@@ -1,5 +1,15 @@
 [
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Elements of Sampling Techniques",
+    "section": "",
+    "text": "Preface\nTheory and applications of sampling from finite populations. Includes: simple random sampling, stratified random sampling, cluster sampling, systematic sampling, probability proportionate to size sampling, and the difference, ratio and regression methods of estimation.\nThis book collects the R demonstrations used throughout the course, one chapter per sampling technique.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
     "objectID": "introR.html",
     "href": "introR.html",
     "title": "1  A Quick Introduction to R",
@@ -277,16 +287,6 @@
     "text": "6.6 Analysis of a dataset (student study hours) collected by UPSWO (without replacement)\n\n\nCode\n## data --- original data frame for holding data\n## cname --- variable recording cluster (psu) identity\n## csize --- variable recording cluster (psu) population size (not sample size)\n## cpik --- sampling probability for each cluster\n## yvar --- variable of interest\n## N --- total number of clusters (psus)\n\ncluster_upswo_ratio_est &lt;- function (data, cname, csize, cpik, yvar)\n{\n  clust &lt;- data[,cname]\n  ydata &lt;- data [, yvar]  \n  \n  ## cluster-wise summary\n  ybari &lt;- tapply (ydata, clust, mean)\n  Mi &lt;- tapply (data [,csize], clust, function (x) x[1])\n  pik &lt;- tapply (data [,cpik], clust, function (x) x[1])\n  ## the same as total in cluster if Mi = mi\n  t_hat_cls &lt;- ybari * Mi \n  \n  ## apply ratio estimate to t_hat_cls and Mi\n  srs_ratio_est (t_hat_cls/pik, Mi/pik)\n}\n\nclasspps &lt;- read.csv (\"data/classpps.csv\")\n\nclasspps\n\n\n\n  \n\n\n\nCode\ncluster_upswo_ratio_est (classpps, \"class\", \"clssize\", \"clssize\", \"hours\")\n\n\n     Est.      S.E.    ci.low    ci.upp \n3.4500000 0.4818584 2.1121467 4.7878533",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Unequal Probability Sampling</span>"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Elements of Sampling Techniques",
-    "section": "",
-    "text": "Preface\nTheory and applications of sampling from finite populations. Includes: simple random sampling, stratified random sampling, cluster sampling, systematic sampling, probability proportionate to size sampling, and the difference, ratio and regression methods of estimation.\nThis book collects the R demonstrations used throughout the course, one chapter per sampling technique.",
-    "crumbs": [
-      "Preface"
     ]
   },
   {
