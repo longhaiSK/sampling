@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Data Analysis and Simulation for Ratio and Regression Estimation – Elements of Sampling Techniques</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-f79c7fb6db380d32be398468f2fb58cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-a7b5894d5a4c39c6aa3484761f021c1f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/custombook-1.0.0/num_eq.js"></script>
+<script src="site_libs/quarto-contrib/custombook-1.0.0/merge-toc.js"></script>
+<link href="site_libs/quarto-contrib/custombook-1.0.0/bookstyles.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ratio.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data Analysis and Simulation for Ratio and Regression Estimation</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Elements of Sampling Techniques</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A Quick Introduction to using R for Data Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./srs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis and Simulation for Simple Random Sampling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./strata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Analysis and Simulation for Stratified Random Sampling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ratio.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data Analysis and Simulation for Ratio and Regression Estimation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cluster.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data Analysis for Cluster Sampling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ups.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#functions-and-packages-for-analyzing-data" id="toc-functions-and-packages-for-analyzing-data" class="nav-link active" data-scroll-target="#functions-and-packages-for-analyzing-data"><span class="header-section-number">4.1</span> Functions and packages for Analyzing Data</a>
+  <ul>
+  <li><a href="#general-functions-for-ratio-and-regression-estimation" id="toc-general-functions-for-ratio-and-regression-estimation" class="nav-link" data-scroll-target="#general-functions-for-ratio-and-regression-estimation"><span class="header-section-number">4.1.1</span> General functions for ratio and regression estimation</a></li>
+  <li><a href="#post-stratification" id="toc-post-stratification" class="nav-link" data-scroll-target="#post-stratification"><span class="header-section-number">4.1.2</span> Post-stratification</a></li>
+  </ul></li>
+  <li><a href="#ratio-estimation-for-cherry.csv-dataset" id="toc-ratio-estimation-for-cherry.csv-dataset" class="nav-link" data-scroll-target="#ratio-estimation-for-cherry.csv-dataset"><span class="header-section-number">4.2</span> Ratio Estimation for cherry.csv dataset</a>
+  <ul>
+  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data"><span class="header-section-number">4.2.1</span> Importing data</a></li>
+  <li><a href="#srs-estimate" id="toc-srs-estimate" class="nav-link" data-scroll-target="#srs-estimate"><span class="header-section-number">4.2.2</span> SRS estimate</a></li>
+  <li><a href="#step-by-step-calculation-for-ratio-estimation" id="toc-step-by-step-calculation-for-ratio-estimation" class="nav-link" data-scroll-target="#step-by-step-calculation-for-ratio-estimation"><span class="header-section-number">4.2.3</span> Step-by-step calculation for Ratio Estimation</a>
+  <ul class="collapse">
+  <li><a href="#estimating-b-and-calculating-residuals" id="toc-estimating-b-and-calculating-residuals" class="nav-link" data-scroll-target="#estimating-b-and-calculating-residuals"><span class="header-section-number">4.2.3.1</span> Estimating B and calculating residuals</a></li>
+  <li><a href="#estimating-se-of-b" id="toc-estimating-se-of-b" class="nav-link" data-scroll-target="#estimating-se-of-b"><span class="header-section-number">4.2.3.2</span> Estimating SE of B</a></li>
+  <li><a href="#estimating-the-mean-volume-of-wood" id="toc-estimating-the-mean-volume-of-wood" class="nav-link" data-scroll-target="#estimating-the-mean-volume-of-wood"><span class="header-section-number">4.2.3.3</span> Estimating the mean volume of wood</a></li>
+  <li><a href="#estimating-the-total-volume-of-wood" id="toc-estimating-the-total-volume-of-wood" class="nav-link" data-scroll-target="#estimating-the-total-volume-of-wood"><span class="header-section-number">4.2.3.4</span> Estimating the total volume of wood</a></li>
+  </ul></li>
+  <li><a href="#ratio-estimation-with-a-function" id="toc-ratio-estimation-with-a-function" class="nav-link" data-scroll-target="#ratio-estimation-with-a-function"><span class="header-section-number">4.2.4</span> Ratio estimation with a function</a>
+  <ul class="collapse">
+  <li><a href="#estimating-the-ratio-of-volume-to-diameter" id="toc-estimating-the-ratio-of-volume-to-diameter" class="nav-link" data-scroll-target="#estimating-the-ratio-of-volume-to-diameter"><span class="header-section-number">4.2.4.1</span> Estimating the ratio of volume to diameter</a></li>
+  <li><a href="#estimating-the-mean-of-volume" id="toc-estimating-the-mean-of-volume" class="nav-link" data-scroll-target="#estimating-the-mean-of-volume"><span class="header-section-number">4.2.4.2</span> Estimating the mean of volume</a></li>
+  <li><a href="#estimating-the-total-of-volume" id="toc-estimating-the-total-of-volume" class="nav-link" data-scroll-target="#estimating-the-total-of-volume"><span class="header-section-number">4.2.4.3</span> Estimating the total of volume</a></li>
+  <li><a href="#percentage-of-variance-reduction" id="toc-percentage-of-variance-reduction" class="nav-link" data-scroll-target="#percentage-of-variance-reduction"><span class="header-section-number">4.2.4.4</span> Percentage of Variance Reduction</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#simulation-study-with-agpop.csv" id="toc-simulation-study-with-agpop.csv" class="nav-link" data-scroll-target="#simulation-study-with-agpop.csv"><span class="header-section-number">4.3</span> Simulation study with agpop.csv</a>
+  <ul>
+  <li><a href="#information-of-population-data" id="toc-information-of-population-data" class="nav-link" data-scroll-target="#information-of-population-data"><span class="header-section-number">4.3.1</span> Information of population data</a></li>
+  <li><a href="#simulation-studies" id="toc-simulation-studies" class="nav-link" data-scroll-target="#simulation-studies"><span class="header-section-number">4.3.2</span> Simulation Studies</a></li>
+  </ul></li>
+  <li><a href="#estimating-domain-means-and-post-stratification-with-agsrs.csv-example" id="toc-estimating-domain-means-and-post-stratification-with-agsrs.csv-example" class="nav-link" data-scroll-target="#estimating-domain-means-and-post-stratification-with-agsrs.csv-example"><span class="header-section-number">4.4</span> Estimating Domain Means and Post-stratification with agsrs.csv example</a>
+  <ul>
+  <li><a href="#estimating-domain-means" id="toc-estimating-domain-means" class="nav-link" data-scroll-target="#estimating-domain-means"><span class="header-section-number">4.4.1</span> Estimating Domain Means</a></li>
+  <li><a href="#post-stratification-analysis" id="toc-post-stratification-analysis" class="nav-link" data-scroll-target="#post-stratification-analysis"><span class="header-section-number">4.4.2</span> Post-stratification Analysis</a></li>
+  </ul></li>
+  <li><a href="#estimating-domain-means-and-post-stratification-with-teacher-example" id="toc-estimating-domain-means-and-post-stratification-with-teacher-example" class="nav-link" data-scroll-target="#estimating-domain-means-and-post-stratification-with-teacher-example"><span class="header-section-number">4.5</span> Estimating Domain Means and Post-stratification with teacher example</a>
+  <ul>
+  <li><a href="#importing-data-and-calculating-contingency-table" id="toc-importing-data-and-calculating-contingency-table" class="nav-link" data-scroll-target="#importing-data-and-calculating-contingency-table"><span class="header-section-number">4.5.1</span> Importing Data and Calculating Contingency Table</a></li>
+  <li><a href="#domain-summary" id="toc-domain-summary" class="nav-link" data-scroll-target="#domain-summary"><span class="header-section-number">4.5.2</span> Domain Summary</a></li>
+  <li><a href="#estimating-domain-means-1" id="toc-estimating-domain-means-1" class="nav-link" data-scroll-target="#estimating-domain-means-1"><span class="header-section-number">4.5.3</span> Estimating Domain Means</a></li>
+  <li><a href="#post-stratification-analysis-1" id="toc-post-stratification-analysis-1" class="nav-link" data-scroll-target="#post-stratification-analysis-1"><span class="header-section-number">4.5.4</span> Post-stratification Analysis</a></li>
+  <li><a href="#comparing-to-the-analysis-with-srs" id="toc-comparing-to-the-analysis-with-srs" class="nav-link" data-scroll-target="#comparing-to-the-analysis-with-srs"><span class="header-section-number">4.5.5</span> Comparing to the Analysis with SRS</a></li>
+  </ul></li>
+  <li><a href="#regression-estimation-for-the-cherry.csv-dataset" id="toc-regression-estimation-for-the-cherry.csv-dataset" class="nav-link" data-scroll-target="#regression-estimation-for-the-cherry.csv-dataset"><span class="header-section-number">4.6</span> Regression Estimation for the cherry.csv dataset</a>
+  <ul>
+  <li><a href="#importing-data-1" id="toc-importing-data-1" class="nav-link" data-scroll-target="#importing-data-1"><span class="header-section-number">4.6.1</span> Importing data</a></li>
+  <li><a href="#step-by-step-calculation" id="toc-step-by-step-calculation" class="nav-link" data-scroll-target="#step-by-step-calculation"><span class="header-section-number">4.6.2</span> Step-by-step calculation</a>
+  <ul class="collapse">
+  <li><a href="#fitting-a-linear-regression-model" id="toc-fitting-a-linear-regression-model" class="nav-link" data-scroll-target="#fitting-a-linear-regression-model"><span class="header-section-number">4.6.2.1</span> Fitting a linear regression model</a></li>
+  <li><a href="#estimate-the-mean" id="toc-estimate-the-mean" class="nav-link" data-scroll-target="#estimate-the-mean"><span class="header-section-number">4.6.2.2</span> Estimate the mean</a></li>
+  <li><a href="#estimate-the-total" id="toc-estimate-the-total" class="nav-link" data-scroll-target="#estimate-the-total"><span class="header-section-number">4.6.2.3</span> Estimate the total</a></li>
+  </ul></li>
+  <li><a href="#regression-estimation-using-the-function" id="toc-regression-estimation-using-the-function" class="nav-link" data-scroll-target="#regression-estimation-using-the-function"><span class="header-section-number">4.6.3</span> Regression estimation Using the function</a>
+  <ul class="collapse">
+  <li><a href="#estimating-the-mean" id="toc-estimating-the-mean" class="nav-link" data-scroll-target="#estimating-the-mean"><span class="header-section-number">4.6.3.1</span> Estimating the mean</a></li>
+  <li><a href="#estimating-the-total" id="toc-estimating-the-total" class="nav-link" data-scroll-target="#estimating-the-total"><span class="header-section-number">4.6.3.2</span> Estimating the total</a></li>
+  <li><a href="#percentage-of-variance-reduction-1" id="toc-percentage-of-variance-reduction-1" class="nav-link" data-scroll-target="#percentage-of-variance-reduction-1"><span class="header-section-number">4.6.3.3</span> Percentage of Variance Reduction</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#regression-estimation-for-photo-counts-of-dead-trees" id="toc-regression-estimation-for-photo-counts-of-dead-trees" class="nav-link" data-scroll-target="#regression-estimation-for-photo-counts-of-dead-trees"><span class="header-section-number">4.7</span> Regression estimation for photo counts of dead trees</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content column-page-right" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data Analysis and Simulation for Ratio and Regression Estimation</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-right">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="functions-and-packages-for-analyzing-data" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="functions-and-packages-for-analyzing-data"><span class="header-section-number">4.1</span> Functions and packages for Analyzing Data</h2>
+<section id="general-functions-for-ratio-and-regression-estimation" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="general-functions-for-ratio-and-regression-estimation"><span class="header-section-number">4.1.1</span> General functions for ratio and regression estimation</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## ydata --- observations of the variable of interest</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">## xdata --- observations of the auxilliary variable</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">## N --- population size</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">## xbarU --- population mean of auxilliary variable</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## the output is the estimate mean or total (est.total=TRUE)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>srs_reg_est <span class="ot">&lt;-</span> <span class="cf">function</span> (ydata, xdata, xbarU, <span class="at">N =</span> <span class="cn">Inf</span>, <span class="at">est.total =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span> (ydata)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  lmfit <span class="ot">&lt;-</span> <span class="fu">lm</span> (ydata <span class="sc">~</span> xdata)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  Bhat <span class="ot">&lt;-</span> lmfit<span class="sc">$</span>coefficients</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  efit <span class="ot">&lt;-</span> lmfit<span class="sc">$</span>residuals</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  SSe <span class="ot">&lt;-</span> <span class="fu">sum</span> (efit<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (n <span class="sc">-</span> <span class="dv">2</span>) </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  yhat_reg <span class="ot">&lt;-</span> Bhat[<span class="dv">1</span>] <span class="sc">+</span> Bhat[<span class="dv">2</span>] <span class="sc">*</span> xbarU</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  se_yhat_reg <span class="ot">&lt;-</span> <span class="fu">sqrt</span> ((<span class="dv">1</span><span class="sc">-</span>n<span class="sc">/</span>N) <span class="sc">*</span> SSe <span class="sc">/</span> n)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  mem <span class="ot">&lt;-</span> <span class="fu">qt</span> (<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">2</span>) <span class="sc">*</span> se_yhat_reg</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  output <span class="ot">&lt;-</span> <span class="fu">c</span>(yhat_reg, se_yhat_reg, yhat_reg <span class="sc">-</span> mem, yhat_reg <span class="sc">+</span> mem)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (est.total) {</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.finite</span>(N)) <span class="fu">stop</span>(<span class="st">"N must be finite for estimating population total"</span> )</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>      output <span class="ot">&lt;-</span> output <span class="sc">*</span> N</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span> (output) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Est."</span>, <span class="st">"S.E."</span>, <span class="st">"ci.low"</span>, <span class="st">"ci.upp"</span> )</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  output</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="do">## ydata --- observations of the variable of interest</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="do">## xdata --- observations of the auxilliary variable</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="do">## N --- population size</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="do">## the output is the ratio of ybarU/xbarU</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>srs_ratio_est <span class="ot">&lt;-</span> <span class="cf">function</span> (ydata, xdata, <span class="at">N =</span> <span class="cn">Inf</span>)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>{   </span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span> (xdata)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  xbar <span class="ot">&lt;-</span> <span class="fu">mean</span> (xdata)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  ybar <span class="ot">&lt;-</span> <span class="fu">mean</span> (ydata)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  B_hat <span class="ot">&lt;-</span> ybar <span class="sc">/</span> xbar</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> ydata <span class="sc">-</span> B_hat <span class="sc">*</span> xdata</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  var_d <span class="ot">&lt;-</span> <span class="fu">sum</span> (d<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (n <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  sd_B_hat <span class="ot">&lt;-</span> <span class="fu">sqrt</span> ((<span class="dv">1</span> <span class="sc">-</span> n<span class="sc">/</span>N) <span class="sc">*</span> var_d <span class="sc">/</span> n) <span class="sc">/</span> xbar</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  mem <span class="ot">&lt;-</span> <span class="fu">qt</span> (<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> sd_B_hat</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  output <span class="ot">&lt;-</span> <span class="fu">c</span> (B_hat, sd_B_hat, B_hat <span class="sc">-</span> mem, B_hat <span class="sc">+</span> mem )</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span> (output) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Est."</span>, <span class="st">"S.E."</span>, <span class="st">"ci.low"</span>, <span class="st">"ci.upp"</span> )</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  output</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="do">## sdata --- a vector of original survey data in a domain</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="do">## N --- population size</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="do">## n --- total sample size (not the sample size in the domain)</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="do">## to find total, multiply domain size N_d to the estimate returned by this function</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>srs_domain_mean_est <span class="ot">&lt;-</span> <span class="cf">function</span> (sdata, n, <span class="at">N =</span> <span class="cn">Inf</span>)</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    n_d <span class="ot">&lt;-</span> <span class="fu">length</span> (sdata)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    ybar <span class="ot">&lt;-</span> <span class="fu">mean</span> (sdata)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    se.ybar <span class="ot">&lt;-</span> <span class="fu">sqrt</span>((<span class="dv">1</span> <span class="sc">-</span> n <span class="sc">/</span> N)) <span class="sc">*</span> <span class="fu">sd</span> (sdata) <span class="sc">/</span> <span class="fu">sqrt</span>(n_d)  </span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    mem <span class="ot">&lt;-</span> <span class="fu">qt</span> (<span class="fl">0.975</span>, <span class="at">df =</span> n_d <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se.ybar</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span> (<span class="at">Est. =</span> ybar, <span class="at">S.E. =</span> se.ybar, <span class="at">ci.low =</span> ybar <span class="sc">-</span> mem, <span class="at">ci.upp =</span> ybar <span class="sc">+</span> mem)</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="do">## sdata --- a vector of original survey data</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="do">## N --- population size</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="do">## to find total, multiply N to the estimate returned by this function</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>srs_mean_est <span class="ot">&lt;-</span> <span class="cf">function</span> (sdata, <span class="at">N =</span> <span class="cn">Inf</span>)</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">length</span> (sdata)</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    ybar <span class="ot">&lt;-</span> <span class="fu">mean</span> (sdata)</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    se.ybar <span class="ot">&lt;-</span> <span class="fu">sqrt</span>((<span class="dv">1</span> <span class="sc">-</span> n <span class="sc">/</span> N)) <span class="sc">*</span> <span class="fu">sd</span> (sdata) <span class="sc">/</span> <span class="fu">sqrt</span>(n)  </span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    mem <span class="ot">&lt;-</span> <span class="fu">qt</span> (<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se.ybar</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span> (<span class="at">Est. =</span> ybar, <span class="at">S.E. =</span> se.ybar, <span class="at">ci.low =</span> ybar <span class="sc">-</span> mem, <span class="at">ci.upp =</span> ybar <span class="sc">+</span> mem)</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="post-stratification" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="post-stratification"><span class="header-section-number">4.1.2</span> Post-stratification</h3>
+<p>For poststratification, plug in <span class="math inline">\(n_h = n * {N_h \over N}\)</span> in the estimator for a real stratified sample</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## to find total, multiply N to the estimate returned by this function</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>str_mean_estimate <span class="ot">&lt;-</span> <span class="cf">function</span> (ybarh, sh, nh, Nh)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    N <span class="ot">&lt;-</span> <span class="fu">sum</span> (Nh)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    Pi_h <span class="ot">&lt;-</span> Nh<span class="sc">/</span>N</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    ybar <span class="ot">&lt;-</span> <span class="fu">sum</span>(ybarh <span class="sc">*</span> Pi_h)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    seybar <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((<span class="dv">1</span><span class="sc">-</span>nh<span class="sc">/</span>Nh)<span class="sc">*</span>Pi_h<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>sh<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>nh))</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    mem <span class="ot">&lt;-</span> <span class="fl">1.96</span> <span class="sc">*</span> seybar</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="at">Est. =</span> ybar, <span class="at">S.E. =</span> seybar, <span class="at">ci.low =</span> ybar <span class="sc">-</span> mem, <span class="at">ci.upp =</span> ybar <span class="sc">+</span> mem)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="ratio-estimation-for-cherry.csv-dataset" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="ratio-estimation-for-cherry.csv-dataset"><span class="header-section-number">4.2</span> Ratio Estimation for cherry.csv dataset</h2>
+<section id="importing-data" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="importing-data"><span class="header-section-number">4.2.1</span> Importing data</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cherry <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/cherry.csv"</span>, <span class="at">header =</span> T)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cherry</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["diameter"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["height"],"name":[2],"type":["int"],"align":["right"]},{"label":["volume"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"8.3","2":"70","3":"10.3"},{"1":"8.6","2":"65","3":"10.3"},{"1":"8.8","2":"63","3":"10.2"},{"1":"10.5","2":"72","3":"16.4"},{"1":"10.7","2":"81","3":"18.8"},{"1":"10.8","2":"83","3":"19.7"},{"1":"11.0","2":"66","3":"15.6"},{"1":"11.0","2":"75","3":"18.2"},{"1":"11.1","2":"80","3":"22.6"},{"1":"11.2","2":"75","3":"19.9"},{"1":"11.3","2":"79","3":"24.2"},{"1":"11.4","2":"76","3":"21.0"},{"1":"11.4","2":"76","3":"21.4"},{"1":"11.7","2":"69","3":"21.3"},{"1":"12.0","2":"75","3":"19.1"},{"1":"12.9","2":"74","3":"22.2"},{"1":"12.9","2":"85","3":"33.8"},{"1":"13.3","2":"86","3":"27.4"},{"1":"13.7","2":"71","3":"25.7"},{"1":"13.8","2":"64","3":"24.9"},{"1":"14.0","2":"78","3":"34.5"},{"1":"14.2","2":"80","3":"31.7"},{"1":"14.5","2":"74","3":"36.3"},{"1":"16.0","2":"72","3":"38.3"},{"1":"16.3","2":"77","3":"42.6"},{"1":"17.3","2":"81","3":"55.4"},{"1":"17.5","2":"82","3":"55.7"},{"1":"17.9","2":"80","3":"58.3"},{"1":"18.0","2":"80","3":"51.5"},{"1":"18.0","2":"80","3":"51.0"},{"1":"20.6","2":"87","3":"77.0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span> (cherry<span class="sc">$</span>volume <span class="sc">~</span> cherry<span class="sc">$</span>diameter)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ratio_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span> (<span class="fu">lm</span>(cherry<span class="sc">$</span>volume <span class="sc">~</span> <span class="dv">0</span><span class="sc">+</span>cherry<span class="sc">$</span>diameter))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = cherry$volume ~ 0 + cherry$diameter)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-11.104  -8.470  -6.199   1.883  27.129 
+
+Coefficients:
+                Estimate Std. Error t value Pr(&gt;|t|)    
+cherry$diameter   2.4209     0.1253   19.32   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 9.493 on 30 degrees of freedom
+Multiple R-squared:  0.9256,    Adjusted R-squared:  0.9231 
+F-statistic: 373.1 on 1 and 30 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="srs-estimate" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="srs-estimate"><span class="header-section-number">4.2.2</span> SRS estimate</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">2967</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## estimating the mean of volume</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>srs_mean_volume <span class="ot">&lt;-</span> <span class="fu">srs_mean_est</span>(cherry<span class="sc">$</span>volume, <span class="at">N =</span> N)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>srs_mean_volume</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Est.      S.E.    ci.low    ci.upp 
+30.170968  2.936861 24.173098 36.168837 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## estimating the total of volume</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>srs_total_volume <span class="ot">&lt;-</span> <span class="fu">srs_mean_est</span>(cherry<span class="sc">$</span>volume, <span class="at">N =</span> N) <span class="sc">*</span> N</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>srs_total_volume</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+ 89517.261   8713.665  71721.583 107312.940 </code></pre>
+</div>
+</div>
+</section>
+<section id="step-by-step-calculation-for-ratio-estimation" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="step-by-step-calculation-for-ratio-estimation"><span class="header-section-number">4.2.3</span> Step-by-step calculation for Ratio Estimation</h3>
+<section id="estimating-b-and-calculating-residuals" class="level4" data-number="4.2.3.1">
+<h4 data-number="4.2.3.1" class="anchored" data-anchor-id="estimating-b-and-calculating-residuals"><span class="header-section-number">4.2.3.1</span> Estimating B and calculating residuals</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## input</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ydata <span class="ot">&lt;-</span> cherry<span class="sc">$</span>volume</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>xdata <span class="ot">&lt;-</span> cherry<span class="sc">$</span>diameter</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">2967</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="do">## calculation</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span> (xdata)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>xbar <span class="ot">&lt;-</span> <span class="fu">mean</span> (xdata)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>ybar <span class="ot">&lt;-</span> <span class="fu">mean</span> (ydata)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>B_hat <span class="ot">&lt;-</span> ybar <span class="sc">/</span> xbar <span class="do">## ratio estimate</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span> (cherry<span class="sc">$</span>volume <span class="sc">~</span> cherry<span class="sc">$</span>diameter)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span> (<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> B_hat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ratio_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> ydata <span class="sc">-</span> B_hat <span class="sc">*</span> xdata <span class="do">## errors</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">data.frame</span> (<span class="st">"$y_i$"</span><span class="ot">=</span>cherry<span class="sc">$</span>volume, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"$x_i$"</span><span class="ot">=</span>cherry<span class="sc">$</span>diameter,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"$</span><span class="sc">\\</span><span class="st">hat y_i=</span><span class="sc">\\</span><span class="st">hat B</span><span class="sc">\\</span><span class="st">times x_i$"</span><span class="ot">=</span>B_hat<span class="sc">*</span>xdata,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"$e_i=y_i - </span><span class="sc">\\</span><span class="st">hat y_i$"</span> <span class="ot">=</span> d,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">check.names =</span> <span class="cn">FALSE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;"><span class="math inline">\(y_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(x_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\hat y_i=\hat B\times x_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(e_i=y_i - \hat y_i\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">10.3</td>
+<td style="text-align: right;">8.3</td>
+<td style="text-align: right;">18.90185</td>
+<td style="text-align: right;">-8.6018505</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10.3</td>
+<td style="text-align: right;">8.6</td>
+<td style="text-align: right;">19.58505</td>
+<td style="text-align: right;">-9.2850499</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">10.2</td>
+<td style="text-align: right;">8.8</td>
+<td style="text-align: right;">20.04052</td>
+<td style="text-align: right;">-9.8405162</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">16.4</td>
+<td style="text-align: right;">10.5</td>
+<td style="text-align: right;">23.91198</td>
+<td style="text-align: right;">-7.5119795</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">18.8</td>
+<td style="text-align: right;">10.7</td>
+<td style="text-align: right;">24.36745</td>
+<td style="text-align: right;">-5.5674458</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">19.7</td>
+<td style="text-align: right;">10.8</td>
+<td style="text-align: right;">24.59518</td>
+<td style="text-align: right;">-4.8951790</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15.6</td>
+<td style="text-align: right;">11.0</td>
+<td style="text-align: right;">25.05065</td>
+<td style="text-align: right;">-9.4506452</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18.2</td>
+<td style="text-align: right;">11.0</td>
+<td style="text-align: right;">25.05065</td>
+<td style="text-align: right;">-6.8506452</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">22.6</td>
+<td style="text-align: right;">11.1</td>
+<td style="text-align: right;">25.27838</td>
+<td style="text-align: right;">-2.6783784</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">19.9</td>
+<td style="text-align: right;">11.2</td>
+<td style="text-align: right;">25.50611</td>
+<td style="text-align: right;">-5.6061115</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">24.2</td>
+<td style="text-align: right;">11.3</td>
+<td style="text-align: right;">25.73384</td>
+<td style="text-align: right;">-1.5338447</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21.0</td>
+<td style="text-align: right;">11.4</td>
+<td style="text-align: right;">25.96158</td>
+<td style="text-align: right;">-4.9615778</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">21.4</td>
+<td style="text-align: right;">11.4</td>
+<td style="text-align: right;">25.96158</td>
+<td style="text-align: right;">-4.5615778</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21.3</td>
+<td style="text-align: right;">11.7</td>
+<td style="text-align: right;">26.64478</td>
+<td style="text-align: right;">-5.3447772</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19.1</td>
+<td style="text-align: right;">12.0</td>
+<td style="text-align: right;">27.32798</td>
+<td style="text-align: right;">-8.2279766</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">22.2</td>
+<td style="text-align: right;">12.9</td>
+<td style="text-align: right;">29.37757</td>
+<td style="text-align: right;">-7.1775749</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">33.8</td>
+<td style="text-align: right;">12.9</td>
+<td style="text-align: right;">29.37757</td>
+<td style="text-align: right;">4.4224251</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">27.4</td>
+<td style="text-align: right;">13.3</td>
+<td style="text-align: right;">30.28851</td>
+<td style="text-align: right;">-2.8885074</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">25.7</td>
+<td style="text-align: right;">13.7</td>
+<td style="text-align: right;">31.19944</td>
+<td style="text-align: right;">-5.4994400</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">24.9</td>
+<td style="text-align: right;">13.8</td>
+<td style="text-align: right;">31.42717</td>
+<td style="text-align: right;">-6.5271731</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">34.5</td>
+<td style="text-align: right;">14.0</td>
+<td style="text-align: right;">31.88264</td>
+<td style="text-align: right;">2.6173606</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">31.7</td>
+<td style="text-align: right;">14.2</td>
+<td style="text-align: right;">32.33811</td>
+<td style="text-align: right;">-0.6381057</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">36.3</td>
+<td style="text-align: right;">14.5</td>
+<td style="text-align: right;">33.02131</td>
+<td style="text-align: right;">3.2786949</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">38.3</td>
+<td style="text-align: right;">16.0</td>
+<td style="text-align: right;">36.43730</td>
+<td style="text-align: right;">1.8626978</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">42.6</td>
+<td style="text-align: right;">16.3</td>
+<td style="text-align: right;">37.12050</td>
+<td style="text-align: right;">5.4794984</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">55.4</td>
+<td style="text-align: right;">17.3</td>
+<td style="text-align: right;">39.39783</td>
+<td style="text-align: right;">16.0021670</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">55.7</td>
+<td style="text-align: right;">17.5</td>
+<td style="text-align: right;">39.85330</td>
+<td style="text-align: right;">15.8467008</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">58.3</td>
+<td style="text-align: right;">17.9</td>
+<td style="text-align: right;">40.76423</td>
+<td style="text-align: right;">17.5357682</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">51.5</td>
+<td style="text-align: right;">18.0</td>
+<td style="text-align: right;">40.99196</td>
+<td style="text-align: right;">10.5080351</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">51.0</td>
+<td style="text-align: right;">18.0</td>
+<td style="text-align: right;">40.99196</td>
+<td style="text-align: right;">10.0080351</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">77.0</td>
+<td style="text-align: right;">20.6</td>
+<td style="text-align: right;">46.91303</td>
+<td style="text-align: right;">30.0869735</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="estimating-se-of-b" class="level4" data-number="4.2.3.2">
+<h4 data-number="4.2.3.2" class="anchored" data-anchor-id="estimating-se-of-b"><span class="header-section-number">4.2.3.2</span> Estimating SE of B</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## estimating S^2_e</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>var_d <span class="ot">&lt;-</span> <span class="fu">sum</span> (d<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (n <span class="sc">-</span> <span class="dv">1</span>) <span class="do">## variance of errors</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>sd_B_hat <span class="ot">&lt;-</span> <span class="fu">sqrt</span> ((<span class="dv">1</span> <span class="sc">-</span> n<span class="sc">/</span>N) <span class="sc">*</span> var_d <span class="sc">/</span> n) <span class="sc">/</span> xbar <span class="do">## SE for B</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>mem <span class="ot">&lt;-</span> <span class="fu">qt</span> (<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> sd_B_hat <span class="do">## margin error for B</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="do">## output</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>output_B <span class="ot">&lt;-</span> <span class="fu">c</span> (B_hat, sd_B_hat, B_hat <span class="sc">-</span> mem, B_hat <span class="sc">+</span> mem )</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span> (output_B) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Est."</span>, <span class="st">"S.E."</span>, <span class="st">"ci.low"</span>, <span class="st">"ci.upp"</span> )</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>output_B</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Est.     S.E.   ci.low   ci.upp 
+2.277331 0.130786 2.010231 2.544432 </code></pre>
+</div>
+</div>
+</section>
+<section id="estimating-the-mean-volume-of-wood" class="level4" data-number="4.2.3.3">
+<h4 data-number="4.2.3.3" class="anchored" data-anchor-id="estimating-the-mean-volume-of-wood"><span class="header-section-number">4.2.3.3</span> Estimating the mean volume of wood</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>mean_diameters <span class="ot">&lt;-</span> <span class="dv">41835</span><span class="sc">/</span>N</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>output_B <span class="sc">*</span> mean_diameters</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Est.      S.E.    ci.low    ci.upp 
+32.110603  1.844097 28.344455 35.876750 </code></pre>
+</div>
+</div>
+</section>
+<section id="estimating-the-total-volume-of-wood" class="level4" data-number="4.2.3.4">
+<h4 data-number="4.2.3.4" class="anchored" data-anchor-id="estimating-the-total-volume-of-wood"><span class="header-section-number">4.2.3.4</span> Estimating the total volume of wood</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>t_diameters <span class="ot">&lt;-</span> <span class="dv">41835</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>output_B <span class="sc">*</span> t_diameters</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+ 95272.159   5471.434  84097.999 106446.318 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="ratio-estimation-with-a-function" class="level3" data-number="4.2.4">
+<h3 data-number="4.2.4" class="anchored" data-anchor-id="ratio-estimation-with-a-function"><span class="header-section-number">4.2.4</span> Ratio estimation with a function</h3>
+<section id="estimating-the-ratio-of-volume-to-diameter" class="level4" data-number="4.2.4.1">
+<h4 data-number="4.2.4.1" class="anchored" data-anchor-id="estimating-the-ratio-of-volume-to-diameter"><span class="header-section-number">4.2.4.1</span> Estimating the ratio of volume to diameter</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>B_v2d <span class="ot">&lt;-</span> <span class="fu">srs_ratio_est</span> (<span class="at">ydata =</span> cherry<span class="sc">$</span>volume, <span class="at">xdata =</span> cherry<span class="sc">$</span>diameter,  <span class="at">N =</span> <span class="dv">2967</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>B_v2d</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Est.     S.E.   ci.low   ci.upp 
+2.277331 0.130786 2.010231 2.544432 </code></pre>
+</div>
+</div>
+</section>
+<section id="estimating-the-mean-of-volume" class="level4" data-number="4.2.4.2">
+<h4 data-number="4.2.4.2" class="anchored" data-anchor-id="estimating-the-mean-of-volume"><span class="header-section-number">4.2.4.2</span> Estimating the mean of volume</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>xbarU <span class="ot">&lt;-</span> <span class="dv">41835</span><span class="sc">/</span>N</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>ratio_mean_volume <span class="ot">&lt;-</span> <span class="fu">srs_ratio_est</span> (<span class="at">ydata =</span> cherry<span class="sc">$</span>volume, <span class="at">xdata =</span> cherry<span class="sc">$</span>diameter, <span class="at">N =</span> <span class="dv">2967</span>) <span class="sc">*</span> xbarU</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>ratio_mean_volume</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Est.      S.E.    ci.low    ci.upp 
+32.110603  1.844097 28.344455 35.876750 </code></pre>
+</div>
+</div>
+</section>
+<section id="estimating-the-total-of-volume" class="level4" data-number="4.2.4.3">
+<h4 data-number="4.2.4.3" class="anchored" data-anchor-id="estimating-the-total-of-volume"><span class="header-section-number">4.2.4.3</span> Estimating the total of volume</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>total_diameters <span class="ot">&lt;-</span> <span class="dv">41835</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_ratio_est</span> (<span class="at">ydata =</span> cherry<span class="sc">$</span>volume, <span class="at">xdata =</span> cherry<span class="sc">$</span>diameter, <span class="at">N =</span> <span class="dv">2967</span>) <span class="sc">*</span> total_diameters</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+ 95272.159   5471.434  84097.999 106446.318 </code></pre>
+</div>
+</div>
+</section>
+<section id="percentage-of-variance-reduction" class="level4" data-number="4.2.4.4">
+<h4 data-number="4.2.4.4" class="anchored" data-anchor-id="percentage-of-variance-reduction"><span class="header-section-number">4.2.4.4</span> Percentage of Variance Reduction</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="dv">1</span><span class="sc">-</span>(ratio_mean_volume[<span class="dv">2</span>]<span class="sc">/</span>srs_mean_volume[<span class="dv">2</span>])<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.6057237</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="simulation-study-with-agpop.csv" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="simulation-study-with-agpop.csv"><span class="header-section-number">4.3</span> Simulation study with agpop.csv</h2>
+<section id="information-of-population-data" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="information-of-population-data"><span class="header-section-number">4.3.1</span> Information of population data</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/agpop.csv"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> agpop[agpop<span class="sc">$</span>acres92 <span class="sc">!=</span> <span class="sc">-</span><span class="dv">99</span>, ] <span class="do">## remove those counties with na</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># sample size</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">300</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co"># population size</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span> (agpop)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># true values that we want to estimate</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>tyU <span class="ot">&lt;-</span> <span class="fu">sum</span> (agpop [,<span class="st">"acres92"</span>])</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co"># suppose known for ratio estimate</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>txU <span class="ot">&lt;-</span> <span class="fu">sum</span> (agpop [,<span class="st">"acres87"</span>]) </span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> tyU<span class="sc">/</span>txU</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span> (agpop [, <span class="st">"acres87"</span>], agpop [, <span class="st">"acres92"</span>])</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a=</span><span class="dv">0</span>,<span class="at">b=</span>B)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ratio_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># expected reduction of variance of ratio estimate to srs</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">-</span><span class="fu">var</span>(agpop<span class="sc">$</span>acres92<span class="sc">-</span>B<span class="sc">*</span>agpop<span class="sc">$</span>acres87)<span class="sc">/</span><span class="fu">var</span>(agpop<span class="sc">$</span>acres92)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9917355</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># linear model output</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(agpop<span class="sc">$</span>acres92 <span class="sc">~</span> agpop<span class="sc">$</span>acres87))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = agpop$acres92 ~ agpop$acres87)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-642399   -8256    -692    5593  656458 
+
+Coefficients:
+                Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   -2.121e+03  8.648e+02  -2.453   0.0142 *  
+agpop$acres87  9.878e-01  1.626e-03 607.388   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 38560 on 3057 degrees of freedom
+Multiple R-squared:  0.9918,    Adjusted R-squared:  0.9918 
+F-statistic: 3.689e+05 on 1 and 3057 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="simulation-studies" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="simulation-studies"><span class="header-section-number">4.3.2</span> Simulation Studies</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>nsim <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>sim_rat <span class="ot">&lt;-</span> <span class="fu">data.frame</span> (</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">simple =</span> <span class="fu">rep</span> (<span class="dv">0</span>, nsim), <span class="at">ratio =</span> <span class="fu">rep</span> (<span class="dv">0</span>, nsim), <span class="at">B =</span> <span class="fu">rep</span> (<span class="dv">0</span>, nsim))</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsim)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  srs <span class="ot">&lt;-</span> <span class="fu">sample</span> (N,n)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  y_srs <span class="ot">&lt;-</span> agpop[srs, <span class="st">"acres92"</span>]</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  x_srs <span class="ot">&lt;-</span> agpop[srs, <span class="st">"acres87"</span>]</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># SRS estimate</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  sim_rat<span class="sc">$</span>simple [i] <span class="ot">&lt;-</span> <span class="fu">mean</span> (y_srs) <span class="sc">*</span> N </span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ratio estimate</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  sim_rat<span class="sc">$</span>B [i] <span class="ot">&lt;-</span> <span class="fu">mean</span> (y_srs) <span class="sc">/</span> <span class="fu">mean</span> (x_srs)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  sim_rat<span class="sc">$</span>ratio [i] <span class="ot">&lt;-</span>  sim_rat<span class="sc">$</span>B [i] <span class="sc">*</span> txU</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>sim_rat[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["simple"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["ratio"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["B"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"862228614","2":"939604359","3":"0.9765261","_rn_":"1"},{"1":"936739767","2":"940777723","3":"0.9777456","_rn_":"2"},{"1":"896792969","2":"940842194","3":"0.9778126","_rn_":"3"},{"1":"936091197","2":"948957626","3":"0.9862469","_rn_":"4"},{"1":"860214497","2":"939232351","3":"0.9761395","_rn_":"5"},{"1":"982014282","2":"948388305","3":"0.9856552","_rn_":"6"},{"1":"914557601","2":"942716981","3":"0.9797610","_rn_":"7"},{"1":"956508554","2":"951687510","3":"0.9890841","_rn_":"8"},{"1":"880532355","2":"953795728","3":"0.9912751","_rn_":"9"},{"1":"1077770077","2":"953930181","3":"0.9914149","_rn_":"10"},{"1":"1053970741","2":"945032635","3":"0.9821677","_rn_":"11"},{"1":"1008832504","2":"946059994","3":"0.9832354","_rn_":"12"},{"1":"1044718347","2":"954244235","3":"0.9917412","_rn_":"13"},{"1":"980271437","2":"948704380","3":"0.9859837","_rn_":"14"},{"1":"1058235915","2":"955710985","3":"0.9932656","_rn_":"15"},{"1":"922720176","2":"946494368","3":"0.9836869","_rn_":"16"},{"1":"1061469360","2":"945556881","3":"0.9827125","_rn_":"17"},{"1":"1008504049","2":"945238074","3":"0.9823812","_rn_":"18"},{"1":"954064270","2":"951510044","3":"0.9888996","_rn_":"19"},{"1":"973615247","2":"934779331","3":"0.9715115","_rn_":"20"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span> (sim_rat [, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span> (<span class="at">h =</span> tyU, <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ratio_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>sim_var <span class="ot">&lt;-</span> <span class="fu">sapply</span> (sim_rat[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], var)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>ratio_sim_var <span class="ot">&lt;-</span> sim_var<span class="sc">/</span>sim_var[<span class="dv">1</span>]</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>percentage_reduction <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">-</span>ratio_sim_var</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span> (sim_var, ratio_sim_var,percentage_reduction)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["sim_var"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["ratio_sim_var"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["percentage_reduction"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"5.044069e+15","2":"1.00000000","3":"0.000000","_rn_":"simple"},{"1":"4.358565e+13","2":"0.00864097","3":"0.991359","_rn_":"ratio"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="estimating-domain-means-and-post-stratification-with-agsrs.csv-example" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="estimating-domain-means-and-post-stratification-with-agsrs.csv-example"><span class="header-section-number">4.4</span> Estimating Domain Means and Post-stratification with agsrs.csv example</h2>
+<section id="estimating-domain-means" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="estimating-domain-means"><span class="header-section-number">4.4.1</span> Estimating Domain Means</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>agsrs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/agsrs.csv"</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span> (agsrs)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>n</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 300</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="do">## estimating domain means</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>region_agsrs_domain <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">rbind</span>(</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">NC =</span> <span class="fu">srs_domain_mean_est</span>(agsrs<span class="sc">$</span>acres92[agsrs<span class="sc">$</span>region<span class="sc">==</span><span class="st">"NC"</span>], <span class="at">n=</span>n, <span class="at">N =</span> <span class="dv">3078</span>),</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">NE =</span> <span class="fu">srs_domain_mean_est</span>(agsrs<span class="sc">$</span>acres92[agsrs<span class="sc">$</span>region<span class="sc">==</span><span class="st">"NE"</span>], <span class="at">n=</span>n,<span class="at">N =</span> <span class="dv">3078</span>),</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">S =</span> <span class="fu">srs_domain_mean_est</span>(agsrs<span class="sc">$</span>acres92[agsrs<span class="sc">$</span>region<span class="sc">==</span><span class="st">"S"</span>], <span class="at">n=</span>n,<span class="at">N =</span> <span class="dv">3078</span>),</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">W =</span> <span class="fu">srs_domain_mean_est</span>(agsrs<span class="sc">$</span>acres92[agsrs<span class="sc">$</span>region<span class="sc">==</span><span class="st">"W"</span>], <span class="at">n=</span>n,<span class="at">N =</span> <span class="dv">3078</span>))</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>region_agsrs_domain</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Est."],"name":[1],"type":["dbl"],"align":["right"]},{"label":["S.E."],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ci.low"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["ci.upp"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"323416.4","2":"30008.35","3":"263662.18","4":"383170.7","_rn_":"NC"},{"1":"106549.0","2":"28957.56","3":"45453.89","4":"167644.1","_rn_":"NE"},{"1":"246185.8","2":"23503.62","3":"199766.28","4":"292605.4","_rn_":"S"},{"1":"518977.6","2":"70298.69","3":"377206.82","4":"660748.5","_rn_":"W"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Compared to the results of naively applying SRS estimation to each domain (wrong analysis)</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>region_agsrs_srs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">rbind</span>(</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">NC =</span> <span class="fu">srs_mean_est</span>(agsrs<span class="sc">$</span>acres92[agsrs<span class="sc">$</span>region<span class="sc">==</span><span class="st">"NC"</span>], <span class="at">N =</span> <span class="dv">1054</span>),</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">NE =</span> <span class="fu">srs_mean_est</span>(agsrs<span class="sc">$</span>acres92[agsrs<span class="sc">$</span>region<span class="sc">==</span><span class="st">"NE"</span>], <span class="at">N =</span> <span class="dv">220</span>),</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">S =</span> <span class="fu">srs_mean_est</span>(agsrs<span class="sc">$</span>acres92[agsrs<span class="sc">$</span>region<span class="sc">==</span><span class="st">"S"</span>], <span class="at">N =</span> <span class="dv">1382</span>),</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">W =</span> <span class="fu">srs_mean_est</span>(agsrs<span class="sc">$</span>acres92[agsrs<span class="sc">$</span>region<span class="sc">==</span><span class="st">"W"</span>], <span class="at">N =</span> <span class="dv">422</span>))</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>region_agsrs_srs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Est."],"name":[1],"type":["dbl"],"align":["right"]},{"label":["S.E."],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ci.low"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["ci.upp"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"323416.4","2":"30395.89","3":"262890.49","4":"383942.4","_rn_":"NC"},{"1":"106549.0","2":"29207.51","3":"44926.55","4":"168171.5","_rn_":"NE"},{"1":"246185.8","2":"23264.01","3":"200239.52","4":"292132.2","_rn_":"S"},{"1":"518977.6","2":"70033.38","3":"377741.86","4":"660213.4","_rn_":"W"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="post-stratification-analysis" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="post-stratification-analysis"><span class="header-section-number">4.4.2</span> Post-stratification Analysis</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>nh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (agsrs[, <span class="st">"acres92"</span>], agsrs[,<span class="st">"region"</span>], length)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">sum</span> (nh)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>n</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 300</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (agsrs[, <span class="st">"acres92"</span>], agsrs[,<span class="st">"region"</span>], sd)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>ybarh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (agsrs[, <span class="st">"acres92"</span>], agsrs[,<span class="st">"region"</span>], mean)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create a vector with external information</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>Nh <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">NC =</span> <span class="dv">1054</span>, <span class="at">NE =</span> <span class="dv">220</span>, <span class="at">S=</span> <span class="dv">1382</span>, <span class="at">W =</span> <span class="dv">422</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>**Create <span class="math inline">\(n_h^{\mbox{post-strat}}=n\times \frac{N_h}{N}\)</span>, instead of using observed <span class="math inline">\(n_h\)</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>nh_post <span class="ot">&lt;-</span> Nh<span class="sc">/</span><span class="fu">sum</span>(Nh)<span class="sc">*</span> n</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="do">## regional summary for stratified sampling estimation</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"${</span><span class="sc">\\</span><span class="st">bar y}_h$"</span><span class="ot">=</span>ybarh, </span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$s_h$"</span><span class="ot">=</span>sh, </span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$n_h$"</span><span class="ot">=</span>nh, </span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$</span><span class="sc">\\</span><span class="st">pi^{</span><span class="sc">\\</span><span class="st">mbox{obs}}_h=n_h/n$"</span><span class="ot">=</span>nh<span class="sc">/</span>n, </span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$N_h$"</span><span class="ot">=</span>Nh, </span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$</span><span class="sc">\\</span><span class="st">pi^{</span><span class="sc">\\</span><span class="st">mbox{pop}}_h=N_h/N$"</span><span class="ot">=</span>Nh<span class="sc">/</span><span class="fu">sum</span>(Nh),  </span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>     <span class="st">"$n_h^{</span><span class="sc">\\</span><span class="st">mbox{post-strat}}=n</span><span class="sc">\\</span><span class="st">times N_h/N$"</span><span class="ot">=</span>nh_post,</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">check.names =</span> <span class="cn">FALSE</span> ),</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 2%">
+<col style="width: 9%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 20%">
+<col style="width: 4%">
+<col style="width: 20%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;"><span class="math inline">\({\bar y}_h\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(s_h\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(n_h\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\pi^{\mbox{obs}}_h=n_h/n\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(N_h\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\pi^{\mbox{pop}}_h=N_h/N\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(n_h^{\mbox{post-strat}}=n\times N_h/N\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">NC</td>
+<td style="text-align: right;">323416.4</td>
+<td style="text-align: right;">278970.0</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: right;">0.2600000</td>
+<td style="text-align: right;">1054</td>
+<td style="text-align: right;">0.3424301</td>
+<td style="text-align: right;">102.7290</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NE</td>
+<td style="text-align: right;">106549.0</td>
+<td style="text-align: right;">129320.2</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">0.0600000</td>
+<td style="text-align: right;">220</td>
+<td style="text-align: right;">0.0714750</td>
+<td style="text-align: right;">21.4425</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">S</td>
+<td style="text-align: right;">246185.8</td>
+<td style="text-align: right;">312941.3</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">0.5333333</td>
+<td style="text-align: right;">1382</td>
+<td style="text-align: right;">0.4489929</td>
+<td style="text-align: right;">134.6979</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">W</td>
+<td style="text-align: right;">518977.6</td>
+<td style="text-align: right;">490842.0</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">0.1466667</td>
+<td style="text-align: right;">422</td>
+<td style="text-align: right;">0.1371020</td>
+<td style="text-align: right;">41.1306</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="do">## strata mean estimate</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_mean_estimate</span> (ybarh, sh, nh_post, Nh)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Est.      S.E.    ci.low    ci.upp 
+300051.69  17760.26 265241.58 334861.79 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="do">## compare with SRS estimate</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_mean_est</span>(agsrs<span class="sc">$</span>acres92, <span class="at">N =</span> <span class="dv">3087</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Est.      S.E.    ci.low    ci.upp 
+297897.05  18901.41 260700.40 335093.69 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="do">## compare with true mean</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(agpop<span class="sc">$</span>acres92)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 308582.4</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="estimating-domain-means-and-post-stratification-with-teacher-example" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="estimating-domain-means-and-post-stratification-with-teacher-example"><span class="header-section-number">4.5</span> Estimating Domain Means and Post-stratification with teacher example</h2>
+<section id="importing-data-and-calculating-contingency-table" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="importing-data-and-calculating-contingency-table"><span class="header-section-number">4.5.1</span> Importing Data and Calculating Contingency Table</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>teacher <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/college_teacher.csv"</span>); teacher</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["teacher"],"name":[1],"type":["int"],"align":["right"]},{"label":["gender"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"1"},{"1":"0","2":"1"},{"1":"1","2":"1"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"1","2":"2"},{"1":"1","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"},{"1":"1","2":"2"},{"1":"1","2":"2"},{"1":"0","2":"2"},{"1":"0","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(teacher[,<span class="dv">2</span><span class="sc">:</span><span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      teacher
+gender   0   1
+     1 156  84
+     2 120  40</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">addmargins</span>(<span class="fu">table</span>(teacher[,<span class="dv">2</span><span class="sc">:</span><span class="dv">1</span>]), <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      teacher
+gender   0   1 Sum
+     1 156  84 240
+     2 120  40 160</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Proportions of students who want to become a teacher in two domains (female and male)</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(teacher[,<span class="dv">2</span><span class="sc">:</span><span class="dv">1</span>]), <span class="at">margin =</span> <span class="st">"gender"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      teacher
+gender    0    1
+     1 0.65 0.35
+     2 0.75 0.25</code></pre>
+</div>
+</div>
+</section>
+<section id="domain-summary" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="domain-summary"><span class="header-section-number">4.5.2</span> Domain Summary</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span> (teacher)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>ybarh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (teacher<span class="sc">$</span>teacher, <span class="at">INDEX =</span> teacher<span class="sc">$</span>gender, <span class="at">FUN =</span> mean); ybarh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   1    2 
+0.35 0.25 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (teacher<span class="sc">$</span>teacher, <span class="at">INDEX =</span> teacher<span class="sc">$</span>gender, <span class="at">FUN =</span> sd); sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>        1         2 
+0.4779664 0.4343722 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>nh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (teacher<span class="sc">$</span>teacher, <span class="at">INDEX =</span> teacher<span class="sc">$</span>gender, <span class="at">FUN =</span> length)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>prop_h_obs <span class="ot">&lt;-</span> nh<span class="sc">/</span><span class="fu">sum</span> (nh); prop_h_obs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  1   2 
+0.6 0.4 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="st">'$</span><span class="sc">\\</span><span class="st">bar y_h$'</span><span class="ot">=</span>ybarh, </span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">"$s_h$"</span><span class="ot">=</span>sh, </span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>               <span class="st">"$n^{</span><span class="sc">\\</span><span class="st">mbox{obs}}_h$"</span><span class="ot">=</span>nh, </span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>               <span class="st">"$</span><span class="sc">\\</span><span class="st">pi^{</span><span class="sc">\\</span><span class="st">mbox{obs}}_h$"</span><span class="ot">=</span>prop_h_obs,</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">check.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;"><span class="math inline">\(\bar y_h\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(s_h\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(n^{\mbox{obs}}_h\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\pi^{\mbox{obs}}_h\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.35</td>
+<td style="text-align: right;">0.4779664</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">0.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">0.4343722</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">0.4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="estimating-domain-means-1" class="level3" data-number="4.5.3">
+<h3 data-number="4.5.3" class="anchored" data-anchor-id="estimating-domain-means-1"><span class="header-section-number">4.5.3</span> Estimating Domain Means</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>Nh <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3000</span>, <span class="dv">1000</span>)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(teacher)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="fu">rbind</span>(</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">female=</span><span class="fu">srs_domain_mean_est</span>(<span class="fu">subset</span>(teacher, gender<span class="sc">==</span><span class="dv">1</span>)<span class="sc">$</span>teacher, <span class="at">n=</span>n, <span class="at">N=</span><span class="dv">4000</span>),</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">male =</span> <span class="fu">srs_domain_mean_est</span>(<span class="fu">subset</span>(teacher, gender<span class="sc">==</span><span class="dv">2</span>)<span class="sc">$</span>teacher, <span class="at">n=</span>n, <span class="at">N=</span><span class="dv">4000</span>)</span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Est."],"name":[1],"type":["dbl"],"align":["right"]},{"label":["S.E."],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ci.low"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["ci.upp"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.35","2":"0.02926935","3":"0.2923412","4":"0.4076588","_rn_":"female"},{"1":"0.25","2":"0.03257792","3":"0.1856587","4":"0.3143413","_rn_":"male"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="post-stratification-analysis-1" class="level3" data-number="4.5.4">
+<h3 data-number="4.5.4" class="anchored" data-anchor-id="post-stratification-analysis-1"><span class="header-section-number">4.5.4</span> Post-stratification Analysis</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>Nh <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3000</span>, <span class="dv">1000</span>)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>prop_h_pop <span class="ot">&lt;-</span> Nh<span class="sc">/</span><span class="fu">sum</span> (Nh); prop_h_pop</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.75 0.25</code></pre>
+</div>
+</div>
+<p>**Create <span class="math inline">\(n_h^{\mbox{post-strat}}=n\times \frac{N_h}{N}\)</span>, instead of using observed <span class="math inline">\(n_h\)</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>nh_post <span class="ot">&lt;-</span> Nh<span class="sc">/</span><span class="fu">sum</span> (Nh) <span class="sc">*</span> n</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="do">## show the differences</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"${</span><span class="sc">\\</span><span class="st">hat p}_h$"</span><span class="ot">=</span>ybarh, </span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$s_h$"</span><span class="ot">=</span>sh, </span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$n_h$"</span><span class="ot">=</span>nh, </span>
+<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$</span><span class="sc">\\</span><span class="st">pi^{</span><span class="sc">\\</span><span class="st">mbox{obs}}_h=n_h/n$"</span><span class="ot">=</span>nh<span class="sc">/</span>n, </span>
+<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$N_h$"</span><span class="ot">=</span>Nh, </span>
+<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$</span><span class="sc">\\</span><span class="st">pi^{</span><span class="sc">\\</span><span class="st">mbox{pop}}_h=N_h/N$"</span><span class="ot">=</span>Nh<span class="sc">/</span><span class="fu">sum</span>(Nh),  </span>
+<span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a>     <span class="st">"$n_h^{</span><span class="sc">\\</span><span class="st">mbox{post-strat}}=n</span><span class="sc">\\</span><span class="st">times N_h/N$"</span><span class="ot">=</span>nh_post,</span>
+<span id="cb66-13"><a href="#cb66-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">check.names =</span> <span class="cn">FALSE</span> )</span>
+<span id="cb66-14"><a href="#cb66-14" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 7%">
+<col style="width: 4%">
+<col style="width: 20%">
+<col style="width: 4%">
+<col style="width: 20%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;"><span class="math inline">\({\hat p}_h\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(s_h\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(n_h\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\pi^{\mbox{obs}}_h=n_h/n\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(N_h\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\pi^{\mbox{pop}}_h=N_h/N\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(n_h^{\mbox{post-strat}}=n\times N_h/N\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.35</td>
+<td style="text-align: right;">0.4779664</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">0.6</td>
+<td style="text-align: right;">3000</td>
+<td style="text-align: right;">0.75</td>
+<td style="text-align: right;">300</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">0.4343722</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">1000</td>
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">100</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="do">## poststratification estimation of mean</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_mean_estimate</span> (ybarh, sh, nh_post, Nh)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+0.32500000 0.02217306 0.28154080 0.36845920 </code></pre>
+</div>
+</div>
+<p>This post-stratification estimate can be also calculated with:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.35</span><span class="sc">*</span><span class="fl">0.75+0.25</span><span class="sc">*</span><span class="fl">0.25</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.325</code></pre>
+</div>
+</div>
+</section>
+<section id="comparing-to-the-analysis-with-srs" class="level3" data-number="4.5.5">
+<h3 data-number="4.5.5" class="anchored" data-anchor-id="comparing-to-the-analysis-with-srs"><span class="header-section-number">4.5.5</span> Comparing to the Analysis with SRS</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_mean_est</span> (teacher<span class="sc">$</span>teacher, <span class="at">N=</span><span class="fu">sum</span>(Nh))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+0.31000000 0.02196545 0.26681751 0.35318249 </code></pre>
+</div>
+</div>
+<p>This answer will be the same as using the observed (sample) gender proportions (0.6 and 0.4) to weight the <span class="math inline">\(\bar y_h\)</span>, that is,</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fl">0.35</span><span class="sc">*</span><span class="fl">0.6+0.25</span><span class="sc">*</span><span class="fl">0.4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.31</code></pre>
+</div>
+</div>
+<p>It is also equal to naive sample proportion:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span> (teacher<span class="sc">$</span>teacher<span class="sc">==</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.31</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="regression-estimation-for-the-cherry.csv-dataset" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="regression-estimation-for-the-cherry.csv-dataset"><span class="header-section-number">4.6</span> Regression Estimation for the cherry.csv dataset</h2>
+<section id="importing-data-1" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="importing-data-1"><span class="header-section-number">4.6.1</span> Importing data</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>cherry <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/cherry.csv"</span>, <span class="at">header =</span> T)</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>ydata <span class="ot">&lt;-</span> cherry<span class="sc">$</span>volume </span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>xdata <span class="ot">&lt;-</span> cherry<span class="sc">$</span>diameter</span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>t_diameters <span class="ot">&lt;-</span> <span class="dv">41835</span></span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a>xbarU <span class="ot">&lt;-</span> t_diameters<span class="sc">/</span><span class="dv">2967</span> </span>
+<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">2967</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="step-by-step-calculation" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="step-by-step-calculation"><span class="header-section-number">4.6.2</span> Step-by-step calculation</h3>
+<section id="fitting-a-linear-regression-model" class="level4" data-number="4.6.2.1">
+<h4 data-number="4.6.2.1" class="anchored" data-anchor-id="fitting-a-linear-regression-model"><span class="header-section-number">4.6.2.1</span> Fitting a linear regression model</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span> (ydata)</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>lmfit <span class="ot">&lt;-</span> <span class="fu">lm</span> (ydata <span class="sc">~</span> xdata)</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span> (lmfit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ydata ~ xdata)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-8.065 -3.107  0.152  3.495  9.587 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -36.9435     3.3651  -10.98 7.62e-12 ***
+xdata         5.0659     0.2474   20.48  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.252 on 29 degrees of freedom
+Multiple R-squared:  0.9353,    Adjusted R-squared:  0.9331 
+F-statistic: 419.4 on 1 and 29 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span> (xdata, ydata)</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span> (lmfit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ratio_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Calculation of <span class="math inline">\(\hat{y}_i=\hat{B}_0 + \hat{B}_1\times x_i\)</span> and <span class="math inline">\(e_i=y_i-\hat{y}_i\)</span>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>Bhat <span class="ot">&lt;-</span> lmfit<span class="sc">$</span>coefficients</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> Bhat[<span class="dv">1</span>] <span class="sc">+</span> Bhat[<span class="dv">2</span>] <span class="sc">*</span> xdata</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>residuals <span class="ot">&lt;-</span> ydata <span class="sc">-</span> yhat</span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">data.frame</span> (<span class="st">"$x_i$"</span><span class="ot">=</span>cherry<span class="sc">$</span>diameter, </span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"$y_i$"</span><span class="ot">=</span>cherry<span class="sc">$</span>volume,</span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"$</span><span class="sc">\\</span><span class="st">hat y_i=</span><span class="sc">\\</span><span class="st">hat B_0+</span><span class="sc">\\</span><span class="st">hat B_1</span><span class="sc">\\</span><span class="st">times x_i$"</span><span class="ot">=</span>yhat,</span>
+<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"$e_i=y_i-</span><span class="sc">\\</span><span class="st">hat y_i$"</span><span class="ot">=</span>residuals,</span>
+<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">check.names=</span><span class="cn">FALSE</span>)) <span class="do">## for visualization</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 55%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;"><span class="math inline">\(x_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(y_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\hat y_i=\hat B_0+\hat B_1\times x_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(e_i=y_i-\hat y_i\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">8.3</td>
+<td style="text-align: right;">10.3</td>
+<td style="text-align: right;">5.103149</td>
+<td style="text-align: right;">5.1968508</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8.6</td>
+<td style="text-align: right;">10.3</td>
+<td style="text-align: right;">6.622906</td>
+<td style="text-align: right;">3.6770939</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8.8</td>
+<td style="text-align: right;">10.2</td>
+<td style="text-align: right;">7.636077</td>
+<td style="text-align: right;">2.5639226</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10.5</td>
+<td style="text-align: right;">16.4</td>
+<td style="text-align: right;">16.248033</td>
+<td style="text-align: right;">0.1519667</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">10.7</td>
+<td style="text-align: right;">18.8</td>
+<td style="text-align: right;">17.261205</td>
+<td style="text-align: right;">1.5387954</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10.8</td>
+<td style="text-align: right;">19.7</td>
+<td style="text-align: right;">17.767790</td>
+<td style="text-align: right;">1.9322098</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11.0</td>
+<td style="text-align: right;">15.6</td>
+<td style="text-align: right;">18.780962</td>
+<td style="text-align: right;">-3.1809615</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11.0</td>
+<td style="text-align: right;">18.2</td>
+<td style="text-align: right;">18.780962</td>
+<td style="text-align: right;">-0.5809615</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11.1</td>
+<td style="text-align: right;">22.6</td>
+<td style="text-align: right;">19.287547</td>
+<td style="text-align: right;">3.3124528</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11.2</td>
+<td style="text-align: right;">19.9</td>
+<td style="text-align: right;">19.794133</td>
+<td style="text-align: right;">0.1058672</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11.3</td>
+<td style="text-align: right;">24.2</td>
+<td style="text-align: right;">20.300718</td>
+<td style="text-align: right;">3.8992815</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11.4</td>
+<td style="text-align: right;">21.0</td>
+<td style="text-align: right;">20.807304</td>
+<td style="text-align: right;">0.1926959</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11.4</td>
+<td style="text-align: right;">21.4</td>
+<td style="text-align: right;">20.807304</td>
+<td style="text-align: right;">0.5926959</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11.7</td>
+<td style="text-align: right;">21.3</td>
+<td style="text-align: right;">22.327061</td>
+<td style="text-align: right;">-1.0270610</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">12.0</td>
+<td style="text-align: right;">19.1</td>
+<td style="text-align: right;">23.846818</td>
+<td style="text-align: right;">-4.7468179</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12.9</td>
+<td style="text-align: right;">22.2</td>
+<td style="text-align: right;">28.406089</td>
+<td style="text-align: right;">-6.2060887</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">12.9</td>
+<td style="text-align: right;">33.8</td>
+<td style="text-align: right;">28.406089</td>
+<td style="text-align: right;">5.3939113</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13.3</td>
+<td style="text-align: right;">27.4</td>
+<td style="text-align: right;">30.432431</td>
+<td style="text-align: right;">-3.0324313</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13.7</td>
+<td style="text-align: right;">25.7</td>
+<td style="text-align: right;">32.458774</td>
+<td style="text-align: right;">-6.7587739</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13.8</td>
+<td style="text-align: right;">24.9</td>
+<td style="text-align: right;">32.965359</td>
+<td style="text-align: right;">-8.0653595</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">14.0</td>
+<td style="text-align: right;">34.5</td>
+<td style="text-align: right;">33.978531</td>
+<td style="text-align: right;">0.5214692</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14.2</td>
+<td style="text-align: right;">31.7</td>
+<td style="text-align: right;">34.991702</td>
+<td style="text-align: right;">-3.2917021</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">14.5</td>
+<td style="text-align: right;">36.3</td>
+<td style="text-align: right;">36.511459</td>
+<td style="text-align: right;">-0.2114590</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">16.0</td>
+<td style="text-align: right;">38.3</td>
+<td style="text-align: right;">44.110244</td>
+<td style="text-align: right;">-5.8102436</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">16.3</td>
+<td style="text-align: right;">42.6</td>
+<td style="text-align: right;">45.630001</td>
+<td style="text-align: right;">-3.0300006</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">17.3</td>
+<td style="text-align: right;">55.4</td>
+<td style="text-align: right;">50.695857</td>
+<td style="text-align: right;">4.7041430</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17.5</td>
+<td style="text-align: right;">55.7</td>
+<td style="text-align: right;">51.709028</td>
+<td style="text-align: right;">3.9909717</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">17.9</td>
+<td style="text-align: right;">58.3</td>
+<td style="text-align: right;">53.735371</td>
+<td style="text-align: right;">4.5646292</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">18.0</td>
+<td style="text-align: right;">51.5</td>
+<td style="text-align: right;">54.241957</td>
+<td style="text-align: right;">-2.7419565</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18.0</td>
+<td style="text-align: right;">51.0</td>
+<td style="text-align: right;">54.241957</td>
+<td style="text-align: right;">-3.2419565</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">20.6</td>
+<td style="text-align: right;">77.0</td>
+<td style="text-align: right;">67.413183</td>
+<td style="text-align: right;">9.5868168</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We can then estimate <span class="math inline">\(s^2_e\)</span> by this expression:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>SSe <span class="ot">&lt;-</span> <span class="fu">sum</span> (residuals<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (n <span class="sc">-</span> <span class="dv">2</span>); SSe </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 18.0794</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(e_i\)</span> and <span class="math inline">\(s^2_e\)</span> can be obtained directly from lm fitting output</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># e_i can be obtained from lm() fitting outputs too</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>lmfit<span class="sc">$</span>residuals <span class="co"># for e_i</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>         1          2          3          4          5          6          7 
+ 5.1968508  3.6770939  2.5639226  0.1519667  1.5387954  1.9322098 -3.1809615 
+         8          9         10         11         12         13         14 
+-0.5809615  3.3124528  0.1058672  3.8992815  0.1926959  0.5926959 -1.0270610 
+        15         16         17         18         19         20         21 
+-4.7468179 -6.2060887  5.3939113 -3.0324313 -6.7587739 -8.0653595  0.5214692 
+        22         23         24         25         26         27         28 
+-3.2917021 -0.2114590 -5.8102436 -3.0300006  4.7041430  3.9909717  4.5646292 
+        29         30         31 
+-2.7419565 -3.2419565  9.5868168 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(lmfit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["int"],"align":["right"]},{"label":["Sum Sq"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Mean Sq"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["F value"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"7581.7813","3":"7581.7813","4":"419.3603","5":"8.644334e-19","_rn_":"xdata"},{"1":"29","2":"524.3025","3":"18.0794","4":"NA","5":"NA","_rn_":"Residuals"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>The Mean Sq for “Residuals” is the <span class="math inline">\(s^2_e\)</span>.</p>
+</section>
+<section id="estimate-the-mean" class="level4" data-number="4.6.2.2">
+<h4 data-number="4.6.2.2" class="anchored" data-anchor-id="estimate-the-mean"><span class="header-section-number">4.6.2.2</span> Estimate the mean</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>yhat_reg <span class="ot">&lt;-</span> Bhat[<span class="dv">1</span>] <span class="sc">+</span> Bhat[<span class="dv">2</span>] <span class="sc">*</span> xbarU</span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>se_yhat_reg <span class="ot">&lt;-</span> <span class="fu">sqrt</span> ((<span class="dv">1</span><span class="sc">-</span>n<span class="sc">/</span>N) <span class="sc">*</span> SSe <span class="sc">/</span> n)</span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>mem <span class="ot">&lt;-</span> <span class="fu">qt</span> (<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">2</span>) <span class="sc">*</span> se_yhat_reg</span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">c</span>(yhat_reg, se_yhat_reg, yhat_reg <span class="sc">-</span> mem, yhat_reg <span class="sc">+</span> mem)</span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span> (output) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Est."</span>, <span class="st">"S.E."</span>, <span class="st">"ci.low"</span>, <span class="st">"ci.upp"</span> )</span>
+<span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a>output</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+34.4856287  0.7596795 32.9319097 36.0393476 </code></pre>
+</div>
+</div>
+</section>
+<section id="estimate-the-total" class="level4" data-number="4.6.2.3">
+<h4 data-number="4.6.2.3" class="anchored" data-anchor-id="estimate-the-total"><span class="header-section-number">4.6.2.3</span> Estimate the total</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>output <span class="sc">*</span> N </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+102318.860   2253.969  97708.976 106928.744 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="regression-estimation-using-the-function" class="level3" data-number="4.6.3">
+<h3 data-number="4.6.3" class="anchored" data-anchor-id="regression-estimation-using-the-function"><span class="header-section-number">4.6.3</span> Regression estimation Using the function</h3>
+<section id="estimating-the-mean" class="level4" data-number="4.6.3.1">
+<h4 data-number="4.6.3.1" class="anchored" data-anchor-id="estimating-the-mean"><span class="header-section-number">4.6.3.1</span> Estimating the mean</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>reg_mean_volume <span class="ot">&lt;-</span> <span class="fu">srs_reg_est</span>(<span class="at">ydata =</span> cherry<span class="sc">$</span>volume, <span class="at">xdata =</span> cherry<span class="sc">$</span>diameter, </span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">xbarU=</span>t_diameters<span class="sc">/</span><span class="dv">2967</span>, <span class="at">N =</span> <span class="dv">2967</span>) </span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a>reg_mean_volume</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+34.4856287  0.7596795 32.9319097 36.0393476 </code></pre>
+</div>
+</div>
+</section>
+<section id="estimating-the-total" class="level4" data-number="4.6.3.2">
+<h4 data-number="4.6.3.2" class="anchored" data-anchor-id="estimating-the-total"><span class="header-section-number">4.6.3.2</span> Estimating the total</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>t_diameters <span class="ot">&lt;-</span> <span class="dv">41835</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_reg_est</span>(<span class="at">ydata =</span> cherry<span class="sc">$</span>volume, <span class="at">xdata =</span> cherry<span class="sc">$</span>diameter, </span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">xbarU=</span>t_diameters<span class="sc">/</span><span class="dv">2967</span>, <span class="at">N =</span> <span class="dv">2967</span>, <span class="at">est.total =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+102318.860   2253.969  97708.976 106928.744 </code></pre>
+</div>
+</div>
+</section>
+<section id="percentage-of-variance-reduction-1" class="level4" data-number="4.6.3.3">
+<h4 data-number="4.6.3.3" class="anchored" data-anchor-id="percentage-of-variance-reduction-1"><span class="header-section-number">4.6.3.3</span> Percentage of Variance Reduction</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="dv">1</span><span class="sc">-</span>(reg_mean_volume[<span class="dv">2</span>]<span class="sc">/</span>srs_mean_volume[<span class="dv">2</span>])<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.9330895</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="regression-estimation-for-photo-counts-of-dead-trees" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="regression-estimation-for-photo-counts-of-dead-trees"><span class="header-section-number">4.7</span> Regression estimation for photo counts of dead trees</h2>
+<p>To estimate the number of dead trees in an area, we divide the area into 100 square plots and count the number of dead trees on a photograph of each plot. Photo counts can be made quickly, but sometimes a tree is misclassiﬁed or not detected. So we select an SRS of 25 of the plots for ﬁeld counts of dead trees. We know that the population mean number of dead trees per plot from the photo count is 11.3.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>photocounts <span class="ot">&lt;-</span> <span class="fu">c</span> (<span class="dv">10</span>,<span class="dv">12</span>,<span class="dv">7</span>, <span class="dv">13</span>,<span class="dv">13</span>, <span class="dv">6</span>,<span class="dv">17</span>, <span class="dv">16</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">14</span>, <span class="dv">12</span>, <span class="dv">10</span>, <span class="dv">5</span>,<span class="dv">12</span>, <span class="dv">10</span>,</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">6</span>, <span class="dv">11</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">10</span>, <span class="dv">10</span>)</span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a>fieldcounts <span class="ot">&lt;-</span> <span class="fu">c</span> (<span class="dv">15</span>, <span class="dv">14</span>, <span class="dv">9</span>, <span class="dv">14</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">18</span>, <span class="dv">15</span>, <span class="dv">13</span>, <span class="dv">15</span>, <span class="dv">11</span>, <span class="dv">15</span>, <span class="dv">12</span>, <span class="dv">8</span>, <span class="dv">13</span>,</span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">9</span>, <span class="dv">12</span>, <span class="dv">13</span>, <span class="dv">11</span>, <span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">8</span>)</span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a>lmfit <span class="ot">&lt;-</span> <span class="fu">lm</span> (fieldcounts <span class="sc">~</span> photocounts)</span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span> (lmfit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = fieldcounts ~ photocounts)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-5.0319 -1.8053  0.1947  1.4212  3.8080 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   5.0593     1.7635   2.869 0.008676 ** 
+photocounts   0.6133     0.1601   3.832 0.000854 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.406 on 23 degrees of freedom
+Multiple R-squared:  0.3896,    Adjusted R-squared:  0.3631 
+F-statistic: 14.68 on 1 and 23 DF,  p-value: 0.0008538</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span> (photocounts, fieldcounts)</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span> (lmfit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ratio_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate for the mean number of dead trees per plot</span></span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_reg_est</span> (<span class="at">ydata =</span> fieldcounts, <span class="at">xdata =</span> photocounts, <span class="at">xbarU =</span> <span class="fl">11.3</span>, <span class="at">N =</span> <span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+11.9892920  0.4167579 11.1271625 12.8514215 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate for the total number of dead trees in the area</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_reg_est</span> (<span class="at">ydata =</span> fieldcounts, <span class="at">xdata =</span> photocounts, <span class="at">xbarU =</span> <span class="fl">11.3</span>, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">est.total =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+1198.92920   41.67579 1112.71625 1285.14215 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compare to simple estimate</span></span>
+<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_mean_est</span> (<span class="at">sdata =</span> fieldcounts, <span class="at">N =</span> <span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+11.5600000  0.5222069 10.4822180 12.6377820 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compare to ratio estimate </span></span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_ratio_est</span> (<span class="at">ydata =</span> fieldcounts, <span class="at">xdata =</span> photocounts, <span class="at">N =</span> <span class="dv">100</span>) <span class="sc">*</span> <span class="fl">11.3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+12.3233962  0.5121485 11.2663736 13.3804189 </code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>6&nbsp; Unequal Probability Sampling – Elements of Sampling Techniques</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-f79c7fb6db380d32be398468f2fb58cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-a7b5894d5a4c39c6aa3484761f021c1f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/custombook-1.0.0/num_eq.js"></script>
+<script src="site_libs/quarto-contrib/custombook-1.0.0/merge-toc.js"></script>
+<link href="site_libs/quarto-contrib/custombook-1.0.0/bookstyles.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ups.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Elements of Sampling Techniques</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A Quick Introduction to using R for Data Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./srs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis and Simulation for Simple Random Sampling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./strata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Analysis and Simulation for Stratified Random Sampling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ratio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data Analysis and Simulation for Ratio and Regression Estimation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cluster.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data Analysis for Cluster Sampling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ups.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#functions-and-packages" id="toc-functions-and-packages" class="nav-link active" data-scroll-target="#functions-and-packages"><span class="header-section-number">6.1</span> Functions and Packages</a></li>
+  <li><a href="#analysis-of-a-dataset-student-study-hours-collected-by-upswr" id="toc-analysis-of-a-dataset-student-study-hours-collected-by-upswr" class="nav-link" data-scroll-target="#analysis-of-a-dataset-student-study-hours-collected-by-upswr"><span class="header-section-number">6.2</span> Analysis of a dataset (student study hours) collected by UPSWR</a></li>
+  <li><a href="#analysis-of-a-dataset-statepop.csv-collected-with-one-stage-upswr" id="toc-analysis-of-a-dataset-statepop.csv-collected-with-one-stage-upswr" class="nav-link" data-scroll-target="#analysis-of-a-dataset-statepop.csv-collected-with-one-stage-upswr"><span class="header-section-number">6.3</span> Analysis of a dataset (statepop.csv) collected with one-stage UPSWR</a></li>
+  <li><a href="#analysis-of-a-dataset-studenthrs.csv-collected-with-two-stage-upswr" id="toc-analysis-of-a-dataset-studenthrs.csv-collected-with-two-stage-upswr" class="nav-link" data-scroll-target="#analysis-of-a-dataset-studenthrs.csv-collected-with-two-stage-upswr"><span class="header-section-number">6.4</span> Analysis of a dataset (studenthrs.csv) collected with two-stage UPSWR</a></li>
+  <li><a href="#simulation-studies-for-upswr-using-agpop-data" id="toc-simulation-studies-for-upswr-using-agpop-data" class="nav-link" data-scroll-target="#simulation-studies-for-upswr-using-agpop-data"><span class="header-section-number">6.5</span> Simulation Studies for UPSWR using agpop data</a>
+  <ul>
+  <li><a href="#using-acres87-to-construct-sampling-probabilities" id="toc-using-acres87-to-construct-sampling-probabilities" class="nav-link" data-scroll-target="#using-acres87-to-construct-sampling-probabilities"><span class="header-section-number">6.5.1</span> Using acres87 to construct sampling probabilities</a></li>
+  <li><a href="#using-largef87-to-construct-sampling-probabilities" id="toc-using-largef87-to-construct-sampling-probabilities" class="nav-link" data-scroll-target="#using-largef87-to-construct-sampling-probabilities"><span class="header-section-number">6.5.2</span> Using largef87 to construct sampling probabilities</a></li>
+  </ul></li>
+  <li><a href="#analysis-of-a-dataset-student-study-hours-collected-by-upswo-without-replacement" id="toc-analysis-of-a-dataset-student-study-hours-collected-by-upswo-without-replacement" class="nav-link" data-scroll-target="#analysis-of-a-dataset-student-study-hours-collected-by-upswo-without-replacement"><span class="header-section-number">6.6</span> Analysis of a dataset (student study hours) collected by UPSWO (without replacement)</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content column-page-right" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-right">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="functions-and-packages" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="functions-and-packages"><span class="header-section-number">6.1</span> Functions and Packages</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## ydata --- observations of the variable of interest</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">## xdata --- observations of the auxilliary variable</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">## N --- population size</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="do">## the output is the ratio of ybarU/xbarU</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>srs_ratio_est <span class="ot">&lt;-</span> <span class="cf">function</span> (ydata, xdata, <span class="at">N =</span> <span class="cn">Inf</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>{   </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span> (xdata)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  xbar <span class="ot">&lt;-</span> <span class="fu">mean</span> (xdata)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  ybar <span class="ot">&lt;-</span> <span class="fu">mean</span> (ydata)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  B_hat <span class="ot">&lt;-</span> ybar <span class="sc">/</span> xbar</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> ydata <span class="sc">-</span> B_hat <span class="sc">*</span> xdata</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  var_d <span class="ot">&lt;-</span> <span class="fu">sum</span> (d<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (n <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  sd_B_hat <span class="ot">&lt;-</span> <span class="fu">sqrt</span> ((<span class="dv">1</span> <span class="sc">-</span> n<span class="sc">/</span>N) <span class="sc">*</span> var_d <span class="sc">/</span> n) <span class="sc">/</span> xbar</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  mem <span class="ot">&lt;-</span> <span class="fu">qt</span> (<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> sd_B_hat</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  output <span class="ot">&lt;-</span> <span class="fu">c</span> (B_hat, sd_B_hat, B_hat <span class="sc">-</span> mem, B_hat <span class="sc">+</span> mem )</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span> (output) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Est."</span>, <span class="st">"S.E."</span>, <span class="st">"ci.low"</span>, <span class="st">"ci.upp"</span> )</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  output</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="do">## ydata --- observations of the variable of interest</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="do">## xdata --- observations of the auxilliary variable</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="do">## N --- population size</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="do">## xbarU --- population mean of auxilliary variable</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="do">## the output is the estimate mean or total (est.total=TRUE)</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>srs_reg_est <span class="ot">&lt;-</span> <span class="cf">function</span> (ydata, xdata, xbarU, <span class="at">N =</span> <span class="cn">Inf</span>, <span class="at">est.total =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span> (ydata)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  lmfit <span class="ot">&lt;-</span> <span class="fu">lm</span> (ydata <span class="sc">~</span> xdata)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  Bhat <span class="ot">&lt;-</span> lmfit<span class="sc">$</span>coefficients</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  efit <span class="ot">&lt;-</span> lmfit<span class="sc">$</span>residuals</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  SSe <span class="ot">&lt;-</span> <span class="fu">sum</span> (efit<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (n <span class="sc">-</span> <span class="dv">2</span>) </span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  yhat_reg <span class="ot">&lt;-</span> Bhat[<span class="dv">1</span>] <span class="sc">+</span> Bhat[<span class="dv">2</span>] <span class="sc">*</span> xbarU</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  se_yhat_reg <span class="ot">&lt;-</span> <span class="fu">sqrt</span> ((<span class="dv">1</span><span class="sc">-</span>n<span class="sc">/</span>N) <span class="sc">*</span> SSe <span class="sc">/</span> n)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  mem <span class="ot">&lt;-</span> <span class="fu">qt</span> (<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">2</span>) <span class="sc">*</span> se_yhat_reg</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  output <span class="ot">&lt;-</span> <span class="fu">c</span>(yhat_reg, se_yhat_reg, yhat_reg <span class="sc">-</span> mem, yhat_reg <span class="sc">+</span> mem)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (est.total) {</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.finite</span>(N)) <span class="fu">stop</span>(<span class="st">"N must be finite for estimating population total"</span> )</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>      output <span class="ot">&lt;-</span> output <span class="sc">*</span> N</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span> (output) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Est."</span>, <span class="st">"S.E."</span>, <span class="st">"ci.low"</span>, <span class="st">"ci.upp"</span> )</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  output</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="do">## sdata --- a vector of original survey data</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="do">## N --- population size</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="do">## to find total, multiply N to the estimate returned by this function</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>srs_mean_est <span class="ot">&lt;-</span> <span class="cf">function</span> (sdata, <span class="at">N =</span> <span class="cn">Inf</span>)</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">length</span> (sdata)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    ybar <span class="ot">&lt;-</span> <span class="fu">mean</span> (sdata)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    se.ybar <span class="ot">&lt;-</span> <span class="fu">sqrt</span>((<span class="dv">1</span> <span class="sc">-</span> n <span class="sc">/</span> N)) <span class="sc">*</span> <span class="fu">sd</span> (sdata) <span class="sc">/</span> <span class="fu">sqrt</span>(n)  </span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    mem <span class="ot">&lt;-</span> <span class="fu">qt</span> (<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se.ybar</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span> (<span class="at">Est. =</span> ybar, <span class="at">S.E. =</span> se.ybar, <span class="at">ci.low =</span> ybar <span class="sc">-</span> mem, <span class="at">ci.upp =</span> ybar <span class="sc">+</span> mem)</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="co"># total estimation for datasets collected with UPS with Replacement</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>upswr_total_est <span class="ot">&lt;-</span> <span class="cf">function</span> (total, psi)</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>{   </span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">srs_mean_est</span> (total<span class="sc">/</span>psi, <span class="at">N =</span> <span class="cn">Inf</span>)</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="co"># ratio estimation for datasets collected with UPS with Replacement</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>upswr_ratio_est <span class="ot">&lt;-</span> <span class="cf">function</span> (total, M, psi)</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">srs_ratio_est</span> (total<span class="sc">/</span>psi, M<span class="sc">/</span>psi, <span class="at">N =</span> <span class="cn">Inf</span>)</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="analysis-of-a-dataset-student-study-hours-collected-by-upswr" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="analysis-of-a-dataset-student-study-hours-collected-by-upswr"><span class="header-section-number">6.2</span> Analysis of a dataset (student study hours) collected by UPSWR</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>psi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">100</span>, <span class="dv">100</span>, <span class="dv">76</span>, <span class="dv">44</span>) <span class="sc">/</span> <span class="dv">647</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Mi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">100</span>, <span class="dv">100</span>, <span class="dv">76</span>, <span class="dv">44</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>hrs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">75</span>, <span class="dv">203</span>, <span class="dv">203</span>, <span class="dv">191</span>, <span class="dv">168</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hrs<span class="sc">~</span>Mi)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ups_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span> (<span class="fu">lm</span>(hrs<span class="sc">~</span>Mi))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = hrs ~ Mi)
+
+Residuals:
+      1       2       3       4       5 
+-29.825  -8.997  -8.997  12.847  34.972 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)  70.9820    31.5534   2.250   0.1100  
+Mi            1.4101     0.4195   3.362   0.0437 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 28.52 on 3 degrees of freedom
+Multiple R-squared:  0.7902,    Adjusted R-squared:  0.7203 
+F-statistic:  11.3 on 1 and 3 DF,  p-value: 0.04368</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## total hrs spent by all students</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">upswr_total_est</span> (<span class="at">total =</span> hrs, <span class="at">psi =</span> psi)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Est.      S.E.    ci.low    ci.upp 
+1749.0144  222.4218 1131.4724 2366.5563 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mean hrs spent by each student</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">upswr_ratio_est</span> (<span class="at">total =</span> hrs, <span class="at">M =</span> Mi, <span class="at">psi =</span> psi)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Est.      S.E.    ci.low    ci.upp 
+2.7032679 0.3437741 1.7487981 3.6577378 </code></pre>
+</div>
+</div>
+</section>
+<section id="analysis-of-a-dataset-statepop.csv-collected-with-one-stage-upswr" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="analysis-of-a-dataset-statepop.csv-collected-with-one-stage-upswr"><span class="header-section-number">6.3</span> Analysis of a dataset (statepop.csv) collected with one-stage UPSWR</h2>
+<p>The file “statepop.csv” is a dataset from an unequal-probability sample of 100 counties in the United States. Counties were chosen using the cumulative-size method from the listings in the County and City Data Book (U.S. Census Bureau, 1994) with probabilities proportional to their populations. The total population for all counties is <span class="math inline">\(M_0 = \sum_{i=1} M_i = 255,077,536\)</span>. Sampling was done with replacement, so very large counties occur multiple times in the sample. For example, Los Angeles County, with the largest population in the United States, occurs four times.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>statepop <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/statepop.csv"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>statepop</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["state"],"name":[1],"type":["chr"],"align":["left"]},{"label":["county"],"name":[2],"type":["chr"],"align":["left"]},{"label":["landarea"],"name":[3],"type":["int"],"align":["right"]},{"label":["popn"],"name":[4],"type":["int"],"align":["right"]},{"label":["phys"],"name":[5],"type":["int"],"align":["right"]},{"label":["farmpop"],"name":[6],"type":["int"],"align":["right"]},{"label":["numfarm"],"name":[7],"type":["int"],"align":["right"]},{"label":["farmacre"],"name":[8],"type":["int"],"align":["right"]},{"label":["veterans"],"name":[9],"type":["int"],"align":["right"]},{"label":["percviet"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"AL","2":"Wilcox","3":"889","4":"13672","5":"4","6":"666","7":"322","8":"156950","9":"836","10":"20.8"},{"1":"AZ","2":"Maricopa","3":"9204","4":"2209567","5":"4320","6":"2124","7":"2334","8":"1391456","9":"262170","10":"31.5"},{"1":"AZ","2":"Maricopa","3":"9204","4":"2209567","5":"4320","6":"2124","7":"2334","8":"1391456","9":"262170","10":"31.5"},{"1":"AZ","2":"Pinal","3":"5370","4":"120786","5":"61","6":"881","7":"730","8":"1958489","9":"14858","10":"29.1"},{"1":"AR","2":"Garland","3":"678","4":"76100","5":"131","6":"524","7":"389","8":"41293","9":"11055","10":"21.3"},{"1":"AR","2":"Mississippi","3":"898","4":"55060","5":"48","6":"955","7":"615","8":"488042","9":"5285","10":"33.8"},{"1":"CA","2":"Contra_Costa","3":"720","4":"840585","5":"1761","6":"607","7":"840","8":"200262","9":"93838","10":"32.5"},{"1":"CA","2":"Kern","3":"8142","4":"587680","5":"682","6":"3307","7":"2255","8":"3037068","9":"56910","10":"32.9"},{"1":"CA","2":"Los_Angeles","3":"4060","4":"9053645","5":"23677","6":"1154","7":"2035","8":"280156","9":"688576","10":"27.3"},{"1":"CA","2":"Los_Angeles","3":"4060","4":"9053645","5":"23677","6":"1154","7":"2035","8":"280156","9":"688576","10":"27.3"},{"1":"CA","2":"Los_Angeles","3":"4060","4":"9053645","5":"23677","6":"1154","7":"2035","8":"280156","9":"688576","10":"27.3"},{"1":"CA","2":"Los_Angeles","3":"4060","4":"9053645","5":"23677","6":"1154","7":"2035","8":"280156","9":"688576","10":"27.3"},{"1":"CA","2":"Merced","3":"1929","4":"189107","5":"185","6":"8893","7":"3048","8":"1049302","9":"15791","10":"37.4"},{"1":"CA","2":"Orange","3":"790","4":"2484789","5":"6062","6":"46","7":"504","8":"108887","9":"235039","10":"30.9"},{"1":"CA","2":"Riverside","3":"7208","4":"1288435","5":"1385","6":"4464","7":"3874","8":"491150","9":"138541","10":"31.2"},{"1":"CA","2":"San_Francisco","3":"47","4":"728921","5":"4761","6":"0","7":"5","8":"0","9":"63229","10":"27.0"},{"1":"CA","2":"Ventura","3":"1846","4":"686560","5":"1168","6":"4111","7":"2120","8":"328960","9":"74253","10":"36.1"},{"1":"CO","2":"Arapahoe","3":"803","4":"420882","5":"583","6":"583","7":"285","8":"295183","9":"50065","10":"42.5"},{"1":"FL","2":"Alachua","3":"874","4":"189409","5":"1180","6":"2295","7":"1161","8":"192255","9":"18369","10":"33.5"},{"1":"FL","2":"Lee","3":"804","4":"352051","5":"509","6":"372","7":"415","8":"132665","9":"56284","10":"19.8"},{"1":"FL","2":"Orange","3":"908","4":"714579","5":"1367","6":"1066","7":"1125","8":"161900","9":"83928","10":"33.9"},{"1":"FL","2":"Pinellas","3":"280","4":"854976","5":"1620","6":"25","7":"166","8":"8549","9":"136044","10":"24.6"},{"1":"GA","2":"Forsyth","3":"226","4":"49859","5":"21","6":"483","7":"478","8":"42909","9":"4729","10":"33.3"},{"1":"IL","2":"Cook","3":"946","4":"5139341","5":"15153","6":"196","7":"389","8":"46907","9":"457880","10":"24.2"},{"1":"IL","2":"Cook","3":"946","4":"5139341","5":"15153","6":"196","7":"389","8":"46907","9":"457880","10":"24.2"},{"1":"IL","2":"Cook","3":"946","4":"5139341","5":"15153","6":"196","7":"389","8":"46907","9":"457880","10":"24.2"},{"1":"IL","2":"DuPage","3":"334","4":"816116","5":"2157","6":"83","7":"161","8":"25432","9":"73498","10":"31.7"},{"1":"IL","2":"Kane","3":"521","4":"333626","5":"473","6":"2094","7":"824","8":"227961","9":"30616","10":"32.2"},{"1":"IL","2":"Kane","3":"521","4":"333626","5":"473","6":"2094","7":"824","8":"227961","9":"30616","10":"32.2"},{"1":"IL","2":"Lake","3":"448","4":"541047","5":"1093","6":"586","7":"448","8":"82349","9":"53060","10":"32.7"},{"1":"IL","2":"St._Clair","3":"664","4":"263124","5":"329","6":"2950","7":"1101","8":"279859","9":"32026","10":"30.3"},{"1":"IL","2":"Williamson","3":"424","4":"58449","5":"63","6":"1987","7":"808","8":"101857","9":"7617","10":"30.4"},{"1":"IN","2":"Bartholomew","3":"407","4":"65498","5":"102","6":"2950","7":"748","8":"175883","9":"7479","10":"26.7"},{"1":"KS","2":"Douglas","3":"457","4":"84538","5":"107","6":"1716","7":"852","8":"233426","9":"6476","10":"33.4"},{"1":"KY","2":"Boone","3":"246","4":"63107","5":"62","6":"1350","7":"810","8":"84750","9":"6363","10":"35.3"},{"1":"KY","2":"Jefferson","3":"385","4":"670837","5":"2171","6":"432","7":"641","8":"55183","9":"79487","10":"28.4"},{"1":"KY","2":"Jefferson","3":"385","4":"670837","5":"2171","6":"432","7":"641","8":"55183","9":"79487","10":"28.4"},{"1":"LA","2":"Jefferson","3":"306","4":"457738","5":"1237","6":"47","7":"102","8":"15748","9":"46391","10":"30.6"},{"1":"LA","2":"St._Charles","3":"284","4":"44372","5":"18","6":"18","7":"72","8":"37656","9":"4080","10":"32.4"},{"1":"MD","2":"Frederick","3":"663","4":"159738","5":"172","6":"2950","7":"1439","8":"236350","9":"17153","10":"36.3"},{"1":"MD","2":"Worcester","3":"473","4":"37306","5":"24","6":"823","7":"631","8":"123406","9":"5054","10":"22.7"},{"1":"MI","2":"Oakland","3":"873","4":"1118611","5":"4020","6":"943","7":"596","8":"60358","9":"112416","10":"28.7"},{"1":"MI","2":"Oakland","3":"873","4":"1118611","5":"4020","6":"943","7":"596","8":"60358","9":"112416","10":"28.7"},{"1":"MN","2":"Hennepin","3":"557","4":"1041332","5":"3706","6":"1094","7":"852","8":"91078","9":"115030","10":"30.0"},{"1":"MN","2":"Otter_Tail","3":"1980","4":"51362","5":"55","6":"6626","7":"2925","8":"876319","9":"6415","10":"24.7"},{"1":"MS","2":"Leflore","3":"592","4":"37477","5":"42","6":"821","7":"281","8":"277137","9":"2427","10":"18.8"},{"1":"MS","2":"Pearl_River","3":"812","4":"39879","5":"22","6":"777","7":"584","8":"123870","9":"4667","10":"31.1"},{"1":"MO","2":"Jasper","3":"640","4":"91895","5":"135","6":"2169","7":"1418","8":"275511","9":"11002","10":"29.1"},{"1":"MO","2":"Nodaway","3":"877","4":"21236","5":"15","6":"3244","7":"1475","8":"528861","9":"1825","10":"22.6"},{"1":"NE","2":"Lancaster","3":"839","4":"219582","5":"389","6":"3081","7":"1508","8":"448286","9":"22688","10":"32.5"},{"1":"NJ","2":"Atlantic","3":"561","4":"229430","5":"379","6":"661","7":"384","8":"29423","9":"26390","10":"23.1"},{"1":"NJ","2":"Burlington","3":"805","4":"397631","5":"719","6":"1430","7":"834","8":"103224","9":"51275","10":"33.3"},{"1":"NJ","2":"Camden","3":"222","4":"507735","5":"1255","6":"99","7":"177","8":"10033","9":"54778","10":"26.4"},{"1":"NM","2":"Lea","3":"4393","4":"56659","5":"40","6":"491","7":"561","8":"2220431","9":"5405","10":"30.4"},{"1":"NM","2":"Santa_Fe","3":"1909","4":"105178","5":"235","6":"231","7":"324","8":"509708","9":"11973","10":"34.4"},{"1":"NY","2":"Kings","3":"71","4":"2286167","5":"4861","6":"0","7":"4","8":"4","9":"137669","10":"21.5"},{"1":"NY","2":"Kings","3":"71","4":"2286167","5":"4861","6":"0","7":"4","8":"4","9":"137669","10":"21.5"},{"1":"NY","2":"Kings","3":"71","4":"2286167","5":"4861","6":"0","7":"4","8":"4","9":"137669","10":"21.5"},{"1":"NY","2":"Monroe","3":"659","4":"724418","5":"2438","6":"1180","7":"682","8":"134670","9":"72558","10":"27.1"},{"1":"NY","2":"Nassau","3":"287","4":"1302067","5":"6147","6":"0","7":"67","8":"1471","9":"147207","10":"18.9"},{"1":"NY","2":"New_York","3":"28","4":"1489066","5":"14052","6":"0","7":"0","8":"0","9":"101647","10":"20.5"},{"1":"NY","2":"New_York","3":"28","4":"1489066","5":"14052","6":"0","7":"0","8":"0","9":"101647","10":"20.5"},{"1":"NY","2":"Richmond","3":"59","4":"391085","5":"1242","6":"0","7":"7","8":"16","9":"37759","10":"26.4"},{"1":"NY","2":"Richmond","3":"59","4":"391085","5":"1242","6":"0","7":"7","8":"16","9":"37759","10":"26.4"},{"1":"NY","2":"Saratoga","3":"812","4":"188387","5":"215","6":"1447","7":"528","8":"82878","9":"21895","10":"30.6"},{"1":"NY","2":"Suffolk","3":"911","4":"1338204","5":"3021","6":"406","7":"696","8":"41799","9":"149324","10":"26.1"},{"1":"NY","2":"Suffolk","3":"911","4":"1338204","5":"3021","6":"406","7":"696","8":"41799","9":"149324","10":"26.1"},{"1":"NC","2":"Rutherford","3":"564","4":"57951","5":"46","6":"801","7":"503","8":"58090","9":"6645","10":"27.7"},{"1":"OH","2":"Allen","3":"584","4":"26405","5":"168","6":"3139","7":"1148","8":"201190","9":"12642","10":"27.9"},{"1":"OH","2":"Cuyahoga","3":"458","4":"1411209","5":"5620","6":"16","7":"150","8":"5563","9":"163322","10":"24.1"},{"1":"OH","2":"Franklin","3":"540","4":"992095","5":"2675","6":"1155","7":"581","8":"121999","9":"102307","10":"31.8"},{"1":"OH","2":"Hamilton","3":"407","4":"872026","5":"3164","6":"362","7":"350","8":"28318","9":"93512","10":"26.0"},{"1":"OH","2":"Harrison","3":"404","4":"15946","5":"12","6":"734","7":"465","8":"118939","9":"1862","10":"26.7"},{"1":"OH","2":"Lucas","3":"340","4":"461508","5":"1391","6":"1417","7":"492","8":"83205","9":"50686","10":"25.5"},{"1":"OH","2":"Stark","3":"576","4":"372125","5":"595","6":"2719","7":"1306","8":"153302","9":"44658","10":"26.7"},{"1":"OK","2":"Tulsa","3":"570","4":"519847","5":"1158","6":"792","7":"913","8":"139900","9":"59305","10":"31.3"},{"1":"OR","2":"Multnomah","3":"435","4":"600811","5":"2571","6":"1115","7":"552","8":"34011","9":"73736","10":"32.6"},{"1":"OR","2":"Wasco","3":"2381","4":"22219","5":"44","6":"1079","7":"487","8":"1172745","9":"3322","10":"30.6"},{"1":"PA","2":"Allegheny","3":"730","4":"1334396","5":"5281","6":"586","7":"451","8":"42686","9":"175155","10":"22.4"},{"1":"PA","2":"Allegheny","3":"730","4":"1334396","5":"5281","6":"586","7":"451","8":"42686","9":"175155","10":"22.4"},{"1":"PA","2":"Bucks","3":"608","4":"556279","5":"879","6":"1811","7":"841","8":"85113","9":"63454","10":"30.0"},{"1":"PA","2":"Delaware","3":"184","4":"549506","5":"1374","6":"74","7":"95","8":"8036","9":"66684","10":"22.5"},{"1":"PA","2":"Luzerne","3":"891","4":"328927","5":"594","6":"915","7":"473","8":"58441","9":"46156","10":"21.9"},{"1":"PA","2":"Northampton","3":"374","4":"252393","5":"459","6":"1104","7":"484","8":"86694","9":"30630","10":"26.7"},{"1":"SC","2":"Greenville","3":"792","4":"324558","5":"650","6":"1162","7":"678","8":"74501","9":"35814","10":"31.0"},{"1":"SD","2":"Charles_Mix","3":"1098","4":"9265","5":"6","6":"1821","7":"830","8":"646007","9":"962","10":"19.9"},{"1":"TN","2":"Coffee","3":"429","4":"41641","5":"50","6":"1423","7":"887","8":"143496","9":"4975","10":"32.6"},{"1":"TN","2":"Dickson","3":"490","4":"36509","5":"27","6":"1868","7":"1068","8":"148611","9":"3747","10":"30.1"},{"1":"TN","2":"Hamblen","3":"161","4":"51657","5":"54","6":"1209","7":"843","8":"58434","9":"5547","10":"29.9"},{"1":"TN","2":"Shelby","3":"755","4":"844847","5":"2489","6":"747","7":"733","8":"139587","9":"84881","10":"33.7"},{"1":"TN","2":"Sullivan","3":"413","4":"146676","5":"377","6":"1478","7":"1432","8":"97537","9":"18325","10":"28.4"},{"1":"TX","2":"Cooke","3":"874","4":"30948","5":"21","6":"1981","7":"1289","8":"515267","9":"3700","10":"30.9"},{"1":"TX","2":"Ector","3":"901","4":"122338","5":"153","6":"189","7":"223","8":"589050","9":"11619","10":"30.1"},{"1":"TX","2":"Fort_Bend","3":"875","4":"255788","5":"231","6":"1425","7":"1233","8":"363823","9":"18375","10":"46.0"},{"1":"TX","2":"Wichita","3":"628","4":"120386","5":"243","6":"581","7":"544","8":"298490","9":"15181","10":"37.1"},{"1":"UT","2":"Davis","3":"305","4":"199953","5":"166","6":"154","7":"647","8":"63244","9":"17445","10":"35.8"},{"1":"VA","2":"Chesterfield","3":"426","4":"225225","5":"181","6":"457","7":"169","8":"20168","9":"23574","10":"43.1"},{"1":"WA","2":"King","3":"2126","4":"1557537","5":"5280","6":"1954","7":"1498","8":"54172","9":"187401","10":"34.2"},{"1":"WI","2":"Lincoln","3":"883","4":"27822","5":"28","6":"1204","7":"507","8":"109031","9":"3315","10":"24.5"},{"1":"WI","2":"Waukesha","3":"556","4":"320306","5":"687","6":"1034","7":"818","8":"126734","9":"34726","10":"30.9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>M0 <span class="ot">&lt;-</span> <span class="dv">255077536</span> <span class="do">## pop of USA in 1992</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>popn <span class="ot">&lt;-</span> statepop<span class="sc">$</span>popn <span class="do">## pop per county in 1992</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>psi <span class="ot">&lt;-</span> popn <span class="sc">/</span> M0</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>phys <span class="ot">&lt;-</span> statepop<span class="sc">$</span>phys</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span> (popn, phys, <span class="at">log=</span><span class="st">"xy"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ups_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span> (phys<span class="sc">~</span>psi))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = phys ~ psi)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2241.1  -564.9  -256.7  -125.8  9884.9 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)    152.0      185.3   0.821    0.414    
+psi         687788.5    21708.5  31.683   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1623 on 98 degrees of freedom
+Multiple R-squared:  0.9111,    Adjusted R-squared:  0.9101 
+F-statistic:  1004 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate the total number of physicians in USA</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">upswr_total_est</span> (phys, psi)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Est.      S.E.    ci.low    ci.upp 
+570304.30  41401.23 488155.27 652453.32 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate number of physicians per capita</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">upswr_ratio_est</span> (phys, popn, psi)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Est.         S.E.       ci.low       ci.upp 
+0.0022358076 0.0001623084 0.0019137525 0.0025578627 </code></pre>
+</div>
+</div>
+<p><strong>Compare with an estimate based on an SRS sample (Assignment 3 Question 3)</strong></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read srs sample of size 100</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>counties <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/counties.csv"</span>, <span class="at">na =</span> <span class="st">"-99"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>counties</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["RN"],"name":[1],"type":["int"],"align":["right"]},{"label":["State"],"name":[2],"type":["chr"],"align":["left"]},{"label":["County"],"name":[3],"type":["chr"],"align":["left"]},{"label":["landarea"],"name":[4],"type":["int"],"align":["right"]},{"label":["totpop"],"name":[5],"type":["int"],"align":["right"]},{"label":["physician"],"name":[6],"type":["int"],"align":["right"]},{"label":["enroll"],"name":[7],"type":["int"],"align":["right"]},{"label":["percpub"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["civlabor"],"name":[9],"type":["int"],"align":["right"]},{"label":["unemp"],"name":[10],"type":["int"],"align":["right"]},{"label":["farmpop"],"name":[11],"type":["int"],"align":["right"]},{"label":["numfarm"],"name":[12],"type":["int"],"align":["right"]},{"label":["farmacre"],"name":[13],"type":["int"],"align":["right"]},{"label":["fedgrant"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["fedciv"],"name":[15],"type":["int"],"align":["right"]},{"label":["milit"],"name":[16],"type":["int"],"align":["right"]},{"label":["veterans"],"name":[17],"type":["int"],"align":["right"]},{"label":["percviet"],"name":[18],"type":["dbl"],"align":["right"]}],"data":[{"1":"27","2":"AL","3":"Escambia","4":"948","5":"36023","6":"24","7":"6931","8":"95.4","9":"15247","10":"1339","11":"531","12":"414","13":"90646","14":"122.3","15":"85","16":"370","17":"3723","18":"27.1"},{"1":"48","2":"AL","3":"Marshall","4":"567","5":"73524","6":"44","7":"11928","8":"98.6","9":"38803","10":"3189","11":"1592","12":"1582","13":"136599","14":"235.7","15":"316","16":"748","17":"8510","18":"29.1"},{"1":"85","2":"AK","3":"Prince of Wales","4":"7325","5":"6408","6":"7","7":"1317","8":"98.6","9":"2787","10":"383","11":"71","12":"2","13":"214","14":"32.2","15":"126","16":"63","17":"809","18":"44.6"},{"1":"126","2":"AR","3":"Cross","4":"616","5":"19261","6":"11","7":"4066","8":"99.1","9":"8336","10":"704","11":"762","12":"492","13":"339830","14":"81.4","15":"87","16":"107","17":"1505","18":"23.9"},{"1":"158","2":"AR","3":"Newton","4":"823","5":"7649","6":"3","7":"1579","8":"99.2","9":"3280","10":"270","11":"600","12":"562","13":"98106","14":"31.7","15":"71","16":"44","17":"807","18":"25.5"},{"1":"186","2":"CA","3":"Butte","4":"1640","5":"188377","6":"327","7":"27899","8":"94.5","9":"77500","10":"7303","11":"2818","12":"2030","13":"494530","14":"688.0","15":"570","16":"577","17":"23958","18":"27.6"},{"1":"254","2":"CO","3":"Custer","4":"739","5":"2140","6":"1","7":"364","8":"97.5","9":"789","10":"42","11":"145","12":"130","13":"150334","14":"7.0","15":"11","16":"10","17":"347","18":"37.8"},{"1":"286","2":"CO","3":"Ouray","4":"542","5":"2497","6":"3","7":"429","8":"99.3","9":"1919","10":"109","11":"112","12":"88","13":"NA","14":"5.7","15":"5","16":"11","17":"337","18":"35.9"},{"1":"305","2":"CT","3":"Hartford","4":"736","5":"847009","6":"2851","7":"128982","8":"90.0","9":"470164","10":"32673","11":"623","12":"656","13":"60277","14":"4051.1","15":"8504","16":"2975","17":"93683","18":"24.9"},{"1":"340","2":"FL","3":"Hardee","4":"637","5":"20084","6":"11","7":"3802","8":"99.1","9":"9368","10":"987","11":"1202","12":"1130","13":"303892","14":"60.6","15":"55","16":"44","17":"2071","18":"21.4"},{"1":"350","2":"FL","3":"Lake","4":"953","5":"161228","6":"167","7":"19777","8":"91.5","9":"58285","10":"5182","11":"1582","12":"1285","13":"232657","14":"664.2","15":"499","16":"403","17":"26923","18":"21.6"},{"1":"371","2":"FL","3":"St. Lucie","4":"573","5":"161106","6":"176","7":"22769","8":"90.6","9":"65078","10":"8966","11":"257","12":"522","13":"297433","14":"543.7","15":"536","16":"348","17":"23205","18":"21.1"},{"1":"422","2":"GA","3":"Crisp","4":"274","5":"20377","6":"20","7":"4112","8":"95.1","9":"8980","10":"573","11":"341","12":"192","13":"112431","14":"67.3","15":"64","16":"170","17":"1893","18":"32.3"},{"1":"432","2":"GA","3":"Echols","4":"404","5":"2291","6":"0","7":"483","8":"100.0","9":"875","10":"39","11":"162","12":"80","13":"13745","14":"4.8","15":"5","16":"19","17":"242","18":"30.2"},{"1":"527","2":"GA","3":"Walton","4":"329","5":"40750","6":"29","7":"7210","8":"95.2","9":"17404","10":"955","11":"756","12":"469","13":"65220","14":"96.2","15":"93","16":"307","17":"3551","18":"28.4"},{"1":"559","2":"ID","3":"Camas","4":"1075","5":"755","6":"0","7":"147","8":"100.0","9":"365","10":"24","11":"66","12":"117","13":"174842","14":"5.9","15":"21","16":"0","17":"82","18":"32.9"},{"1":"586","2":"ID","3":"Shoshone","4":"2634","5":"13644","6":"9","7":"2683","8":"97.8","9":"5041","10":"981","11":"29","12":"46","13":"5148","14":"59.5","15":"203","16":"75","17":"2070","18":"29.3"},{"1":"606","2":"IL","3":"Cook","4":"946","5":"5139341","6":"15153","7":"853115","8":"81.5","9":"2715405","10":"196796","11":"196","12":"389","13":"46907","14":"20151.2","15":"61976","16":"16480","17":"457880","18":"24.2"},{"1":"617","2":"IL","3":"Ford","4":"486","5":"13914","6":"11","7":"2555","8":"97.6","9":"7265","10":"481","11":"1477","12":"729","13":"297013","14":"54.4","15":"69","16":"40","17":"1741","18":"32.2"},{"1":"630","2":"IL","3":"Jasper","4":"494","5":"10519","6":"3","7":"1994","8":"91.7","9":"5828","10":"434","11":"2795","12":"894","13":"262198","14":"31.3","15":"52","16":"31","17":"1073","18":"22.7"},{"1":"639","2":"IL","3":"Lake","4":"448","5":"541047","6":"1093","7":"88975","8":"88.9","9":"319950","10":"14863","11":"586","12":"448","13":"82349","14":"1641.8","15":"9399","16":"21454","17":"53060","18":"32.7"},{"1":"698","2":"IN","3":"Boone","4":"423","5":"38381","6":"81","7":"7062","8":"95.1","9":"21157","10":"716","11":"2258","12":"822","13":"227524","14":"83.6","15":"111","16":"213","17":"4283","18":"29.5"},{"1":"702","2":"IN","3":"Clark","4":"375","5":"89658","6":"109","7":"15779","8":"92.4","9":"47787","10":"3025","11":"1310","12":"691","13":"118810","14":"314.6","15":"2980","16":"488","17":"11222","18":"31.8"},{"1":"703","2":"IN","3":"Clay","4":"358","5":"25078","6":"11","7":"4506","8":"95.9","9":"10971","10":"748","11":"1811","12":"646","13":"162594","14":"82.9","15":"80","16":"137","17":"2874","18":"22.2"},{"1":"743","2":"IN","3":"Martin","4":"336","5":"10510","6":"4","7":"1923","8":"95.2","9":"5353","10":"374","11":"695","12":"361","13":"67373","14":"244.9","15":"5240","16":"109","17":"1359","18":"31.2"},{"1":"780","2":"IN","3":"Washington","4":"515","5":"24398","6":"9","7":"4443","8":"99.1","9":"11411","10":"882","11":"2119","12":"1034","13":"195118","14":"63.4","15":"69","16":"128","17":"2745","18":"29.7"},{"1":"895","2":"KS","3":"Cheyenne","4":"1020","5":"3189","6":"2","7":"555","8":"98.6","9":"1414","10":"34","11":"493","12":"493","13":"619870","14":"20.3","15":"22","16":"39","17":"350","18":"11.7"},{"1":"917","2":"KS","3":"Grant","4":"575","5":"7625","6":"4","7":"1712","8":"97.8","9":"3626","10":"116","11":"269","12":"303","13":"323138","14":"21.6","15":"27","16":"81","17":"624","18":"38.9"},{"1":"932","2":"KS","3":"Kiowa","4":"722","5":"3582","6":"2","7":"643","8":"97.0","9":"1828","10":"44","11":"356","12":"310","13":"392245","14":"31.8","15":"32","16":"41","17":"346","18":"18.8"},{"1":"943","2":"KS","3":"Meade","4":"979","5":"4230","6":"3","7":"7747","8":"100.0","9":"1978","10":"51","11":"306","12":"464","13":"582454","14":"23.1","15":"27","16":"51","17":"432","18":"24.8"},{"1":"1040","2":"KY","3":"Henry","4":"289","5":"13486","6":"5","7":"2205","8":"98.3","9":"7771","10":"556","11":"2043","12":"1093","13":"166376","14":"38.6","15":"64","16":"79","17":"1253","18":"32.3"},{"1":"1137","2":"LA","3":"Lafourche","4":"1085","5":"86723","6":"70","7":"17956","8":"88.9","9":"32767","10":"2050","11":"667","12":"366","13":"122862","14":"210.1","15":"165","16":"387","17":"6113","18":"24.8"},{"1":"1145","2":"LA","3":"Ouachita","4":"611","5":"144910","6":"268","7":"28271","8":"92.0","9":"71299","10":"4542","11":"595","12":"429","13":"87400","14":"442.9","15":"648","16":"649","17":"14694","18":"31.5"},{"1":"1149","2":"LA","3":"Red River","4":"389","5":"9257","6":"6","7":"1957","8":"89.8","9":"4101","10":"496","11":"217","12":"251","13":"112884","14":"77.6","15":"40","16":"47","17":"696","18":"23.9"},{"1":"1156","2":"LA","3":"St. John the Baptist","4":"219","5":"41179","6":"20","7":"9147","8":"70.0","9":"17626","10":"1612","11":"15","12":"39","13":"18826","14":"114.8","15":"75","16":"181","17":"3245","18":"33.7"},{"1":"1191","2":"MD","3":"Baltimore","4":"599","5":"705138","6":"1269","7":"96046","8":"82.1","9":"392248","10":"22381","11":"1734","12":"917","13":"92806","14":"2864.4","15":"15628","16":"3972","17":"86248","18":"25.4"},{"1":"1219","2":"MA","3":"Hampden","4":"619","5":"452140","6":"904","7":"74801","8":"86.1","9":"216333","10":"20697","11":"343","12":"490","13":"46747","14":"1826.6","15":"5890","16":"2342","17":"53284","18":"24.9"},{"1":"1269","2":"MI","3":"Lake","4":"568","5":"9029","6":"2","7":"1551","8":"95.6","9":"3591","10":"395","11":"162","12":"111","13":"18555","14":"43.1","15":"70","16":"20","17":"1392","18":"21.6"},{"1":"1303","2":"MI","3":"Schoolcraft","4":"1178","5":"8478","6":"6","7":"1529","8":"91.0","9":"3746","10":"532","11":"63","12":"52","13":"NA","14":"38.8","15":"67","16":"18","17":"1138","18":"23.6"},{"1":"1363","2":"MN","3":"Norman","4":"876","5":"7709","6":"2","7":"1600","8":"99.9","9":"3764","10":"264","11":"1173","12":"718","13":"472449","14":"40.1","15":"58","16":"36","17":"914","18":"26.8"},{"1":"1381","2":"MN","3":"Sibley","4":"589","5":"14274","6":"7","7":"2791","8":"89.3","9":"6804","10":"401","11":"3310","12":"1252","13":"336712","14":"43.9","15":"52","16":"66","17":"1457","18":"25.3"},{"1":"1411","2":"MS","3":"Copiah","4":"777","5":"27831","6":"12","7":"5763","8":"88.4","9":"9994","10":"1157","11":"816","12":"555","13":"151921","14":"108.3","15":"83","16":"158","17":"2370","18":"26.7"},{"1":"1485","2":"MO","3":"Bates","4":"849","5":"15047","6":"6","7":"2794","8":"95.9","9":"6110","10":"511","11":"2212","12":"1294","13":"429204","14":"61.3","15":"79","16":"108","17":"1760","18":"20.3"},{"1":"1494","2":"MO","3":"Cape Girardeau","4":"579","5":"63318","6":"137","7":"9650","8":"85.9","9":"36328","10":"1731","11":"2299","12":"1365","13":"266557","14":"194.4","15":"328","16":"440","17":"6641","18":"29.2"},{"1":"1544","2":"MO","3":"Miller","4":"592","5":"21267","6":"3","7":"3917","8":"97.4","9":"8923","10":"1125","11":"1680","12":"1091","13":"233057","14":"65.1","15":"65","16":"133","17":"2567","18":"28.2"},{"1":"1548","2":"MO","3":"Montgomery","4":"539","5":"11264","6":"2","7":"2012","8":"98.5","9":"5300","10":"404","11":"1315","12":"832","13":"235002","14":"42.7","15":"62","16":"79","17":"1505","18":"26.6"},{"1":"1554","2":"MO","3":"Osage","4":"606","5":"12117","6":"1","7":"2208","8":"77.1","9":"6429","10":"359","11":"2124","12":"1160","13":"300812","14":"30.6","15":"49","16":"79","17":"1379","18":"29.6"},{"1":"1572","2":"MO","3":"Ste. Genevieve","4":"502","5":"16163","6":"7","7":"2919","8":"74.2","9":"6590","10":"562","11":"1052","12":"666","13":"178570","14":"39.7","15":"37","16":"112","17":"1988","18":"29.5"},{"1":"1593","2":"MO","3":"St. Louis City","4":"62","5":"383733","6":"4189","7":"63566","8":"77.4","9":"189604","10":"17123","11":"0","12":"0","13":"0","14":"6022.5","15":"23219","16":"4112","17":"41310","18":"26.5"},{"1":"1640","2":"MT","3":"Silver Bow","4":"718","5":"34128","6":"67","7":"5587","8":"89.8","9":"13603","10":"1217","11":"195","12":"114","13":"115350","14":"178.6","15":"344","16":"222","17":"4706","18":"27.0"},{"1":"1751","2":"NV","3":"Lander","4":"5494","5":"6691","6":"1","7":"1377","8":"98.8","9":"2852","10":"148","11":"108","12":"64","13":"NA","14":"10.6","15":"91","16":"14","17":"663","18":"36.2"},{"1":"1818","2":"NM","3":"San Miguel","4":"4717","5":"26486","6":"27","7":"5236","8":"95.5","9":"9449","10":"996","11":"294","12":"634","13":"1949191","14":"108.9","15":"182","16":"102","17":"2626","18":"28.8"},{"1":"1854","2":"NY","3":"Montgomery","4":"405","5":"52065","6":"66","7":"8792","8":"93.4","9":"26597","10":"2324","11":"1488","12":"616","13":"156368","14":"201.0","15":"118","16":"119","17":"6491","18":"22.6"},{"1":"1904","2":"NC","3":"Caswell","4":"426","5":"20698","6":"7","7":"3737","8":"95.2","9":"9849","10":"622","11":"1617","12":"707","13":"130334","14":"54.8","15":"58","16":"74","17":"1856","18":"29.7"},{"1":"1956","2":"NC","3":"Pamlico","4":"337","5":"11676","6":"6","7":"1938","8":"99.5","9":"4775","10":"249","11":"178","12":"86","13":"38270","14":"47.9","15":"34","16":"56","17":"1681","18":"28.1"},{"1":"1973","2":"NC","3":"Surry","4":"537","5":"62972","6":"50","7":"9691","8":"97.5","9":"33281","10":"2089","11":"2162","12":"1314","13":"133218","14":"178.6","15":"186","16":"208","17":"5878","18":"27.8"},{"1":"1988","2":"ND","3":"Adams","4":"988","5":"3007","6":"13","7":"576","8":"100.0","9":"1579","10":"37","11":"733","12":"410","13":"626589","14":"18.3","15":"30","16":"21","17":"346","18":"24.9"},{"1":"1992","2":"ND","3":"Bottineau","4":"1669","5":"7604","6":"4","7":"1479","8":"99.5","9":"2973","10":"132","11":"1091","12":"929","13":"1001689","14":"46.5","15":"87","16":"56","17":"799","18":"30.8"},{"1":"2025","2":"ND","3":"Renville","4":"875","5":"2944","6":"3","7":"624","8":"100.0","9":"1174","10":"57","11":"664","12":"454","13":"504536","14":"20.1","15":"30","16":"22","17":"353","18":"28.9"},{"1":"2031","2":"ND","3":"Slope","4":"1218","5":"897","6":"0","7":"199","8":"84.9","9":"436","10":"33","11":"613","12":"299","13":"808789","14":"11.1","15":"10","16":"0","17":"87","18":"26.4"},{"1":"2057","2":"OH","3":"Crawford","4":"402","5":"47660","6":"39","7":"9004","8":"91.3","9":"21043","10":"2295","11":"2410","12":"877","13":"222057","14":"143.0","15":"101","16":"124","17":"5493","18":"26.1"},{"1":"2062","2":"OH","3":"Erie","4":"255","5":"77512","6":"107","7":"13743","8":"88.3","9":"41733","10":"2943","11":"1117","12":"480","13":"90106","14":"245.1","15":"202","16":"206","17":"10085","18":"25.6"},{"1":"2063","2":"OH","3":"Fairfield","4":"506","5":"109318","6":"86","7":"19337","8":"93.3","9":"53117","10":"3336","11":"3058","12":"1217","13":"214316","14":"245.3","15":"234","16":"265","17":"13157","18":"35.1"},{"1":"2099","2":"OH","3":"Morrow","4":"406","5":"28577","6":"6","7":"5894","8":"96.4","9":"11270","10":"942","11":"2438","12":"864","13":"165764","14":"57.8","15":"67","16":"71","17":"3097","18":"32.0"},{"1":"2125","2":"OH","3":"Wayne","4":"555","5":"103908","6":"84","7":"18642","8":"90.2","9":"51670","10":"3070","11":"5848","12":"1734","13":"263457","14":"232.1","15":"258","16":"270","17":"9735","18":"30.5"},{"1":"2142","2":"OK","3":"Cleveland","4":"536","5":"181388","6":"217","7":"31525","8":"94.9","9":"84742","10":"4036","11":"960","12":"894","13":"149021","14":"615.8","15":"665","16":"1365","17":"20129","18":"43.4"},{"1":"2211","2":"OR","3":"Coos","4":"1601","5":"61894","6":"98","7":"10523","8":"96.2","9":"27233","10":"2472","11":"1297","12":"736","13":"163167","14":"250.4","15":"503","16":"510","17":"9660","18":"27.8"},{"1":"2225","2":"OR","3":"Lane","4":"4554","5":"290866","6":"497","7":"44968","8":"94.5","9":"147872","10":"9580","11":"4514","12":"2039","13":"276559","14":"914.4","15":"2647","16":"1085","17":"36661","18":"32.1"},{"1":"2234","2":"OR","3":"Tillamook","4":"1102","5":"22307","6":"23","7":"3515","8":"95.3","9":"9464","10":"593","11":"980","12":"360","13":"39913","14":"89.9","15":"184","16":"122","17":"3691","18":"25.0"},{"1":"2324","2":"SC","3":"Cherokee","4":"393","5":"45602","6":"34","7":"8225","8":"97.6","9":"23075","10":"1601","11":"530","12":"412","13":"70468","14":"108.8","15":"108","16":"358","17":"4441","18":"32.9"},{"1":"2333","2":"SC","3":"Fairfield","4":"687","5":"22412","6":"10","7":"4670","8":"94.0","9":"9997","10":"1179","11":"671","12":"186","13":"57293","14":"67.5","15":"66","16":"190","17":"2212","18":"24.1"},{"1":"2380","2":"SD","3":"Douglas","4":"434","5":"3651","6":"4","7":"758","8":"82.1","9":"1587","10":"36","11":"1397","12":"478","13":"254299","14":"12.9","15":"32","16":"24","17":"355","18":"25.9"},{"1":"2398","2":"SD","3":"Lake","4":"563","5":"10585","6":"6","7":"1963","8":"95.3","9":"5086","10":"219","11":"1424","12":"606","13":"293880","14":"40.1","15":"69","16":"63","17":"1115","18":"21.8"},{"1":"2454","2":"TN","3":"Grainger","4":"280","5":"17766","6":"4","7":"2908","8":"99.0","9":"7503","10":"674","11":"1591","12":"1219","13":"108212","14":"54.0","15":"43","16":"74","17":"1456","18":"25.6"},{"1":"2484","2":"TN","3":"Marshall","4":"375","5":"22974","6":"18","7":"3842","8":"98.6","9":"10689","10":"896","11":"1283","12":"1013","13":"173473","14":"70.5","15":"57","16":"91","17":"2215","18":"34.6"},{"1":"2505","2":"TN","3":"Trousdale","4":"114","5":"5949","6":"3","7":"1010","8":"97.3","9":"3723","10":"309","11":"752","12":"439","13":"58550","14":"18.6","15":"20","16":"26","17":"477","18":"28.1"},{"1":"2547","2":"TX","3":"Burnet","4":"995","5":"23080","6":"17","7":"3853","8":"96.6","9":"9435","10":"495","11":"1119","12":"889","13":"509782","14":"92.5","15":"50","16":"89","17":"3330","18":"26.2"},{"1":"2548","2":"TX","3":"Caldwell","4":"546","5":"26819","6":"12","7":"5485","8":"97.5","9":"10343","10":"589","11":"964","12":"1026","13":"265788","14":"77.6","15":"59","16":"104","17":"2478","18":"32.4"},{"1":"2554","2":"TX","3":"Cass","4":"938","5":"29981","6":"14","7":"5916","8":"99.0","9":"16355","10":"1377","11":"777","12":"885","13":"190634","14":"113.2","15":"68","16":"107","17":"3596","18":"28.2"},{"1":"2592","2":"TX","3":"Erath","4":"1086","5":"28426","6":"22","7":"4486","8":"99.0","9":"13954","10":"602","11":"2361","12":"1599","13":"562030","14":"88.7","15":"123","16":"93","17":"2739","18":"25.8"},{"1":"2610","2":"TX","3":"Gray","4":"928","5":"23436","6":"30","7":"4515","8":"95.5","9":"11812","10":"577","11":"185","12":"323","13":"504506","14":"86.9","15":"73","16":"84","17":"2744","18":"23.0"},{"1":"2614","2":"TX","3":"Guadalupe","4":"711","5":"66613","6":"47","7":"12724","8":"95.2","9":"29528","10":"1283","11":"1898","12":"1770","13":"331240","14":"188.8","15":"169","16":"220","17":"8179","18":"45.7"},{"1":"2662","2":"TX","3":"La Salle","4":"1489","5":"5431","6":"2","7":"1289","8":"94.3","9":"2147","10":"171","11":"150","12":"265","13":"766840","14":"25.3","15":"37","16":"17","17":"322","18":"25.8"},{"1":"2682","2":"TX","3":"Maverick","4":"1280","5":"40647","6":"24","7":"10240","8":"97.4","9":"14350","10":"4144","11":"232","12":"202","13":"672382","14":"119.0","15":"256","16":"145","17":"1432","18":"34.6"},{"1":"2752","2":"TX","3":"Uvaide","4":"1557","5":"24192","6":"16","7":"5399","8":"96.5","9":"13880","10":"1297","11":"593","12":"575","13":"850230","14":"80.9","15":"96","16":"87","17":"1859","18":"28.7"},{"1":"2763","2":"TX","3":"Wichita","4":"628","5":"120386","6":"243","7":"21081","8":"94.9","9":"54569","10":"3709","11":"581","12":"544","13":"298490","14":"672.5","15":"2532","16":"7004","17":"15181","18":"37.1"},{"1":"2840","2":"VA","3":"Craig","4":"330","5":"4496","6":"1","7":"702","8":"96.3","9":"2015","10":"158","11":"178","12":"177","13":"50308","14":"12.0","15":"37","16":"25","17":"586","18":"25.9"},{"1":"2847","2":"VA","3":"Fauquier","4":"650","5":"50686","6":"48","7":"8502","8":"90.9","9":"27490","10":"1399","11":"2267","12":"978","13":"240638","14":"193.5","15":"1310","16":"1057","17":"6199","18":"38.7"},{"1":"2899","2":"VA","3":"Shenandoah","4":"512","5":"32282","6":"23","7":"4553","8":"94.8","9":"18773","10":"1158","11":"1270","12":"830","13":"138883","14":"100.6","15":"151","16":"174","17":"4068","18":"26.6"},{"1":"2902","2":"VA","3":"Spotsylvania","4":"401","5":"61435","6":"144","7":"11409","8":"95.9","9":"23662","10":"2073","11":"840","12":"305","13":"57337","14":"65.7","15":"283","16":"387","17":"7352","18":"43.7"},{"1":"2903","2":"VA","3":"Stafford","4":"270","5":"70900","6":"7","7":"11918","8":"96.3","9":"32895","10":"1758","11":"255","12":"197","13":"27849","14":"113.6","15":"79","16":"352","17":"8266","18":"46.9"},{"1":"2925","2":"VA","3":"Falls Church City","4":"2","5":"9324","6":"0","7":"1285","8":"87.4","9":"6943","10":"248","11":"0","12":"0","13":"0","14":"709.2","15":"0","16":"0","17":"1251","18":"34.4"},{"1":"2990","2":"WA","3":"Whatcom","4":"2120","5":"137913","6":"203","7":"21174","8":"89.7","9":"69513","10":"4374","11":"3596","12":"1463","13":"124675","14":"620.0","15":"763","16":"652","17":"15256","18":"35.0"},{"1":"3009","2":"WV","3":"Jackson","4":"466","5":"26108","6":"15","7":"4880","8":"97.3","9":"9966","10":"1213","11":"587","12":"679","13":"103906","14":"78.9","15":"91","16":"84","17":"3305","18":"23.0"},{"1":"3044","2":"WV","3":"Wirt","4":"233","5":"5298","6":"0","7":"900","8":"99.8","9":"2152","10":"417","11":"266","12":"221","13":"36627","14":"33.5","15":"21","16":"18","17":"653","18":"29.1"},{"1":"3071","2":"WI","3":"Green Lake","4":"354","5":"18822","6":"16","7":"3402","8":"86.3","9":"8231","10":"651","11":"1658","12":"711","13":"161827","14":"63.8","15":"66","16":"127","17":"2021","18":"26.6"},{"1":"3095","2":"WI","3":"Pierce","4":"577","5":"33442","6":"22","7":"5719","8":"93.0","9":"16854","10":"842","11":"3449","12":"1240","13":"269644","14":"85.4","15":"120","16":"236","17":"3012","18":"32.5"},{"1":"3107","2":"WI","3":"Sheboygan","4":"514","5":"105039","6":"114","7":"18908","8":"85.8","9":"58258","10":"3259","11":"3003","12":"1213","13":"209508","14":"278.4","15":"253","16":"708","17":"11672","18":"26.9"},{"1":"3132","2":"WY","3":"Natrona","4":"5340","5":"62565","6":"130","7":"11769","8":"97.9","9":"31200","10":"1782","11":"500","12":"304","13":"2633700","14":"229.5","15":"699","16":"284","17":"7518","18":"32.5"},{"1":"3142","2":"WY","3":"Weston","4":"2398","5":"6600","6":"3","7":"1387","8":"96.9","9":"3221","10":"183","11":"405","12":"235","13":"1546633","14":"41.6","15":"80","16":"32","17":"828","18":"30.6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(physician<span class="sc">~</span>totpop, <span class="at">data=</span>counties, <span class="at">log=</span><span class="st">"xy"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in xy.coords(x, y, xlabel, ylabel, log): 5 y values &lt;= 0 omitted from
+logarithmic plot</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ups_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span> (<span class="fu">lm</span>(physician<span class="sc">~</span>totpop, <span class="at">data=</span>counties))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = physician ~ totpop, data = counties)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-767.24  -43.44    4.84   32.93 3105.60 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -5.423e+01  3.490e+01  -1.554    0.123    
+totpop       2.965e-03  6.519e-05  45.477   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 340.3 on 98 degrees of freedom
+Multiple R-squared:  0.9548,    Adjusted R-squared:  0.9543 
+F-statistic:  2068 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>totpop <span class="ot">&lt;-</span>  <span class="dv">255077536</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">3141</span> <span class="co"># total number of counties</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># naive estimate </span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_mean_est</span> (counties<span class="sc">$</span>physician, <span class="at">N =</span> <span class="dv">3141</span>) <span class="sc">*</span> <span class="dv">3141</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.       S.E.     ci.low     ci.upp 
+ 933410.97  491982.79  -42789.62 1909611.56 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ratio estimate</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_ratio_est</span> (counties<span class="sc">$</span>physician, counties<span class="sc">$</span>totpop, <span class="at">N =</span> <span class="dv">3141</span>) <span class="sc">*</span> totpop</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Est.      S.E.    ci.low    ci.upp 
+639506.03  87885.27 465122.60 813889.46 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># regression estimate</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_reg_est</span> (counties<span class="sc">$</span>physician, counties<span class="sc">$</span>totpop, totpop<span class="sc">/</span>N, <span class="at">N =</span> N) <span class="sc">*</span> N </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Est.     S.E.   ci.low   ci.upp 
+585870.6 105177.4 377149.4 794591.8 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># From the textbook by Lohr, the true value is: </span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>total_physician <span class="ot">&lt;-</span> <span class="dv">532638</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="analysis-of-a-dataset-studenthrs.csv-collected-with-two-stage-upswr" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="analysis-of-a-dataset-studenthrs.csv-collected-with-two-stage-upswr"><span class="header-section-number">6.4</span> Analysis of a dataset (studenthrs.csv) collected with two-stage UPSWR</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>studenthrs <span class="ot">&lt;-</span> <span class="fu">read.table</span> (<span class="st">"data/studentshrs.txt"</span>, <span class="at">header =</span> T)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="do">## add sampling probability to the data</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>studenthrs<span class="sc">$</span>cpsi <span class="ot">&lt;-</span> studenthrs<span class="sc">$</span>class_size<span class="sc">/</span><span class="dv">647</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>studenthrs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["sid"],"name":[1],"type":["int"],"align":["right"]},{"label":["class_size"],"name":[2],"type":["int"],"align":["right"]},{"label":["samplesize"],"name":[3],"type":["int"],"align":["right"]},{"label":["hrs"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["cpsi"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"12","2":"24","3":"5","4":"2.0","5":"0.03709428"},{"1":"12","2":"24","3":"5","4":"3.0","5":"0.03709428"},{"1":"12","2":"24","3":"5","4":"2.5","5":"0.03709428"},{"1":"12","2":"24","3":"5","4":"3.0","5":"0.03709428"},{"1":"12","2":"24","3":"5","4":"1.5","5":"0.03709428"},{"1":"141","2":"100","3":"5","4":"2.5","5":"0.15455951"},{"1":"141","2":"100","3":"5","4":"2.0","5":"0.15455951"},{"1":"141","2":"100","3":"5","4":"3.0","5":"0.15455951"},{"1":"141","2":"100","3":"5","4":"0.0","5":"0.15455951"},{"1":"141","2":"100","3":"5","4":"0.5","5":"0.15455951"},{"1":"142","2":"100","3":"5","4":"3.0","5":"0.15455951"},{"1":"142","2":"100","3":"5","4":"0.5","5":"0.15455951"},{"1":"142","2":"100","3":"5","4":"1.5","5":"0.15455951"},{"1":"142","2":"100","3":"5","4":"2.0","5":"0.15455951"},{"1":"142","2":"100","3":"5","4":"3.0","5":"0.15455951"},{"1":"5","2":"76","3":"5","4":"1.0","5":"0.11746522"},{"1":"5","2":"76","3":"5","4":"2.5","5":"0.11746522"},{"1":"5","2":"76","3":"5","4":"3.0","5":"0.11746522"},{"1":"5","2":"76","3":"5","4":"5.0","5":"0.11746522"},{"1":"5","2":"76","3":"5","4":"2.5","5":"0.11746522"},{"1":"1","2":"44","3":"5","4":"4.0","5":"0.06800618"},{"1":"1","2":"44","3":"5","4":"4.5","5":"0.06800618"},{"1":"1","2":"44","3":"5","4":"3.0","5":"0.06800618"},{"1":"1","2":"44","3":"5","4":"2.0","5":"0.06800618"},{"1":"1","2":"44","3":"5","4":"5.0","5":"0.06800618"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="do">## data --- original data frame for holding data</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="do">## sid --- variable recording sample id of psu, note that, </span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="do">## sid must be different when the same psu is surveyed multiple times</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="do">## csize --- variable recording cluster (psu) population size (not sample size)</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="do">## cpik --- sampling probability for each cluster</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="do">## yvar --- variable of interest</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="do">## N --- total number of clusters (psus)</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>cluster_upswr_ratio_est <span class="ot">&lt;-</span> <span class="cf">function</span> (data, sid, csize, cpsi, yvar,<span class="at">show.cluster.summary=</span><span class="cn">TRUE</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    clust <span class="ot">&lt;-</span> data[, sid]</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    ydata <span class="ot">&lt;-</span> data [, yvar]  </span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    <span class="do">## cluster-wise summary</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>    ybari <span class="ot">&lt;-</span> <span class="fu">tapply</span> (ydata, clust, mean)</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>    Mi <span class="ot">&lt;-</span> <span class="fu">tapply</span> (data [,csize], clust, <span class="cf">function</span> (x) x[<span class="dv">1</span>])</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>    psi <span class="ot">&lt;-</span> <span class="fu">tapply</span> (data [,cpsi], clust, <span class="cf">function</span> (x) x[<span class="dv">1</span>])</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>    <span class="do">## the same as total in cluster if Mi = mi</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>    t_hat_cls <span class="ot">&lt;-</span> ybari <span class="sc">*</span> Mi </span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(show.cluster.summary){</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span> (<span class="st">"Cluster level Summary:</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="fu">data.frame</span>(Mi,psi,ybari, <span class="at">ti=</span>t_hat_cls, <span class="at">ti_psi=</span>t_hat_cls<span class="sc">/</span>psi,<span class="at">Mi_psi=</span>Mi<span class="sc">/</span>psi))</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>    <span class="do">## apply ratio estimate to t_hat_cls and Mi</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">srs_ratio_est</span> (t_hat_cls<span class="sc">/</span>psi, Mi<span class="sc">/</span>psi)</span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a><span class="fu">cluster_upswr_ratio_est</span> (studenthrs, <span class="st">"sid"</span> , <span class="st">"class_size"</span>, <span class="st">"cpsi"</span>, <span class="st">"hrs"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Cluster level Summary:
+     Mi        psi ybari    ti ti_psi Mi_psi
+1    44 0.06800618   3.7 162.8 2393.9    647
+5    76 0.11746522   2.8 212.8 1811.6    647
+12   24 0.03709428   2.4  57.6 1552.8    647
+141 100 0.15455951   1.6 160.0 1035.2    647
+142 100 0.15455951   2.0 200.0 1294.0    647</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Est.      S.E.    ci.low    ci.upp 
+2.5000000 0.3605551 1.4989385 3.5010615 </code></pre>
+</div>
+</div>
+</section>
+<section id="simulation-studies-for-upswr-using-agpop-data" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="simulation-studies-for-upswr-using-agpop-data"><span class="header-section-number">6.5</span> Simulation Studies for UPSWR using agpop data</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read population data</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/agpop.csv"</span>, <span class="at">na =</span> <span class="st">"-99"</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="do">## removing the counties with NA in either acres92 or acres87</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">subset</span>(agpop, <span class="at">subset =</span> <span class="sc">!</span><span class="fu">is.na</span>(agpop<span class="sc">$</span>acres92) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(agpop<span class="sc">$</span>acres87))</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span> (agpop); N</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3044</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>total_acres92<span class="ot">&lt;-</span> <span class="fu">sum</span> (agpop<span class="sc">$</span>acres92)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>total_acres87 <span class="ot">&lt;-</span> <span class="fu">sum</span> (agpop<span class="sc">$</span>acres87)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="using-acres87-to-construct-sampling-probabilities" class="level3" data-number="6.5.1">
+<h3 data-number="6.5.1" class="anchored" data-anchor-id="using-acres87-to-construct-sampling-probabilities"><span class="header-section-number">6.5.1</span> Using acres87 to construct sampling probabilities</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span> (agpop<span class="sc">$</span>acres87, agpop<span class="sc">$</span>acres92)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ups_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(agpop<span class="sc">$</span>acres92<span class="sc">~</span>agpop<span class="sc">$</span>acres87))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = agpop$acres92 ~ agpop$acres87)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-642580   -8012    -453    5738  656073 
+
+Coefficients:
+                Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   -2.451e+03  8.517e+02  -2.878  0.00404 ** 
+agpop$acres87  9.882e-01  1.598e-03 618.428  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 37840 on 3042 degrees of freedom
+Multiple R-squared:  0.9921,    Adjusted R-squared:  0.9921 
+F-statistic: 3.825e+05 on 1 and 3042 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>acres87 <span class="ot">&lt;-</span> agpop[, <span class="st">"acres87"</span>]</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>est_srs300 <span class="ot">&lt;-</span> est_ups300_acres87 <span class="ot">&lt;-</span> est_srs300_reg_acres87 <span class="ot">&lt;-</span> <span class="fu">rep</span> (<span class="dv">0</span>, <span class="dv">2000</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="do">## srs sample</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  srs300 <span class="ot">&lt;-</span> <span class="fu">sample</span> (<span class="dv">1</span><span class="sc">:</span>N, <span class="at">size =</span> <span class="dv">300</span>)</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="do">## survey</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  acres92_srs300 <span class="ot">&lt;-</span> agpop[srs300, <span class="st">"acres92"</span>]</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  acres87_srs300 <span class="ot">&lt;-</span> agpop[srs300, <span class="st">"acres87"</span>]</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="do">## estimate</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  est_srs300 [i] <span class="ot">&lt;-</span>  (<span class="fu">srs_mean_est</span> (acres92_srs300, <span class="at">N =</span> N) <span class="sc">*</span> N) [<span class="dv">1</span>] </span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  est_srs300_reg_acres87[i] <span class="ot">&lt;-</span> <span class="fu">srs_reg_est</span>(</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>      acres92_srs300, acres87_srs300, total_acres87<span class="sc">/</span>N, <span class="at">N =</span> N, <span class="at">est.total =</span> <span class="cn">TRUE</span> )[<span class="dv">1</span>]</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>  <span class="do">## upswr sample</span></span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>  ups300 <span class="ot">&lt;-</span> <span class="fu">sample</span> (<span class="dv">1</span><span class="sc">:</span>N, <span class="at">size =</span> <span class="dv">300</span>, <span class="at">prob =</span> acres87, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>  <span class="do">## survey (obtaining measurements on acres92)</span></span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>  acres92_ups300 <span class="ot">&lt;-</span> agpop[ups300, <span class="st">"acres92"</span>]</span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>  <span class="do">## estimate</span></span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>  psi <span class="ot">&lt;-</span> (acres87 <span class="sc">/</span> <span class="fu">sum</span> (acres87)) [ups300]</span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>  est_ups300_acres87 [i] <span class="ot">&lt;-</span>  <span class="fu">upswr_total_est</span> (acres92_ups300, psi) [<span class="dv">1</span>] </span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span> (<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span> (<span class="fu">data.frame</span>(est_srs300, est_srs300_reg_acres87, est_ups300_acres87))</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span>total_acres92, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span> (<span class="fu">data.frame</span>(est_srs300_reg_acres87, est_ups300_acres87))</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span>total_acres92, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ups_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="using-largef87-to-construct-sampling-probabilities" class="level3" data-number="6.5.2">
+<h3 data-number="6.5.2" class="anchored" data-anchor-id="using-largef87-to-construct-sampling-probabilities"><span class="header-section-number">6.5.2</span> Using largef87 to construct sampling probabilities</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span> (agpop<span class="sc">$</span>largef92, agpop<span class="sc">$</span>acres92)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ups_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>largef87 <span class="ot">&lt;-</span> agpop[, <span class="st">"largef87"</span>]</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(agpop<span class="sc">$</span>acres92<span class="sc">~</span>agpop<span class="sc">$</span>largef87))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = agpop$acres92 ~ agpop$largef87)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-837145  -85139  -46310   18214 6770696 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)    95759.61    7151.10   13.39   &lt;2e-16 ***
+agpop$largef87  3863.08      77.35   49.94   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 315700 on 3042 degrees of freedom
+Multiple R-squared:  0.4505,    Adjusted R-squared:  0.4503 
+F-statistic:  2494 on 1 and 3042 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>est_ups300_largef87 <span class="ot">&lt;-</span> <span class="fu">rep</span> (<span class="dv">0</span>, <span class="dv">2000</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="do">## ups sample</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    ups300 <span class="ot">&lt;-</span> <span class="fu">sample</span> (<span class="dv">1</span><span class="sc">:</span>N, <span class="at">size =</span> <span class="dv">300</span>, <span class="at">prob =</span> largef87, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    <span class="do">## survey</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    acres92_ups300 <span class="ot">&lt;-</span> agpop[ups300, <span class="st">"acres92"</span>]</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>    <span class="do">## estimate</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>    psi <span class="ot">&lt;-</span> (largef87 <span class="sc">/</span> <span class="fu">sum</span> (largef87)) [ups300]</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>    est_ups300_largef87 [i] <span class="ot">&lt;-</span>  <span class="fu">upswr_total_est</span> (acres92_ups300, psi) [<span class="dv">1</span>] </span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span> (<span class="fu">data.frame</span>(est_srs300,est_srs300_reg_acres87, est_ups300_acres87, est_ups300_largef87))</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span>total_acres92, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ups_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="analysis-of-a-dataset-student-study-hours-collected-by-upswo-without-replacement" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="analysis-of-a-dataset-student-study-hours-collected-by-upswo-without-replacement"><span class="header-section-number">6.6</span> Analysis of a dataset (student study hours) collected by UPSWO (without replacement)</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="do">## data --- original data frame for holding data</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="do">## cname --- variable recording cluster (psu) identity</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="do">## csize --- variable recording cluster (psu) population size (not sample size)</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="do">## cpik --- sampling probability for each cluster</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="do">## yvar --- variable of interest</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="do">## N --- total number of clusters (psus)</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>cluster_upswo_ratio_est <span class="ot">&lt;-</span> <span class="cf">function</span> (data, cname, csize, cpik, yvar)</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>  clust <span class="ot">&lt;-</span> data[,cname]</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>  ydata <span class="ot">&lt;-</span> data [, yvar]  </span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>  <span class="do">## cluster-wise summary</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>  ybari <span class="ot">&lt;-</span> <span class="fu">tapply</span> (ydata, clust, mean)</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>  Mi <span class="ot">&lt;-</span> <span class="fu">tapply</span> (data [,csize], clust, <span class="cf">function</span> (x) x[<span class="dv">1</span>])</span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>  pik <span class="ot">&lt;-</span> <span class="fu">tapply</span> (data [,cpik], clust, <span class="cf">function</span> (x) x[<span class="dv">1</span>])</span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>  <span class="do">## the same as total in cluster if Mi = mi</span></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>  t_hat_cls <span class="ot">&lt;-</span> ybari <span class="sc">*</span> Mi </span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>  <span class="do">## apply ratio estimate to t_hat_cls and Mi</span></span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">srs_ratio_est</span> (t_hat_cls<span class="sc">/</span>pik, Mi<span class="sc">/</span>pik)</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>classpps <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/classpps.csv"</span>)</span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>classpps</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["class"],"name":[1],"type":["int"],"align":["right"]},{"label":["clssize"],"name":[2],"type":["int"],"align":["right"]},{"label":["finalweight"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["hours"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"4","2":"22","3":"32.35","4":"5.0"},{"1":"4","2":"22","3":"32.35","4":"4.5"},{"1":"4","2":"22","3":"32.35","4":"5.5"},{"1":"4","2":"22","3":"32.35","4":"5.0"},{"1":"10","2":"34","3":"32.35","4":"2.0"},{"1":"10","2":"34","3":"32.35","4":"4.0"},{"1":"10","2":"34","3":"32.35","4":"3.0"},{"1":"10","2":"34","3":"32.35","4":"3.5"},{"1":"1","2":"44","3":"32.35","4":"5.0"},{"1":"1","2":"44","3":"32.35","4":"3.0"},{"1":"1","2":"44","3":"32.35","4":"4.0"},{"1":"1","2":"44","3":"32.35","4":"2.0"},{"1":"9","2":"54","3":"32.35","4":"3.5"},{"1":"9","2":"54","3":"32.35","4":"4.0"},{"1":"9","2":"54","3":"32.35","4":"1.0"},{"1":"9","2":"54","3":"32.35","4":"6.0"},{"1":"14","2":"100","3":"32.35","4":"2.0"},{"1":"14","2":"100","3":"32.35","4":"1.5"},{"1":"14","2":"100","3":"32.35","4":"1.5"},{"1":"14","2":"100","3":"32.35","4":"3.0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cluster_upswo_ratio_est</span> (classpps, <span class="st">"class"</span>, <span class="st">"clssize"</span>, <span class="st">"clssize"</span>, <span class="st">"hours"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Est.      S.E.    ci.low    ci.upp 
+3.4500000 0.4818584 2.1121467 4.7878533 </code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
