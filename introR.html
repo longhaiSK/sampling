@@ -163,25 +163,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./srs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis and Simulation for Simple Random Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./strata.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Analysis and Simulation for Stratified Random Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ratio.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data Analysis and Simulation for Ratio and Regression Estimation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cluster.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data Analysis for Cluster Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -442,13 +442,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="do">## simple analysis</span></span>
 <span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span> (agpop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       county           state         acres92           acres87       
- Length   :3078   Length   :3078   Min.   :    -99   Min.   :    -99  
- N.unique :1809   N.unique :  50   1st Qu.:  80903   1st Qu.:  86236  
- N.blank  :   0   N.blank  :   0   Median : 191648   Median : 199864  
- Min.nchar:  10   Min.nchar:   2   Mean   : 306677   Mean   : 313016  
- Max.nchar:  26   Max.nchar:   2   3rd Qu.: 366886   3rd Qu.: 372224  
-                                   Max.   :7229585   Max.   :7687460  
+<pre><code>    county             state              acres92           acres87       
+ Length:3078        Length:3078        Min.   :    -99   Min.   :    -99  
+ Class :character   Class :character   1st Qu.:  80903   1st Qu.:  86236  
+ Mode  :character   Mode  :character   Median : 191648   Median : 199864  
+                                       Mean   : 306677   Mean   : 313016  
+                                       3rd Qu.: 366886   3rd Qu.: 372224  
+                                       Max.   :7229585   Max.   :7687460  
     acres82           farms92          farms87          farms82      
  Min.   :    -99   Min.   :   0.0   Min.   :   0.0   Min.   :   0.0  
  1st Qu.:  96397   1st Qu.: 295.0   1st Qu.: 318.5   1st Qu.: 345.0  
@@ -463,13 +463,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  Mean   : 56.18   Mean   : 54.86   Mean   : 52.62   Mean   :  54.09  
  3rd Qu.: 75.00   3rd Qu.: 70.00   3rd Qu.: 65.00   3rd Qu.:  59.00  
  Max.   :579.00   Max.   :596.00   Max.   :546.00   Max.   :4298.00  
-    smallf87          smallf82             region    
- Min.   :   0.00   Min.   :   0.00   Length   :3078  
- 1st Qu.:  17.00   1st Qu.:  16.00   N.unique :   4  
- Median :  35.00   Median :  34.00   N.blank  :   0  
- Mean   :  59.54   Mean   :  60.97   Min.nchar:   1  
- 3rd Qu.:  67.00   3rd Qu.:  67.00   Max.nchar:   2  
- Max.   :3654.00   Max.   :3522.00                   </code></pre>
+    smallf87          smallf82          region         
+ Min.   :   0.00   Min.   :   0.00   Length:3078       
+ 1st Qu.:  17.00   1st Qu.:  16.00   Class :character  
+ Median :  35.00   Median :  34.00   Mode  :character  
+ Mean   :  59.54   Mean   :  60.97                     
+ 3rd Qu.:  67.00   3rd Qu.:  67.00                     
+ Max.   :3654.00   Max.   :3522.00                     </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span> (agpop<span class="sc">$</span>acres92)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
