@@ -16,8 +16,8 @@ To evaluate a Simple Random Sample (SRS), we calculate the point estimate, the s
 **Key Formulas:**
 
 * **Sample Mean:** $\bar{y} = \frac{1}{n} \sum_{i=1}^n y_i$
-* **Standard Error:** $\mathrm{SE}(\bar{y}) = \sqrt{1 - \frac{n}{N}} \left( \frac{s}{\sqrt{n}} \right)$
-* **Margin of Error:** $\mathrm{ME} = t_{\alpha/2, n-1} \times \mathrm{SE}(\bar{y})$
+* **Standard Error:** $SE(\bar{y}) = \sqrt{1 - \frac{n}{N}} \left( \frac{s}{\sqrt{n}} \right)$
+* **Margin of Error:** $ME = t_{\alpha/2, n-1} \times SE(\bar{y})$
 * **Population Total:** $\hat{t} = N\bar{y}$
 
 ```{r}
@@ -73,13 +73,13 @@ format_srs_gt <- function(est_vec, is_total = FALSE, is_prop = FALSE) {
   # Determine appropriate mathematical notation for the headers
   if (is_total) {
     est_sym <- "$\\hat{t}$"
-    se_sym <- "$\\mathrm{SE}(\\hat{t})$"
+    se_sym <- "$SE(\\hat{t})$"
   } else if (is_prop) {
     est_sym <- "$\\hat{p}$"
-    se_sym <- "$\\mathrm{SE}(\\hat{p})$"
+    se_sym <- "$SE(\\hat{p})$"
   } else {
     est_sym <- "$\\bar{y}$"
-    se_sym <- "$\\mathrm{SE}(\\bar{y})$"
+    se_sym <- "$SE(\\bar{y})$"
   }
   
   df |>
@@ -187,12 +187,12 @@ agpop <- subset( agpop, acres92 != -99)
 
 ### True Values
 
-Define the target sample size and compute the true population mean ($\mu$) and theoretical standard error ($\mathrm{SE}_{true}$) using the known population standard deviation ($S$).
+Define the target sample size and compute the true population mean ($\mu$) and theoretical standard error ($SE_{true}$) using the known population standard deviation ($S$).
 
 **Theoretical Standard Error:**
 
 
-$$\mathrm{SE}_{true}(\bar{y}) = \sqrt{1 - \frac{n}{N}} \left(\frac{S}{\sqrt{n}}\right)$$
+$$SE_{true}(\bar{y}) = \sqrt{1 - \frac{n}{N}} \left(\frac{S}{\sqrt{n}}\right)$$
 
 ```{r}
 # sample size

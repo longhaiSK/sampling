@@ -95,13 +95,13 @@ format_str_gt <- function(est_vec, is_total = FALSE, is_prop = FALSE) {
   
   if (is_total) {
     est_sym <- "$\\hat{t}_{str}$"
-    se_sym <- "$SE(\\hat{t}_{str})$"
+    se_sym <- "$\\mathrm{SE}(\\hat{t}_{str})$"
   } else if (is_prop) {
     est_sym <- "$\\hat{p}_{str}$"
-    se_sym <- "$SE(\\hat{p}_{str})$"
+    se_sym <- "$\\mathrm{SE}(\\hat{p}_{str})$"
   } else {
     est_sym <- "$\\bar{y}_{str}$"
-    se_sym <- "$SE(\\bar{y}_{str})$"
+    se_sym <- "$\\mathrm{SE}(\\bar{y}_{str})$"
   }
   
   df |>
@@ -125,13 +125,13 @@ format_srs_gt <- function(est_vec, is_total = FALSE, is_prop = FALSE) {
   
   if (is_total) {
     est_sym <- "$\\hat{t}$"
-    se_sym <- "$SE(\\hat{t})$"
+    se_sym <- "$\\mathrm{SE}(\\hat{t})$"
   } else if (is_prop) {
     est_sym <- "$\\hat{p}$"
-    se_sym <- "$SE(\\hat{p})$"
+    se_sym <- "$\\mathrm{SE}(\\hat{p})$"
   } else {
     est_sym <- "$\\bar{y}$"
-    se_sym <- "$SE(\\bar{y})$"
+    se_sym <- "$\\mathrm{SE}(\\bar{y})$"
   }
   
   df |>
