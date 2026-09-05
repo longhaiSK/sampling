@@ -1,10 +1,39 @@
 # Stratified Random Sampling
 
+## Key Formulas for Stratified Sampling
+
+Stratified random sampling divides a population of size $N$ into $H$ mutually exclusive strata. A simple random sample of size $n_h$ is then drawn from each stratum of size $N_h$. This design often yields higher precision than Simple Random Sampling (SRS).
+
+**1. Stratified Population Mean Estimator**
+The estimated population mean is a weighted average of the sample means from each stratum:
+$$ \bar{y}_{str} = \sum_{h=1}^H W_h \bar{y}_h $$
+Where $W_h = \frac{N_h}{N}$ is the stratum weight, and $\bar{y}_h$ is the sample mean of stratum $h$.
+
+**2. Variance of the Stratified Mean**
+The estimated variance accounts for the finite population correction in each stratum:
+$$ \hat{V}(\bar{y}_{str}) = \sum_{h=1}^H W_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h} $$
+Where $s_h^2$ is the sample variance in stratum $h$.
+
+**3. Proportional Allocation**
+Sample sizes are allocated proportional to the size of the stratum:
+$$ n_h = n \left( \frac{N_h}{N} \right) $$
+
+**4. Neyman (Optimal) Allocation**
+If surveying costs are equal across strata, Neyman allocation minimizes the variance of the estimator by sampling more heavily from larger and more highly variable strata:
+$$ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h} $$
+
+---
+
 ## Functions and packages for Analyzing Data
+
+The following code loads necessary libraries and defines custom functions to automate the calculation of the stratified mean, standard error, and confidence intervals. `str_mean_estimate_data` computes these directly from a dataset, while `str_mean_estimate` computes them from pre-calculated summary statistics. We also define helper functions to format our output using the `gt` package.
+
 ```{r}
 library(latex2exp)
 library(sampling)
 library(plyr)
+library(gt)
+
 ## this function finds statistical estimates given a dataset with sampling weight
 # stratdata --- data.frame containing stratified sample
 # y --- name of variable for which we want to estiamte population mean
@@ -31,7 +60,6 @@ str_mean_estimate_data <- function (stratdata, y, stratum, weight)
     
 }
 
-
 ## to find total, multiply N to the estimate returned by this function
 ## for poststratification, use nh = n * Nh/N
 str_mean_estimate <- function (ybarh, sh, nh, Nh)
@@ -44,460 +72,526 @@ str_mean_estimate <- function (ybarh, sh, nh, Nh)
     c(Est. = ybar, S.E. = seybar, ci.low = ybar - mem, ci.upp = ybar + mem)
 }
 
-
-
 ## sdata --- a vector of original survey data
 ## N --- population size
 ## to find total, multiply N to the estimate returned by this function
-
 srs_mean_est <- function (sdata, N = Inf)
 {
-	n <- length (sdata)
-	ybar <- mean (sdata)
-	se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n)  
-	mem <- qt (0.975, df = n - 1) * se.ybar
-	c (Est. = ybar, S.E. = se.ybar, ci.low = ybar - mem, ci.upp = ybar + mem)
+    n <- length (sdata)
+    ybar <- mean (sdata)
+    se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n)  
+    mem <- qt (0.975, df = n - 1) * se.ybar
+    c (Est. = ybar, S.E. = se.ybar, ci.low = ybar - mem, ci.upp = ybar + mem)
 }
 
+
+# Helper function to format the output of stratified estimates using gt
+format_str_gt <- function(est_vec, is_total = FALSE, is_prop = FALSE) {
+  df <- as.data.frame(t(est_vec))
+  
+  if (is_total) {
+    est_sym <- "$\\hat{t}_{str}$"
+    se_sym <- "$SE(\\hat{t}_{str})$"
+  } else if (is_prop) {
+    est_sym <- "$\\hat{p}_{str}$"
+    se_sym <- "$SE(\\hat{p}_{str})$"
+  } else {
+    est_sym <- "$\\bar{y}_{str}$"
+    se_sym <- "$SE(\\bar{y}_{str})$"
+  }
+  
+  df |>
+    gt() |>
+    cols_label(
+      Est. = md(est_sym),
+      S.E. = md(se_sym),
+      ci.low = md("95% CI Lower"),
+      ci.upp = md("95% CI Upper")
+    ) |>
+    fmt_number(
+      columns = everything(),
+      decimals = 4
+    ) |>
+    tab_options(table.width = pct(60))
+}
+
+# Helper function to format the output of SRS estimates using gt
+format_srs_gt <- function(est_vec, is_total = FALSE, is_prop = FALSE) {
+  df <- as.data.frame(t(est_vec))
+  
+  if (is_total) {
+    est_sym <- "$\\hat{t}$"
+    se_sym <- "$SE(\\hat{t})$"
+  } else if (is_prop) {
+    est_sym <- "$\\hat{p}$"
+    se_sym <- "$SE(\\hat{p})$"
+  } else {
+    est_sym <- "$\\bar{y}$"
+    se_sym <- "$SE(\\bar{y})$"
+  }
+  
+  df |>
+    gt() |>
+    cols_label(
+      Est. = md(est_sym),
+      S.E. = md(se_sym),
+      ci.low = md("95% CI Lower"),
+      ci.upp = md("95% CI Upper")
+    ) |>
+    fmt_number(columns = everything(), decimals = 4) |>
+    tab_options(table.width = pct(60))
+}
 ```
 
-
-
-
 ## Analysis of "agstrat.csv" data
+
+We will estimate the average 1992 farm acreage (`acres92`) across US counties, using geographic region (`region`) as the stratification variable.
+
 ### Importing agstrat.csv data
 ```{r}
 agstrat <- read.csv("data/agstrat.csv")
-agstrat 
+head(agstrat) |> gt()
 ```
+**Output Note:** The table above shows the sample survey data, including the stratum (region) and weights for each county.
 
 ### Spreadsheet calculation
 #### Summarizing acre92 in each stratum
 
+We first manually compute the sample size ($n_h$), standard deviation ($s_h$), and mean ($\bar{y}_h$) for each region, matching them with the known total counties in each region ($N_h$).
+
 ```{r}
 nh <- tapply (agstrat[, "acres92"], agstrat[,"region"], length)
 sh <- tapply (agstrat[, "acres92"], agstrat[,"region"], sd)
 ybarh <- tapply (agstrat[, "acres92"], agstrat[,"region"], mean)
-# create a vector with external information
+# create a vector with external information (true population size per stratum)
 Nh <- c(NC = 1054, NE = 220, S= 1382, W = 422)
 
-data.frame (Nh, nh, ybarh, sh)
+data.frame(Nh, nh, ybarh, sh) |> 
+  gt(rownames_to_stub = TRUE) |>
+  cols_label(
+    Nh = md("$N_h$"),
+    nh = md("$n_h$"),
+    ybarh = md("$\\bar{y}_h$"),
+    sh = md("$s_h$")
+  ) |>
+  fmt_number(columns = c(ybarh, sh), decimals = 2)
 ```
+**Output Note:** This displays the summary statistics per stratum. Note the significantly high variance ($s_h$) in the `r names(sh)[which.max(sh)]` region compared to the others.
 
 #### Estimates
+
+Next, we build a "spreadsheet-style" table to calculate the intermediate values needed for the final stratified variance and mean, summing the results at the bottom. We use `gt` to properly format the mathematical column headers.
+
 ```{r}
-N <- sum (Nh)
+N <- sum(Nh)
 pi_h <- Nh/N
 weighted_ybar_h <- ybarh * pi_h
 var_ybarh <- (1-nh/Nh)*sh^2/nh
-var_h=var_ybarh*pi_h^2
+var_h <- var_ybarh * pi_h^2
 
-workingtable <- data.frame ("$N_h$"=Nh, 
-                            "$n_h$"=nh,  
-                            "$\\bar y_h$"= ybarh, 
-                            "$s_h$"= sh, 
-                            "$s^2_h$" = sh^2, 
-                            "$\\pi_h={N_h/N}$"= pi_h,
-                            "$\\bar y_h\\cdot \\pi_h$"= weighted_ybar_h,
-                            "${\\hat V} (\\bar y_h)=(1-n_h/N_h)s^2_h/n_h$"=var_ybarh,
-                            "${\\hat V} (\\bar y_h)\\cdot \\pi^2_h$"=var_h,
-                            check.names = FALSE)
+workingtable <- data.frame(
+  Nh = Nh, 
+  nh = nh,  
+  ybarh = ybarh, 
+  sh = sh, 
+  s2h = sh^2, 
+  pi_h = pi_h,
+  weighted_ybar_h = weighted_ybar_h,
+  var_ybarh = var_ybarh,
+  var_h = var_h
+)
 
-workingtable <- rbind (workingtable, colSums(workingtable))
+workingtable <- rbind(workingtable, colSums(workingtable))
 row.names(workingtable)[5] <- "Sum"
-library(knitr)
-library(kableExtra)
-kableExtra::kable(workingtable, escape=FALSE)
-```
+workingtable$Region <- rownames(workingtable)
 
+workingtable |>
+  gt(rowname_col = "Region") |>
+  cols_label(
+    Nh = md("$N_h$"),
+    nh = md("$n_h$"),
+    ybarh = md("$\\bar{y}_h$"),
+    sh = md("$s_h$"),
+    s2h = md("$s^2_h$"),
+    pi_h = md("$\\pi_h = N_h/N$"),
+    weighted_ybar_h = md("$\\bar{y}_h \\cdot \\pi_h$"),
+    var_ybarh = md("$\\hat{V}(\\bar{y}_h) = (1 - n_h/N_h)s^2_h/n_h$"),
+    var_h = md("$\\hat{V}(\\bar{y}_h) \\cdot \\pi^2_h$")
+  ) |>
+  fmt_number(
+    columns = c(ybarh, sh, s2h, pi_h, weighted_ybar_h, var_ybarh, var_h),
+    decimals = 4
+  )
+```
+**Output Note:** The table provides a detailed breakdown of how each individual stratum contributes to the final mean and variance.
+
+Extracting the final sum values gives our overall estimates.
 
 ```{r}
-ybar <- sum(weighted_ybar_h); ybar
-var_ybar <- sum((1-nh/Nh)*pi_h^2*sh^2/nh); var_ybar
+ybar <- sum(weighted_ybar_h)
+var_ybar <- sum((1-nh/Nh)*pi_h^2*sh^2/nh)
 seybar <- sqrt(var_ybar)
 mem <- 1.96 * seybar
-c(Est. = ybar, S.E. = seybar, ci.low = ybar - mem, ci.upp = ybar + mem)
+
+c(Est. = ybar, S.E. = seybar, ci.low = ybar - mem, ci.upp = ybar + mem) |> 
+  format_str_gt()
 ```
+**Output Note:** The overall result indicates an estimated mean of `r format(round(ybar, 0), big.mark=",")` acres, with a 95% confidence interval of [`r format(round(ybar - mem, 0), big.mark=",")`, `r format(round(ybar + mem, 0), big.mark=",")`].
 
 ### Using the function "str_mean_estimate"
+
+We can bypass the manual table generation using our predefined function.
+
 ```{r}
 nh <- tapply (agstrat[, "acres92"], agstrat[,"region"], length)
 sh <- tapply (agstrat[, "acres92"], agstrat[,"region"], sd)
 ybarh <- tapply (agstrat[, "acres92"], agstrat[,"region"], mean)
-# create a vector with external information
 Nh <- c(NC = 1054, NE = 220, S= 1382, W = 422)
 
 ## strata mean estimate
-str_mean_estimate (ybarh, sh, nh, Nh)
+str_mean_estimate(ybarh, sh, nh, Nh) |> 
+  format_str_gt()
 ```
+**Output Note:** This matches our manual spreadsheet calculation precisely.
 
+To find the population total (total acreage across all US counties), multiply the mean and CI by $N$.
 
 ```{r}
 ## population total estimate 
-str_mean_estimate (ybarh, sh, nh, Nh) * sum (Nh)
+(str_mean_estimate(ybarh, sh, nh, Nh) * sum(Nh)) |> 
+  format_str_gt(is_total = TRUE)
 ```
-### Using the function "str_mean_estimate_data"
-```{r}
-## In the fucntion "str_mean_estimate_data", we can find the stratum size with the variable "weights":
-tapply (agstrat$weight, agstrat$region, sum)
-```
+**Output Note:** This successfully scales the estimates up to the total area of `r format(round(str_mean_estimate(ybarh, sh, nh, Nh)["Est."] * sum(Nh), 0), big.mark=",", scientific=FALSE)` acres.
 
+### Using the function "str_mean_estimate_data"
+
+Instead of pre-calculating the summary stats, this function extracts everything directly from the dataset using the pre-assigned sampling weights.
+
+```{r}
+## In the function "str_mean_estimate_data", we can find the stratum size with the variable "weights":
+tapply(agstrat$weight, agstrat$region, sum)
+```
+**Output Note:** This reconstructs the total population sizes ($N_h$) per region.
 
 ```{r}
 ## if the dataset contains a variable "weight"
-str_mean_estimate_data (agstrat, y="acres92", stratum="region", weight="weight")
+str_mean_estimate_data(agstrat, y="acres92", stratum="region", weight="weight") |> 
+  format_str_gt()
 ```
-
+**Output Note:** Once again, this perfectly matches the manual calculation.
 
 ```{r}
 ## estimating the mean of the number of small farms in 1992
-str_mean_estimate_data (agstrat, y="smallf92", stratum="region", weight="weight")
-
+str_mean_estimate_data(agstrat, y="smallf92", stratum="region", weight="weight") |> 
+  format_str_gt()
 ```
+**Output Note:** This demonstrates the function's flexibility: we can easily estimate a different variable (an average of `r round(str_mean_estimate_data(agstrat, "smallf92", "region", "weight")["Est."], 1)` small farms per county).
 
 ### Comparing with SRS estimate
+
+To see the benefit of stratifying, we compare our stratified estimates against a Simple Random Sample approach on the same population.
+
 ```{r}
-agsrs <- read.csv ("data/agsrs.csv")
-srs_mean_est(agsrs[, "acres92"], N=3078)
-
-## the ratio of estimated variance
-(16379.87/18898.43)^2
-
+agsrs <- read.csv("data/agsrs.csv")
+srs_mean_est(agsrs[, "acres92"], N=3078) |> 
+  format_srs_gt()
 ```
+**Output Note:** The Simple Random Sample standard error is noticeably higher at `r format(round(srs_mean_est(agsrs[, "acres92"], N=3078)["S.E."], 0), big.mark=",")`.
+
+```{r}
+## the ratio of estimated variance (Stratified SE / SRS SE)^2
+ratio_var <- (str_mean_estimate_data(agstrat, "acres92", "region", "weight")["S.E."] / srs_mean_est(agsrs[, "acres92"], N=3078)["S.E."])^2
+unname(ratio_var)
+```
+**Output Note:** The stratified variance is approximately `r round(ratio_var * 100, 1)`% of the SRS variance.
+
 ```{r}
 ## percentage of reduction of variance of str estimates from that of SRS estimate
-1- (16379.87/18898.43)^2
+unname(1 - ratio_var)
 ```
+**Output Note:** Stratification by region reduced the variance by `r round((1 - ratio_var) * 100, 1)`%. This is a substantial gain in precision for no extra sampling cost.
 
 ## Allocation of stratum sample size
 
-### Analyzing seals.csv collected with stratified sampling
-Lydersen and Ryg (1991) used stratification techniques to estimate ringed seal pop- ulations in Svalbard fjords. The 200 km2 study area was divided into three zones: Zone 1, outer Sassenfjorden, was covered with relatively new ice during the study period in March, 1990, and had little snow cover; Zone 3, Tempelfjorden, had a stable ice cover throughout the year; Zone 2, inner Sassenfjorden, was intermediate between the stable Zone 3 and the unstable Zone 1. Ringed seals need good ice to establish territories with breathing holes, and snow cover enables females to dig out birth lairs. Thus, it was thought that the three zones would have different seal densities. The investigators took a stratified random sample of 20% of the 200 1-km2 areas. 
-```{r}
-###### ########
+Deciding how to distribute the total sample $n$ among the strata significantly impacts the precision of the estimator.
 
+### Analyzing seals.csv collected with stratified sampling
+
+This dataset investigates ringed seal holes in different zones. The researchers used Proportional Allocation, taking 20% of the areas in each zone.
+
+```{r}
 ## load data
 seals <- read.csv("data/seals.csv")
-seals
-```
 
-
-```{r}
 # survey data summary in each stratum
 nh <- as.vector(table(seals[,"zone"]))
-sh <- tapply (seals[, "holes"], seals[,"zone"], sd)
-ybarh <- tapply (seals[, "holes"], seals[,"zone"], mean)
-Nh <- c(68,84,48)
-data.frame (Nh,nh, ybarh, sh)
-```
+sh <- tapply(seals[, "holes"], seals[,"zone"], sd)
+ybarh <- tapply(seals[, "holes"], seals[,"zone"], mean)
+Nh <- c(68, 84, 48)
 
+data.frame(Nh, nh, ybarh, sh) |> 
+  gt(rownames_to_stub = TRUE) |> 
+  fmt_number(columns = c(ybarh, sh), decimals = 2)
+```
+**Output Note:** Zone `r names(sh)[which.max(sh)]` has the highest standard deviation ($s_h \approx `r round(max(sh), 1)`$), indicating a high degree of variability in seal density in that region.
 
 ```{r}
-str_mean_estimate (ybarh, sh, nh, Nh)
+str_mean_estimate(ybarh, sh, nh, Nh) |> 
+  format_str_gt()
 ```
+**Output Note:** This provides the estimated mean number of seal holes per square kilometer (`r round(str_mean_estimate(ybarh, sh, nh, Nh)["Est."], 1)`).
 
 ### Neyman allocation of stratum sample size
 
+Because Zone 3 was highly variable, we could have achieved a lower overall variance if we had sampled it more heavily. Neyman allocation formally calculates this optimal distribution.
+
 ```{r}
-## assuming the cost of surving each zone is the same
-Ch <- rep (1, 3)
-Sh <- sh ## estimate Sh with sh
-NhShDCh <- Nh * Sh / sqrt (Ch)
+## assuming the cost of surveying each zone is the same
+Ch <- rep(1, 3)
+Sh <- sh ## estimate population Sh with sample sh
+NhShDCh <- Nh * Sh / sqrt(Ch)
 
-## the optimal allocation scheme for estimating the population total or means holes:
-Lh <- NhShDCh / sum (NhShDCh)
-data.frame(Ch,Nh, Sh,NhShDCh, Lh)
+## the optimal allocation proportion (Lh) for estimating the population total or mean:
+Lh <- NhShDCh / sum(NhShDCh)
 
+data.frame(Ch, Nh, Sh, NhShDCh, Lh) |> 
+  gt(rownames_to_stub = TRUE) |> 
+  cols_label(NhShDCh = md("$N_h S_h / \\sqrt{C_h}$"), Lh = md("$L_h$ (Prop)")) |>
+  fmt_number(columns = c(Sh, NhShDCh, Lh), decimals = 3)
 ```
+**Output Note:** This displays the optimal allocation proportions ($L_h$). Even though Zone 2 is a larger area ($N_h=84$), Zone 3's high variance means we should allocate the largest share (`r round(Lh["3"] * 100, 0)`%) of our sampling effort there.
 
 ## Simulation to Study the Efficiency of Stratified Sampling with Different Allocation
+
+We will use the full `agpop.csv` dataset (acting as our true population) to run 2000 repeated samples. We will compare SRS, Proportional (P2S), and Optimal (Neyman) allocations.
 
 ### Using "Region" to Stratify
 #### Read Population Data
 ```{r}
-agpop <- read.csv ("data/agpop.csv")
+agpop <- read.csv("data/agpop.csv")
 agpop <- agpop[agpop$acres92 != -99, ] ## remove those counties with na
 N <- nrow(agpop)
 ```
-
 
 #### Define Stratum Variable
 ```{r}
 agpop$stratum <- agpop$region
 ## reorder agpop for the ease of using strata of "sampling" (very important)
-agpop <- agpop[order (agpop$stratum), ]
-
+agpop <- agpop[order(agpop$stratum), ]
 ```
 
-Look at variance decomposition
+A stratification variable is most effective when it strongly explains the variance in the target variable. We check this via ANOVA and R-squared.
+
 ```{r}
-boxplot (acres92 ~ stratum, data = agpop)
-anova(lm (agpop$acres92~agpop$stratum))
+boxplot(acres92 ~ stratum, data = agpop)
+anova(lm(agpop$acres92 ~ agpop$stratum))
+summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared
 ```
-Look at the $R^2$ of predicting "acres92" with "region".
-```{r}
-summary(lm (agpop$acres92~agpop$stratum))$r.squared
-```
+**Output Note:** The R-squared is `r round(summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared, 3)`. The region variable only explains about `r round(summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared * 100, 1)`% of the variance in acreage, which is helpful but not extremely strong.
 
-#### Stratified Sampling with P2S allocation 
+#### Stratified Sampling with P2S allocation (Single Run)
 ```{r}
 # doing one stratified sampling
-Nh <- tapply (1:nrow(agpop), agpop$stratum, length) 
-nh <- round(Nh/sum (Nh)*300)
-data.frame(Nh,nh)
-nh
+Nh <- tapply(1:nrow(agpop), agpop$stratum, length) 
+nh <- round(Nh/sum(Nh)*300)
 
 ## doing stratified sampling
-strsample <- strata (agpop, "stratum", size = nh,  method = "srswor")
-strsample
-## checking sampling results
-table (strsample [,1]) 
+strsample <- strata(agpop, "stratum", size = nh, method = "srswor")
 
 # collecting data on sampled counties
-agstrat <- agpop [strsample$ID_unit, ]
+agstrat <- agpop[strsample$ID_unit, ]
 agstrat$weight <- 1/strsample$Prob
 
-str_mean_estimate_data (agstrat, "acres92", "stratum", "weight")
-
+str_mean_estimate_data(agstrat, "acres92", "stratum", "weight") |> 
+  format_str_gt()
 ```
-Estimate with spreadsheet method for a double checking
-```{r}
-## double checking the estimates
-nh <- tapply (agstrat[, "acres92"], agstrat[,"region"], length)
-sh <- tapply (agstrat[, "acres92"], agstrat[,"region"], sd)
-ybarh <- tapply (agstrat[, "acres92"], agstrat[,"region"], mean)
-# create a vector with external information
-Nh <- tapply (1:nrow(agpop), agpop[,"region"], length)
-## strata mean estimate
-str_mean_estimate (ybarh, sh, nh, Nh)
-```
+**Output Note:** This provides a single point estimate for demonstration.
 
 #### Repeat stratified sampling with P2S allocation 2000 times
 ```{r cache=TRUE}
-
-Nh <- tapply (1:nrow (agpop), agpop$stratum, length) 
-nh <- round(Nh/sum (Nh)*300) ## make sure the order matches Nh
+Nh <- tapply(1:nrow(agpop), agpop$stratum, length) 
+nh <- round(Nh/sum(Nh)*300) ## make sure the order matches Nh
 
 nres <- 2000
-str_p2s_simulated <- matrix (0, nres, 4)
-for (i in 1:nres)
-{
-    ## doing stratified sampling
-    strsample <- strata (agpop, "stratum", size = nh,  method = "srswor")
-    agstrat <- agpop [strsample$ID_unit, ]
+str_p2s_simulated <- matrix(0, nres, 4)
+for (i in 1:nres) {
+    strsample <- strata(agpop, "stratum", size = nh, method = "srswor")
+    agstrat <- agpop[strsample$ID_unit, ]
     agstrat$weight <- 1/strsample$Prob
-    ## analyziing data
-    str_p2s_simulated[i,] <- str_mean_estimate_data (agstrat, "acres92", "stratum", "weight")
-    
+    str_p2s_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight")
 }
 ```
-
 
 #### Repeat stratified sampling with optimal allocation 2000 times
 ```{r}
-Nh <- tapply (agpop$acres92, agpop$stratum, length) 
+Nh <- tapply(agpop$acres92, agpop$stratum, length) 
+Sh <- tapply(agpop$acres92, agpop$stratum, sd)
+nh_opt <- round((Nh*Sh)/sum(Nh*Sh) * 300)
 
-Sh <- tapply (agpop$acres92, agpop$stratum, sd)
-nh_opt <- round((Nh*Sh)/sum (Nh*Sh) * 300);nh_opt
-data.frame(Nh,Sh,nh_opt)
+data.frame(Nh, Sh, nh_opt) |> 
+  gt(rownames_to_stub = TRUE) |> 
+  fmt_number(columns = Sh, decimals = 2)
 ```
-
+**Output Note:** This table compares the population sizes to the optimal sample sizes. Notice that the West region (high variance) gets a disproportionately larger sample under Neyman allocation.
 
 ```{r cache=TRUE}
 nres <- 2000
-str_neyman_simulated <- matrix (0, nres, 4)
-for (i in 1:nres)
-{
-    ## doing stratified sampling
-    strsample <- strata (agpop, "stratum", size = nh_opt,  method = "srswor")
-    # collecting data on sampled counties
-    agstrat <- agpop [strsample$ID_unit, ]
+str_neyman_simulated <- matrix(0, nres, 4)
+for (i in 1:nres) {
+    strsample <- strata(agpop, "stratum", size = nh_opt, method = "srswor")
+    agstrat <- agpop[strsample$ID_unit, ]
     agstrat$weight <- 1/strsample$Prob
-    
-    str_neyman_simulated[i,] <- str_mean_estimate_data (agstrat, "acres92", "stratum", "weight")
-    
+    str_neyman_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight")
 }
 ```
 
-#### Repeat simple random sampling  2000 times
-```{r}
-
+#### Repeat simple random sampling 2000 times
+```{r cache=TRUE}
 nres <- 2000
-srs_simulated <- matrix (0, nres, 4)
-for (i in 1:nres)
-{
-    ## doing stratified sampling
-    srs <- sample (sum(Nh), sum (nh))
-    # collecting data on sampled counties
-    agsrs <- agpop [srs, ]
-    srs_simulated[i,] <- srs_mean_est (agsrs[, "acres92"], N= sum(Nh))
-    
+srs_simulated <- matrix(0, nres, 4)
+for (i in 1:nres) {
+    srs <- sample(sum(Nh), sum(nh))
+    agsrs <- agpop[srs, ]
+    srs_simulated[i,] <- srs_mean_est(agsrs[, "acres92"], N = sum(Nh))
 }
-
 ```
+
 #### Compare the efficiency of different methods
 
 ```{r}
-sim_results_str_region <- data.frame("SRS"=srs_simulated[,1], 
-                      "Prop2size"=str_p2s_simulated[,1], 
-                      "Neyman"=str_neyman_simulated[,1])
-boxplot (sim_results_str_region)
-abline (h = mean (agpop$acres92), col = "red")
-
-sapply (sim_results_str_region, mean) -> sim_means
-sapply (sim_results_str_region, var) -> sim_var
-
-sim_var/sim_var[1] -> sim_var_relative
-
-#Percentage of reduction of variances of estimates compared to SRS
-
-1-sim_var/sim_var[1] -> sim_var_reduction
-
-data.frame("Mean"=sim_means, "Variance"=sim_var, "Relative Variance"= sim_var_relative, "Percentage of Variance Reduction"=sim_var_reduction, check.names = FALSE)
-
+sim_results_str_region <- data.frame(
+  "SRS" = srs_simulated[,1], 
+  "Prop2size" = str_p2s_simulated[,1], 
+  "Neyman" = str_neyman_simulated[,1]
+)
+boxplot(sim_results_str_region)
+abline(h = mean(agpop$acres92), col = "red")
 ```
+**Output Note:** The plot visually demonstrates that Neyman allocation has the tightest spread around the true mean (the red line).
+
+```{r}
+sim_means <- sapply(sim_results_str_region, mean)
+sim_var <- sapply(sim_results_str_region, var)
+sim_var_relative <- sim_var / sim_var[1]
+sim_var_reduction <- 1 - sim_var_relative
+
+data.frame(
+  "Mean" = sim_means, 
+  "Variance" = sim_var, 
+  "Relative Variance" = sim_var_relative, 
+  "Percentage of Variance Reduction" = sim_var_reduction, 
+  check.names = FALSE
+) |> 
+  gt(rownames_to_stub = TRUE) |> 
+  fmt_number(columns = c(Mean, Variance), decimals = 1) |> 
+  fmt_percent(columns = c(`Percentage of Variance Reduction`), decimals = 2) |> 
+  fmt_number(columns = c(`Relative Variance`), decimals = 3)
+```
+**Output Note:** The table summarizes the simulation. Proportional allocation reduces variance by `r round(sim_var_reduction["Prop2size"] * 100, 1)`%, while Neyman allocation reduces it by `r round(sim_var_reduction["Neyman"] * 100, 1)`% compared to Simple Random Sampling.
 
 ### Using "acres82" to Define Strata
+
+What if we stratify by a variable highly correlated with our target, like the acreage from a decade prior (`acres82`)?
+
 #### Read Population Data
 ```{r}
-agpop <- read.csv ("data/agpop.csv")
-agpop <- agpop[agpop$acres92 != -99, ] ## remove those counties with na
+agpop <- read.csv("data/agpop.csv")
+agpop <- agpop[agpop$acres92 != -99, ] 
 N <- nrow(agpop)
 ```
 
 #### Define Stratum Variable with Quantiles of "acres82"
+We convert the continuous `acres82` variable into four distinct categorical strata based on quantiles.
+
 ```{r}
-plot (acres92~acres82, data = agpop)
-summary (lm(acres92~acres82, data = agpop))
 agpop$stratum <- cut(agpop$acres82,
-                     breaks = quantile (agpop$acres82, 
-                                        probs = c(0,0.25,0.75,0.95,1)),
-                     include.lowest =  T)
+                     breaks = quantile(agpop$acres82, probs = c(0,0.25,0.75,0.95,1)),
+                     include.lowest = T)
 agpop$stratum <- mapvalues(agpop$stratum, 
-                          from = (sort(unique (agpop$stratum))), 
-                          to= paste0("acres82",c("Q1", "Q2", "Q3", "Q4")))
+                           from = (sort(unique(agpop$stratum))), 
+                           to = paste0("acres82", c("Q1", "Q2", "Q3", "Q4")))
 agpop <- agpop[order(agpop$stratum), ]
 ```
 
-Look at variance decomposition
+Let's check the explanatory power of this new stratification variable.
+
 ```{r}
-boxplot (acres92 ~ stratum, data = agpop)
-anova(lm (agpop$acres92~agpop$stratum))
+boxplot(acres92 ~ stratum, data = agpop)
+summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared
 ```
-Look at the $R^2$ of predicting "acres92" with "acres82" quantile.
-```{r}
-summary(lm (agpop$acres92~agpop$stratum))$r.squared
-```
+**Output Note:** The R-squared is `r round(summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared, 3)`. The past acreage explains `r round(summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared * 100, 1)`% of the variance in 1992 acreage, making this a vastly superior stratification variable.
 
 #### Stratified sampling with P2S allocation
-```{r}
-# doing one stratified sampling
-Nh <- tapply (1:nrow(agpop), agpop$stratum, length) 
-nh <- round(Nh/sum (Nh)*300)
-nh
-
-## doing stratified sampling
-strsample <- strata (agpop, "stratum", size = nh,  method = "srswor")
-strsample
-## checking sampling results
-table (strsample [,1]) 
-
-# collecting data on sampled counties
-agstrat <- agpop [strsample$ID_unit, ]
-agstrat$weight <- 1/strsample$Prob
-
-str_mean_estimate_data (agstrat, "acres92", "stratum", "weight")
-
-```
-
-
-#### Repeat stratified sampling with P2S allocation 2000 times
 ```{r cache=TRUE}
+Nh <- tapply(1:nrow(agpop), agpop$stratum, length) 
+nh <- round(Nh/sum(Nh)*300)
 
-Nh <- tapply (1:nrow (agpop), agpop$stratum, length) 
-nh <- round(Nh/sum (Nh)*300) ## make sure the order matches Nh
-data.frame(Nh, nh)
 nres <- 2000
-str_p2s_simulated <- matrix (0, nres, 4)
-for (i in 1:nres)
-{
-    ## doing stratified sampling
-    strsample <- strata (agpop, "stratum", size = nh,  method = "srswor")
-    agstrat <- agpop [strsample$ID_unit, ]
+str_p2s_simulated <- matrix(0, nres, 4)
+for (i in 1:nres) {
+    strsample <- strata(agpop, "stratum", size = nh, method = "srswor")
+    agstrat <- agpop[strsample$ID_unit, ]
     agstrat$weight <- 1/strsample$Prob
-    ## analyziing data
-    str_p2s_simulated[i,] <- str_mean_estimate_data (agstrat, "acres92", "stratum", "weight")
-    
+    str_p2s_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight")
 }
 ```
-
 
 #### Repeat stratified sampling with optimal allocation 2000 times
-```{r}
-Nh <- tapply (1:nrow (agpop), agpop$stratum, length) 
-# find order of stratum
-# unique (agpop$stratum)
-Sh <- tapply (agpop$acres92, agpop$stratum, sd)
-nh_opt <- round((Nh*Sh)/sum (Nh*Sh) * 300);nh_opt
-data.frame(Nh,Sh,nh_opt)
+```{r cache=TRUE}
+Nh <- tapply(1:nrow(agpop), agpop$stratum, length) 
+Sh <- tapply(agpop$acres92, agpop$stratum, sd)
+nh_opt <- round((Nh*Sh)/sum(Nh*Sh) * 300)
+
+nres <- 2000
+str_neyman_simulated <- matrix(0, nres, 4)
+for (i in 1:nres) {
+    strsample <- strata(agpop, "stratum", size = nh_opt, method = "srswor")
+    agstrat <- agpop[strsample$ID_unit, ]
+    agstrat$weight <- 1/strsample$Prob
+    str_neyman_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight")
+}
 ```
+
+#### Repeat simple random sampling 2000 times
 ```{r cache=TRUE}
 nres <- 2000
-str_neyman_simulated <- matrix (0, nres, 4)
-for (i in 1:nres)
-{
-    ## doing stratified sampling
-    strsample <- strata (agpop, "stratum", size = nh_opt,  method = "srswor")
-    # collecting data on sampled counties
-    agstrat <- agpop [strsample$ID_unit, ]
-    agstrat$weight <- 1/strsample$Prob
-    
-    str_neyman_simulated[i,] <- str_mean_estimate_data (agstrat, "acres92", "stratum", "weight")
-    
+srs_simulated <- matrix(0, nres, 4)
+for (i in 1:nres) {
+    srs <- sample(sum(Nh), sum(nh))
+    agsrs <- agpop[srs, ]
+    srs_simulated[i,] <- srs_mean_est(agsrs[, "acres92"], N = sum(Nh))
 }
 ```
 
-#### Repeat simple random sampling  2000 times
-```{r}
-
-nres <- 2000
-srs_simulated <- matrix (0, nres, 4)
-for (i in 1:nres)
-{
-    ## doing stratified sampling
-    srs <- sample (sum(Nh), sum (nh))
-    # collecting data on sampled counties
-    agsrs <- agpop [srs, ]
-    srs_simulated[i,] <- srs_mean_est (agsrs[, "acres92"], N= sum(Nh))
-    
-}
-
-```
 #### Compare the efficiency of different methods
 
 ```{r}
-sim_results_str_acres82 <- data.frame("SRS"=srs_simulated[,1], 
-                      "Prop2size"=str_p2s_simulated[,1], 
-                      "Neyman"=str_neyman_simulated[,1])
-boxplot (sim_results_str_acres82)
-abline (h = mean (agpop$acres92), col = "red")
-
-sapply (sim_results_str_acres82, mean) -> sim_means
-sapply (sim_results_str_acres82, var) -> sim_var
-
-sim_var/sim_var[1] -> sim_var_relative
-
-#Percentage of reduction of variances of estimates compared to SRS
-
-1-sim_var/sim_var[1] -> sim_var_reduction
-
-data.frame("Mean"=sim_means, "Variance"=sim_var, "Relative Variance"= sim_var_relative, "Percentage of Variance Reduction"=sim_var_reduction, check.names = FALSE)
-
+sim_results_str_acres82 <- data.frame(
+  "SRS" = srs_simulated[,1], 
+  "Prop2size" = str_p2s_simulated[,1], 
+  "Neyman" = str_neyman_simulated[,1]
+)
+boxplot(sim_results_str_acres82)
+abline(h = mean(agpop$acres92), col = "red")
 ```
+**Output Note:** The boxplot visually highlights a massive reduction in variance compared to SRS, especially for the Neyman allocation.
 
+```{r}
+sim_means <- sapply(sim_results_str_acres82, mean)
+sim_var <- sapply(sim_results_str_acres82, var)
+sim_var_relative <- sim_var / sim_var[1]
+sim_var_reduction <- 1 - sim_var_relative
 
-<!-- # Functions in the file estimates.r -->
-<!-- ```{r comment=""} -->
-<!-- cat(paste0(readLines("estimates.r"), collapse="\n")) -->
-<!-- ``` -->
-
+data.frame(
+  "Mean" = sim_means, 
+  "Variance" = sim_var, 
+  "Relative Variance" = sim_var_relative, 
+  "Percentage of Variance Reduction" = sim_var_reduction, 
+  check.names = FALSE
+) |> 
+  gt(rownames_to_stub = TRUE) |> 
+  fmt_number(columns = c(Mean, Variance), decimals = 1) |> 
+  fmt_percent(columns = c(`Percentage of Variance Reduction`), decimals = 2) |> 
+  fmt_number(columns = c(`Relative Variance`), decimals = 3)
+```
+**Output Note:** The table shows dramatic results: Proportional allocation reduces variance by `r round(sim_var_reduction["Prop2size"] * 100, 1)`%, and Neyman allocation reduces it by `r round(sim_var_reduction["Neyman"] * 100, 1)`%. Stratifying by a highly correlated variable is immensely powerful.

@@ -1,12 +1,25 @@
-# Simple Random Sampling
-
-```{r}
-library(latex2exp)
-```
+---
+title: "Simple Random Sampling"
+format: html
+execute:
+  warning: false
+  message: false
+---
 
 
 ## Analysis of agsrs.csv Data
-### Step by step calculation without using a function 
+
+### Step by step calculation without using a function
+
+To evaluate a Simple Random Sample (SRS), we calculate the point estimate, the standard error (incorporating the Finite Population Correction factor), and the margin of error to construct a 95% confidence interval.
+
+**Key Formulas:**
+
+* **Sample Mean:** $\bar{y} = \frac{1}{n} \sum_{i=1}^n y_i$
+* **Standard Error:** $SE(\bar{y}) = \sqrt{1 - \frac{n}{N}} \left( \frac{s}{\sqrt{n}} \right)$
+* **Margin of Error:** $ME = t_{\alpha/2, n-1} \times SE(\bar{y})$
+* **Population Total:** $\hat{t} = N\bar{y}$
+
 ```{r}
 ## read survey data
 agsrs <- read.csv ("data/agsrs.csv")
@@ -21,58 +34,130 @@ n <- length (sdata)
 ybar <- mean (sdata)
 se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n)  
 mem <- qt (0.975, df = n - 1) * se.ybar
+
 ## return estimate vector for pop mean
 c (Est. = ybar, S.E. = se.ybar, ci.low = ybar - mem, ci.upp = ybar + mem)
 
 ## return estimate vector for pop total
 c (Est. = ybar, S.E. = se.ybar, ci.low = ybar - mem, ci.upp = ybar + mem) * N
+
 ```
 
 ### Write a function for repeated use
+
 #### A function for doing data analysis for srs sample
-```{r }
-# 
+
+Wrap the previous manual calculations into a custom R function to quickly estimate means, standard errors, and confidence intervals for any variable of interest. We will also create a helper function using `gt` to format the numerical vector into a nice table with mathematical expressions in the headers.
+
+```{r}
+
+library(gt)
+
 # sdata -- a vector of sampling survey data
 # N -- population size 
 # to find total, multiply N to the estimate returned by this function
 srs_mean_est <- function (sdata, N)
 {
-	n <- length (sdata)
-	ybar <- mean (sdata)
-	se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n)  
-	mem <- qt (0.975, df = n - 1) * se.ybar
-	c (ybar = ybar, se = se.ybar, ci.low = ybar - mem, ci.upp = ybar + mem)
+   n <- length (sdata)
+   ybar <- mean (sdata)
+   se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n)  
+   mem <- qt (0.975, df = n - 1) * se.ybar
+   c (ybar = ybar, se = se.ybar, ci.low = ybar - mem, ci.upp = ybar + mem)
 }
+
+# Helper function to format the output of srs_mean_est using gt
+format_srs_gt <- function(est_vec, is_total = FALSE, is_prop = FALSE) {
+  # Convert the named vector into a data frame
+  df <- as.data.frame(t(est_vec))
+  
+  # Determine appropriate mathematical notation for the headers
+  if (is_total) {
+    est_sym <- "$\\hat{t}$"
+    se_sym <- "$SE(\\hat{t})$"
+  } else if (is_prop) {
+    est_sym <- "$\\hat{p}$"
+    se_sym <- "$SE(\\hat{p})$"
+  } else {
+    est_sym <- "$\\bar{y}$"
+    se_sym <- "$SE(\\bar{y})$"
+  }
+  
+  df |>
+    gt() |>
+    cols_label(
+      ybar = md(est_sym),
+      se = md(se_sym),
+      ci.low = md("95% CI Lower"),
+      ci.upp = md("95% CI Upper")
+    ) |>
+    fmt_number(
+      columns = everything(),
+      decimals = 4
+    ) |>
+    tab_options(
+      table.width = pct(60)
+    )
+}
+
 ```
 
 #### Apply srs_mean_est to agsrs.csv data
+
 *Import Data*
+
+Load the survey sample data representing US counties.
+
 ```{r}
 agsrs <- read.csv ("data/agsrs.csv")
+
 ```
+
 *Estimating the mean of acre92*
+
+Calculate the estimated average farm acreage per county using the custom function and format the output with `gt`.
+
 ```{r}
-srs_mean_est (agsrs[,"acres92"], N = 3078)
+srs_mean_est(agsrs[,"acres92"], N = 3078) |> 
+  format_srs_gt()
+
 ```
 
 *Estimating the total of acre92*
+
+Scale the sample mean and confidence intervals by the population size ($N = 3078$) to estimate the total farm acreage across all counties.
+
 ```{r}
-srs_mean_est (agsrs[,"acres92"], N = 3078) * 3078
+(srs_mean_est(agsrs[,"acres92"], N = 3078) * 3078) |> 
+  format_srs_gt(is_total = TRUE)
+
 ```
 
 *Estimating the proportion of counties with fewer than 200K acres for farming in 1992*
+
+To estimate a proportion under SRS, create an indicator variable ($y_i = 1$ if true, $0$ if false). The mean of this indicator variable serves as the sample proportion ($\hat{p} = \bar{y}_{indicator}$).
+
 ```{r}
 acres92.is.fewer.200k <- as.numeric (agsrs[,"acres92"] < 200000)
 head(acres92.is.fewer.200k)
-srs_mean_est (acres92.is.fewer.200k, N = 3078)
+
+srs_mean_est(acres92.is.fewer.200k, N = 3078) |> 
+  format_srs_gt(is_prop = TRUE)
+
 ```
 
 *Estimating the total number of counties with fewer than 200K acres for farming in 1992*
+
+Multiply the estimated proportion and its interval bounds by the total population size to estimate the absolute count of counties meeting the criteria.
+
 ```{r}
-srs_mean_est (acres92.is.fewer.200k, N = 3078) * 3078
+(srs_mean_est(acres92.is.fewer.200k, N = 3078) * 3078) |> 
+  format_srs_gt(is_total = TRUE)
+
 ```
 
 ### Comparing with true value
+
+Load the complete census (population) dataset to calculate the true parameters. This allows us to assess the accuracy of our previous SRS estimates against the exact population values.
 
 ```{r}
 agpop <- read.csv ("data/agpop.csv", na = "-99")
@@ -89,17 +174,27 @@ sum (agpop[, "acres92"] < 200000, na.rm = T)
 ```
 
 ## A Simulation Demonstration of SRS Inference
-```{r }
+
+Load the full population data and filter out missing values to serve as a complete, known finite population for resampling experiments.
+
+```{r}
 # read population data 
 agpop <- read.csv ("data/agpop.csv")
 # remove those counties with na
 agpop <- subset( agpop, acres92 != -99)
+
 ```
 
-
-
 ### True Values
-```{r }
+
+Define the target sample size and compute the true population mean ($\mu$) and theoretical standard error ($SE_{true}$) using the known population standard deviation ($S$).
+
+**Theoretical Standard Error:**
+
+
+$$SE_{true}(\bar{y}) = \sqrt{1 - \frac{n}{N}} \left(\frac{S}{\sqrt{n}}\right)$$
+
+```{r}
 # sample size
 n <- 300
 # population size
@@ -109,11 +204,14 @@ N <- nrow (agpop); N
 ybarU <- mean (agpop[,"acres92"]); ybarU
 # true value of deviation of sample mean
 true.se.ybar <- sqrt (1- n/N) * sd (agpop[,"acres92"]) / sqrt (n); true.se.ybar
+
 ```
 
 ### One SRS sampling
 
-```{r }
+Draw a single random sample of size $n=300$ from the population and run our estimator function to see a single instance of survey inference.
+
+```{r}
 ## 
 # srs sampling
 srs <- sample (1:N,n)
@@ -121,10 +219,17 @@ head(agpop [srs, ])
 # get data of variable "acres92"
 sdata <- agpop [srs, "acres92"]
 # analysis
-srs_mean_est (sdata, N)
+srs_mean_est(sdata, N) |> 
+  format_srs_gt()
+
 ```
 
 ### Repeating SRS sampling 5000 times
+
+To demonstrate the Central Limit Theorem and unbiasedness of the estimator, draw 5,000 independent samples, storing the estimates from each iteration. We plot the resulting sampling distribution against the true population mean.
+
+*(Note: We use the raw vector output of `srs_mean_est` directly here to efficiently build the results matrix.)*
+
 ```{r fig.height=10}
 nres <- 5000 # number of repeated sampling
 simulation.results <- matrix (0, nres, 4) # matrix recording repeated results
@@ -133,8 +238,8 @@ colnames(simulation.results) <- c( "Est.",   "S.E.",   "ci.low", "ci.upp")
 for (i in 1:nres)
 {
     srs <- sample (N, n)
-	sdata <- agpop [srs, "acres92"]
-	simulation.results [i,] <- srs_mean_est (sdata, N)
+   sdata <- agpop [srs, "acres92"]
+   simulation.results [i,] <- srs_mean_est (sdata, N)
 }
 
 head(simulation.results)
@@ -151,10 +256,12 @@ mean (simulation.results[,1])
 ybarU
 sd (simulation.results [,1])
 true.se.ybar
+
 ```
 
-
 ### Empirical Coverage Rate of CIs
+
+Verify the reliability of the 95% confidence intervals by checking whether the true population mean falls within the calculated bounds for each of the 5,000 samples. The empirical coverage rate should closely approximate 0.95. The plot highlights the first 100 intervals, flagging those that fail to capture the true mean in a distinct color.
 
 ```{r fig.height=10}
 simulation.results <- cbind (simulation.results, (simulation.results[,3] < ybarU) * (ybarU < simulation.results[,4] ))
@@ -174,6 +281,3 @@ abline(h=ybarU, col = "blue")
 mean (simulation.results[,"Covered?"])
 
 ```
-
-
-
