@@ -204,7 +204,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ratio.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ratio, Regression, and Domain Estimation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -297,11 +297,15 @@ window.Quarto = {
 
 <section id="key-formulas-for-stratified-sampling" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="key-formulas-for-stratified-sampling"><span class="header-section-number">3.1</span> Key Formulas for Stratified Sampling</h2>
-<p>Stratified random sampling divides a population of size <span class="math inline">\(N\)</span> into <span class="math inline">\(H\)</span> mutually exclusive strata. A simple random sample of size <span class="math inline">\(n_h\)</span> is then drawn from each stratum of size <span class="math inline">\(N_h\)</span>. This design often yields higher precision than Simple Random Sampling (SRS).</p>
-<p><strong>1. Stratified Population Mean Estimator</strong> The estimated population mean is a weighted average of the sample means from each stratum: <span class="math display">\[ \bar{y}_{str} = \sum_{h=1}^H W_h \bar{y}_h \]</span> Where <span class="math inline">\(W_h = \frac{N_h}{N}\)</span> is the stratum weight, and <span class="math inline">\(\bar{y}_h\)</span> is the sample mean of stratum <span class="math inline">\(h\)</span>.</p>
-<p><strong>2. Variance of the Stratified Mean</strong> The estimated variance accounts for the finite population correction in each stratum: <span class="math display">\[ \hat{V}(\bar{y}_{str}) = \sum_{h=1}^H W_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h} \]</span> Where <span class="math inline">\(s_h^2\)</span> is the sample variance in stratum <span class="math inline">\(h\)</span>.</p>
-<p><strong>3. Proportional Allocation</strong> Sample sizes are allocated proportional to the size of the stratum: <span class="math display">\[ n_h = n \left( \frac{N_h}{N} \right) \]</span></p>
-<p><strong>4. Neyman (Optimal) Allocation</strong> If surveying costs are equal across strata, Neyman allocation minimizes the variance of the estimator by sampling more heavily from larger and more highly variable strata: <span class="math display">\[ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h} \]</span></p>
+<p>Stratified random sampling divides a population of size <span class="math inline">\(N\)</span> into <span class="math inline">\(H\)</span> mutually exclusive strata. A simple random sample of size <span class="math inline">\(n_h\)</span> is then drawn from each stratum of size <span class="math inline">\(N_h\)</span>. This design often yields higher precision than Simple Random Sampling (SRS). #### 1. Stratified Population Mean Estimator {-} The estimated population mean is a weighted average of the sample means from each stratum: <span class="math display">\[
+\overline{y}_{str} = \sum_{h=1}^H W_h \overline{y}_h.
+\]</span> Where <span class="math inline">\(W_h = \frac{N_h}{N}\)</span> is the stratum weight, and <span class="math inline">\(\overline{y}_h\)</span> is the sample mean of stratum <span class="math inline">\(h\)</span>. #### 2. Variance of the Stratified Mean {-} The estimated variance accounts for the finite population correction in each stratum: <span class="math display">\[
+\hat{V}(\overline{y}_{str}) = \sum_{h=1}^H W_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}.
+\]</span> Where <span class="math inline">\(s_h^2\)</span> is the sample variance in stratum <span class="math inline">\(h\)</span>. #### 3. Proportional Allocation {-} Sample sizes are allocated proportional to the size of the stratum: <span class="math display">\[
+n_h = n \left( \frac{N_h}{N} \right).
+\]</span> #### 4. Neyman (Optimal) Allocation {-} If surveying costs are equal across strata, Neyman allocation minimizes the variance of the estimator by sampling more heavily from larger and more highly variable strata: <span class="math display">\[
+n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
+\]</span></p>
 <hr>
 </section>
 <section id="functions-and-packages-for-analyzing-data" class="level2" data-number="3.2">
@@ -1036,7 +1040,7 @@ window.Quarto = {
 <h3 data-number="3.3.2" class="anchored" data-anchor-id="spreadsheet-calculation"><span class="header-section-number">3.3.2</span> Spreadsheet calculation</h3>
 <section id="summarizing-acre92-in-each-stratum" class="level4" data-number="3.3.2.1">
 <h4 data-number="3.3.2.1" class="anchored" data-anchor-id="summarizing-acre92-in-each-stratum"><span class="header-section-number">3.3.2.1</span> Summarizing acre92 in each stratum</h4>
-<p>We first manually compute the sample size (<span class="math inline">\(n_h\)</span>), standard deviation (<span class="math inline">\(s_h\)</span>), and mean (<span class="math inline">\(\bar{y}_h\)</span>) for each region, matching them with the known total counties in each region (<span class="math inline">\(N_h\)</span>).</p>
+<p>We first manually compute the sample size (<span class="math inline">\(n_h\)</span>), standard deviation (<span class="math inline">\(s_h\)</span>), and mean (<span class="math inline">\(\overline{y}_h\)</span>) for each region, matching them with the known total counties in each region (<span class="math inline">\(N_h\)</span>).</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -6090,7 +6094,7 @@ window.Quarto = {
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Ch, Nh, Sh, NhShDCh, Lh) <span class="sc">|&gt;</span> </span>
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rownames_to_stub =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">NhShDCh =</span> <span class="fu">md</span>(<span class="st">"$N_h S_h / </span><span class="sc">\\</span><span class="st">sqrt{C_h}$"</span>), <span class="at">Lh =</span> <span class="fu">md</span>(<span class="st">"$L_h$ (Prop)"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">NhShDCh =</span> <span class="fu">md</span>(<span class="st">"$N_h S_h / </span><span class="sc">\\</span><span class="st">sqrt{C_h}$"</span>), <span class="at">Lh =</span> <span class="fu">md</span>(<span class="st">"$L_h$ (Prop)"</span>), <span class="at">Ch=</span><span class="fu">md</span>(<span class="st">"$C_h$"</span>), <span class="at">Sh=</span><span class="fu">md</span>(<span class="st">"$S_h$"</span>), <span class="at">Nh=</span><span class="fu">md</span>(<span class="st">"$N_h$"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(Sh, NhShDCh, Lh), <span class="at">decimals =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -6548,9 +6552,9 @@ window.Quarto = {
 <thead>
 <tr class="gt_col_headings header">
 <th id="a::stub" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
-<th id="Ch" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Ch</th>
-<th id="Nh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Nh</th>
-<th id="Sh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Sh</th>
+<th id="Ch" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(C_h\)</span></th>
+<th id="Nh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(N_h\)</span></th>
+<th id="Sh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(S_h\)</span></th>
 <th id="NhShDCh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(N_h S_h / \sqrt{C_h}\)</span></th>
 <th id="Lh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(L_h\)</span> (Prop)</th>
 </tr>
