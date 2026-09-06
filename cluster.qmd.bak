@@ -3,6 +3,7 @@
 ## Key Formulas for Cluster Sampling
 
 Cluster sampling divides the population into $N$ clusters, out of which a simple random sample of $n$ clusters is selected. This design is highly practical when a sampling frame of individual elements is unavailable, or when individuals are geographically grouped.
+
 #### 1. One-Stage Cluster Sampling {-}
 In a one-stage design, every element $M_i$ within the sampled cluster $i$ is surveyed. 
 
@@ -16,6 +17,7 @@ $$
     $$
 \hat{V}(\overline{y}_r) = \left(1 - \frac{n}{N}\right) \frac{1}{n\overline{M}^2} \frac{\sum_{i=1}^n (t_i - \overline{y}_r M_i)^2}{n-1}.
 $$
+
 #### 2. Two-Stage Cluster Sampling {-}
 In a two-stage design, we first sample $n$ clusters, then take a subsample of $m_i$ elements from the $M_i$ elements within each selected cluster. Because we don't observe the true cluster total $t_i$, we estimate it:
 
@@ -32,6 +34,7 @@ $$
 The updated `cluster_ratio_est` function analyzes both one-stage and two-stage cluster samples. It computes the cluster-level summary statistics and returns them in a list alongside the final ratio estimation output. The robust `format_est_gt` function guarantees cleanly formatted mathematical headers for the final output.
 
 ```{r}
+#| code-fold: true
 library(latex2exp)
 library(gt)
 
@@ -152,6 +155,7 @@ algebra <- read.csv("data/algebra.csv")
 algebra |>
   gt() |>
   tab_header(title = "Raw Data: Algebra Classes") |>
+  cols_label(Mi = html("M<sub>i</sub>")) |>
   opt_interactive(use_pagination = TRUE, page_size_default = 10)
 ```
 **Output Note:** The table above displays the raw, unaggregated survey data. The interactive pagination allows you to flip through the dataset compactly.
@@ -190,17 +194,28 @@ alg_res$estimate |> format_est_gt("ratio_mean")
 
 In two-stage cluster sampling, we sample clusters, and then subsample elements within them. In this dataset, researcher Arnold investigated coot eggs. He first selected a random sample of clutches (the clusters), and then measured the volume of a random subsample of eggs within each selected clutch.
 
-We apply the exact same ratio estimator formulation, though mathematically, the cluster total $t_i$ is now an *estimated* total $\hat{t}_i$. We will display the summary using `gt`'s interactive pagination.
 
 ```{r}
 coots <- read.csv("data/coots.csv")
 
+coots |>
+  gt() |>
+  tab_header(title = "Raw Data: Coots") |>
+  tab_options(
+    container.height = px(400), # Adjust height as needed
+    container.overflow.y = TRUE # Forces the vertical scroll bar
+  )
+```
+
+
+We apply the exact same ratio estimator formulation, though mathematically, the cluster total $t_i$ is now an *estimated* total $\hat{t}_i$. We will display the summary using `gt`'s interactive pagination.
+
+```{r}
 coots_res <- cluster_ratio_est(data = coots, 
                                cname = "clutch", 
                                csize = "csize", 
                                yvar = "volume")
 
-# Display the cluster-level summary using gt with interactive pagination
 coots_res$summary |> 
   gt() |> 
   tab_header(title = "Cluster-Level Summary (Coots)") |>
@@ -211,7 +226,10 @@ coots_res$summary |>
     ti_hat = md("$\\hat{t}_i$")
   ) |> 
   fmt_number(columns = c(ybari, ti_hat), decimals = 2) |> 
-  opt_interactive(use_pagination = TRUE, page_size_default = 10)
+  tab_options(
+    container.height = px(400),   # Restricts table height
+    container.overflow.y = TRUE   # Enables the vertical scroll bar
+  )
 ```
 **Output Note:** Unlike the previous example, we only measured a subset of eggs per clutch. The function automatically estimates the total volume of each clutch ($\hat{t}_i$) by multiplying the true clutch size ($M_i$) by the observed subsample mean ($\overline{y}_i$). The pagination allows you to view all the clusters cleanly.
 

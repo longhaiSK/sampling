@@ -457,8 +457,11 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <section id="importing-agstrat.csv-data" class="level3" data-number="3.3.1">
 <h3 data-number="3.3.1" class="anchored" data-anchor-id="importing-agstrat.csv-data"><span class="header-section-number">3.3.1</span> Importing agstrat.csv data</h3>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>agstrat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/agstrat.csv"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agstrat) <span class="sc">|&gt;</span> <span class="fu">gt</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="yvoclirqqg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#yvoclirqqg table {
@@ -1061,6 +1064,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <h4 data-number="3.3.2.1" class="anchored" data-anchor-id="summarizing-acre92-in-each-stratum"><span class="header-section-number">3.3.2.1</span> Summarizing acre92 in each stratum</h4>
 <p>We first manually compute the sample size (<span class="math inline">\(n_h\)</span>), standard deviation (<span class="math inline">\(s_h\)</span>), and mean (<span class="math inline">\(\overline{y}_h\)</span>) for each region, matching them with the known total counties in each region (<span class="math inline">\(N_h\)</span>).</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>nh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (agstrat[, <span class="st">"acres92"</span>], agstrat[,<span class="st">"region"</span>], length)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (agstrat[, <span class="st">"acres92"</span>], agstrat[,<span class="st">"region"</span>], sd)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>ybarh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (agstrat[, <span class="st">"acres92"</span>], agstrat[,<span class="st">"region"</span>], mean)</span>
@@ -1076,6 +1081,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">sh =</span> <span class="fu">md</span>(<span class="st">"$s_h$"</span>)</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(ybarh, sh), <span class="at">decimals =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="ilvdnangtx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ilvdnangtx table {
@@ -1578,6 +1584,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <h4 data-number="3.3.2.2" class="anchored" data-anchor-id="estimates"><span class="header-section-number">3.3.2.2</span> Estimates</h4>
 <p>Next, we build a “spreadsheet-style” table to calculate the intermediate values needed for the final stratified variance and mean, summing the results at the bottom. We use <code>gt</code> to properly format the mathematical column headers.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">sum</span>(Nh)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pi_h <span class="ot">&lt;-</span> Nh<span class="sc">/</span>N</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>weighted_ybar_h <span class="ot">&lt;-</span> ybarh <span class="sc">*</span> pi_h</span>
@@ -1617,6 +1625,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(ybarh, sh, s2h, pi_h, weighted_ybar_h, var_ybarh, var_h),</span>
 <span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">4</span></span>
 <span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="tlrrclteku" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tlrrclteku table {
@@ -2153,6 +2162,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <p><strong>Output Note:</strong> The table provides a detailed breakdown of how each individual stratum contributes to the final mean and variance.</p>
 <p>Extracting the final sum values gives our overall estimates.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ybar <span class="ot">&lt;-</span> <span class="fu">sum</span>(weighted_ybar_h)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>var_ybar <span class="ot">&lt;-</span> <span class="fu">sum</span>((<span class="dv">1</span><span class="sc">-</span>nh<span class="sc">/</span>Nh)<span class="sc">*</span>pi_h<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>sh<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>nh)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>seybar <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(var_ybar)</span>
@@ -2160,6 +2171,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">Est. =</span> ybar, <span class="at">S.E. =</span> seybar, <span class="at">ci.low =</span> ybar <span class="sc">-</span> mem, <span class="at">ci.upp =</span> ybar <span class="sc">+</span> mem) <span class="sc">|&gt;</span> </span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_str_gt</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="tzqlzzipph" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tzqlzzipph table {
@@ -2640,6 +2652,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <h3 data-number="3.3.3" class="anchored" data-anchor-id="using-the-function-str_mean_estimate"><span class="header-section-number">3.3.3</span> Using the function “str_mean_estimate”</h3>
 <p>We can bypass the manual table generation using our predefined function.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (agstrat[, <span class="st">"acres92"</span>], agstrat[,<span class="st">"region"</span>], length)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (agstrat[, <span class="st">"acres92"</span>], agstrat[,<span class="st">"region"</span>], sd)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ybarh <span class="ot">&lt;-</span> <span class="fu">tapply</span> (agstrat[, <span class="st">"acres92"</span>], agstrat[,<span class="st">"region"</span>], mean)</span>
@@ -2648,6 +2662,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="do">## strata mean estimate</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">str_mean_estimate</span>(ybarh, sh, nh, Nh) <span class="sc">|&gt;</span> </span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_str_gt</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="tkycyweixq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tkycyweixq table {
@@ -3124,9 +3139,12 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <p><strong>Output Note:</strong> This matches our manual spreadsheet calculation precisely.</p>
 <p>To find the population total (total acreage across all US counties), multiply the mean and CI by <span class="math inline">\(N\)</span>.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## population total estimate </span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>(<span class="fu">str_mean_estimate</span>(ybarh, sh, nh, Nh) <span class="sc">*</span> <span class="fu">sum</span>(Nh)) <span class="sc">|&gt;</span> </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_str_gt</span>(<span class="at">is_total =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="jvkqhlyjxf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#jvkqhlyjxf table {
@@ -3606,8 +3624,11 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <h3 data-number="3.3.4" class="anchored" data-anchor-id="using-the-function-str_mean_estimate_data"><span class="header-section-number">3.3.4</span> Using the function “str_mean_estimate_data”</h3>
 <p>Instead of pre-calculating the summary stats, this function extracts everything directly from the dataset using the pre-assigned sampling weights.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">## In the function "str_mean_estimate_data", we can find the stratum size with the variable "weights":</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(agstrat<span class="sc">$</span>weight, agstrat<span class="sc">$</span>region, sum)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>  NC   NE    S    W 
 1054  220 1382  422 </code></pre>
@@ -3615,9 +3636,12 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 </div>
 <p><strong>Output Note:</strong> This reconstructs the total population sizes (<span class="math inline">\(N_h\)</span>) per region.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## if the dataset contains a variable "weight"</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_mean_estimate_data</span>(agstrat, <span class="at">y=</span><span class="st">"acres92"</span>, <span class="at">stratum=</span><span class="st">"region"</span>, <span class="at">weight=</span><span class="st">"weight"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_str_gt</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="cwuhixlkml" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#cwuhixlkml table {
@@ -4093,9 +4117,12 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 </div>
 <p><strong>Output Note:</strong> Once again, this perfectly matches the manual calculation.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## estimating the mean of the number of small farms in 1992</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_mean_estimate_data</span>(agstrat, <span class="at">y=</span><span class="st">"smallf92"</span>, <span class="at">stratum=</span><span class="st">"region"</span>, <span class="at">weight=</span><span class="st">"weight"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_str_gt</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="csmkjkbspy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#csmkjkbspy table {
@@ -4575,9 +4602,12 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <h3 data-number="3.3.5" class="anchored" data-anchor-id="comparing-with-srs-estimate"><span class="header-section-number">3.3.5</span> Comparing with SRS estimate</h3>
 <p>To see the benefit of stratifying, we compare our stratified estimates against a Simple Random Sample approach on the same population.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>agsrs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/agsrs.csv"</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">srs_mean_est</span>(agsrs[, <span class="st">"acres92"</span>], <span class="at">N=</span><span class="dv">3078</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_srs_gt</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="gpzprkebqk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gpzprkebqk table {
@@ -5053,17 +5083,23 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 </div>
 <p><strong>Output Note:</strong> The Simple Random Sample standard error is noticeably higher at 18,898.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## the ratio of estimated variance (Stratified SE / SRS SE)^2</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ratio_var <span class="ot">&lt;-</span> (<span class="fu">str_mean_estimate_data</span>(agstrat, <span class="st">"acres92"</span>, <span class="st">"region"</span>, <span class="st">"weight"</span>)[<span class="st">"S.E."</span>] <span class="sc">/</span> <span class="fu">srs_mean_est</span>(agsrs[, <span class="st">"acres92"</span>], <span class="at">N=</span><span class="dv">3078</span>)[<span class="st">"S.E."</span>])<span class="sc">^</span><span class="dv">2</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unname</span>(ratio_var)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.7512239</code></pre>
 </div>
 </div>
 <p><strong>Output Note:</strong> The stratified variance is approximately 75.1% of the SRS variance.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## percentage of reduction of variance of str estimates from that of SRS estimate</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unname</span>(<span class="dv">1</span> <span class="sc">-</span> ratio_var)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.2487761</code></pre>
 </div>
@@ -5078,6 +5114,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <h3 data-number="3.4.1" class="anchored" data-anchor-id="analyzing-seals.csv-collected-with-stratified-sampling"><span class="header-section-number">3.4.1</span> Analyzing seals.csv collected with stratified sampling</h3>
 <p>This dataset investigates ringed seal holes in different zones. The researchers used Proportional Allocation, taking 20% of the areas in each zone.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## load data</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>seals <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/seals.csv"</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -5090,6 +5128,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Nh, nh, ybarh, sh) <span class="sc">|&gt;</span> </span>
 <span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rownames_to_stub =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(ybarh, sh), <span class="at">decimals =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="gokobwpiql" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gokobwpiql table {
@@ -5581,8 +5620,11 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 </div>
 <p><strong>Output Note:</strong> Zone 3 has the highest standard deviation (<span class="math inline">\(s_h \approx 6.8\)</span>), indicating a high degree of variability in seal density in that region.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_mean_estimate</span>(ybarh, sh, nh, Nh) <span class="sc">|&gt;</span> </span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_str_gt</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="tknxppfftd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tknxppfftd table {
@@ -6062,6 +6104,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <h3 data-number="3.4.2" class="anchored" data-anchor-id="neyman-allocation-of-stratum-sample-size"><span class="header-section-number">3.4.2</span> Neyman allocation of stratum sample size</h3>
 <p>Because Zone 3 was highly variable, we could have achieved a lower overall variance if we had sampled it more heavily. Neyman allocation formally calculates this optimal distribution.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## assuming the cost of surveying each zone is the same</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>Ch <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>Sh <span class="ot">&lt;-</span> sh <span class="do">## estimate population Sh with sample sh</span></span>
@@ -6074,6 +6118,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rownames_to_stub =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">NhShDCh =</span> <span class="fu">md</span>(<span class="st">"$N_h S_h / </span><span class="sc">\\</span><span class="st">sqrt{C_h}$"</span>), <span class="at">Lh =</span> <span class="fu">md</span>(<span class="st">"$L_h$ (Prop)"</span>), <span class="at">Ch=</span><span class="fu">md</span>(<span class="st">"$C_h$"</span>), <span class="at">Sh=</span><span class="fu">md</span>(<span class="st">"$S_h$"</span>), <span class="at">Nh=</span><span class="fu">md</span>(<span class="st">"$N_h$"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(Sh, NhShDCh, Lh), <span class="at">decimals =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="ttndgjtotm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ttndgjtotm table {
@@ -6578,21 +6623,30 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <section id="read-population-data" class="level4" data-number="3.5.1.1">
 <h4 data-number="3.5.1.1" class="anchored" data-anchor-id="read-population-data"><span class="header-section-number">3.5.1.1</span> Read Population Data</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/agpop.csv"</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> agpop[agpop<span class="sc">$</span>acres92 <span class="sc">!=</span> <span class="sc">-</span><span class="dv">99</span>, ] <span class="do">## remove those counties with na</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span>(agpop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="define-stratum-variable" class="level4" data-number="3.5.1.2">
 <h4 data-number="3.5.1.2" class="anchored" data-anchor-id="define-stratum-variable"><span class="header-section-number">3.5.1.2</span> Define Stratum Variable</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>agpop<span class="sc">$</span>stratum <span class="ot">&lt;-</span> agpop<span class="sc">$</span>region</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="do">## reorder agpop for the ease of using strata of "sampling" (very important)</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> agpop[<span class="fu">order</span>(agpop<span class="sc">$</span>stratum), ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <p>A stratification variable is most effective when it strongly explains the variance in the target variable. We check this via ANOVA and R-squared.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(acres92 <span class="sc">~</span> stratum, <span class="at">data =</span> agpop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -6600,7 +6654,10 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 </figure>
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(<span class="fu">lm</span>(agpop<span class="sc">$</span>acres92 <span class="sc">~</span> agpop<span class="sc">$</span>stratum))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -6608,7 +6665,10 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
   </script>
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(agpop<span class="sc">$</span>acres92 <span class="sc">~</span> agpop<span class="sc">$</span>stratum))<span class="sc">$</span>r.squared</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.1821031</code></pre>
 </div>
@@ -6618,6 +6678,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <section id="stratified-sampling-with-p2s-allocation-single-run" class="level4" data-number="3.5.1.3">
 <h4 data-number="3.5.1.3" class="anchored" data-anchor-id="stratified-sampling-with-p2s-allocation-single-run"><span class="header-section-number">3.5.1.3</span> Stratified Sampling with P2S allocation (Single Run)</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># doing one stratified sampling</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>Nh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(agpop), agpop<span class="sc">$</span>stratum, length) </span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>nh <span class="ot">&lt;-</span> <span class="fu">round</span>(Nh<span class="sc">/</span><span class="fu">sum</span>(Nh)<span class="sc">*</span><span class="dv">300</span>)</span>
@@ -6631,6 +6693,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="fu">str_mean_estimate_data</span>(agstrat, <span class="st">"acres92"</span>, <span class="st">"stratum"</span>, <span class="st">"weight"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_str_gt</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="wqcmsrdahi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#wqcmsrdahi table {
@@ -7109,6 +7172,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <section id="repeat-stratified-sampling-with-p2s-allocation-2000-times" class="level4" data-number="3.5.1.4">
 <h4 data-number="3.5.1.4" class="anchored" data-anchor-id="repeat-stratified-sampling-with-p2s-allocation-2000-times"><span class="header-section-number">3.5.1.4</span> Repeat stratified sampling with P2S allocation 2000 times</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>Nh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(agpop), agpop<span class="sc">$</span>stratum, length) </span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>nh <span class="ot">&lt;-</span> <span class="fu">round</span>(Nh<span class="sc">/</span><span class="fu">sum</span>(Nh)<span class="sc">*</span><span class="dv">300</span>) <span class="do">## make sure the order matches Nh</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -7120,11 +7185,14 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    agstrat<span class="sc">$</span>weight <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>strsample<span class="sc">$</span>Prob</span>
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    str_p2s_simulated[i,] <span class="ot">&lt;-</span> <span class="fu">str_mean_estimate_data</span>(agstrat, <span class="st">"acres92"</span>, <span class="st">"stratum"</span>, <span class="st">"weight"</span>)</span>
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="repeat-stratified-sampling-with-optimal-allocation-2000-times" class="level4" data-number="3.5.1.5">
 <h4 data-number="3.5.1.5" class="anchored" data-anchor-id="repeat-stratified-sampling-with-optimal-allocation-2000-times"><span class="header-section-number">3.5.1.5</span> Repeat stratified sampling with optimal allocation 2000 times</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>Nh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(agpop<span class="sc">$</span>acres92, agpop<span class="sc">$</span>stratum, length) </span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>Sh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(agpop<span class="sc">$</span>acres92, agpop<span class="sc">$</span>stratum, sd)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>nh_opt <span class="ot">&lt;-</span> <span class="fu">round</span>((Nh<span class="sc">*</span>Sh)<span class="sc">/</span><span class="fu">sum</span>(Nh<span class="sc">*</span>Sh) <span class="sc">*</span> <span class="dv">300</span>)</span>
@@ -7132,6 +7200,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Nh, Sh, nh_opt) <span class="sc">|&gt;</span> </span>
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rownames_to_stub =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> Sh, <span class="at">decimals =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="nppqsofvke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#nppqsofvke table {
@@ -7625,6 +7694,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 </div>
 <p><strong>Output Note:</strong> This table compares the population sizes to the optimal sample sizes. Notice that the West region (high variance) gets a disproportionately larger sample under Neyman allocation.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>nres <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>str_neyman_simulated <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, nres, <span class="dv">4</span>)</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nres) {</span>
@@ -7633,11 +7704,14 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    agstrat<span class="sc">$</span>weight <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>strsample<span class="sc">$</span>Prob</span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    str_neyman_simulated[i,] <span class="ot">&lt;-</span> <span class="fu">str_mean_estimate_data</span>(agstrat, <span class="st">"acres92"</span>, <span class="st">"stratum"</span>, <span class="st">"weight"</span>)</span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="repeat-simple-random-sampling-2000-times" class="level4" data-number="3.5.1.6">
 <h4 data-number="3.5.1.6" class="anchored" data-anchor-id="repeat-simple-random-sampling-2000-times"><span class="header-section-number">3.5.1.6</span> Repeat simple random sampling 2000 times</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>nres <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>srs_simulated <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, nres, <span class="dv">4</span>)</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nres) {</span>
@@ -7645,11 +7719,14 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    agsrs <span class="ot">&lt;-</span> agpop[srs, ]</span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    srs_simulated[i,] <span class="ot">&lt;-</span> <span class="fu">srs_mean_est</span>(agsrs[, <span class="st">"acres92"</span>], <span class="at">N =</span> <span class="fu">sum</span>(Nh))</span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="compare-the-efficiency-of-different-methods" class="level4" data-number="3.5.1.7">
 <h4 data-number="3.5.1.7" class="anchored" data-anchor-id="compare-the-efficiency-of-different-methods"><span class="header-section-number">3.5.1.7</span> Compare the efficiency of different methods</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>sim_results_str_region <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"SRS"</span> <span class="ot">=</span> srs_simulated[,<span class="dv">1</span>], </span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Prop2size"</span> <span class="ot">=</span> str_p2s_simulated[,<span class="dv">1</span>], </span>
@@ -7657,6 +7734,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(sim_results_str_region)</span>
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(agpop<span class="sc">$</span>acres92), <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -7667,6 +7745,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 </div>
 <p><strong>Output Note:</strong> The plot visually demonstrates that Neyman allocation has the tightest spread around the true mean (the red line).</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>sim_means <span class="ot">&lt;-</span> <span class="fu">sapply</span>(sim_results_str_region, mean)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>sim_var <span class="ot">&lt;-</span> <span class="fu">sapply</span>(sim_results_str_region, var)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>sim_var_relative <span class="ot">&lt;-</span> sim_var <span class="sc">/</span> sim_var[<span class="dv">1</span>]</span>
@@ -7683,6 +7763,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(Mean, Variance), <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_percent</span>(<span class="at">columns =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">Percentage of Variance Reduction</span><span class="st">`</span>), <span class="at">decimals =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">Relative Variance</span><span class="st">`</span>), <span class="at">decimals =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="cztzirjzah" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#cztzirjzah table {
@@ -8181,15 +8262,20 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <section id="read-population-data-1" class="level4" data-number="3.5.2.1">
 <h4 data-number="3.5.2.1" class="anchored" data-anchor-id="read-population-data-1"><span class="header-section-number">3.5.2.1</span> Read Population Data</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/agpop.csv"</span>)</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> agpop[agpop<span class="sc">$</span>acres92 <span class="sc">!=</span> <span class="sc">-</span><span class="dv">99</span>, ] </span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span>(agpop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="define-stratum-variable-with-quantiles-of-acres82" class="level4" data-number="3.5.2.2">
 <h4 data-number="3.5.2.2" class="anchored" data-anchor-id="define-stratum-variable-with-quantiles-of-acres82"><span class="header-section-number">3.5.2.2</span> Define Stratum Variable with Quantiles of “acres82”</h4>
 <p>We convert the continuous <code>acres82</code> variable into four distinct categorical strata based on quantiles.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>agpop<span class="sc">$</span>stratum <span class="ot">&lt;-</span> <span class="fu">cut</span>(agpop<span class="sc">$</span>acres82,</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">quantile</span>(agpop<span class="sc">$</span>acres82, <span class="at">probs =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.25</span>,<span class="fl">0.75</span>,<span class="fl">0.95</span>,<span class="dv">1</span>)),</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">include.lowest =</span> T)</span>
@@ -8197,10 +8283,14 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">from =</span> (<span class="fu">sort</span>(<span class="fu">unique</span>(agpop<span class="sc">$</span>stratum))), </span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">to =</span> <span class="fu">paste0</span>(<span class="st">"acres82"</span>, <span class="fu">c</span>(<span class="st">"Q1"</span>, <span class="st">"Q2"</span>, <span class="st">"Q3"</span>, <span class="st">"Q4"</span>)))</span>
 <span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> agpop[<span class="fu">order</span>(agpop<span class="sc">$</span>stratum), ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <p>Let’s check the explanatory power of this new stratification variable.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(acres92 <span class="sc">~</span> stratum, <span class="at">data =</span> agpop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -8208,7 +8298,10 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 </figure>
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(agpop<span class="sc">$</span>acres92 <span class="sc">~</span> agpop<span class="sc">$</span>stratum))<span class="sc">$</span>r.squared</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.7393047</code></pre>
 </div>
@@ -8218,6 +8311,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <section id="stratified-sampling-with-p2s-allocation" class="level4" data-number="3.5.2.3">
 <h4 data-number="3.5.2.3" class="anchored" data-anchor-id="stratified-sampling-with-p2s-allocation"><span class="header-section-number">3.5.2.3</span> Stratified sampling with P2S allocation</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>Nh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(agpop), agpop<span class="sc">$</span>stratum, length) </span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>nh <span class="ot">&lt;-</span> <span class="fu">round</span>(Nh<span class="sc">/</span><span class="fu">sum</span>(Nh)<span class="sc">*</span><span class="dv">300</span>)</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -8229,11 +8324,14 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>    agstrat<span class="sc">$</span>weight <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>strsample<span class="sc">$</span>Prob</span>
 <span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    str_p2s_simulated[i,] <span class="ot">&lt;-</span> <span class="fu">str_mean_estimate_data</span>(agstrat, <span class="st">"acres92"</span>, <span class="st">"stratum"</span>, <span class="st">"weight"</span>)</span>
 <span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="repeat-stratified-sampling-with-optimal-allocation-2000-times-1" class="level4" data-number="3.5.2.4">
 <h4 data-number="3.5.2.4" class="anchored" data-anchor-id="repeat-stratified-sampling-with-optimal-allocation-2000-times-1"><span class="header-section-number">3.5.2.4</span> Repeat stratified sampling with optimal allocation 2000 times</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>Nh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(agpop), agpop<span class="sc">$</span>stratum, length) </span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>Sh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(agpop<span class="sc">$</span>acres92, agpop<span class="sc">$</span>stratum, sd)</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>nh_opt <span class="ot">&lt;-</span> <span class="fu">round</span>((Nh<span class="sc">*</span>Sh)<span class="sc">/</span><span class="fu">sum</span>(Nh<span class="sc">*</span>Sh) <span class="sc">*</span> <span class="dv">300</span>)</span>
@@ -8246,11 +8344,14 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    agstrat<span class="sc">$</span>weight <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>strsample<span class="sc">$</span>Prob</span>
 <span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    str_neyman_simulated[i,] <span class="ot">&lt;-</span> <span class="fu">str_mean_estimate_data</span>(agstrat, <span class="st">"acres92"</span>, <span class="st">"stratum"</span>, <span class="st">"weight"</span>)</span>
 <span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="repeat-simple-random-sampling-2000-times-1" class="level4" data-number="3.5.2.5">
 <h4 data-number="3.5.2.5" class="anchored" data-anchor-id="repeat-simple-random-sampling-2000-times-1"><span class="header-section-number">3.5.2.5</span> Repeat simple random sampling 2000 times</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>nres <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>srs_simulated <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, nres, <span class="dv">4</span>)</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nres) {</span>
@@ -8258,11 +8359,14 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    agsrs <span class="ot">&lt;-</span> agpop[srs, ]</span>
 <span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    srs_simulated[i,] <span class="ot">&lt;-</span> <span class="fu">srs_mean_est</span>(agsrs[, <span class="st">"acres92"</span>], <span class="at">N =</span> <span class="fu">sum</span>(Nh))</span>
 <span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="compare-the-efficiency-of-different-methods-1" class="level4" data-number="3.5.2.6">
 <h4 data-number="3.5.2.6" class="anchored" data-anchor-id="compare-the-efficiency-of-different-methods-1"><span class="header-section-number">3.5.2.6</span> Compare the efficiency of different methods</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sim_results_str_acres82 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"SRS"</span> <span class="ot">=</span> srs_simulated[,<span class="dv">1</span>], </span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Prop2size"</span> <span class="ot">=</span> str_p2s_simulated[,<span class="dv">1</span>], </span>
@@ -8270,6 +8374,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(sim_results_str_acres82)</span>
 <span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(agpop<span class="sc">$</span>acres92), <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -8280,6 +8385,8 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 </div>
 <p><strong>Output Note:</strong> The boxplot visually highlights a massive reduction in variance compared to SRS, especially for the Neyman allocation.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>sim_means <span class="ot">&lt;-</span> <span class="fu">sapply</span>(sim_results_str_acres82, mean)</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>sim_var <span class="ot">&lt;-</span> <span class="fu">sapply</span>(sim_results_str_acres82, var)</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>sim_var_relative <span class="ot">&lt;-</span> sim_var <span class="sc">/</span> sim_var[<span class="dv">1</span>]</span>
@@ -8296,6 +8403,7 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(Mean, Variance), <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_percent</span>(<span class="at">columns =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">Percentage of Variance Reduction</span><span class="st">`</span>), <span class="at">decimals =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">Relative Variance</span><span class="st">`</span>), <span class="at">decimals =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="jqgpslpdkl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#jqgpslpdkl table {

@@ -105,13 +105,13 @@ format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_
   est_type <- match.arg(est_type)
   
   sym_map <- list(
-    "mean"        = c(est = "$\\bar{y}$",         se = "$SE(\\bar{y})$"),
-    "total"       = c(est = "$\\hat{t}$",         se = "$SE(\\hat{t})$"),
-    "ratio"       = c(est = "$\\hat{B}$",         se = "$SE(\\hat{B})$"),
-    "reg_mean"    = c(est = "$\\bar{y}_{reg}$",   se = "$SE(\\bar{y}_{reg})$"),
-    "reg_total"   = c(est = "$\\hat{t}_{reg}$",   se = "$SE(\\hat{t}_{reg})$"),
-    "ratio_mean"  = c(est = "$\\bar{y}_{r}$",     se = "$SE(\\bar{y}_{r})$"),
-    "domain_mean" = c(est = "$\\bar{y}_{d}$",     se = "$SE(\\bar{y}_{d})$")
+    "mean"        = c(est = "$\\bar{y}$",         se = "$\\mathrm{SE}(\\bar{y})$"),
+    "total"       = c(est = "$\\hat{t}$",         se = "$\\mathrm{SE}(\\hat{t})$"),
+    "ratio"       = c(est = "$\\hat{B}$",         se = "$\\mathrm{SE}(\\hat{B})$"),
+    "reg_mean"    = c(est = "$\\bar{y}_{reg}$",   se = "$\\mathrm{SE}(\\bar{y}_{reg})$"),
+    "reg_total"   = c(est = "$\\hat{t}_{reg}$",   se = "$\\mathrm{SE}(\\hat{t}_{reg})$"),
+    "ratio_mean"  = c(est = "$\\bar{y}_{r}$",     se = "$\\mathrm{SE}(\\bar{y}_{r})$"),
+    "domain_mean" = c(est = "$\\bar{y}_{d}$",     se = "$\\mathrm{SE}(\\bar{y}_{d})$")
   )
   
   est_sym <- sym_map[[est_type]]["est"]
