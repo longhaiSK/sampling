@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Elements of Sampling Survey",
     "section": "",
-    "text": "Preface\nTheory and applications of sampling from finite populations. Includes: simple random sampling, stratified random sampling, cluster sampling, systematic sampling, probability proportionate to size sampling, and the difference, ratio and regression methods of estimation.\nThis book collects the R demonstrations used throughout the course, one chapter per sampling technique.",
+    "text": "Preface\nStatistical inference in the real world almost always deals with bounded, finite populations—whether we are estimating agricultural yields, public health metrics, or economic indicators. This book explores the mathematical theory and practical mechanics of drawing reliable samples from those populations, examining how intelligent survey design directly dictates the precision and cost of our conclusions.\nThe chapters cover a comprehensive suite of methodologies, including simple random sampling, stratified random sampling, cluster and systematic sampling, probability proportionate to size (PPS) sampling, and powerful auxiliary-variable strategies like difference, ratio, and regression estimation.",
     "crumbs": [
       "Preface"
     ]
@@ -407,6 +407,16 @@
     "text": "6.7 Analysis of a dataset on student study hours collected by UPSWO\nWhen sampling Without Replacement with unequal probabilities, we rely on the inclusion probabilities (\\(\\pi_k\\)) rather than single-draw probabilities (\\(\\psi_i\\)).\n\n\nCode\nclasspps &lt;- read.csv(\"data/classpps.csv\")\n\nres_upswo &lt;- cluster_upswo_ratio_est(\n  data = classpps, \n  cname = \"class\", \n  csize = \"clssize\", \n  cpik = \"clssize\", # Assuming inclusion prob is proportional to class size\n  yvar = \"hours\"\n)\n\n# Display the cluster-level summary\nres_upswo$summary |&gt; \n  gt() |&gt; \n  tab_header(title = \"Cluster-Level Summary (UPS Without Replacement)\") |&gt;\n  cols_label(\n    Cluster = md(\"**Class**\"),\n    Mi = md(\"$M_i$\"),\n    pik = md(\"$\\\\pi_k$\"),\n    ybari = md(\"$\\\\bar{y}_i$\"),\n    ti_hat = md(\"$\\\\hat{t}_i$\")\n  ) |&gt; \n  fmt_number(columns = c(ybari, ti_hat), decimals = 2)\n\n\n\n\n\n\n\n\nCluster-Level Summary (UPS Without Replacement)\n\n\nClass\n\\(M_i\\)\n\\(\\pi_k\\)\n\\(\\bar{y}_i\\)\n\\(\\hat{t}_i\\)\n\n\n\n\n1\n44\n44\n3.50\n154.00\n\n\n4\n22\n22\n5.00\n110.00\n\n\n9\n54\n54\n3.62\n195.75\n\n\n10\n34\n34\n3.12\n106.25\n\n\n14\n100\n100\n2.00\n200.00\n\n\n\n\n\n\n\nEstimate the overall mean study hours (Horvitz-Thompson ratio style):\n\n\nCode\nres_upswo$estimate |&gt; format_est_gt(\"ratio_mean\")\n\n\n\n\n\n\n\n\n\\(\\bar{y}_{r}\\)\n\\(SE(\\bar{y}_{r})\\)\n95% CI Lower\n95% CI Upper\n\n\n\n\n3.4500\n0.4819\n2.1121\n4.7879",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Unequal Probability Sampling</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#key-features",
+    "href": "index.html#key-features",
+    "title": "Elements of Sampling Survey",
+    "section": "Key Features",
+    "text": "Key Features\n\nCustom R Functions: Rather than relying exclusively on pre-built packages, this text emphasizes writing custom functions to analyze survey data, helping students learn how R works under the hood.\nModern R Workflows: Data manipulation and presentation leverage the modern R ecosystem, utilizing dplyr for clean wrangling, ggplot2 for advanced visualization, and gt for publication-ready mathematical tables.\nSimulation-Based Learning: Extensive simulation studies demonstrate the practical differences between sampling schemes, with a core focus on how predictive auxiliary variables improve precision and reduce variance.",
+    "crumbs": [
+      "Preface"
     ]
   }
 ]
