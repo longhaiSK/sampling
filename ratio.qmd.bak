@@ -7,18 +7,21 @@ When auxiliary information (a variable $x$) is highly correlated with our target
 If the relationship between $y$ and $x$ passes through the origin, we estimate the ratio $B$ and use it to adjust the mean:
 
 *   **Ratio:** $\hat{B} = \frac{\overline{y}}{\overline{x}}$
-*   **Mean Estimator:** $\overline{y}_r = \hat{B} \overline{x}_U$ (where $\overline{x}_U$ is the true population mean of $x$)
+*   **Mean Estimator:** $\overline{y}_r = \hat{B} \overline{x}_{\text{U}}$ (where $\overline{x}_{\text{U}}$ is the true population mean of $x$)
 
 *   **Estimated Variance:** $\hat{V}(\overline{y}_r) = \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}$, where $s_e^2$ is the sample variance of the residuals $e_i = y_i - \hat{B}x_i$.
+
 #### 2. Regression Estimation {-}
 If the relationship does not pass through the origin, a linear regression is more appropriate:
 
-*   **Mean Estimator:** $\overline{y}_{reg} = \hat{B}_0 + \hat{B}_1 \overline{x}_U$ (where $\hat{B}_0$ and $\hat{B}_1$ are OLS coefficients)
+*   **Mean Estimator:** $\overline{y}_{reg} = \hat{B}_0 + \hat{B}_1 \overline{x}_{\text{U}}$ (where $\hat{B}_0$ and $\hat{B}_1$ are OLS coefficients)
 *   **Estimated Variance:** $\hat{V}(\overline{y}_{reg}) = \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}$, where $s_e^2$ is the Mean Square Error (Residuals) from the regression.
+
 #### 3. Domain Estimation {-}
 To estimate the mean of a subgroup (domain $d$) when the domain sample size $n_d$ is a random variable:
 
 *   **Mean Estimator:** $\overline{y}_d = \frac{1}{n_d} \sum_{i \in U_d} y_i$
+
 #### 4. Post-stratification {-}
 If we know the true population sizes ($N_h$) of strata, but we used a Simple Random Sample, we can post-stratify to reduce variance. We substitute $n_h$ with expected proportional sample sizes:
 
@@ -262,7 +265,7 @@ output_B |> format_est_gt("ratio")
 
 #### Estimating the mean volume of wood
 
-If we know the true total of the population diameters is 41,835, we can derive the population mean diameter $\overline{x}_U$ and scale our ratio up.
+If we know the true total of the population diameters is 41,835, we can derive the population mean diameter $\overline{x}_{\text{U}}$ and scale our ratio up.
 
 ```{r}
 mean_diameters <- 41835 / N

@@ -3,23 +3,27 @@
 ## Key Formulas for Stratified Sampling
 
 Stratified random sampling divides a population of size $N$ into $H$ mutually exclusive strata. A simple random sample of size $n_h$ is then drawn from each stratum of size $N_h$. This design often yields higher precision than Simple Random Sampling (SRS).
+
 #### 1. Stratified Population Mean Estimator {-}
 The estimated population mean is a weighted average of the sample means from each stratum:
 $$
 \overline{y}_{str} = \sum_{h=1}^H W_h \overline{y}_h.
 $$
 Where $W_h = \frac{N_h}{N}$ is the stratum weight, and $\overline{y}_h$ is the sample mean of stratum $h$.
+
 #### 2. Variance of the Stratified Mean {-}
 The estimated variance accounts for the finite population correction in each stratum:
 $$
 \hat{V}(\overline{y}_{str}) = \sum_{h=1}^H W_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}.
 $$
 Where $s_h^2$ is the sample variance in stratum $h$.
+
 #### 3. Proportional Allocation {-}
 Sample sizes are allocated proportional to the size of the stratum:
 $$
 n_h = n \left( \frac{N_h}{N} \right).
 $$
+
 #### 4. Neyman (Optimal) Allocation {-}
 If surveying costs are equal across strata, Neyman allocation minimizes the variance of the estimator by sampling more heavily from larger and more highly variable strata:
 $$
@@ -33,9 +37,10 @@ $$
 The following code loads necessary libraries and defines custom functions to automate the calculation of the stratified mean, standard error, and confidence intervals. `str_mean_estimate_data` computes these directly from a dataset, while `str_mean_estimate` computes them from pre-calculated summary statistics. We also define helper functions to format our output using the `gt` package.
 
 ```{r}
+#| code-fold: true
 library(latex2exp)
 library(sampling)
-library(plyr)
+library(dplyr)
 library(gt)
 
 ## this function finds statistical estimates given a dataset with sampling weight

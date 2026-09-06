@@ -263,21 +263,29 @@ true.se.ybar
 
 Verify the reliability of the 95% confidence intervals by checking whether the true population mean falls within the calculated bounds for each of the 5,000 samples. The empirical coverage rate should closely approximate 0.95. The plot highlights the first 100 intervals, flagging those that fail to capture the true mean in a distinct color.
 
-```{r fig.height=10}
-simulation.results <- cbind (simulation.results, (simulation.results[,3] < ybarU) * (ybarU < simulation.results[,4] ))
-colnames(simulation.results)[5] <- "Covered?"
+```{r fig.height=6}
+library(dplyr)
+library(plotrix) 
+
+# Convert to data frame (if it was a matrix) and use mutate to evaluate coverage
+simulation.results <- as.data.frame(simulation.results) |>
+  mutate(
+    `Covered?` = as.numeric(ci.low < ybarU & ybarU < ci.upp)
+  )
+
 head(simulation.results)
 
-library("plotrix") 
 par(mfrow=c(1,1))
-plotCI(x=1:100,
-       y=simulation.results[1:100,1],
-       li = simulation.results[1:100,3],
-       ui = simulation.results[1:100,4],
-       col = 2-simulation.results[,5])
-abline(h=ybarU, col = "blue")
+plotCI(
+  x = 1:100,
+  y = simulation.results$Est.[1:100], 
+  li = simulation.results$ci.low[1:100],
+  ui = simulation.results$ci.upp[1:100],
+  col = 2 - simulation.results$`Covered?`[1:100]
+)
+abline(h = ybarU, col = "blue")
 
 # Empirical coverage rate 
-mean (simulation.results[,"Covered?"])
+mean(simulation.results$`Covered?`)
 
 ```

@@ -193,7 +193,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./introR.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A Quick Introduction to R</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Introduction to Data Analysis with R</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -417,8 +417,6 @@ window.Quarto = {
 <p>Consider a population of 187 high school algebra classes in a city. An investigator takes an SRS of 12 of those classes (the clusters). Because this is a one-stage sample, every student in the 12 sampled classes takes the test to evaluate their function knowledge.</p>
 <p>We read the raw data and display it using <code>gt</code>’s interactive pagination feature to keep the document clean.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>algebra <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/algebra.csv"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>algebra <span class="sc">|&gt;</span></span>
@@ -426,7 +424,6 @@ window.Quarto = {
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Raw Data: Algebra Classes"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">Mi =</span> <span class="fu">html</span>(<span class="st">"M&lt;sub&gt;i&lt;/sub&gt;"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_interactive</span>(<span class="at">use_pagination =</span> <span class="cn">TRUE</span>, <span class="at">page_size_default =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="fqnwbqndkh" class=".gt_table" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#fqnwbqndkh table {
@@ -889,8 +886,6 @@ window.Quarto = {
 <p><strong>Output Note:</strong> The table above displays the raw, unaggregated survey data. The interactive pagination allows you to flip through the dataset compactly.</p>
 <p>Next, we run our updated function to compute both the cluster-level aggregates and the overall ratio estimate for the average student score.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>alg_res <span class="ot">&lt;-</span> <span class="fu">cluster_ratio_est</span>(<span class="at">data =</span> algebra, </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">cname =</span> <span class="st">"class"</span>, </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">csize =</span> <span class="st">"Mi"</span>, </span>
@@ -907,7 +902,6 @@ window.Quarto = {
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">ti_hat =</span> <span class="fu">md</span>(<span class="st">"$t_i$"</span>)</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(ybari, ti_hat), <span class="at">decimals =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="gaenmmnvyf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gaenmmnvyf table {
@@ -1450,11 +1444,8 @@ window.Quarto = {
 <p><strong>Output Note:</strong> The summary table above displays the number of students (<span class="math inline">\(M_i\)</span>), the average score (<span class="math inline">\(\overline{y}_i\)</span>), and the total class score (<span class="math inline">\(t_i\)</span>) for each of the 12 randomly selected clusters.</p>
 <p>Finally, we extract the ratio estimate from the function output list to assess the overall population mean.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the overall ratio estimate</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>alg_res<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="nqdagjeebu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#nqdagjeebu table {
@@ -1934,8 +1925,6 @@ window.Quarto = {
 <h2 data-number="5.4" class="anchored" data-anchor-id="estimating-for-two-stage-cluster-sampling-analysis-of-coots.csv"><span class="header-section-number">5.4</span> Estimating for two-stage cluster sampling: analysis of coots.csv</h2>
 <p>In two-stage cluster sampling, we sample clusters, and then subsample elements within them. In this dataset, researcher Arnold investigated coot eggs. He first selected a random sample of clutches (the clusters), and then measured the volume of a random subsample of eggs within each selected clutch.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>coots <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/coots.csv"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>coots <span class="sc">|&gt;</span></span>
@@ -1945,7 +1934,6 @@ window.Quarto = {
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">container.height =</span> <span class="fu">px</span>(<span class="dv">400</span>), <span class="co"># Adjust height as needed</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">container.overflow.y =</span> <span class="cn">TRUE</span> <span class="co"># Forces the vertical scroll bar</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="iedselszbw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:400px;">
 <style>#iedselszbw table {
@@ -5364,8 +5352,6 @@ window.Quarto = {
 </div>
 <p>We apply the exact same ratio estimator formulation, though mathematically, the cluster total <span class="math inline">\(t_i\)</span> is now an <em>estimated</em> total <span class="math inline">\(\hat{t}_i\)</span>. We will display the summary using <code>gt</code>’s interactive pagination.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>coots_res <span class="ot">&lt;-</span> <span class="fu">cluster_ratio_est</span>(<span class="at">data =</span> coots, </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">cname =</span> <span class="st">"clutch"</span>, </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">csize =</span> <span class="st">"csize"</span>, </span>
@@ -5385,7 +5371,6 @@ window.Quarto = {
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">container.height =</span> <span class="fu">px</span>(<span class="dv">400</span>),   <span class="co"># Restricts table height</span></span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">container.overflow.y =</span> <span class="cn">TRUE</span>   <span class="co"># Enables the vertical scroll bar</span></span>
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="sntbkmoxzm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:400px;">
 <style>#sntbkmoxzm table {
@@ -6962,11 +6947,8 @@ window.Quarto = {
 </div>
 <p><strong>Output Note:</strong> Unlike the previous example, we only measured a subset of eggs per clutch. The function automatically estimates the total volume of each clutch (<span class="math inline">\(\hat{t}_i\)</span>) by multiplying the true clutch size (<span class="math inline">\(M_i\)</span>) by the observed subsample mean (<span class="math inline">\(\overline{y}_i\)</span>). The pagination allows you to view all the clusters cleanly.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the overall ratio estimate</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>coots_res<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="ogebwoljfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ogebwoljfi table {
