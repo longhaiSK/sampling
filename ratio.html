@@ -230,6 +230,7 @@ window.Quarto = {
   <ul>
   <li><a href="#key-formulas" id="toc-key-formulas" class="nav-link active" data-scroll-target="#key-formulas"><span class="header-section-number">4.1</span> Key Formulas</a>
   <ul>
+  <li><a href="#ratio-estimation" id="toc-ratio-estimation" class="nav-link" data-scroll-target="#ratio-estimation">1. Ratio Estimation</a></li>
   <li><a href="#regression-estimation" id="toc-regression-estimation" class="nav-link" data-scroll-target="#regression-estimation">2. Regression Estimation</a></li>
   <li><a href="#domain-estimation" id="toc-domain-estimation" class="nav-link" data-scroll-target="#domain-estimation">3. Domain Estimation</a></li>
   <li><a href="#post-stratification" id="toc-post-stratification" class="nav-link" data-scroll-target="#post-stratification">4. Post-stratification</a></li>
@@ -330,12 +331,16 @@ window.Quarto = {
 
 <section id="key-formulas" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="key-formulas"><span class="header-section-number">4.1</span> Key Formulas</h2>
-<p>When auxiliary information (a variable <span class="math inline">\(x\)</span>) is highly correlated with our target variable of interest (<span class="math inline">\(y\)</span>), we can use <strong>Ratio</strong> or <strong>Regression</strong> estimation to improve precision without increasing the sample size. We can also use auxiliary population structures to adjust our estimates after the fact via <strong>Post-stratification</strong>, or estimate means for specific sub-populations (<strong>Domains</strong>). #### 1. Ratio Estimation {-} If the relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> passes through the origin, we estimate the ratio <span class="math inline">\(B\)</span> and use it to adjust the mean:</p>
+<p>When auxiliary information (a variable <span class="math inline">\(x\)</span>) is highly correlated with our target variable of interest (<span class="math inline">\(y\)</span>), we can use <strong>Ratio</strong> or <strong>Regression</strong> estimation to improve precision without increasing the sample size. We can also use auxiliary population structures to adjust our estimates after the fact via <strong>Post-stratification</strong>, or estimate means for specific sub-populations (<strong>Domains</strong>).</p>
+<section id="ratio-estimation" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="ratio-estimation">1. Ratio Estimation</h4>
+<p>If the relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> passes through the origin, we estimate the ratio <span class="math inline">\(B\)</span> and use it to adjust the mean:</p>
 <ul>
 <li><p><strong>Ratio:</strong> <span class="math inline">\(\hat{B} = \frac{\overline{y}}{\overline{x}}\)</span></p></li>
 <li><p><strong>Mean Estimator:</strong> <span class="math inline">\(\overline{y}_r = \hat{B} \overline{x}_{\text{U}}\)</span> (where <span class="math inline">\(\overline{x}_{\text{U}}\)</span> is the true population mean of <span class="math inline">\(x\)</span>)</p></li>
 <li><p><strong>Estimated Variance:</strong> <span class="math inline">\(\hat{V}(\overline{y}_r) = \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}\)</span>, where <span class="math inline">\(s_e^2\)</span> is the sample variance of the residuals <span class="math inline">\(e_i = y_i - \hat{B}x_i\)</span>.</p></li>
 </ul>
+</section>
 <section id="regression-estimation" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="regression-estimation">2. Regression Estimation</h4>
 <p>If the relationship does not pass through the origin, a linear regression is more appropriate:</p>

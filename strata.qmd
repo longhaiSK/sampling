@@ -215,7 +215,6 @@ workingtable <- data.frame(
 workingtable <- rbind(workingtable, colSums(workingtable))
 row.names(workingtable)[5] <- "Sum"
 workingtable$Region <- rownames(workingtable)
-
 workingtable |>
   gt(rowname_col = "Region") |>
   cols_label(
@@ -224,14 +223,34 @@ workingtable |>
     ybarh = md("$\\bar{y}_h$"),
     sh = md("$s_h$"),
     s2h = md("$s^2_h$"),
-    pi_h = md("$\\pi_h = N_h/N$"),
-    weighted_ybar_h = md("$\\bar{y}_h \\cdot \\pi_h$"),
-    var_ybarh = md("$\\hat{V}(\\bar{y}_h) = (1 - n_h/N_h)s^2_h/n_h$"),
-    var_h = md("$\\hat{V}(\\bar{y}_h) \\cdot \\pi^2_h$")
+    pi_h = md("$\\pi_h$"),
+    weighted_ybar_h = md("$\\bar{y}_{wh}$"),
+    var_ybarh = md("$\\hat{V}(\\bar{y}_h)$"),
+    var_h = md("$\\hat{V}_h$")
+  ) |>
+  tab_footnote(
+    footnote = md("$\\pi_h = N_h / N$"),
+    locations = cells_column_labels(columns = pi_h)
+  ) |>
+  tab_footnote(
+    footnote = md("$\\bar{y}_h \\cdot \\pi_h$"),
+    locations = cells_column_labels(columns = weighted_ybar_h)
+  ) |>
+  tab_footnote(
+    footnote = md("$\\hat{V}(\\bar{y}_h) = \\left(1 - \\frac{n_h}{N_h}\\right) \\frac{s^2_h}{n_h}$"),
+    locations = cells_column_labels(columns = var_ybarh)
+  ) |>
+  tab_footnote(
+    footnote = md("$\\hat{V}(\\bar{y}_h) \\cdot \\pi^2_h$"),
+    locations = cells_column_labels(columns = var_h)
+  ) |>
+  fmt_scientific(
+    columns = c(ybarh, sh, s2h, weighted_ybar_h, var_ybarh, var_h),
+    decimals = 2
   ) |>
   fmt_number(
-    columns = c(ybarh, sh, s2h, pi_h, weighted_ybar_h, var_ybarh, var_h),
-    decimals = 4
+    columns = c(pi_h),
+    decimals = 2
   )
 ```
 **Output Note:** The table provides a detailed breakdown of how each individual stratum contributes to the final mean and variance.

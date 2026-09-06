@@ -168,6 +168,9 @@ window.Quarto = {
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Elements of Sampling Survey</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/longhaiSK/sampling" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -1607,24 +1610,43 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>workingtable <span class="ot">&lt;-</span> <span class="fu">rbind</span>(workingtable, <span class="fu">colSums</span>(workingtable))</span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(workingtable)[<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="st">"Sum"</span></span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>workingtable<span class="sc">$</span>Region <span class="ot">&lt;-</span> <span class="fu">rownames</span>(workingtable)</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>workingtable <span class="sc">|&gt;</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rowname_col =</span> <span class="st">"Region"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">Nh =</span> <span class="fu">md</span>(<span class="st">"$N_h$"</span>),</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">nh =</span> <span class="fu">md</span>(<span class="st">"$n_h$"</span>),</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">ybarh =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_h$"</span>),</span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">sh =</span> <span class="fu">md</span>(<span class="st">"$s_h$"</span>),</span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">s2h =</span> <span class="fu">md</span>(<span class="st">"$s^2_h$"</span>),</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">pi_h =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">pi_h = N_h/N$"</span>),</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">weighted_ybar_h =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_h </span><span class="sc">\\</span><span class="st">cdot </span><span class="sc">\\</span><span class="st">pi_h$"</span>),</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">var_ybarh =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">hat{V}(</span><span class="sc">\\</span><span class="st">bar{y}_h) = (1 - n_h/N_h)s^2_h/n_h$"</span>),</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">var_h =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">hat{V}(</span><span class="sc">\\</span><span class="st">bar{y}_h) </span><span class="sc">\\</span><span class="st">cdot </span><span class="sc">\\</span><span class="st">pi^2_h$"</span>)</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(ybarh, sh, s2h, pi_h, weighted_ybar_h, var_ybarh, var_h),</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">4</span></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>workingtable <span class="sc">|&gt;</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">rowname_col =</span> <span class="st">"Region"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">Nh =</span> <span class="fu">md</span>(<span class="st">"$N_h$"</span>),</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">nh =</span> <span class="fu">md</span>(<span class="st">"$n_h$"</span>),</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">ybarh =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_h$"</span>),</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">sh =</span> <span class="fu">md</span>(<span class="st">"$s_h$"</span>),</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">s2h =</span> <span class="fu">md</span>(<span class="st">"$s^2_h$"</span>),</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">pi_h =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">pi_h$"</span>),</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">weighted_ybar_h =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{wh}$"</span>),</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">var_ybarh =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">hat{V}(</span><span class="sc">\\</span><span class="st">bar{y}_h)$"</span>),</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">var_h =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">hat{V}_h$"</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_footnote</span>(</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">footnote =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">pi_h = N_h / N$"</span>),</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> pi_h)</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_footnote</span>(</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">footnote =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_h </span><span class="sc">\\</span><span class="st">cdot </span><span class="sc">\\</span><span class="st">pi_h$"</span>),</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> weighted_ybar_h)</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_footnote</span>(</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">footnote =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">hat{V}(</span><span class="sc">\\</span><span class="st">bar{y}_h) = </span><span class="sc">\\</span><span class="st">left(1 - </span><span class="sc">\\</span><span class="st">frac{n_h}{N_h}</span><span class="sc">\\</span><span class="st">right) </span><span class="sc">\\</span><span class="st">frac{s^2_h}{n_h}$"</span>),</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> var_ybarh)</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_footnote</span>(</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">footnote =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">hat{V}(</span><span class="sc">\\</span><span class="st">bar{y}_h) </span><span class="sc">\\</span><span class="st">cdot </span><span class="sc">\\</span><span class="st">pi^2_h$"</span>),</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> var_h)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_scientific</span>(</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(ybarh, sh, s2h, weighted_ybar_h, var_ybarh, var_h),</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">2</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(pi_h),</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">2</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="tlrrclteku" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -2086,10 +2108,10 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <th id="ybarh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(\bar{y}_h\)</span></th>
 <th id="sh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(s_h\)</span></th>
 <th id="s2h" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(s^2_h\)</span></th>
-<th id="pi_h" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(\pi_h = N_h/N\)</span></th>
-<th id="weighted_ybar_h" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(\bar{y}_h \cdot \pi_h\)</span></th>
-<th id="var_ybarh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(\hat{V}(\bar{y}_h) = (1 - n_h/N_h)s^2_h/n_h\)</span></th>
-<th id="var_h" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(\hat{V}(\bar{y}_h) \cdot \pi^2_h\)</span></th>
+<th id="pi_h" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(\pi_h\)</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+<th id="weighted_ybar_h" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(\bar{y}_{wh}\)</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span></th>
+<th id="var_ybarh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(\hat{V}(\bar{y}_h)\)</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>3</sup></span></th>
+<th id="var_h" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\(\hat{V}_h\)</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>4</sup></span></th>
 </tr>
 </thead>
 <tbody class="gt_table_body">
@@ -2097,63 +2119,77 @@ n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 <th id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">NC</th>
 <td class="gt_row gt_right" headers="stub_1_1 Nh">1054</td>
 <td class="gt_row gt_right" headers="stub_1_1 nh">103</td>
-<td class="gt_row gt_right" headers="stub_1_1 ybarh">300,504.1553</td>
-<td class="gt_row gt_right" headers="stub_1_1 sh">172,099.3421</td>
-<td class="gt_row gt_right" headers="stub_1_1 s2h">29,618,183,543.2894</td>
-<td class="gt_row gt_right" headers="stub_1_1 pi_h">0.3424</td>
-<td class="gt_row gt_right" headers="stub_1_1 weighted_ybar_h">102,901.6828</td>
-<td class="gt_row gt_right" headers="stub_1_1 var_ybarh">259,454,436.6322</td>
-<td class="gt_row gt_right" headers="stub_1_1 var_h">30,423,213.9936</td>
+<td class="gt_row gt_right" headers="stub_1_1 ybarh">3.01&nbsp;×&nbsp;10<sup>5</sup></td>
+<td class="gt_row gt_right" headers="stub_1_1 sh">1.72&nbsp;×&nbsp;10<sup>5</sup></td>
+<td class="gt_row gt_right" headers="stub_1_1 s2h">2.96&nbsp;×&nbsp;10<sup>10</sup></td>
+<td class="gt_row gt_right" headers="stub_1_1 pi_h">0.34</td>
+<td class="gt_row gt_right" headers="stub_1_1 weighted_ybar_h">1.03&nbsp;×&nbsp;10<sup>5</sup></td>
+<td class="gt_row gt_right" headers="stub_1_1 var_ybarh">2.59&nbsp;×&nbsp;10<sup>8</sup></td>
+<td class="gt_row gt_right" headers="stub_1_1 var_h">3.04&nbsp;×&nbsp;10<sup>7</sup></td>
 </tr>
 <tr class="even">
 <th id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">NE</th>
 <td class="gt_row gt_right" headers="stub_1_2 Nh">220</td>
 <td class="gt_row gt_right" headers="stub_1_2 nh">21</td>
-<td class="gt_row gt_right" headers="stub_1_2 ybarh">97,629.8095</td>
-<td class="gt_row gt_right" headers="stub_1_2 sh">87,449.8297</td>
-<td class="gt_row gt_right" headers="stub_1_2 s2h">7,647,472,708.1619</td>
-<td class="gt_row gt_right" headers="stub_1_2 pi_h">0.0715</td>
-<td class="gt_row gt_right" headers="stub_1_2 weighted_ybar_h">6,978.0890</td>
-<td class="gt_row gt_right" headers="stub_1_2 var_ybarh">329,404,127.4728</td>
-<td class="gt_row gt_right" headers="stub_1_2 var_h">1,682,818.0719</td>
+<td class="gt_row gt_right" headers="stub_1_2 ybarh">9.76&nbsp;×&nbsp;10<sup>4</sup></td>
+<td class="gt_row gt_right" headers="stub_1_2 sh">8.74&nbsp;×&nbsp;10<sup>4</sup></td>
+<td class="gt_row gt_right" headers="stub_1_2 s2h">7.65&nbsp;×&nbsp;10<sup>9</sup></td>
+<td class="gt_row gt_right" headers="stub_1_2 pi_h">0.07</td>
+<td class="gt_row gt_right" headers="stub_1_2 weighted_ybar_h">6.98&nbsp;×&nbsp;10<sup>3</sup></td>
+<td class="gt_row gt_right" headers="stub_1_2 var_ybarh">3.29&nbsp;×&nbsp;10<sup>8</sup></td>
+<td class="gt_row gt_right" headers="stub_1_2 var_h">1.68&nbsp;×&nbsp;10<sup>6</sup></td>
 </tr>
 <tr class="odd">
 <th id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">S</th>
 <td class="gt_row gt_right" headers="stub_1_3 Nh">1382</td>
 <td class="gt_row gt_right" headers="stub_1_3 nh">135</td>
-<td class="gt_row gt_right" headers="stub_1_3 ybarh">211,315.0444</td>
-<td class="gt_row gt_right" headers="stub_1_3 sh">231,489.7144</td>
-<td class="gt_row gt_right" headers="stub_1_3 s2h">53,587,487,856.1920</td>
-<td class="gt_row gt_right" headers="stub_1_3 pi_h">0.4490</td>
-<td class="gt_row gt_right" headers="stub_1_3 weighted_ybar_h">94,878.9446</td>
-<td class="gt_row gt_right" headers="stub_1_3 var_ybarh">358,169,037.6624</td>
-<td class="gt_row gt_right" headers="stub_1_3 var_h">72,204,937.2887</td>
+<td class="gt_row gt_right" headers="stub_1_3 ybarh">2.11&nbsp;×&nbsp;10<sup>5</sup></td>
+<td class="gt_row gt_right" headers="stub_1_3 sh">2.31&nbsp;×&nbsp;10<sup>5</sup></td>
+<td class="gt_row gt_right" headers="stub_1_3 s2h">5.36&nbsp;×&nbsp;10<sup>10</sup></td>
+<td class="gt_row gt_right" headers="stub_1_3 pi_h">0.45</td>
+<td class="gt_row gt_right" headers="stub_1_3 weighted_ybar_h">9.49&nbsp;×&nbsp;10<sup>4</sup></td>
+<td class="gt_row gt_right" headers="stub_1_3 var_ybarh">3.58&nbsp;×&nbsp;10<sup>8</sup></td>
+<td class="gt_row gt_right" headers="stub_1_3 var_h">7.22&nbsp;×&nbsp;10<sup>7</sup></td>
 </tr>
 <tr class="even">
 <th id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">W</th>
 <td class="gt_row gt_right" headers="stub_1_4 Nh">422</td>
 <td class="gt_row gt_right" headers="stub_1_4 nh">41</td>
-<td class="gt_row gt_right" headers="stub_1_4 ybarh">662,295.5122</td>
-<td class="gt_row gt_right" headers="stub_1_4 sh">629,433.0387</td>
-<td class="gt_row gt_right" headers="stub_1_4 s2h">396,185,950,266.2562</td>
-<td class="gt_row gt_right" headers="stub_1_4 pi_h">0.1371</td>
-<td class="gt_row gt_right" headers="stub_1_4 weighted_ybar_h">90,802.0488</td>
-<td class="gt_row gt_right" headers="stub_1_4 var_ybarh">8,724,242,691.6798</td>
-<td class="gt_row gt_right" headers="stub_1_4 var_h">163,989,261.1787</td>
+<td class="gt_row gt_right" headers="stub_1_4 ybarh">6.62&nbsp;×&nbsp;10<sup>5</sup></td>
+<td class="gt_row gt_right" headers="stub_1_4 sh">6.29&nbsp;×&nbsp;10<sup>5</sup></td>
+<td class="gt_row gt_right" headers="stub_1_4 s2h">3.96&nbsp;×&nbsp;10<sup>11</sup></td>
+<td class="gt_row gt_right" headers="stub_1_4 pi_h">0.14</td>
+<td class="gt_row gt_right" headers="stub_1_4 weighted_ybar_h">9.08&nbsp;×&nbsp;10<sup>4</sup></td>
+<td class="gt_row gt_right" headers="stub_1_4 var_ybarh">8.72&nbsp;×&nbsp;10<sup>9</sup></td>
+<td class="gt_row gt_right" headers="stub_1_4 var_h">1.64&nbsp;×&nbsp;10<sup>8</sup></td>
 </tr>
 <tr class="odd">
 <th id="stub_1_5" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Sum</th>
 <td class="gt_row gt_right" headers="stub_1_5 Nh">3078</td>
 <td class="gt_row gt_right" headers="stub_1_5 nh">300</td>
-<td class="gt_row gt_right" headers="stub_1_5 ybarh">1,271,744.5215</td>
-<td class="gt_row gt_right" headers="stub_1_5 sh">1,120,471.9249</td>
-<td class="gt_row gt_right" headers="stub_1_5 s2h">487,039,094,373.8995</td>
-<td class="gt_row gt_right" headers="stub_1_5 pi_h">1.0000</td>
-<td class="gt_row gt_right" headers="stub_1_5 weighted_ybar_h">295,560.7652</td>
-<td class="gt_row gt_right" headers="stub_1_5 var_ybarh">9,671,270,293.4472</td>
-<td class="gt_row gt_right" headers="stub_1_5 var_h">268,300,230.5330</td>
+<td class="gt_row gt_right" headers="stub_1_5 ybarh">1.27&nbsp;×&nbsp;10<sup>6</sup></td>
+<td class="gt_row gt_right" headers="stub_1_5 sh">1.12&nbsp;×&nbsp;10<sup>6</sup></td>
+<td class="gt_row gt_right" headers="stub_1_5 s2h">4.87&nbsp;×&nbsp;10<sup>11</sup></td>
+<td class="gt_row gt_right" headers="stub_1_5 pi_h">1.00</td>
+<td class="gt_row gt_right" headers="stub_1_5 weighted_ybar_h">2.96&nbsp;×&nbsp;10<sup>5</sup></td>
+<td class="gt_row gt_right" headers="stub_1_5 var_ybarh">9.67&nbsp;×&nbsp;10<sup>9</sup></td>
+<td class="gt_row gt_right" headers="stub_1_5 var_h">2.68&nbsp;×&nbsp;10<sup>8</sup></td>
 </tr>
-</tbody>
+</tbody><tfoot>
+<tr class="gt_footnotes odd">
+<td colspan="10" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class="math inline">\(\pi_h = N_h / N\)</span></td>
+</tr>
+<tr class="gt_footnotes even">
+<td colspan="10" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span> <span class="math inline">\(\bar{y}_h \cdot \pi_h\)</span></td>
+</tr>
+<tr class="gt_footnotes odd">
+<td colspan="10" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>3</sup></span> <span class="math inline">\(\hat{V}(\bar{y}_h) = \left(1 - \frac{n_h}{N_h}\right) \frac{s^2_h}{n_h}\)</span></td>
+</tr>
+<tr class="gt_footnotes even">
+<td colspan="10" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>4</sup></span> <span class="math inline">\(\hat{V}(\bar{y}_h) \cdot \pi^2_h\)</span></td>
+</tr>
+</tfoot>
+
 </table>
 
 </div>
