@@ -113,6 +113,7 @@ srs_mean_est <- function (sdata, N = Inf)
     mem <- qt (0.975, df = n - 1) * se.ybar
     c (Est. = ybar, S.E. = se.ybar, ci.low = ybar - mem, ci.upp = ybar + mem)
 }
+
 # Helper function to format estimation outputs with appropriate mathematical headers
 format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_mean", "reg_total", "ratio_mean", "domain_mean")) {
   est_type <- match.arg(est_type)
