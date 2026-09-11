@@ -61,6 +61,18 @@ fmt_auto <- function (gt_tbl, data, columns, decimals = 3, small = 1e-3, large =
     gt_tbl
 }
 
+## Formats a single scalar for inline formula display (fixed-point with
+## thousands separators, switching to scientific notation for very small or
+## very large magnitudes, mirroring fmt_auto()) --- used to show worked-example
+## steps such as \bar y = sum/n with the actual numbers plugged in.
+fmt_num <- function (x, decimals = 3, small = 1e-3, large = 1e5)
+{
+    use_sci <- is.finite (x) & x != 0 & (abs (x) < small | abs (x) >= large)
+    ifelse (use_sci,
+            formatC (x, format = "e", digits = decimals),
+            formatC (x, format = "f", digits = decimals, big.mark = ","))
+}
+
 ## Truncates a row-level working data.frame whose LAST row is a summary row
 ## to the first head_n data rows + "..." + the summary row.
 truncate_working <- function (working, id_col, head_n = 6)
@@ -152,6 +164,21 @@ str_mean_estimate <- function (ybarh, sh, nh, Nh, estimate = c ("mean", "total")
         tab_footnote (
             footnote  = md ("$v_h = (1-n_h/N_h)\\,\\pi_h^2\\, s_h^2/n_h$ is stratum $h$'s contribution to $V(\\bar y_{str}) = \\sum_h v_h$."),
             locations = cells_column_labels (columns = v_h)
+        ) |>
+        tab_source_note (
+            source_note = md (if (estimate == "total")
+                sprintf ("**Point estimate:** $\\hat t_{str} = N\\bar y_{str} = %s \\times %s = %s$",
+                         fmt_num (N, 0), fmt_num (ybar), fmt_num (est))
+            else
+                sprintf ("**Point estimate:** $\\bar y_{str} = \\sum_h \\pi_h\\bar y_h = %s$", fmt_num (ybar)))
+        ) |>
+        tab_source_note (
+            source_note = md (if (estimate == "total")
+                sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t_{str}) = N \\times \\mathrm{SE}(\\bar y_{str}) = %s \\times %s = %s$",
+                         fmt_num (N, 0), fmt_num (seybar), fmt_num (se.est))
+            else
+                sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y_{str}) = \\sqrt{\\sum_h v_h} = \\sqrt{%s} = %s$",
+                         fmt_num (sum (v_h)), fmt_num (seybar)))
         )
 
     list (estimate = estimate_vec, table = table)
@@ -241,6 +268,25 @@ srs_mean_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
         tab_footnote (
             footnote  = md (sprintf ("$s_y^2 = \\sum_i (%s-\\bar y)^2/(n-1) = %.4f$.", col_labels$y, s2y)),
             locations = cells_column_labels (columns = dev2)
+        ) |>
+        tab_source_note (
+            source_note = md (if (estimate == "total")
+                sprintf ("**Point estimate:** $\\hat t = N\\bar y = %s \\times %s = %s$",
+                         fmt_num (N, 0), fmt_num (ybar), fmt_num (est))
+            else
+                sprintf ("**Point estimate:** $\\bar y = \\dfrac{\\sum_i %s}{n} = \\dfrac{%s}{%d} = %s$",
+                         col_labels$y, fmt_num (sum (sdata)), n, fmt_num (ybar)))
+        ) |>
+        tab_source_note (
+            source_note = md (if (estimate == "total")
+                sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t) = N \\times \\mathrm{SE}(\\bar y) = %s \\times %s = %s$",
+                         fmt_num (N, 0), fmt_num (se.ybar), fmt_num (se.est))
+            else if (is.finite (N))
+                sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y) = \\sqrt{1-\\dfrac{n}{N}}\\,\\dfrac{s}{\\sqrt n} = \\sqrt{1-\\dfrac{%d}{%d}}\\,\\dfrac{%s}{\\sqrt{%d}} = %s$",
+                         n, N, fmt_num (sqrt (s2y)), n, fmt_num (se.ybar))
+            else
+                sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y) = \\dfrac{s}{\\sqrt n} = \\dfrac{%s}{\\sqrt{%d}} = %s$",
+                         fmt_num (sqrt (s2y)), n, fmt_num (se.ybar)))
         )
 
     list (estimate = estimate_vec, table = table)
@@ -601,9 +647,7 @@ We convert the continuous `acres82` variable into four distinct categorical stra
 agpop$stratum <- cut(agpop$acres82,
                      breaks = quantile(agpop$acres82, probs = c(0,0.25,0.75,0.95,1)),
                      include.lowest = T)
-agpop$stratum <- mapvalues(agpop$stratum, 
-                           from = (sort(unique(agpop$stratum))), 
-                           to = paste0("acres82", c("Q1", "Q2", "Q3", "Q4")))
+levels(agpop$stratum) <- paste0("acres82", c("Q1", "Q2", "Q3", "Q4"))
 agpop <- agpop[order(agpop$stratum), ]
 ```
 

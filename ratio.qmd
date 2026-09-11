@@ -59,6 +59,18 @@ fmt_auto <- function (gt_tbl, data, columns, decimals = 3, small = 1e-3, large =
     gt_tbl
 }
 
+## Formats a single scalar for inline formula display (fixed-point with
+## thousands separators, switching to scientific notation for very small or
+## very large magnitudes, mirroring fmt_auto()) --- used to show worked-example
+## steps such as \bar y = sum/n with the actual numbers plugged in.
+fmt_num <- function (x, decimals = 3, small = 1e-3, large = 1e5)
+{
+    use_sci <- is.finite (x) & x != 0 & (abs (x) < small | abs (x) >= large)
+    ifelse (use_sci,
+            formatC (x, format = "e", digits = decimals),
+            formatC (x, format = "f", digits = decimals, big.mark = ","))
+}
+
 ## Truncates a row-level working data.frame whose LAST row is a summary row
 ## (e.g. "Sum"/"Total") to the first head_n data rows + "..." + the summary
 ## row, so long working tables stay readable. id_col --- row-label column.
@@ -132,6 +144,9 @@ srs_reg_est_mean <- function (ydata, xdata, xbarU = NULL, N = Inf,
   if (!show.details)
       return (list (estimate = estimate_vec, table = NULL))
 
+  Sxx <- sum ((xdata - mean (xdata))^2)
+  Sxy <- sum ((xdata - mean (xdata)) * (ydata - mean (ydata)))
+
   working <- data.frame (
       i    = c (seq_len (n), "Sum"),
       y    = c (ydata, sum (ydata)),
@@ -163,6 +178,31 @@ srs_reg_est_mean <- function (ydata, xdata, xbarU = NULL, N = Inf,
           footnote  = md (sprintf ("$\\hat B_0 = %.4f$, $\\hat B_1 = %.4f$, $\\hat y_i = \\hat B_0 + \\hat B_1 x_i$, $s_e^2 = %.4f$.",
                                     Bhat[1], Bhat[2], SSe)),
           locations = cells_column_labels (columns = yhat)
+      ) |>
+      tab_source_note (
+          source_note = md (if (estimate == "model")
+              sprintf ("**Point estimate:** $\\hat B_1 = \\dfrac{\\sum_i(x_i-\\bar x)(y_i-\\bar y)}{\\sum_i(x_i-\\bar x)^2} = \\dfrac{%s}{%s} = %s$",
+                       fmt_num (Sxy), fmt_num (Sxx), fmt_num (unname (Bhat[2])))
+          else if (estimate == "total")
+              sprintf ("**Point estimate:** $\\hat t_{reg} = N\\bar y_{reg} = %s \\times %s = %s$",
+                       fmt_num (N, 0), fmt_num (yhat_reg), fmt_num (est))
+          else
+              sprintf ("**Point estimate:** $\\bar y_{reg} = \\hat B_0+\\hat B_1\\bar x_U = %s + %s \\times %s = %s$",
+                       fmt_num (Bhat[1]), fmt_num (Bhat[2]), fmt_num (xbarU), fmt_num (yhat_reg)))
+      ) |>
+      tab_source_note (
+          source_note = md (if (estimate == "model")
+              sprintf ("**Standard error:** $\\mathrm{SE}(\\hat B_1) = \\sqrt{\\dfrac{s_e^2}{\\sum_i(x_i-\\bar x)^2}} = \\sqrt{\\dfrac{%s}{%s}} = %s$",
+                       fmt_num (SSe), fmt_num (Sxx), fmt_num (sd_est))
+          else if (estimate == "total")
+              sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t_{reg}) = N\\times\\mathrm{SE}(\\bar y_{reg}) = %s \\times %s = %s$",
+                       fmt_num (N, 0), fmt_num (se_yhat_reg), fmt_num (sd_est))
+          else if (is.finite (N))
+              sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y_{reg}) = \\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n}} = \\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d}} = %s$",
+                       n, N, fmt_num (SSe), n, fmt_num (se_yhat_reg))
+          else
+              sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y_{reg}) = \\sqrt{\\dfrac{s_e^2}{n}} = \\sqrt{\\dfrac{%s}{%d}} = %s$",
+                       fmt_num (SSe), n, fmt_num (se_yhat_reg)))
       )
 
   list (estimate = estimate_vec, table = table)
@@ -259,6 +299,32 @@ srs_ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
           footnote  = md (sprintf ("$\\hat B = \\sum_i %s / \\sum_i %s = %.4f$, $%s = \\hat B\\, %s$, $s_e^2 = %.4f$.",
                                     col_labels$y, col_labels$x, B_hat, col_labels$yhat, col_labels$x, var_e)),
           locations = cells_column_labels (columns = yhat)
+      ) |>
+      tab_source_note (
+          source_note = md (if (estimate == "model")
+              sprintf ("**Point estimate:** $\\hat B = \\dfrac{\\sum_i %s}{\\sum_i %s} = \\dfrac{%s}{%s} = %s$",
+                       col_labels$y, col_labels$x, fmt_num (sum (ydata)), fmt_num (sum (xdata)), fmt_num (B_hat))
+          else if (estimate == "total")
+              sprintf ("**Point estimate:** $\\hat t = \\hat B\\,\\bar x_U\\,N = %s \\times %s \\times %s = %s$",
+                       fmt_num (B_hat), fmt_num (xbarU), fmt_num (N, 0), fmt_num (est))
+          else
+              sprintf ("**Point estimate:** $\\bar y_r = \\hat B\\,\\bar x_U = %s \\times %s = %s$",
+                       fmt_num (B_hat), fmt_num (xbarU), fmt_num (est)))
+      ) |>
+      tab_source_note (
+          source_note = md (if (estimate == "model")
+              (if (is.finite (N))
+                  sprintf ("**Standard error:** $\\mathrm{SE}(\\hat B) = \\dfrac{1}{\\bar x}\\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n}} = \\dfrac{1}{%s}\\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d}} = %s$",
+                           fmt_num (xbar), n, N, fmt_num (var_e), n, fmt_num (sd_B_hat))
+              else
+                  sprintf ("**Standard error:** $\\mathrm{SE}(\\hat B) = \\dfrac{1}{\\bar x}\\sqrt{\\dfrac{s_e^2}{n}} = \\dfrac{1}{%s}\\sqrt{\\dfrac{%s}{%d}} = %s$",
+                           fmt_num (xbar), fmt_num (var_e), n, fmt_num (sd_B_hat)))
+          else if (estimate == "total")
+              sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t) = \\mathrm{SE}(\\hat B)\\,\\bar x_U\\,N = %s \\times %s \\times %s = %s$",
+                       fmt_num (sd_B_hat), fmt_num (xbarU), fmt_num (N, 0), fmt_num (sd_est))
+          else
+              sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y_r) = \\mathrm{SE}(\\hat B)\\,\\bar x_U = %s \\times %s = %s$",
+                       fmt_num (sd_B_hat), fmt_num (xbarU), fmt_num (sd_est)))
       )
 
   list (estimate = estimate_vec, table = table)
@@ -341,6 +407,25 @@ srs_mean_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
         tab_footnote (
             footnote  = md (sprintf ("$s_y^2 = \\sum_i (%s-\\bar y)^2/(n-1) = %.4f$.", col_labels$y, s2y)),
             locations = cells_column_labels (columns = dev2)
+        ) |>
+        tab_source_note (
+            source_note = md (if (estimate == "total")
+                sprintf ("**Point estimate:** $\\hat t = N\\bar y = %s \\times %s = %s$",
+                         fmt_num (N, 0), fmt_num (ybar), fmt_num (est))
+            else
+                sprintf ("**Point estimate:** $\\bar y = \\dfrac{\\sum_i %s}{n} = \\dfrac{%s}{%d} = %s$",
+                         col_labels$y, fmt_num (sum (sdata)), n, fmt_num (ybar)))
+        ) |>
+        tab_source_note (
+            source_note = md (if (estimate == "total")
+                sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t) = N \\times \\mathrm{SE}(\\bar y) = %s \\times %s = %s$",
+                         fmt_num (N, 0), fmt_num (se.ybar), fmt_num (se.est))
+            else if (is.finite (N))
+                sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y) = \\sqrt{1-\\dfrac{n}{N}}\\,\\dfrac{s}{\\sqrt n} = \\sqrt{1-\\dfrac{%d}{%d}}\\,\\dfrac{%s}{\\sqrt{%d}} = %s$",
+                         n, N, fmt_num (sqrt (s2y)), n, fmt_num (se.ybar))
+            else
+                sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y) = \\dfrac{s}{\\sqrt n} = \\dfrac{%s}{\\sqrt{%d}} = %s$",
+                         fmt_num (sqrt (s2y)), n, fmt_num (se.ybar)))
         )
 
     list (estimate = estimate_vec, table = table)
@@ -472,6 +557,21 @@ str_mean_estimate <- function (ybarh, sh, nh, Nh, estimate = c ("mean", "total")
         tab_footnote (
             footnote  = md ("$v_h = (1-n_h/N_h)\\,\\pi_h^2\\, s_h^2/n_h$ is stratum $h$'s contribution to $V(\\bar y_{str}) = \\sum_h v_h$."),
             locations = cells_column_labels (columns = v_h)
+        ) |>
+        tab_source_note (
+            source_note = md (if (estimate == "total")
+                sprintf ("**Point estimate:** $\\hat t_{str} = N\\bar y_{str} = %s \\times %s = %s$",
+                         fmt_num (N, 0), fmt_num (ybar), fmt_num (est))
+            else
+                sprintf ("**Point estimate:** $\\bar y_{str} = \\sum_h \\pi_h\\bar y_h = %s$", fmt_num (ybar)))
+        ) |>
+        tab_source_note (
+            source_note = md (if (estimate == "total")
+                sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t_{str}) = N \\times \\mathrm{SE}(\\bar y_{str}) = %s \\times %s = %s$",
+                         fmt_num (N, 0), fmt_num (seybar), fmt_num (se.est))
+            else
+                sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y_{str}) = \\sqrt{\\sum_h v_h} = \\sqrt{%s} = %s$",
+                         fmt_num (sum (v_h)), fmt_num (seybar)))
         )
 
     list (estimate = estimate_vec, table = table)
