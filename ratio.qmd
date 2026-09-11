@@ -38,6 +38,8 @@ We begin by loading the necessary libraries, including `gt` for formatting mathe
 
 The estimating functions used throughout this book (including `reg_est`, `ratio_est`, `domain_est`, `srs_est`, and the `format_est_gt` table-formatting helper used below) live in a single shared file, `samplingestimate.r`, which we source below.
 
+For post-stratification, we reuse the shared `str_est()` stratified estimator, but we plug in the expected sample sizes $n_h = n \times \frac{N_h}{N}$ instead of the actual observed random $n_h$.
+
 ```{r}
 #| echo: false
 source("samplingestimate.r")
@@ -56,9 +58,6 @@ cat("\n```\n")
 
 </details>
 
-### Post-stratification
-
-For post-stratification, we reuse the shared `str_est()` stratified estimator, but we plug in the expected sample sizes $n_h = n \times \frac{N_h}{N}$ instead of the actual observed random $n_h$.
 
 ## Ratio Estimation for cherry.csv dataset 
 
