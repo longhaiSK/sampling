@@ -43,112 +43,245 @@ library(sampling)
 library(dplyr)
 library(gt)
 
+## Formats a gt table column as ordinary fixed-point, UNLESS its values are
+## too small (< `small` in absolute value) or too large (>= `large`), in
+## which case it switches that column to scientific notation instead.
+fmt_auto <- function (gt_tbl, data, columns, decimals = 3, small = 1e-3, large = 1e5)
+{
+    for (col in columns)
+    {
+        x <- data[[col]]
+        x <- x[is.finite (x) & x != 0]
+        if (length (x) == 0) next
+        if (any (abs (x) < small) || any (abs (x) >= large))
+            gt_tbl <- fmt_scientific (gt_tbl, columns = tidyselect::all_of (col), decimals = decimals)
+        else
+            gt_tbl <- fmt_number (gt_tbl, columns = tidyselect::all_of (col), decimals = decimals)
+    }
+    gt_tbl
+}
+
+## Truncates a row-level working data.frame whose LAST row is a summary row
+## to the first head_n data rows + "..." + the summary row.
+truncate_working <- function (working, id_col, head_n = 6)
+{
+    n <- nrow (working) - 1
+    if (n <= head_n + 1) return (working)
+
+    dots <- working[1, ]
+    dots[1, ] <- NA
+    dots[1, id_col] <- "..."
+
+    rbind (working[seq_len (head_n), ], dots, working[nrow (working), ])
+}
+
+## Given per-stratum summaries, compute the stratified (or post-stratified)
+## mean or total.
+## estimate --- "mean" (default) returns the stratified MEAN estimate;
+##              "total" returns the stratified TOTAL estimate
+## show.details --- if TRUE (default), also return a gt table showing the
+##                  stratum-by-stratum working, with a Total row
+## for poststratification, use nh = n * Nh/N
+## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
+str_mean_estimate <- function (ybarh, sh, nh, Nh, estimate = c ("mean", "total"), show.details = TRUE)
+{
+    estimate <- match.arg (estimate)
+
+    N    <- sum (Nh)
+    Pi_h <- Nh / N
+    v_h  <- (1 - nh / Nh) * Pi_h^2 * sh^2 / nh
+
+    ybar   <- sum (ybarh * Pi_h)
+    seybar <- sqrt (sum (v_h))
+
+    if (estimate == "total")
+    {
+        est    <- N * ybar
+        se.est <- N * seybar
+    }
+    else
+    {
+        est    <- ybar
+        se.est <- seybar
+    }
+    mem          <- 1.96 * se.est
+    estimate_vec <- c (Est. = est, S.E. = se.est, ci.low = est - mem, ci.upp = est + mem)
+
+    if (!show.details)
+        return (list (estimate = estimate_vec, table = NULL))
+
+    stratum <- names (Nh)
+    if (is.null (stratum)) stratum <- seq_along (Nh)
+
+    working <- data.frame (
+        Stratum       = c (stratum, "Total"),
+        Nh            = c (Nh, N),
+        nh            = c (nh, sum (nh)),
+        Pi_h          = c (Pi_h, sum (Pi_h)),
+        ybarh         = c (ybarh, NA),
+        sh2           = c (sh^2, NA),
+        weighted_mean = c (Pi_h * ybarh, ybar),
+        v_h           = c (v_h, seybar^2)
+    )
+
+    table <- gt (working) |>
+        tab_header (title = "Stratified Mean Estimation: Working Table") |>
+        cols_label (
+            Stratum       = md ("Stratum"),
+            Nh            = md ("$N_h$"),
+            nh            = md ("$n_h$"),
+            Pi_h          = md ("$\\pi_h$"),
+            ybarh         = md ("$\\bar y_h$"),
+            sh2           = md ("$s_h^2$"),
+            weighted_mean = md ("$\\pi_h\\bar y_h$"),
+            v_h           = md ("$v_h$")
+        ) |>
+        cols_width (c (Nh, nh) ~ px (60), everything () ~ px (110)) |>
+        fmt_number (columns = c (Nh, nh), decimals = 0) |>
+        fmt_number (columns = Pi_h, decimals = 2) |>
+        fmt_auto (data = working, columns = c ("ybarh", "sh2", "weighted_mean", "v_h"), decimals = 2) |>
+        sub_missing (missing_text = "") |>
+        tab_style (
+            style     = cell_text (weight = "bold"),
+            locations = cells_body (rows = Stratum == "Total")
+        ) |>
+        tab_footnote (
+            footnote  = md ("$\\pi_h = N_h/N$ is the stratum weight."),
+            locations = cells_column_labels (columns = Pi_h)
+        ) |>
+        tab_footnote (
+            footnote  = md ("$v_h = (1-n_h/N_h)\\,\\pi_h^2\\, s_h^2/n_h$ is stratum $h$'s contribution to $V(\\bar y_{str}) = \\sum_h v_h$."),
+            locations = cells_column_labels (columns = v_h)
+        )
+
+    list (estimate = estimate_vec, table = table)
+}
+
 ## this function finds statistical estimates given a dataset with sampling weight
 # stratdata --- data.frame containing stratified sample
 # y --- name of variable for which we want to estiamte population mean
 # stratum --- name of variable that will be used as stratum variable
 # weight --- name of variable indicating sampling weight
-# post = TRUE is to indicate that we will do post-stratification analysis (ignoring it for the moment)
 # note: from weights we can find Nh (see the code for formula)
-str_mean_estimate_data <- function (stratdata, y, stratum, weight)
+# returns the same list ($estimate, $table) as str_mean_estimate(), which
+# this function calls after deriving ybarh/sh/nh/Nh from the raw data
+str_mean_estimate_data <- function (stratdata, y, stratum, weight, estimate = c ("mean", "total"), show.details = TRUE)
 {
     ## compute stratum-wise data
-    n <- nrow (stratdata)
     sh <- tapply (stratdata[, y], stratdata[,stratum], sd)
     ybarh <- tapply (stratdata[, y], stratdata[,stratum], mean)
     ## find population stratum size using sampling weight included in the data set
     Nh <- tapply (stratdata[, weight], stratdata[,stratum], sum)
     nh <- tapply (1:nrow(stratdata), stratdata[,stratum], length)
-    ## find mean estimates
-    N <- sum (Nh)
-    Pi_h <- Nh/N
-    ybar <- sum(ybarh * Pi_h)
-    seybar <- sqrt(sum((1-nh/Nh)*Pi_h^2*sh^2/nh))
-    mem <- 1.96 * seybar
-    c(Est. = ybar, S.E. = seybar, ci.low = ybar - mem, ci.upp = ybar + mem)
-    
-}
 
-## to find total, multiply N to the estimate returned by this function
-## for poststratification, use nh = n * Nh/N
-str_mean_estimate <- function (ybarh, sh, nh, Nh)
-{
-    N <- sum (Nh)
-    Pi_h <- Nh/N
-    ybar <- sum(ybarh * Pi_h)
-    seybar <- sqrt(sum((1-nh/Nh)*Pi_h^2*sh^2/nh))
-    mem <- 1.96 * seybar
-    c(Est. = ybar, S.E. = seybar, ci.low = ybar - mem, ci.upp = ybar + mem)
+    str_mean_estimate (ybarh, sh, nh, Nh, estimate = estimate, show.details = show.details)
 }
 
 ## sdata --- a vector of original survey data
 ## N --- population size
-## to find total, multiply N to the estimate returned by this function
-srs_mean_est <- function (sdata, N = Inf)
+## estimate --- "mean" (default) returns the population MEAN estimate;
+##              "total" returns the population TOTAL estimate (requires
+##              finite N)
+## show.details --- if TRUE (default), also return a gt table of the
+##                  row-level working values, with a Sum row and a
+##                  footnote showing s_y^2; NULL otherwise
+## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
+srs_mean_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
+                          show.details = TRUE, col_labels = list (y = "y_i"))
 {
+    estimate <- match.arg (estimate)
+
     n <- length (sdata)
     ybar <- mean (sdata)
-    se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n)  
-    mem <- qt (0.975, df = n - 1) * se.ybar
-    c (Est. = ybar, S.E. = se.ybar, ci.low = ybar - mem, ci.upp = ybar + mem)
+    dev <- sdata - ybar
+    s2y <- sum (dev^2) / (n - 1)
+    se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n)
+
+    if (estimate == "total")
+    {
+        if (!is.finite (N))
+            stop ("N must be finite to compute estimate = \"total\"")
+        est <- N * ybar
+        se.est <- N * se.ybar
+    }
+    else
+    {
+        est <- ybar
+        se.est <- se.ybar
+    }
+    mem <- qt (0.975, df = n - 1) * se.est
+    estimate_vec <- c (Est. = est, S.E. = se.est, ci.low = est - mem, ci.upp = est + mem)
+
+    if (!show.details)
+        return (list (estimate = estimate_vec, table = NULL))
+
+    working <- data.frame (
+        i    = c (seq_len (n), "Sum"),
+        y    = c (sdata, sum (sdata)),
+        dev  = c (dev, sum (dev)),
+        dev2 = c (dev^2, sum (dev^2))
+    )
+    working <- truncate_working (working, id_col = "i")
+
+    table <- gt (working) |>
+        tab_header (title = "SRS Mean Estimation: Working Table", subtitle = md (sprintf ("$n = %d$", n))) |>
+        cols_label (
+            i    = md ("$i$"),
+            y    = md (sprintf ("$%s$", col_labels$y)),
+            dev  = md (sprintf ("$%s-\\bar y$", col_labels$y)),
+            dev2 = md (sprintf ("$(%s-\\bar y)^2$", col_labels$y))
+        ) |>
+        cols_width (i ~ px (40), everything () ~ px (110)) |>
+        fmt_auto (data = working, columns = c ("y", "dev", "dev2"), decimals = 3) |>
+        sub_missing (missing_text = "...") |>
+        tab_style (
+            style     = cell_text (weight = "bold"),
+            locations = cells_body (rows = i == "Sum")
+        ) |>
+        tab_footnote (
+            footnote  = md (sprintf ("$s_y^2 = \\sum_i (%s-\\bar y)^2/(n-1) = %.4f$.", col_labels$y, s2y)),
+            locations = cells_column_labels (columns = dev2)
+        )
+
+    list (estimate = estimate_vec, table = table)
 }
 
+# Helper function to format estimation outputs with appropriate mathematical headers
+format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_mean", "reg_total", "ratio_mean", "domain_mean")) {
+  est_type <- match.arg(est_type)
 
-# Helper function to format the output of stratified estimates using gt
-format_str_gt <- function(est_vec, is_total = FALSE, is_prop = FALSE) {
-  df <- as.data.frame(t(est_vec))
-  
-  if (is_total) {
-    est_sym <- "$\\hat{t}_{str}$"
-    se_sym <- "$\\mathrm{SE}(\\hat{t}_{str})$"
-  } else if (is_prop) {
-    est_sym <- "$\\hat{p}_{str}$"
-    se_sym <- "$\\mathrm{SE}(\\hat{p}_{str})$"
-  } else {
-    est_sym <- "$\\bar{y}_{str}$"
-    se_sym <- "$\\mathrm{SE}(\\bar{y}_{str})$"
-  }
-  
-  df |>
-    gt() |>
-    cols_label(
-      Est. = md(est_sym),
-      S.E. = md(se_sym),
-      ci.low = md("95% CI Lower"),
-      ci.upp = md("95% CI Upper")
-    ) |>
-    fmt_number(
-      columns = everything(),
-      decimals = 4
-    ) |>
-    tab_options(table.width = pct(60))
-}
+  sym_map <- list(
+    "mean"        = c(est = "$\\bar{y}$",         se = "$\\mathrm{SE}(\\bar{y})$"),
+    "total"       = c(est = "$\\hat{t}$",         se = "$\\mathrm{SE}(\\hat{t})$"),
+    "ratio"       = c(est = "$\\hat{B}$",         se = "$\\mathrm{SE}(\\hat{B})$"),
+    "reg_mean"    = c(est = "$\\bar{y}_{reg}$",   se = "$\\mathrm{SE}(\\bar{y}_{reg})$"),
+    "reg_total"   = c(est = "$\\hat{t}_{reg}$",   se = "$\\mathrm{SE}(\\hat{t}_{reg})$"),
+    "ratio_mean"  = c(est = "$\\bar{y}_{r}$",     se = "$\\mathrm{SE}(\\bar{y}_{r})$"),
+    "domain_mean" = c(est = "$\\bar{y}_{d}$",     se = "$\\mathrm{SE}(\\bar{y}_{d})$")
+  )
 
-# Helper function to format the output of SRS estimates using gt
-format_srs_gt <- function(est_vec, is_total = FALSE, is_prop = FALSE) {
-  df <- as.data.frame(t(est_vec))
-  
-  if (is_total) {
-    est_sym <- "$\\hat{t}$"
-    se_sym <- "$\\mathrm{SE}(\\hat{t})$"
-  } else if (is_prop) {
-    est_sym <- "$\\hat{p}$"
-    se_sym <- "$\\mathrm{SE}(\\hat{p})$"
+  est_sym <- sym_map[[est_type]]["est"]
+  se_sym  <- sym_map[[est_type]]["se"]
+
+  if (is.vector(est_data) && !is.list(est_data)) {
+    df <- as.data.frame(t(unname(est_data)))
   } else {
-    est_sym <- "$\\bar{y}$"
-    se_sym <- "$\\mathrm{SE}(\\bar{y})$"
+    df <- as.data.frame(est_data)
   }
-  
+
+  colnames(df) <- c("Est.", "S.E.", "ci.low", "ci.upp")
+  use_stub <- !is.null(rownames(df)) && !all(rownames(df) == as.character(1:nrow(df)))
+
   df |>
-    gt() |>
+    gt(rownames_to_stub = use_stub) |>
     cols_label(
-      Est. = md(est_sym),
-      S.E. = md(se_sym),
+      Est.   = md(est_sym),
+      S.E.   = md(se_sym),
       ci.low = md("95% CI Lower"),
       ci.upp = md("95% CI Upper")
     ) |>
     fmt_number(columns = everything(), decimals = 4) |>
-    tab_options(table.width = pct(60))
+    tab_options(table.width = pct(70))
 }
 ```
 
@@ -191,107 +324,29 @@ data.frame(Nh, nh, ybarh, sh) |>
 
 #### Estimates
 
-Next, we build a "spreadsheet-style" table to calculate the intermediate values needed for the final stratified variance and mean, summing the results at the bottom. We use `gt` to properly format the mathematical column headers.
+Rather than building the "spreadsheet-style" working table by hand, we call `str_mean_estimate()`, whose `$table` shows the same intermediate stratum-level values ($N_h$, $n_h$, $\pi_h$, $\bar y_h$, $s_h^2$, $\pi_h\bar y_h$, $v_h$) needed for the final stratified mean and variance, with a Total row and footnotes for $\pi_h$ and $v_h$.
 
 ```{r}
-N <- sum(Nh)
-pi_h <- Nh/N
-weighted_ybar_h <- ybarh * pi_h
-var_ybarh <- (1-nh/Nh)*sh^2/nh
-var_h <- var_ybarh * pi_h^2
-
-workingtable <- data.frame(
-  Nh = Nh, 
-  nh = nh,  
-  ybarh = ybarh, 
-  sh = sh, 
-  s2h = sh^2, 
-  pi_h = pi_h,
-  weighted_ybar_h = weighted_ybar_h,
-  var_ybarh = var_ybarh,
-  var_h = var_h
-)
-
-workingtable <- rbind(workingtable, colSums(workingtable))
-row.names(workingtable)[5] <- "Sum"
-workingtable$Region <- rownames(workingtable)
-workingtable |>
-  gt(rowname_col = "Region") |>
-  cols_label(
-    Nh = md("$N_h$"),
-    nh = md("$n_h$"),
-    ybarh = md("$\\bar{y}_h$"),
-    sh = md("$s_h$"),
-    s2h = md("$s^2_h$"),
-    pi_h = md("$\\pi_h$"),
-    weighted_ybar_h = md("$\\bar{y}_{wh}$"),
-    var_ybarh = md("$\\hat{V}(\\bar{y}_h)$"),
-    var_h = md("$\\hat{V}_h$")
-  ) |>
-  tab_footnote(
-    footnote = md("$\\pi_h = N_h / N$"),
-    locations = cells_column_labels(columns = pi_h)
-  ) |>
-  tab_footnote(
-    footnote = md("$\\bar{y}_h \\cdot \\pi_h$"),
-    locations = cells_column_labels(columns = weighted_ybar_h)
-  ) |>
-  tab_footnote(
-    footnote = md("$\\hat{V}(\\bar{y}_h) = \\left(1 - \\frac{n_h}{N_h}\\right) \\frac{s^2_h}{n_h}$"),
-    locations = cells_column_labels(columns = var_ybarh)
-  ) |>
-  tab_footnote(
-    footnote = md("$\\hat{V}(\\bar{y}_h) \\cdot \\pi^2_h$"),
-    locations = cells_column_labels(columns = var_h)
-  ) |>
-  fmt_scientific(
-    columns = c(ybarh, sh, s2h, weighted_ybar_h, var_ybarh, var_h),
-    decimals = 2
-  ) |>
-  fmt_number(
-    columns = c(pi_h),
-    decimals = 2
-  )
+res_str_mean <- str_mean_estimate(ybarh, sh, nh, Nh, estimate = "mean")
+res_str_mean$table
 ```
 **Output Note:** The table provides a detailed breakdown of how each individual stratum contributes to the final mean and variance.
 
-Extracting the final sum values gives our overall estimates.
+Extracting `$estimate` gives our overall result.
 
 ```{r}
-ybar <- sum(weighted_ybar_h)
-var_ybar <- sum((1-nh/Nh)*pi_h^2*sh^2/nh)
-seybar <- sqrt(var_ybar)
-mem <- 1.96 * seybar
-
-c(Est. = ybar, S.E. = seybar, ci.low = ybar - mem, ci.upp = ybar + mem) |> 
-  format_str_gt()
+res_str_mean$estimate |> format_est_gt("mean")
 ```
-**Output Note:** The overall result indicates an estimated mean of `r format(round(ybar, 0), big.mark=",")` acres, with a 95% confidence interval of [`r format(round(ybar - mem, 0), big.mark=",")`, `r format(round(ybar + mem, 0), big.mark=",")`].
+**Output Note:** The overall result indicates an estimated mean of `r format(round(res_str_mean$estimate["Est."], 0), big.mark=",")` acres, with a 95% confidence interval of [`r format(round(res_str_mean$estimate["ci.low"], 0), big.mark=",")`, `r format(round(res_str_mean$estimate["ci.upp"], 0), big.mark=",")`].
 
-### Using the function "str_mean_estimate"
-
-We can bypass the manual table generation using our predefined function.
+To find the population total (total acreage across all US counties), set `estimate = "total"`.
 
 ```{r}
-nh <- tapply (agstrat[, "acres92"], agstrat[,"region"], length)
-sh <- tapply (agstrat[, "acres92"], agstrat[,"region"], sd)
-ybarh <- tapply (agstrat[, "acres92"], agstrat[,"region"], mean)
-Nh <- c(NC = 1054, NE = 220, S= 1382, W = 422)
-
-## strata mean estimate
-str_mean_estimate(ybarh, sh, nh, Nh) |> 
-  format_str_gt()
+## population total estimate
+res_str_total <- str_mean_estimate(ybarh, sh, nh, Nh, estimate = "total")
+res_str_total$estimate |> format_est_gt("total")
 ```
-**Output Note:** This matches our manual spreadsheet calculation precisely.
-
-To find the population total (total acreage across all US counties), multiply the mean and CI by $N$.
-
-```{r}
-## population total estimate 
-(str_mean_estimate(ybarh, sh, nh, Nh) * sum(Nh)) |> 
-  format_str_gt(is_total = TRUE)
-```
-**Output Note:** This successfully scales the estimates up to the total area of `r format(round(str_mean_estimate(ybarh, sh, nh, Nh)["Est."] * sum(Nh), 0), big.mark=",", scientific=FALSE)` acres.
+**Output Note:** This scales the estimates up to the total area of `r format(round(res_str_total$estimate["Est."], 0), big.mark=",", scientific=FALSE)` acres.
 
 ### Using the function "str_mean_estimate_data"
 
@@ -305,17 +360,19 @@ tapply(agstrat$weight, agstrat$region, sum)
 
 ```{r}
 ## if the dataset contains a variable "weight"
-str_mean_estimate_data(agstrat, y="acres92", stratum="region", weight="weight") |> 
-  format_str_gt()
+res_agstrat_acres92 <- str_mean_estimate_data(agstrat, y="acres92", stratum="region", weight="weight", estimate = "mean")
+res_agstrat_acres92$table
+res_agstrat_acres92$estimate |> format_est_gt("mean")
 ```
 **Output Note:** Once again, this perfectly matches the manual calculation.
 
 ```{r}
 ## estimating the mean of the number of small farms in 1992
-str_mean_estimate_data(agstrat, y="smallf92", stratum="region", weight="weight") |> 
-  format_str_gt()
+res_agstrat_smallf92 <- str_mean_estimate_data(agstrat, y="smallf92", stratum="region", weight="weight", estimate = "mean")
+res_agstrat_smallf92$table
+res_agstrat_smallf92$estimate |> format_est_gt("mean")
 ```
-**Output Note:** This demonstrates the function's flexibility: we can easily estimate a different variable (an average of `r round(str_mean_estimate_data(agstrat, "smallf92", "region", "weight")["Est."], 1)` small farms per county).
+**Output Note:** This demonstrates the function's flexibility: we can easily estimate a different variable (an average of `r round(res_agstrat_smallf92$estimate["Est."], 1)` small farms per county).
 
 ### Comparing with SRS estimate
 
@@ -323,14 +380,15 @@ To see the benefit of stratifying, we compare our stratified estimates against a
 
 ```{r}
 agsrs <- read.csv("data/agsrs.csv")
-srs_mean_est(agsrs[, "acres92"], N=3078) |> 
-  format_srs_gt()
+res_agsrs_srs <- srs_mean_est(agsrs[, "acres92"], N=3078, estimate = "mean")
+res_agsrs_srs$table
+res_agsrs_srs$estimate |> format_est_gt("mean")
 ```
-**Output Note:** The Simple Random Sample standard error is noticeably higher at `r format(round(srs_mean_est(agsrs[, "acres92"], N=3078)["S.E."], 0), big.mark=",")`.
+**Output Note:** The Simple Random Sample standard error is noticeably higher at `r format(round(res_agsrs_srs$estimate["S.E."], 0), big.mark=",")`.
 
 ```{r}
 ## the ratio of estimated variance (Stratified SE / SRS SE)^2
-ratio_var <- (str_mean_estimate_data(agstrat, "acres92", "region", "weight")["S.E."] / srs_mean_est(agsrs[, "acres92"], N=3078)["S.E."])^2
+ratio_var <- (res_agstrat_acres92$estimate["S.E."] / res_agsrs_srs$estimate["S.E."])^2
 unname(ratio_var)
 ```
 **Output Note:** The stratified variance is approximately `r round(ratio_var * 100, 1)`% of the SRS variance.
@@ -359,17 +417,15 @@ sh <- tapply(seals[, "holes"], seals[,"zone"], sd)
 ybarh <- tapply(seals[, "holes"], seals[,"zone"], mean)
 Nh <- c(68, 84, 48)
 
-data.frame(Nh, nh, ybarh, sh) |> 
-  gt(rownames_to_stub = TRUE) |> 
-  fmt_number(columns = c(ybarh, sh), decimals = 2)
+res_seals <- str_mean_estimate(ybarh, sh, nh, Nh, estimate = "mean")
+res_seals$table
 ```
 **Output Note:** Zone `r names(sh)[which.max(sh)]` has the highest standard deviation ($s_h \approx `r round(max(sh), 1)`$), indicating a high degree of variability in seal density in that region.
 
 ```{r}
-str_mean_estimate(ybarh, sh, nh, Nh) |> 
-  format_str_gt()
+res_seals$estimate |> format_est_gt("mean")
 ```
-**Output Note:** This provides the estimated mean number of seal holes per square kilometer (`r round(str_mean_estimate(ybarh, sh, nh, Nh)["Est."], 1)`).
+**Output Note:** This provides the estimated mean number of seal holes per square kilometer (`r round(res_seals$estimate["Est."], 1)`).
 
 ### Neyman allocation of stratum sample size
 
@@ -436,8 +492,8 @@ strsample <- strata(agpop, "stratum", size = nh, method = "srswor")
 agstrat <- agpop[strsample$ID_unit, ]
 agstrat$weight <- 1/strsample$Prob
 
-str_mean_estimate_data(agstrat, "acres92", "stratum", "weight") |> 
-  format_str_gt()
+str_mean_estimate_data(agstrat, "acres92", "stratum", "weight", estimate = "mean")$estimate |>
+  format_est_gt("mean")
 ```
 **Output Note:** This provides a single point estimate for demonstration.
 
@@ -453,7 +509,7 @@ for (i in 1:nres) {
     strsample <- strata(agpop, "stratum", size = nh, method = "srswor")
     agstrat <- agpop[strsample$ID_unit, ]
     agstrat$weight <- 1/strsample$Prob
-    str_p2s_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight")
+    str_p2s_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight", estimate = "mean", show.details = FALSE)$estimate
 }
 ```
 
@@ -477,7 +533,7 @@ for (i in 1:nres) {
     strsample <- strata(agpop, "stratum", size = nh_opt, method = "srswor")
     agstrat <- agpop[strsample$ID_unit, ]
     agstrat$weight <- 1/strsample$Prob
-    str_neyman_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight")
+    str_neyman_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight", estimate = "mean", show.details = FALSE)$estimate
 }
 ```
 
@@ -489,7 +545,7 @@ srs_simulated <- matrix(0, nres, 4)
 for (i in 1:nres) {
     srs <- sample(sum(Nh), sum(nh))
     agsrs <- agpop[srs, ]
-    srs_simulated[i,] <- srs_mean_est(agsrs[, "acres92"], N = sum(Nh))
+    srs_simulated[i,] <- srs_mean_est(agsrs[, "acres92"], N = sum(Nh), estimate = "mean", show.details = FALSE)$estimate
 }
 ```
 
@@ -571,7 +627,7 @@ for (i in 1:nres) {
     strsample <- strata(agpop, "stratum", size = nh, method = "srswor")
     agstrat <- agpop[strsample$ID_unit, ]
     agstrat$weight <- 1/strsample$Prob
-    str_p2s_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight")
+    str_p2s_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight", estimate = "mean", show.details = FALSE)$estimate
 }
 ```
 
@@ -588,7 +644,7 @@ for (i in 1:nres) {
     strsample <- strata(agpop, "stratum", size = nh_opt, method = "srswor")
     agstrat <- agpop[strsample$ID_unit, ]
     agstrat$weight <- 1/strsample$Prob
-    str_neyman_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight")
+    str_neyman_simulated[i,] <- str_mean_estimate_data(agstrat, "acres92", "stratum", "weight", estimate = "mean", show.details = FALSE)$estimate
 }
 ```
 
@@ -600,7 +656,7 @@ srs_simulated <- matrix(0, nres, 4)
 for (i in 1:nres) {
     srs <- sample(sum(Nh), sum(nh))
     agsrs <- agpop[srs, ]
-    srs_simulated[i,] <- srs_mean_est(agsrs[, "acres92"], N = sum(Nh))
+    srs_simulated[i,] <- srs_mean_est(agsrs[, "acres92"], N = sum(Nh), estimate = "mean", show.details = FALSE)$estimate
 }
 ```
 

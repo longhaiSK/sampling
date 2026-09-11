@@ -41,52 +41,227 @@ We begin by loading the necessary libraries, including `gt` for formatting mathe
 library(latex2exp)
 library(gt)
 
-## ydata --- observations of the variable of interest
-## xdata --- observations of the auxilliary variable
-## N --- population size
-## xbarU --- population mean of auxilliary variable
-
-## the output is the estimate mean or total (est.total=TRUE)
-srs_reg_est <- function (ydata, xdata, xbarU, N = Inf, est.total = FALSE)
+## Formats a gt table column as ordinary fixed-point, UNLESS its values are
+## too small (< `small` in absolute value) or too large (>= `large`), in
+## which case it switches that column to scientific notation instead.
+fmt_auto <- function (gt_tbl, data, columns, decimals = 3, small = 1e-3, large = 1e5)
 {
-  n <- length (ydata)
-  lmfit <- lm (ydata ~ xdata)
-  Bhat <- lmfit$coefficients
-  efit <- lmfit$residuals
-  SSe <- sum (efit^2) / (n - 2) 
-  yhat_reg <- Bhat[1] + Bhat[2] * xbarU
-  se_yhat_reg <- sqrt ((1-n/N) * SSe / n)
-  mem <- qt (0.975, df = n - 2) * se_yhat_reg
-  output <- c(yhat_reg, se_yhat_reg, yhat_reg - mem, yhat_reg + mem)
-  
-  if (est.total) {
-      if(!is.finite(N)) stop("N must be finite for estimating population total" )
-      output <- output * N
-  }
+    for (col in columns)
+    {
+        x <- data[[col]]
+        x <- x[is.finite (x) & x != 0]
+        if (length (x) == 0) next
+        if (any (abs (x) < small) || any (abs (x) >= large))
+            gt_tbl <- fmt_scientific (gt_tbl, columns = tidyselect::all_of (col), decimals = decimals)
+        else
+            gt_tbl <- fmt_number (gt_tbl, columns = tidyselect::all_of (col), decimals = decimals)
+    }
+    gt_tbl
+}
 
-  names (output) <- c("Est.", "S.E.", "ci.low", "ci.upp" )
-  output
+## Truncates a row-level working data.frame whose LAST row is a summary row
+## (e.g. "Sum"/"Total") to the first head_n data rows + "..." + the summary
+## row, so long working tables stay readable. id_col --- row-label column.
+truncate_working <- function (working, id_col, head_n = 6)
+{
+    n <- nrow (working) - 1
+    if (n <= head_n + 1) return (working)
+
+    dots <- working[1, ]
+    dots[1, ] <- NA
+    dots[1, id_col] <- "..."
+
+    rbind (working[seq_len (head_n), ], dots, working[nrow (working), ])
 }
 
 ## ydata --- observations of the variable of interest
-## xdata --- observations of the auxilliary variable
+## xdata --- observations of the auxiliary variable
+## xbarU --- population mean of the auxiliary variable; required when
+##           estimate is "mean" or "total"; ignored when estimate = "model"
 ## N --- population size
+## estimate --- "mean" (default) returns the regression estimate of the
+##              population MEAN of y, Bhat0 + Bhat1*xbarU; "total" returns
+##              the regression estimate of the population TOTAL of y
+##              (requires finite N); "model" returns the raw fitted slope
+##              Bhat1 itself (with its own SE from the lm fit)
+## show.details --- if TRUE (default), also return a gt table of the
+##                  row-level working values y_i, x_i, fitted yhat_i, e_i,
+##                  e_i^2, with a Sum row and a footnote showing Bhat0,
+##                  Bhat1, and s_e^2; NULL otherwise
+## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
+srs_reg_est_mean <- function (ydata, xdata, xbarU = NULL, N = Inf,
+                               estimate = c ("mean", "total", "model"), show.details = TRUE)
+{
+  estimate <- match.arg (estimate)
 
-## the output is the ratio of ybarU/xbarU
-srs_ratio_est <- function (ydata, xdata, N = Inf)
-{   
+  n <- length (ydata)
+  lmfit <- lm (ydata ~ xdata)
+  Bhat <- lmfit$coefficients
+  yhat <- lmfit$fitted.values
+  e <- lmfit$residuals
+  SSe <- sum (e^2) / (n - 2)
+
+  if (estimate == "model")
+  {
+      est <- unname (Bhat[2])
+      sd_est <- summary (lmfit)$coefficients[2, "Std. Error"]
+  }
+  else
+  {
+      if (is.null (xbarU))
+          stop ("xbarU (population mean of x) is required when estimate is \"mean\" or \"total\"")
+      yhat_reg <- unname (Bhat[1] + Bhat[2] * xbarU)
+      se_yhat_reg <- sqrt ((1-n/N) * SSe / n)
+      if (estimate == "total")
+      {
+          if (!is.finite (N))
+              stop ("N must be finite to compute estimate = \"total\"")
+          est <- yhat_reg * N
+          sd_est <- se_yhat_reg * N
+      }
+      else
+      {
+          est <- yhat_reg
+          sd_est <- se_yhat_reg
+      }
+  }
+
+  mem <- qt (0.975, df = n - 2) * sd_est
+  estimate_vec <- c (Est. = est, S.E. = sd_est, ci.low = est - mem, ci.upp = est + mem)
+
+  if (!show.details)
+      return (list (estimate = estimate_vec, table = NULL))
+
+  working <- data.frame (
+      i    = c (seq_len (n), "Sum"),
+      y    = c (ydata, sum (ydata)),
+      x    = c (xdata, sum (xdata)),
+      yhat = c (yhat, sum (yhat)),
+      e    = c (e, sum (e)),
+      e2   = c (e^2, sum (e^2))
+  )
+  working <- truncate_working (working, id_col = "i")
+
+  table <- gt (working) |>
+      tab_header (title = "Regression Estimation: Working Table", subtitle = md (sprintf ("$n = %d$", n))) |>
+      cols_label (
+          i    = md ("$i$"),
+          y    = md ("$y_i$"),
+          x    = md ("$x_i$"),
+          yhat = md ("$\\hat y_i$"),
+          e    = md ("$e_i$"),
+          e2   = md ("$e_i^2$")
+      ) |>
+      cols_width (i ~ px (40), everything () ~ px (100)) |>
+      fmt_auto (data = working, columns = c ("y", "x", "yhat", "e", "e2"), decimals = 3) |>
+      sub_missing (missing_text = "...") |>
+      tab_style (
+          style     = cell_text (weight = "bold"),
+          locations = cells_body (rows = i == "Sum")
+      ) |>
+      tab_footnote (
+          footnote  = md (sprintf ("$\\hat B_0 = %.4f$, $\\hat B_1 = %.4f$, $\\hat y_i = \\hat B_0 + \\hat B_1 x_i$, $s_e^2 = %.4f$.",
+                                    Bhat[1], Bhat[2], SSe)),
+          locations = cells_column_labels (columns = yhat)
+      )
+
+  list (estimate = estimate_vec, table = table)
+}
+srs_reg_est <- srs_reg_est_mean
+
+## ydata --- observations of the variable of interest
+## xdata --- observations of the auxiliary variable
+## xbarU --- population mean of the auxiliary variable; required when
+##           estimate is "mean" or "total"; ignored when estimate = "model"
+## N --- population size
+## estimate --- "mean" (default) returns the ratio estimate of the
+##              population MEAN of y, Bhat*xbarU; "total" returns the ratio
+##              estimate of the population TOTAL of y (requires finite N);
+##              "model" returns the raw ratio coefficient Bhat = ybar/xbar
+##              itself (with its own SE)
+## show.details --- if TRUE (default), also return a gt table of the
+##                  row-level working values y_i, x_i, fitted yhat_i =
+##                  Bhat*x_i, residual e_i, and e_i^2, with a Sum row and a
+##                  footnote showing Bhat and s_e^2; NULL otherwise
+## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
+srs_ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
+                            estimate = c ("mean", "total", "model"), show.details = TRUE,
+                            col_labels = list (y = "y_i", x = "x_i", yhat = "\\hat y_i"))
+{
+  estimate <- match.arg (estimate)
+
   n <- length (xdata)
   xbar <- mean (xdata)
   ybar <- mean (ydata)
   B_hat <- ybar / xbar
-  d <- ydata - B_hat * xdata
-  var_d <- sum (d^2) / (n - 1)
-  sd_B_hat <- sqrt ((1 - n/N) * var_d / n) / xbar
-  mem <- qt (0.975, df = n - 1) * sd_B_hat
-  output <- c (B_hat, sd_B_hat, B_hat - mem, B_hat + mem )
-  
-  names (output) <- c("Est.", "S.E.", "ci.low", "ci.upp" )
-  output
+  yhat <- B_hat * xdata
+  e <- ydata - yhat
+  var_e <- sum (e^2) / (n - 1)
+  sd_B_hat <- sqrt ((1 - n/N) * var_e / n) / xbar
+
+  if (estimate == "model")
+  {
+      est <- B_hat
+      sd_est <- sd_B_hat
+  }
+  else
+  {
+      if (is.null (xbarU))
+          stop ("xbarU (population mean of x) is required when estimate is \"mean\" or \"total\"")
+      if (estimate == "total")
+      {
+          if (!is.finite (N))
+              stop ("N must be finite to compute estimate = \"total\"")
+          est <- B_hat * xbarU * N
+          sd_est <- sd_B_hat * xbarU * N
+      }
+      else
+      {
+          est <- B_hat * xbarU
+          sd_est <- sd_B_hat * xbarU
+      }
+  }
+
+  mem <- qt (0.975, df = n - 1) * sd_est
+  estimate_vec <- c (Est. = est, S.E. = sd_est, ci.low = est - mem, ci.upp = est + mem)
+
+  if (!show.details)
+      return (list (estimate = estimate_vec, table = NULL))
+
+  working <- data.frame (
+      i    = c (seq_len (n), "Sum"),
+      y    = c (ydata, sum (ydata)),
+      x    = c (xdata, sum (xdata)),
+      yhat = c (yhat, sum (yhat)),
+      e    = c (e, sum (e)),
+      e2   = c (e^2, sum (e^2))
+  )
+  working <- truncate_working (working, id_col = "i")
+
+  table <- gt (working) |>
+      tab_header (title = "Ratio Estimation: Working Table", subtitle = md (sprintf ("$n = %d$", n))) |>
+      cols_label (
+          i    = md ("$i$"),
+          y    = md (sprintf ("$%s$", col_labels$y)),
+          x    = md (sprintf ("$%s$", col_labels$x)),
+          yhat = md (sprintf ("$%s$", col_labels$yhat)),
+          e    = md ("$e_i$"),
+          e2   = md ("$e_i^2$")
+      ) |>
+      cols_width (i ~ px (40), everything () ~ px (100)) |>
+      fmt_auto (data = working, columns = c ("y", "x", "yhat", "e", "e2"), decimals = 3) |>
+      sub_missing (missing_text = "...") |>
+      tab_style (
+          style     = cell_text (weight = "bold"),
+          locations = cells_body (rows = i == "Sum")
+      ) |>
+      tab_footnote (
+          footnote  = md (sprintf ("$\\hat B = \\sum_i %s / \\sum_i %s = %.4f$, $%s = \\hat B\\, %s$, $s_e^2 = %.4f$.",
+                                    col_labels$y, col_labels$x, B_hat, col_labels$yhat, col_labels$x, var_e)),
+          locations = cells_column_labels (columns = yhat)
+      )
+
+  list (estimate = estimate_vec, table = table)
 }
 
 ## sdata --- a vector of original survey data in a domain
@@ -97,21 +272,78 @@ srs_domain_mean_est <- function (sdata, n, N = Inf)
 {
     n_d <- length (sdata)
     ybar <- mean (sdata)
-    se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n_d)  
+    se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n_d)
     mem <- qt (0.975, df = n_d - 1) * se.ybar
     c (Est. = ybar, S.E. = se.ybar, ci.low = ybar - mem, ci.upp = ybar + mem)
 }
 
 ## sdata --- a vector of original survey data
 ## N --- population size
-## to find total, multiply N to the estimate returned by this function
-srs_mean_est <- function (sdata, N = Inf)
+## estimate --- "mean" (default) returns the population MEAN estimate;
+##              "total" returns the population TOTAL estimate (requires
+##              finite N)
+## show.details --- if TRUE (default), also return a gt table of the
+##                  row-level working values, with a Sum row and a
+##                  footnote showing s_y^2; NULL otherwise
+## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
+srs_mean_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
+                          show.details = TRUE, col_labels = list (y = "y_i"))
 {
+    estimate <- match.arg (estimate)
+
     n <- length (sdata)
     ybar <- mean (sdata)
-    se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n)  
-    mem <- qt (0.975, df = n - 1) * se.ybar
-    c (Est. = ybar, S.E. = se.ybar, ci.low = ybar - mem, ci.upp = ybar + mem)
+    dev <- sdata - ybar
+    s2y <- sum (dev^2) / (n - 1)
+    se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n)
+
+    if (estimate == "total")
+    {
+        if (!is.finite (N))
+            stop ("N must be finite to compute estimate = \"total\"")
+        est <- N * ybar
+        se.est <- N * se.ybar
+    }
+    else
+    {
+        est <- ybar
+        se.est <- se.ybar
+    }
+    mem <- qt (0.975, df = n - 1) * se.est
+    estimate_vec <- c (Est. = est, S.E. = se.est, ci.low = est - mem, ci.upp = est + mem)
+
+    if (!show.details)
+        return (list (estimate = estimate_vec, table = NULL))
+
+    working <- data.frame (
+        i    = c (seq_len (n), "Sum"),
+        y    = c (sdata, sum (sdata)),
+        dev  = c (dev, sum (dev)),
+        dev2 = c (dev^2, sum (dev^2))
+    )
+    working <- truncate_working (working, id_col = "i")
+
+    table <- gt (working) |>
+        tab_header (title = "SRS Mean Estimation: Working Table", subtitle = md (sprintf ("$n = %d$", n))) |>
+        cols_label (
+            i    = md ("$i$"),
+            y    = md (sprintf ("$%s$", col_labels$y)),
+            dev  = md (sprintf ("$%s-\\bar y$", col_labels$y)),
+            dev2 = md (sprintf ("$(%s-\\bar y)^2$", col_labels$y))
+        ) |>
+        cols_width (i ~ px (40), everything () ~ px (110)) |>
+        fmt_auto (data = working, columns = c ("y", "dev", "dev2"), decimals = 3) |>
+        sub_missing (missing_text = "...") |>
+        tab_style (
+            style     = cell_text (weight = "bold"),
+            locations = cells_body (rows = i == "Sum")
+        ) |>
+        tab_footnote (
+            footnote  = md (sprintf ("$s_y^2 = \\sum_i (%s-\\bar y)^2/(n-1) = %.4f$.", col_labels$y, s2y)),
+            locations = cells_column_labels (columns = dev2)
+        )
+
+    list (estimate = estimate_vec, table = table)
 }
 
 # Helper function to format estimation outputs with appropriate mathematical headers
@@ -165,15 +397,84 @@ format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_
 For post-stratification, we use the standard stratified estimator, but we plug in the expected sample sizes $n_h = n \times \frac{N_h}{N}$ instead of the actual observed random $n_h$.
 
 ```{r}
-## to find total, multiply N to the estimate returned by this function
-str_mean_estimate <- function (ybarh, sh, nh, Nh)
+## Given per-stratum summaries, compute the (post-)stratified mean or total.
+## estimate --- "mean" (default) returns the stratified MEAN estimate;
+##              "total" returns the stratified TOTAL estimate
+## show.details --- if TRUE (default), also return a gt table of the
+##                  stratum-by-stratum working values, with a Total row
+## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
+str_mean_estimate <- function (ybarh, sh, nh, Nh, estimate = c ("mean", "total"), show.details = TRUE)
 {
-    N <- sum (Nh)
-    Pi_h <- Nh/N
-    ybar <- sum(ybarh * Pi_h)
-    seybar <- sqrt(sum((1-nh/Nh)*Pi_h^2*sh^2/nh))
-    mem <- 1.96 * seybar
-    c(Est. = ybar, S.E. = seybar, ci.low = ybar - mem, ci.upp = ybar + mem)
+    estimate <- match.arg (estimate)
+
+    N    <- sum (Nh)
+    Pi_h <- Nh / N
+    v_h  <- (1 - nh / Nh) * Pi_h^2 * sh^2 / nh
+
+    ybar   <- sum (ybarh * Pi_h)
+    seybar <- sqrt (sum (v_h))
+
+    if (estimate == "total")
+    {
+        est    <- N * ybar
+        se.est <- N * seybar
+    }
+    else
+    {
+        est    <- ybar
+        se.est <- seybar
+    }
+    mem          <- 1.96 * se.est
+    estimate_vec <- c (Est. = est, S.E. = se.est, ci.low = est - mem, ci.upp = est + mem)
+
+    if (!show.details)
+        return (list (estimate = estimate_vec, table = NULL))
+
+    stratum <- names (Nh)
+    if (is.null (stratum)) stratum <- seq_along (Nh)
+
+    working <- data.frame (
+        Stratum       = c (stratum, "Total"),
+        Nh            = c (Nh, N),
+        nh            = c (nh, sum (nh)),
+        Pi_h          = c (Pi_h, sum (Pi_h)),
+        ybarh         = c (ybarh, NA),
+        sh2           = c (sh^2, NA),
+        weighted_mean = c (Pi_h * ybarh, ybar),
+        v_h           = c (v_h, seybar^2)
+    )
+
+    table <- gt (working) |>
+        tab_header (title = "Stratified Mean Estimation: Working Table") |>
+        cols_label (
+            Stratum       = md ("Stratum"),
+            Nh            = md ("$N_h$"),
+            nh            = md ("$n_h$"),
+            Pi_h          = md ("$\\pi_h$"),
+            ybarh         = md ("$\\bar y_h$"),
+            sh2           = md ("$s_h^2$"),
+            weighted_mean = md ("$\\pi_h\\bar y_h$"),
+            v_h           = md ("$v_h$")
+        ) |>
+        cols_width (c (Nh, nh) ~ px (60), everything () ~ px (110)) |>
+        fmt_number (columns = c (Nh, nh), decimals = 0) |>
+        fmt_number (columns = Pi_h, decimals = 2) |>
+        fmt_auto (data = working, columns = c ("ybarh", "sh2", "weighted_mean", "v_h"), decimals = 2) |>
+        sub_missing (missing_text = "") |>
+        tab_style (
+            style     = cell_text (weight = "bold"),
+            locations = cells_body (rows = Stratum == "Total")
+        ) |>
+        tab_footnote (
+            footnote  = md ("$\\pi_h = N_h/N$ is the stratum weight."),
+            locations = cells_column_labels (columns = Pi_h)
+        ) |>
+        tab_footnote (
+            footnote  = md ("$v_h = (1-n_h/N_h)\\,\\pi_h^2\\, s_h^2/n_h$ is stratum $h$'s contribution to $V(\\bar y_{str}) = \\sum_h v_h$."),
+            locations = cells_column_labels (columns = v_h)
+        )
+
+    list (estimate = estimate_vec, table = table)
 }
 ```
 
@@ -201,113 +502,58 @@ To establish a baseline, we first estimate the mean and total volume using stand
 ```{r}
 N <- 2967
 ## estimating the mean of volume
-srs_mean_vol_raw <- srs_mean_est(cherry$volume, N = N)
+res_srs_vol <- srs_mean_est(cherry$volume, N = N, estimate = "mean")
+res_srs_vol$table
+srs_mean_vol_raw <- res_srs_vol$estimate
 srs_mean_vol_raw |> format_est_gt("mean")
 
 ## estimating the total of volume
-srs_total_vol_raw <- srs_mean_est(cherry$volume, N = N) * N
+res_srs_total_vol <- srs_mean_est(cherry$volume, N = N, estimate = "total")
+srs_total_vol_raw <- res_srs_total_vol$estimate
 srs_total_vol_raw |> format_est_gt("total")
 ```
 **Output Note:** Under SRS, the standard error for the mean volume is `r round(srs_mean_vol_raw["S.E."], 2)`.
 
-### Step-by-step calculation for Ratio Estimation
+### Ratio Estimation Using the Function
 
-#### Estimating B and calculating residuals
-
-We calculate the ratio $\hat{B} = \overline{y}/\overline{x}$ and the residuals $e_i = y_i - \hat{B}x_i$.
+We calculate the ratio $\hat{B} = \overline{y}/\overline{x}$; the function's `$table` shows the row-level working values $x_i$, $y_i$, fitted $\hat{y}_i = \hat{B}x_i$, residuals $e_i = y_i - \hat{y}_i$, and $e_i^2$ (with a Sum row and a footnote giving $\hat B$ and $s_e^2$), so we no longer need to build this table by hand.
 
 ```{r}
-## input
 ydata <- cherry$volume
 xdata <- cherry$diameter
 N <- 2967
 
-## calculation
-n <- length(xdata)
-xbar <- mean(xdata)
-ybar <- mean(ydata)
-B_hat <- ybar / xbar ## ratio estimate
+res_ratio_model <- srs_ratio_est(ydata, xdata, N = N, estimate = "model")
+res_ratio_model$table
 
 plot(cherry$volume ~ cherry$diameter, main="Ratio Estimation Fit")
-abline(a = 0, b = B_hat, col="blue", lwd=2)
-
-d <- ydata - B_hat * xdata ## errors
-
-data.frame(
-  yi = cherry$volume, 
-  xi = cherry$diameter,
-  yhat = B_hat * xdata,
-  ei = d
-) |> head() |> 
-  gt() |> 
-  cols_label(
-    yi = md("$y_i$"),
-    xi = md("$x_i$"),
-    yhat = md("$\\hat{y}_i = \\hat{B} \\times x_i$"),
-    ei = md("$e_i = y_i - \\hat{y}_i$")
-  ) |> 
-  fmt_number(columns = c(yhat, ei), decimals = 2)
+abline(a = 0, b = res_ratio_model$estimate["Est."], col="blue", lwd=2)
 ```
-**Output Note:** The blue line represents our estimated ratio $\hat{B} \approx `r round(B_hat, 2)`$. The table shows the individual residuals used to estimate variance.
-
-#### Estimating SE of B
-
-Next, we calculate the variance of those residuals to find the standard error of $\hat{B}$.
+**Output Note:** The blue line represents our estimated ratio $\hat{B} \approx `r round(res_ratio_model$estimate["Est."], 2)`$. The working table above shows the individual residuals used to estimate $s_e^2$.
 
 ```{r}
-## estimating S^2_e
-var_d <- sum(d^2) / (n - 1) ## variance of errors
-sd_B_hat <- sqrt((1 - n/N) * var_d / n) / xbar ## SE for B
-mem <- qt(0.975, df = n - 1) * sd_B_hat ## margin error for B
-
-## output
-output_B <- c(Est. = B_hat, S.E. = sd_B_hat, ci.low = B_hat - mem, ci.upp = B_hat + mem)
-output_B |> format_est_gt("ratio")
+B_v2d <- res_ratio_model$estimate
+B_v2d |> format_est_gt("ratio")
 ```
-**Output Note:** The ratio $\hat{B}$ is estimated at `r round(output_B["Est."], 3)` with a standard error of `r round(output_B["S.E."], 4)`.
+**Output Note:** The ratio $\hat{B}$ is estimated at `r round(B_v2d["Est."], 3)` with a standard error of `r round(B_v2d["S.E."], 4)`.
 
 #### Estimating the mean volume of wood
 
-If we know the true total of the population diameters is 41,835, we can derive the population mean diameter $\overline{x}_{\text{U}}$ and scale our ratio up.
+If we know the true total of the population diameters is 41,835, we can derive the population mean diameter $\overline{x}_{\text{U}}$ and pass it as `xbarU` with `estimate = "mean"`.
 
 ```{r}
 mean_diameters <- 41835 / N
-(output_B * mean_diameters) |> format_est_gt("ratio_mean")
+ratio_mean_volume_raw <- srs_ratio_est(ydata, xdata, xbarU = mean_diameters, N = N, estimate = "mean")$estimate
+ratio_mean_volume_raw |> format_est_gt("ratio_mean")
 ```
 
 #### Estimating the total volume of wood
 
-Scaling by the known population total diameter gives the estimated population total volume.
+Using `estimate = "total"` with the known population total diameter gives the estimated population total volume directly.
 
 ```{r}
 t_diameters <- 41835
-(output_B * t_diameters) |> format_est_gt("total")
-```
-
-### Ratio estimation with a function 
-
-We can achieve the exact same results instantly using our `srs_ratio_est` function.
-
-#### Estimating the ratio of volume to diameter
-
-```{r}
-B_v2d <- srs_ratio_est(ydata = cherry$volume, xdata = cherry$diameter, N = 2967)
-B_v2d |> format_est_gt("ratio")
-```
-
-#### Estimating the mean of volume
-
-```{r}
-xbarU <- 41835 / N
-ratio_mean_volume_raw <- srs_ratio_est(ydata = cherry$volume, xdata = cherry$diameter, N = 2967) * xbarU
-ratio_mean_volume_raw |> format_est_gt("ratio_mean")
-```
-
-#### Estimating the total of volume
-
-```{r}
-total_diameters <- 41835
-(srs_ratio_est(ydata = cherry$volume, xdata = cherry$diameter, N = 2967) * total_diameters) |> 
+srs_ratio_est(ydata, xdata, xbarU = t_diameters / N, N = N, estimate = "total")$estimate |>
   format_est_gt("total")
 ```
 
@@ -422,10 +668,10 @@ If we incorrectly used the standard SRS formula (pretending $n_d$ was fixed), ou
 ```{r}
 ## naively applying SRS estimation to each domain (incorrect analysis)
 region_agsrs_srs <- data.frame(rbind(
-    NC = srs_mean_est(agsrs$acres92[agsrs$region=="NC"], N = 1054),
-    NE = srs_mean_est(agsrs$acres92[agsrs$region=="NE"], N = 220),
-    S  = srs_mean_est(agsrs$acres92[agsrs$region=="S"], N = 1382),
-    W  = srs_mean_est(agsrs$acres92[agsrs$region=="W"], N = 422)
+    NC = srs_mean_est(agsrs$acres92[agsrs$region=="NC"], N = 1054, estimate = "mean", show.details = FALSE)$estimate,
+    NE = srs_mean_est(agsrs$acres92[agsrs$region=="NE"], N = 220,  estimate = "mean", show.details = FALSE)$estimate,
+    S  = srs_mean_est(agsrs$acres92[agsrs$region=="S"],  N = 1382, estimate = "mean", show.details = FALSE)$estimate,
+    W  = srs_mean_est(agsrs$acres92[agsrs$region=="W"],  N = 422,  estimate = "mean", show.details = FALSE)$estimate
 ))
 
 region_agsrs_srs |> format_est_gt("mean")
@@ -476,11 +722,14 @@ data.frame(
 
 ```{r}
 ## strata mean estimate
-post_strat_est <- str_mean_estimate(ybarh, sh, nh_post, Nh)
+res_post_strat <- str_mean_estimate(ybarh, sh, nh_post, Nh, estimate = "mean")
+res_post_strat$table
+post_strat_est <- res_post_strat$estimate
 post_strat_est |> format_est_gt("mean")
 
 ## compare with SRS estimate
-srs_est_raw <- srs_mean_est(agsrs$acres92, N = 3087)
+res_srs_est <- srs_mean_est(agsrs$acres92, N = 3087, estimate = "mean")
+srs_est_raw <- res_srs_est$estimate
 srs_est_raw |> format_est_gt("mean")
 
 ## true mean check
@@ -577,7 +826,9 @@ Calculate the post-stratification estimation of the mean:
 
 ```{r}
 ## poststratification estimation of mean
-teacher_post_strat <- str_mean_estimate(ybarh, sh, nh_post, Nh)
+res_teacher_post_strat <- str_mean_estimate(ybarh, sh, nh_post, Nh, estimate = "mean")
+res_teacher_post_strat$table
+teacher_post_strat <- res_teacher_post_strat$estimate
 teacher_post_strat |> format_est_gt("mean")
 ```
 
@@ -593,7 +844,9 @@ This post-stratification estimate explicitly corrects for the sampling imbalance
 If we didn't post-stratify, the simple mean is heavily weighted toward males because they were over-sampled by chance (40% in sample vs 25% in population).
 
 ```{r}
-teacher_srs <- srs_mean_est(teacher$teacher, N=sum(Nh))
+res_teacher_srs <- srs_mean_est(teacher$teacher, N=sum(Nh), estimate = "mean")
+res_teacher_srs$table
+teacher_srs <- res_teacher_srs$estimate
 teacher_srs |> format_est_gt("mean")
 ```
 
@@ -619,7 +872,7 @@ xbarU <- t_diameters / 2967
 N <- 2967
 ```
 
-### Step-by-step calculation
+### Regression Estimation Using the Function
 
 #### Fitting a linear regression model
 
@@ -632,58 +885,22 @@ plot(xdata, ydata, main="Linear Regression: Volume vs Diameter")
 abline(lmfit, col="green", lwd=2)
 ```
 
-Calculation of $\hat{y}_i = \hat{B}_0 + \hat{B}_1\times x_i$ and $e_i = y_i - \hat{y}_i$:
+The function's `$table` shows the row-level working values $x_i$, $y_i$, fitted $\hat{y}_i = \hat{B}_0 + \hat{B}_1 x_i$, residuals $e_i = y_i - \hat{y}_i$, and $e_i^2$ (with a Sum row and a footnote giving $\hat B_0$, $\hat B_1$, and $s_e^2$):
 
 ```{r}
-Bhat <- lmfit$coefficients
-yhat <- Bhat[1] + Bhat[2] * xdata
-residuals <- ydata - yhat
-
-data.frame(
-  xi = cherry$diameter, 
-  yi = cherry$volume,
-  yhati = yhat,
-  ei = residuals
-) |> head() |> 
-  gt() |> 
-  cols_label(
-    xi = md("$x_i$"),
-    yi = md("$y_i$"),
-    yhati = md("$\\hat{y}_i = \\hat{B}_0 + \\hat{B}_1 x_i$"),
-    ei = md("$e_i = y_i - \\hat{y}_i$")
-  ) |> 
-  fmt_number(columns = c(yhati, ei), decimals = 2)
-```
-
-We estimate $s^2_e$ using the sum of squared residuals divided by $n-2$:
-
-```{r}
-SSe <- sum(residuals^2) / (n - 2)
-SSe 
-```
-
-We can also extract this directly from the `anova()` table in R (the Mean Sq for Residuals).
-
-```{r}
-anova(lmfit)
+res_reg_model <- srs_reg_est(ydata, xdata, N = N, estimate = "model")
+res_reg_model$table
 ```
 
 #### Estimate the mean
 
-We compute the regression estimate $\overline{y}_{reg}$ and its margin of error.
+We compute the regression estimate $\overline{y}_{reg}$ by passing `xbarU` with `estimate = "mean"`.
 
 ```{r}
-yhat_reg <- Bhat[1] + Bhat[2] * xbarU
-se_yhat_reg <- sqrt((1 - n/N) * SSe / n)
-mem <- qt(0.975, df = n - 2) * se_yhat_reg
+res_reg_mean <- srs_reg_est(ydata, xdata, xbarU = xbarU, N = N, estimate = "mean")
+res_reg_mean$table
 
-output_reg <- c(
-  Est.   = unname(yhat_reg), 
-  S.E.   = unname(se_yhat_reg), 
-  ci.low = unname(yhat_reg - mem), 
-  ci.upp = unname(yhat_reg + mem)
-)
-
+output_reg <- res_reg_mean$estimate
 output_reg |> format_est_gt("reg_mean")
 ```
 **Output Note:** The Regression estimate for the mean volume is `r round(output_reg["Est."], 3)` with a standard error of `r round(output_reg["S.E."], 4)`.
@@ -691,32 +908,14 @@ output_reg |> format_est_gt("reg_mean")
 #### Estimate the total
 
 ```{r}
-(output_reg * N) |> format_est_gt("reg_total")
+reg_total_volume_raw <- srs_reg_est(ydata, xdata, xbarU = xbarU, N = N, estimate = "total")$estimate
+reg_total_volume_raw |> format_est_gt("reg_total")
 ```
 
-### Regression estimation Using the function 
-
-We can confirm these numbers with our provided regression function.
-
-#### Estimating the mean
+#### Percentage of Variance Reduction
 
 ```{r}
-reg_mean_volume_raw <- srs_reg_est(ydata = cherry$volume, xdata = cherry$diameter, 
-                                   xbarU = t_diameters/2967, N = 2967) 
-reg_mean_volume_raw |> format_est_gt("reg_mean")
-```
-
-#### Estimating the total
-
-```{r}
-srs_reg_est(ydata = cherry$volume, xdata = cherry$diameter, 
-            xbarU = t_diameters/2967, N = 2967, est.total = TRUE) |> 
-  format_est_gt("reg_total")
-```
-
-#### Percentage of Variance Reduction 
-
-```{r}
+reg_mean_volume_raw <- output_reg
 var_reduction_reg <- 1 - (reg_mean_volume_raw["S.E."] / srs_mean_vol_raw["S.E."])^2
 unname(var_reduction_reg)
 ```
@@ -744,19 +943,24 @@ Let's compare the three different estimation methods to see which provides the l
 
 ```{r}
 # 1. Regression estimate for the mean
-dt_reg_raw <- srs_reg_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100)
+res_dt_reg <- srs_reg_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100, estimate = "mean")
+res_dt_reg$table
+dt_reg_raw <- res_dt_reg$estimate
 dt_reg_raw |> format_est_gt("reg_mean")
 
 # (And estimating the total)
-srs_reg_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100, est.total = TRUE) |> 
+srs_reg_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100, estimate = "total")$estimate |>
   format_est_gt("reg_total")
 
 # 2. Simple random sampling estimate for the mean (Ignoring photo counts)
-dt_srs_raw <- srs_mean_est(sdata = fieldcounts, N = 100)
+res_dt_srs <- srs_mean_est(sdata = fieldcounts, N = 100, estimate = "mean")
+dt_srs_raw <- res_dt_srs$estimate
 dt_srs_raw |> format_est_gt("mean")
 
-# 3. Ratio estimate for the mean 
-dt_ratio_raw <- srs_ratio_est(ydata = fieldcounts, xdata = photocounts, N = 100) * 11.3
+# 3. Ratio estimate for the mean
+res_dt_ratio <- srs_ratio_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100, estimate = "mean")
+res_dt_ratio$table
+dt_ratio_raw <- res_dt_ratio$estimate
 dt_ratio_raw |> format_est_gt("ratio_mean")
 ```
 #### Output Note: {-}
