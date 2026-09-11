@@ -7,14 +7,14 @@ Stratified random sampling divides a population of size $N$ into $H$ mutually ex
 #### 1. Stratified Population Mean Estimator {-}
 The estimated population mean is a weighted average of the sample means from each stratum:
 $$
-\overline{y}_{str} = \sum_{h=1}^H W_h \overline{y}_h.
+\overline{y}_{str} = \sum_{h=1}^H \pi_h \overline{y}_h.
 $$
-Where $W_h = \frac{N_h}{N}$ is the stratum weight, and $\overline{y}_h$ is the sample mean of stratum $h$.
+Where $\pi_h = \frac{N_h}{N}$ is the stratum weight, and $\overline{y}_h$ is the sample mean of stratum $h$.
 
 #### 2. Variance of the Stratified Mean {-}
 The estimated variance accounts for the finite population correction in each stratum:
 $$
-\hat{V}(\overline{y}_{str}) = \sum_{h=1}^H W_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}.
+\hat{V}(\overline{y}_{str}) = \sum_{h=1}^H \pi_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}.
 $$
 Where $s_h^2$ is the sample variance in stratum $h$.
 
@@ -244,10 +244,13 @@ A stratification variable is most effective when it strongly explains the varian
 
 ```{r agpop-region-anova}
 boxplot(acres92 ~ stratum, data = agpop)
-anova(lm(agpop$acres92 ~ agpop$stratum))
-summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared
+lm_region <- lm(agpop$acres92 ~ agpop$stratum)
+anova(lm_region)
+lm_region_gt <- format_lm_gt(lm_region)
+lm_region_gt$fit
+r_squared_region <- summary(lm_region)$r.squared
 ```
-**Output Note:** The R-squared is `r round(summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared, 3)`. The region variable only explains about `r round(summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared * 100, 1)`% of the variance in acreage, which is helpful but not extremely strong.
+**Output Note:** The R-squared is `r round(r_squared_region, 3)`. The region variable only explains about `r round(r_squared_region * 100, 1)`% of the variance in acreage, which is helpful but not extremely strong.
 
 #### Stratified Sampling with P2S allocation (Single Run)
 
@@ -380,9 +383,12 @@ Let's check the explanatory power of this new stratification variable.
 
 ```{r agpop-acres82-anova}
 boxplot(acres92 ~ stratum, data = agpop)
-summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared
+lm_acres82 <- lm(agpop$acres92 ~ agpop$stratum)
+lm_acres82_gt <- format_lm_gt(lm_acres82)
+lm_acres82_gt$fit
+r_squared_acres82 <- summary(lm_acres82)$r.squared
 ```
-**Output Note:** The R-squared is `r round(summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared, 3)`. The past acreage explains `r round(summary(lm(agpop$acres92 ~ agpop$stratum))$r.squared * 100, 1)`% of the variance in 1992 acreage, making this a vastly superior stratification variable.
+**Output Note:** The R-squared is `r round(r_squared_acres82, 3)`. The past acreage explains `r round(r_squared_acres82 * 100, 1)`% of the variance in 1992 acreage, making this a vastly superior stratification variable.
 
 #### Stratified sampling with P2S allocation
 

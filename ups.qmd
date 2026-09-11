@@ -70,8 +70,13 @@ abline(lm(hrs ~ Mi), col = "blue")
 
 ```{r studyhrs-upswr-est}
 # Estimate the total hours spent by all students
-res_hrs_total <- upswr_total(total = hrs, psi = psi, show.details = FALSE)
+res_hrs_total <- upswr_total(total = hrs, psi = psi, show.details = TRUE)
+res_hrs_total$table
 res_hrs_total$estimate |> format_est_gt("total")
+
+# Estimate the mean hours spent by each student (SE and CI scale down too)
+(res_hrs_total$estimate / 647) |> format_est_gt("mean")
+
 
 # Estimate the mean hours spent by each student
 res_hrs_ratio <- upswr_ratio(total = hrs, M = Mi, psi = psi, estimate = "mean")

@@ -1,6 +1,8 @@
 # Ratio, Regression, and Domain Estimation
 
-## Key Formulas
+:::{.callout-note}
+
+### Key formulae
 
 When auxiliary information (a variable $x$) is highly correlated with our target variable of interest ($y$), we can use **Ratio** or **Regression** estimation to improve precision without increasing the sample size. We can also use auxiliary population structures to adjust our estimates after the fact via **Post-stratification**, or estimate means for specific sub-populations (**Domains**).
 
@@ -10,7 +12,7 @@ If the relationship between $y$ and $x$ passes through the origin, we estimate t
 *   **Ratio:** $\hat{B} = \frac{\overline{y}}{\overline{x}}$
 *   **Mean Estimator:** $\overline{y}_r = \hat{B} \overline{x}_{\text{U}}$ (where $\overline{x}_{\text{U}}$ is the true population mean of $x$)
 
-*   **Estimated Variance:** $\hat{V}(\overline{y}_r) = \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}$, where $s_e^2$ is the sample variance of the residuals $e_i = y_i - \hat{B}x_i$.
+*   **Estimated Variance:** $\hat{V}(\overline{y}_r) = \left(\frac{\overline{x}_{\text{U}}}{\overline{x}}\right)^2 \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}$, where $s_e^2$ is the sample variance of the residuals $e_i = y_i - \hat{B}x_i$.
 
 #### 2. Regression Estimation {-}
 If the relationship does not pass through the origin, a linear regression is more appropriate:
@@ -22,13 +24,14 @@ If the relationship does not pass through the origin, a linear regression is mor
 To estimate the mean of a subgroup (domain $d$) when the domain sample size $n_d$ is a random variable:
 
 *   **Mean Estimator:** $\overline{y}_d = \frac{1}{n_d} \sum_{i \in U_d} y_i$
+*   **Estimated Variance:** $\hat{V}(\overline{y}_d) = \left(1 - \frac{n}{N}\right) \frac{s_d^2}{n_d}$, where $n$ is the overall sample size, $N$ is the population size, and $s_d^2$ is the sample variance of $y$ among the $n_d$ units observed in domain $d$.
 
 #### 4. Post-stratification {-}
 If we know the true population sizes ($N_h$) of strata, but we used a Simple Random Sample, we can post-stratify to reduce variance. We substitute $n_h$ with expected proportional sample sizes:
 
 *   $n_h^{post-strat} = n \frac{N_h}{N}$
 
----
+:::
 
 ## Functions and packages for Analyzing Data
 
@@ -72,7 +75,7 @@ cherry <- read.csv("data/cherry.csv", header = T)
 head(cherry) |> gt()
 
 plot(cherry$volume ~ cherry$diameter, main = "Volume vs Diameter")
-summary(lm(cherry$volume ~ 0 + cherry$diameter))
+anova(lm(cherry$volume ~ 0 + cherry$diameter))
 ```
 **Output Note:** The plot and the linear model output (which forces a 0 intercept) confirm a very strong relationship, making this a prime candidate for Ratio estimation.
 
@@ -177,7 +180,9 @@ plot(agpop[, "acres87"], agpop[, "acres92"], main="Acres 1992 vs Acres 1987")
 abline(a = 0, b = B, col="red")
 
 # linear model output
-summary(lm(agpop$acres92 ~ agpop$acres87))
+lm_gt <- format_lm_gt(lm(agpop$acres92 ~ agpop$acres87))
+lm_gt$coef
+lm_gt$fit
 
 # expected reduction of variance of ratio estimate to srs
 exp_var_red <- 1 - var(agpop$acres92 - B * agpop$acres87) / var(agpop$acres92)
@@ -464,7 +469,9 @@ N <- 2967
 ```{r cherry-reg-fit}
 n <- length(ydata)
 lmfit <- lm(ydata ~ xdata)
-summary(lmfit)
+lmfit_gt <- format_lm_gt(lmfit)
+lmfit_gt$coef
+lmfit_gt$fit
 
 plot(xdata, ydata, main="Linear Regression: Volume vs Diameter")
 abline(lmfit, col="green", lwd=2)
@@ -518,7 +525,9 @@ fieldcounts <- c(15, 14, 9, 14, 8, 5, 18, 15, 13, 15, 11, 15, 12, 8, 13,
                  9, 11, 12, 9, 12, 13, 11, 10, 9, 8)
 
 lmfit <- lm(fieldcounts ~ photocounts)
-summary(lmfit)
+lmfit_gt <- format_lm_gt(lmfit)
+lmfit_gt$coef
+lmfit_gt$fit
 
 plot(photocounts, fieldcounts, main="Field Counts vs Photo Counts")
 abline(lmfit, col="purple", lwd=2)

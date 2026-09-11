@@ -111,6 +111,50 @@ format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_
     tab_options(table.width = pct(70))
 }
 
+## Formats an lm object as two gt tables, replacing the plain-text
+## summary(lmfit) output:
+##   $coef --- coefficient table (Estimate, S.E., t value, p value)
+##   $fit  --- one-row table of model fit statistics, including R^2
+## returns list($coef, $fit)
+format_lm_gt <- function (lmfit)
+{
+    s <- summary (lmfit)
+
+    coef_df <- as.data.frame (s$coefficients)
+    colnames (coef_df) <- c ("Estimate", "S.E.", "t value", "p value")
+
+    coef_gt <- coef_df |>
+        gt (rownames_to_stub = TRUE) |>
+        fmt_number (columns = c ("Estimate", "S.E.", "t value"), decimals = 4) |>
+        fmt_number (columns = "p value", decimals = 4) |>
+        tab_header (title = "Coefficient Estimates") |>
+        tab_options (table.width = pct(70))
+
+    fstat <- s$fstatistic
+    fit_df <- data.frame (
+        R.squared     = s$r.squared,
+        Adj.R.squared = s$adj.r.squared,
+        Sigma         = s$sigma,
+        F.statistic   = unname (fstat["value"]),
+        p.value       = unname (pf (fstat["value"], fstat["numdf"], fstat["dendf"], lower.tail = FALSE))
+    )
+
+    fit_gt <- fit_df |>
+        gt () |>
+        cols_label (
+            R.squared     = md ("$R^2$"),
+            Adj.R.squared = md ("Adj. $R^2$"),
+            Sigma         = md ("$\\hat\\sigma$"),
+            F.statistic   = "F-statistic",
+            p.value       = "p-value"
+        ) |>
+        fmt_number (columns = everything (), decimals = 4) |>
+        tab_header (title = "Model Fit Summary") |>
+        tab_options (table.width = pct(70))
+
+    list (coef = coef_gt, fit = fit_gt)
+}
+
 # ---------------------------------------------------------
 # Base Estimators
 # ---------------------------------------------------------
@@ -221,10 +265,17 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
 ##                working-table columns, so this function can be reused
 ##                (e.g. by cluster_ratio(), upswr_ratio()) with
 ##                context-appropriate labels
+## extra_col --- optional list (label, values, formula) adding one extra
+##               RAW-latex-labelled column of per-unit `values` right before
+##               the y column of the working table (e.g. the within-cluster
+##               means $\bar y_i$ used by cluster_ratio() to build $\hat
+##               t_i = \bar y_i M_i$); `formula` (optional) is shown as a
+##               footnote on the y column documenting that relationship
 ## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
 ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
                         estimate = c ("mean", "total", "model"), show.details = TRUE,
-                        col_labels = list (y = "y_i", x = "x_i", yhat = "\\hat y_i"))
+                        col_labels = list (y = "y_i", x = "x_i", yhat = "\\hat y_i"),
+                        extra_col = NULL)
 {
   estimate <- match.arg (estimate)
 
@@ -266,28 +317,35 @@ ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
   if (!show.details)
       return (list (estimate = estimate_vec, table = NULL))
 
-  working <- data.frame (
-      i    = c (seq_len (n), "Sum"),
-      y    = c (ydata, sum (ydata)),
-      x    = c (xdata, sum (xdata)),
-      yhat = c (yhat, sum (yhat)),
-      e    = c (e, sum (e)),
-      e2   = c (e^2, sum (e^2))
-  )
+  working_cols <- list (i = c (seq_len (n), "Sum"))
+  if (!is.null (extra_col))
+      working_cols$extra <- c (extra_col$values, NA)
+  working_cols$y    <- c (ydata, sum (ydata))
+  working_cols$x    <- c (xdata, sum (xdata))
+  working_cols$yhat <- c (yhat, sum (yhat))
+  working_cols$e    <- c (e, sum (e))
+  working_cols$e2   <- c (e^2, sum (e^2))
+  working <- as.data.frame (working_cols, check.names = FALSE)
   working <- truncate_working (working, id_col = "i")
 
+  fmt_cols <- c ("y", "x", "yhat", "e", "e2")
+  if (!is.null (extra_col)) fmt_cols <- c ("extra", fmt_cols)
+
+  label_args <- list (i = md ("$i$"))
+  if (!is.null (extra_col))
+      label_args$extra <- md (sprintf ("$%s$", extra_col$label))
+  label_args$y    <- md (sprintf ("$%s$", col_labels$y))
+  label_args$x    <- md (sprintf ("$%s$", col_labels$x))
+  label_args$yhat <- md (sprintf ("$%s$", col_labels$yhat))
+  label_args$e    <- md ("$e_i$")
+  label_args$e2   <- md ("$e_i^2$")
+
   table <- gt (working) |>
-      tab_header (title = "Ratio Estimation: Working Table", subtitle = md (sprintf ("$n = %d$", n))) |>
-      cols_label (
-          i    = md ("$i$"),
-          y    = md (sprintf ("$%s$", col_labels$y)),
-          x    = md (sprintf ("$%s$", col_labels$x)),
-          yhat = md (sprintf ("$%s$", col_labels$yhat)),
-          e    = md ("$e_i$"),
-          e2   = md ("$e_i^2$")
-      ) |>
+      tab_header (title = "Ratio Estimation: Working Table", subtitle = md (sprintf ("$n = %d$", n)))
+  table <- do.call (cols_label, c (list (table), label_args))
+  table <- table |>
       cols_width (i ~ px (40), everything () ~ px (100)) |>
-      fmt_auto (data = working, columns = c ("y", "x", "yhat", "e", "e2"), decimals = 3) |>
+      fmt_auto (data = working, columns = fmt_cols, decimals = 3) |>
       sub_missing (missing_text = "...") |>
       tab_style (
           style     = cell_text (weight = "bold"),
@@ -297,7 +355,14 @@ ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
           footnote  = md (sprintf ("$\\hat B = \\sum_i %s / \\sum_i %s = %.4f$, $%s = \\hat B\\, %s$, $s_e^2 = %.4f$.",
                                     col_labels$y, col_labels$x, B_hat, col_labels$yhat, col_labels$x, var_e)),
           locations = cells_column_labels (columns = yhat)
-      ) |>
+      )
+  if (!is.null (extra_col) && !is.null (extra_col$formula))
+      table <- table |>
+          tab_footnote (
+              footnote  = md (sprintf ("$%s$.", extra_col$formula)),
+              locations = cells_column_labels (columns = y)
+          )
+  table <- table |>
       tab_source_note (
           source_note = md (if (estimate == "model")
               sprintf ("**Point estimate:** $\\hat B = \\dfrac{\\sum_i %s}{\\sum_i %s} = \\dfrac{%s}{%s} = %s$",
@@ -622,17 +687,21 @@ cluster_ratio <- function (data, cname, csize, yvar, N = Inf,
   ## same as the cluster total if all Mi elements were measured (mi = Mi)
   t_hat_cls <- ybari * Mi
 
+  ybar_col <- list (label = "\\bar y_i", values = ybari, formula = "\\hat t_i = \\bar y_i \\, M_i")
+
   if (estimate == "total")
   {
       if (is.null (Mtotal_U))
           stop ("Mtotal_U (population total of the cluster-size variable) is required when estimate = \"total\"")
       ratio_est (t_hat_cls, Mi, xbarU = Mtotal_U, N = N, estimate = "mean", show.details = show.details,
-                 col_labels = list (y = "\\hat t_i", x = "M_i", yhat = "\\hat B M_i"))
+                 col_labels = list (y = "\\hat t_i", x = "M_i", yhat = "\\hat B M_i"),
+                 extra_col = ybar_col)
   }
   else
   {
       ratio_est (t_hat_cls, Mi, N = N, estimate = "model", show.details = show.details,
-                 col_labels = list (y = "\\hat t_i", x = "M_i", yhat = "\\hat B M_i"))
+                 col_labels = list (y = "\\hat t_i", x = "M_i", yhat = "\\hat B M_i"),
+                 extra_col = ybar_col)
   }
 }
 
