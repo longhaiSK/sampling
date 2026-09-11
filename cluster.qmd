@@ -31,359 +31,25 @@ $$
 
 ## Functions and packages for Analyzing Data
 
-The updated `cluster_ratio_est` function analyzes both one-stage and two-stage cluster samples. It computes the cluster-level summary statistics and returns them in a list alongside the final ratio estimation output. The robust `format_est_gt` function guarantees cleanly formatted mathematical headers for the final output.
+The estimating functions used throughout this book (including `cluster_ratio`, used below for one-stage and two-stage cluster samples) live in a single shared file, `samplingestimate.r`, which we source below.
 
 ```{r}
-#| code-fold: true
-library(latex2exp)
-library(gt)
-
-## Formats a gt table column as ordinary fixed-point, UNLESS its values are
-## too small (< `small` in absolute value) or too large (>= `large`), in
-## which case it switches that column to scientific notation instead.
-fmt_auto <- function (gt_tbl, data, columns, decimals = 3, small = 1e-3, large = 1e5)
-{
-    for (col in columns)
-    {
-        x <- data[[col]]
-        x <- x[is.finite (x) & x != 0]
-        if (length (x) == 0) next
-        if (any (abs (x) < small) || any (abs (x) >= large))
-            gt_tbl <- fmt_scientific (gt_tbl, columns = tidyselect::all_of (col), decimals = decimals)
-        else
-            gt_tbl <- fmt_number (gt_tbl, columns = tidyselect::all_of (col), decimals = decimals)
-    }
-    gt_tbl
-}
-
-## Formats a single scalar for inline formula display (fixed-point with
-## thousands separators, switching to scientific notation for very small or
-## very large magnitudes, mirroring fmt_auto()) --- used to show worked-example
-## steps such as \bar y = sum/n with the actual numbers plugged in.
-fmt_num <- function (x, decimals = 3, small = 1e-3, large = 1e5)
-{
-    use_sci <- is.finite (x) & x != 0 & (abs (x) < small | abs (x) >= large)
-    ifelse (use_sci,
-            formatC (x, format = "e", digits = decimals),
-            formatC (x, format = "f", digits = decimals, big.mark = ","))
-}
-
-## Truncates a row-level working data.frame whose LAST row is a summary row
-## to the first head_n data rows + "..." + the summary row.
-truncate_working <- function (working, id_col, head_n = 6)
-{
-    n <- nrow (working) - 1
-    if (n <= head_n + 1) return (working)
-
-    dots <- working[1, ]
-    dots[1, ] <- NA
-    dots[1, id_col] <- "..."
-
-    rbind (working[seq_len (head_n), ], dots, working[nrow (working), ])
-}
-
-## ydata --- observations of the variable of interest
-## xdata --- observations of the auxiliary variable
-## xbarU --- population mean of the auxiliary variable; required when
-##           estimate is "mean" or "total"; ignored when estimate = "model"
-## N --- population size
-## estimate --- "mean" (default) returns the ratio estimate of the
-##              population MEAN of y, Bhat*xbarU; "total" returns the ratio
-##              estimate of the population TOTAL of y (requires finite N);
-##              "model" returns the raw ratio coefficient Bhat = ybar/xbar
-##              itself (with its own SE)
-## show.details --- if TRUE (default), also return a gt table of the
-##                  row-level working values y_i, x_i, fitted yhat_i =
-##                  Bhat*x_i, residual e_i, and e_i^2, with a Sum row and a
-##                  footnote showing Bhat and s_e^2; NULL otherwise
-## col_labels --- named list (y, x, yhat) of RAW latex for those
-##                working-table columns, so this function can be reused
-##                (e.g. by cluster_ratio_est()) with cluster-appropriate labels
-## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
-srs_ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
-                            estimate = c ("mean", "total", "model"), show.details = TRUE,
-                            col_labels = list (y = "y_i", x = "x_i", yhat = "\\hat y_i"))
-{
-  estimate <- match.arg (estimate)
-
-  n <- length (xdata)
-  xbar <- mean (xdata)
-  ybar <- mean (ydata)
-  B_hat <- ybar / xbar
-  yhat <- B_hat * xdata
-  e <- ydata - yhat
-  var_e <- sum (e^2) / (n - 1)
-  sd_B_hat <- sqrt ((1 - n/N) * var_e / n) / xbar
-
-  if (estimate == "model")
-  {
-      est <- B_hat
-      sd_est <- sd_B_hat
-  }
-  else
-  {
-      if (is.null (xbarU))
-          stop ("xbarU (population mean of x) is required when estimate is \"mean\" or \"total\"")
-      if (estimate == "total")
-      {
-          if (!is.finite (N))
-              stop ("N must be finite to compute estimate = \"total\"")
-          est <- B_hat * xbarU * N
-          sd_est <- sd_B_hat * xbarU * N
-      }
-      else
-      {
-          est <- B_hat * xbarU
-          sd_est <- sd_B_hat * xbarU
-      }
-  }
-
-  mem <- qt (0.975, df = n - 1) * sd_est
-  estimate_vec <- c (Est. = est, S.E. = sd_est, ci.low = est - mem, ci.upp = est + mem)
-
-  if (!show.details)
-      return (list (estimate = estimate_vec, table = NULL))
-
-  working <- data.frame (
-      i    = c (seq_len (n), "Sum"),
-      y    = c (ydata, sum (ydata)),
-      x    = c (xdata, sum (xdata)),
-      yhat = c (yhat, sum (yhat)),
-      e    = c (e, sum (e)),
-      e2   = c (e^2, sum (e^2))
-  )
-  working <- truncate_working (working, id_col = "i")
-
-  table <- gt (working) |>
-      tab_header (title = "Ratio Estimation: Working Table", subtitle = md (sprintf ("$n = %d$", n))) |>
-      cols_label (
-          i    = md ("$i$"),
-          y    = md (sprintf ("$%s$", col_labels$y)),
-          x    = md (sprintf ("$%s$", col_labels$x)),
-          yhat = md (sprintf ("$%s$", col_labels$yhat)),
-          e    = md ("$e_i$"),
-          e2   = md ("$e_i^2$")
-      ) |>
-      cols_width (i ~ px (40), everything () ~ px (100)) |>
-      fmt_auto (data = working, columns = c ("y", "x", "yhat", "e", "e2"), decimals = 3) |>
-      sub_missing (missing_text = "...") |>
-      tab_style (
-          style     = cell_text (weight = "bold"),
-          locations = cells_body (rows = i == "Sum")
-      ) |>
-      tab_footnote (
-          footnote  = md (sprintf ("$\\hat B = \\sum_i %s / \\sum_i %s = %.4f$, $%s = \\hat B\\, %s$, $s_e^2 = %.4f$.",
-                                    col_labels$y, col_labels$x, B_hat, col_labels$yhat, col_labels$x, var_e)),
-          locations = cells_column_labels (columns = yhat)
-      ) |>
-      tab_source_note (
-          source_note = md (if (estimate == "model")
-              sprintf ("**Point estimate:** $\\hat B = \\dfrac{\\sum_i %s}{\\sum_i %s} = \\dfrac{%s}{%s} = %s$",
-                       col_labels$y, col_labels$x, fmt_num (sum (ydata)), fmt_num (sum (xdata)), fmt_num (B_hat))
-          else if (estimate == "total")
-              sprintf ("**Point estimate:** $\\hat t = \\hat B\\,\\bar x_U\\,N = %s \\times %s \\times %s = %s$",
-                       fmt_num (B_hat), fmt_num (xbarU), fmt_num (N, 0), fmt_num (est))
-          else
-              sprintf ("**Point estimate:** $\\bar y_r = \\hat B\\,\\bar x_U = %s \\times %s = %s$",
-                       fmt_num (B_hat), fmt_num (xbarU), fmt_num (est)))
-      ) |>
-      tab_source_note (
-          source_note = md (if (estimate == "model")
-              (if (is.finite (N))
-                  sprintf ("**Standard error:** $\\mathrm{SE}(\\hat B) = \\dfrac{1}{\\bar x}\\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n}} = \\dfrac{1}{%s}\\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d}} = %s$",
-                           fmt_num (xbar), n, N, fmt_num (var_e), n, fmt_num (sd_B_hat))
-              else
-                  sprintf ("**Standard error:** $\\mathrm{SE}(\\hat B) = \\dfrac{1}{\\bar x}\\sqrt{\\dfrac{s_e^2}{n}} = \\dfrac{1}{%s}\\sqrt{\\dfrac{%s}{%d}} = %s$",
-                           fmt_num (xbar), fmt_num (var_e), n, fmt_num (sd_B_hat)))
-          else if (estimate == "total")
-              sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t) = \\mathrm{SE}(\\hat B)\\,\\bar x_U\\,N = %s \\times %s \\times %s = %s$",
-                       fmt_num (sd_B_hat), fmt_num (xbarU), fmt_num (N, 0), fmt_num (sd_est))
-          else
-              sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y_r) = \\mathrm{SE}(\\hat B)\\,\\bar x_U = %s \\times %s = %s$",
-                       fmt_num (sd_B_hat), fmt_num (xbarU), fmt_num (sd_est)))
-      )
-
-  list (estimate = estimate_vec, table = table)
-}
-
-## Cluster ratio estimation (one-stage if Mi = mi, i.e. every element in the
-## sampled cluster is measured; two-stage/ratio-to-size if only mi < Mi
-## elements are subsampled, so t_hat_i = Mi * ybari is an ESTIMATED total).
-## data --- original data frame for holding data
-## cname --- variable recording cluster (psu) identity
-## csize --- variable recording cluster (psu) population size (not sample size)
-## yvar --- variable of interest
-## N --- total number of clusters (psus) in the population
-## estimate --- "mean" (default) or "model" both return the raw ratio
-##              Bhat = sum(t_hat_i)/sum(Mi) --- for this ratio-to-size
-##              cluster estimator, that raw B IS the population MEAN per
-##              element, so the two coincide; "total" returns the
-##              population TOTAL of y, Bhat*Mtotal_U (requires Mtotal_U,
-##              the population total of the cluster-size variable)
-## Mtotal_U --- population total of the cluster-size variable; required
-##              when estimate = "total"
-## show.details --- if TRUE, also return a gt table of the cluster-level
-##                  working values (t_hat_i, M_i, fitted, e_i, e_i^2), via
-##                  srs_ratio_est()'s own working table
-## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
-cluster_ratio_est <- function (data, cname, csize, yvar, N = Inf,
-                                estimate = c ("mean", "total", "model"),
-                                show.details = TRUE, Mtotal_U = NULL)
-{
-  estimate <- match.arg (estimate)
-
-  clust <- data[, cname]
-  ydata <- data[, yvar]
-
-  ybari <- tapply (ydata, clust, mean)
-  Mi    <- tapply (data[, csize], clust, function (x) x[1])
-  ## same as the cluster total if all Mi elements were measured (mi = Mi)
-  t_hat_cls <- ybari * Mi
-
-  if (estimate == "total")
-  {
-      if (is.null (Mtotal_U))
-          stop ("Mtotal_U (population total of the cluster-size variable) is required when estimate = \"total\"")
-      srs_ratio_est (t_hat_cls, Mi, xbarU = Mtotal_U, N = N, estimate = "mean", show.details = show.details,
-                     col_labels = list (y = "\\hat t_i", x = "M_i", yhat = "\\hat B M_i"))
-  }
-  else
-  {
-      srs_ratio_est (t_hat_cls, Mi, N = N, estimate = "model", show.details = show.details,
-                     col_labels = list (y = "\\hat t_i", x = "M_i", yhat = "\\hat B M_i"))
-  }
-}
-
-## sdata --- a vector of original survey data
-## N --- population size
-## estimate --- "mean" (default) returns the population MEAN estimate;
-##              "total" returns the population TOTAL estimate (requires
-##              finite N)
-## show.details --- if TRUE (default), also return a gt table of the
-##                  row-level working values, with a Sum row and a
-##                  footnote showing s_y^2; NULL otherwise
-## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
-srs_mean_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
-                          show.details = TRUE, col_labels = list (y = "y_i"))
-{
-    estimate <- match.arg (estimate)
-
-    n <- length (sdata)
-    ybar <- mean (sdata)
-    dev <- sdata - ybar
-    s2y <- sum (dev^2) / (n - 1)
-    se.ybar <- sqrt((1 - n / N)) * sd (sdata) / sqrt(n)
-
-    if (estimate == "total")
-    {
-        if (!is.finite (N))
-            stop ("N must be finite to compute estimate = \"total\"")
-        est <- N * ybar
-        se.est <- N * se.ybar
-    }
-    else
-    {
-        est <- ybar
-        se.est <- se.ybar
-    }
-    mem <- qt (0.975, df = n - 1) * se.est
-    estimate_vec <- c (Est. = est, S.E. = se.est, ci.low = est - mem, ci.upp = est + mem)
-
-    if (!show.details)
-        return (list (estimate = estimate_vec, table = NULL))
-
-    working <- data.frame (
-        i    = c (seq_len (n), "Sum"),
-        y    = c (sdata, sum (sdata)),
-        dev  = c (dev, sum (dev)),
-        dev2 = c (dev^2, sum (dev^2))
-    )
-    working <- truncate_working (working, id_col = "i")
-
-    table <- gt (working) |>
-        tab_header (title = "SRS Mean Estimation: Working Table", subtitle = md (sprintf ("$n = %d$", n))) |>
-        cols_label (
-            i    = md ("$i$"),
-            y    = md (sprintf ("$%s$", col_labels$y)),
-            dev  = md (sprintf ("$%s-\\bar y$", col_labels$y)),
-            dev2 = md (sprintf ("$(%s-\\bar y)^2$", col_labels$y))
-        ) |>
-        cols_width (i ~ px (40), everything () ~ px (110)) |>
-        fmt_auto (data = working, columns = c ("y", "dev", "dev2"), decimals = 3) |>
-        sub_missing (missing_text = "...") |>
-        tab_style (
-            style     = cell_text (weight = "bold"),
-            locations = cells_body (rows = i == "Sum")
-        ) |>
-        tab_footnote (
-            footnote  = md (sprintf ("$s_y^2 = \\sum_i (%s-\\bar y)^2/(n-1) = %.4f$.", col_labels$y, s2y)),
-            locations = cells_column_labels (columns = dev2)
-        ) |>
-        tab_source_note (
-            source_note = md (if (estimate == "total")
-                sprintf ("**Point estimate:** $\\hat t = N\\bar y = %s \\times %s = %s$",
-                         fmt_num (N, 0), fmt_num (ybar), fmt_num (est))
-            else
-                sprintf ("**Point estimate:** $\\bar y = \\dfrac{\\sum_i %s}{n} = \\dfrac{%s}{%d} = %s$",
-                         col_labels$y, fmt_num (sum (sdata)), n, fmt_num (ybar)))
-        ) |>
-        tab_source_note (
-            source_note = md (if (estimate == "total")
-                sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t) = N \\times \\mathrm{SE}(\\bar y) = %s \\times %s = %s$",
-                         fmt_num (N, 0), fmt_num (se.ybar), fmt_num (se.est))
-            else if (is.finite (N))
-                sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y) = \\sqrt{1-\\dfrac{n}{N}}\\,\\dfrac{s}{\\sqrt n} = \\sqrt{1-\\dfrac{%d}{%d}}\\,\\dfrac{%s}{\\sqrt{%d}} = %s$",
-                         n, N, fmt_num (sqrt (s2y)), n, fmt_num (se.ybar))
-            else
-                sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y) = \\dfrac{s}{\\sqrt n} = \\dfrac{%s}{\\sqrt{%d}} = %s$",
-                         fmt_num (sqrt (s2y)), n, fmt_num (se.ybar)))
-        )
-
-    list (estimate = estimate_vec, table = table)
-}
-
-# Helper function to format estimation outputs with appropriate mathematical headers
-format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_mean", "reg_total", "ratio_mean", "domain_mean")) {
-  est_type <- match.arg(est_type)
-  
-  sym_map <- list(
-    "mean"        = c(est = "$\\bar{y}$",         se = "$\\mathrm{SE}(\\bar{y})$"),
-    "total"       = c(est = "$\\hat{t}$",         se = "$\\mathrm{SE}(\\hat{t})$"),
-    "ratio"       = c(est = "$\\hat{B}$",         se = "$\\mathrm{SE}(\\hat{B})$"),
-    "reg_mean"    = c(est = "$\\bar{y}_{reg}$",   se = "$\\mathrm{SE}(\\bar{y}_{reg})$"),
-    "reg_total"   = c(est = "$\\hat{t}_{reg}$",   se = "$\\mathrm{SE}(\\hat{t}_{reg})$"),
-    "ratio_mean"  = c(est = "$\\bar{y}_{r}$",     se = "$\\mathrm{SE}(\\bar{y}_{r})$"),
-    "domain_mean" = c(est = "$\\bar{y}_{d}$",     se = "$\\mathrm{SE}(\\bar{y}_{d})$")
-  )
-  
-  est_sym <- sym_map[[est_type]]["est"]
-  se_sym  <- sym_map[[est_type]]["se"]
-  
-  # Convert to data frame and strip hidden names to prevent gt() errors
-  if (is.vector(est_data) && !is.list(est_data)) {
-    df <- as.data.frame(t(unname(est_data)))
-  } else {
-    df <- as.data.frame(est_data)
-  }
-  
-  colnames(df) <- c("Est.", "S.E.", "ci.low", "ci.upp")
-  use_stub <- !is.null(rownames(df)) && !all(rownames(df) == as.character(1:nrow(df)))
-  
-  df |>
-    gt(rownames_to_stub = use_stub) |>
-    cols_label(
-      Est.   = md(est_sym),
-      S.E.   = md(se_sym),
-      ci.low = md("95% CI Lower"),
-      ci.upp = md("95% CI Upper")
-    ) |>
-    fmt_number(
-      columns = everything(),
-      decimals = 4
-    ) |>
-    tab_options(table.width = pct(70))
-}
+#| echo: false
+source("samplingestimate.r")
 ```
+
+<details>
+<summary>Show the shared estimating functions (`samplingestimate.r`)</summary>
+
+```{r}
+#| echo: false
+#| results: asis
+cat("```r\n")
+cat(readLines("samplingestimate.r"), sep = "\n")
+cat("\n```\n")
+```
+
+</details>
 
 ## Estimating for One-stage cluster sampling: analysis of algebra.csv
 
@@ -405,7 +71,7 @@ algebra |>
 Next, we run our updated function to compute both the cluster-level working table and the overall ratio estimate for the average student score.
 
 ```{r}
-alg_res <- cluster_ratio_est(data = algebra,
+alg_res <- cluster_ratio(data = algebra,
                              cname = "class",
                              csize = "Mi",
                              yvar = "score",
@@ -445,7 +111,7 @@ coots |>
 We apply the exact same ratio estimator formulation, though mathematically, the cluster total $t_i$ is now an *estimated* total $\hat{t}_i$.
 
 ```{r}
-coots_res <- cluster_ratio_est(data = coots,
+coots_res <- cluster_ratio(data = coots,
                                cname = "clutch",
                                csize = "csize",
                                yvar = "volume")
