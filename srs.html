@@ -68,18 +68,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./strata.html" rel="next">
-<link href="./introR.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-f79c7fb6db380d32be398468f2fb58cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87aed0b8589e23e45aa8556edf37a91b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a7b5894d5a4c39c6aa3484761f021c1f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/custombook-1.0.0/num_eq.js"></script>
+<script src="site_libs/quarto-contrib/custombook-1.0.0/merge-toc.js"></script>
+<link href="site_libs/quarto-contrib/custombook-1.0.0/bookstyles.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -159,7 +160,7 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
@@ -221,22 +222,22 @@ window.Quarto = {
 </li>
     </ul>
     </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+    <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#analysis-of-agsrs.csv-data" id="toc-analysis-of-agsrs.csv-data" class="nav-link active" data-scroll-target="#analysis-of-agsrs.csv-data"><span class="header-section-number">2.1</span> Analysis of agsrs.csv Data</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#step-by-step-calculation-without-using-a-function" id="toc-step-by-step-calculation-without-using-a-function" class="nav-link" data-scroll-target="#step-by-step-calculation-without-using-a-function"><span class="header-section-number">2.1.1</span> Step by step calculation without using a function</a></li>
-  <li><a href="#write-a-function-for-repeated-use" id="toc-write-a-function-for-repeated-use" class="nav-link" data-scroll-target="#write-a-function-for-repeated-use"><span class="header-section-number">2.1.2</span> Write a function for repeated use</a></li>
+  <li><a href="#write-a-function-for-repeated-use" id="toc-write-a-function-for-repeated-use" class="nav-link" data-scroll-target="#write-a-function-for-repeated-use"><span class="header-section-number">2.1.2</span> Write a function for repeated use</a>
+  <ul class="collapse">
+  <li><a href="#a-function-for-doing-data-analysis-for-srs-sample" id="toc-a-function-for-doing-data-analysis-for-srs-sample" class="nav-link" data-scroll-target="#a-function-for-doing-data-analysis-for-srs-sample"><span class="header-section-number">2.1.2.1</span> A function for doing data analysis for srs sample</a></li>
+  <li><a href="#apply-srs_mean_est-to-agsrs.csv-data" id="toc-apply-srs_mean_est-to-agsrs.csv-data" class="nav-link" data-scroll-target="#apply-srs_mean_est-to-agsrs.csv-data"><span class="header-section-number">2.1.2.2</span> Apply srs_mean_est to agsrs.csv data</a></li>
+  </ul></li>
   <li><a href="#comparing-with-true-value" id="toc-comparing-with-true-value" class="nav-link" data-scroll-target="#comparing-with-true-value"><span class="header-section-number">2.1.3</span> Comparing with true value</a></li>
   </ul></li>
   <li><a href="#a-simulation-demonstration-of-srs-inference" id="toc-a-simulation-demonstration-of-srs-inference" class="nav-link" data-scroll-target="#a-simulation-demonstration-of-srs-inference"><span class="header-section-number">2.2</span> A Simulation Demonstration of SRS Inference</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#true-values" id="toc-true-values" class="nav-link" data-scroll-target="#true-values"><span class="header-section-number">2.2.1</span> True Values</a></li>
   <li><a href="#one-srs-sampling" id="toc-one-srs-sampling" class="nav-link" data-scroll-target="#one-srs-sampling"><span class="header-section-number">2.2.2</span> One SRS sampling</a></li>
   <li><a href="#repeating-srs-sampling-5000-times" id="toc-repeating-srs-sampling-5000-times" class="nav-link" data-scroll-target="#repeating-srs-sampling-5000-times"><span class="header-section-number">2.2.3</span> Repeating SRS sampling 5000 times</a></li>
@@ -244,9 +245,13 @@ window.Quarto = {
   </ul></li>
   </ul>
 </nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -255,7 +260,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page-right">
 
     
   
@@ -280,9 +285,12 @@ window.Quarto = {
 <li><strong>Population Total:</strong> <span class="math inline">\(\hat{t} = N\bar{y}\)</span></li>
 </ul>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## read survey data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>agsrs <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/agsrs.csv"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agsrs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>             county state acres92 acres87 acres82 farms92 farms87 farms82
 1     COFFEE COUNTY    AL  175209  179311  194509     760     842     944
@@ -299,6 +307,8 @@ window.Quarto = {
 5        7        9        9       11       23       27      S
 6       20       17       23       18       32       29      S</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## extract the variable of interest</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sdata <span class="ot">&lt;-</span> agsrs<span class="sc">$</span>acres92</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">3078</span></span>
@@ -311,12 +321,16 @@ window.Quarto = {
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="do">## return estimate vector for pop mean</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span> (<span class="at">Est. =</span> ybar, <span class="at">S.E. =</span> se.ybar, <span class="at">ci.low =</span> ybar <span class="sc">-</span> mem, <span class="at">ci.upp =</span> ybar <span class="sc">+</span> mem)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Est.      S.E.    ci.low    ci.upp 
 297897.05  18898.43 260706.26 335087.84 </code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## return estimate vector for pop total</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span> (<span class="at">Est. =</span> ybar, <span class="at">S.E. =</span> se.ybar, <span class="at">ci.low =</span> ybar <span class="sc">-</span> mem, <span class="at">ci.upp =</span> ybar <span class="sc">+</span> mem) <span class="sc">*</span> N</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      Est.       S.E.     ci.low     ci.upp 
  916927110   58169381  802453859 1031400361 </code></pre>
@@ -489,13 +503,19 @@ window.Quarto = {
 <p><em>Import Data</em></p>
 <p>Load the survey sample data representing US counties.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>agsrs <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/agsrs.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <p><em>Estimating the mean of acre92</em></p>
 <p>Calculate the estimated average farm acreage per county using the custom function. The function’s <code>$table</code> shows the row-level working values (truncated to the first 6 rows + Sum), and <code>$estimate</code> holds the final point estimate, SE, and CI, formatted with <code>format_est_gt()</code>.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res_mean <span class="ot">&lt;-</span> <span class="fu">srs_mean_est</span>(agsrs[,<span class="st">"acres92"</span>], <span class="at">N =</span> <span class="dv">3078</span>, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>res_mean<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="svmxmtluyd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#svmxmtluyd table {
@@ -1021,7 +1041,10 @@ window.Quarto = {
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>res_mean<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="kpkapbpyjo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#kpkapbpyjo table {
@@ -1498,8 +1521,11 @@ window.Quarto = {
 <p><em>Estimating the total of acre92</em></p>
 <p>Set <code>estimate = "total"</code> to have the function itself scale the mean and confidence interval by the population size (<span class="math inline">\(N = 3078\)</span>) to estimate the total farm acreage across all counties.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>res_total <span class="ot">&lt;-</span> <span class="fu">srs_mean_est</span>(agsrs[,<span class="st">"acres92"</span>], <span class="at">N =</span> <span class="dv">3078</span>, <span class="at">estimate =</span> <span class="st">"total"</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>res_total<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="gagnlawddq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gagnlawddq table {
@@ -2025,7 +2051,10 @@ window.Quarto = {
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>res_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="gvzqjutwra" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gvzqjutwra table {
@@ -2502,13 +2531,19 @@ window.Quarto = {
 <p><em>Estimating the proportion of counties with fewer than 200K acres for farming in 1992</em></p>
 <p>To estimate a proportion under SRS, create an indicator variable (<span class="math inline">\(y_i = 1\)</span> if true, <span class="math inline">\(0\)</span> if false). The mean of this indicator variable serves as the sample proportion (<span class="math inline">\(\hat{p} = \bar{y}_{indicator}\)</span>).</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>acres92.is.fewer<span class="fl">.200</span>k <span class="ot">&lt;-</span> <span class="fu">as.numeric</span> (agsrs[,<span class="st">"acres92"</span>] <span class="sc">&lt;</span> <span class="dv">200000</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(acres92.is.fewer<span class="fl">.200</span>k)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 1 1 1 1 1</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>res_prop <span class="ot">&lt;-</span> <span class="fu">srs_mean_est</span>(acres92.is.fewer<span class="fl">.200</span>k, <span class="at">N =</span> <span class="dv">3078</span>, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>res_prop<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="pqwosbjknh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#pqwosbjknh table {
@@ -3034,7 +3069,10 @@ window.Quarto = {
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>res_prop<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="qgwjfibjfr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#qgwjfibjfr table {
@@ -3511,8 +3549,11 @@ window.Quarto = {
 <p><em>Estimating the total number of counties with fewer than 200K acres for farming in 1992</em></p>
 <p>Set <code>estimate = "total"</code> to estimate the absolute count of counties meeting the criteria.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>res_prop_total <span class="ot">&lt;-</span> <span class="fu">srs_mean_est</span>(acres92.is.fewer<span class="fl">.200</span>k, <span class="at">N =</span> <span class="dv">3078</span>, <span class="at">estimate =</span> <span class="st">"total"</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>res_prop_total<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="bvjsfnyimn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#bvjsfnyimn table {
@@ -4038,7 +4079,10 @@ window.Quarto = {
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>res_prop_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="cqiamlxpth" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#cqiamlxpth table {
@@ -4518,24 +4562,36 @@ window.Quarto = {
 <h3 data-number="2.1.3" class="anchored" data-anchor-id="comparing-with-true-value"><span class="header-section-number">2.1.3</span> Comparing with true value</h3>
 <p>Load the complete census (population) dataset to calculate the true parameters. This allows us to assess the accuracy of our previous SRS estimates against the exact population values.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/agpop.csv"</span>, <span class="at">na =</span> <span class="st">"-99"</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#true mean</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span> (agpop[, <span class="st">"acres92"</span>], <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308582.4</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># true total</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span> (agpop[, <span class="st">"acres92"</span>], <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 943953599</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># true proportion of counties with less than 200K acres for farming</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span> (agpop[, <span class="st">"acres92"</span>] <span class="sc">&lt;</span> <span class="dv">200000</span>, <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.5145472</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># true number of counties with less than 200K acres for farming</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span> (agpop[, <span class="st">"acres92"</span>] <span class="sc">&lt;</span> <span class="dv">200000</span>, <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1574</code></pre>
 </div>
@@ -4546,10 +4602,13 @@ window.Quarto = {
 <h2 data-number="2.2" class="anchored" data-anchor-id="a-simulation-demonstration-of-srs-inference"><span class="header-section-number">2.2</span> A Simulation Demonstration of SRS Inference</h2>
 <p>Load the full population data and filter out missing values to serve as a complete, known finite population for resampling experiments.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read population data </span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/agpop.csv"</span>)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># remove those counties with na</span></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">subset</span>( agpop, acres92 <span class="sc">!=</span> <span class="sc">-</span><span class="dv">99</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <section id="true-values" class="level3" data-number="2.2.1">
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="true-values"><span class="header-section-number">2.2.1</span> True Values</h3>
@@ -4557,20 +4616,29 @@ window.Quarto = {
 <p><strong>Theoretical Standard Error:</strong></p>
 <p><span class="math display">\[\mathrm{SE}_{true}(\bar{y}) = \sqrt{1 - \frac{n}{N}} \left(\frac{S}{\sqrt{n}}\right)\]</span></p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sample size</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">300</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># population size</span></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span> (agpop); N</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3059</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># true value of population mean</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>ybarU <span class="ot">&lt;-</span> <span class="fu">mean</span> (agpop[,<span class="st">"acres92"</span>]); ybarU</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308582.4</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># true value of deviation of sample mean</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>true.se.ybar <span class="ot">&lt;-</span> <span class="fu">sqrt</span> (<span class="dv">1</span><span class="sc">-</span> n<span class="sc">/</span>N) <span class="sc">*</span> <span class="fu">sd</span> (agpop[,<span class="st">"acres92"</span>]) <span class="sc">/</span> <span class="fu">sqrt</span> (n); true.se.ybar</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 23320.29</code></pre>
 </div>
@@ -4580,10 +4648,13 @@ window.Quarto = {
 <h3 data-number="2.2.2" class="anchored" data-anchor-id="one-srs-sampling"><span class="header-section-number">2.2.2</span> One SRS sampling</h3>
 <p>Draw a single random sample of size <span class="math inline">\(n=300\)</span> from the population and run our estimator function to see a single instance of survey inference.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># srs sampling</span></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>srs <span class="ot">&lt;-</span> <span class="fu">sample</span> (<span class="dv">1</span><span class="sc">:</span>N,n)</span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agpop [srs, ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>                county state acres92 acres87 acres82 farms92 farms87 farms82
 2098 WASHINGTON COUNTY    OH  139655  146000  159389     864     955    1088
@@ -4600,11 +4671,14 @@ window.Quarto = {
 61         10       10        6       12       26       20      S
 1496       32       27       31       12        8       14      S</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get data of variable "acres92"</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>sdata <span class="ot">&lt;-</span> agpop [srs, <span class="st">"acres92"</span>]</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># analysis</span></span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>res_one <span class="ot">&lt;-</span> <span class="fu">srs_mean_est</span>(sdata, N, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>res_one<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="xtemthaskz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xtemthaskz table {
@@ -5130,7 +5204,10 @@ window.Quarto = {
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>res_one<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="frzjafwluk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#frzjafwluk table {
@@ -5610,6 +5687,8 @@ window.Quarto = {
 <p>To demonstrate the Central Limit Theorem and unbiasedness of the estimator, draw 5,000 independent samples, storing the estimates from each iteration. We plot the resulting sampling distribution against the true population mean.</p>
 <p><em>(Note: We use <code>show.details = FALSE</code> and pull out just <code>$estimate</code> here, so the loop skips building 5,000 working tables and stays fast.)</em></p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>nres <span class="ot">&lt;-</span> <span class="dv">5000</span> <span class="co"># number of repeated sampling</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>simulation.results <span class="ot">&lt;-</span> <span class="fu">matrix</span> (<span class="dv">0</span>, nres, <span class="dv">4</span>) <span class="co"># matrix recording repeated results</span></span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(simulation.results) <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"Est."</span>,   <span class="st">"S.E."</span>,   <span class="st">"ci.low"</span>, <span class="st">"ci.upp"</span>)</span>
@@ -5622,6 +5701,7 @@ window.Quarto = {
 <span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(simulation.results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>         Est.     S.E.   ci.low   ci.upp
 [1,] 276522.5 21650.10 233916.7 319128.4
@@ -5631,6 +5711,8 @@ window.Quarto = {
 [5,] 305230.0 23384.26 259211.4 351248.5
 [6,] 289760.2 20500.58 249416.5 330103.9</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># look at the distribution of sample mean</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span> (<span class="at">mfrow=</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span> (agpop<span class="sc">$</span>acres92,<span class="at">main =</span> <span class="st">"Population Distribution of acre92"</span>)</span>
@@ -5639,6 +5721,7 @@ window.Quarto = {
 <span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span> (simulation.results[,<span class="dv">1</span>], <span class="at">main=</span><span class="st">"QQ plot of Sample Mean"</span>); <span class="fu">qqline</span>(simulation.results[,<span class="dv">1</span>])</span>
 <span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span> (simulation.results[,<span class="dv">1</span>], <span class="at">main =</span> <span class="st">"Boxplot of Sample Mean"</span>)</span>
 <span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span> (<span class="at">h =</span> ybarU, <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -5646,19 +5729,31 @@ window.Quarto = {
 </figure>
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span> (simulation.results[,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308255.2</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>ybarU</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308582.4</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span> (simulation.results [,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 23170.82</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>true.se.ybar</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 23320.29</code></pre>
 </div>
@@ -5668,6 +5763,8 @@ window.Quarto = {
 <h3 data-number="2.2.4" class="anchored" data-anchor-id="empirical-coverage-rate-of-cis"><span class="header-section-number">2.2.4</span> Empirical Coverage Rate of CIs</h3>
 <p>Verify the reliability of the 95% confidence intervals by checking whether the true population mean falls within the calculated bounds for each of the 5,000 samples. The empirical coverage rate should closely approximate 0.95. The plot highlights the first 100 intervals, flagging those that fail to capture the true mean in a distinct color.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotrix) </span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -5678,6 +5775,7 @@ window.Quarto = {
 <span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(simulation.results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      Est.     S.E.   ci.low   ci.upp Covered?
 1 276522.5 21650.10 233916.7 319128.4        1
@@ -5687,6 +5785,8 @@ window.Quarto = {
 5 305230.0 23384.26 259211.4 351248.5        1
 6 289760.2 20500.58 249416.5 330103.9        1</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotCI</span>(</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>,</span>
@@ -5696,6 +5796,7 @@ window.Quarto = {
 <span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="dv">2</span> <span class="sc">-</span> simulation.results<span class="sc">$</span><span class="st">`</span><span class="at">Covered?</span><span class="st">`</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>]</span>
 <span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> ybarU, <span class="at">col =</span> <span class="st">"blue"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -5703,8 +5804,11 @@ window.Quarto = {
 </figure>
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Empirical coverage rate </span></span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(simulation.results<span class="sc">$</span><span class="st">`</span><span class="at">Covered?</span><span class="st">`</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9374</code></pre>
 </div>
@@ -6115,18 +6219,6 @@ window.Quarto = {
     }
   });
   </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="./introR.html" class="pagination-link" aria-label="An Introduction to Data Analysis with R">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Introduction to Data Analysis with R</span></span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="./strata.html" class="pagination-link" aria-label="Stratified Random Sampling">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
 
 
