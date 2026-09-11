@@ -125,65 +125,113 @@ head(agpop_subset)
 
 ### Displaying Large Datasets with a Scroll Bar
 
-When working with large datasets, printing the entire dataframe to your HTML document takes up too much vertical space and can slow down the browser. We can use the `gt` package to create a fixed-height, scrollable window. 
+When working with large datasets, printing the entire dataframe to your HTML document takes up too much vertical space and can slow down the browser. We can use the `gt` package to create a fixed-height, scrollable window, so HTML readers can scroll through the **full** dataset. A static, non-HTML render (e.g. Typst/PDF) has no scrollbar, so there we show only the head of the data instead.
+
+::: {.content-visible when-format="html"}
 
 ```{r scrollable-table, message=FALSE, warning=FALSE}
 library(gt)
 
-# Display a large subset of the data inside a scrollable box
-agpop |> 
-  slice(1:100) |> # Slicing the first 100 rows prevents the HTML file from becoming too large
-  gt() |> 
+# Display the FULL dataset inside a scrollable box (HTML only)
+agpop |>
+  gt() |>
   tab_header(
     title = "Agricultural Population Data",
     subtitle = "Scroll to view more rows"
-  ) |> 
+  ) |>
   tab_options(
     container.height = px(400),   # Restricts the table height to 400 pixels
     container.overflow.y = TRUE   # Enables the vertical scroll bar
   )
 ```
-**Output Note:** The `gt` table provides a clean, professional display of the dataset, confining the long list of rows within a manageable 400-pixel-high scrolling container.
+
+:::
+
+::: {.content-visible unless-format="html"}
+
+```{r scrollable-table-print, message=FALSE, warning=FALSE}
+library(gt)
+
+# Non-HTML output (e.g. Typst/PDF): a scrollbar doesn't exist on a static
+# page, so just show the head of the dataset instead of the full table
+agpop |>
+  head() |>
+  gt() |>
+  tab_header(
+    title = "Agricultural Population Data",
+    subtitle = "First 6 rows (see the HTML version for the full, scrollable table)"
+  )
+```
+
+:::
+
+**Output Note:** The HTML version shows the full dataset in a clean, professional, 400-pixel-high scrolling container; the Typst/PDF version shows only the first six rows since a printed page cannot scroll.
 
 ### Advanced Tables with `gt`
 
-The `gt` package also allows you to create highly customized, publication-ready tables. Below, we summarize the `agpop` dataset by region and create a table featuring a spanning header across multiple columns and complex mathematical LaTeX symbols in the column labels.
+The `gt` package also allows you to create highly customized, publication-ready tables. Below, we summarize five variables of the `agpop` dataset by region, computing both the mean and the variance of each, and create a table featuring spanning headers across multiple columns and complex mathematical LaTeX symbols in the column labels.
 
 ```{r advanced-gt-table, message=FALSE, warning=FALSE}
-# Create a summary dataset by region, filtering out missing values (-99)
+# The five variables we want to summarize
+vars_of_interest <- c("acres92", "acres87", "farms92", "largef92", "smallf92")
+
+# Create a summary dataset by region: mean and variance of each variable,
+# filtering out rows where any of the five variables is missing (-99)
 ag_summary <- agpop |>
-  filter(acres92 != -99, acres87 != -99) |>
+  filter(if_all(all_of(vars_of_interest), ~ .x != -99)) |>
   group_by(region) |>
   summarize(
-    mean_92 = mean(acres92, na.rm = TRUE),
-    mean_87 = mean(acres87, na.rm = TRUE),
-    diff = mean_92 - mean_87
+    across(
+      all_of(vars_of_interest),
+      list(mean = ~mean(.x), var = ~var(.x)),
+      .names = "{.col}_{.fn}"
+    )
   )
+ag_summary
+```
 
+```{r}
+#| label: display-summary-gt
 # Display the summary using a customized gt table
 ag_summary |>
   gt() |>
   tab_header(
-    title = "Regional Farm Acreage Summary",
-    subtitle = "Comparing 1987 and 1992"
+    title = "Regional Summary: Mean and Variance of Five Variables",
+    subtitle = "acres92, acres87, farms92, largef92, smallf92"
   ) |>
-  # Add a spanning header over the two mean columns
+  # Add spanning headers grouping the mean columns and the variance columns
   tab_spanner(
-    label = md("**Average Acreage**"),
-    columns = c(mean_92, mean_87)
+    label = md("**Mean**"),
+    columns = ends_with("_mean")
+  ) |>
+  tab_spanner(
+    label = md("**Variance**"),
+    columns = ends_with("_var")
   ) |>
   # Use LaTeX math expressions for column names
   cols_label(
-    region = md("**Region**"),
-    mean_92 = md("$\\bar{y}_{1992}$"),
-    mean_87 = md("$\\bar{x}_{1987}$"),
-    diff = md("$\\Delta = \\bar{y}_{1992} - \\bar{x}_{1987}$")
+    region        = md("**Region**"),
+    acres92_mean  = md("$\\bar{y}_{acres92}$"),
+    acres87_mean  = md("$\\bar{y}_{acres87}$"),
+    farms92_mean  = md("$\\bar{y}_{farms92}$"),
+    largef92_mean = md("$\\bar{y}_{largef92}$"),
+    smallf92_mean = md("$\\bar{y}_{smallf92}$"),
+    acres92_var   = md("$s^2_{acres92}$"),
+    acres87_var   = md("$s^2_{acres87}$"),
+    farms92_var   = md("$s^2_{farms92}$"),
+    largef92_var  = md("$s^2_{largef92}$"),
+    smallf92_var  = md("$s^2_{smallf92}$")
   ) |>
   fmt_number(
-    columns = c(mean_92, mean_87, diff),
+    columns = ends_with("_mean"),
     decimals = 1
   ) |>
-  tab_options(table.width = pct(80))
+  fmt_number(
+    columns = ends_with("_var"),
+    decimals = 0,
+    sep_mark = ","
+  ) |>
+  tab_options(table.width = pct(100))
 ```
 
 ## Graphics in R 
