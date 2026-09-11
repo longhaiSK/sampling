@@ -40,7 +40,7 @@ The estimating functions used throughout this book (including `reg_est`, `ratio_
 
 For post-stratification, we reuse the shared `str_est()` stratified estimator, but we plug in the expected sample sizes $n_h = n \times \frac{N_h}{N}$ instead of the actual observed random $n_h$.
 
-```{r}
+```{r source-functions}
 #| echo: false
 source("samplingestimate.r")
 ```
@@ -48,7 +48,7 @@ source("samplingestimate.r")
 <details>
 <summary>Show the shared estimating functions (`samplingestimate.r`)</summary>
 
-```{r}
+```{r print-functions}
 #| echo: false
 #| results: asis
 cat("```r\n")
@@ -67,7 +67,7 @@ We want to estimate the volume of wood in cherry trees using their diameter as a
 
 First, let's load the data and verify that a strong linear relationship passing near the origin exists between volume and diameter.
 
-```{r}
+```{r cherry-load-plot}
 cherry <- read.csv("data/cherry.csv", header = T)
 head(cherry) |> gt()
 
@@ -80,7 +80,7 @@ summary(lm(cherry$volume ~ 0 + cherry$diameter))
 
 To establish a baseline, we first estimate the mean and total volume using standard Simple Random Sampling (ignoring the auxiliary variable).
 
-```{r}
+```{r cherry-srs-est}
 N <- 2967
 ## estimating the mean of volume
 res_srs_vol <- srs_est(cherry$volume, N = N, estimate = "mean", show.details = FALSE)
@@ -98,7 +98,7 @@ srs_total_vol_raw |> format_est_gt("total")
 
 We calculate the ratio $\hat{B} = \overline{y}/\overline{x}$; the function's `$table` shows the row-level working values $x_i$, $y_i$, fitted $\hat{y}_i = \hat{B}x_i$, residuals $e_i = y_i - \hat{y}_i$, and $e_i^2$ (with a Sum row and a footnote giving $\hat B$ and $s_e^2$), so we no longer need to build this table by hand.
 
-```{r}
+```{r cherry-ratio-est}
 ydata <- cherry$volume
 xdata <- cherry$diameter
 N <- 2967
@@ -111,7 +111,7 @@ abline(a = 0, b = res_ratio_model$estimate["Est."], col="blue", lwd=2)
 ```
 **Output Note:** The blue line represents our estimated ratio $\hat{B} \approx `r round(res_ratio_model$estimate["Est."], 2)`$. The working table above shows the individual residuals used to estimate $s_e^2$.
 
-```{r}
+```{r cherry-ratio-b}
 B_v2d <- res_ratio_model$estimate
 B_v2d |> format_est_gt("ratio")
 ```
@@ -121,9 +121,11 @@ B_v2d |> format_est_gt("ratio")
 
 If we know the true total of the population diameters is 41,835, we can derive the population mean diameter $\overline{x}_{\text{U}}$ and pass it as `xbarU` with `estimate = "mean"`.
 
-```{r}
+```{r cherry-ratio-mean}
 mean_diameters <- 41835 / N
-ratio_mean_volume_raw <- ratio_est(ydata, xdata, xbarU = mean_diameters, N = N, estimate = "mean")$estimate
+res_ratio_mean <- ratio_est(ydata, xdata, xbarU = mean_diameters, N = N, estimate = "mean")
+res_ratio_mean$table
+ratio_mean_volume_raw <- res_ratio_mean$estimate
 ratio_mean_volume_raw |> format_est_gt("ratio_mean")
 ```
 
@@ -131,17 +133,20 @@ ratio_mean_volume_raw |> format_est_gt("ratio_mean")
 
 Using `estimate = "total"` with the known population total diameter gives the estimated population total volume directly.
 
-```{r}
+```{r cherry-ratio-total}
 t_diameters <- 41835
-ratio_est(ydata, xdata, xbarU = t_diameters / N, N = N, estimate = "total")$estimate |>
-  format_est_gt("total")
+
+res_ratio_total <- ratio_est(ydata, xdata, xbarU = t_diameters / N, N = N, estimate = "total")
+res_ratio_total$table
+ratio_total_volume <- res_ratio_total$estimate
+ratio_total_volume |> format_est_gt("total")
 ```
 
 #### Percentage of Variance Reduction
 
 How much did ratio estimation help compared to ignoring the auxiliary variable?
 
-```{r}
+```{r cherry-ratio-varred}
 variance_reduction <- 1 - (ratio_mean_volume_raw["S.E."] / srs_mean_vol_raw["S.E."])^2
 unname(variance_reduction)
 ```
@@ -153,7 +158,7 @@ Let's test this practically by drawing 2000 random samples and seeing how SRS an
 
 ### Information of population data 
 
-```{r}
+```{r agpop-load}
 agpop <- read.csv("data/agpop.csv")
 agpop <- agpop[agpop$acres92 != -99, ] ## remove those counties with na
 
@@ -182,7 +187,7 @@ exp_var_red
 
 ### Simulation Studies
 
-```{r cache=TRUE}
+```{r agpop-simulation, cache=TRUE}
 nsim <- 2000
 sim_rat <- data.frame(simple = rep(0, nsim), ratio = rep(0, nsim), B = rep(0, nsim))
 
@@ -204,7 +209,7 @@ abline(h = tyU, col = "red", lwd=2)
 
 We now calculate the actual variance across our 2000 simulations.
 
-```{r}
+```{r agpop-sim-variance}
 sim_var <- sapply(sim_rat[, 1:2], var)
 ratio_sim_var <- sim_var / sim_var[1]
 percentage_reduction <- 1 - ratio_sim_var
@@ -228,7 +233,7 @@ data.frame(sim_var, ratio_sim_var, percentage_reduction) |>
 
 When estimating the mean for a specific subgroup (like a region), the sample size in that subgroup ($n_d$) is a random variable, which increases our uncertainty.
 
-```{r}
+```{r agsrs-domain-est}
 agsrs <- read.csv("data/agsrs.csv")
 n <- nrow(agsrs)
 
@@ -245,7 +250,7 @@ region_agsrs_domain |> format_est_gt("domain_mean")
 
 If we incorrectly used the standard SRS formula (pretending $n_d$ was fixed), our standard errors would be artificially low:
 
-```{r}
+```{r agsrs-domain-srs}
 ## naively applying SRS estimation to each domain (incorrect analysis)
 region_agsrs_srs <- data.frame(rbind(
     NC = srs_est(agsrs$acres92[agsrs$region=="NC"], N = 1054, estimate = "mean", show.details = FALSE)$estimate,
@@ -262,7 +267,7 @@ region_agsrs_srs |> format_est_gt("mean")
 
 If we know the true regional population sizes ($N_h$), we can post-stratify our SRS data.
 
-```{r}
+```{r agsrs-poststrat-setup}
 nh <- tapply(agsrs[, "acres92"], agsrs[,"region"], length)
 n <- sum(nh)
 sh <- tapply(agsrs[, "acres92"], agsrs[,"region"], sd)
@@ -273,7 +278,7 @@ Nh <- c(NC = 1054, NE = 220, S = 1382, W = 422)
 
 **Create $n_h^{\text{post-strat}} = n \times \frac{N_h}{N}$**, instead of using the randomly observed $n_h$.
 
-```{r}
+```{r agsrs-poststrat-table}
 nh_post <- Nh / sum(Nh) * n
 
 ## regional summary for stratified sampling estimation
@@ -300,7 +305,7 @@ data.frame(
 ```
 **Output Note:** The table above shows the difference between the sample proportion ($\pi^{obs}_h$) and the true population proportion ($\pi^{pop}_h$). Post-stratification forces the weights to reflect the true population structure.
 
-```{r}
+```{r agsrs-poststrat-est}
 ## strata mean estimate
 res_post_strat <- str_est(ybarh, sh, nh_post, Nh, estimate = "mean")
 res_post_strat$table
@@ -321,7 +326,7 @@ mean(agpop$acres92)
 
 ### Importing Data and Calculating Contingency Table
 
-```{r}
+```{r teacher-load}
 teacher <- read.csv("data/college_teacher.csv")
 
 table(teacher[, 2:1])
@@ -332,7 +337,7 @@ prop.table(table(teacher[, 2:1]), margin = "gender")
 
 ### Domain Summary
 
-```{r}
+```{r teacher-domain-summary}
 n <- nrow(teacher)
 ybarh <- tapply(teacher$teacher, INDEX = teacher$gender, FUN = mean)
 sh <- tapply(teacher$teacher, INDEX = teacher$gender, FUN = sd)
@@ -357,7 +362,7 @@ data.frame(
 
 ### Estimating Domain Means
 
-```{r}
+```{r teacher-domain-est}
 Nh <- c(3000, 1000)
 n <- nrow(teacher)
 domain_teacher_est <- data.frame(rbind(
@@ -370,13 +375,13 @@ domain_teacher_est |> format_est_gt("domain_mean")
 
 ### Post-stratification Analysis
 
-```{r}
+```{r teacher-poststrat-prop}
 Nh <- c(3000, 1000)
 prop_h_pop <- Nh / sum(Nh)
 prop_h_pop
 ```
 #### Create $n_h^{\text{post-strat}} = n \times \frac{N_h}{N}$ {-}
-```{r}
+```{r teacher-poststrat-table}
 nh_post <- Nh / sum(Nh) * n
 
 ## show the differences
@@ -404,7 +409,7 @@ data.frame(
 
 Calculate the post-stratification estimation of the mean:
 
-```{r}
+```{r teacher-poststrat-est}
 ## poststratification estimation of mean
 res_teacher_post_strat <- str_est(ybarh, sh, nh_post, Nh, estimate = "mean")
 res_teacher_post_strat$table
@@ -414,7 +419,7 @@ teacher_post_strat |> format_est_gt("mean")
 
 This post-stratification estimate explicitly corrects for the sampling imbalance using the true strata sizes:
 
-```{r}
+```{r teacher-poststrat-check}
 # 0.35 * 0.75 + 0.25 * 0.25 
 (ybarh[1] * prop_h_pop[1]) + (ybarh[2] * prop_h_pop[2])
 ```
@@ -423,7 +428,7 @@ This post-stratification estimate explicitly corrects for the sampling imbalance
 
 If we didn't post-stratify, the simple mean is heavily weighted toward males because they were over-sampled by chance (40% in sample vs 25% in population).
 
-```{r}
+```{r teacher-srs-est}
 res_teacher_srs <- srs_est(teacher$teacher, N=sum(Nh), estimate = "mean", show.details = FALSE)
 res_teacher_srs$table
 teacher_srs <- res_teacher_srs$estimate
@@ -432,7 +437,7 @@ teacher_srs |> format_est_gt("mean")
 
 This equals the naive sample proportion:
 
-```{r}
+```{r teacher-srs-check}
 # 0.35 * 0.6 + 0.25 * 0.4
 mean(teacher$teacher == 1)
 ```
@@ -443,7 +448,7 @@ When the relationship between $y$ and $x$ doesn't pass exactly through the origi
 
 ### Importing data
 
-```{r}
+```{r cherry-reg-load}
 cherry <- read.csv("data/cherry.csv", header = T)
 ydata <- cherry$volume 
 xdata <- cherry$diameter
@@ -456,7 +461,7 @@ N <- 2967
 
 #### Fitting a linear regression model
 
-```{r}
+```{r cherry-reg-fit}
 n <- length(ydata)
 lmfit <- lm(ydata ~ xdata)
 summary(lmfit)
@@ -467,7 +472,7 @@ abline(lmfit, col="green", lwd=2)
 
 The function's `$table` shows the row-level working values $x_i$, $y_i$, fitted $\hat{y}_i = \hat{B}_0 + \hat{B}_1 x_i$, residuals $e_i = y_i - \hat{y}_i$, and $e_i^2$ (with a Sum row and a footnote giving $\hat B_0$, $\hat B_1$, and $s_e^2$):
 
-```{r}
+```{r cherry-reg-model}
 res_reg_model <- reg_est(ydata, xdata, N = N, estimate = "model")
 res_reg_model$table
 ```
@@ -476,7 +481,7 @@ res_reg_model$table
 
 We compute the regression estimate $\overline{y}_{reg}$ by passing `xbarU` with `estimate = "mean"`.
 
-```{r}
+```{r cherry-reg-mean}
 res_reg_mean <- reg_est(ydata, xdata, xbarU = xbarU, N = N, estimate = "mean")
 res_reg_mean$table
 
@@ -487,14 +492,14 @@ output_reg |> format_est_gt("reg_mean")
 
 #### Estimate the total
 
-```{r}
+```{r cherry-reg-total}
 reg_total_volume_raw <- reg_est(ydata, xdata, xbarU = xbarU, N = N, estimate = "total")$estimate
 reg_total_volume_raw |> format_est_gt("reg_total")
 ```
 
 #### Percentage of Variance Reduction
 
-```{r}
+```{r cherry-reg-varred}
 reg_mean_volume_raw <- output_reg
 var_reduction_reg <- 1 - (reg_mean_volume_raw["S.E."] / srs_mean_vol_raw["S.E."])^2
 unname(var_reduction_reg)
@@ -505,7 +510,7 @@ unname(var_reduction_reg)
 
 To estimate the number of dead trees in an area, we divide the area into 100 square plots and count dead trees on photographs. We select an SRS of 25 plots for exact field counts. We know the true mean photo count is 11.3.
 
-```{r}
+```{r deadtrees-data}
 photocounts <- c(10, 12, 7, 13, 13, 6, 17, 16, 15, 10, 14, 12, 10, 5, 12, 10,
                  10, 9, 6, 11, 7, 9, 11, 10, 10)
 
@@ -521,7 +526,7 @@ abline(lmfit, col="purple", lwd=2)
 
 Let's compare the three different estimation methods to see which provides the lowest Standard Error for the population mean.
 
-```{r}
+```{r deadtrees-compare}
 # 1. Regression estimate for the mean
 res_dt_reg <- reg_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100, estimate = "mean")
 res_dt_reg$table

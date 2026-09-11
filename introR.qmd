@@ -5,7 +5,7 @@ code-fold: false
 ---
 ## Basic R Objects and Operations
 
-```{r message=FALSE, warning=FALSE}
+```{r basic-r-objects, message=FALSE, warning=FALSE}
 # create a vector
 x <- 1:10
 x <- seq(30, 3, by = -2)
@@ -60,7 +60,7 @@ stat245_scores$scores[1] <- 40
 
 ## Import a Dataset as a dataframe and Simple Operations
 
-```{r}
+```{r import-agpop}
 # import agpop.csv and treat -99 as NA
 agpop <- read.csv("data/agpop.csv", na.strings = "-99")
 
@@ -97,7 +97,7 @@ agpop |>
 
 The `dplyr` package and the native pipe (`|>`) make modifying, subsetting, and summarizing data frames much cleaner than base R.
 
-```{r message=FALSE, warning=FALSE}
+```{r dplyr-manipulation, message=FALSE, warning=FALSE}
 library(dplyr)
 
 # 1. Modifying an existing data frame with mutate()
@@ -127,7 +127,7 @@ head(agpop_subset)
 
 When working with large datasets, printing the entire dataframe to your HTML document takes up too much vertical space and can slow down the browser. We can use the `gt` package to create a fixed-height, scrollable window. 
 
-```{r message=FALSE, warning=FALSE}
+```{r scrollable-table, message=FALSE, warning=FALSE}
 library(gt)
 
 # Display a large subset of the data inside a scrollable box
@@ -149,7 +149,7 @@ agpop |>
 
 The `gt` package also allows you to create highly customized, publication-ready tables. Below, we summarize the `agpop` dataset by region and create a table featuring a spanning header across multiple columns and complex mathematical LaTeX symbols in the column labels.
 
-```{r message=FALSE, warning=FALSE}
+```{r advanced-gt-table, message=FALSE, warning=FALSE}
 # Create a summary dataset by region, filtering out missing values (-99)
 ag_summary <- agpop |>
   filter(acres92 != -99, acres87 != -99) |>
@@ -192,7 +192,7 @@ ag_summary |>
 
 Base R includes built-in functions for quickly generating standard plots.
 
-```{r }
+```{r base-r-plots}
 hist(agpop$acres92, main = "Histogram of 1992 Acres", xlab = "Acres")
 plot(agpop$acres87, agpop$acres92, main = "1992 vs 1987 Acreage")
 abline(a = 0, b = 1, col = "red")
@@ -204,7 +204,7 @@ Here is the new sub-section you can add right below your standard plotting chunk
 
 Sometimes you need to export a high-resolution plot for a journal submission or a presentation. You can save a plot directly to your computer by opening a "graphics device" (like `pdf()`, `png()`, or `jpeg()`), running your plot code, and then closing the device with `dev.off()`.
 
-```{r results='hide'}
+```{r save-png-plot, results='hide'}
 # 1. Open the PNG device with high resolution (res = 300)
 # Note: When increasing resolution, you must also scale up the width/height in pixels or specify units in inches.
 png("agpop_scatter_highres.png", width = 6, height = 4, units = "in", res = 300)
@@ -218,7 +218,7 @@ dev.off()
 
 Once the file is saved in your project folder, you can insert it back into your Quarto document at any time using the `knitr` package.
 
-```{r fig.cap="My Imported PNG Plot"}
+```{r insert-png-plot, fig.cap="My Imported PNG Plot"}
 # Insert the saved PDF back into the document
 knitr::include_graphics("agpop_scatter_highres.png")
 
@@ -229,7 +229,7 @@ knitr::include_graphics("agpop_scatter_highres.png")
 
 While base R graphics are useful for quick checks, `ggplot2` provides a powerful grammar of graphics for complex visuals. Below, we generate a histogram of log-transformed 1992 acreages, overlaying both an empirical density curve and a theoretical normal distribution curve.
 
-```{r message=FALSE, warning=FALSE}
+```{r ggplot-histogram, message=FALSE, warning=FALSE}
 library(ggplot2)
 
 # Modern data prep with pipes
@@ -262,7 +262,7 @@ ggplot(ag_clean, aes(x = log_acres)) +
 
 ## Create your own function
 
-```{r }
+```{r custom-function-def}
 ## data is a matrix or data.frame
 means_col <- function(data)
 {
@@ -279,7 +279,7 @@ means_col <- function(data)
 ```
 
 
-```{r message=FALSE, warning=FALSE}
+```{r compare-custom-builtin, message=FALSE, warning=FALSE}
 library(gt)
 
 ## apply custom function (using dplyr to select numeric columns first)

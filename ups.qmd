@@ -21,7 +21,7 @@ When sampling without replacement, the inclusion probability for unit $i$ across
 
 The estimating functions used throughout this book (including `ratio_est`, `reg_est`, `srs_est`, `upswr_total`, `upswr_ratio`, `cluster_upswr_ratio`, `cluster_upswo_ratio`, and the `format_est_gt` table-formatting helper used below) live in a single shared file, `samplingestimate.r`, which we source below.
 
-```{r message=FALSE, warning=FALSE}
+```{r source-functions, message=FALSE, warning=FALSE}
 #| echo: false
 library(dplyr)
 library(latex2exp)
@@ -31,7 +31,7 @@ source("samplingestimate.r")
 <details>
 <summary>Show the shared estimating functions (`samplingestimate.r`)</summary>
 
-```{r}
+```{r print-functions}
 #| echo: false
 #| results: asis
 cat("```r\n")
@@ -45,7 +45,7 @@ cat("\n```\n")
 
 We first manually define a small dataset describing hours spent studying, where the probability of sampling a specific student group ($\psi_i$) was proportional to the number of students in that group ($M_i$).
 
-```{r}
+```{r studyhrs-data}
 # 1. Define the raw data
 psi <- c(24, 100, 100, 76, 44) / 647
 Mi <- c(24, 100, 100, 76, 44)
@@ -68,7 +68,7 @@ abline(lm(hrs ~ Mi), col = "blue")
 
 **Estimate the total and mean study hours:**
 
-```{r}
+```{r studyhrs-upswr-est}
 # Estimate the total hours spent by all students
 res_hrs_total <- upswr_total(total = hrs, psi = psi, show.details = FALSE)
 res_hrs_total$estimate |> format_est_gt("total")
@@ -83,7 +83,7 @@ res_hrs_ratio$estimate |> format_est_gt("ratio_mean")
 
 The file `statepop.csv` contains data from an unequal-probability sample of 100 U.S. counties. Counties were chosen with probabilities proportional to their populations. The total U.S. population is $M_0 = 255,077,536$. Because sampling was done **with replacement**, large counties like Los Angeles occur multiple times in the sample.
 
-```{r}
+```{r statepop-load}
 statepop <- read.csv("data/statepop.csv")
 
 # Constants
@@ -107,7 +107,7 @@ plot(popn, phys, log = "xy",
 
 **Estimate the Total and Per Capita Physicians:**
 
-```{r}
+```{r statepop-upswr-est}
 # Estimate the total number of physicians in the USA
 res_phys_total <- upswr_total(phys, psi, show.details = FALSE)
 res_phys_total$estimate |> format_est_gt("total")
@@ -123,7 +123,7 @@ res_phys_ratio$estimate |> format_est_gt("ratio_mean")
 
 Let's compare our UPSWR results against a naive Simple Random Sample of 100 counties.
 
-```{r}
+```{r counties-srs-compare}
 # Read SRS sample, treating -99 as NA
 counties <- read.csv("data/counties.csv", na.strings = "-99")
 totpop <- 255077536
@@ -149,7 +149,7 @@ res_counties_reg$estimate |> format_est_gt("reg_total")
 
 Here, we sample classes (Primary Sampling Units) with replacement based on class size, and then subsample students within them to ask about their study hours.
 
-```{r}
+```{r studenthrs-2stage-upswr}
 studenthrs <- read.table("data/studentshrs.txt", header = TRUE)
 
 # Calculate sampling probability (cpsi) based on known total students (647)
@@ -172,7 +172,7 @@ res_hrs$table
 
 **Estimate the overall mean study hours:**
 
-```{r}
+```{r studenthrs-mean-est}
 res_hrs$estimate |> format_est_gt("ratio_mean")
 ```
 
@@ -180,7 +180,7 @@ res_hrs$estimate |> format_est_gt("ratio_mean")
 
 Let's simulate 2000 random samples to see how UPSWR empirically compares to Simple Random Sampling. 
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r agpop-upswr-sim, message=FALSE, warning=FALSE, cache=TRUE}
 # Read population data
 agpop <- read.csv("data/agpop.csv", na.strings = "-99")
 agpop <- agpop |> filter(!is.na(acres92), !is.na(acres87))
@@ -216,7 +216,7 @@ for (i in 1:2000) {
 
 ### Visualizing Estimator Variance
 
-```{r fig.height=8, fig.width=8}
+```{r upswr-sim-plot, fig.height=8, fig.width=8}
 par(mfrow = c(2,1))
 
 # Compare Naive SRS, Regression SRS, and UPSWR
@@ -239,7 +239,7 @@ abline(h = total_acres92, col = "red", lwd = 2)
 
 When sampling **Without Replacement** with unequal probabilities, we rely on the inclusion probabilities ($\pi_k$) rather than single-draw probabilities ($\psi_i$). 
 
-```{r}
+```{r classpps-upswo}
 classpps <- read.csv("data/classpps.csv")
 
 res_upswo <- cluster_upswo_ratio(
@@ -257,6 +257,6 @@ res_upswo$table
 
 **Estimate the overall mean study hours (Horvitz-Thompson ratio style):**
 
-```{r}
+```{r classpps-upswo-est}
 res_upswo$estimate |> format_est_gt("ratio_mean")
 ```

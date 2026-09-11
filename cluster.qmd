@@ -33,7 +33,7 @@ $$
 
 The estimating functions used throughout this book (including `cluster_ratio`, used below for one-stage and two-stage cluster samples) live in a single shared file, `samplingestimate.r`, which we source below.
 
-```{r}
+```{r source-functions}
 #| echo: false
 source("samplingestimate.r")
 ```
@@ -41,7 +41,7 @@ source("samplingestimate.r")
 <details>
 <summary>Show the shared estimating functions (`samplingestimate.r`)</summary>
 
-```{r}
+```{r print-functions}
 #| echo: false
 #| results: asis
 cat("```r\n")
@@ -57,7 +57,7 @@ Consider a population of 187 high school algebra classes in a city. An investiga
 
 We read the raw data and display it using `gt`'s interactive pagination feature to keep the document clean.
 
-```{r}
+```{r algebra-load}
 algebra <- read.csv("data/algebra.csv")
 
 algebra |>
@@ -70,7 +70,7 @@ algebra |>
 
 Next, we run our updated function to compute both the cluster-level working table and the overall ratio estimate for the average student score.
 
-```{r}
+```{r algebra-cluster-ratio}
 alg_res <- cluster_ratio(data = algebra,
                              cname = "class",
                              csize = "Mi",
@@ -84,7 +84,7 @@ alg_res$table
 
 Finally, we extract the ratio estimate from the function output list to assess the overall population mean.
 
-```{r}
+```{r algebra-ratio-mean}
 # Display the overall ratio estimate
 alg_res$estimate |> format_est_gt("ratio_mean")
 ```
@@ -95,7 +95,7 @@ alg_res$estimate |> format_est_gt("ratio_mean")
 In two-stage cluster sampling, we sample clusters, and then subsample elements within them. In this dataset, researcher Arnold investigated coot eggs. He first selected a random sample of clutches (the clusters), and then measured the volume of a random subsample of eggs within each selected clutch.
 
 
-```{r}
+```{r coots-load}
 coots <- read.csv("data/coots.csv")
 
 coots |>
@@ -110,7 +110,7 @@ coots |>
 
 We apply the exact same ratio estimator formulation, though mathematically, the cluster total $t_i$ is now an *estimated* total $\hat{t}_i$.
 
-```{r}
+```{r coots-cluster-ratio}
 coots_res <- cluster_ratio(data = coots,
                                cname = "clutch",
                                csize = "csize",
@@ -120,7 +120,7 @@ coots_res$table
 ```
 **Output Note:** Unlike the previous example, we only measured a subset of eggs per clutch. The function automatically estimates the total volume of each clutch ($\hat{t}_i$) by multiplying the true clutch size ($M_i$) by the observed subsample mean ($\overline{y}_i$); the working table (truncated to the first 6 rows + Sum) shows these estimated totals alongside the ratio fit and residuals.
 
-```{r}
+```{r coots-ratio-mean}
 # Display the overall ratio estimate
 coots_res$estimate |> format_est_gt("ratio_mean")
 ```
