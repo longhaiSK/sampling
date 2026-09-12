@@ -1,1 +1,1 @@
-quarto render -M freeze:false
+quarto render --to html -M freeze:false
