@@ -169,7 +169,7 @@ format_lm_gt <- function (lmfit)
 ##                  with a Sum row and a footnote showing s_y^2; NULL otherwise
 ## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
 srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
-                      show.details = TRUE, col_labels = list (y = "y_i"))
+                      show.details = TRUE, col_labels = list (y = "y_i", ybar="\\bar y", dev="e_i"))
 {
     estimate <- match.arg (estimate)
 
@@ -200,6 +200,7 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
     working <- data.frame (
         i    = c (seq_len (n), "Sum"),
         y    = c (sdata, sum (sdata)),
+        ybar = rep (ybar, n + 1),
         dev  = c (dev, sum (dev)),
         dev2 = c (dev^2, sum (dev^2))
     )
@@ -210,11 +211,12 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
         cols_label (
             i    = md ("$i$"),
             y    = md (sprintf ("$%s$", col_labels$y)),
-            dev  = md (sprintf ("$%s-\\bar y$", col_labels$y)),
+            ybar    = md (sprintf ("$%s$", col_labels$ybar)),
+            dev  = md (sprintf ("$%s$", col_labels$dev)),
             dev2 = md (sprintf ("$(%s-\\bar y)^2$", col_labels$y))
         ) |>
         cols_width (i ~ px (40), everything () ~ px (110)) |>
-        fmt_auto (data = working, columns = c ("y", "dev", "dev2"), decimals = 3) |>
+        fmt_auto (data = working, columns = c ("y", "ybar", "dev", "dev2"), decimals = 3) |>
         sub_missing (missing_text = "...") |>
         tab_style (
             style     = cell_text (weight = "bold"),
@@ -226,21 +228,21 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
         ) |>
         tab_source_note (
             source_note = md (if (estimate == "total")
-                sprintf ("**Point estimate:** $\\hat t = N\\bar y = %s \\times %s = %s$",
+                sprintf ("$\\hat t = N\\bar y = %s \\times %s = %s$",
                          fmt_num (N, 0), fmt_num (ybar), fmt_num (est))
             else
-                sprintf ("**Point estimate:** $\\bar y = \\dfrac{\\sum_i %s}{n} = \\dfrac{%s}{%d} = %s$",
+                sprintf ("$\\bar y = \\dfrac{\\sum_i %s}{n} = \\dfrac{%s}{%d} = %s$",
                          col_labels$y, fmt_num (sum (sdata)), n, fmt_num (ybar)))
         ) |>
         tab_source_note (
             source_note = md (if (estimate == "total")
-                sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t) = N \\times \\mathrm{SE}(\\bar y) = %s \\times %s = %s$",
+                sprintf ("$\\mathrm{SE}(\\hat t) = N \\times \\mathrm{SE}(\\bar y) = %s \\times %s = %s$",
                          fmt_num (N, 0), fmt_num (se.ybar), fmt_num (se.est))
             else if (is.finite (N))
-                sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y) = \\sqrt{1-\\dfrac{n}{N}}\\,\\dfrac{s}{\\sqrt n} = \\sqrt{1-\\dfrac{%d}{%d}}\\,\\dfrac{%s}{\\sqrt{%d}} = %s$",
+                sprintf ("$\\mathrm{SE}(\\bar y) = \\sqrt{1-\\dfrac{n}{N}}\\,\\dfrac{s}{\\sqrt n} = \\sqrt{1-\\dfrac{%d}{%d}}\\,\\dfrac{%s}{\\sqrt{%d}} = %s$",
                          n, N, fmt_num (sqrt (s2y)), n, fmt_num (se.ybar))
             else
-                sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y) = \\dfrac{s}{\\sqrt n} = \\dfrac{%s}{\\sqrt{%d}} = %s$",
+                sprintf ("$\\mathrm{SE}(\\bar y) = \\dfrac{s}{\\sqrt n} = \\dfrac{%s}{\\sqrt{%d}} = %s$",
                          fmt_num (sqrt (s2y)), n, fmt_num (se.ybar)))
         )
 
@@ -275,7 +277,7 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
 ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
                         estimate = c ("mean", "total", "model"), show.details = TRUE,
                         col_labels = list (y = "y_i", x = "x_i", yhat = "\\hat y_i"),
-                        extra_col = NULL)
+                        extra_col = NULL, B_label = "\\hat B")
 {
   estimate <- match.arg (estimate)
 
@@ -365,28 +367,28 @@ ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
   table <- table |>
       tab_source_note (
           source_note = md (if (estimate == "model")
-              sprintf ("**Point estimate:** $\\hat B = \\dfrac{\\sum_i %s}{\\sum_i %s} = \\dfrac{%s}{%s} = %s$",
-                       col_labels$y, col_labels$x, fmt_num (sum (ydata)), fmt_num (sum (xdata)), fmt_num (B_hat))
+              sprintf ("$%s = \\dfrac{\\sum_i %s}{\\sum_i %s} = \\dfrac{%s}{%s} = %s$",
+                       B_label, col_labels$y, col_labels$x, fmt_num (sum (ydata)), fmt_num (sum (xdata)), fmt_num (B_hat))
           else if (estimate == "total")
-              sprintf ("**Point estimate:** $\\hat t = \\hat B\\,\\bar x_U\\,N = %s \\times %s \\times %s = %s$",
+              sprintf ("$\\hat t = \\hat B\\,\\bar x_U\\,N = %s \\times %s \\times %s = %s$",
                        fmt_num (B_hat), fmt_num (xbarU), fmt_num (N, 0), fmt_num (est))
           else
-              sprintf ("**Point estimate:** $\\bar y_r = \\hat B\\,\\bar x_U = %s \\times %s = %s$",
+              sprintf ("$\\bar y_r = \\hat B\\,\\bar x_U = %s \\times %s = %s$",
                        fmt_num (B_hat), fmt_num (xbarU), fmt_num (est)))
       ) |>
       tab_source_note (
           source_note = md (if (estimate == "model")
               (if (is.finite (N))
-                  sprintf ("**Standard error:** $\\mathrm{SE}(\\hat B) = \\dfrac{1}{\\bar x}\\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n}} = \\dfrac{1}{%s}\\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d}} = %s$",
-                          fmt_num (xbar), n, N, fmt_num (var_e), n, fmt_num (sd_B_hat))
+                  sprintf ("$\\mathrm{SE}(%s) = \\dfrac{1}{\\bar x}\\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n}} = \\dfrac{1}{%s}\\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d}} = %s$",
+                          B_label, fmt_num (xbar), n, N, fmt_num (var_e), n, fmt_num (sd_B_hat))
               else
-                  sprintf ("**Standard error:** $\\mathrm{SE}(\\hat B) = \\dfrac{1}{\\bar x}\\sqrt{\\dfrac{s_e^2}{n}} = \\dfrac{1}{%s}\\sqrt{\\dfrac{%s}{%d}} = %s$",
-                          fmt_num (xbar), fmt_num (var_e), n, fmt_num (sd_B_hat)))
+                  sprintf ("$\\mathrm{SE}(%s) = \\dfrac{1}{\\bar x}\\sqrt{\\dfrac{s_e^2}{n}} = \\dfrac{1}{%s}\\sqrt{\\dfrac{%s}{%d}} = %s$",
+                          B_label, fmt_num (xbar), fmt_num (var_e), n, fmt_num (sd_B_hat)))
           else if (estimate == "total")
-              sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t) = \\mathrm{SE}(\\hat B)\\,\\bar x_U\\,N = %s \\times %s \\times %s = %s$",
+              sprintf ("$\\mathrm{SE}(\\hat t) = \\mathrm{SE}(\\hat B)\\,\\bar x_U\\,N = %s \\times %s \\times %s = %s$",
                        fmt_num (sd_B_hat), fmt_num (xbarU), fmt_num (N, 0), fmt_num (sd_est))
           else
-              sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y_r) = \\mathrm{SE}(\\hat B)\\,\\bar x_U = %s \\times %s = %s$",
+              sprintf ("$\\mathrm{SE}(\\bar y_r) = \\mathrm{SE}(\\hat B)\\,\\bar x_U = %s \\times %s = %s$",
                        fmt_num (sd_B_hat), fmt_num (xbarU), fmt_num (sd_est)))
       )
 
@@ -488,27 +490,27 @@ reg_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
       ) |>
       tab_source_note (
           source_note = md (if (estimate == "model")
-              sprintf ("**Point estimate:** $\\hat B_1 = \\dfrac{\\sum_i(x_i-\\bar x)(y_i-\\bar y)}{\\sum_i(x_i-\\bar x)^2} = \\dfrac{%s}{%s} = %s$",
+              sprintf ("$\\hat B_1 = \\dfrac{\\sum_i(x_i-\\bar x)(y_i-\\bar y)}{\\sum_i(x_i-\\bar x)^2} = \\dfrac{%s}{%s} = %s$",
                        fmt_num (Sxy), fmt_num (Sxx), fmt_num (unname (Bhat[2])))
           else if (estimate == "total")
-              sprintf ("**Point estimate:** $\\hat t_{reg} = N\\bar y_{reg} = %s \\times %s = %s$",
+              sprintf ("$\\hat t_{reg} = N\\bar y_{reg} = %s \\times %s = %s$",
                        fmt_num (N, 0), fmt_num (yhat_reg), fmt_num (est))
           else
-              sprintf ("**Point estimate:** $\\bar y_{reg} = \\hat B_0+\\hat B_1\\bar x_U = %s + %s \\times %s = %s$",
+              sprintf ("$\\bar y_{reg} = \\hat B_0+\\hat B_1\\bar x_U = %s + %s \\times %s = %s$",
                        fmt_num (Bhat[1]), fmt_num (Bhat[2]), fmt_num (xbarU), fmt_num (yhat_reg)))
       ) |>
       tab_source_note (
           source_note = md (if (estimate == "model")
-              sprintf ("**Standard error:** $\\mathrm{SE}(\\hat B_1) = \\sqrt{\\dfrac{s_e^2}{\\sum_i(x_i-\\bar x)^2}} = \\sqrt{\\dfrac{%s}{%s}} = %s$",
+              sprintf ("$\\mathrm{SE}(\\hat B_1) = \\sqrt{\\dfrac{s_e^2}{\\sum_i(x_i-\\bar x)^2}} = \\sqrt{\\dfrac{%s}{%s}} = %s$",
                        fmt_num (SSe), fmt_num (Sxx), fmt_num (sd_est))
           else if (estimate == "total")
-              sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t_{reg}) = N\\times\\mathrm{SE}(\\bar y_{reg}) = %s \\times %s = %s$",
+              sprintf ("$\\mathrm{SE}(\\hat t_{reg}) = N\\times\\mathrm{SE}(\\bar y_{reg}) = %s \\times %s = %s$",
                        fmt_num (N, 0), fmt_num (se_yhat_reg), fmt_num (sd_est))
           else if (is.finite (N))
-              sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y_{reg}) = \\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n}} = \\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d}} = %s$",
+              sprintf ("$\\mathrm{SE}(\\bar y_{reg}) = \\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n}} = \\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d}} = %s$",
                        n, N, fmt_num (SSe), n, fmt_num (se_yhat_reg))
           else
-              sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y_{reg}) = \\sqrt{\\dfrac{s_e^2}{n}} = \\sqrt{\\dfrac{%s}{%d}} = %s$",
+              sprintf ("$\\mathrm{SE}(\\bar y_{reg}) = \\sqrt{\\dfrac{s_e^2}{n}} = \\sqrt{\\dfrac{%s}{%d}} = %s$",
                        fmt_num (SSe), n, fmt_num (se_yhat_reg)))
       )
 
@@ -612,17 +614,17 @@ str_est <- function (ybarh, sh, nh, Nh, estimate = c ("mean", "total"), show.det
         ) |>
         tab_source_note (
             source_note = md (if (estimate == "total")
-                sprintf ("**Point estimate:** $\\hat t_{str} = N\\bar y_{str} = %s \\times %s = %s$",
+                sprintf ("$\\hat t_{str} = N\\bar y_{str} = %s \\times %s = %s$",
                          fmt_num (N, 0), fmt_num (ybar), fmt_num (est))
             else
-                sprintf ("**Point estimate:** $\\bar y_{str} = \\sum_h \\pi_h\\bar y_h = %s$", fmt_num (ybar)))
+                sprintf ("$\\bar y_{str} = \\sum_h \\pi_h\\bar y_h = %s$", fmt_num (ybar)))
         ) |>
         tab_source_note (
             source_note = md (if (estimate == "total")
-                sprintf ("**Standard error:** $\\mathrm{SE}(\\hat t_{str}) = N \\times \\mathrm{SE}(\\bar y_{str}) = %s \\times %s = %s$",
+                sprintf ("$\\mathrm{SE}(\\hat t_{str}) = N \\times \\mathrm{SE}(\\bar y_{str}) = %s \\times %s = %s$",
                          fmt_num (N, 0), fmt_num (seybar), fmt_num (se.est))
             else
-                sprintf ("**Standard error:** $\\mathrm{SE}(\\bar y_{str}) = \\sqrt{\\sum_h v_h} = \\sqrt{%s} = %s$",
+                sprintf ("$\\mathrm{SE}(\\bar y_{str}) = \\sqrt{\\sum_h v_h} = \\sqrt{%s} = %s$",
                          fmt_num (sum (v_h)), fmt_num (seybar)))
         )
 
@@ -701,7 +703,7 @@ cluster_ratio <- function (data, cname, csize, yvar, N = Inf,
   {
       ratio_est (t_hat_cls, Mi, N = N, estimate = "model", show.details = show.details,
                  col_labels = list (y = "\\hat t_i", x = "M_i", yhat = "\\hat B M_i"),
-                 extra_col = ybar_col)
+                 extra_col = ybar_col, B_label = "\\bar y_r")
   }
 }
 
