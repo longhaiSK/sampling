@@ -91,7 +91,7 @@ agpop |>
   )
 ```
 
-## Tables and Data Manipulation in R
+## Data Manipulation and Data Table
 
 ### Modern Data Manipulation using `dplyr`
 
@@ -149,7 +149,7 @@ agpop |>
 
 ::: {.content-visible unless-format="html"}
 
-```{r scrollable-table-print, message=FALSE, warning=FALSE}
+```{r head-table-print, message=FALSE, warning=FALSE}
 library(gt)
 
 # Non-HTML output (e.g. Typst/PDF): a scrollbar doesn't exist on a static
@@ -234,7 +234,56 @@ ag_summary |>
   tab_options(table.width = pct(100))
 ```
 
-## Graphics in R 
+The spanners above group columns by **statistic** (all means together, all variances together). We can instead reorder the columns with `select()` and group them by **variable**, so each variable's mean and variance sit side by side under their own spanning header.
+
+```{r}
+#| label: display-summary-gt-by-variable
+ag_summary |>
+  select(region,
+         acres92_mean, acres92_var,
+         acres87_mean, acres87_var,
+         farms92_mean, farms92_var,
+         largef92_mean, largef92_var,
+         smallf92_mean, smallf92_var) |>
+  gt() |>
+  tab_header(
+    title = "Regional Summary: Mean and Variance of Five Variables",
+    subtitle = "Grouped by variable"
+  ) |>
+  # One spanning header per variable, covering its mean and variance columns
+  tab_spanner(label = md("**acres92**"),  columns = c(acres92_mean, acres92_var)) |>
+  tab_spanner(label = md("**acres87**"),  columns = c(acres87_mean, acres87_var)) |>
+  tab_spanner(label = md("**farms92**"),  columns = c(farms92_mean, farms92_var)) |>
+  tab_spanner(label = md("**largef92**"), columns = c(largef92_mean, largef92_var)) |>
+  tab_spanner(label = md("**smallf92**"), columns = c(smallf92_mean, smallf92_var)) |>
+  # The spanner already names the variable, so the column labels can stay generic
+  cols_label(
+    region        = md("**Region**"),
+    acres92_mean  = md("$\\bar y$"),
+    acres92_var   = md("$s^2$"),
+    acres87_mean  = md("$\\bar y$"),
+    acres87_var   = md("$s^2$"),
+    farms92_mean  = md("$\\bar y$"),
+    farms92_var   = md("$s^2$"),
+    largef92_mean = md("$\\bar y$"),
+    largef92_var  = md("$s^2$"),
+    smallf92_mean = md("$\\bar y$"),
+    smallf92_var  = md("$s^2$")
+  ) |>
+  fmt_number(
+    columns = ends_with("_mean"),
+    decimals = 1
+  ) |>
+  fmt_number(
+    columns = ends_with("_var"),
+    decimals = 0,
+    sep_mark = ","
+  ) |>
+  tab_options(table.width = pct(100))
+```
+**Output Note:** Both tables show exactly the same numbers; only the column grouping differs. Grouping by variable (this view) makes it easy to compare a single variable's mean and variance; grouping by statistic (the earlier view) makes it easy to compare means (or variances) across variables.
+
+## Graphics in R
 
 ### Base R Graphics
 
