@@ -95,7 +95,44 @@ agpop |>
 
 ### Pipe Operations
 
+The native pipe `|>` takes the value on its left and passes it as the **first argument** to the function on its right. `x |> f()` is just another way of writing `f(x)`, and pipes can be chained so that the output of one step feeds into the next.
 
+```{r pipe-basics}
+x <- c(1, 2, 3, 4, 5, NA)
+
+# without the pipe
+sum(x, na.rm = TRUE)
+log(sum(x, na.rm = TRUE), base = 10)
+round(exp(log(sum(x, na.rm = TRUE), base = 10)), digits = 2)
+
+# the same computations written with the pipe, read left to right
+x |> sum(na.rm = TRUE)
+x |> sum(na.rm = TRUE) |> log(base = 10)
+x |> sum(na.rm = TRUE) |> log(base = 10) |> exp() |> round(digits = 2)
+```
+
+Extra arguments still work as usual — they just go after the piped-in first argument. Each `|>` step below passes its result on as the *first* argument only; any other arguments (`na.rm`, `trim`, `decreasing`, `digits`) are supplied by name at each step:
+
+```{r pipe-extra-args}
+c(1, 4, 9, 16, NA) |>
+  sum(na.rm = TRUE) |>
+  sqrt() |>
+  round(digits = 1)
+
+c(5, 1, NA, 3, 9) |>
+  sort(decreasing = TRUE, na.last = NA) |>
+  mean(trim = 0.1)
+```
+
+When the piped-in value needs to land in an argument other than the first, use the placeholder `_` to mark where it goes (the named argument holding `_` must be spelled out):
+
+```{r pipe-placeholder}
+# without the pipe: mtcars is the *data* argument to lm(), not the first argument
+lm(mpg ~ disp, data = mtcars)
+
+# with the placeholder, mtcars |> lm(mpg ~ disp, data = _) sends mtcars to `data`
+mtcars |> lm(mpg ~ disp, data = _)
+```
 
 ### Modern Data Manipulation using `dplyr`
 

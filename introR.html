@@ -249,9 +249,10 @@ window.Quarto = {
   <li><a href="#import-a-dataset-as-a-dataframe-and-simple-operations" id="toc-import-a-dataset-as-a-dataframe-and-simple-operations" class="nav-link" data-scroll-target="#import-a-dataset-as-a-dataframe-and-simple-operations"><span class="header-section-number">1.2</span> Import a Dataset as a dataframe and Simple Operations</a></li>
   <li><a href="#data-manipulation-and-data-table" id="toc-data-manipulation-and-data-table" class="nav-link" data-scroll-target="#data-manipulation-and-data-table"><span class="header-section-number">1.3</span> Data Manipulation and Data Table</a>
   <ul>
-  <li><a href="#modern-data-manipulation-using-dplyr" id="toc-modern-data-manipulation-using-dplyr" class="nav-link" data-scroll-target="#modern-data-manipulation-using-dplyr"><span class="header-section-number">1.3.1</span> Modern Data Manipulation using <code>dplyr</code></a></li>
-  <li><a href="#displaying-large-datasets-with-a-scroll-bar" id="toc-displaying-large-datasets-with-a-scroll-bar" class="nav-link" data-scroll-target="#displaying-large-datasets-with-a-scroll-bar"><span class="header-section-number">1.3.2</span> Displaying Large Datasets with a Scroll Bar</a></li>
-  <li><a href="#advanced-tables-with-gt" id="toc-advanced-tables-with-gt" class="nav-link" data-scroll-target="#advanced-tables-with-gt"><span class="header-section-number">1.3.3</span> Advanced Tables with <code>gt</code></a></li>
+  <li><a href="#pipe-operations" id="toc-pipe-operations" class="nav-link" data-scroll-target="#pipe-operations"><span class="header-section-number">1.3.1</span> Pipe Operations</a></li>
+  <li><a href="#modern-data-manipulation-using-dplyr" id="toc-modern-data-manipulation-using-dplyr" class="nav-link" data-scroll-target="#modern-data-manipulation-using-dplyr"><span class="header-section-number">1.3.2</span> Modern Data Manipulation using <code>dplyr</code></a></li>
+  <li><a href="#displaying-large-datasets-with-a-scroll-bar" id="toc-displaying-large-datasets-with-a-scroll-bar" class="nav-link" data-scroll-target="#displaying-large-datasets-with-a-scroll-bar"><span class="header-section-number">1.3.3</span> Displaying Large Datasets with a Scroll Bar</a></li>
+  <li><a href="#advanced-tables-with-gt" id="toc-advanced-tables-with-gt" class="nav-link" data-scroll-target="#advanced-tables-with-gt"><span class="header-section-number">1.3.4</span> Advanced Tables with <code>gt</code></a></li>
   </ul></li>
   <li><a href="#graphics-in-r" id="toc-graphics-in-r" class="nav-link" data-scroll-target="#graphics-in-r"><span class="header-section-number">1.4</span> Graphics in R</a>
   <ul>
@@ -434,23 +435,23 @@ window.Quarto = {
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(<span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>)</span>
 <span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="xivrxynpbb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#xivrxynpbb table {
+<div id="jtcccjocaa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jtcccjocaa table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#xivrxynpbb thead, #xivrxynpbb tbody, #xivrxynpbb tfoot, #xivrxynpbb tr, #xivrxynpbb td, #xivrxynpbb th {
+#jtcccjocaa thead, #jtcccjocaa tbody, #jtcccjocaa tfoot, #jtcccjocaa tr, #jtcccjocaa td, #jtcccjocaa th {
   border-style: none;
 }
 
-#xivrxynpbb p {
+#jtcccjocaa p {
   margin: 0;
   padding: 0;
 }
 
-#xivrxynpbb .gt_table {
+#jtcccjocaa .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -476,12 +477,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#xivrxynpbb .gt_caption {
+#jtcccjocaa .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#xivrxynpbb .gt_title {
+#jtcccjocaa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -493,7 +494,7 @@ window.Quarto = {
   border-bottom-width: 0;
 }
 
-#xivrxynpbb .gt_subtitle {
+#jtcccjocaa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -505,7 +506,7 @@ window.Quarto = {
   border-top-width: 0;
 }
 
-#xivrxynpbb .gt_heading {
+#jtcccjocaa .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -517,13 +518,13 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#xivrxynpbb .gt_bottom_border {
+#jtcccjocaa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#xivrxynpbb .gt_col_headings {
+#jtcccjocaa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -538,7 +539,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#xivrxynpbb .gt_col_heading {
+#jtcccjocaa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -558,7 +559,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#xivrxynpbb .gt_column_spanner_outer {
+#jtcccjocaa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -570,15 +571,15 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#xivrxynpbb .gt_column_spanner_outer:first-child {
+#jtcccjocaa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#xivrxynpbb .gt_column_spanner_outer:last-child {
+#jtcccjocaa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#xivrxynpbb .gt_column_spanner {
+#jtcccjocaa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -590,11 +591,11 @@ window.Quarto = {
   width: 100%;
 }
 
-#xivrxynpbb .gt_spanner_row {
+#jtcccjocaa .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#xivrxynpbb .gt_group_heading {
+#jtcccjocaa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -620,7 +621,7 @@ window.Quarto = {
   text-align: left;
 }
 
-#xivrxynpbb .gt_empty_group_heading {
+#jtcccjocaa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -635,15 +636,15 @@ window.Quarto = {
   vertical-align: middle;
 }
 
-#xivrxynpbb .gt_from_md > :first-child {
+#jtcccjocaa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#xivrxynpbb .gt_from_md > :last-child {
+#jtcccjocaa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#xivrxynpbb .gt_row {
+#jtcccjocaa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -662,7 +663,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#xivrxynpbb .gt_stub {
+#jtcccjocaa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -675,7 +676,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#xivrxynpbb .gt_stub_row_group {
+#jtcccjocaa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -689,15 +690,15 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#xivrxynpbb .gt_row_group_first td {
+#jtcccjocaa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#xivrxynpbb .gt_row_group_first th {
+#jtcccjocaa .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#xivrxynpbb .gt_summary_row {
+#jtcccjocaa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -707,16 +708,16 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#xivrxynpbb .gt_first_summary_row {
+#jtcccjocaa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#xivrxynpbb .gt_first_summary_row.thick {
+#jtcccjocaa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#xivrxynpbb .gt_last_summary_row {
+#jtcccjocaa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -726,7 +727,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#xivrxynpbb .gt_grand_summary_row {
+#jtcccjocaa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -736,7 +737,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#xivrxynpbb .gt_first_grand_summary_row {
+#jtcccjocaa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -746,7 +747,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#xivrxynpbb .gt_last_grand_summary_row_top {
+#jtcccjocaa .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -756,11 +757,11 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#xivrxynpbb .gt_striped {
+#jtcccjocaa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#xivrxynpbb .gt_table_body {
+#jtcccjocaa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -769,7 +770,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#xivrxynpbb .gt_footnotes {
+#jtcccjocaa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -783,7 +784,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#xivrxynpbb .gt_footnote {
+#jtcccjocaa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -792,7 +793,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#xivrxynpbb .gt_sourcenotes {
+#jtcccjocaa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -806,7 +807,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#xivrxynpbb .gt_sourcenote {
+#jtcccjocaa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -814,72 +815,72 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#xivrxynpbb .gt_left {
+#jtcccjocaa .gt_left {
   text-align: left;
 }
 
-#xivrxynpbb .gt_center {
+#jtcccjocaa .gt_center {
   text-align: center;
 }
 
-#xivrxynpbb .gt_right {
+#jtcccjocaa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xivrxynpbb .gt_font_normal {
+#jtcccjocaa .gt_font_normal {
   font-weight: normal;
 }
 
-#xivrxynpbb .gt_font_bold {
+#jtcccjocaa .gt_font_bold {
   font-weight: bold;
 }
 
-#xivrxynpbb .gt_font_italic {
+#jtcccjocaa .gt_font_italic {
   font-style: italic;
 }
 
-#xivrxynpbb .gt_super {
+#jtcccjocaa .gt_super {
   font-size: 65%;
 }
 
-#xivrxynpbb .gt_footnote_marks {
+#jtcccjocaa .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#xivrxynpbb .gt_asterisk {
+#jtcccjocaa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#xivrxynpbb .gt_indent_1 {
+#jtcccjocaa .gt_indent_1 {
   text-indent: 5px;
 }
 
-#xivrxynpbb .gt_indent_2 {
+#jtcccjocaa .gt_indent_2 {
   text-indent: 10px;
 }
 
-#xivrxynpbb .gt_indent_3 {
+#jtcccjocaa .gt_indent_3 {
   text-indent: 15px;
 }
 
-#xivrxynpbb .gt_indent_4 {
+#jtcccjocaa .gt_indent_4 {
   text-indent: 20px;
 }
 
-#xivrxynpbb .gt_indent_5 {
+#jtcccjocaa .gt_indent_5 {
   text-indent: 25px;
 }
 
-#xivrxynpbb .katex-display {
+#jtcccjocaa .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#xivrxynpbb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#jtcccjocaa div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -962,20 +963,95 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 </section>
 <section id="data-manipulation-and-data-table" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="data-manipulation-and-data-table"><span class="header-section-number">1.3</span> Data Manipulation and Data Table</h2>
-<section id="modern-data-manipulation-using-dplyr" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="modern-data-manipulation-using-dplyr"><span class="header-section-number">1.3.1</span> Modern Data Manipulation using <code>dplyr</code></h3>
+<section id="pipe-operations" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="pipe-operations"><span class="header-section-number">1.3.1</span> Pipe Operations</h3>
+<p>The native pipe <code>|&gt;</code> takes the value on its left and passes it as the <strong>first argument</strong> to the function on its right. <code>x |&gt; f()</code> is just another way of writing <code>f(x)</code>, and pipes can be chained so that the output of one step feeds into the next.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="cn">NA</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># without the pipe</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">base =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.176091</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">exp</span>(<span class="fu">log</span>(<span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">base =</span> <span class="dv">10</span>)), <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.24</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the same computations written with the pipe, read left to right</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">log</span>(<span class="at">base =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.176091</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">log</span>(<span class="at">base =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span> <span class="fu">exp</span>() <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.24</code></pre>
+</div>
+</div>
+<p>Extra arguments still work as usual — they just go after the piped-in first argument. Each <code>|&gt;</code> step below passes its result on as the <em>first</em> argument only; any other arguments (<code>na.rm</code>, <code>trim</code>, <code>decreasing</code>, <code>digits</code>) are supplied by name at each step:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>, <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.5</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="cn">NA</span>, <span class="dv">3</span>, <span class="dv">9</span>) <span class="sc">|&gt;</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>, <span class="at">na.last =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(<span class="at">trim =</span> <span class="fl">0.1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.5</code></pre>
+</div>
+</div>
+<p>When the piped-in value needs to land in an argument other than the first, use the placeholder <code>_</code> to mark where it goes (the named argument holding <code>_</code> must be spelled out):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># without the pipe: mtcars is the *data* argument to lm(), not the first argument</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> mtcars)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = mpg ~ disp, data = mtcars)
+
+Coefficients:
+(Intercept)         disp  
+   29.59985     -0.04122  </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># with the placeholder, mtcars |&gt; lm(mpg ~ disp, data = _) sends mtcars to `data`</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> _)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = mpg ~ disp, data = mtcars)
+
+Coefficients:
+(Intercept)         disp  
+   29.59985     -0.04122  </code></pre>
+</div>
+</div>
+</section>
+<section id="modern-data-manipulation-using-dplyr" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="modern-data-manipulation-using-dplyr"><span class="header-section-number">1.3.2</span> Modern Data Manipulation using <code>dplyr</code></h3>
 <p>The <code>dplyr</code> package and the native pipe (<code>|&gt;</code>) make modifying, subsetting, and summarizing data frames much cleaner than base R.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Modifying an existing data frame with mutate()</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Instead of updating columns one by one with $, we can create multiple new columns at once</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>stat245_scores <span class="ot">&lt;-</span> stat245_scores <span class="sc">|&gt;</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">perc =</span> scores <span class="sc">/</span> <span class="dv">50</span> <span class="sc">*</span> <span class="dv">100</span>,</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">adj =</span> perc <span class="sc">+</span> <span class="dv">10</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>stat245_scores</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Modifying an existing data frame with mutate()</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Instead of updating columns one by one with $, we can create multiple new columns at once</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>stat245_scores <span class="ot">&lt;-</span> stat245_scores <span class="sc">|&gt;</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">perc =</span> scores <span class="sc">/</span> <span class="dv">50</span> <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">adj =</span> perc <span class="sc">+</span> <span class="dv">10</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>stat245_scores</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -983,18 +1059,18 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   </script>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Filter rows based on conditions</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>agpop_AK <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(state <span class="sc">==</span> <span class="st">"AK"</span>)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>agpop_W <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">"W"</span>)</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>agpop_largefarm <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(largef92 <span class="sc">&gt;</span> <span class="dv">10</span>)</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Select specific columns and slice specific rows</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co"># This replaces base R: agpop[1:20, c("acres92", "largef92")]</span></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>agpop_subset <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> </span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(acres92, largef92)</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agpop_subset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Filter rows based on conditions</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>agpop_AK <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(state <span class="sc">==</span> <span class="st">"AK"</span>)</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>agpop_W <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">"W"</span>)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>agpop_largefarm <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(largef92 <span class="sc">&gt;</span> <span class="dv">10</span>)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Select specific columns and slice specific rows</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="co"># This replaces base R: agpop[1:20, c("acres92", "largef92")]</span></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>agpop_subset <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> </span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(acres92, largef92)</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agpop_subset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -1004,41 +1080,41 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 </div>
 </div>
 </section>
-<section id="displaying-large-datasets-with-a-scroll-bar" class="level3" data-number="1.3.2">
-<h3 data-number="1.3.2" class="anchored" data-anchor-id="displaying-large-datasets-with-a-scroll-bar"><span class="header-section-number">1.3.2</span> Displaying Large Datasets with a Scroll Bar</h3>
+<section id="displaying-large-datasets-with-a-scroll-bar" class="level3" data-number="1.3.3">
+<h3 data-number="1.3.3" class="anchored" data-anchor-id="displaying-large-datasets-with-a-scroll-bar"><span class="header-section-number">1.3.3</span> Displaying Large Datasets with a Scroll Bar</h3>
 <p>When working with large datasets, printing the entire dataframe to your HTML document takes up too much vertical space and can slow down the browser. We can use the <code>gt</code> package to create a fixed-height, scrollable window, so HTML readers can scroll through the <strong>full</strong> dataset. A static, non-HTML render (e.g.&nbsp;Typst/PDF) has no scrollbar, so there we show only the head of the data instead.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the FULL dataset inside a scrollable box (HTML only)</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>agpop <span class="sc">|&gt;</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Agricultural Population Data"</span>,</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Scroll to view more rows"</span></span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(</span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">container.height =</span> <span class="fu">px</span>(<span class="dv">400</span>),   <span class="co"># Restricts the table height to 400 pixels</span></span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">container.overflow.y =</span> <span class="cn">TRUE</span>   <span class="co"># Enables the vertical scroll bar</span></span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the FULL dataset inside a scrollable box (HTML only)</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>agpop <span class="sc">|&gt;</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Agricultural Population Data"</span>,</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Scroll to view more rows"</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">container.height =</span> <span class="fu">px</span>(<span class="dv">400</span>),   <span class="co"># Restricts the table height to 400 pixels</span></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">container.overflow.y =</span> <span class="cn">TRUE</span>   <span class="co"># Enables the vertical scroll bar</span></span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="qqpkggnodx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:400px;">
-<style>#qqpkggnodx table {
+<div id="ftejsgewiq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:400px;">
+<style>#ftejsgewiq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#qqpkggnodx thead, #qqpkggnodx tbody, #qqpkggnodx tfoot, #qqpkggnodx tr, #qqpkggnodx td, #qqpkggnodx th {
+#ftejsgewiq thead, #ftejsgewiq tbody, #ftejsgewiq tfoot, #ftejsgewiq tr, #ftejsgewiq td, #ftejsgewiq th {
   border-style: none;
 }
 
-#qqpkggnodx p {
+#ftejsgewiq p {
   margin: 0;
   padding: 0;
 }
 
-#qqpkggnodx .gt_table {
+#ftejsgewiq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1064,12 +1140,12 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-left-color: #D3D3D3;
 }
 
-#qqpkggnodx .gt_caption {
+#ftejsgewiq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#qqpkggnodx .gt_title {
+#ftejsgewiq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1081,7 +1157,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-width: 0;
 }
 
-#qqpkggnodx .gt_subtitle {
+#ftejsgewiq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1093,7 +1169,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-top-width: 0;
 }
 
-#qqpkggnodx .gt_heading {
+#ftejsgewiq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1105,13 +1181,13 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#qqpkggnodx .gt_bottom_border {
+#ftejsgewiq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qqpkggnodx .gt_col_headings {
+#ftejsgewiq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1126,7 +1202,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#qqpkggnodx .gt_col_heading {
+#ftejsgewiq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1146,7 +1222,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   overflow-x: hidden;
 }
 
-#qqpkggnodx .gt_column_spanner_outer {
+#ftejsgewiq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1158,15 +1234,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 4px;
 }
 
-#qqpkggnodx .gt_column_spanner_outer:first-child {
+#ftejsgewiq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qqpkggnodx .gt_column_spanner_outer:last-child {
+#ftejsgewiq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qqpkggnodx .gt_column_spanner {
+#ftejsgewiq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1178,11 +1254,11 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   width: 100%;
 }
 
-#qqpkggnodx .gt_spanner_row {
+#ftejsgewiq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#qqpkggnodx .gt_group_heading {
+#ftejsgewiq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1208,7 +1284,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   text-align: left;
 }
 
-#qqpkggnodx .gt_empty_group_heading {
+#ftejsgewiq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1223,15 +1299,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   vertical-align: middle;
 }
 
-#qqpkggnodx .gt_from_md > :first-child {
+#ftejsgewiq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qqpkggnodx .gt_from_md > :last-child {
+#ftejsgewiq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qqpkggnodx .gt_row {
+#ftejsgewiq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1250,7 +1326,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   overflow-x: hidden;
 }
 
-#qqpkggnodx .gt_stub {
+#ftejsgewiq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1263,7 +1339,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#qqpkggnodx .gt_stub_row_group {
+#ftejsgewiq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1277,15 +1353,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   vertical-align: top;
 }
 
-#qqpkggnodx .gt_row_group_first td {
+#ftejsgewiq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qqpkggnodx .gt_row_group_first th {
+#ftejsgewiq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#qqpkggnodx .gt_summary_row {
+#ftejsgewiq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1295,16 +1371,16 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#qqpkggnodx .gt_first_summary_row {
+#ftejsgewiq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qqpkggnodx .gt_first_summary_row.thick {
+#ftejsgewiq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qqpkggnodx .gt_last_summary_row {
+#ftejsgewiq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1314,7 +1390,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#qqpkggnodx .gt_grand_summary_row {
+#ftejsgewiq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1324,7 +1400,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#qqpkggnodx .gt_first_grand_summary_row {
+#ftejsgewiq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1334,7 +1410,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-top-color: #D3D3D3;
 }
 
-#qqpkggnodx .gt_last_grand_summary_row_top {
+#ftejsgewiq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1344,11 +1420,11 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#qqpkggnodx .gt_striped {
+#ftejsgewiq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qqpkggnodx .gt_table_body {
+#ftejsgewiq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1357,7 +1433,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#qqpkggnodx .gt_footnotes {
+#ftejsgewiq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1371,7 +1447,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#qqpkggnodx .gt_footnote {
+#ftejsgewiq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1380,7 +1456,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#qqpkggnodx .gt_sourcenotes {
+#ftejsgewiq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1394,7 +1470,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#qqpkggnodx .gt_sourcenote {
+#ftejsgewiq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1402,72 +1478,72 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#qqpkggnodx .gt_left {
+#ftejsgewiq .gt_left {
   text-align: left;
 }
 
-#qqpkggnodx .gt_center {
+#ftejsgewiq .gt_center {
   text-align: center;
 }
 
-#qqpkggnodx .gt_right {
+#ftejsgewiq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qqpkggnodx .gt_font_normal {
+#ftejsgewiq .gt_font_normal {
   font-weight: normal;
 }
 
-#qqpkggnodx .gt_font_bold {
+#ftejsgewiq .gt_font_bold {
   font-weight: bold;
 }
 
-#qqpkggnodx .gt_font_italic {
+#ftejsgewiq .gt_font_italic {
   font-style: italic;
 }
 
-#qqpkggnodx .gt_super {
+#ftejsgewiq .gt_super {
   font-size: 65%;
 }
 
-#qqpkggnodx .gt_footnote_marks {
+#ftejsgewiq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#qqpkggnodx .gt_asterisk {
+#ftejsgewiq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qqpkggnodx .gt_indent_1 {
+#ftejsgewiq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#qqpkggnodx .gt_indent_2 {
+#ftejsgewiq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#qqpkggnodx .gt_indent_3 {
+#ftejsgewiq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#qqpkggnodx .gt_indent_4 {
+#ftejsgewiq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#qqpkggnodx .gt_indent_5 {
+#ftejsgewiq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#qqpkggnodx .katex-display {
+#ftejsgewiq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#qqpkggnodx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ftejsgewiq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -53833,26 +53909,26 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 </div>
 <p><strong>Output Note:</strong> The HTML version shows the full dataset in a clean, professional, 400-pixel-high scrolling container; the Typst/PDF version shows only the first six rows since a printed page cannot scroll.</p>
 </section>
-<section id="advanced-tables-with-gt" class="level3" data-number="1.3.3">
-<h3 data-number="1.3.3" class="anchored" data-anchor-id="advanced-tables-with-gt"><span class="header-section-number">1.3.3</span> Advanced Tables with <code>gt</code></h3>
+<section id="advanced-tables-with-gt" class="level3" data-number="1.3.4">
+<h3 data-number="1.3.4" class="anchored" data-anchor-id="advanced-tables-with-gt"><span class="header-section-number">1.3.4</span> Advanced Tables with <code>gt</code></h3>
 <p>The <code>gt</code> package also allows you to create highly customized, publication-ready tables. Below, we summarize five variables of the <code>agpop</code> dataset by region, computing both the mean and the variance of each, and create a table featuring spanning headers across multiple columns and complex mathematical LaTeX symbols in the column labels.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The five variables we want to summarize</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>vars_of_interest <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"acres92"</span>, <span class="st">"acres87"</span>, <span class="st">"farms92"</span>, <span class="st">"largef92"</span>, <span class="st">"smallf92"</span>)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a summary dataset by region: mean and variance of each variable,</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co"># filtering out rows where any of the five variables is missing (-99)</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_all</span>(<span class="fu">all_of</span>(vars_of_interest), <span class="sc">~</span> .x <span class="sc">!=</span> <span class="sc">-</span><span class="dv">99</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(region) <span class="sc">|&gt;</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">all_of</span>(vars_of_interest),</span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(<span class="at">mean =</span> <span class="sc">~</span><span class="fu">mean</span>(.x), <span class="at">var =</span> <span class="sc">~</span><span class="fu">var</span>(.x)),</span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">"{.col}_{.fn}"</span></span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>ag_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The five variables we want to summarize</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>vars_of_interest <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"acres92"</span>, <span class="st">"acres87"</span>, <span class="st">"farms92"</span>, <span class="st">"largef92"</span>, <span class="st">"smallf92"</span>)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a summary dataset by region: mean and variance of each variable,</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="co"># filtering out rows where any of the five variables is missing (-99)</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_all</span>(<span class="fu">all_of</span>(vars_of_interest), <span class="sc">~</span> .x <span class="sc">!=</span> <span class="sc">-</span><span class="dv">99</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(region) <span class="sc">|&gt;</span></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">all_of</span>(vars_of_interest),</span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(<span class="at">mean =</span> <span class="sc">~</span><span class="fu">mean</span>(.x), <span class="at">var =</span> <span class="sc">~</span><span class="fu">var</span>(.x)),</span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">.names =</span> <span class="st">"{.col}_{.fn}"</span></span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a>ag_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -53862,64 +53938,64 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the summary using a customized gt table</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="sc">|&gt;</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Regional Summary: Mean and Variance of Five Variables"</span>,</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"acres92, acres87, farms92, largef92, smallf92"</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add spanning headers grouping the mean columns and the variance columns</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**Mean**"</span>),</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>)</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**Variance**"</span>),</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>)</span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Use LaTeX math expressions for column names</span></span>
-<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
-<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">region        =</span> <span class="fu">md</span>(<span class="st">"**Region**"</span>),</span>
-<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres92_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{acres92}$"</span>),</span>
-<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres87_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{acres87}$"</span>),</span>
-<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">farms92_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{farms92}$"</span>),</span>
-<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">largef92_mean =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{largef92}$"</span>),</span>
-<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">smallf92_mean =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{smallf92}$"</span>),</span>
-<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres92_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2_{acres92}$"</span>),</span>
-<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres87_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2_{acres87}$"</span>),</span>
-<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">farms92_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2_{farms92}$"</span>),</span>
-<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">largef92_var  =</span> <span class="fu">md</span>(<span class="st">"$s^2_{largef92}$"</span>),</span>
-<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">smallf92_var  =</span> <span class="fu">md</span>(<span class="st">"$s^2_{smallf92}$"</span>)</span>
-<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
-<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>),</span>
-<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">1</span></span>
-<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
-<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>),</span>
-<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">0</span>,</span>
-<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep_mark =</span> <span class="st">","</span></span>
-<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">table.width =</span> <span class="fu">pct</span>(<span class="dv">100</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the summary using a customized gt table</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="sc">|&gt;</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Regional Summary: Mean and Variance of Five Variables"</span>,</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"acres92, acres87, farms92, largef92, smallf92"</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add spanning headers grouping the mean columns and the variance columns</span></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**Mean**"</span>),</span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>)</span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**Variance**"</span>),</span>
+<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>)</span>
+<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Use LaTeX math expressions for column names</span></span>
+<span id="cb55-18"><a href="#cb55-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb55-19"><a href="#cb55-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">region        =</span> <span class="fu">md</span>(<span class="st">"**Region**"</span>),</span>
+<span id="cb55-20"><a href="#cb55-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres92_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{acres92}$"</span>),</span>
+<span id="cb55-21"><a href="#cb55-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres87_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{acres87}$"</span>),</span>
+<span id="cb55-22"><a href="#cb55-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">farms92_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{farms92}$"</span>),</span>
+<span id="cb55-23"><a href="#cb55-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">largef92_mean =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{largef92}$"</span>),</span>
+<span id="cb55-24"><a href="#cb55-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">smallf92_mean =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{smallf92}$"</span>),</span>
+<span id="cb55-25"><a href="#cb55-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres92_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2_{acres92}$"</span>),</span>
+<span id="cb55-26"><a href="#cb55-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres87_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2_{acres87}$"</span>),</span>
+<span id="cb55-27"><a href="#cb55-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">farms92_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2_{farms92}$"</span>),</span>
+<span id="cb55-28"><a href="#cb55-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">largef92_var  =</span> <span class="fu">md</span>(<span class="st">"$s^2_{largef92}$"</span>),</span>
+<span id="cb55-29"><a href="#cb55-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">smallf92_var  =</span> <span class="fu">md</span>(<span class="st">"$s^2_{smallf92}$"</span>)</span>
+<span id="cb55-30"><a href="#cb55-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb55-31"><a href="#cb55-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb55-32"><a href="#cb55-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>),</span>
+<span id="cb55-33"><a href="#cb55-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">1</span></span>
+<span id="cb55-34"><a href="#cb55-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb55-35"><a href="#cb55-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb55-36"><a href="#cb55-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>),</span>
+<span id="cb55-37"><a href="#cb55-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">0</span>,</span>
+<span id="cb55-38"><a href="#cb55-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep_mark =</span> <span class="st">","</span></span>
+<span id="cb55-39"><a href="#cb55-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb55-40"><a href="#cb55-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">table.width =</span> <span class="fu">pct</span>(<span class="dv">100</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="qyqjpamlny" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#qyqjpamlny table {
+<div id="tdcqjtwgio" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tdcqjtwgio table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#qyqjpamlny thead, #qyqjpamlny tbody, #qyqjpamlny tfoot, #qyqjpamlny tr, #qyqjpamlny td, #qyqjpamlny th {
+#tdcqjtwgio thead, #tdcqjtwgio tbody, #tdcqjtwgio tfoot, #tdcqjtwgio tr, #tdcqjtwgio td, #tdcqjtwgio th {
   border-style: none;
 }
 
-#qyqjpamlny p {
+#tdcqjtwgio p {
   margin: 0;
   padding: 0;
 }
 
-#qyqjpamlny .gt_table {
+#tdcqjtwgio .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -53945,12 +54021,12 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-left-color: #D3D3D3;
 }
 
-#qyqjpamlny .gt_caption {
+#tdcqjtwgio .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#qyqjpamlny .gt_title {
+#tdcqjtwgio .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -53962,7 +54038,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-width: 0;
 }
 
-#qyqjpamlny .gt_subtitle {
+#tdcqjtwgio .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -53974,7 +54050,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-top-width: 0;
 }
 
-#qyqjpamlny .gt_heading {
+#tdcqjtwgio .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -53986,13 +54062,13 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#qyqjpamlny .gt_bottom_border {
+#tdcqjtwgio .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qyqjpamlny .gt_col_headings {
+#tdcqjtwgio .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -54007,7 +54083,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#qyqjpamlny .gt_col_heading {
+#tdcqjtwgio .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54027,7 +54103,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   overflow-x: hidden;
 }
 
-#qyqjpamlny .gt_column_spanner_outer {
+#tdcqjtwgio .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54039,15 +54115,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 4px;
 }
 
-#qyqjpamlny .gt_column_spanner_outer:first-child {
+#tdcqjtwgio .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qyqjpamlny .gt_column_spanner_outer:last-child {
+#tdcqjtwgio .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qyqjpamlny .gt_column_spanner {
+#tdcqjtwgio .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -54059,11 +54135,11 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   width: 100%;
 }
 
-#qyqjpamlny .gt_spanner_row {
+#tdcqjtwgio .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#qyqjpamlny .gt_group_heading {
+#tdcqjtwgio .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54089,7 +54165,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   text-align: left;
 }
 
-#qyqjpamlny .gt_empty_group_heading {
+#tdcqjtwgio .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -54104,15 +54180,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   vertical-align: middle;
 }
 
-#qyqjpamlny .gt_from_md > :first-child {
+#tdcqjtwgio .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qyqjpamlny .gt_from_md > :last-child {
+#tdcqjtwgio .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qyqjpamlny .gt_row {
+#tdcqjtwgio .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54131,7 +54207,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   overflow-x: hidden;
 }
 
-#qyqjpamlny .gt_stub {
+#tdcqjtwgio .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54144,7 +54220,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#qyqjpamlny .gt_stub_row_group {
+#tdcqjtwgio .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54158,15 +54234,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   vertical-align: top;
 }
 
-#qyqjpamlny .gt_row_group_first td {
+#tdcqjtwgio .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qyqjpamlny .gt_row_group_first th {
+#tdcqjtwgio .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#qyqjpamlny .gt_summary_row {
+#tdcqjtwgio .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -54176,16 +54252,16 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#qyqjpamlny .gt_first_summary_row {
+#tdcqjtwgio .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qyqjpamlny .gt_first_summary_row.thick {
+#tdcqjtwgio .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qyqjpamlny .gt_last_summary_row {
+#tdcqjtwgio .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54195,7 +54271,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#qyqjpamlny .gt_grand_summary_row {
+#tdcqjtwgio .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -54205,7 +54281,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#qyqjpamlny .gt_first_grand_summary_row {
+#tdcqjtwgio .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54215,7 +54291,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-top-color: #D3D3D3;
 }
 
-#qyqjpamlny .gt_last_grand_summary_row_top {
+#tdcqjtwgio .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54225,11 +54301,11 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#qyqjpamlny .gt_striped {
+#tdcqjtwgio .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qyqjpamlny .gt_table_body {
+#tdcqjtwgio .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -54238,7 +54314,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#qyqjpamlny .gt_footnotes {
+#tdcqjtwgio .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -54252,7 +54328,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#qyqjpamlny .gt_footnote {
+#tdcqjtwgio .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -54261,7 +54337,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#qyqjpamlny .gt_sourcenotes {
+#tdcqjtwgio .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -54275,7 +54351,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#qyqjpamlny .gt_sourcenote {
+#tdcqjtwgio .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -54283,72 +54359,72 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#qyqjpamlny .gt_left {
+#tdcqjtwgio .gt_left {
   text-align: left;
 }
 
-#qyqjpamlny .gt_center {
+#tdcqjtwgio .gt_center {
   text-align: center;
 }
 
-#qyqjpamlny .gt_right {
+#tdcqjtwgio .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qyqjpamlny .gt_font_normal {
+#tdcqjtwgio .gt_font_normal {
   font-weight: normal;
 }
 
-#qyqjpamlny .gt_font_bold {
+#tdcqjtwgio .gt_font_bold {
   font-weight: bold;
 }
 
-#qyqjpamlny .gt_font_italic {
+#tdcqjtwgio .gt_font_italic {
   font-style: italic;
 }
 
-#qyqjpamlny .gt_super {
+#tdcqjtwgio .gt_super {
   font-size: 65%;
 }
 
-#qyqjpamlny .gt_footnote_marks {
+#tdcqjtwgio .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#qyqjpamlny .gt_asterisk {
+#tdcqjtwgio .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qyqjpamlny .gt_indent_1 {
+#tdcqjtwgio .gt_indent_1 {
   text-indent: 5px;
 }
 
-#qyqjpamlny .gt_indent_2 {
+#tdcqjtwgio .gt_indent_2 {
   text-indent: 10px;
 }
 
-#qyqjpamlny .gt_indent_3 {
+#tdcqjtwgio .gt_indent_3 {
   text-indent: 15px;
 }
 
-#qyqjpamlny .gt_indent_4 {
+#tdcqjtwgio .gt_indent_4 {
   text-indent: 20px;
 }
 
-#qyqjpamlny .gt_indent_5 {
+#tdcqjtwgio .gt_indent_5 {
   text-indent: 25px;
 }
 
-#qyqjpamlny .katex-display {
+#tdcqjtwgio .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#qyqjpamlny div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#tdcqjtwgio div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -54457,66 +54533,66 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 </div>
 <p>The spanners above group columns by <strong>statistic</strong> (all means together, all variances together). We can instead reorder the columns with <code>select()</code> and group them by <strong>variable</strong>, so each variable’s mean and variance sit side by side under their own spanning header.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="sc">|&gt;</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region,</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>         acres92_mean, acres92_var,</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>         acres87_mean, acres87_var,</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>         farms92_mean, farms92_var,</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>         largef92_mean, largef92_var,</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>         smallf92_mean, smallf92_var) <span class="sc">|&gt;</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Regional Summary: Mean and Variance of Five Variables"</span>,</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Grouped by variable"</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># One spanning header per variable, covering its mean and variance columns</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**acres92**"</span>),  <span class="at">columns =</span> <span class="fu">c</span>(acres92_mean, acres92_var)) <span class="sc">|&gt;</span></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**acres87**"</span>),  <span class="at">columns =</span> <span class="fu">c</span>(acres87_mean, acres87_var)) <span class="sc">|&gt;</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**farms92**"</span>),  <span class="at">columns =</span> <span class="fu">c</span>(farms92_mean, farms92_var)) <span class="sc">|&gt;</span></span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**largef92**"</span>), <span class="at">columns =</span> <span class="fu">c</span>(largef92_mean, largef92_var)) <span class="sc">|&gt;</span></span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**smallf92**"</span>), <span class="at">columns =</span> <span class="fu">c</span>(smallf92_mean, smallf92_var)) <span class="sc">|&gt;</span></span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The spanner already names the variable, so the column labels can stay generic</span></span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">region        =</span> <span class="fu">md</span>(<span class="st">"**Region**"</span>),</span>
-<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres92_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar y$"</span>),</span>
-<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres92_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2$"</span>),</span>
-<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres87_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar y$"</span>),</span>
-<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres87_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2$"</span>),</span>
-<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">farms92_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar y$"</span>),</span>
-<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">farms92_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2$"</span>),</span>
-<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">largef92_mean =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar y$"</span>),</span>
-<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">largef92_var  =</span> <span class="fu">md</span>(<span class="st">"$s^2$"</span>),</span>
-<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">smallf92_mean =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar y$"</span>),</span>
-<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">smallf92_var  =</span> <span class="fu">md</span>(<span class="st">"$s^2$"</span>)</span>
-<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
-<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>),</span>
-<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">1</span></span>
-<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
-<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>),</span>
-<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">0</span>,</span>
-<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep_mark =</span> <span class="st">","</span></span>
-<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">table.width =</span> <span class="fu">pct</span>(<span class="dv">100</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="sc">|&gt;</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region,</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>         acres92_mean, acres92_var,</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>         acres87_mean, acres87_var,</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>         farms92_mean, farms92_var,</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>         largef92_mean, largef92_var,</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>         smallf92_mean, smallf92_var) <span class="sc">|&gt;</span></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Regional Summary: Mean and Variance of Five Variables"</span>,</span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Grouped by variable"</span></span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># One spanning header per variable, covering its mean and variance columns</span></span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**acres92**"</span>),  <span class="at">columns =</span> <span class="fu">c</span>(acres92_mean, acres92_var)) <span class="sc">|&gt;</span></span>
+<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**acres87**"</span>),  <span class="at">columns =</span> <span class="fu">c</span>(acres87_mean, acres87_var)) <span class="sc">|&gt;</span></span>
+<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**farms92**"</span>),  <span class="at">columns =</span> <span class="fu">c</span>(farms92_mean, farms92_var)) <span class="sc">|&gt;</span></span>
+<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**largef92**"</span>), <span class="at">columns =</span> <span class="fu">c</span>(largef92_mean, largef92_var)) <span class="sc">|&gt;</span></span>
+<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**smallf92**"</span>), <span class="at">columns =</span> <span class="fu">c</span>(smallf92_mean, smallf92_var)) <span class="sc">|&gt;</span></span>
+<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The spanner already names the variable, so the column labels can stay generic</span></span>
+<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb56-21"><a href="#cb56-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">region        =</span> <span class="fu">md</span>(<span class="st">"**Region**"</span>),</span>
+<span id="cb56-22"><a href="#cb56-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres92_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar y$"</span>),</span>
+<span id="cb56-23"><a href="#cb56-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres92_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2$"</span>),</span>
+<span id="cb56-24"><a href="#cb56-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres87_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar y$"</span>),</span>
+<span id="cb56-25"><a href="#cb56-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres87_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2$"</span>),</span>
+<span id="cb56-26"><a href="#cb56-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">farms92_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar y$"</span>),</span>
+<span id="cb56-27"><a href="#cb56-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">farms92_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2$"</span>),</span>
+<span id="cb56-28"><a href="#cb56-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">largef92_mean =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar y$"</span>),</span>
+<span id="cb56-29"><a href="#cb56-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">largef92_var  =</span> <span class="fu">md</span>(<span class="st">"$s^2$"</span>),</span>
+<span id="cb56-30"><a href="#cb56-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">smallf92_mean =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar y$"</span>),</span>
+<span id="cb56-31"><a href="#cb56-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">smallf92_var  =</span> <span class="fu">md</span>(<span class="st">"$s^2$"</span>)</span>
+<span id="cb56-32"><a href="#cb56-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb56-33"><a href="#cb56-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb56-34"><a href="#cb56-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>),</span>
+<span id="cb56-35"><a href="#cb56-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">1</span></span>
+<span id="cb56-36"><a href="#cb56-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb56-37"><a href="#cb56-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb56-38"><a href="#cb56-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>),</span>
+<span id="cb56-39"><a href="#cb56-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">0</span>,</span>
+<span id="cb56-40"><a href="#cb56-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep_mark =</span> <span class="st">","</span></span>
+<span id="cb56-41"><a href="#cb56-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb56-42"><a href="#cb56-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">table.width =</span> <span class="fu">pct</span>(<span class="dv">100</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="wfhsvykzgj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wfhsvykzgj table {
+<div id="xtwqeytjoq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#xtwqeytjoq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#wfhsvykzgj thead, #wfhsvykzgj tbody, #wfhsvykzgj tfoot, #wfhsvykzgj tr, #wfhsvykzgj td, #wfhsvykzgj th {
+#xtwqeytjoq thead, #xtwqeytjoq tbody, #xtwqeytjoq tfoot, #xtwqeytjoq tr, #xtwqeytjoq td, #xtwqeytjoq th {
   border-style: none;
 }
 
-#wfhsvykzgj p {
+#xtwqeytjoq p {
   margin: 0;
   padding: 0;
 }
 
-#wfhsvykzgj .gt_table {
+#xtwqeytjoq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -54542,12 +54618,12 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-left-color: #D3D3D3;
 }
 
-#wfhsvykzgj .gt_caption {
+#xtwqeytjoq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#wfhsvykzgj .gt_title {
+#xtwqeytjoq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -54559,7 +54635,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-width: 0;
 }
 
-#wfhsvykzgj .gt_subtitle {
+#xtwqeytjoq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -54571,7 +54647,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-top-width: 0;
 }
 
-#wfhsvykzgj .gt_heading {
+#xtwqeytjoq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -54583,13 +54659,13 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#wfhsvykzgj .gt_bottom_border {
+#xtwqeytjoq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wfhsvykzgj .gt_col_headings {
+#xtwqeytjoq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -54604,7 +54680,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#wfhsvykzgj .gt_col_heading {
+#xtwqeytjoq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54624,7 +54700,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   overflow-x: hidden;
 }
 
-#wfhsvykzgj .gt_column_spanner_outer {
+#xtwqeytjoq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54636,15 +54712,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 4px;
 }
 
-#wfhsvykzgj .gt_column_spanner_outer:first-child {
+#xtwqeytjoq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wfhsvykzgj .gt_column_spanner_outer:last-child {
+#xtwqeytjoq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wfhsvykzgj .gt_column_spanner {
+#xtwqeytjoq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -54656,11 +54732,11 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   width: 100%;
 }
 
-#wfhsvykzgj .gt_spanner_row {
+#xtwqeytjoq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#wfhsvykzgj .gt_group_heading {
+#xtwqeytjoq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54686,7 +54762,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   text-align: left;
 }
 
-#wfhsvykzgj .gt_empty_group_heading {
+#xtwqeytjoq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -54701,15 +54777,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   vertical-align: middle;
 }
 
-#wfhsvykzgj .gt_from_md > :first-child {
+#xtwqeytjoq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wfhsvykzgj .gt_from_md > :last-child {
+#xtwqeytjoq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wfhsvykzgj .gt_row {
+#xtwqeytjoq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54728,7 +54804,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   overflow-x: hidden;
 }
 
-#wfhsvykzgj .gt_stub {
+#xtwqeytjoq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54741,7 +54817,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#wfhsvykzgj .gt_stub_row_group {
+#xtwqeytjoq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54755,15 +54831,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   vertical-align: top;
 }
 
-#wfhsvykzgj .gt_row_group_first td {
+#xtwqeytjoq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wfhsvykzgj .gt_row_group_first th {
+#xtwqeytjoq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#wfhsvykzgj .gt_summary_row {
+#xtwqeytjoq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -54773,16 +54849,16 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#wfhsvykzgj .gt_first_summary_row {
+#xtwqeytjoq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#wfhsvykzgj .gt_first_summary_row.thick {
+#xtwqeytjoq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wfhsvykzgj .gt_last_summary_row {
+#xtwqeytjoq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54792,7 +54868,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#wfhsvykzgj .gt_grand_summary_row {
+#xtwqeytjoq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -54802,7 +54878,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#wfhsvykzgj .gt_first_grand_summary_row {
+#xtwqeytjoq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54812,7 +54888,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-top-color: #D3D3D3;
 }
 
-#wfhsvykzgj .gt_last_grand_summary_row_top {
+#xtwqeytjoq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54822,11 +54898,11 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#wfhsvykzgj .gt_striped {
+#xtwqeytjoq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wfhsvykzgj .gt_table_body {
+#xtwqeytjoq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -54835,7 +54911,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#wfhsvykzgj .gt_footnotes {
+#xtwqeytjoq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -54849,7 +54925,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#wfhsvykzgj .gt_footnote {
+#xtwqeytjoq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -54858,7 +54934,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#wfhsvykzgj .gt_sourcenotes {
+#xtwqeytjoq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -54872,7 +54948,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#wfhsvykzgj .gt_sourcenote {
+#xtwqeytjoq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -54880,72 +54956,72 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#wfhsvykzgj .gt_left {
+#xtwqeytjoq .gt_left {
   text-align: left;
 }
 
-#wfhsvykzgj .gt_center {
+#xtwqeytjoq .gt_center {
   text-align: center;
 }
 
-#wfhsvykzgj .gt_right {
+#xtwqeytjoq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wfhsvykzgj .gt_font_normal {
+#xtwqeytjoq .gt_font_normal {
   font-weight: normal;
 }
 
-#wfhsvykzgj .gt_font_bold {
+#xtwqeytjoq .gt_font_bold {
   font-weight: bold;
 }
 
-#wfhsvykzgj .gt_font_italic {
+#xtwqeytjoq .gt_font_italic {
   font-style: italic;
 }
 
-#wfhsvykzgj .gt_super {
+#xtwqeytjoq .gt_super {
   font-size: 65%;
 }
 
-#wfhsvykzgj .gt_footnote_marks {
+#xtwqeytjoq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#wfhsvykzgj .gt_asterisk {
+#xtwqeytjoq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wfhsvykzgj .gt_indent_1 {
+#xtwqeytjoq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#wfhsvykzgj .gt_indent_2 {
+#xtwqeytjoq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#wfhsvykzgj .gt_indent_3 {
+#xtwqeytjoq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#wfhsvykzgj .gt_indent_4 {
+#xtwqeytjoq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#wfhsvykzgj .gt_indent_5 {
+#xtwqeytjoq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#wfhsvykzgj .katex-display {
+#xtwqeytjoq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#wfhsvykzgj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#xtwqeytjoq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -55070,7 +55146,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <h3 data-number="1.4.1" class="anchored" data-anchor-id="base-r-graphics"><span class="header-section-number">1.4.1</span> Base R Graphics</h3>
 <p>Base R includes built-in functions for quickly generating standard plots.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(agpop<span class="sc">$</span>acres92, <span class="at">main =</span> <span class="st">"Histogram of 1992 Acres"</span>, <span class="at">xlab =</span> <span class="st">"Acres"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(agpop<span class="sc">$</span>acres92, <span class="at">main =</span> <span class="st">"Histogram of 1992 Acres"</span>, <span class="at">xlab =</span> <span class="st">"Acres"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -55078,8 +55154,8 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(agpop<span class="sc">$</span>acres87, agpop<span class="sc">$</span>acres92, <span class="at">main =</span> <span class="st">"1992 vs 1987 Acreage"</span>)</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(agpop<span class="sc">$</span>acres87, agpop<span class="sc">$</span>acres92, <span class="at">main =</span> <span class="st">"1992 vs 1987 Acreage"</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -55094,19 +55170,19 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <h3 data-number="1.4.2" class="anchored" data-anchor-id="saving-and-inserting-external-plots"><span class="header-section-number">1.4.2</span> Saving and Inserting External Plots</h3>
 <p>Sometimes you need to export a high-resolution plot for a journal submission or a presentation. You can save a plot directly to your computer by opening a “graphics device” (like <code>pdf()</code>, <code>png()</code>, or <code>jpeg()</code>), running your plot code, and then closing the device with <code>dev.off()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Open the PNG device with high resolution (res = 300)</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: When increasing resolution, you must also scale up the width/height in pixels or specify units in inches.</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"agpop_scatter_highres.png"</span>, <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">4</span>, <span class="at">units =</span> <span class="st">"in"</span>, <span class="at">res =</span> <span class="dv">300</span>)</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(agpop<span class="sc">$</span>acres87, agpop<span class="sc">$</span>acres92, <span class="at">main =</span> <span class="st">"1992 vs 1987 Acreage"</span>)</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Open the PNG device with high resolution (res = 300)</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: When increasing resolution, you must also scale up the width/height in pixels or specify units in inches.</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"agpop_scatter_highres.png"</span>, <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">4</span>, <span class="at">units =</span> <span class="st">"in"</span>, <span class="at">res =</span> <span class="dv">300</span>)</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(agpop<span class="sc">$</span>acres87, agpop<span class="sc">$</span>acres92, <span class="at">main =</span> <span class="st">"1992 vs 1987 Acreage"</span>)</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Once the file is saved in your project folder, you can insert it back into your Quarto document at any time using the <code>knitr</code> package.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Insert the saved PDF back into the document</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"agpop_scatter_highres.png"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Insert the saved PDF back into the document</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"agpop_scatter_highres.png"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -55121,34 +55197,34 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <h3 data-number="1.4.3" class="anchored" data-anchor-id="advanced-visualization-with-ggplot2"><span class="header-section-number">1.4.3</span> Advanced Visualization with <code>ggplot2</code></h3>
 <p>While base R graphics are useful for quick checks, <code>ggplot2</code> provides a powerful grammar of graphics for complex visuals. Below, we generate a histogram of log-transformed 1992 acreages, overlaying both an empirical density curve and a theoretical normal distribution curve.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Modern data prep with pipes</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>ag_clean <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(acres92 <span class="sc">!=</span> <span class="sc">-</span><span class="dv">99</span>, acres92 <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_acres =</span> <span class="fu">log</span>(acres92))</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate parameters for the theoretical normal curve</span></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>mean_log <span class="ot">&lt;-</span> <span class="fu">mean</span>(ag_clean<span class="sc">$</span>log_acres)</span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>sd_log <span class="ot">&lt;-</span> <span class="fu">sd</span>(ag_clean<span class="sc">$</span>log_acres)</span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ag_clean, <span class="fu">aes</span>(<span class="at">x =</span> log_acres)) <span class="sc">+</span></span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Base Histogram mapped to density (instead of count)</span></span>
-<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">bins =</span> <span class="dv">30</span>, </span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Empirical Density Curve (Dark Red)</span></span>
-<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">"darkred"</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Theoretical Normal Curve (Black, Dashed)</span></span>
-<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, </span>
-<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> mean_log, <span class="at">sd =</span> sd_log), </span>
-<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Log(Acres92)"</span>,</span>
-<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Histogram with Empirical Density (Red) and Normal Fit (Black Dashed)"</span>,</span>
-<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Log of 1992 Farm Acreage"</span>,</span>
-<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
-<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Modern data prep with pipes</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>ag_clean <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(acres92 <span class="sc">!=</span> <span class="sc">-</span><span class="dv">99</span>, acres92 <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_acres =</span> <span class="fu">log</span>(acres92))</span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate parameters for the theoretical normal curve</span></span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>mean_log <span class="ot">&lt;-</span> <span class="fu">mean</span>(ag_clean<span class="sc">$</span>log_acres)</span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>sd_log <span class="ot">&lt;-</span> <span class="fu">sd</span>(ag_clean<span class="sc">$</span>log_acres)</span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ag_clean, <span class="fu">aes</span>(<span class="at">x =</span> log_acres)) <span class="sc">+</span></span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Base Histogram mapped to density (instead of count)</span></span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">bins =</span> <span class="dv">30</span>, </span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Empirical Density Curve (Dark Red)</span></span>
+<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">"darkred"</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Theoretical Normal Curve (Black, Dashed)</span></span>
+<span id="cb61-19"><a href="#cb61-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, </span>
+<span id="cb61-20"><a href="#cb61-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> mean_log, <span class="at">sd =</span> sd_log), </span>
+<span id="cb61-21"><a href="#cb61-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb61-22"><a href="#cb61-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb61-23"><a href="#cb61-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Log(Acres92)"</span>,</span>
+<span id="cb61-24"><a href="#cb61-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Histogram with Empirical Density (Red) and Normal Fit (Black Dashed)"</span>,</span>
+<span id="cb61-25"><a href="#cb61-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Log of 1992 Farm Acreage"</span>,</span>
+<span id="cb61-26"><a href="#cb61-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb61-27"><a href="#cb61-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb61-28"><a href="#cb61-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -55162,69 +55238,69 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <section id="create-your-own-function" class="level2" data-number="1.5">
 <h2 data-number="1.5" class="anchored" data-anchor-id="create-your-own-function"><span class="header-section-number">1.5</span> Create your own function</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="do">## data is a matrix or data.frame</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>means_col <span class="ot">&lt;-</span> <span class="cf">function</span>(data)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">ncol</span>(data)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    cmeans <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n)</span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n)</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>        cmeans[j] <span class="ot">&lt;-</span> <span class="fu">mean</span>(data[,j], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    cmeans</span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="do">## data is a matrix or data.frame</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>means_col <span class="ot">&lt;-</span> <span class="cf">function</span>(data)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">ncol</span>(data)</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>    cmeans <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n)</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>        cmeans[j] <span class="ot">&lt;-</span> <span class="fu">mean</span>(data[,j], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>    cmeans</span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="do">## apply custom function (using dplyr to select numeric columns first)</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>agpop_numeric <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">13</span>)</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>custom_means <span class="ot">&lt;-</span> <span class="fu">means_col</span>(agpop_numeric)</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="do">## apply R built-in function</span></span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>builtin_means <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(agpop_numeric, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Create a data frame to compare the results</span></span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>comparison_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">colnames</span>(agpop_numeric),</span>
-<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Custom_Function =</span> custom_means,</span>
-<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Built_in =</span> builtin_means</span>
-<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Display the comparison as a clean table</span></span>
-<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>comparison_df <span class="sc">|&gt;</span> </span>
-<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Comparing Mean Calculations"</span>,</span>
-<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Custom Function vs. Base R colMeans()"</span></span>
-<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
-<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="fu">md</span>(<span class="st">"**Variable**"</span>),</span>
-<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">Custom_Function =</span> <span class="fu">md</span>(<span class="st">"**Custom `means_col()`**"</span>),</span>
-<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">Built_in =</span> <span class="fu">md</span>(<span class="st">"**Base `colMeans()`**"</span>)</span>
-<span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb43-29"><a href="#cb43-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
-<span id="cb43-30"><a href="#cb43-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(Custom_Function, Built_in),</span>
-<span id="cb43-31"><a href="#cb43-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">2</span></span>
-<span id="cb43-32"><a href="#cb43-32" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="do">## apply custom function (using dplyr to select numeric columns first)</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>agpop_numeric <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">13</span>)</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>custom_means <span class="ot">&lt;-</span> <span class="fu">means_col</span>(agpop_numeric)</span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a><span class="do">## apply R built-in function</span></span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>builtin_means <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(agpop_numeric, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Create a data frame to compare the results</span></span>
+<span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a>comparison_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb63-12"><a href="#cb63-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">colnames</span>(agpop_numeric),</span>
+<span id="cb63-13"><a href="#cb63-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Custom_Function =</span> custom_means,</span>
+<span id="cb63-14"><a href="#cb63-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Built_in =</span> builtin_means</span>
+<span id="cb63-15"><a href="#cb63-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb63-16"><a href="#cb63-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-17"><a href="#cb63-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Display the comparison as a clean table</span></span>
+<span id="cb63-18"><a href="#cb63-18" aria-hidden="true" tabindex="-1"></a>comparison_df <span class="sc">|&gt;</span> </span>
+<span id="cb63-19"><a href="#cb63-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb63-20"><a href="#cb63-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb63-21"><a href="#cb63-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Comparing Mean Calculations"</span>,</span>
+<span id="cb63-22"><a href="#cb63-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Custom Function vs. Base R colMeans()"</span></span>
+<span id="cb63-23"><a href="#cb63-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb63-24"><a href="#cb63-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb63-25"><a href="#cb63-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="fu">md</span>(<span class="st">"**Variable**"</span>),</span>
+<span id="cb63-26"><a href="#cb63-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">Custom_Function =</span> <span class="fu">md</span>(<span class="st">"**Custom `means_col()`**"</span>),</span>
+<span id="cb63-27"><a href="#cb63-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">Built_in =</span> <span class="fu">md</span>(<span class="st">"**Base `colMeans()`**"</span>)</span>
+<span id="cb63-28"><a href="#cb63-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb63-29"><a href="#cb63-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
+<span id="cb63-30"><a href="#cb63-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(Custom_Function, Built_in),</span>
+<span id="cb63-31"><a href="#cb63-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">2</span></span>
+<span id="cb63-32"><a href="#cb63-32" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="lebdpqgegu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#lebdpqgegu table {
+<div id="ooohlrqvew" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ooohlrqvew table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#lebdpqgegu thead, #lebdpqgegu tbody, #lebdpqgegu tfoot, #lebdpqgegu tr, #lebdpqgegu td, #lebdpqgegu th {
+#ooohlrqvew thead, #ooohlrqvew tbody, #ooohlrqvew tfoot, #ooohlrqvew tr, #ooohlrqvew td, #ooohlrqvew th {
   border-style: none;
 }
 
-#lebdpqgegu p {
+#ooohlrqvew p {
   margin: 0;
   padding: 0;
 }
 
-#lebdpqgegu .gt_table {
+#ooohlrqvew .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -55250,12 +55326,12 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-left-color: #D3D3D3;
 }
 
-#lebdpqgegu .gt_caption {
+#ooohlrqvew .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#lebdpqgegu .gt_title {
+#ooohlrqvew .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -55267,7 +55343,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-width: 0;
 }
 
-#lebdpqgegu .gt_subtitle {
+#ooohlrqvew .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -55279,7 +55355,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-top-width: 0;
 }
 
-#lebdpqgegu .gt_heading {
+#ooohlrqvew .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -55291,13 +55367,13 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#lebdpqgegu .gt_bottom_border {
+#ooohlrqvew .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#lebdpqgegu .gt_col_headings {
+#ooohlrqvew .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -55312,7 +55388,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#lebdpqgegu .gt_col_heading {
+#ooohlrqvew .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -55332,7 +55408,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   overflow-x: hidden;
 }
 
-#lebdpqgegu .gt_column_spanner_outer {
+#ooohlrqvew .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -55344,15 +55420,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 4px;
 }
 
-#lebdpqgegu .gt_column_spanner_outer:first-child {
+#ooohlrqvew .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#lebdpqgegu .gt_column_spanner_outer:last-child {
+#ooohlrqvew .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#lebdpqgegu .gt_column_spanner {
+#ooohlrqvew .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -55364,11 +55440,11 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   width: 100%;
 }
 
-#lebdpqgegu .gt_spanner_row {
+#ooohlrqvew .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#lebdpqgegu .gt_group_heading {
+#ooohlrqvew .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -55394,7 +55470,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   text-align: left;
 }
 
-#lebdpqgegu .gt_empty_group_heading {
+#ooohlrqvew .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -55409,15 +55485,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   vertical-align: middle;
 }
 
-#lebdpqgegu .gt_from_md > :first-child {
+#ooohlrqvew .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#lebdpqgegu .gt_from_md > :last-child {
+#ooohlrqvew .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#lebdpqgegu .gt_row {
+#ooohlrqvew .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -55436,7 +55512,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   overflow-x: hidden;
 }
 
-#lebdpqgegu .gt_stub {
+#ooohlrqvew .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -55449,7 +55525,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#lebdpqgegu .gt_stub_row_group {
+#ooohlrqvew .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -55463,15 +55539,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   vertical-align: top;
 }
 
-#lebdpqgegu .gt_row_group_first td {
+#ooohlrqvew .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#lebdpqgegu .gt_row_group_first th {
+#ooohlrqvew .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#lebdpqgegu .gt_summary_row {
+#ooohlrqvew .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -55481,16 +55557,16 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#lebdpqgegu .gt_first_summary_row {
+#ooohlrqvew .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#lebdpqgegu .gt_first_summary_row.thick {
+#ooohlrqvew .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#lebdpqgegu .gt_last_summary_row {
+#ooohlrqvew .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -55500,7 +55576,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#lebdpqgegu .gt_grand_summary_row {
+#ooohlrqvew .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -55510,7 +55586,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#lebdpqgegu .gt_first_grand_summary_row {
+#ooohlrqvew .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -55520,7 +55596,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-top-color: #D3D3D3;
 }
 
-#lebdpqgegu .gt_last_grand_summary_row_top {
+#ooohlrqvew .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -55530,11 +55606,11 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#lebdpqgegu .gt_striped {
+#ooohlrqvew .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#lebdpqgegu .gt_table_body {
+#ooohlrqvew .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -55543,7 +55619,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#lebdpqgegu .gt_footnotes {
+#ooohlrqvew .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -55557,7 +55633,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#lebdpqgegu .gt_footnote {
+#ooohlrqvew .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -55566,7 +55642,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#lebdpqgegu .gt_sourcenotes {
+#ooohlrqvew .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -55580,7 +55656,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#lebdpqgegu .gt_sourcenote {
+#ooohlrqvew .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -55588,72 +55664,72 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#lebdpqgegu .gt_left {
+#ooohlrqvew .gt_left {
   text-align: left;
 }
 
-#lebdpqgegu .gt_center {
+#ooohlrqvew .gt_center {
   text-align: center;
 }
 
-#lebdpqgegu .gt_right {
+#ooohlrqvew .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#lebdpqgegu .gt_font_normal {
+#ooohlrqvew .gt_font_normal {
   font-weight: normal;
 }
 
-#lebdpqgegu .gt_font_bold {
+#ooohlrqvew .gt_font_bold {
   font-weight: bold;
 }
 
-#lebdpqgegu .gt_font_italic {
+#ooohlrqvew .gt_font_italic {
   font-style: italic;
 }
 
-#lebdpqgegu .gt_super {
+#ooohlrqvew .gt_super {
   font-size: 65%;
 }
 
-#lebdpqgegu .gt_footnote_marks {
+#ooohlrqvew .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#lebdpqgegu .gt_asterisk {
+#ooohlrqvew .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#lebdpqgegu .gt_indent_1 {
+#ooohlrqvew .gt_indent_1 {
   text-indent: 5px;
 }
 
-#lebdpqgegu .gt_indent_2 {
+#ooohlrqvew .gt_indent_2 {
   text-indent: 10px;
 }
 
-#lebdpqgegu .gt_indent_3 {
+#ooohlrqvew .gt_indent_3 {
   text-indent: 15px;
 }
 
-#lebdpqgegu .gt_indent_4 {
+#ooohlrqvew .gt_indent_4 {
   text-indent: 20px;
 }
 
-#lebdpqgegu .gt_indent_5 {
+#ooohlrqvew .gt_indent_5 {
   text-indent: 25px;
 }
 
-#lebdpqgegu .katex-display {
+#ooohlrqvew .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#lebdpqgegu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ooohlrqvew div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
