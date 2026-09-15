@@ -1,9 +1,10 @@
 ---
-title: "An Introduction to Data Analysis with R"
+title: "Data Analysis with R"
 subtitle: "Modern workflows with dplyr, gt, and ggplot2"
 code-fold: false
 ---
-## Basic R Objects and Operations
+
+## Basic R Objects and Operations {#basic-obj}
 
 ```{r basic-r-objects, message=FALSE, warning=FALSE}
 # create a vector
@@ -61,8 +62,15 @@ stat245_scores$scores[1] <- 40
 ## Import a Dataset as a dataframe and Simple Operations
 
 ```{r import-agpop}
+
 # import agpop.csv and treat -99 as NA
-agpop <- read.csv("data/agpop.csv", na.strings = "-99")
+data_url <- "https://raw.githubusercontent.com/longhaiSK/sampling/main/data/"
+
+## the file URL:
+agpop_file <- paste0(data_url, "agpop.csv")
+
+## import dataset directly from the internet
+agpop <- read.csv(agpop_file,  na.strings = "-99")
 
 # preview agpop
 head(agpop)
