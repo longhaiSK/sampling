@@ -471,3 +471,290 @@ data.frame(
   fmt_number(columns = c(`Relative Variance`), decimals = 3)
 ```
 **Output Note:** The table shows dramatic results: Proportional allocation reduces variance by `r round(sim_var_reduction["Prop2size"] * 100, 1)`%, and Neyman allocation reduces it by `r round(sim_var_reduction["Neyman"] * 100, 1)`%. Stratifying by a highly correlated variable is immensely powerful.
+
+## Interactive Demonstration: Stratification by `acres82`
+
+The app below draws three samples of the same total size $n$ at every step: a
+simple random sample, a stratified sample with proportional allocation, and a
+stratified sample with Neyman allocation. The strata are the `acres82` quartile
+groups defined above, labelled Q1 to Q4.
+
+The top panel shows the population split into its four strata, each drawn as a
+band of jittered points on a broken `acres92` axis; the radio buttons choose
+which of the three samples is highlighted in red, and each band is labelled with
+its $N_h$ and the $n_h$ that the chosen allocation assigns to it.
+
+The bottom panel accumulates the sample means of all three designs on a common
+axis, one row per design, with a violin summarising each cloud once enough draws
+have accumulated. The bar above each row is the current confidence interval for
+that design, green when it covers $\mu$ and red when it does not, and replaced at
+every draw. The running empirical standard deviation, variance relative to SRS,
+and coverage rate appear at the right of each row.
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 860
+
+## file: app.R
+library(shiny)
+
+data_url <- "https://raw.githubusercontent.com/longhaiSK/sampling/main/acres92_stratum.csv"
+download.file(data_url, "acres92_stratum.csv")
+dat <- read.csv("acres92_stratum.csv")
+dat <- dat[order(dat$stratum), ]
+
+pop     <- dat$acres92
+stratum <- factor(dat$stratum)
+lev     <- sub("^acres82", "", levels(stratum))   # acres82Q1 -> Q1
+H       <- length(lev)
+N       <- length(pop)
+ybarU   <- mean(pop)
+S       <- sd(pop)
+
+idx_h <- split(seq_len(N), stratum)      # population indices by stratum
+Nh    <- sapply(idx_h, length)
+Sh    <- sapply(idx_h, function(i) sd(pop[i]))
+W     <- Nh / N
+
+## ---- broken x-axis, shared by both panels ----------------------------------
+## Drawn region [0, 2 * ybarU]: visible scale [0, cut] plus a compressed lane
+## for the right tail, so the population mean sits at the midpoint of the panel.
+lane_frac <- 0.10
+cut       <- 2 * ybarU / (1 + lane_frac)
+lane_w    <- lane_frac * cut
+xmax_top  <- cut + lane_w
+
+px      <- pop
+tail_id <- which(pop > cut)
+n_tail  <- length(tail_id)
+if (n_tail > 0) {
+  r <- rank(pop[tail_id], ties.method = "first") / (n_tail + 1)
+  px[tail_id] <- cut + lane_w * (0.10 + 0.80 * r)
+}
+
+set.seed(42)
+band  <- as.integer(stratum)
+y_pop <- (H + 1 - band) + runif(N, -0.30, 0.30)   # Q1 in the top band
+
+## ---- fixed window for the sampling distributions ---------------------------
+se100  <- sqrt(1 - 100 / N) * S / sqrt(100)
+xlim_b <- ybarU + c(-1, 1) * 5 * se100
+
+METHOD <- c("SRS", "Proportional", "Neyman")
+MCOL   <- c("grey35", "steelblue", "darkorange")
+MAR    <- c(4.5, 7, 3, 1.5)   # identical in both panels, so the scales align
+
+## allocation with at least 2 units per stratum, summing to n
+alloc <- function(w, n) {
+  nh <- pmin(pmax(2, round(w / sum(w) * n)), Nh)
+  while (sum(nh) > n && any(nh > 2)) {
+    i <- which.max(nh - 2); nh[i] <- nh[i] - 1
+  }
+  while (sum(nh) < n && any(nh < Nh)) {
+    i <- which.max(Nh - nh); nh[i] <- nh[i] + 1
+  }
+  nh
+}
+
+## symmetric density polygon, drawn horizontally about y = at
+violin <- function(x, at, col, w = 0.32) {
+  if (length(x) < 10 || diff(range(x)) <= 0) return(invisible())
+  d  <- density(x)
+  hw <- w * d$y / max(d$y)
+  polygon(c(d$x, rev(d$x)), c(at + hw, rev(at - hw)),
+          col = adjustcolor(col, 0.35), border = col)
+  m <- median(x)
+  segments(m, at - w * 0.6, m, at + w * 0.6, col = col, lwd = 2)
+}
+
+ui <- fluidPage(
+  titlePanel("Stratified sampling by acres82 quartiles, against simple random sampling"),
+  sidebarLayout(
+    sidebarPanel(
+      width = 3,
+      sliderInput("n", "Total sample size (n)", min = 40, max = 1000, value = 300, step = 10),
+      sliderInput("conf", "Confidence level", min = 0.80, max = 0.99, value = 0.95, step = 0.01),
+      radioButtons("show", "Highlight sample from", choiceNames = METHOD,
+                   choiceValues = as.character(1:3), selected = "3"),
+      actionButton("draw", "Draw new samples", class = "btn-primary", width = "100%"),
+      br(), br(),
+      fluidRow(
+        column(6, actionButton("play", "Play", class = "btn-success", width = "100%")),
+        column(6, actionButton("stop", "Stop", class = "btn-danger",  width = "100%"))
+      ),
+      br(),
+      sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),
+      numericInput("nrep", "Stop after this many samples",
+                   value = 500, min = 10, max = 20000, step = 50),
+      actionButton("reset", "Reset", width = "100%")
+    ),
+    mainPanel(
+      width = 9,
+      plotOutput("popPlot",  height = "380px"),
+      plotOutput("distPlot", height = "380px")
+    )
+  )
+)
+
+server <- function(input, output, session) {
+
+  rv <- reactiveValues(
+    idx = NULL,      # list of sampled indices, one element per design
+    est = NULL,      # matrix 3 x 3: mean, lower, upper
+    M   = NULL,      # accumulated means, one column per design
+    HIT = NULL,      # accumulated coverage indicators
+    jit = numeric(0)
+  )
+  running <- reactiveVal(FALSE)
+
+  nrep <- reactive({
+    v <- input$nrep
+    if (is.null(v) || is.na(v) || v < 1) 1L else min(as.integer(v), 20000L)
+  })
+
+  nh_prop   <- reactive(alloc(Nh,      input$n))
+  nh_neyman <- reactive(alloc(Nh * Sh, input$n))
+
+  draw_one <- function() {
+    n    <- isolate(input$n)
+    conf <- isolate(input$conf)
+    a    <- 1 - (1 - conf) / 2
+
+    # simple random sample
+    i_srs <- sample(N, n)
+    y     <- pop[i_srs]
+    m_srs <- mean(y)
+    se    <- sqrt(1 - n / N) * sd(y) / sqrt(n)
+    d_srs <- qt(a, df = n - 1) * se
+
+    # stratified: ybar_str = sum W_h ybar_h, V = sum W_h^2 (1 - n_h/N_h) s_h^2 / n_h
+    str_draw <- function(nh) {
+      ii <- unlist(lapply(seq_len(H), function(h) sample(idx_h[[h]], nh[h])))
+      yh <- split(pop[ii], rep(seq_len(H), nh))
+      mh <- sapply(yh, mean)
+      sh <- sapply(yh, sd)
+      m  <- sum(W * mh)
+      v  <- sum(W^2 * (1 - nh / Nh) * sh^2 / nh)
+      c(m, qt(a, df = sum(nh) - H) * sqrt(v))
+    }
+    p <- str_draw(isolate(nh_prop()))
+    q <- str_draw(isolate(nh_neyman()))
+
+    take <- function(nh) unlist(lapply(seq_len(H), function(h) sample(idx_h[[h]], nh[h])))
+
+    est <- rbind(c(m_srs, m_srs - d_srs, m_srs + d_srs),
+                 c(p[1],  p[1]  - p[2],  p[1]  + p[2]),
+                 c(q[1],  q[1]  - q[2],  q[1]  + q[2]))
+
+    rv$idx <- list(i_srs, take(isolate(nh_prop())), take(isolate(nh_neyman())))
+    rv$est <- est
+    rv$M   <- rbind(rv$M,   est[, 1])
+    rv$HIT <- rbind(rv$HIT, est[, 2] <= ybarU & ybarU <= est[, 3])
+    rv$jit <- c(rv$jit, runif(1, -0.1, 0.1))
+  }
+
+  observeEvent(input$draw, { running(FALSE); draw_one() })
+  observeEvent(input$play, running(TRUE))
+  observeEvent(input$stop, running(FALSE))
+
+  observe({
+    if (!isTRUE(running())) return()
+    if (NROW(isolate(rv$M)) >= isolate(nrep())) { running(FALSE); return() }
+    invalidateLater(1000 / isolate(input$speed), session)
+    isolate(draw_one())
+  })
+
+  reset_history <- function() {
+    running(FALSE)
+    rv$idx <- NULL; rv$est <- NULL; rv$M <- NULL; rv$HIT <- NULL
+    rv$jit <- numeric(0)
+  }
+  observeEvent(input$reset, reset_history())
+  observeEvent(input$n,     reset_history())
+  observeEvent(input$conf,  reset_history())
+
+  fmt <- function(x) format(round(x), big.mark = ",")
+
+  output$popPlot <- renderPlot({
+    j  <- as.integer(input$show)
+    nh <- switch(j, rep(NA_integer_, H), nh_prop(), nh_neyman())
+
+    par(mar = MAR, xaxs = "i")
+    plot(NA, xlim = c(0, xmax_top), ylim = c(0.3, H + 0.9),
+         xlab = "acres92", ylab = "", xaxt = "n", yaxt = "n", bty = "n",
+         main = sprintf("Population by acres82 stratum, with the %s sample", METHOD[j]))
+
+    for (h in seq_len(H)) {
+      yc <- H + 1 - h
+      rect(0, yc - 0.36, xmax_top, yc + 0.36,
+           col = adjustcolor("grey92", 0.6), border = NA)
+    }
+    points(px, y_pop, pch = 16, cex = 0.5, col = adjustcolor("grey55", 0.5))
+    if (!is.null(rv$idx))
+      points(px[rv$idx[[j]]], y_pop[rv$idx[[j]]], pch = 16, cex = 0.6,
+             col = adjustcolor("red", 0.85))
+
+    axis(2, at = H:1, labels = lev, las = 1, tick = FALSE, line = -0.5)
+    for (h in seq_len(H)) {
+      lab <- if (j == 1) sprintf("N = %d", Nh[h])
+             else        sprintf("N = %d,  n = %d", Nh[h], nh[h])
+      mtext(lab, side = 2, at = H + 1 - h, line = 1.8, las = 1, cex = 0.72, col = "grey30")
+    }
+
+    at <- pretty(c(0, cut), 6); at <- at[at <= cut]
+    axis(1, at = at, labels = format(at, big.mark = ",", trim = TRUE))
+    segments(cut, 0.3, cut, H + 0.6, col = "grey60", lty = 3)
+    text(cut, 0.14, "//", col = "grey40", cex = 1.3, xpd = NA)
+    text(cut + lane_w / 2, 0.14, sprintf("> %s", fmt(cut)),
+         col = "grey40", cex = 0.75, xpd = NA)
+    abline(v = ybarU, col = "black", lwd = 2, lty = 2)
+  })
+
+  output$distPlot <- renderPlot({
+    par(mar = MAR, xaxs = "i")
+    plot(NA, xlim = xlim_b, ylim = c(0.4, 3.9), yaxt = "n", bty = "n",
+         xlab = "Sample mean of acres92", ylab = "",
+         main = "Sampling distributions of the three estimators")
+    abline(v = ybarU, col = "black", lwd = 2, lty = 2)
+    axis(2, at = 3:1, labels = METHOD, las = 1, tick = FALSE, line = -0.5)
+
+    if (is.null(rv$M)) {
+      text(ybarU, 2, "Click 'Draw new samples' or 'Play' to begin", col = "grey50")
+      return(invisible())
+    }
+
+    k     <- NROW(rv$M)
+    v_srs <- if (k > 1) var(rv$M[, 1]) else NA_real_
+
+    for (j in 1:3) {
+      yc <- 4 - j
+      points(rv$M[, j], yc + rv$jit, pch = 16, cex = 0.45,
+             col = adjustcolor(MCOL[j], 0.30))
+      violin(rv$M[, j], at = yc, col = MCOL[j])
+
+      # transient interval for the current draw
+      ci_col <- if (rv$HIT[k, j]) "forestgreen" else "red"
+      yb     <- yc + 0.42
+      segments(rv$est[j, 2], yb, rv$est[j, 3], yb, col = ci_col, lwd = 3)
+      segments(rv$est[j, 2:3], yb - 0.06, rv$est[j, 2:3], yb + 0.06, col = ci_col, lwd = 3)
+      points(rv$est[j, 1], yb, pch = 19, cex = 1.1, col = ci_col)
+
+      lab <- if (k > 1)
+        sprintf("sd = %s   rel.var = %.3f   coverage = %.1f%%",
+                fmt(sd(rv$M[, j])), var(rv$M[, j]) / v_srs, 100 * mean(rv$HIT[, j]))
+      else
+        sprintf("coverage = %.0f%%", 100 * mean(rv$HIT[, j]))
+      text(xlim_b[2], yc - 0.34, lab, adj = c(1, 0), cex = 0.8, col = "grey25")
+    }
+
+    outside <- sum(rv$M < xlim_b[1] | rv$M > xlim_b[2])
+    sub <- sprintf("n = %d per design   |   samples drawn = %d of %d   |   nominal %.0f%%",
+                   input$n, k, nrep(), 100 * input$conf)
+    if (outside > 0) sub <- paste0(sub, sprintf("   |   %d mean(s) beyond the axis", outside))
+    mtext(sub, side = 3, line = -0.2, cex = 0.8, col = "grey30")
+  })
+}
+
+shinyApp(ui, server)
+
+```
