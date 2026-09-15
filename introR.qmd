@@ -1,9 +1,13 @@
 ---
 title: "Data Analysis with R"
 subtitle: "Modern workflows with the native pipe, dplyr, gt, and ggplot2"
+format:
+  html:
+    df-print: paged
 execute:
   message: false
   warning: false
+  cache: true
 editor:
   markdown:
     wrap: none
@@ -66,7 +70,7 @@ stat245_scores
 
 The column of names is called `student` rather than `names`, so that the base function `names()` is not masked.
 
-### Importing a dataset
+## Importing a dataset
 
 ```{r import-agpop}
 data_url <- "https://raw.githubusercontent.com/longhaiSK/sampling/main/data/"
@@ -75,15 +79,38 @@ agpop_file <- paste0(data_url, "agpop.csv")
 # -99 is the missing-value code in this file, so convert it to NA on import
 agpop <- read.csv(agpop_file, na.strings = "-99")
 
-head(agpop)
 colnames(agpop)
 c(rows = nrow(agpop), cols = ncol(agpop))
+```
 
+Because `na.strings = "-99"` is applied at import, every `-99` is already `NA` in `agpop`. All later filtering therefore uses `is.na()`; comparisons such as `acres92 != -99` no longer identify the missing values.
+
+### Displaying the full dataset
+
+Printing several thousand rows into an HTML document consumes vertical space and slows the browser. With `df-print: paged` (set under `format: html` in the YAML header), a printed data frame appears as a paged table: all rows are embedded as one lightweight data blob, and only the current page is drawn. Static targets such as Typst or PDF have no pager, so only the first rows are shown there.
+
+::: {.content-visible when-format="html"}
+
+```{r agpop-paged}
+agpop
+```
+
+:::
+
+::: {.content-visible unless-format="html"}
+
+```{r agpop-head}
+head(agpop)
+```
+
+:::
+
+### Simple summaries
+
+```{r agpop-summaries}
 mean(agpop$acres92, na.rm = TRUE)
 sd(agpop$acres92, na.rm = TRUE)
 ```
-
-Because `na.strings = "-99"` is applied at import, every `-99` is already `NA` in `agpop`. All later filtering therefore uses `is.na()`; comparisons such as `acres92 != -99` would silently keep nothing out and, worse, propagate `NA` through the condition.
 
 ## The native pipe
 
@@ -179,48 +206,7 @@ Restricting to complete cases with `if_all(..., ~ !is.na(.x))` makes the means a
 
 ## Tables with gt
 
-### Displaying a large dataset
-
-Printing a few thousand rows into an HTML document consumes vertical space and slows the browser. `gt` can place the full table inside a fixed-height scrolling container. A static target such as Typst or PDF has no scrollbar, so there the head of the data is shown instead.
-
-::: {.content-visible when-format="html"}
-
-```{r scrollable-table}
-agpop |>
-  gt() |>
-  tab_header(
-    title = "Agricultural Population Data",
-    subtitle = "Scroll to view more rows"
-  ) |>
-  tab_options(
-    container.height = px(400),  # restrict the table height
-    container.overflow.y = TRUE  # enable the vertical scroll bar
-  )
-```
-
-With `df-print: paged` set in the YAML header, a plain data frame is instead rendered as a paged table:
-
-```{r paged-table}
-agpop
-```
-
-:::
-
-::: {.content-visible unless-format="html"}
-
-```{r head-table-print}
-agpop |>
-  head() |>
-  gt() |>
-  tab_header(
-    title = "Agricultural Population Data",
-    subtitle = "First 6 rows (see the HTML version for the full, scrollable table)"
-  )
-```
-
-:::
-
-The scrolling container embeds every row in the HTML, so file size grows with the data. For very large tables, pipe through `slice_head()` first.
+`gt()` writes every row as styled HTML, even inside a scrolling container, so a full-size dataset enlarges the file and slows rendering. Reduce the data first (e.g. with `slice_head()` or a `summarize()` step); for browsing raw data, the paged display in the import section is the better tool.
 
 ### Spanning headers grouped by statistic
 
