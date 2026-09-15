@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>1&nbsp; An Introduction to Data Analysis with R – Elements of Sampling Survey</title>
+<title>1&nbsp; Data Analysis with R – Elements of Sampling Survey</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -71,10 +74,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-1b3e43c72e8be34557c75123b0b69e0d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-f79c7fb6db380d32be398468f2fb58cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-17f59c791bce0a2fed01d4cac093e796.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a7b5894d5a4c39c6aa3484761f021c1f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/custombook-1.0.0/num_eq.js"></script>
 <script src="site_libs/quarto-contrib/custombook-1.0.0/merge-toc.js"></script>
 <link href="site_libs/quarto-contrib/custombook-1.0.0/bookstyles.css" rel="stylesheet">
@@ -109,7 +112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -122,7 +125,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -242,13 +245,7 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<<<<<<< Updated upstream
   <li><a href="#foundations" id="toc-foundations" class="nav-link active" data-scroll-target="#foundations"><span class="header-section-number">1.1</span> Foundations</a>
-=======
-  <li><a href="#basic-r-objects-and-operations" id="toc-basic-r-objects-and-operations" class="nav-link active" data-scroll-target="#basic-r-objects-and-operations"><span class="header-section-number">1.1</span> Basic R Objects and Operations</a></li>
-  <li><a href="#import-a-dataset-as-a-dataframe-and-simple-operations" id="toc-import-a-dataset-as-a-dataframe-and-simple-operations" class="nav-link" data-scroll-target="#import-a-dataset-as-a-dataframe-and-simple-operations"><span class="header-section-number">1.2</span> Import a Dataset as a dataframe and Simple Operations</a></li>
-  <li><a href="#data-manipulation-and-data-table" id="toc-data-manipulation-and-data-table" class="nav-link" data-scroll-target="#data-manipulation-and-data-table"><span class="header-section-number">1.3</span> Data Manipulation and Data Table</a>
->>>>>>> Stashed changes
   <ul>
   <li><a href="#basic-r-objects" id="toc-basic-r-objects" class="nav-link" data-scroll-target="#basic-r-objects"><span class="header-section-number">1.1.1</span> Basic R objects</a></li>
   <li><a href="#importing-a-dataset" id="toc-importing-a-dataset" class="nav-link" data-scroll-target="#importing-a-dataset"><span class="header-section-number">1.1.2</span> Importing a dataset</a></li>
@@ -281,13 +278,8 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<<<<<<< Updated upstream
 <h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></h1>
 <p class="subtitle lead">Modern workflows with the native pipe, dplyr, gt, and ggplot2</p>
-=======
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Introduction to Data Analysis with R</span></h1>
-<p class="subtitle lead">Modern workflows with dplyr, gt, and ggplot2</p>
->>>>>>> Stashed changes
 </div>
 
 
@@ -304,18 +296,13 @@ window.Quarto = {
 </header>
 
 
-<<<<<<< Updated upstream
-=======
-<section id="basic-r-objects-and-operations" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="basic-r-objects-and-operations"><span class="header-section-number">1.1</span> Basic R Objects and Operations</h2>
->>>>>>> Stashed changes
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>All packages are loaded once in a hidden <code>setup</code> chunk, and <code>message</code>/<code>warning</code> suppression is set globally in the YAML header rather than repeated on every chunk.</p>
@@ -326,38 +313,38 @@ window.Quarto = {
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># vectors</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># vectors</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">3</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">2</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">66.32</span>, <span class="fl">69.87</span>, <span class="fl">70.12</span>, <span class="fl">90.37</span>, <span class="fl">50.08</span>, <span class="fl">61.20</span>, <span class="fl">65.00</span>, <span class="fl">57.65</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">1</span>]            <span class="co"># extract an element</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">1</span>]            <span class="co"># extract an element</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 66.32</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fl">85.34</span>   <span class="co"># replace an element</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fl">85.34</span>   <span class="co"># replace an element</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ma <span class="ot">&lt;-</span> <span class="fu">mean</span>(a)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ma</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ma</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 68.70375</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read a vector of numbers from text without saving a file first</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read a vector of numbers from text without saving a file first</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="at">text =</span> <span class="st">"7 8 9 10 11 12 13 13 14 17 17 45"</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1]  7  8  9 10 11 12 13 13 14 17 17 45</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrices: matrix() fills by column unless byrow = TRUE</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrices: matrix() fills by column unless byrow = TRUE</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>A</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2]
@@ -368,8 +355,8 @@ window.Quarto = {
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">matrix</span>(a, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>D</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">matrix</span>(a, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>D</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      [,1]  [,2]
@@ -380,34 +367,34 @@ window.Quarto = {
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a larger matrix, to illustrate element and row assignment</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a larger matrix, to illustrate element and row assignment</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5000</span>, <span class="at">nrow =</span> <span class="dv">100</span>, <span class="at">ncol =</span> <span class="dv">50</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>B[<span class="dv">2</span>, <span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">45</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>B[<span class="dv">1</span>, ] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(B[<span class="dv">1</span>, ])   <span class="co"># part of the first row</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(B[<span class="dv">1</span>, ])   <span class="co"># part of the first row</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 2 3 4 5 6</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(B[, <span class="dv">1</span>])   <span class="co"># part of the first column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(B[, <span class="dv">1</span>])   <span class="co"># part of the first column</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 2 3 4 5 6</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lists</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lists</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>E <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">newa =</span> a, <span class="at">newA =</span> A)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(E)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(E)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "newa" "newA"</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>E<span class="sc">$</span>newA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>E<span class="sc">$</span>newA</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2]
@@ -418,14 +405,14 @@ window.Quarto = {
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>E<span class="sc">$</span>newa <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">17</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>E<span class="sc">$</span>newa <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">17</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># data frames</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>stat245_scores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">student =</span> <span class="fu">c</span>(<span class="st">"Peter"</span>, <span class="st">"John"</span>, <span class="st">"Alice"</span>),</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">score   =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">45</span>, <span class="dv">50</span>)</span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>stat245_scores</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>stat245_scores</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
@@ -442,13 +429,13 @@ window.Quarto = {
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>data_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/longhaiSK/sampling/main/data/"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>data_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/longhaiSK/sampling/main/data/"</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>agpop_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(data_url, <span class="st">"agpop.csv"</span>)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># -99 is the missing-value code in this file, so convert it to NA on import</span></span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(agpop_file, <span class="at">na.strings =</span> <span class="st">"-99"</span>)</span>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agpop)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agpop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
@@ -459,7 +446,7 @@ window.Quarto = {
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(agpop)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(agpop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "county"   "state"    "acres92"  "acres87"  "acres82"  "farms92" 
@@ -468,7 +455,7 @@ window.Quarto = {
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">rows =</span> <span class="fu">nrow</span>(agpop), <span class="at">cols =</span> <span class="fu">ncol</span>(agpop))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">rows =</span> <span class="fu">nrow</span>(agpop), <span class="at">cols =</span> <span class="fu">ncol</span>(agpop))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>rows cols 
@@ -476,555 +463,18 @@ window.Quarto = {
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(agpop<span class="sc">$</span>acres92, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(agpop<span class="sc">$</span>acres92, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308582.4</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(agpop<span class="sc">$</span>acres92, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(agpop<span class="sc">$</span>acres92, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 425312.8</code></pre>
 </div>
-<<<<<<< Updated upstream
-=======
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Modern summary table using gtsummary</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("gtsummary") # Run this once in your console if you don't have it</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"gtsummary"</span>)</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>agpop <span class="sc">|&gt;</span> </span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, acres92, acres87, largef92, farms92) <span class="sc">|&gt;</span> </span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> region, </span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(<span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>)</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div id="jtcccjocaa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#jtcccjocaa table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#jtcccjocaa thead, #jtcccjocaa tbody, #jtcccjocaa tfoot, #jtcccjocaa tr, #jtcccjocaa td, #jtcccjocaa th {
-  border-style: none;
-}
-
-#jtcccjocaa p {
-  margin: 0;
-  padding: 0;
-}
-
-#jtcccjocaa .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#jtcccjocaa .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#jtcccjocaa .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#jtcccjocaa .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#jtcccjocaa .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#jtcccjocaa .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#jtcccjocaa .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#jtcccjocaa .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#jtcccjocaa .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#jtcccjocaa .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#jtcccjocaa .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#jtcccjocaa .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#jtcccjocaa .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#jtcccjocaa .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#jtcccjocaa .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#jtcccjocaa .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#jtcccjocaa .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#jtcccjocaa .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#jtcccjocaa .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#jtcccjocaa .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#jtcccjocaa .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#jtcccjocaa .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#jtcccjocaa .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#jtcccjocaa .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#jtcccjocaa .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#jtcccjocaa .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#jtcccjocaa .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#jtcccjocaa .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#jtcccjocaa .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#jtcccjocaa .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#jtcccjocaa .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#jtcccjocaa .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#jtcccjocaa .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#jtcccjocaa .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#jtcccjocaa .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#jtcccjocaa .gt_left {
-  text-align: left;
-}
-
-#jtcccjocaa .gt_center {
-  text-align: center;
-}
-
-#jtcccjocaa .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#jtcccjocaa .gt_font_normal {
-  font-weight: normal;
-}
-
-#jtcccjocaa .gt_font_bold {
-  font-weight: bold;
-}
-
-#jtcccjocaa .gt_font_italic {
-  font-style: italic;
-}
-
-#jtcccjocaa .gt_super {
-  font-size: 65%;
-}
-
-#jtcccjocaa .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#jtcccjocaa .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#jtcccjocaa .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#jtcccjocaa .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#jtcccjocaa .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#jtcccjocaa .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#jtcccjocaa .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#jtcccjocaa .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#jtcccjocaa div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="gt_col_headings header">
-<th id="label" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
-<th id="stat_1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>NC</strong><br>
-N = 1,054<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-<th id="stat_2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>NE</strong><br>
-N = 220<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-<th id="stat_3" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>S</strong><br>
-N = 1,382<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-<th id="stat_4" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>W</strong><br>
-N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">acres92</td>
-<td class="gt_row gt_center" headers="stat_1">326,571 (271,188)</td>
-<td class="gt_row gt_center" headers="stat_2">93,600 (78,906)</td>
-<td class="gt_row gt_center" headers="stat_3">200,009 (244,132)</td>
-<td class="gt_row gt_center" headers="stat_4">730,267 (836,614)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
-<td class="gt_row gt_center" headers="stat_1">2</td>
-<td class="gt_row gt_center" headers="stat_2">7</td>
-<td class="gt_row gt_center" headers="stat_3">6</td>
-<td class="gt_row gt_center" headers="stat_4">4</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">acres87</td>
-<td class="gt_row gt_center" headers="stat_1">333,754 (270,834)</td>
-<td class="gt_row gt_center" headers="stat_2">102,458 (86,127)</td>
-<td class="gt_row gt_center" headers="stat_3">204,202 (243,247)</td>
-<td class="gt_row gt_center" headers="stat_4">746,210 (847,298)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
-<td class="gt_row gt_center" headers="stat_1">4</td>
-<td class="gt_row gt_center" headers="stat_2">5</td>
-<td class="gt_row gt_center" headers="stat_3">8</td>
-<td class="gt_row gt_center" headers="stat_4">6</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">largef92</td>
-<td class="gt_row gt_center" headers="stat_1">75 (81)</td>
-<td class="gt_row gt_center" headers="stat_2">8 (11)</td>
-<td class="gt_row gt_center" headers="stat_3">37 (47)</td>
-<td class="gt_row gt_center" headers="stat_4">98 (97)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">farms92</td>
-<td class="gt_row gt_center" headers="stat_1">737 (390)</td>
-<td class="gt_row gt_center" headers="stat_2">509 (441)</td>
-<td class="gt_row gt_center" headers="stat_3">559 (435)</td>
-<td class="gt_row gt_center" headers="stat_4">625 (777)</td>
-</tr>
-</tbody><tfoot>
-<tr class="gt_footnotes odd">
-<td colspan="5" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Mean (SD)</td>
-</tr>
-</tfoot>
-
-</table>
-
-</div>
-</div>
->>>>>>> Stashed changes
 </div>
 <p>Because <code>na.strings = "-99"</code> is applied at import, every <code>-99</code> is already <code>NA</code> in <code>agpop</code>. All later filtering therefore uses <code>is.na()</code>; comparisons such as <code>acres92 != -99</code> would silently keep nothing out and, worse, propagate <code>NA</code> through the condition.</p>
 </section>
@@ -1035,46 +485,46 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="cn">NA</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="cn">NA</span>)</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># without the pipe</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 15</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">base =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">base =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.176091</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">exp</span>(<span class="fu">log</span>(<span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">base =</span> <span class="dv">10</span>)), <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">exp</span>(<span class="fu">log</span>(<span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">base =</span> <span class="dv">10</span>)), <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.24</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the same computations, read left to right</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the same computations, read left to right</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 15</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">log</span>(<span class="at">base =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">log</span>(<span class="at">base =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.176091</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">log</span>(<span class="at">base =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span> <span class="fu">exp</span>() <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">log</span>(<span class="at">base =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span> <span class="fu">exp</span>() <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.24</code></pre>
@@ -1084,19 +534,19 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>, <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>, <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5.5</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="cn">NA</span>, <span class="dv">3</span>, <span class="dv">9</span>) <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="cn">NA</span>, <span class="dv">3</span>, <span class="dv">9</span>) <span class="sc">|&gt;</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>, <span class="at">na.last =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(<span class="at">trim =</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(<span class="at">trim =</span> <span class="fl">0.1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4.5</code></pre>
@@ -1106,8 +556,8 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mtcars is the `data` argument of lm(), not its first argument</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mtcars is the `data` argument of lm(), not its first argument</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> mtcars)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -1120,7 +570,7 @@ Coefficients:
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> _)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -1139,16 +589,15 @@ Coefficients:
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mutate() creates several columns at once, replacing repeated $ assignment</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mutate() creates several columns at once, replacing repeated $ assignment</span></span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>stat245_scores <span class="ot">&lt;-</span> stat245_scores <span class="sc">|&gt;</span></span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">perc =</span> score <span class="sc">/</span> <span class="dv">50</span> <span class="sc">*</span> <span class="dv">100</span>,</span>
 <span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">adj  =</span> perc <span class="sc">+</span> <span class="dv">10</span></span>
 <span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>stat245_scores</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>stat245_scores</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<<<<<<< Updated upstream
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
 {"columns":[{"label":["student"],"name":[1],"type":["chr"],"align":["left"]},{"label":["score"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["perc"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["adj"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"Peter","2":"30","3":"60","4":"70"},{"1":"John","2":"45","3":"90","4":"100"},{"1":"Alice","2":"50","3":"100","4":"110"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1159,12 +608,12 @@ Coefficients:
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filter() subsets rows</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filter() subsets rows</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>agpop_AK <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(state <span class="sc">==</span> <span class="st">"AK"</span>)</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>agpop_W  <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">"W"</span>)</span>
 <span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>agpop_lg <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(largef92 <span class="sc">&gt;</span> <span class="dv">10</span>)</span>
 <span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">AK =</span> <span class="fu">nrow</span>(agpop_AK), <span class="at">W =</span> <span class="fu">nrow</span>(agpop_W), <span class="at">largefarm =</span> <span class="fu">nrow</span>(agpop_lg))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">AK =</span> <span class="fu">nrow</span>(agpop_AK), <span class="at">W =</span> <span class="fu">nrow</span>(agpop_W), <span class="at">largefarm =</span> <span class="fu">nrow</span>(agpop_lg))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>       AK         W largefarm 
@@ -1172,13 +621,13 @@ Coefficients:
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># slice() subsets rows by position and select() subsets columns;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># slice() subsets rows by position and select() subsets columns;</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co"># together they replace agpop[1:20, c("acres92", "largef92")]</span></span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>agpop_subset <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span></span>
 <span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">|&gt;</span></span>
 <span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(acres92, largef92)</span>
 <span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agpop_subset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agpop_subset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
@@ -1191,7 +640,7 @@ Coefficients:
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>vars_of_interest <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"acres92"</span>, <span class="st">"acres87"</span>, <span class="st">"farms92"</span>, <span class="st">"largef92"</span>, <span class="st">"smallf92"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>vars_of_interest <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"acres92"</span>, <span class="st">"acres87"</span>, <span class="st">"farms92"</span>, <span class="st">"largef92"</span>, <span class="st">"smallf92"</span>)</span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="co"># group_by() + summarize() + across(): mean and variance of each variable by</span></span>
 <span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="co"># region, over counties that are complete on all five variables</span></span>
@@ -1206,7 +655,7 @@ Coefficients:
 <span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
 <span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
 <span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a>ag_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a>ag_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
@@ -1226,7 +675,7 @@ Coefficients:
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>agpop <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>agpop <span class="sc">|&gt;</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
 <span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Agricultural Population Data"</span>,</span>
@@ -1235,42 +684,26 @@ Coefficients:
 <span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(</span>
 <span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">container.height =</span> <span class="fu">px</span>(<span class="dv">400</span>),  <span class="co"># restrict the table height</span></span>
 <span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">container.overflow.y =</span> <span class="cn">TRUE</span>  <span class="co"># enable the vertical scroll bar</span></span>
-<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="tkussqjrxx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:400px;">
-<style>#tkussqjrxx table {
-=======
 <div id="ftejsgewiq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:400px;">
 <style>#ftejsgewiq table {
->>>>>>> Stashed changes
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx thead, #tkussqjrxx tbody, #tkussqjrxx tfoot, #tkussqjrxx tr, #tkussqjrxx td, #tkussqjrxx th {
-  border-style: none;
-}
-
-#tkussqjrxx p {
-=======
 #ftejsgewiq thead, #ftejsgewiq tbody, #ftejsgewiq tfoot, #ftejsgewiq tr, #ftejsgewiq td, #ftejsgewiq th {
   border-style: none;
 }
 
 #ftejsgewiq p {
->>>>>>> Stashed changes
   margin: 0;
   padding: 0;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_table {
-=======
 #ftejsgewiq .gt_table {
->>>>>>> Stashed changes
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1296,20 +729,12 @@ Coefficients:
   border-left-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_caption {
-=======
 #ftejsgewiq .gt_caption {
->>>>>>> Stashed changes
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_title {
-=======
 #ftejsgewiq .gt_title {
->>>>>>> Stashed changes
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1321,11 +746,7 @@ Coefficients:
   border-bottom-width: 0;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_subtitle {
-=======
 #ftejsgewiq .gt_subtitle {
->>>>>>> Stashed changes
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1337,11 +758,7 @@ Coefficients:
   border-top-width: 0;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_heading {
-=======
 #ftejsgewiq .gt_heading {
->>>>>>> Stashed changes
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1353,21 +770,13 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_bottom_border {
-=======
 #ftejsgewiq .gt_bottom_border {
->>>>>>> Stashed changes
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_col_headings {
-=======
 #ftejsgewiq .gt_col_headings {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1382,11 +791,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_col_heading {
-=======
 #ftejsgewiq .gt_col_heading {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1406,11 +811,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_column_spanner_outer {
-=======
 #ftejsgewiq .gt_column_spanner_outer {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1422,17 +823,6 @@ Coefficients:
   padding-right: 4px;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#tkussqjrxx .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#tkussqjrxx .gt_column_spanner {
-=======
 #ftejsgewiq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
@@ -1442,7 +832,6 @@ Coefficients:
 }
 
 #ftejsgewiq .gt_column_spanner {
->>>>>>> Stashed changes
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1454,19 +843,11 @@ Coefficients:
   width: 100%;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#tkussqjrxx .gt_group_heading {
-=======
 #ftejsgewiq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
 #ftejsgewiq .gt_group_heading {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1492,11 +873,7 @@ Coefficients:
   text-align: left;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_empty_group_heading {
-=======
 #ftejsgewiq .gt_empty_group_heading {
->>>>>>> Stashed changes
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1511,17 +888,6 @@ Coefficients:
   vertical-align: middle;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#tkussqjrxx .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#tkussqjrxx .gt_row {
-=======
 #ftejsgewiq .gt_from_md > :first-child {
   margin-top: 0;
 }
@@ -1531,7 +897,6 @@ Coefficients:
 }
 
 #ftejsgewiq .gt_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1550,11 +915,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_stub {
-=======
 #ftejsgewiq .gt_stub {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1567,11 +928,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_stub_row_group {
-=======
 #ftejsgewiq .gt_stub_row_group {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1585,17 +942,6 @@ Coefficients:
   vertical-align: top;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#tkussqjrxx .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#tkussqjrxx .gt_summary_row {
-=======
 #ftejsgewiq .gt_row_group_first td {
   border-top-width: 2px;
 }
@@ -1605,7 +951,6 @@ Coefficients:
 }
 
 #ftejsgewiq .gt_summary_row {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1615,28 +960,16 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_first_summary_row {
-=======
 #ftejsgewiq .gt_first_summary_row {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#tkussqjrxx .gt_last_summary_row {
-=======
 #ftejsgewiq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
 #ftejsgewiq .gt_last_summary_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1646,11 +979,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_grand_summary_row {
-=======
 #ftejsgewiq .gt_grand_summary_row {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1660,11 +989,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_first_grand_summary_row {
-=======
 #ftejsgewiq .gt_first_grand_summary_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1674,11 +999,7 @@ Coefficients:
   border-top-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_last_grand_summary_row_top {
-=======
 #ftejsgewiq .gt_last_grand_summary_row_top {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1688,19 +1009,11 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#tkussqjrxx .gt_table_body {
-=======
 #ftejsgewiq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
 #ftejsgewiq .gt_table_body {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1709,11 +1022,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_footnotes {
-=======
 #ftejsgewiq .gt_footnotes {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1727,11 +1036,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_footnote {
-=======
 #ftejsgewiq .gt_footnote {
->>>>>>> Stashed changes
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1740,11 +1045,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_sourcenotes {
-=======
 #ftejsgewiq .gt_sourcenotes {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1758,11 +1059,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_sourcenote {
-=======
 #ftejsgewiq .gt_sourcenote {
->>>>>>> Stashed changes
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1770,17 +1067,6 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_left {
-  text-align: left;
-}
-
-#tkussqjrxx .gt_center {
-  text-align: center;
-}
-
-#tkussqjrxx .gt_right {
-=======
 #ftejsgewiq .gt_left {
   text-align: left;
 }
@@ -1790,30 +1076,10 @@ Coefficients:
 }
 
 #ftejsgewiq .gt_right {
->>>>>>> Stashed changes
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_font_normal {
-  font-weight: normal;
-}
-
-#tkussqjrxx .gt_font_bold {
-  font-weight: bold;
-}
-
-#tkussqjrxx .gt_font_italic {
-  font-style: italic;
-}
-
-#tkussqjrxx .gt_super {
-  font-size: 65%;
-}
-
-#tkussqjrxx .gt_footnote_marks {
-=======
 #ftejsgewiq .gt_font_normal {
   font-weight: normal;
 }
@@ -1831,44 +1097,16 @@ Coefficients:
 }
 
 #ftejsgewiq .gt_footnote_marks {
->>>>>>> Stashed changes
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_asterisk {
-=======
 #ftejsgewiq .gt_asterisk {
->>>>>>> Stashed changes
   font-size: 100%;
   vertical-align: 0;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#tkussqjrxx .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#tkussqjrxx .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#tkussqjrxx .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#tkussqjrxx .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#tkussqjrxx .katex-display {
-=======
 #ftejsgewiq .gt_indent_1 {
   text-indent: 5px;
 }
@@ -1890,27 +1128,22 @@ Coefficients:
 }
 
 #ftejsgewiq .katex-display {
->>>>>>> Stashed changes
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-<<<<<<< Updated upstream
-#tkussqjrxx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-=======
 #ftejsgewiq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
->>>>>>> Stashed changes
   height: 0px !important;
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading header">
-<th colspan="15" class="gt_heading gt_title gt_font_normal">Agricultural Population Data</th>
+<td colspan="15" class="gt_heading gt_title gt_font_normal">Agricultural Population Data</td>
 </tr>
 <tr class="gt_heading even">
-<th colspan="15" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Scroll to view more rows</th>
+<td colspan="15" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Scroll to view more rows</td>
 </tr>
 <tr class="gt_col_headings header">
 <th id="county" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">county</th>
@@ -54267,7 +53500,7 @@ Coefficients:
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>agpop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>agpop</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
@@ -54285,7 +53518,7 @@ Coefficients:
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="sc">|&gt;</span></span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
 <span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Regional Summary: Mean and Variance of Five Variables"</span>,</span>
@@ -54308,92 +53541,26 @@ Coefficients:
 <span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>), <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
 <span id="cb57-23"><a href="#cb57-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>), <span class="at">decimals =</span> <span class="dv">0</span>, <span class="at">sep_mark =</span> <span class="st">","</span>) <span class="sc">|&gt;</span></span>
-<span id="cb57-24"><a href="#cb57-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">table.width =</span> <span class="fu">pct</span>(<span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb57-24"><a href="#cb57-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">table.width =</span> <span class="fu">pct</span>(<span class="dv">100</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output-display">
-<<<<<<< Updated upstream
-<div id="usvszpwowk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#usvszpwowk table {
-=======
-<div data-pagedtable="false">
-  <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":["region"],"name":[1],"type":["chr"],"align":["left"]},{"label":["acres92_mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["acres92_var"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["acres87_mean"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["acres87_var"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["farms92_mean"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["farms92_var"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["largef92_mean"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["largef92_var"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["smallf92_mean"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["smallf92_var"],"name":[11],"type":["dbl"],"align":["right"]}],"data":[{"1":"NC","2":"327482.9","3":"73461356635","4":"334064.2","5":"73319885590","6":"740.2459","7":"150770.1","8":"75.343184","9":"6489.8230","10":"42.80362","11":"1146.832"},{"1":"NE","2":"94462.2","3":"6205925458","4":"104387.4","5":"7358098722","6":"529.3033","7":"191800.8","8":"8.668246","9":"126.1656","10":"49.36967","11":"3727.501"},{"1":"S","2":"200845.8","3":"59700811734","4":"203876.7","5":"58908068196","6":"563.1569","7":"189097.0","8":"37.084672","9":"2240.5348","10":"43.96131","11":"4157.260"},{"1":"W","2":"736031.4","3":"702941261694","4":"749811.7","5":"718684588595","6":"635.9855","7":"608923.7","8":"99.292271","9":"9454.9628","10":"121.42271","11":"87941.271"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the summary using a customized gt table</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="sc">|&gt;</span></span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Regional Summary: Mean and Variance of Five Variables"</span>,</span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"acres92, acres87, farms92, largef92, smallf92"</span></span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add spanning headers grouping the mean columns and the variance columns</span></span>
-<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
-<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**Mean**"</span>),</span>
-<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>)</span>
-<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
-<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">md</span>(<span class="st">"**Variance**"</span>),</span>
-<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>)</span>
-<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Use LaTeX math expressions for column names</span></span>
-<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
-<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">region        =</span> <span class="fu">md</span>(<span class="st">"**Region**"</span>),</span>
-<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres92_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{acres92}$"</span>),</span>
-<span id="cb56-21"><a href="#cb56-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres87_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{acres87}$"</span>),</span>
-<span id="cb56-22"><a href="#cb56-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">farms92_mean  =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{farms92}$"</span>),</span>
-<span id="cb56-23"><a href="#cb56-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">largef92_mean =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{largef92}$"</span>),</span>
-<span id="cb56-24"><a href="#cb56-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">smallf92_mean =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{y}_{smallf92}$"</span>),</span>
-<span id="cb56-25"><a href="#cb56-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres92_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2_{acres92}$"</span>),</span>
-<span id="cb56-26"><a href="#cb56-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">acres87_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2_{acres87}$"</span>),</span>
-<span id="cb56-27"><a href="#cb56-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">farms92_var   =</span> <span class="fu">md</span>(<span class="st">"$s^2_{farms92}$"</span>),</span>
-<span id="cb56-28"><a href="#cb56-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">largef92_var  =</span> <span class="fu">md</span>(<span class="st">"$s^2_{largef92}$"</span>),</span>
-<span id="cb56-29"><a href="#cb56-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">smallf92_var  =</span> <span class="fu">md</span>(<span class="st">"$s^2_{smallf92}$"</span>)</span>
-<span id="cb56-30"><a href="#cb56-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb56-31"><a href="#cb56-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
-<span id="cb56-32"><a href="#cb56-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>),</span>
-<span id="cb56-33"><a href="#cb56-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">1</span></span>
-<span id="cb56-34"><a href="#cb56-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb56-35"><a href="#cb56-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
-<span id="cb56-36"><a href="#cb56-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>),</span>
-<span id="cb56-37"><a href="#cb56-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">0</span>,</span>
-<span id="cb56-38"><a href="#cb56-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep_mark =</span> <span class="st">","</span></span>
-<span id="cb56-39"><a href="#cb56-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb56-40"><a href="#cb56-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">table.width =</span> <span class="fu">pct</span>(<span class="dv">100</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div id="tdcqjtwgio" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tdcqjtwgio table {
->>>>>>> Stashed changes
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk thead, #usvszpwowk tbody, #usvszpwowk tfoot, #usvszpwowk tr, #usvszpwowk td, #usvszpwowk th {
-  border-style: none;
-}
-
-#usvszpwowk p {
-=======
 #tdcqjtwgio thead, #tdcqjtwgio tbody, #tdcqjtwgio tfoot, #tdcqjtwgio tr, #tdcqjtwgio td, #tdcqjtwgio th {
   border-style: none;
 }
 
 #tdcqjtwgio p {
->>>>>>> Stashed changes
   margin: 0;
   padding: 0;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_table {
-=======
 #tdcqjtwgio .gt_table {
->>>>>>> Stashed changes
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -54419,20 +53586,12 @@ Coefficients:
   border-left-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_caption {
-=======
 #tdcqjtwgio .gt_caption {
->>>>>>> Stashed changes
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_title {
-=======
 #tdcqjtwgio .gt_title {
->>>>>>> Stashed changes
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -54444,11 +53603,7 @@ Coefficients:
   border-bottom-width: 0;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_subtitle {
-=======
 #tdcqjtwgio .gt_subtitle {
->>>>>>> Stashed changes
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -54460,11 +53615,7 @@ Coefficients:
   border-top-width: 0;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_heading {
-=======
 #tdcqjtwgio .gt_heading {
->>>>>>> Stashed changes
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -54476,21 +53627,13 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_bottom_border {
-=======
 #tdcqjtwgio .gt_bottom_border {
->>>>>>> Stashed changes
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_col_headings {
-=======
 #tdcqjtwgio .gt_col_headings {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -54505,11 +53648,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_col_heading {
-=======
 #tdcqjtwgio .gt_col_heading {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54529,11 +53668,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_column_spanner_outer {
-=======
 #tdcqjtwgio .gt_column_spanner_outer {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54545,17 +53680,6 @@ Coefficients:
   padding-right: 4px;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#usvszpwowk .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#usvszpwowk .gt_column_spanner {
-=======
 #tdcqjtwgio .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
@@ -54565,7 +53689,6 @@ Coefficients:
 }
 
 #tdcqjtwgio .gt_column_spanner {
->>>>>>> Stashed changes
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -54577,19 +53700,11 @@ Coefficients:
   width: 100%;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#usvszpwowk .gt_group_heading {
-=======
 #tdcqjtwgio .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
 #tdcqjtwgio .gt_group_heading {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54615,11 +53730,7 @@ Coefficients:
   text-align: left;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_empty_group_heading {
-=======
 #tdcqjtwgio .gt_empty_group_heading {
->>>>>>> Stashed changes
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -54634,17 +53745,6 @@ Coefficients:
   vertical-align: middle;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#usvszpwowk .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#usvszpwowk .gt_row {
-=======
 #tdcqjtwgio .gt_from_md > :first-child {
   margin-top: 0;
 }
@@ -54654,7 +53754,6 @@ Coefficients:
 }
 
 #tdcqjtwgio .gt_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54673,11 +53772,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_stub {
-=======
 #tdcqjtwgio .gt_stub {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54690,11 +53785,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_stub_row_group {
-=======
 #tdcqjtwgio .gt_stub_row_group {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -54708,17 +53799,6 @@ Coefficients:
   vertical-align: top;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#usvszpwowk .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#usvszpwowk .gt_summary_row {
-=======
 #tdcqjtwgio .gt_row_group_first td {
   border-top-width: 2px;
 }
@@ -54728,7 +53808,6 @@ Coefficients:
 }
 
 #tdcqjtwgio .gt_summary_row {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -54738,28 +53817,16 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_first_summary_row {
-=======
 #tdcqjtwgio .gt_first_summary_row {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#usvszpwowk .gt_last_summary_row {
-=======
 #tdcqjtwgio .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
 #tdcqjtwgio .gt_last_summary_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54769,11 +53836,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_grand_summary_row {
-=======
 #tdcqjtwgio .gt_grand_summary_row {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -54783,11 +53846,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_first_grand_summary_row {
-=======
 #tdcqjtwgio .gt_first_grand_summary_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54797,11 +53856,7 @@ Coefficients:
   border-top-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_last_grand_summary_row_top {
-=======
 #tdcqjtwgio .gt_last_grand_summary_row_top {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -54811,19 +53866,11 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#usvszpwowk .gt_table_body {
-=======
 #tdcqjtwgio .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
 #tdcqjtwgio .gt_table_body {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -54832,11 +53879,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_footnotes {
-=======
 #tdcqjtwgio .gt_footnotes {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -54850,11 +53893,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_footnote {
-=======
 #tdcqjtwgio .gt_footnote {
->>>>>>> Stashed changes
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -54863,11 +53902,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_sourcenotes {
-=======
 #tdcqjtwgio .gt_sourcenotes {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -54881,11 +53916,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_sourcenote {
-=======
 #tdcqjtwgio .gt_sourcenote {
->>>>>>> Stashed changes
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -54893,17 +53924,6 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_left {
-  text-align: left;
-}
-
-#usvszpwowk .gt_center {
-  text-align: center;
-}
-
-#usvszpwowk .gt_right {
-=======
 #tdcqjtwgio .gt_left {
   text-align: left;
 }
@@ -54913,30 +53933,10 @@ Coefficients:
 }
 
 #tdcqjtwgio .gt_right {
->>>>>>> Stashed changes
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_font_normal {
-  font-weight: normal;
-}
-
-#usvszpwowk .gt_font_bold {
-  font-weight: bold;
-}
-
-#usvszpwowk .gt_font_italic {
-  font-style: italic;
-}
-
-#usvszpwowk .gt_super {
-  font-size: 65%;
-}
-
-#usvszpwowk .gt_footnote_marks {
-=======
 #tdcqjtwgio .gt_font_normal {
   font-weight: normal;
 }
@@ -54954,44 +53954,16 @@ Coefficients:
 }
 
 #tdcqjtwgio .gt_footnote_marks {
->>>>>>> Stashed changes
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_asterisk {
-=======
 #tdcqjtwgio .gt_asterisk {
->>>>>>> Stashed changes
   font-size: 100%;
   vertical-align: 0;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#usvszpwowk .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#usvszpwowk .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#usvszpwowk .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#usvszpwowk .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#usvszpwowk .katex-display {
-=======
 #tdcqjtwgio .gt_indent_1 {
   text-indent: 5px;
 }
@@ -55013,21 +53985,16 @@ Coefficients:
 }
 
 #tdcqjtwgio .katex-display {
->>>>>>> Stashed changes
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-<<<<<<< Updated upstream
-#usvszpwowk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-=======
 #tdcqjtwgio div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
->>>>>>> Stashed changes
   height: 0px !important;
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <colgroup>
 <col style="width: 9%">
 <col style="width: 9%">
@@ -55043,10 +54010,10 @@ Coefficients:
 </colgroup>
 <thead>
 <tr class="gt_heading header">
-<th colspan="11" class="gt_heading gt_title gt_font_normal">Regional Summary: Mean and Variance of Five Variables</th>
+<td colspan="11" class="gt_heading gt_title gt_font_normal">Regional Summary: Mean and Variance of Five Variables</td>
 </tr>
 <tr class="gt_heading even">
-<th colspan="11" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">acres92, acres87, farms92, largef92, smallf92</th>
+<td colspan="11" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">acres92, acres87, farms92, largef92, smallf92</td>
 </tr>
 <tr class="gt_col_headings gt_spanner_row header">
 <th rowspan="2" id="region" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Region</strong></th>
@@ -55137,7 +54104,7 @@ Coefficients:
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="sc">|&gt;</span></span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>    region,</span>
 <span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>    acres92_mean,  acres92_var,</span>
@@ -55167,43 +54134,26 @@ Coefficients:
 <span id="cb58-28"><a href="#cb58-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb58-29"><a href="#cb58-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>), <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
 <span id="cb58-30"><a href="#cb58-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>), <span class="at">decimals =</span> <span class="dv">0</span>, <span class="at">sep_mark =</span> <span class="st">","</span>) <span class="sc">|&gt;</span></span>
-<span id="cb58-31"><a href="#cb58-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">table.width =</span> <span class="fu">pct</span>(<span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb58-31"><a href="#cb58-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">table.width =</span> <span class="fu">pct</span>(<span class="dv">100</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<<<<<<< Updated upstream
-<div id="quqocsbeyj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#quqocsbeyj table {
-=======
 <div id="xtwqeytjoq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xtwqeytjoq table {
->>>>>>> Stashed changes
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj thead, #quqocsbeyj tbody, #quqocsbeyj tfoot, #quqocsbeyj tr, #quqocsbeyj td, #quqocsbeyj th {
-  border-style: none;
-}
-
-#quqocsbeyj p {
-=======
 #xtwqeytjoq thead, #xtwqeytjoq tbody, #xtwqeytjoq tfoot, #xtwqeytjoq tr, #xtwqeytjoq td, #xtwqeytjoq th {
   border-style: none;
 }
 
 #xtwqeytjoq p {
->>>>>>> Stashed changes
   margin: 0;
   padding: 0;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_table {
-=======
 #xtwqeytjoq .gt_table {
->>>>>>> Stashed changes
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -55229,20 +54179,12 @@ Coefficients:
   border-left-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_caption {
-=======
 #xtwqeytjoq .gt_caption {
->>>>>>> Stashed changes
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_title {
-=======
 #xtwqeytjoq .gt_title {
->>>>>>> Stashed changes
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -55254,11 +54196,7 @@ Coefficients:
   border-bottom-width: 0;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_subtitle {
-=======
 #xtwqeytjoq .gt_subtitle {
->>>>>>> Stashed changes
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -55270,11 +54208,7 @@ Coefficients:
   border-top-width: 0;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_heading {
-=======
 #xtwqeytjoq .gt_heading {
->>>>>>> Stashed changes
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -55286,21 +54220,13 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_bottom_border {
-=======
 #xtwqeytjoq .gt_bottom_border {
->>>>>>> Stashed changes
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_col_headings {
-=======
 #xtwqeytjoq .gt_col_headings {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -55315,11 +54241,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_col_heading {
-=======
 #xtwqeytjoq .gt_col_heading {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -55339,11 +54261,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_column_spanner_outer {
-=======
 #xtwqeytjoq .gt_column_spanner_outer {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -55355,17 +54273,6 @@ Coefficients:
   padding-right: 4px;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#quqocsbeyj .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#quqocsbeyj .gt_column_spanner {
-=======
 #xtwqeytjoq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
@@ -55375,7 +54282,6 @@ Coefficients:
 }
 
 #xtwqeytjoq .gt_column_spanner {
->>>>>>> Stashed changes
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -55387,19 +54293,11 @@ Coefficients:
   width: 100%;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#quqocsbeyj .gt_group_heading {
-=======
 #xtwqeytjoq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
 #xtwqeytjoq .gt_group_heading {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -55425,11 +54323,7 @@ Coefficients:
   text-align: left;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_empty_group_heading {
-=======
 #xtwqeytjoq .gt_empty_group_heading {
->>>>>>> Stashed changes
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -55444,17 +54338,6 @@ Coefficients:
   vertical-align: middle;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#quqocsbeyj .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#quqocsbeyj .gt_row {
-=======
 #xtwqeytjoq .gt_from_md > :first-child {
   margin-top: 0;
 }
@@ -55464,7 +54347,6 @@ Coefficients:
 }
 
 #xtwqeytjoq .gt_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -55483,11 +54365,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_stub {
-=======
 #xtwqeytjoq .gt_stub {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -55500,11 +54378,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_stub_row_group {
-=======
 #xtwqeytjoq .gt_stub_row_group {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -55518,17 +54392,6 @@ Coefficients:
   vertical-align: top;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#quqocsbeyj .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#quqocsbeyj .gt_summary_row {
-=======
 #xtwqeytjoq .gt_row_group_first td {
   border-top-width: 2px;
 }
@@ -55538,7 +54401,6 @@ Coefficients:
 }
 
 #xtwqeytjoq .gt_summary_row {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -55548,28 +54410,16 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_first_summary_row {
-=======
 #xtwqeytjoq .gt_first_summary_row {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#quqocsbeyj .gt_last_summary_row {
-=======
 #xtwqeytjoq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
 #xtwqeytjoq .gt_last_summary_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -55579,11 +54429,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_grand_summary_row {
-=======
 #xtwqeytjoq .gt_grand_summary_row {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -55593,11 +54439,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_first_grand_summary_row {
-=======
 #xtwqeytjoq .gt_first_grand_summary_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -55607,11 +54449,7 @@ Coefficients:
   border-top-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_last_grand_summary_row_top {
-=======
 #xtwqeytjoq .gt_last_grand_summary_row_top {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -55621,19 +54459,11 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#quqocsbeyj .gt_table_body {
-=======
 #xtwqeytjoq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
 #xtwqeytjoq .gt_table_body {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -55642,11 +54472,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_footnotes {
-=======
 #xtwqeytjoq .gt_footnotes {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -55660,11 +54486,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_footnote {
-=======
 #xtwqeytjoq .gt_footnote {
->>>>>>> Stashed changes
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -55673,11 +54495,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_sourcenotes {
-=======
 #xtwqeytjoq .gt_sourcenotes {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -55691,11 +54509,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_sourcenote {
-=======
 #xtwqeytjoq .gt_sourcenote {
->>>>>>> Stashed changes
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -55703,17 +54517,6 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_left {
-  text-align: left;
-}
-
-#quqocsbeyj .gt_center {
-  text-align: center;
-}
-
-#quqocsbeyj .gt_right {
-=======
 #xtwqeytjoq .gt_left {
   text-align: left;
 }
@@ -55723,30 +54526,10 @@ Coefficients:
 }
 
 #xtwqeytjoq .gt_right {
->>>>>>> Stashed changes
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_font_normal {
-  font-weight: normal;
-}
-
-#quqocsbeyj .gt_font_bold {
-  font-weight: bold;
-}
-
-#quqocsbeyj .gt_font_italic {
-  font-style: italic;
-}
-
-#quqocsbeyj .gt_super {
-  font-size: 65%;
-}
-
-#quqocsbeyj .gt_footnote_marks {
-=======
 #xtwqeytjoq .gt_font_normal {
   font-weight: normal;
 }
@@ -55764,44 +54547,16 @@ Coefficients:
 }
 
 #xtwqeytjoq .gt_footnote_marks {
->>>>>>> Stashed changes
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_asterisk {
-=======
 #xtwqeytjoq .gt_asterisk {
->>>>>>> Stashed changes
   font-size: 100%;
   vertical-align: 0;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#quqocsbeyj .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#quqocsbeyj .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#quqocsbeyj .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#quqocsbeyj .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#quqocsbeyj .katex-display {
-=======
 #xtwqeytjoq .gt_indent_1 {
   text-indent: 5px;
 }
@@ -55823,21 +54578,16 @@ Coefficients:
 }
 
 #xtwqeytjoq .katex-display {
->>>>>>> Stashed changes
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-<<<<<<< Updated upstream
-#quqocsbeyj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-=======
 #xtwqeytjoq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
->>>>>>> Stashed changes
   height: 0px !important;
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <colgroup>
 <col style="width: 9%">
 <col style="width: 9%">
@@ -55853,10 +54603,10 @@ Coefficients:
 </colgroup>
 <thead>
 <tr class="gt_heading header">
-<th colspan="11" class="gt_heading gt_title gt_font_normal">Regional Summary: Mean and Variance of Five Variables</th>
+<td colspan="11" class="gt_heading gt_title gt_font_normal">Regional Summary: Mean and Variance of Five Variables</td>
 </tr>
 <tr class="gt_heading even">
-<th colspan="11" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Grouped by variable</th>
+<td colspan="11" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Grouped by variable</td>
 </tr>
 <tr class="gt_col_headings gt_spanner_row header">
 <th rowspan="2" id="region" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Region</strong></th>
@@ -55956,184 +54706,31 @@ Coefficients:
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>agpop <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>agpop <span class="sc">|&gt;</span></span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, acres92, acres87, largef92, farms92) <span class="sc">|&gt;</span></span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
 <span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> region,</span>
 <span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(<span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>)</span>
-<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output-display">
-<<<<<<< Updated upstream
-<div id="sowoombyeu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#sowoombyeu table {
-=======
-<div>
-<figure class="figure">
-<p><img src="introR_files/figure-html/base-r-plots-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(agpop<span class="sc">$</span>acres87, agpop<span class="sc">$</span>acres92, <span class="at">main =</span> <span class="st">"1992 vs 1987 Acreage"</span>)</span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="introR_files/figure-html/base-r-plots-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Here is the new sub-section you can add right below your standard plotting chunk to explain this workflow to your readers.</p>
-</section>
-<section id="saving-and-inserting-external-plots" class="level3" data-number="1.4.2">
-<h3 data-number="1.4.2" class="anchored" data-anchor-id="saving-and-inserting-external-plots"><span class="header-section-number">1.4.2</span> Saving and Inserting External Plots</h3>
-<p>Sometimes you need to export a high-resolution plot for a journal submission or a presentation. You can save a plot directly to your computer by opening a “graphics device” (like <code>pdf()</code>, <code>png()</code>, or <code>jpeg()</code>), running your plot code, and then closing the device with <code>dev.off()</code>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Open the PNG device with high resolution (res = 300)</span></span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: When increasing resolution, you must also scale up the width/height in pixels or specify units in inches.</span></span>
-<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"agpop_scatter_highres.png"</span>, <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">4</span>, <span class="at">units =</span> <span class="st">"in"</span>, <span class="at">res =</span> <span class="dv">300</span>)</span>
-<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(agpop<span class="sc">$</span>acres87, agpop<span class="sc">$</span>acres92, <span class="at">main =</span> <span class="st">"1992 vs 1987 Acreage"</span>)</span>
-<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
-<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Once the file is saved in your project folder, you can insert it back into your Quarto document at any time using the <code>knitr</code> package.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Insert the saved PDF back into the document</span></span>
-<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"agpop_scatter_highres.png"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="agpop_scatter_highres.png" class="img-fluid figure-img" width="900"></p>
-<figcaption>My Imported PNG Plot</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="advanced-visualization-with-ggplot2" class="level3" data-number="1.4.3">
-<h3 data-number="1.4.3" class="anchored" data-anchor-id="advanced-visualization-with-ggplot2"><span class="header-section-number">1.4.3</span> Advanced Visualization with <code>ggplot2</code></h3>
-<p>While base R graphics are useful for quick checks, <code>ggplot2</code> provides a powerful grammar of graphics for complex visuals. Below, we generate a histogram of log-transformed 1992 acreages, overlaying both an empirical density curve and a theoretical normal distribution curve.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Modern data prep with pipes</span></span>
-<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>ag_clean <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span></span>
-<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(acres92 <span class="sc">!=</span> <span class="sc">-</span><span class="dv">99</span>, acres92 <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
-<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_acres =</span> <span class="fu">log</span>(acres92))</span>
-<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate parameters for the theoretical normal curve</span></span>
-<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>mean_log <span class="ot">&lt;-</span> <span class="fu">mean</span>(ag_clean<span class="sc">$</span>log_acres)</span>
-<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>sd_log <span class="ot">&lt;-</span> <span class="fu">sd</span>(ag_clean<span class="sc">$</span>log_acres)</span>
-<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ag_clean, <span class="fu">aes</span>(<span class="at">x =</span> log_acres)) <span class="sc">+</span></span>
-<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Base Histogram mapped to density (instead of count)</span></span>
-<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">bins =</span> <span class="dv">30</span>, </span>
-<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Empirical Density Curve (Dark Red)</span></span>
-<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">"darkred"</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
-<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Theoretical Normal Curve (Black, Dashed)</span></span>
-<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, </span>
-<span id="cb62-20"><a href="#cb62-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> mean_log, <span class="at">sd =</span> sd_log), </span>
-<span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb62-22"><a href="#cb62-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb62-23"><a href="#cb62-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Log(Acres92)"</span>,</span>
-<span id="cb62-24"><a href="#cb62-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Histogram with Empirical Density (Red) and Normal Fit (Black Dashed)"</span>,</span>
-<span id="cb62-25"><a href="#cb62-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Log of 1992 Farm Acreage"</span>,</span>
-<span id="cb62-26"><a href="#cb62-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
-<span id="cb62-27"><a href="#cb62-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb62-28"><a href="#cb62-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="introR_files/figure-html/ggplot-histogram-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="create-your-own-function" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="create-your-own-function"><span class="header-section-number">1.5</span> Create your own function</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="do">## data is a matrix or data.frame</span></span>
-<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>means_col <span class="ot">&lt;-</span> <span class="cf">function</span>(data)</span>
-<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">ncol</span>(data)</span>
-<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>    cmeans <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n)</span>
-<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n)</span>
-<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>        cmeans[j] <span class="ot">&lt;-</span> <span class="fu">mean</span>(data[,j], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a>    cmeans</span>
-<span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="do">## apply custom function (using dplyr to select numeric columns first)</span></span>
-<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>agpop_numeric <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">13</span>)</span>
-<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>custom_means <span class="ot">&lt;-</span> <span class="fu">means_col</span>(agpop_numeric)</span>
-<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="do">## apply R built-in function</span></span>
-<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a>builtin_means <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(agpop_numeric, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Create a data frame to compare the results</span></span>
-<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a>comparison_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">colnames</span>(agpop_numeric),</span>
-<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Custom_Function =</span> custom_means,</span>
-<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Built_in =</span> builtin_means</span>
-<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Display the comparison as a clean table</span></span>
-<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a>comparison_df <span class="sc">|&gt;</span> </span>
-<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Comparing Mean Calculations"</span>,</span>
-<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Custom Function vs. Base R colMeans()"</span></span>
-<span id="cb64-23"><a href="#cb64-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb64-24"><a href="#cb64-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
-<span id="cb64-25"><a href="#cb64-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="fu">md</span>(<span class="st">"**Variable**"</span>),</span>
-<span id="cb64-26"><a href="#cb64-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">Custom_Function =</span> <span class="fu">md</span>(<span class="st">"**Custom `means_col()`**"</span>),</span>
-<span id="cb64-27"><a href="#cb64-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">Built_in =</span> <span class="fu">md</span>(<span class="st">"**Base `colMeans()`**"</span>)</span>
-<span id="cb64-28"><a href="#cb64-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb64-29"><a href="#cb64-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(</span>
-<span id="cb64-30"><a href="#cb64-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(Custom_Function, Built_in),</span>
-<span id="cb64-31"><a href="#cb64-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">2</span></span>
-<span id="cb64-32"><a href="#cb64-32" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div id="ooohlrqvew" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ooohlrqvew table {
->>>>>>> Stashed changes
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu thead, #sowoombyeu tbody, #sowoombyeu tfoot, #sowoombyeu tr, #sowoombyeu td, #sowoombyeu th {
-  border-style: none;
-}
-
-#sowoombyeu p {
-=======
 #ooohlrqvew thead, #ooohlrqvew tbody, #ooohlrqvew tfoot, #ooohlrqvew tr, #ooohlrqvew td, #ooohlrqvew th {
   border-style: none;
 }
 
 #ooohlrqvew p {
->>>>>>> Stashed changes
   margin: 0;
   padding: 0;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_table {
-=======
 #ooohlrqvew .gt_table {
->>>>>>> Stashed changes
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -56159,20 +54756,12 @@ Coefficients:
   border-left-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_caption {
-=======
 #ooohlrqvew .gt_caption {
->>>>>>> Stashed changes
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_title {
-=======
 #ooohlrqvew .gt_title {
->>>>>>> Stashed changes
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -56184,11 +54773,7 @@ Coefficients:
   border-bottom-width: 0;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_subtitle {
-=======
 #ooohlrqvew .gt_subtitle {
->>>>>>> Stashed changes
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -56200,11 +54785,7 @@ Coefficients:
   border-top-width: 0;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_heading {
-=======
 #ooohlrqvew .gt_heading {
->>>>>>> Stashed changes
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -56216,21 +54797,13 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_bottom_border {
-=======
 #ooohlrqvew .gt_bottom_border {
->>>>>>> Stashed changes
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_col_headings {
-=======
 #ooohlrqvew .gt_col_headings {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -56245,11 +54818,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_col_heading {
-=======
 #ooohlrqvew .gt_col_heading {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -56269,11 +54838,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_column_spanner_outer {
-=======
 #ooohlrqvew .gt_column_spanner_outer {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -56285,17 +54850,6 @@ Coefficients:
   padding-right: 4px;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#sowoombyeu .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#sowoombyeu .gt_column_spanner {
-=======
 #ooohlrqvew .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
@@ -56305,7 +54859,6 @@ Coefficients:
 }
 
 #ooohlrqvew .gt_column_spanner {
->>>>>>> Stashed changes
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -56317,19 +54870,11 @@ Coefficients:
   width: 100%;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#sowoombyeu .gt_group_heading {
-=======
 #ooohlrqvew .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
 #ooohlrqvew .gt_group_heading {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -56355,11 +54900,7 @@ Coefficients:
   text-align: left;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_empty_group_heading {
-=======
 #ooohlrqvew .gt_empty_group_heading {
->>>>>>> Stashed changes
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -56374,17 +54915,6 @@ Coefficients:
   vertical-align: middle;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#sowoombyeu .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#sowoombyeu .gt_row {
-=======
 #ooohlrqvew .gt_from_md > :first-child {
   margin-top: 0;
 }
@@ -56394,7 +54924,6 @@ Coefficients:
 }
 
 #ooohlrqvew .gt_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -56413,11 +54942,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_stub {
-=======
 #ooohlrqvew .gt_stub {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -56430,11 +54955,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_stub_row_group {
-=======
 #ooohlrqvew .gt_stub_row_group {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -56448,17 +54969,6 @@ Coefficients:
   vertical-align: top;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#sowoombyeu .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#sowoombyeu .gt_summary_row {
-=======
 #ooohlrqvew .gt_row_group_first td {
   border-top-width: 2px;
 }
@@ -56468,7 +54978,6 @@ Coefficients:
 }
 
 #ooohlrqvew .gt_summary_row {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -56478,28 +54987,16 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_first_summary_row {
-=======
 #ooohlrqvew .gt_first_summary_row {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#sowoombyeu .gt_last_summary_row {
-=======
 #ooohlrqvew .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
 #ooohlrqvew .gt_last_summary_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -56509,11 +55006,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_grand_summary_row {
-=======
 #ooohlrqvew .gt_grand_summary_row {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -56523,11 +55016,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_first_grand_summary_row {
-=======
 #ooohlrqvew .gt_first_grand_summary_row {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -56537,11 +55026,7 @@ Coefficients:
   border-top-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_last_grand_summary_row_top {
-=======
 #ooohlrqvew .gt_last_grand_summary_row_top {
->>>>>>> Stashed changes
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -56551,19 +55036,11 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#sowoombyeu .gt_table_body {
-=======
 #ooohlrqvew .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
 #ooohlrqvew .gt_table_body {
->>>>>>> Stashed changes
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -56572,11 +55049,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_footnotes {
-=======
 #ooohlrqvew .gt_footnotes {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -56590,11 +55063,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_footnote {
-=======
 #ooohlrqvew .gt_footnote {
->>>>>>> Stashed changes
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -56603,11 +55072,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_sourcenotes {
-=======
 #ooohlrqvew .gt_sourcenotes {
->>>>>>> Stashed changes
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -56621,11 +55086,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_sourcenote {
-=======
 #ooohlrqvew .gt_sourcenote {
->>>>>>> Stashed changes
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -56633,17 +55094,6 @@ Coefficients:
   padding-right: 5px;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_left {
-  text-align: left;
-}
-
-#sowoombyeu .gt_center {
-  text-align: center;
-}
-
-#sowoombyeu .gt_right {
-=======
 #ooohlrqvew .gt_left {
   text-align: left;
 }
@@ -56653,30 +55103,10 @@ Coefficients:
 }
 
 #ooohlrqvew .gt_right {
->>>>>>> Stashed changes
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_font_normal {
-  font-weight: normal;
-}
-
-#sowoombyeu .gt_font_bold {
-  font-weight: bold;
-}
-
-#sowoombyeu .gt_font_italic {
-  font-style: italic;
-}
-
-#sowoombyeu .gt_super {
-  font-size: 65%;
-}
-
-#sowoombyeu .gt_footnote_marks {
-=======
 #ooohlrqvew .gt_font_normal {
   font-weight: normal;
 }
@@ -56694,44 +55124,16 @@ Coefficients:
 }
 
 #ooohlrqvew .gt_footnote_marks {
->>>>>>> Stashed changes
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_asterisk {
-=======
 #ooohlrqvew .gt_asterisk {
->>>>>>> Stashed changes
   font-size: 100%;
   vertical-align: 0;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#sowoombyeu .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#sowoombyeu .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#sowoombyeu .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#sowoombyeu .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#sowoombyeu .katex-display {
-=======
 #ooohlrqvew .gt_indent_1 {
   text-indent: 5px;
 }
@@ -56753,21 +55155,16 @@ Coefficients:
 }
 
 #ooohlrqvew .katex-display {
->>>>>>> Stashed changes
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-<<<<<<< Updated upstream
-#sowoombyeu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-=======
 #ooohlrqvew div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
->>>>>>> Stashed changes
   height: 0px !important;
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <colgroup>
 <col style="width: 20%">
 <col style="width: 20%">
@@ -56852,7 +55249,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(agpop<span class="sc">$</span>acres92, <span class="at">main =</span> <span class="st">"Histogram of 1992 Acres"</span>, <span class="at">xlab =</span> <span class="st">"Acres"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(agpop<span class="sc">$</span>acres92, <span class="at">main =</span> <span class="st">"Histogram of 1992 Acres"</span>, <span class="at">xlab =</span> <span class="st">"Acres"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -56863,10 +55260,10 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(agpop<span class="sc">$</span>acres87, agpop<span class="sc">$</span>acres92,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(agpop<span class="sc">$</span>acres87, agpop<span class="sc">$</span>acres92,</span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"1992 vs 1987 Acreage"</span>,</span>
 <span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Acres 1987"</span>, <span class="at">ylab =</span> <span class="st">"Acres 1992"</span>)</span>
-<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -56883,7 +55280,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"figures"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"figures"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/agpop_scatter_highres.png"</span>,</span>
 <span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">4</span>, <span class="at">units =</span> <span class="st">"in"</span>, <span class="at">res =</span> <span class="dv">300</span>)</span>
@@ -56893,14 +55290,14 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Acres 1987"</span>, <span class="at">ylab =</span> <span class="st">"Acres 1992"</span>)</span>
 <span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
 <span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>The saved file can then be placed back into the document with <code>knitr::include_graphics()</code>.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figures/agpop_scatter_highres.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figures/agpop_scatter_highres.png"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -56918,7 +55315,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>ag_clean <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>ag_clean <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span></span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(acres92), acres92 <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_acres =</span> <span class="fu">log</span>(acres92))</span>
 <span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -56940,7 +55337,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Log of 1992 farm acreage"</span>,</span>
 <span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
 <span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb64-23"><a href="#cb64-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb64-23"><a href="#cb64-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -56958,7 +55355,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="do">## data is a matrix or data frame; returns the mean of each column</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="do">## data is a matrix or data frame; returns the mean of each column</span></span>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>means_col <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
 <span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">ncol</span>(data)</span>
 <span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  cmeans <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA_real_</span>, n)</span>
@@ -56967,14 +55364,14 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(cmeans) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(data)</span>
 <span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a>  cmeans</span>
-<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Indexing with <code>data[[j]]</code> extracts column <code>j</code> as a vector for both data frames and tibbles, whereas <code>data[, j]</code> returns a one-column tibble in the tibble case. <code>seq_len(n)</code> is used in place of <code>1:n</code> so that a zero-column input yields an empty loop rather than iterating over <code>1, 0</code>.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>agpop_numeric <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">where</span>(is.numeric))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>agpop_numeric <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">where</span>(is.numeric))</span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>custom_means  <span class="ot">&lt;-</span> <span class="fu">means_col</span>(agpop_numeric)</span>
 <span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>builtin_means <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(agpop_numeric, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
@@ -56995,26 +55392,26 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <span id="cb66-19"><a href="#cb66-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Custom_Function =</span> <span class="fu">md</span>(<span class="st">"**Custom `means_col()`**"</span>),</span>
 <span id="cb66-20"><a href="#cb66-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">Built_in        =</span> <span class="fu">md</span>(<span class="st">"**Base `colMeans()`**"</span>)</span>
 <span id="cb66-21"><a href="#cb66-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb66-22"><a href="#cb66-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(Custom_Function, Built_in), <span class="at">decimals =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb66-22"><a href="#cb66-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(Custom_Function, Built_in), <span class="at">decimals =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="ycrongytag" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ycrongytag table {
+<div id="ismzvlqggf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ismzvlqggf table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ycrongytag thead, #ycrongytag tbody, #ycrongytag tfoot, #ycrongytag tr, #ycrongytag td, #ycrongytag th {
+#ismzvlqggf thead, #ismzvlqggf tbody, #ismzvlqggf tfoot, #ismzvlqggf tr, #ismzvlqggf td, #ismzvlqggf th {
   border-style: none;
 }
 
-#ycrongytag p {
+#ismzvlqggf p {
   margin: 0;
   padding: 0;
 }
 
-#ycrongytag .gt_table {
+#ismzvlqggf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -57040,12 +55437,12 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-left-color: #D3D3D3;
 }
 
-#ycrongytag .gt_caption {
+#ismzvlqggf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ycrongytag .gt_title {
+#ismzvlqggf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -57057,7 +55454,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-width: 0;
 }
 
-#ycrongytag .gt_subtitle {
+#ismzvlqggf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -57069,7 +55466,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-top-width: 0;
 }
 
-#ycrongytag .gt_heading {
+#ismzvlqggf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -57081,13 +55478,13 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#ycrongytag .gt_bottom_border {
+#ismzvlqggf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ycrongytag .gt_col_headings {
+#ismzvlqggf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -57102,7 +55499,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#ycrongytag .gt_col_heading {
+#ismzvlqggf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -57122,7 +55519,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   overflow-x: hidden;
 }
 
-#ycrongytag .gt_column_spanner_outer {
+#ismzvlqggf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -57134,15 +55531,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 4px;
 }
 
-#ycrongytag .gt_column_spanner_outer:first-child {
+#ismzvlqggf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ycrongytag .gt_column_spanner_outer:last-child {
+#ismzvlqggf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ycrongytag .gt_column_spanner {
+#ismzvlqggf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -57154,11 +55551,11 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   width: 100%;
 }
 
-#ycrongytag .gt_spanner_row {
+#ismzvlqggf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ycrongytag .gt_group_heading {
+#ismzvlqggf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -57184,7 +55581,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   text-align: left;
 }
 
-#ycrongytag .gt_empty_group_heading {
+#ismzvlqggf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -57199,15 +55596,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   vertical-align: middle;
 }
 
-#ycrongytag .gt_from_md > :first-child {
+#ismzvlqggf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ycrongytag .gt_from_md > :last-child {
+#ismzvlqggf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ycrongytag .gt_row {
+#ismzvlqggf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -57226,7 +55623,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   overflow-x: hidden;
 }
 
-#ycrongytag .gt_stub {
+#ismzvlqggf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -57239,7 +55636,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#ycrongytag .gt_stub_row_group {
+#ismzvlqggf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -57253,15 +55650,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   vertical-align: top;
 }
 
-#ycrongytag .gt_row_group_first td {
+#ismzvlqggf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ycrongytag .gt_row_group_first th {
+#ismzvlqggf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ycrongytag .gt_summary_row {
+#ismzvlqggf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -57271,16 +55668,16 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#ycrongytag .gt_first_summary_row {
+#ismzvlqggf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ycrongytag .gt_first_summary_row.thick {
+#ismzvlqggf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ycrongytag .gt_last_summary_row {
+#ismzvlqggf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -57290,7 +55687,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#ycrongytag .gt_grand_summary_row {
+#ismzvlqggf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -57300,7 +55697,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#ycrongytag .gt_first_grand_summary_row {
+#ismzvlqggf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -57310,7 +55707,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-top-color: #D3D3D3;
 }
 
-#ycrongytag .gt_last_grand_summary_row_top {
+#ismzvlqggf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -57320,11 +55717,11 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#ycrongytag .gt_striped {
+#ismzvlqggf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ycrongytag .gt_table_body {
+#ismzvlqggf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -57333,7 +55730,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-bottom-color: #D3D3D3;
 }
 
-#ycrongytag .gt_footnotes {
+#ismzvlqggf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -57347,7 +55744,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#ycrongytag .gt_footnote {
+#ismzvlqggf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -57356,7 +55753,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#ycrongytag .gt_sourcenotes {
+#ismzvlqggf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -57370,7 +55767,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   border-right-color: #D3D3D3;
 }
 
-#ycrongytag .gt_sourcenote {
+#ismzvlqggf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -57378,83 +55775,83 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
   padding-right: 5px;
 }
 
-#ycrongytag .gt_left {
+#ismzvlqggf .gt_left {
   text-align: left;
 }
 
-#ycrongytag .gt_center {
+#ismzvlqggf .gt_center {
   text-align: center;
 }
 
-#ycrongytag .gt_right {
+#ismzvlqggf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ycrongytag .gt_font_normal {
+#ismzvlqggf .gt_font_normal {
   font-weight: normal;
 }
 
-#ycrongytag .gt_font_bold {
+#ismzvlqggf .gt_font_bold {
   font-weight: bold;
 }
 
-#ycrongytag .gt_font_italic {
+#ismzvlqggf .gt_font_italic {
   font-style: italic;
 }
 
-#ycrongytag .gt_super {
+#ismzvlqggf .gt_super {
   font-size: 65%;
 }
 
-#ycrongytag .gt_footnote_marks {
+#ismzvlqggf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ycrongytag .gt_asterisk {
+#ismzvlqggf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ycrongytag .gt_indent_1 {
+#ismzvlqggf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ycrongytag .gt_indent_2 {
+#ismzvlqggf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ycrongytag .gt_indent_3 {
+#ismzvlqggf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ycrongytag .gt_indent_4 {
+#ismzvlqggf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ycrongytag .gt_indent_5 {
+#ismzvlqggf .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ycrongytag .katex-display {
+#ismzvlqggf .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ycrongytag div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ismzvlqggf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading header">
-<th colspan="3" class="gt_heading gt_title gt_font_normal">Comparing Mean Calculations</th>
+<td colspan="3" class="gt_heading gt_title gt_font_normal">Comparing Mean Calculations</td>
 </tr>
 <tr class="gt_heading even">
-<th colspan="3" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Custom function vs. base R colMeans()</th>
+<td colspan="3" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Custom function vs. base R colMeans()</td>
 </tr>
 <tr class="gt_col_headings header">
 <th id="Variable" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Variable</strong></th>
@@ -57532,7 +55929,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(custom_means, builtin_means)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(custom_means, builtin_means)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
@@ -57595,13 +55992,14 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
