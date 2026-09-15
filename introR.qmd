@@ -139,6 +139,55 @@ mtcars |> lm(mpg ~ disp, data = _)
 
 The `dplyr` package and the native pipe (`|>`) make modifying, subsetting, and summarizing data frames much cleaner than base R.
 
+### Displaying Large Datasets with a Scroll Bar
+
+When working with large datasets, printing the entire dataframe to your HTML document takes up too much vertical space and can slow down the browser. We can use the `gt` package to create a fixed-height, scrollable window, so HTML readers can scroll through the **full** dataset. A static, non-HTML render (e.g. Typst/PDF) has no scrollbar, so there we show only the head of the data instead.
+
+::: {.content-visible when-format="html"}
+
+```{r scrollable-table, message=FALSE, warning=FALSE}
+library(gt)
+
+# Display the FULL dataset inside a scrollable box (HTML only)
+agpop |>
+  gt() |>
+  tab_header(
+    title = "Agricultural Population Data",
+    subtitle = "Scroll to view more rows"
+  ) |>
+  tab_options(
+    container.height = px(400),   # Restricts the table height to 400 pixels
+    container.overflow.y = TRUE   # Enables the vertical scroll bar
+  )
+```
+
+Of course, quarto uses 'kable' as a default tool to display a large dataset using pages:
+
+```{r}
+agpop
+```
+
+:::
+
+::: {.content-visible unless-format="html"}
+
+```{r head-table-print, message=FALSE, warning=FALSE}
+library(gt)
+
+# Non-HTML output (e.g. Typst/PDF): a scrollbar doesn't exist on a static
+# page, so just show the head of the dataset instead of the full table
+agpop |>
+  head() |>
+  gt() |>
+  tab_header(
+    title = "Agricultural Population Data",
+    subtitle = "First 6 rows (see the HTML version for the full, scrollable table)"
+  )
+```
+
+:::
+
+
 ```{r dplyr-manipulation, message=FALSE, warning=FALSE}
 library(dplyr)
 
@@ -165,47 +214,6 @@ agpop_subset <- agpop |>
 head(agpop_subset)
 ```
 
-### Displaying Large Datasets with a Scroll Bar
-
-When working with large datasets, printing the entire dataframe to your HTML document takes up too much vertical space and can slow down the browser. We can use the `gt` package to create a fixed-height, scrollable window, so HTML readers can scroll through the **full** dataset. A static, non-HTML render (e.g. Typst/PDF) has no scrollbar, so there we show only the head of the data instead.
-
-::: {.content-visible when-format="html"}
-
-```{r scrollable-table, message=FALSE, warning=FALSE}
-library(gt)
-
-# Display the FULL dataset inside a scrollable box (HTML only)
-agpop |>
-  gt() |>
-  tab_header(
-    title = "Agricultural Population Data",
-    subtitle = "Scroll to view more rows"
-  ) |>
-  tab_options(
-    container.height = px(400),   # Restricts the table height to 400 pixels
-    container.overflow.y = TRUE   # Enables the vertical scroll bar
-  )
-```
-
-:::
-
-::: {.content-visible unless-format="html"}
-
-```{r head-table-print, message=FALSE, warning=FALSE}
-library(gt)
-
-# Non-HTML output (e.g. Typst/PDF): a scrollbar doesn't exist on a static
-# page, so just show the head of the dataset instead of the full table
-agpop |>
-  head() |>
-  gt() |>
-  tab_header(
-    title = "Agricultural Population Data",
-    subtitle = "First 6 rows (see the HTML version for the full, scrollable table)"
-  )
-```
-
-:::
 
 **Output Note:** The HTML version shows the full dataset in a clean, professional, 400-pixel-high scrolling container; the Typst/PDF version shows only the first six rows since a printed page cannot scroll.
 
