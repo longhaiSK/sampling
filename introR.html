@@ -68,19 +68,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./srs.html" rel="next">
+<link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-f79c7fb6db380d32be398468f2fb58cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a7b5894d5a4c39c6aa3484761f021c1f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/custombook-1.0.0/num_eq.js"></script>
-<script src="site_libs/quarto-contrib/custombook-1.0.0/merge-toc.js"></script>
-<link href="site_libs/quarto-contrib/custombook-1.0.0/bookstyles.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-87aed0b8589e23e45aa8556edf37a91b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -108,8 +107,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -162,7 +159,7 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
@@ -241,21 +238,25 @@ window.Quarto = {
   </li>
     </ul>
     </div>
-    <nav id="TOC" role="doc-toc" class="toc-active">
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#basic-r-objects-and-operations" id="toc-basic-r-objects-and-operations" class="nav-link active" data-scroll-target="#basic-r-objects-and-operations"><span class="header-section-number">1.1</span> Basic R Objects and Operations</a></li>
   <li><a href="#import-a-dataset-as-a-dataframe-and-simple-operations" id="toc-import-a-dataset-as-a-dataframe-and-simple-operations" class="nav-link" data-scroll-target="#import-a-dataset-as-a-dataframe-and-simple-operations"><span class="header-section-number">1.2</span> Import a Dataset as a dataframe and Simple Operations</a></li>
   <li><a href="#data-manipulation-and-data-table" id="toc-data-manipulation-and-data-table" class="nav-link" data-scroll-target="#data-manipulation-and-data-table"><span class="header-section-number">1.3</span> Data Manipulation and Data Table</a>
-  <ul>
+  <ul class="collapse">
   <li><a href="#pipe-operations" id="toc-pipe-operations" class="nav-link" data-scroll-target="#pipe-operations"><span class="header-section-number">1.3.1</span> Pipe Operations</a></li>
   <li><a href="#modern-data-manipulation-using-dplyr" id="toc-modern-data-manipulation-using-dplyr" class="nav-link" data-scroll-target="#modern-data-manipulation-using-dplyr"><span class="header-section-number">1.3.2</span> Modern Data Manipulation using <code>dplyr</code></a></li>
   <li><a href="#displaying-large-datasets-with-a-scroll-bar" id="toc-displaying-large-datasets-with-a-scroll-bar" class="nav-link" data-scroll-target="#displaying-large-datasets-with-a-scroll-bar"><span class="header-section-number">1.3.3</span> Displaying Large Datasets with a Scroll Bar</a></li>
   <li><a href="#advanced-tables-with-gt" id="toc-advanced-tables-with-gt" class="nav-link" data-scroll-target="#advanced-tables-with-gt"><span class="header-section-number">1.3.4</span> Advanced Tables with <code>gt</code></a></li>
   </ul></li>
   <li><a href="#graphics-in-r" id="toc-graphics-in-r" class="nav-link" data-scroll-target="#graphics-in-r"><span class="header-section-number">1.4</span> Graphics in R</a>
-  <ul>
+  <ul class="collapse">
   <li><a href="#base-r-graphics" id="toc-base-r-graphics" class="nav-link" data-scroll-target="#base-r-graphics"><span class="header-section-number">1.4.1</span> Base R Graphics</a></li>
   <li><a href="#saving-and-inserting-external-plots" id="toc-saving-and-inserting-external-plots" class="nav-link" data-scroll-target="#saving-and-inserting-external-plots"><span class="header-section-number">1.4.2</span> Saving and Inserting External Plots</a></li>
   <li><a href="#advanced-visualization-with-ggplot2" id="toc-advanced-visualization-with-ggplot2" class="nav-link" data-scroll-target="#advanced-visualization-with-ggplot2"><span class="header-section-number">1.4.3</span> Advanced Visualization with <code>ggplot2</code></a></li>
@@ -263,13 +264,9 @@ window.Quarto = {
   <li><a href="#create-your-own-function" id="toc-create-your-own-function" class="nav-link" data-scroll-target="#create-your-own-function"><span class="header-section-number">1.5</span> Create your own function</a></li>
   </ul>
 </nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content column-page-right" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -279,7 +276,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta column-page-right">
+<div class="quarto-title-meta">
 
     
   
@@ -53869,7 +53866,7 @@ Coefficients:
 </div>
 </div>
 </div>
-<p>Of course, quarto used ‘kable’ as a default tool to display a large dataset using pages:</p>
+<p>Of course, quarto uses ‘kable’ as a default tool to display a large dataset using pages:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>agpop</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -56227,6 +56224,18 @@ Coefficients:
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Preface">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./srs.html" class="pagination-link" aria-label="Simple Random Sampling">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

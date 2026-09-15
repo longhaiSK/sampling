@@ -81,6 +81,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-contrib/custombook-1.0.0/num_eq.js"></script>
 <script src="site_libs/quarto-contrib/custombook-1.0.0/merge-toc.js"></script>
 <link href="site_libs/quarto-contrib/custombook-1.0.0/bookstyles.css" rel="stylesheet">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="site_libs/quarto-contrib/shinylive-0.10.12/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="site_libs/quarto-contrib/shinylive-0.10.12/shinylive/run-python-blocks.js" type="module"></script>
+<link href="site_libs/quarto-contrib/shinylive-0.10.12/shinylive/shinylive.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -261,6 +266,7 @@ window.Quarto = {
   <li><a href="#one-srs-sampling" id="toc-one-srs-sampling" class="nav-link" data-scroll-target="#one-srs-sampling"><span class="header-section-number">2.2.2</span> One SRS sampling</a></li>
   <li><a href="#repeating-srs-sampling-5000-times" id="toc-repeating-srs-sampling-5000-times" class="nav-link" data-scroll-target="#repeating-srs-sampling-5000-times"><span class="header-section-number">2.2.3</span> Repeating SRS sampling 5000 times</a></li>
   <li><a href="#empirical-coverage-rate-of-cis" id="toc-empirical-coverage-rate-of-cis" class="nav-link" data-scroll-target="#empirical-coverage-rate-of-cis"><span class="header-section-number">2.2.4</span> Empirical Coverage Rate of CIs</a></li>
+  <li><a href="#interactive-demonstration" id="toc-interactive-demonstration" class="nav-link" data-scroll-target="#interactive-demonstration"><span class="header-section-number">2.2.5</span> Interactive Demonstration</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -635,7 +641,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb6-277"><a href="#cb6-277" aria-hidden="true" tabindex="-1"></a>ratio_est <span class="ot">&lt;-</span> <span class="cf">function</span> (ydata, xdata, <span class="at">xbarU =</span> <span class="cn">NULL</span>, <span class="at">N =</span> <span class="cn">Inf</span>,</span>
 <span id="cb6-278"><a href="#cb6-278" aria-hidden="true" tabindex="-1"></a>                        <span class="at">estimate =</span> <span class="fu">c</span> (<span class="st">"mean"</span>, <span class="st">"total"</span>, <span class="st">"model"</span>), <span class="at">show.details =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb6-279"><a href="#cb6-279" aria-hidden="true" tabindex="-1"></a>                        <span class="at">col_labels =</span> <span class="fu">list</span> (<span class="at">y =</span> <span class="st">"y_i"</span>, <span class="at">x =</span> <span class="st">"x_i"</span>, <span class="at">yhat =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">hat y_i"</span>),</span>
-<span id="cb6-280"><a href="#cb6-280" aria-hidden="true" tabindex="-1"></a>                        <span class="at">extra_col =</span> <span class="cn">NULL</span>)</span>
+<span id="cb6-280"><a href="#cb6-280" aria-hidden="true" tabindex="-1"></a>                        <span class="at">extra_col =</span> <span class="cn">NULL</span>, <span class="at">B_label =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">hat B"</span>)</span>
 <span id="cb6-281"><a href="#cb6-281" aria-hidden="true" tabindex="-1"></a>{</span>
 <span id="cb6-282"><a href="#cb6-282" aria-hidden="true" tabindex="-1"></a>  estimate <span class="ot">&lt;-</span> <span class="fu">match.arg</span> (estimate)</span>
 <span id="cb6-283"><a href="#cb6-283" aria-hidden="true" tabindex="-1"></a></span>
@@ -725,8 +731,8 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a>  table <span class="ot">&lt;-</span> table <span class="sc">|&gt;</span></span>
 <span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tab_source_note</span> (</span>
 <span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a>          <span class="at">source_note =</span> <span class="fu">md</span> (<span class="cf">if</span> (estimate <span class="sc">==</span> <span class="st">"model"</span>)</span>
-<span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a>              <span class="fu">sprintf</span> (<span class="st">"$</span><span class="sc">\\</span><span class="st">hat B = </span><span class="sc">\\</span><span class="st">dfrac{</span><span class="sc">\\</span><span class="st">sum_i %s}{</span><span class="sc">\\</span><span class="st">sum_i %s} = </span><span class="sc">\\</span><span class="st">dfrac{%s}{%s} = %s$"</span>,</span>
-<span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a>                       col_labels<span class="sc">$</span>y, col_labels<span class="sc">$</span>x, <span class="fu">fmt_num</span> (<span class="fu">sum</span> (ydata)), <span class="fu">fmt_num</span> (<span class="fu">sum</span> (xdata)), <span class="fu">fmt_num</span> (B_hat))</span>
+<span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a>              <span class="fu">sprintf</span> (<span class="st">"$%s = </span><span class="sc">\\</span><span class="st">dfrac{</span><span class="sc">\\</span><span class="st">sum_i %s}{</span><span class="sc">\\</span><span class="st">sum_i %s} = </span><span class="sc">\\</span><span class="st">dfrac{%s}{%s} = %s$"</span>,</span>
+<span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a>                       B_label, col_labels<span class="sc">$</span>y, col_labels<span class="sc">$</span>x, <span class="fu">fmt_num</span> (<span class="fu">sum</span> (ydata)), <span class="fu">fmt_num</span> (<span class="fu">sum</span> (xdata)), <span class="fu">fmt_num</span> (B_hat))</span>
 <span id="cb6-372"><a href="#cb6-372" aria-hidden="true" tabindex="-1"></a>          <span class="cf">else</span> <span class="cf">if</span> (estimate <span class="sc">==</span> <span class="st">"total"</span>)</span>
 <span id="cb6-373"><a href="#cb6-373" aria-hidden="true" tabindex="-1"></a>              <span class="fu">sprintf</span> (<span class="st">"$</span><span class="sc">\\</span><span class="st">hat t = </span><span class="sc">\\</span><span class="st">hat B</span><span class="sc">\\</span><span class="st">,</span><span class="sc">\\</span><span class="st">bar x_U</span><span class="sc">\\</span><span class="st">,N = %s </span><span class="sc">\\</span><span class="st">times %s </span><span class="sc">\\</span><span class="st">times %s = %s$"</span>,</span>
 <span id="cb6-374"><a href="#cb6-374" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">fmt_num</span> (B_hat), <span class="fu">fmt_num</span> (xbarU), <span class="fu">fmt_num</span> (N, <span class="dv">0</span>), <span class="fu">fmt_num</span> (est))</span>
@@ -737,11 +743,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb6-379"><a href="#cb6-379" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tab_source_note</span> (</span>
 <span id="cb6-380"><a href="#cb6-380" aria-hidden="true" tabindex="-1"></a>          <span class="at">source_note =</span> <span class="fu">md</span> (<span class="cf">if</span> (estimate <span class="sc">==</span> <span class="st">"model"</span>)</span>
 <span id="cb6-381"><a href="#cb6-381" aria-hidden="true" tabindex="-1"></a>              (<span class="cf">if</span> (<span class="fu">is.finite</span> (N))</span>
-<span id="cb6-382"><a href="#cb6-382" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">sprintf</span> (<span class="st">"$</span><span class="sc">\\</span><span class="st">mathrm{SE}(</span><span class="sc">\\</span><span class="st">hat B) = </span><span class="sc">\\</span><span class="st">dfrac{1}{</span><span class="sc">\\</span><span class="st">bar x}</span><span class="sc">\\</span><span class="st">sqrt{</span><span class="sc">\\</span><span class="st">left(1-</span><span class="sc">\\</span><span class="st">dfrac{n}{N}</span><span class="sc">\\</span><span class="st">right)</span><span class="sc">\\</span><span class="st">dfrac{s_e^2}{n}} = </span><span class="sc">\\</span><span class="st">dfrac{1}{%s}</span><span class="sc">\\</span><span class="st">sqrt{</span><span class="sc">\\</span><span class="st">left(1-</span><span class="sc">\\</span><span class="st">dfrac{%d}{%d}</span><span class="sc">\\</span><span class="st">right)</span><span class="sc">\\</span><span class="st">dfrac{%s}{%d}} = %s$"</span>,</span>
-<span id="cb6-383"><a href="#cb6-383" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">fmt_num</span> (xbar), n, N, <span class="fu">fmt_num</span> (var_e), n, <span class="fu">fmt_num</span> (sd_B_hat))</span>
+<span id="cb6-382"><a href="#cb6-382" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">sprintf</span> (<span class="st">"$</span><span class="sc">\\</span><span class="st">mathrm{SE}(%s) = </span><span class="sc">\\</span><span class="st">dfrac{1}{</span><span class="sc">\\</span><span class="st">bar x}</span><span class="sc">\\</span><span class="st">sqrt{</span><span class="sc">\\</span><span class="st">left(1-</span><span class="sc">\\</span><span class="st">dfrac{n}{N}</span><span class="sc">\\</span><span class="st">right)</span><span class="sc">\\</span><span class="st">dfrac{s_e^2}{n}} = </span><span class="sc">\\</span><span class="st">dfrac{1}{%s}</span><span class="sc">\\</span><span class="st">sqrt{</span><span class="sc">\\</span><span class="st">left(1-</span><span class="sc">\\</span><span class="st">dfrac{%d}{%d}</span><span class="sc">\\</span><span class="st">right)</span><span class="sc">\\</span><span class="st">dfrac{%s}{%d}} = %s$"</span>,</span>
+<span id="cb6-383"><a href="#cb6-383" aria-hidden="true" tabindex="-1"></a>                          B_label, <span class="fu">fmt_num</span> (xbar), n, N, <span class="fu">fmt_num</span> (var_e), n, <span class="fu">fmt_num</span> (sd_B_hat))</span>
 <span id="cb6-384"><a href="#cb6-384" aria-hidden="true" tabindex="-1"></a>              <span class="cf">else</span></span>
-<span id="cb6-385"><a href="#cb6-385" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">sprintf</span> (<span class="st">"$</span><span class="sc">\\</span><span class="st">mathrm{SE}(</span><span class="sc">\\</span><span class="st">hat B) = </span><span class="sc">\\</span><span class="st">dfrac{1}{</span><span class="sc">\\</span><span class="st">bar x}</span><span class="sc">\\</span><span class="st">sqrt{</span><span class="sc">\\</span><span class="st">dfrac{s_e^2}{n}} = </span><span class="sc">\\</span><span class="st">dfrac{1}{%s}</span><span class="sc">\\</span><span class="st">sqrt{</span><span class="sc">\\</span><span class="st">dfrac{%s}{%d}} = %s$"</span>,</span>
-<span id="cb6-386"><a href="#cb6-386" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">fmt_num</span> (xbar), <span class="fu">fmt_num</span> (var_e), n, <span class="fu">fmt_num</span> (sd_B_hat)))</span>
+<span id="cb6-385"><a href="#cb6-385" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">sprintf</span> (<span class="st">"$</span><span class="sc">\\</span><span class="st">mathrm{SE}(%s) = </span><span class="sc">\\</span><span class="st">dfrac{1}{</span><span class="sc">\\</span><span class="st">bar x}</span><span class="sc">\\</span><span class="st">sqrt{</span><span class="sc">\\</span><span class="st">dfrac{s_e^2}{n}} = </span><span class="sc">\\</span><span class="st">dfrac{1}{%s}</span><span class="sc">\\</span><span class="st">sqrt{</span><span class="sc">\\</span><span class="st">dfrac{%s}{%d}} = %s$"</span>,</span>
+<span id="cb6-386"><a href="#cb6-386" aria-hidden="true" tabindex="-1"></a>                          B_label, <span class="fu">fmt_num</span> (xbar), <span class="fu">fmt_num</span> (var_e), n, <span class="fu">fmt_num</span> (sd_B_hat)))</span>
 <span id="cb6-387"><a href="#cb6-387" aria-hidden="true" tabindex="-1"></a>          <span class="cf">else</span> <span class="cf">if</span> (estimate <span class="sc">==</span> <span class="st">"total"</span>)</span>
 <span id="cb6-388"><a href="#cb6-388" aria-hidden="true" tabindex="-1"></a>              <span class="fu">sprintf</span> (<span class="st">"$</span><span class="sc">\\</span><span class="st">mathrm{SE}(</span><span class="sc">\\</span><span class="st">hat t) = </span><span class="sc">\\</span><span class="st">mathrm{SE}(</span><span class="sc">\\</span><span class="st">hat B)</span><span class="sc">\\</span><span class="st">,</span><span class="sc">\\</span><span class="st">bar x_U</span><span class="sc">\\</span><span class="st">,N = %s </span><span class="sc">\\</span><span class="st">times %s </span><span class="sc">\\</span><span class="st">times %s = %s$"</span>,</span>
 <span id="cb6-389"><a href="#cb6-389" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">fmt_num</span> (sd_B_hat), <span class="fu">fmt_num</span> (xbarU), <span class="fu">fmt_num</span> (N, <span class="dv">0</span>), <span class="fu">fmt_num</span> (sd_est))</span>
@@ -1061,7 +1067,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb6-703"><a href="#cb6-703" aria-hidden="true" tabindex="-1"></a>  {</span>
 <span id="cb6-704"><a href="#cb6-704" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ratio_est</span> (t_hat_cls, Mi, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"model"</span>, <span class="at">show.details =</span> show.details,</span>
 <span id="cb6-705"><a href="#cb6-705" aria-hidden="true" tabindex="-1"></a>                 <span class="at">col_labels =</span> <span class="fu">list</span> (<span class="at">y =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">hat t_i"</span>, <span class="at">x =</span> <span class="st">"M_i"</span>, <span class="at">yhat =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">hat B M_i"</span>),</span>
-<span id="cb6-706"><a href="#cb6-706" aria-hidden="true" tabindex="-1"></a>                 <span class="at">extra_col =</span> ybar_col)</span>
+<span id="cb6-706"><a href="#cb6-706" aria-hidden="true" tabindex="-1"></a>                 <span class="at">extra_col =</span> ybar_col, <span class="at">B_label =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">bar y_r"</span>)</span>
 <span id="cb6-707"><a href="#cb6-707" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb6-708"><a href="#cb6-708" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb6-709"><a href="#cb6-709" aria-hidden="true" tabindex="-1"></a></span>
@@ -1195,23 +1201,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>res_mean<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="ppuhbmdahg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ppuhbmdahg table {
+<div id="kxxxxwzdep" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kxxxxwzdep table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ppuhbmdahg thead, #ppuhbmdahg tbody, #ppuhbmdahg tfoot, #ppuhbmdahg tr, #ppuhbmdahg td, #ppuhbmdahg th {
+#kxxxxwzdep thead, #kxxxxwzdep tbody, #kxxxxwzdep tfoot, #kxxxxwzdep tr, #kxxxxwzdep td, #kxxxxwzdep th {
   border-style: none;
 }
 
-#ppuhbmdahg p {
+#kxxxxwzdep p {
   margin: 0;
   padding: 0;
 }
 
-#ppuhbmdahg .gt_table {
+#kxxxxwzdep .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1237,12 +1243,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#ppuhbmdahg .gt_caption {
+#kxxxxwzdep .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ppuhbmdahg .gt_title {
+#kxxxxwzdep .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1254,7 +1260,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#ppuhbmdahg .gt_subtitle {
+#kxxxxwzdep .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1266,7 +1272,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#ppuhbmdahg .gt_heading {
+#kxxxxwzdep .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1278,13 +1284,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ppuhbmdahg .gt_bottom_border {
+#kxxxxwzdep .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ppuhbmdahg .gt_col_headings {
+#kxxxxwzdep .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1299,7 +1305,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ppuhbmdahg .gt_col_heading {
+#kxxxxwzdep .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1319,7 +1325,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#ppuhbmdahg .gt_column_spanner_outer {
+#kxxxxwzdep .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1331,15 +1337,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#ppuhbmdahg .gt_column_spanner_outer:first-child {
+#kxxxxwzdep .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ppuhbmdahg .gt_column_spanner_outer:last-child {
+#kxxxxwzdep .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ppuhbmdahg .gt_column_spanner {
+#kxxxxwzdep .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1351,11 +1357,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#ppuhbmdahg .gt_spanner_row {
+#kxxxxwzdep .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ppuhbmdahg .gt_group_heading {
+#kxxxxwzdep .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1381,7 +1387,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#ppuhbmdahg .gt_empty_group_heading {
+#kxxxxwzdep .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1396,15 +1402,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#ppuhbmdahg .gt_from_md > :first-child {
+#kxxxxwzdep .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ppuhbmdahg .gt_from_md > :last-child {
+#kxxxxwzdep .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ppuhbmdahg .gt_row {
+#kxxxxwzdep .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1423,7 +1429,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#ppuhbmdahg .gt_stub {
+#kxxxxwzdep .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1436,7 +1442,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ppuhbmdahg .gt_stub_row_group {
+#kxxxxwzdep .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1450,15 +1456,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#ppuhbmdahg .gt_row_group_first td {
+#kxxxxwzdep .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ppuhbmdahg .gt_row_group_first th {
+#kxxxxwzdep .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ppuhbmdahg .gt_summary_row {
+#kxxxxwzdep .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1468,16 +1474,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ppuhbmdahg .gt_first_summary_row {
+#kxxxxwzdep .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ppuhbmdahg .gt_first_summary_row.thick {
+#kxxxxwzdep .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ppuhbmdahg .gt_last_summary_row {
+#kxxxxwzdep .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1487,7 +1493,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#ppuhbmdahg .gt_grand_summary_row {
+#kxxxxwzdep .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1497,7 +1503,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ppuhbmdahg .gt_first_grand_summary_row {
+#kxxxxwzdep .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1507,7 +1513,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#ppuhbmdahg .gt_last_grand_summary_row_top {
+#kxxxxwzdep .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1517,11 +1523,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#ppuhbmdahg .gt_striped {
+#kxxxxwzdep .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ppuhbmdahg .gt_table_body {
+#kxxxxwzdep .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1530,7 +1536,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#ppuhbmdahg .gt_footnotes {
+#kxxxxwzdep .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1544,7 +1550,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ppuhbmdahg .gt_footnote {
+#kxxxxwzdep .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1553,7 +1559,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ppuhbmdahg .gt_sourcenotes {
+#kxxxxwzdep .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1567,7 +1573,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ppuhbmdahg .gt_sourcenote {
+#kxxxxwzdep .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1575,72 +1581,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ppuhbmdahg .gt_left {
+#kxxxxwzdep .gt_left {
   text-align: left;
 }
 
-#ppuhbmdahg .gt_center {
+#kxxxxwzdep .gt_center {
   text-align: center;
 }
 
-#ppuhbmdahg .gt_right {
+#kxxxxwzdep .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ppuhbmdahg .gt_font_normal {
+#kxxxxwzdep .gt_font_normal {
   font-weight: normal;
 }
 
-#ppuhbmdahg .gt_font_bold {
+#kxxxxwzdep .gt_font_bold {
   font-weight: bold;
 }
 
-#ppuhbmdahg .gt_font_italic {
+#kxxxxwzdep .gt_font_italic {
   font-style: italic;
 }
 
-#ppuhbmdahg .gt_super {
+#kxxxxwzdep .gt_super {
   font-size: 65%;
 }
 
-#ppuhbmdahg .gt_footnote_marks {
+#kxxxxwzdep .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ppuhbmdahg .gt_asterisk {
+#kxxxxwzdep .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ppuhbmdahg .gt_indent_1 {
+#kxxxxwzdep .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ppuhbmdahg .gt_indent_2 {
+#kxxxxwzdep .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ppuhbmdahg .gt_indent_3 {
+#kxxxxwzdep .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ppuhbmdahg .gt_indent_4 {
+#kxxxxwzdep .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ppuhbmdahg .gt_indent_5 {
+#kxxxxwzdep .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ppuhbmdahg .katex-display {
+#kxxxxwzdep .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ppuhbmdahg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#kxxxxwzdep div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1739,23 +1745,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res_mean<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="qgwilcfbvq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#qgwilcfbvq table {
+<div id="gotcvlmkdm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gotcvlmkdm table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#qgwilcfbvq thead, #qgwilcfbvq tbody, #qgwilcfbvq tfoot, #qgwilcfbvq tr, #qgwilcfbvq td, #qgwilcfbvq th {
+#gotcvlmkdm thead, #gotcvlmkdm tbody, #gotcvlmkdm tfoot, #gotcvlmkdm tr, #gotcvlmkdm td, #gotcvlmkdm th {
   border-style: none;
 }
 
-#qgwilcfbvq p {
+#gotcvlmkdm p {
   margin: 0;
   padding: 0;
 }
 
-#qgwilcfbvq .gt_table {
+#gotcvlmkdm .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1781,12 +1787,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#qgwilcfbvq .gt_caption {
+#gotcvlmkdm .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#qgwilcfbvq .gt_title {
+#gotcvlmkdm .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1798,7 +1804,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#qgwilcfbvq .gt_subtitle {
+#gotcvlmkdm .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1810,7 +1816,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#qgwilcfbvq .gt_heading {
+#gotcvlmkdm .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1822,13 +1828,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#qgwilcfbvq .gt_bottom_border {
+#gotcvlmkdm .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qgwilcfbvq .gt_col_headings {
+#gotcvlmkdm .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1843,7 +1849,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#qgwilcfbvq .gt_col_heading {
+#gotcvlmkdm .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1863,7 +1869,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#qgwilcfbvq .gt_column_spanner_outer {
+#gotcvlmkdm .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1875,15 +1881,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#qgwilcfbvq .gt_column_spanner_outer:first-child {
+#gotcvlmkdm .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qgwilcfbvq .gt_column_spanner_outer:last-child {
+#gotcvlmkdm .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qgwilcfbvq .gt_column_spanner {
+#gotcvlmkdm .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1895,11 +1901,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#qgwilcfbvq .gt_spanner_row {
+#gotcvlmkdm .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#qgwilcfbvq .gt_group_heading {
+#gotcvlmkdm .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1925,7 +1931,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#qgwilcfbvq .gt_empty_group_heading {
+#gotcvlmkdm .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1940,15 +1946,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#qgwilcfbvq .gt_from_md > :first-child {
+#gotcvlmkdm .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qgwilcfbvq .gt_from_md > :last-child {
+#gotcvlmkdm .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qgwilcfbvq .gt_row {
+#gotcvlmkdm .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1967,7 +1973,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#qgwilcfbvq .gt_stub {
+#gotcvlmkdm .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1980,7 +1986,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#qgwilcfbvq .gt_stub_row_group {
+#gotcvlmkdm .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1994,15 +2000,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#qgwilcfbvq .gt_row_group_first td {
+#gotcvlmkdm .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qgwilcfbvq .gt_row_group_first th {
+#gotcvlmkdm .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#qgwilcfbvq .gt_summary_row {
+#gotcvlmkdm .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2012,16 +2018,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#qgwilcfbvq .gt_first_summary_row {
+#gotcvlmkdm .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qgwilcfbvq .gt_first_summary_row.thick {
+#gotcvlmkdm .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qgwilcfbvq .gt_last_summary_row {
+#gotcvlmkdm .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2031,7 +2037,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#qgwilcfbvq .gt_grand_summary_row {
+#gotcvlmkdm .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2041,7 +2047,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#qgwilcfbvq .gt_first_grand_summary_row {
+#gotcvlmkdm .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2051,7 +2057,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#qgwilcfbvq .gt_last_grand_summary_row_top {
+#gotcvlmkdm .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2061,11 +2067,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#qgwilcfbvq .gt_striped {
+#gotcvlmkdm .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qgwilcfbvq .gt_table_body {
+#gotcvlmkdm .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2074,7 +2080,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#qgwilcfbvq .gt_footnotes {
+#gotcvlmkdm .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2088,7 +2094,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#qgwilcfbvq .gt_footnote {
+#gotcvlmkdm .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2097,7 +2103,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#qgwilcfbvq .gt_sourcenotes {
+#gotcvlmkdm .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2111,7 +2117,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#qgwilcfbvq .gt_sourcenote {
+#gotcvlmkdm .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2119,72 +2125,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#qgwilcfbvq .gt_left {
+#gotcvlmkdm .gt_left {
   text-align: left;
 }
 
-#qgwilcfbvq .gt_center {
+#gotcvlmkdm .gt_center {
   text-align: center;
 }
 
-#qgwilcfbvq .gt_right {
+#gotcvlmkdm .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qgwilcfbvq .gt_font_normal {
+#gotcvlmkdm .gt_font_normal {
   font-weight: normal;
 }
 
-#qgwilcfbvq .gt_font_bold {
+#gotcvlmkdm .gt_font_bold {
   font-weight: bold;
 }
 
-#qgwilcfbvq .gt_font_italic {
+#gotcvlmkdm .gt_font_italic {
   font-style: italic;
 }
 
-#qgwilcfbvq .gt_super {
+#gotcvlmkdm .gt_super {
   font-size: 65%;
 }
 
-#qgwilcfbvq .gt_footnote_marks {
+#gotcvlmkdm .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#qgwilcfbvq .gt_asterisk {
+#gotcvlmkdm .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qgwilcfbvq .gt_indent_1 {
+#gotcvlmkdm .gt_indent_1 {
   text-indent: 5px;
 }
 
-#qgwilcfbvq .gt_indent_2 {
+#gotcvlmkdm .gt_indent_2 {
   text-indent: 10px;
 }
 
-#qgwilcfbvq .gt_indent_3 {
+#gotcvlmkdm .gt_indent_3 {
   text-indent: 15px;
 }
 
-#qgwilcfbvq .gt_indent_4 {
+#gotcvlmkdm .gt_indent_4 {
   text-indent: 20px;
 }
 
-#qgwilcfbvq .gt_indent_5 {
+#gotcvlmkdm .gt_indent_5 {
   text-indent: 25px;
 }
 
-#qgwilcfbvq .katex-display {
+#gotcvlmkdm .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#qgwilcfbvq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#gotcvlmkdm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2220,23 +2226,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>res_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="lecbtdsexf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#lecbtdsexf table {
+<div id="ivelmsndvk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ivelmsndvk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#lecbtdsexf thead, #lecbtdsexf tbody, #lecbtdsexf tfoot, #lecbtdsexf tr, #lecbtdsexf td, #lecbtdsexf th {
+#ivelmsndvk thead, #ivelmsndvk tbody, #ivelmsndvk tfoot, #ivelmsndvk tr, #ivelmsndvk td, #ivelmsndvk th {
   border-style: none;
 }
 
-#lecbtdsexf p {
+#ivelmsndvk p {
   margin: 0;
   padding: 0;
 }
 
-#lecbtdsexf .gt_table {
+#ivelmsndvk .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2262,12 +2268,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#lecbtdsexf .gt_caption {
+#ivelmsndvk .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#lecbtdsexf .gt_title {
+#ivelmsndvk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2279,7 +2285,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#lecbtdsexf .gt_subtitle {
+#ivelmsndvk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2291,7 +2297,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#lecbtdsexf .gt_heading {
+#ivelmsndvk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2303,13 +2309,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#lecbtdsexf .gt_bottom_border {
+#ivelmsndvk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#lecbtdsexf .gt_col_headings {
+#ivelmsndvk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2324,7 +2330,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#lecbtdsexf .gt_col_heading {
+#ivelmsndvk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2344,7 +2350,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#lecbtdsexf .gt_column_spanner_outer {
+#ivelmsndvk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2356,15 +2362,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#lecbtdsexf .gt_column_spanner_outer:first-child {
+#ivelmsndvk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#lecbtdsexf .gt_column_spanner_outer:last-child {
+#ivelmsndvk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#lecbtdsexf .gt_column_spanner {
+#ivelmsndvk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2376,11 +2382,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#lecbtdsexf .gt_spanner_row {
+#ivelmsndvk .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#lecbtdsexf .gt_group_heading {
+#ivelmsndvk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2406,7 +2412,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#lecbtdsexf .gt_empty_group_heading {
+#ivelmsndvk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2421,15 +2427,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#lecbtdsexf .gt_from_md > :first-child {
+#ivelmsndvk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#lecbtdsexf .gt_from_md > :last-child {
+#ivelmsndvk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#lecbtdsexf .gt_row {
+#ivelmsndvk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2448,7 +2454,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#lecbtdsexf .gt_stub {
+#ivelmsndvk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2461,7 +2467,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#lecbtdsexf .gt_stub_row_group {
+#ivelmsndvk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2475,15 +2481,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#lecbtdsexf .gt_row_group_first td {
+#ivelmsndvk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#lecbtdsexf .gt_row_group_first th {
+#ivelmsndvk .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#lecbtdsexf .gt_summary_row {
+#ivelmsndvk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2493,16 +2499,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#lecbtdsexf .gt_first_summary_row {
+#ivelmsndvk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#lecbtdsexf .gt_first_summary_row.thick {
+#ivelmsndvk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#lecbtdsexf .gt_last_summary_row {
+#ivelmsndvk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2512,7 +2518,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#lecbtdsexf .gt_grand_summary_row {
+#ivelmsndvk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2522,7 +2528,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#lecbtdsexf .gt_first_grand_summary_row {
+#ivelmsndvk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2532,7 +2538,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#lecbtdsexf .gt_last_grand_summary_row_top {
+#ivelmsndvk .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2542,11 +2548,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#lecbtdsexf .gt_striped {
+#ivelmsndvk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#lecbtdsexf .gt_table_body {
+#ivelmsndvk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2555,7 +2561,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#lecbtdsexf .gt_footnotes {
+#ivelmsndvk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2569,7 +2575,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#lecbtdsexf .gt_footnote {
+#ivelmsndvk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2578,7 +2584,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#lecbtdsexf .gt_sourcenotes {
+#ivelmsndvk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2592,7 +2598,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#lecbtdsexf .gt_sourcenote {
+#ivelmsndvk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2600,72 +2606,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#lecbtdsexf .gt_left {
+#ivelmsndvk .gt_left {
   text-align: left;
 }
 
-#lecbtdsexf .gt_center {
+#ivelmsndvk .gt_center {
   text-align: center;
 }
 
-#lecbtdsexf .gt_right {
+#ivelmsndvk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#lecbtdsexf .gt_font_normal {
+#ivelmsndvk .gt_font_normal {
   font-weight: normal;
 }
 
-#lecbtdsexf .gt_font_bold {
+#ivelmsndvk .gt_font_bold {
   font-weight: bold;
 }
 
-#lecbtdsexf .gt_font_italic {
+#ivelmsndvk .gt_font_italic {
   font-style: italic;
 }
 
-#lecbtdsexf .gt_super {
+#ivelmsndvk .gt_super {
   font-size: 65%;
 }
 
-#lecbtdsexf .gt_footnote_marks {
+#ivelmsndvk .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#lecbtdsexf .gt_asterisk {
+#ivelmsndvk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#lecbtdsexf .gt_indent_1 {
+#ivelmsndvk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#lecbtdsexf .gt_indent_2 {
+#ivelmsndvk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#lecbtdsexf .gt_indent_3 {
+#ivelmsndvk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#lecbtdsexf .gt_indent_4 {
+#ivelmsndvk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#lecbtdsexf .gt_indent_5 {
+#ivelmsndvk .gt_indent_5 {
   text-indent: 25px;
 }
 
-#lecbtdsexf .katex-display {
+#ivelmsndvk .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#lecbtdsexf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ivelmsndvk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2709,23 +2715,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>res_prop<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="kbswjhvtch" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kbswjhvtch table {
+<div id="izyqyzyabj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#izyqyzyabj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kbswjhvtch thead, #kbswjhvtch tbody, #kbswjhvtch tfoot, #kbswjhvtch tr, #kbswjhvtch td, #kbswjhvtch th {
+#izyqyzyabj thead, #izyqyzyabj tbody, #izyqyzyabj tfoot, #izyqyzyabj tr, #izyqyzyabj td, #izyqyzyabj th {
   border-style: none;
 }
 
-#kbswjhvtch p {
+#izyqyzyabj p {
   margin: 0;
   padding: 0;
 }
 
-#kbswjhvtch .gt_table {
+#izyqyzyabj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2751,12 +2757,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#kbswjhvtch .gt_caption {
+#izyqyzyabj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kbswjhvtch .gt_title {
+#izyqyzyabj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2768,7 +2774,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#kbswjhvtch .gt_subtitle {
+#izyqyzyabj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2780,7 +2786,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#kbswjhvtch .gt_heading {
+#izyqyzyabj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2792,13 +2798,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#kbswjhvtch .gt_bottom_border {
+#izyqyzyabj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kbswjhvtch .gt_col_headings {
+#izyqyzyabj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2813,7 +2819,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#kbswjhvtch .gt_col_heading {
+#izyqyzyabj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2833,7 +2839,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#kbswjhvtch .gt_column_spanner_outer {
+#izyqyzyabj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2845,15 +2851,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#kbswjhvtch .gt_column_spanner_outer:first-child {
+#izyqyzyabj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kbswjhvtch .gt_column_spanner_outer:last-child {
+#izyqyzyabj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kbswjhvtch .gt_column_spanner {
+#izyqyzyabj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2865,11 +2871,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#kbswjhvtch .gt_spanner_row {
+#izyqyzyabj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kbswjhvtch .gt_group_heading {
+#izyqyzyabj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2895,7 +2901,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#kbswjhvtch .gt_empty_group_heading {
+#izyqyzyabj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2910,15 +2916,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#kbswjhvtch .gt_from_md > :first-child {
+#izyqyzyabj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kbswjhvtch .gt_from_md > :last-child {
+#izyqyzyabj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kbswjhvtch .gt_row {
+#izyqyzyabj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2937,7 +2943,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#kbswjhvtch .gt_stub {
+#izyqyzyabj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2950,7 +2956,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#kbswjhvtch .gt_stub_row_group {
+#izyqyzyabj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2964,15 +2970,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#kbswjhvtch .gt_row_group_first td {
+#izyqyzyabj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kbswjhvtch .gt_row_group_first th {
+#izyqyzyabj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kbswjhvtch .gt_summary_row {
+#izyqyzyabj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2982,16 +2988,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#kbswjhvtch .gt_first_summary_row {
+#izyqyzyabj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kbswjhvtch .gt_first_summary_row.thick {
+#izyqyzyabj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kbswjhvtch .gt_last_summary_row {
+#izyqyzyabj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3001,7 +3007,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#kbswjhvtch .gt_grand_summary_row {
+#izyqyzyabj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3011,7 +3017,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#kbswjhvtch .gt_first_grand_summary_row {
+#izyqyzyabj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3021,7 +3027,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#kbswjhvtch .gt_last_grand_summary_row_top {
+#izyqyzyabj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3031,11 +3037,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#kbswjhvtch .gt_striped {
+#izyqyzyabj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kbswjhvtch .gt_table_body {
+#izyqyzyabj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3044,7 +3050,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#kbswjhvtch .gt_footnotes {
+#izyqyzyabj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3058,7 +3064,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#kbswjhvtch .gt_footnote {
+#izyqyzyabj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3067,7 +3073,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#kbswjhvtch .gt_sourcenotes {
+#izyqyzyabj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3081,7 +3087,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#kbswjhvtch .gt_sourcenote {
+#izyqyzyabj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3089,72 +3095,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#kbswjhvtch .gt_left {
+#izyqyzyabj .gt_left {
   text-align: left;
 }
 
-#kbswjhvtch .gt_center {
+#izyqyzyabj .gt_center {
   text-align: center;
 }
 
-#kbswjhvtch .gt_right {
+#izyqyzyabj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kbswjhvtch .gt_font_normal {
+#izyqyzyabj .gt_font_normal {
   font-weight: normal;
 }
 
-#kbswjhvtch .gt_font_bold {
+#izyqyzyabj .gt_font_bold {
   font-weight: bold;
 }
 
-#kbswjhvtch .gt_font_italic {
+#izyqyzyabj .gt_font_italic {
   font-style: italic;
 }
 
-#kbswjhvtch .gt_super {
+#izyqyzyabj .gt_super {
   font-size: 65%;
 }
 
-#kbswjhvtch .gt_footnote_marks {
+#izyqyzyabj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kbswjhvtch .gt_asterisk {
+#izyqyzyabj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kbswjhvtch .gt_indent_1 {
+#izyqyzyabj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kbswjhvtch .gt_indent_2 {
+#izyqyzyabj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kbswjhvtch .gt_indent_3 {
+#izyqyzyabj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kbswjhvtch .gt_indent_4 {
+#izyqyzyabj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kbswjhvtch .gt_indent_5 {
+#izyqyzyabj .gt_indent_5 {
   text-indent: 25px;
 }
 
-#kbswjhvtch .katex-display {
+#izyqyzyabj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#kbswjhvtch div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#izyqyzyabj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3190,23 +3196,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>res_prop_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="sqhkzbjtty" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#sqhkzbjtty table {
+<div id="esscwjprvp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#esscwjprvp table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#sqhkzbjtty thead, #sqhkzbjtty tbody, #sqhkzbjtty tfoot, #sqhkzbjtty tr, #sqhkzbjtty td, #sqhkzbjtty th {
+#esscwjprvp thead, #esscwjprvp tbody, #esscwjprvp tfoot, #esscwjprvp tr, #esscwjprvp td, #esscwjprvp th {
   border-style: none;
 }
 
-#sqhkzbjtty p {
+#esscwjprvp p {
   margin: 0;
   padding: 0;
 }
 
-#sqhkzbjtty .gt_table {
+#esscwjprvp .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3232,12 +3238,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#sqhkzbjtty .gt_caption {
+#esscwjprvp .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#sqhkzbjtty .gt_title {
+#esscwjprvp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3249,7 +3255,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#sqhkzbjtty .gt_subtitle {
+#esscwjprvp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3261,7 +3267,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#sqhkzbjtty .gt_heading {
+#esscwjprvp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3273,13 +3279,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#sqhkzbjtty .gt_bottom_border {
+#esscwjprvp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#sqhkzbjtty .gt_col_headings {
+#esscwjprvp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3294,7 +3300,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#sqhkzbjtty .gt_col_heading {
+#esscwjprvp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3314,7 +3320,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#sqhkzbjtty .gt_column_spanner_outer {
+#esscwjprvp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3326,15 +3332,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#sqhkzbjtty .gt_column_spanner_outer:first-child {
+#esscwjprvp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#sqhkzbjtty .gt_column_spanner_outer:last-child {
+#esscwjprvp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#sqhkzbjtty .gt_column_spanner {
+#esscwjprvp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3346,11 +3352,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#sqhkzbjtty .gt_spanner_row {
+#esscwjprvp .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#sqhkzbjtty .gt_group_heading {
+#esscwjprvp .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3376,7 +3382,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#sqhkzbjtty .gt_empty_group_heading {
+#esscwjprvp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3391,15 +3397,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#sqhkzbjtty .gt_from_md > :first-child {
+#esscwjprvp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#sqhkzbjtty .gt_from_md > :last-child {
+#esscwjprvp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#sqhkzbjtty .gt_row {
+#esscwjprvp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3418,7 +3424,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#sqhkzbjtty .gt_stub {
+#esscwjprvp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3431,7 +3437,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#sqhkzbjtty .gt_stub_row_group {
+#esscwjprvp .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3445,15 +3451,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#sqhkzbjtty .gt_row_group_first td {
+#esscwjprvp .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#sqhkzbjtty .gt_row_group_first th {
+#esscwjprvp .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#sqhkzbjtty .gt_summary_row {
+#esscwjprvp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3463,16 +3469,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#sqhkzbjtty .gt_first_summary_row {
+#esscwjprvp .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#sqhkzbjtty .gt_first_summary_row.thick {
+#esscwjprvp .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#sqhkzbjtty .gt_last_summary_row {
+#esscwjprvp .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3482,7 +3488,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#sqhkzbjtty .gt_grand_summary_row {
+#esscwjprvp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3492,7 +3498,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#sqhkzbjtty .gt_first_grand_summary_row {
+#esscwjprvp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3502,7 +3508,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#sqhkzbjtty .gt_last_grand_summary_row_top {
+#esscwjprvp .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3512,11 +3518,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#sqhkzbjtty .gt_striped {
+#esscwjprvp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#sqhkzbjtty .gt_table_body {
+#esscwjprvp .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3525,7 +3531,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#sqhkzbjtty .gt_footnotes {
+#esscwjprvp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3539,7 +3545,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#sqhkzbjtty .gt_footnote {
+#esscwjprvp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3548,7 +3554,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#sqhkzbjtty .gt_sourcenotes {
+#esscwjprvp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3562,7 +3568,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#sqhkzbjtty .gt_sourcenote {
+#esscwjprvp .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3570,72 +3576,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#sqhkzbjtty .gt_left {
+#esscwjprvp .gt_left {
   text-align: left;
 }
 
-#sqhkzbjtty .gt_center {
+#esscwjprvp .gt_center {
   text-align: center;
 }
 
-#sqhkzbjtty .gt_right {
+#esscwjprvp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#sqhkzbjtty .gt_font_normal {
+#esscwjprvp .gt_font_normal {
   font-weight: normal;
 }
 
-#sqhkzbjtty .gt_font_bold {
+#esscwjprvp .gt_font_bold {
   font-weight: bold;
 }
 
-#sqhkzbjtty .gt_font_italic {
+#esscwjprvp .gt_font_italic {
   font-style: italic;
 }
 
-#sqhkzbjtty .gt_super {
+#esscwjprvp .gt_super {
   font-size: 65%;
 }
 
-#sqhkzbjtty .gt_footnote_marks {
+#esscwjprvp .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#sqhkzbjtty .gt_asterisk {
+#esscwjprvp .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#sqhkzbjtty .gt_indent_1 {
+#esscwjprvp .gt_indent_1 {
   text-indent: 5px;
 }
 
-#sqhkzbjtty .gt_indent_2 {
+#esscwjprvp .gt_indent_2 {
   text-indent: 10px;
 }
 
-#sqhkzbjtty .gt_indent_3 {
+#esscwjprvp .gt_indent_3 {
   text-indent: 15px;
 }
 
-#sqhkzbjtty .gt_indent_4 {
+#esscwjprvp .gt_indent_4 {
   text-indent: 20px;
 }
 
-#sqhkzbjtty .gt_indent_5 {
+#esscwjprvp .gt_indent_5 {
   text-indent: 25px;
 }
 
-#sqhkzbjtty .katex-display {
+#esscwjprvp .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#sqhkzbjtty div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#esscwjprvp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3764,7 +3770,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["county"],"name":[1],"type":["chr"],"align":["left"]},{"label":["state"],"name":[2],"type":["chr"],"align":["left"]},{"label":["acres92"],"name":[3],"type":["int"],"align":["right"]},{"label":["acres87"],"name":[4],"type":["int"],"align":["right"]},{"label":["acres82"],"name":[5],"type":["int"],"align":["right"]},{"label":["farms92"],"name":[6],"type":["int"],"align":["right"]},{"label":["farms87"],"name":[7],"type":["int"],"align":["right"]},{"label":["farms82"],"name":[8],"type":["int"],"align":["right"]},{"label":["largef92"],"name":[9],"type":["int"],"align":["right"]},{"label":["largef87"],"name":[10],"type":["int"],"align":["right"]},{"label":["largef82"],"name":[11],"type":["int"],"align":["right"]},{"label":["smallf92"],"name":[12],"type":["int"],"align":["right"]},{"label":["smallf87"],"name":[13],"type":["int"],"align":["right"]},{"label":["smallf82"],"name":[14],"type":["int"],"align":["right"]},{"label":["region"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"HENDERSON COUNTY","2":"TN","3":"146868","4":"163685","5":"167118","6":"767","7":"849","8":"947","9":"15","10":"9","11":"12","12":"41","13":"55","14":"68","15":"S","_rn_":"2438"},{"1":"ONSLOW COUNTY","2":"NC","3":"63992","4":"68890","5":"75804","6":"425","7":"436","8":"578","9":"7","10":"5","11":"6","12":"42","13":"40","14":"43","15":"S","_rn_":"1692"},{"1":"OREGON COUNTY","2":"MO","3":"252074","4":"251890","5":"245457","6":"791","7":"837","8":"921","9":"42","10":"40","11":"28","12":"26","13":"34","14":"37","15":"NC","_rn_":"1448"},{"1":"STEELE COUNTY","2":"ND","3":"439846","4":"445448","5":"453672","6":"335","7":"396","8":"440","9":"196","10":"211","11":"184","12":"6","13":"7","14":"7","15":"NC","_rn_":"1771"},{"1":"MARION COUNTY","2":"KS","3":"588061","4":"577700","5":"571707","6":"1006","7":"1119","8":"1184","9":"150","10":"139","11":"115","12":"42","13":"67","14":"55","15":"NC","_rn_":"919"},{"1":"MARQUETTE COUNTY","2":"MI","3":"23290","4":"24484","5":"29645","6":"84","7":"101","8":"125","9":"5","10":"4","11":"4","12":"6","13":"5","14":"4","15":"NC","_rn_":"1255"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["county"],"name":[1],"type":["chr"],"align":["left"]},{"label":["state"],"name":[2],"type":["chr"],"align":["left"]},{"label":["acres92"],"name":[3],"type":["int"],"align":["right"]},{"label":["acres87"],"name":[4],"type":["int"],"align":["right"]},{"label":["acres82"],"name":[5],"type":["int"],"align":["right"]},{"label":["farms92"],"name":[6],"type":["int"],"align":["right"]},{"label":["farms87"],"name":[7],"type":["int"],"align":["right"]},{"label":["farms82"],"name":[8],"type":["int"],"align":["right"]},{"label":["largef92"],"name":[9],"type":["int"],"align":["right"]},{"label":["largef87"],"name":[10],"type":["int"],"align":["right"]},{"label":["largef82"],"name":[11],"type":["int"],"align":["right"]},{"label":["smallf92"],"name":[12],"type":["int"],"align":["right"]},{"label":["smallf87"],"name":[13],"type":["int"],"align":["right"]},{"label":["smallf82"],"name":[14],"type":["int"],"align":["right"]},{"label":["region"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"COOPER COUNTY","2":"MO","3":"298709","4":"310033","5":"315969","6":"892","7":"929","8":"1009","9":"61","10":"61","11":"55","12":"36","13":"36","14":"47","15":"NC","_rn_":"1400"},{"1":"MADISON COUNTY","2":"NE","3":"322120","4":"325985","5":"336242","6":"825","7":"958","8":"991","9":"65","10":"47","11":"48","12":"62","13":"88","14":"84","15":"NC","_rn_":"1838"},{"1":"BROOME COUNTY","2":"NY","3":"97869","4":"116759","5":"132263","6":"517","7":"590","8":"644","9":"9","10":"9","11":"10","12":"27","13":"24","14":"33","15":"NE","_rn_":"1956"},{"1":"EAGLE COUNTY","2":"CO","3":"213004","4":"213441","5":"201657","6":"134","7":"147","8":"124","9":"29","10":"35","11":"30","12":"9","13":"7","14":"12","15":"W","_rn_":"239"},{"1":"SHEBOYGAN COUNTY","2":"WI","3":"207128","4":"209508","5":"217888","6":"1071","7":"1213","8":"1349","9":"18","10":"13","11":"8","12":"93","13":"119","14":"128","15":"NC","_rn_":"2988"},{"1":"JACKSON COUNTY","2":"MN","3":"401039","4":"394000","5":"411488","6":"1027","7":"1074","8":"1253","9":"56","10":"56","11":"41","12":"76","13":"73","14":"67","15":"NC","_rn_":"1318"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -3777,23 +3783,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>res_one<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="ejzyypnnmq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ejzyypnnmq table {
+<div id="rgveqzhdrp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rgveqzhdrp table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ejzyypnnmq thead, #ejzyypnnmq tbody, #ejzyypnnmq tfoot, #ejzyypnnmq tr, #ejzyypnnmq td, #ejzyypnnmq th {
+#rgveqzhdrp thead, #rgveqzhdrp tbody, #rgveqzhdrp tfoot, #rgveqzhdrp tr, #rgveqzhdrp td, #rgveqzhdrp th {
   border-style: none;
 }
 
-#ejzyypnnmq p {
+#rgveqzhdrp p {
   margin: 0;
   padding: 0;
 }
 
-#ejzyypnnmq .gt_table {
+#rgveqzhdrp .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3819,12 +3825,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#ejzyypnnmq .gt_caption {
+#rgveqzhdrp .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ejzyypnnmq .gt_title {
+#rgveqzhdrp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3836,7 +3842,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#ejzyypnnmq .gt_subtitle {
+#rgveqzhdrp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3848,7 +3854,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#ejzyypnnmq .gt_heading {
+#rgveqzhdrp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3860,13 +3866,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ejzyypnnmq .gt_bottom_border {
+#rgveqzhdrp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ejzyypnnmq .gt_col_headings {
+#rgveqzhdrp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3881,7 +3887,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ejzyypnnmq .gt_col_heading {
+#rgveqzhdrp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3901,7 +3907,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#ejzyypnnmq .gt_column_spanner_outer {
+#rgveqzhdrp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3913,15 +3919,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#ejzyypnnmq .gt_column_spanner_outer:first-child {
+#rgveqzhdrp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ejzyypnnmq .gt_column_spanner_outer:last-child {
+#rgveqzhdrp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ejzyypnnmq .gt_column_spanner {
+#rgveqzhdrp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3933,11 +3939,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#ejzyypnnmq .gt_spanner_row {
+#rgveqzhdrp .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ejzyypnnmq .gt_group_heading {
+#rgveqzhdrp .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3963,7 +3969,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#ejzyypnnmq .gt_empty_group_heading {
+#rgveqzhdrp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3978,15 +3984,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#ejzyypnnmq .gt_from_md > :first-child {
+#rgveqzhdrp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ejzyypnnmq .gt_from_md > :last-child {
+#rgveqzhdrp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ejzyypnnmq .gt_row {
+#rgveqzhdrp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4005,7 +4011,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#ejzyypnnmq .gt_stub {
+#rgveqzhdrp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4018,7 +4024,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ejzyypnnmq .gt_stub_row_group {
+#rgveqzhdrp .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4032,15 +4038,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#ejzyypnnmq .gt_row_group_first td {
+#rgveqzhdrp .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ejzyypnnmq .gt_row_group_first th {
+#rgveqzhdrp .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ejzyypnnmq .gt_summary_row {
+#rgveqzhdrp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4050,16 +4056,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ejzyypnnmq .gt_first_summary_row {
+#rgveqzhdrp .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ejzyypnnmq .gt_first_summary_row.thick {
+#rgveqzhdrp .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ejzyypnnmq .gt_last_summary_row {
+#rgveqzhdrp .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4069,7 +4075,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#ejzyypnnmq .gt_grand_summary_row {
+#rgveqzhdrp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4079,7 +4085,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ejzyypnnmq .gt_first_grand_summary_row {
+#rgveqzhdrp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4089,7 +4095,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#ejzyypnnmq .gt_last_grand_summary_row_top {
+#rgveqzhdrp .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4099,11 +4105,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#ejzyypnnmq .gt_striped {
+#rgveqzhdrp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ejzyypnnmq .gt_table_body {
+#rgveqzhdrp .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4112,7 +4118,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#ejzyypnnmq .gt_footnotes {
+#rgveqzhdrp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4126,7 +4132,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ejzyypnnmq .gt_footnote {
+#rgveqzhdrp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -4135,7 +4141,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ejzyypnnmq .gt_sourcenotes {
+#rgveqzhdrp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4149,7 +4155,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ejzyypnnmq .gt_sourcenote {
+#rgveqzhdrp .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -4157,72 +4163,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ejzyypnnmq .gt_left {
+#rgveqzhdrp .gt_left {
   text-align: left;
 }
 
-#ejzyypnnmq .gt_center {
+#rgveqzhdrp .gt_center {
   text-align: center;
 }
 
-#ejzyypnnmq .gt_right {
+#rgveqzhdrp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ejzyypnnmq .gt_font_normal {
+#rgveqzhdrp .gt_font_normal {
   font-weight: normal;
 }
 
-#ejzyypnnmq .gt_font_bold {
+#rgveqzhdrp .gt_font_bold {
   font-weight: bold;
 }
 
-#ejzyypnnmq .gt_font_italic {
+#rgveqzhdrp .gt_font_italic {
   font-style: italic;
 }
 
-#ejzyypnnmq .gt_super {
+#rgveqzhdrp .gt_super {
   font-size: 65%;
 }
 
-#ejzyypnnmq .gt_footnote_marks {
+#rgveqzhdrp .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ejzyypnnmq .gt_asterisk {
+#rgveqzhdrp .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ejzyypnnmq .gt_indent_1 {
+#rgveqzhdrp .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ejzyypnnmq .gt_indent_2 {
+#rgveqzhdrp .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ejzyypnnmq .gt_indent_3 {
+#rgveqzhdrp .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ejzyypnnmq .gt_indent_4 {
+#rgveqzhdrp .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ejzyypnnmq .gt_indent_5 {
+#rgveqzhdrp .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ejzyypnnmq .katex-display {
+#rgveqzhdrp .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ejzyypnnmq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#rgveqzhdrp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -4238,10 +4244,10 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
-<td class="gt_row gt_right" headers="Est.">302,095.5367</td>
-<td class="gt_row gt_right" headers="S.E.">20,561.0463</td>
-<td class="gt_row gt_right" headers="ci.low">261,632.8436</td>
-<td class="gt_row gt_right" headers="ci.upp">342,558.2298</td>
+<td class="gt_row gt_right" headers="Est.">326,255.5533</td>
+<td class="gt_row gt_right" headers="S.E.">30,705.8585</td>
+<td class="gt_row gt_right" headers="ci.low">265,828.5834</td>
+<td class="gt_row gt_right" headers="ci.upp">386,682.5233</td>
 </tr>
 </tbody>
 </table>
@@ -4272,12 +4278,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>         Est.     S.E.   ci.low   ci.upp
-[1,] 302041.1 20458.92 261779.3 342302.8
-[2,] 288999.2 20214.09 249219.3 328779.1
-[3,] 273295.9 18178.16 237522.5 309069.2
-[4,] 328818.5 30022.07 269737.1 387899.8
-[5,] 306450.1 23758.89 259694.2 353205.9
-[6,] 293258.1 20400.53 253111.3 333404.9</code></pre>
+[1,] 299733.5 21558.98 257306.9 342160.1
+[2,] 311957.5 20994.24 270642.3 353272.7
+[3,] 298762.3 25311.11 248951.8 348572.8
+[4,] 303828.8 21987.74 260558.4 347099.1
+[5,] 314593.9 22082.70 271136.7 358051.1
+[6,] 298518.4 20145.63 258873.2 338163.6</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -4302,7 +4308,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span> (simulation.results[,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 309122</code></pre>
+<pre><code>[1] 308990.6</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -4316,7 +4322,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span> (simulation.results [,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 23141.23</code></pre>
+<pre><code>[1] 23271.82</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -4347,7 +4353,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Est."],"name":[1],"type":["dbl"],"align":["right"]},{"label":["S.E."],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ci.low"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["ci.upp"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Covered?"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"302041.1","2":"20458.92","3":"261779.3","4":"342302.8","5":"1","_rn_":"1"},{"1":"288999.2","2":"20214.09","3":"249219.3","4":"328779.1","5":"1","_rn_":"2"},{"1":"273295.9","2":"18178.16","3":"237522.5","4":"309069.2","5":"1","_rn_":"3"},{"1":"328818.5","2":"30022.07","3":"269737.1","4":"387899.8","5":"1","_rn_":"4"},{"1":"306450.1","2":"23758.89","3":"259694.2","4":"353205.9","5":"1","_rn_":"5"},{"1":"293258.1","2":"20400.53","3":"253111.3","4":"333404.9","5":"1","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Est."],"name":[1],"type":["dbl"],"align":["right"]},{"label":["S.E."],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ci.low"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["ci.upp"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Covered?"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"299733.5","2":"21558.98","3":"257306.9","4":"342160.1","5":"1","_rn_":"1"},{"1":"311957.5","2":"20994.24","3":"270642.3","4":"353272.7","5":"1","_rn_":"2"},{"1":"298762.3","2":"25311.11","3":"248951.8","4":"348572.8","5":"1","_rn_":"3"},{"1":"303828.8","2":"21987.74","3":"260558.4","4":"347099.1","5":"1","_rn_":"4"},{"1":"314593.9","2":"22082.70","3":"271136.7","4":"358051.1","5":"1","_rn_":"5"},{"1":"298518.4","2":"20145.63","3":"258873.2","4":"338163.6","5":"1","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -4372,13 +4378,226 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Empirical coverage rate </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Empirical coverage rate</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(simulation.results<span class="sc">$</span><span class="st">`</span><span class="at">Covered?</span><span class="st">`</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9358</code></pre>
+<pre><code>[1] 0.9404</code></pre>
 </div>
 </div>
+</section>
+<section id="interactive-demonstration" class="level3" data-number="2.2.5">
+<h3 data-number="2.2.5" class="anchored" data-anchor-id="interactive-demonstration"><span class="header-section-number">2.2.5</span> Interactive Demonstration</h3>
+<p>The static plots above show a snapshot of 5,000 repeated samples. The app below draws SRS samples one at a time (or automatically).</p>
+<p>The top panel shows the population of <code>acres92</code>: the grey curve is a kernel density estimate and the grey points below the axis are the raw values, jittered vertically. The axis is broken at twice the population mean; counties above the cut are compressed, in rank order, into the narrow lane at the right, so that a tail unit drawn into the sample is still visible. Points selected into the current sample turn red.</p>
+<p>The bottom panel accumulates the sample means. Its window is fixed at five theoretical standard errors for <span class="math inline">\(n = 100\)</span> on either side of <span class="math inline">\(\mu\)</span>, so the spread is comparable across sample sizes; for <span class="math inline">\(n &lt; 100\)</span> some means fall outside the window and are counted in the legend. The interval above the histogram belongs to the current sample, drawn green when it covers <span class="math inline">\(\mu\)</span> and red when it does not, and replaced at every draw. Both panels are centred on <span class="math inline">\(\mu\)</span>, so the two dashed lines are vertically aligned.</p>
+<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
+#|   shinylive does not work in self-contained HTML documents.
+#|   Please set `embed-resources: false` in your metadata.
+#| standalone: true
+#| viewerHeight: 830
+
+## file: app.R
+library(shiny)
+
+pop   &lt;- read.csv("acres92.csv")$acres92
+N     &lt;- length(pop)
+ybarU &lt;- mean(pop)
+S     &lt;- sd(pop)
+
+## ---- broken x-axis for the population panel --------------------------------
+## The drawn region is [0, 2 * ybarU]: the visible scale [0, cut] plus a
+## compressed lane holding the right tail. That total width puts the population
+## mean exactly at the midpoint, matching the histogram panel below.
+lane_frac &lt;- 0.10
+cut       &lt;- 2 * ybarU / (1 + lane_frac)
+lane_w    &lt;- lane_frac * cut
+xmax_top  &lt;- cut + lane_w                      # == 2 * ybarU
+
+tail_id &lt;- which(pop &gt; cut)
+n_tail  &lt;- length(tail_id)
+px      &lt;- pop                                 # plotting positions
+if (n_tail &gt; 0) {
+  r &lt;- rank(pop[tail_id], ties.method = "first") / (n_tail + 1)
+  px[tail_id] &lt;- cut + lane_w * (0.10 + 0.80 * r)
+}
+
+# fixed jitter band for the rug of raw population values
+set.seed(42)
+rug_y &lt;- runif(N, -0.42, -0.08)
+
+dens   &lt;- density(pop, from = 0, to = cut)
+dens_y &lt;- dens$y / max(dens$y)
+
+## ---- fixed window for the sampling distribution ----------------------------
+se100  &lt;- sqrt(1 - 100 / N) * S / sqrt(100)
+half   &lt;- 5 * se100
+xlim_b &lt;- ybarU + c(-1, 1) * half
+
+MAR &lt;- c(4.5, 4.5, 3, 1.5)   # identical in both panels, so the scales align
+
+ui &lt;- fluidPage(
+  titlePanel("Simple random sampling: sampling distribution and CI coverage"),
+  sidebarLayout(
+    sidebarPanel(
+      width = 3,
+      sliderInput("n", "Sample size (n)", min = 10, max = 1000, value = 300, step = 10),
+      sliderInput("conf", "Confidence level", min = 0.80, max = 0.99, value = 0.95, step = 0.01),
+      actionButton("draw", "Draw new SRS sample", class = "btn-primary"),
+      br(), br(),
+      checkboxInput("auto", "Auto-run", value = FALSE),
+      sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),
+      actionButton("reset", "Reset"),
+      hr(),
+      verbatimTextOutput("stats")
+    ),
+    mainPanel(
+      width = 9,
+      plotOutput("popPlot",  height = "340px"),
+      plotOutput("histPlot", height = "360px")
+    )
+  )
+)
+
+server &lt;- function(input, output, session) {
+
+  rv &lt;- reactiveValues(
+    idx = NULL, mean = NULL, ci = NULL, covered = NULL,
+    means = numeric(0), hits = logical(0)
+  )
+
+  draw_one &lt;- function() {
+    n    &lt;- isolate(input$n)
+    conf &lt;- isolate(input$conf)
+    idx  &lt;- sample(N, n)
+    s    &lt;- pop[idx]
+    m    &lt;- mean(s)
+    se   &lt;- sqrt(1 - n / N) * sd(s) / sqrt(n)
+    me   &lt;- qt(1 - (1 - conf) / 2, df = n - 1) * se
+
+    rv$idx     &lt;- idx
+    rv$mean    &lt;- m
+    rv$ci      &lt;- c(m - me, m + me)
+    rv$covered &lt;- (m - me) &lt;= ybarU &amp;&amp; ybarU &lt;= (m + me)
+    rv$means   &lt;- c(rv$means, m)
+    rv$hits    &lt;- c(rv$hits, rv$covered)
+  }
+
+  observeEvent(input$draw, draw_one())
+
+  observe({
+    if (isTRUE(input$auto)) {
+      invalidateLater(1000 / input$speed, session)
+      isolate(draw_one())
+    }
+  })
+
+  reset_history &lt;- function() {
+    rv$idx &lt;- NULL; rv$mean &lt;- NULL; rv$ci &lt;- NULL; rv$covered &lt;- NULL
+    rv$means &lt;- numeric(0); rv$hits &lt;- logical(0)
+  }
+  observeEvent(input$reset, reset_history())
+  observeEvent(input$n,     reset_history())
+  observeEvent(input$conf,  reset_history())
+
+  fmt &lt;- function(x) format(round(x), big.mark = ",")
+
+  output$popPlot &lt;- renderPlot({
+    par(mar = MAR, xaxs = "i")
+    plot(dens$x, dens_y, type = "l", col = "grey40", lwd = 2,
+         xlim = c(0, xmax_top), ylim = c(-0.62, 1.15),
+         xlab = "acres92", ylab = "", xaxt = "n", yaxt = "n", bty = "n",
+         main = "Population distribution with the current SRS sample")
+
+    # raw values, jittered; tail units sit in the compressed lane
+    points(px, rug_y, pch = 16, cex = 0.5, col = adjustcolor("grey60", 0.5))
+    if (!is.null(rv$idx))
+      points(px[rv$idx], rug_y[rv$idx], pch = 16, cex = 0.6,
+             col = adjustcolor("red", 0.85))
+
+    # axis up to the cut, then the break marker and the lane
+    at &lt;- pretty(c(0, cut), 6); at &lt;- at[at &lt;= cut]
+    axis(1, at = at, labels = format(at, big.mark = ",", trim = TRUE))
+    segments(cut, -0.62, cut, 1.05, col = "grey75", lty = 3)
+    text(cut, -0.70, "//", col = "grey40", cex = 1.3, xpd = NA)
+    text(cut + lane_w / 2, -0.70,
+         sprintf("&gt; %s\n(%d counties)", fmt(cut), n_tail),
+         col = "grey40", cex = 0.75, xpd = NA)
+
+    # current sample mean and interval
+    if (!is.null(rv$mean)) {
+      segments(rv$ci[1], -0.55, rv$ci[2], -0.55, col = "blue", lwd = 3)
+      points(rv$mean, -0.55, pch = 19, cex = 1.3, col = "blue")
+    }
+    abline(v = ybarU, col = "black", lwd = 2, lty = 2)
+
+    legend("topright", bty = "n", inset = c(0.12, 0),
+           legend = c("Population", "Current sample", "Sample mean and CI", "True mean"),
+           col = c("grey60", "red", "blue", "black"),
+           pch = c(16, 16, 19, NA), lty = c(NA, NA, NA, 2))
+  })
+
+  output$histPlot &lt;- renderPlot({
+    par(mar = MAR, xaxs = "i")
+
+    if (length(rv$means) == 0) {
+      plot(1, type = "n", xlim = xlim_b, ylim = c(0, 1), bty = "n", yaxt = "n",
+           xlab = "Sample mean of acres92", ylab = "",
+           main = "Sampling distribution of the sample mean")
+      abline(v = ybarU, col = "black", lwd = 2, lty = 2)
+      text(ybarU, 0.5, "Click 'Draw new SRS sample' to begin", col = "grey50")
+      return(invisible())
+    }
+
+    # fixed bin width; breaks extended to cover means outside the fixed window
+    bw &lt;- 2 * half / 40
+    lo &lt;- min(xlim_b[1], min(rv$means)) - bw
+    hi &lt;- max(xlim_b[2], max(rv$means)) + bw
+    h  &lt;- hist(rv$means, breaks = seq(lo, hi, by = bw), plot = FALSE)
+
+    vis &lt;- h$counts[h$mids &gt;= xlim_b[1] &amp; h$mids &lt;= xlim_b[2]]
+    top &lt;- max(c(vis, 1))
+
+    plot(h, col = "skyblue", border = "white",
+         xlim = xlim_b, ylim = c(0, top * 1.30),
+         xlab = "Sample mean of acres92", ylab = "Frequency",
+         main = "Sampling distribution of the sample mean")
+    abline(v = ybarU, col = "black", lwd = 2, lty = 2)
+
+    # transient interval, for the current sample only
+    ci_col &lt;- if (rv$covered) "forestgreen" else "red"
+    y      &lt;- top * 1.17
+    segments(rv$ci[1], y, rv$ci[2], y, col = ci_col, lwd = 3)
+    segments(rv$ci, y - top * 0.045, rv$ci, y + top * 0.045, col = ci_col, lwd = 3)
+    points(rv$mean, y, pch = 19, cex = 1.3, col = ci_col)
+
+    outside &lt;- sum(rv$means &lt; xlim_b[1] | rv$means &gt; xlim_b[2])
+    leg &lt;- c(
+      sprintf("True mean = %s", fmt(ybarU)),
+      sprintf("Samples drawn = %d", length(rv$means)),
+      sprintf("Empirical coverage = %.1f%% (nominal %.0f%%)",
+              100 * mean(rv$hits), 100 * input$conf)
+    )
+    if (outside &gt; 0)
+      leg &lt;- c(leg, sprintf("%d mean(s) beyond the axis", outside))
+    legend("topleft", bty = "n", cex = 0.95, legend = leg)
+  })
+
+  output$stats &lt;- renderText({
+    if (is.null(rv$idx)) return("No sample drawn yet.")
+    sprintf(
+      "Sample mean: %s\n%.0f%% CI: [%s, %s]\nContains true mean? %s\nMisses so far: %d of %d",
+      fmt(rv$mean), 100 * input$conf, fmt(rv$ci[1]), fmt(rv$ci[2]),
+      if (rv$covered) "Yes" else "No", sum(!rv$hits), length(rv$hits)
+    )
+  })
+}
+
+shinyApp(ui, server)
+
+## file: acres92.csv
+## &lt;-- keep the existing `## file: acres92.csv` section from your document here,
+##     unchanged (header line `acres92` followed by one value per line).</code></pre>
 
 
 </section>
