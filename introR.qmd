@@ -212,7 +212,8 @@ Restricting to complete cases with `if_all(..., ~ !is.na(.x))` makes the means a
 
 `tab_spanner()` groups columns under a shared header. Here the means are grouped together and the variances are grouped together.
 
-```{r gt-by-statistic}
+```{r tbl-region-summary-by-statistic}
+#| tbl-cap: "Regional summary of five variables, grouped by statistic"
 ag_summary |>
   gt() |>
   tab_header(
@@ -245,7 +246,8 @@ The `$...$` labels are typeset by the HTML math engine after the table is writte
 
 Reordering the columns with `select()` puts each variable's mean and variance side by side under one spanner.
 
-```{r gt-by-variable}
+```{r tbl-region-summary-by-variable}
+#| tbl-cap: "Regional summary of five variables, grouped by variable"
 ag_summary |>
   select(
     region,
@@ -285,7 +287,8 @@ Both tables report identical numbers; only the grouping differs. Grouping by var
 
 `gtsummary::tbl_summary()` produces a descriptive table directly from the raw data, without a `summarize()` step.
 
-```{r gtsummary-table}
+```{r tbl-gtsummary-region}
+#| tbl-cap: "Automatic descriptive summary of agpop variables by region"
 agpop |>
   select(region, acres92, acres87, largef92, farms92) |>
   tbl_summary(
@@ -300,9 +303,13 @@ agpop |>
 
 Base R is convenient for quick diagnostic plots.
 
-```{r base-r-plots}
+```{r fig-agpop-acres92-hist}
+#| fig-cap: "Histogram of 1992 farm acreage"
 hist(agpop$acres92, main = "Histogram of 1992 Acres", xlab = "Acres")
+```
 
+```{r fig-agpop-acres-scatter}
+#| fig-cap: "1992 vs. 1987 farm acreage, with the 1:1 line"
 plot(agpop$acres87, agpop$acres92,
      main = "1992 vs 1987 Acreage",
      xlab = "Acres 1987", ylab = "Acres 1992")
@@ -330,7 +337,7 @@ dev.off()
 
 The saved file can then be placed back into the document with `knitr::include_graphics()`.
 
-```{r insert-png-plot}
+```{r fig-agpop-scatter-highres}
 #| fig-cap: "The saved high-resolution PNG, re-inserted"
 knitr::include_graphics("figures/agpop_scatter_highres.png")
 ```
@@ -339,7 +346,8 @@ knitr::include_graphics("figures/agpop_scatter_highres.png")
 
 `ggplot2` provides a grammar of graphics for layered displays. Below, a histogram of log-transformed 1992 acreage carries both an empirical density curve and a fitted normal curve.
 
-```{r ggplot-histogram}
+```{r fig-log-acres-hist}
+#| fig-cap: "Distribution of log(acres92): histogram with empirical density and normal fit"
 ag_clean <- agpop |>
   filter(!is.na(acres92), acres92 > 0) |>
   mutate(log_acres = log(acres92))
@@ -384,7 +392,8 @@ means_col <- function(data) {
 
 Indexing with `data[[j]]` extracts column `j` as a vector for both data frames and tibbles, whereas `data[, j]` returns a one-column tibble in the tibble case. `seq_len(n)` is used in place of `1:n` so that a zero-column input yields an empty loop rather than iterating over `1, 0`.
 
-```{r compare-custom-builtin}
+```{r tbl-means-custom-vs-builtin}
+#| tbl-cap: "Comparing column means: custom function vs. base R colMeans()"
 agpop_numeric <- agpop |> select(where(is.numeric))
 
 custom_means  <- means_col(agpop_numeric)

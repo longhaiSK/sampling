@@ -67,7 +67,8 @@ We will estimate the average 1992 farm acreage (`acres92`) across US counties, u
 
 ### Importing agstrat.csv data
 
-```{r agstrat-load}
+```{r tbl-agstrat-sample-data}
+#| tbl-cap: "Sample survey data for agstrat.csv, including stratum and weight"
 agstrat <- read.csv("data/agstrat.csv")
 head(agstrat) |> gt()
 ```
@@ -79,7 +80,8 @@ head(agstrat) |> gt()
 
 We first manually compute the sample size ($n_h$), standard deviation ($s_h$), and mean ($\overline{y}_h$) for each region, matching them with the known total counties in each region ($N_h$).
 
-```{r agstrat-summary-table}
+```{r tbl-agstrat-summary-by-region}
+#| tbl-cap: "Sample summary statistics for acres92 by region stratum"
 nh <- tapply (agstrat[, "acres92"], agstrat[,"region"], length)
 sh <- tapply (agstrat[, "acres92"], agstrat[,"region"], sd)
 ybarh <- tapply (agstrat[, "acres92"], agstrat[,"region"], mean)
@@ -206,7 +208,8 @@ res_seals$estimate |> format_est_gt("mean")
 
 Because Zone 3 was highly variable, we could have achieved a lower overall variance if we had sampled it more heavily. Neyman allocation formally calculates this optimal distribution.
 
-```{r seals-neyman-calc}
+```{r tbl-seals-neyman-allocation}
+#| tbl-cap: "Neyman-optimal allocation proportions for the seals survey zones"
 ## assuming the cost of surveying each zone is the same
 Ch <- rep(1, 3)
 Sh <- sh ## estimate population Sh with sample sh
@@ -246,8 +249,12 @@ agpop <- agpop[order(agpop$stratum), ]
 
 A stratification variable is most effective when it strongly explains the variance in the target variable. We check this via ANOVA and R-squared.
 
-```{r agpop-region-anova}
+```{r fig-agpop-region-boxplot}
+#| fig-cap: "1992 farm acreage by region stratum"
 boxplot(acres92 ~ stratum, data = agpop)
+```
+
+```{r agpop-region-anova}
 lm_region <- lm(agpop$acres92 ~ agpop$stratum)
 anova(lm_region)
 lm_region_gt <- format_lm_gt(lm_region)
@@ -293,7 +300,8 @@ for (i in 1:nres) {
 
 #### Repeat stratified sampling with optimal allocation 2000 times
 
-```{r agpop-region-neyman-alloc}
+```{r tbl-agpop-region-neyman-allocation}
+#| tbl-cap: "Population sizes and Neyman-optimal sample sizes by region stratum"
 Nh <- tapply(agpop$acres92, agpop$stratum, length) 
 Sh <- tapply(agpop$acres92, agpop$stratum, sd)
 nh_opt <- round((Nh*Sh)/sum(Nh*Sh) * 300)
@@ -329,7 +337,8 @@ for (i in 1:nres) {
 
 #### Compare the efficiency of different methods
 
-```{r agpop-region-compare-plot}
+```{r fig-agpop-region-compare-boxplot}
+#| fig-cap: "Sampling distribution of the mean under SRS, proportional, and Neyman allocation (region strata, 2000 simulations)"
 sim_results_str_region <- data.frame(
   "SRS" = srs_simulated[,1], 
   "Prop2size" = str_p2s_simulated[,1], 
@@ -340,7 +349,8 @@ abline(h = mean(agpop$acres92), col = "red")
 ```
 **Output Note:** The plot visually demonstrates that Neyman allocation has the tightest spread around the true mean (the red line).
 
-```{r agpop-region-compare-table}
+```{r tbl-agpop-region-compare-methods}
+#| tbl-cap: "Simulated mean, variance, and variance reduction by allocation method (region strata)"
 sim_means <- sapply(sim_results_str_region, mean)
 sim_var <- sapply(sim_results_str_region, var)
 sim_var_relative <- sim_var / sim_var[1]
@@ -385,8 +395,12 @@ agpop <- agpop[order(agpop$stratum), ]
 
 Let's check the explanatory power of this new stratification variable.
 
-```{r agpop-acres82-anova}
+```{r fig-agpop-acres82-boxplot}
+#| fig-cap: "1992 farm acreage by acres82 quartile stratum"
 boxplot(acres92 ~ stratum, data = agpop)
+```
+
+```{r agpop-acres82-anova}
 lm_acres82 <- lm(agpop$acres92 ~ agpop$stratum)
 lm_acres82_gt <- format_lm_gt(lm_acres82)
 lm_acres82_gt$fit
@@ -441,7 +455,8 @@ for (i in 1:nres) {
 
 #### Compare the efficiency of different methods
 
-```{r agpop-acres82-compare-plot}
+```{r fig-agpop-acres82-compare-boxplot}
+#| fig-cap: "Sampling distribution of the mean under SRS, proportional, and Neyman allocation (acres82 strata, 2000 simulations)"
 sim_results_str_acres82 <- data.frame(
   "SRS" = srs_simulated[,1], 
   "Prop2size" = str_p2s_simulated[,1], 
@@ -452,7 +467,8 @@ abline(h = mean(agpop$acres92), col = "red")
 ```
 **Output Note:** The boxplot visually highlights a massive reduction in variance compared to SRS, especially for the Neyman allocation.
 
-```{r agpop-acres82-compare-table}
+```{r tbl-agpop-acres82-compare-methods}
+#| tbl-cap: "Simulated mean, variance, and variance reduction by allocation method (acres82 strata)"
 sim_means <- sapply(sim_results_str_acres82, mean)
 sim_var <- sapply(sim_results_str_acres82, var)
 sim_var_relative <- sim_var / sim_var[1]
@@ -472,7 +488,7 @@ data.frame(
 ```
 **Output Note:** The table shows dramatic results: Proportional allocation reduces variance by `r round(sim_var_reduction["Prop2size"] * 100, 1)`%, and Neyman allocation reduces it by `r round(sim_var_reduction["Neyman"] * 100, 1)`%. Stratifying by a highly correlated variable is immensely powerful.
 
-## Interactive Demonstration: Stratification by `acres82`
+## Interactive Demonstration: Stratification by `acres82` {#sec-app-stratification}
 
 The app below draws three samples of the same total size $n$ at every step: a
 simple random sample, a stratified sample with proportional allocation, and a

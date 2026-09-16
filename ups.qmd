@@ -49,7 +49,8 @@ cat("\n```\n")
 
 We first manually define a small dataset describing hours spent studying, where the probability of sampling a specific student group ($\psi_i$) was proportional to the number of students in that group ($M_i$).
 
-```{r studyhrs-data}
+```{r tbl-studyhrs-raw-data}
+#| tbl-cap: "Raw data: student study hours by group, with selection probabilities"
 # 1. Define the raw data
 psi <- c(24, 100, 100, 76, 44) / 647
 Mi <- c(24, 100, 100, 76, 44)
@@ -64,7 +65,10 @@ data.frame(Mi, psi, hrs) |>
     hrs = md("**Total Hours ($y_i$)**")
   ) |> 
   fmt_number(columns = psi, decimals = 3)
+```
 
+```{r fig-studyhrs-vs-Mi}
+#| fig-cap: "Study hours vs. number of students, by group"
 plot(hrs ~ Mi, main = "Study Hours vs Number of Students", 
      xlab = "Number of Students (Mi)", ylab = "Study Hours (hrs)")
 abline(lm(hrs ~ Mi), col = "blue")
@@ -92,7 +96,8 @@ res_hrs_ratio$estimate |> format_est_gt("ratio_mean")
 
 The file `statepop.csv` contains data from an unequal-probability sample of 100 U.S. counties. Counties were chosen with probabilities proportional to their populations. The total U.S. population is $M_0 = 255,077,536$. Because sampling was done **with replacement**, large counties like Los Angeles occur multiple times in the sample.
 
-```{r statepop-load}
+```{r tbl-statepop-sample-data}
+#| tbl-cap: "Sample of U.S. county population and physician counts"
 statepop <- read.csv("data/statepop.csv")
 
 # Constants
@@ -108,7 +113,10 @@ statepop |>
   gt() |> 
   tab_header(title = "U.S. County Data (Sample)") |> 
   tab_options(container.height = px(300), container.overflow.y = TRUE)
+```
 
+```{r fig-statepop-phys-vs-popn}
+#| fig-cap: "Physicians vs. population (log-log scale), sample of U.S. counties"
 plot(popn, phys, log = "xy", 
      main = "Physicians vs Population (Log Scale)", 
      xlab = "Population", ylab = "Physicians")
@@ -225,7 +233,8 @@ for (i in 1:2000) {
 
 ### Visualizing Estimator Variance
 
-```{r upswr-sim-plot, fig.height=8, fig.width=8}
+```{r fig-upswr-sim-comparison, fig.height=8, fig.width=8}
+#| fig-cap: "Estimator variance: naive SRS vs. SRS regression vs. UPSWR (2000 simulations), full and zoomed views"
 par(mfrow = c(2,1))
 
 # Compare Naive SRS, Regression SRS, and UPSWR

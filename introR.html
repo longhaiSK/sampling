@@ -68,19 +68,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./srs.html" rel="next">
+<link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-f79c7fb6db380d32be398468f2fb58cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a7b5894d5a4c39c6aa3484761f021c1f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/custombook-1.0.0/num_eq.js"></script>
-<script src="site_libs/quarto-contrib/custombook-1.0.0/merge-toc.js"></script>
-<link href="site_libs/quarto-contrib/custombook-1.0.0/bookstyles.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-87aed0b8589e23e45aa8556edf37a91b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -162,7 +161,7 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
@@ -233,6 +232,12 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Figures, Tables, and Apps</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./appendix.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Estimating Functions Source Code</span></span></a>
   </div>
@@ -241,29 +246,33 @@ window.Quarto = {
   </li>
     </ul>
     </div>
-    <nav id="TOC" role="doc-toc" class="toc-active">
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#foundations" id="toc-foundations" class="nav-link active" data-scroll-target="#foundations"><span class="header-section-number">1.1</span> Foundations</a>
-  <ul>
+  <ul class="collapse">
   <li><a href="#basic-r-objects" id="toc-basic-r-objects" class="nav-link" data-scroll-target="#basic-r-objects"><span class="header-section-number">1.1.1</span> Basic R objects</a></li>
   </ul></li>
   <li><a href="#importing-a-dataset" id="toc-importing-a-dataset" class="nav-link" data-scroll-target="#importing-a-dataset"><span class="header-section-number">1.2</span> Importing a dataset</a>
-  <ul>
+  <ul class="collapse">
   <li><a href="#displaying-the-full-dataset" id="toc-displaying-the-full-dataset" class="nav-link" data-scroll-target="#displaying-the-full-dataset"><span class="header-section-number">1.2.1</span> Displaying the full dataset</a></li>
   <li><a href="#simple-summaries" id="toc-simple-summaries" class="nav-link" data-scroll-target="#simple-summaries"><span class="header-section-number">1.2.2</span> Simple summaries</a></li>
   </ul></li>
   <li><a href="#the-native-pipe" id="toc-the-native-pipe" class="nav-link" data-scroll-target="#the-native-pipe"><span class="header-section-number">1.3</span> The native pipe</a></li>
   <li><a href="#data-manipulation-with-dplyr" id="toc-data-manipulation-with-dplyr" class="nav-link" data-scroll-target="#data-manipulation-with-dplyr"><span class="header-section-number">1.4</span> Data manipulation with dplyr</a></li>
   <li><a href="#tables-with-gt" id="toc-tables-with-gt" class="nav-link" data-scroll-target="#tables-with-gt"><span class="header-section-number">1.5</span> Tables with gt</a>
-  <ul>
+  <ul class="collapse">
   <li><a href="#spanning-headers-grouped-by-statistic" id="toc-spanning-headers-grouped-by-statistic" class="nav-link" data-scroll-target="#spanning-headers-grouped-by-statistic"><span class="header-section-number">1.5.1</span> Spanning headers grouped by statistic</a></li>
   <li><a href="#spanning-headers-grouped-by-variable" id="toc-spanning-headers-grouped-by-variable" class="nav-link" data-scroll-target="#spanning-headers-grouped-by-variable"><span class="header-section-number">1.5.2</span> Spanning headers grouped by variable</a></li>
   <li><a href="#automatic-summary-tables-with-gtsummary" id="toc-automatic-summary-tables-with-gtsummary" class="nav-link" data-scroll-target="#automatic-summary-tables-with-gtsummary"><span class="header-section-number">1.5.3</span> Automatic summary tables with gtsummary</a></li>
   </ul></li>
   <li><a href="#graphics" id="toc-graphics" class="nav-link" data-scroll-target="#graphics"><span class="header-section-number">1.6</span> Graphics</a>
-  <ul>
+  <ul class="collapse">
   <li><a href="#base-r-graphics" id="toc-base-r-graphics" class="nav-link" data-scroll-target="#base-r-graphics"><span class="header-section-number">1.6.1</span> Base R graphics</a></li>
   <li><a href="#saving-and-re-inserting-an-external-plot" id="toc-saving-and-re-inserting-an-external-plot" class="nav-link" data-scroll-target="#saving-and-re-inserting-an-external-plot"><span class="header-section-number">1.6.2</span> Saving and re-inserting an external plot</a></li>
   <li><a href="#advanced-visualization-with-ggplot2" id="toc-advanced-visualization-with-ggplot2" class="nav-link" data-scroll-target="#advanced-visualization-with-ggplot2"><span class="header-section-number">1.6.3</span> Advanced visualization with ggplot2</a></li>
@@ -271,13 +280,9 @@ window.Quarto = {
   <li><a href="#writing-your-own-function" id="toc-writing-your-own-function" class="nav-link" data-scroll-target="#writing-your-own-function"><span class="header-section-number">1.7</span> Writing your own function</a></li>
   </ul>
 </nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content column-page-right" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -287,7 +292,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta column-page-right">
+<div class="quarto-title-meta">
 
     
   
@@ -300,13 +305,10 @@ window.Quarto = {
 
 
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 </div>
 <p>All packages are loaded once in a hidden <code>setup</code> chunk, and <code>message</code>/<code>warning</code> suppression is set globally in the YAML header rather than repeated on every chunk.</p>
 <section id="foundations" class="level2" data-number="1.1">
@@ -314,41 +316,29 @@ window.Quarto = {
 <section id="basic-r-objects" class="level3" data-number="1.1.1">
 <h3 data-number="1.1.1" class="anchored" data-anchor-id="basic-r-objects"><span class="header-section-number">1.1.1</span> Basic R objects</h3>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># vectors</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">3</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">2</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">66.32</span>, <span class="fl">69.87</span>, <span class="fl">70.12</span>, <span class="fl">90.37</span>, <span class="fl">50.08</span>, <span class="fl">61.20</span>, <span class="fl">65.00</span>, <span class="fl">57.65</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">1</span>]            <span class="co"># extract an element</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 66.32</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fl">85.34</span>   <span class="co"># replace an element</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ma <span class="ot">&lt;-</span> <span class="fu">mean</span>(a)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ma</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 68.70375</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read a vector of numbers from text without saving a file first</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="at">text =</span> <span class="st">"7 8 9 10 11 12 13 13 14 17 17 45"</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1]  7  8  9 10 11 12 13 13 14 17 17 45</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrices: matrix() fills by column unless byrow = TRUE</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>A</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2]
 [1,]    1    5
@@ -356,11 +346,8 @@ window.Quarto = {
 [3,]    3    7
 [4,]    4    8</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">matrix</span>(a, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>D</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      [,1]  [,2]
 [1,] 85.34 69.87
@@ -368,37 +355,25 @@ window.Quarto = {
 [3,] 50.08 61.20
 [4,] 65.00 57.65</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a larger matrix, to illustrate element and row assignment</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5000</span>, <span class="at">nrow =</span> <span class="dv">100</span>, <span class="at">ncol =</span> <span class="dv">50</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>B[<span class="dv">2</span>, <span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">45</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>B[<span class="dv">1</span>, ] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(B[<span class="dv">1</span>, ])   <span class="co"># part of the first row</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 2 3 4 5 6</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(B[, <span class="dv">1</span>])   <span class="co"># part of the first column</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 2 3 4 5 6</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lists</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>E <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">newa =</span> a, <span class="at">newA =</span> A)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(E)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "newa" "newA"</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>E<span class="sc">$</span>newA</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2]
 [1,]    1    5
@@ -406,8 +381,6 @@ window.Quarto = {
 [3,]    3    7
 [4,]    4    8</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>E<span class="sc">$</span>newa <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">17</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># data frames</span></span>
@@ -416,7 +389,6 @@ window.Quarto = {
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">score   =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">45</span>, <span class="dv">50</span>)</span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>stat245_scores</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -431,8 +403,6 @@ window.Quarto = {
 <section id="importing-a-dataset" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="importing-a-dataset"><span class="header-section-number">1.2</span> Importing a dataset</h2>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>data_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/longhaiSK/sampling/main/data/"</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>agpop_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(data_url, <span class="st">"agpop.csv"</span>)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -440,16 +410,12 @@ window.Quarto = {
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(agpop_file, <span class="at">na.strings =</span> <span class="st">"-99"</span>)</span>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(agpop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "county"   "state"    "acres92"  "acres87"  "acres82"  "farms92" 
  [7] "farms87"  "farms82"  "largef92" "largef87" "largef82" "smallf92"
 [13] "smallf87" "smallf82" "region"  </code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">rows =</span> <span class="fu">nrow</span>(agpop), <span class="at">cols =</span> <span class="fu">ncol</span>(agpop))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>rows cols 
 3078   15 </code></pre>
@@ -460,10 +426,7 @@ window.Quarto = {
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="displaying-the-full-dataset"><span class="header-section-number">1.2.1</span> Displaying the full dataset</h3>
 <p>Printing several thousand rows into an HTML document consumes vertical space and slows the browser. With <code>df-print: paged</code> (set under <code>format: html</code> in the YAML header), a printed data frame appears as a paged table: all rows are embedded as one lightweight data blob, and only the current page is drawn. Static targets such as Typst or PDF have no pager, so only the first rows are shown there.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>agpop</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -476,17 +439,11 @@ window.Quarto = {
 <section id="simple-summaries" class="level3" data-number="1.2.2">
 <h3 data-number="1.2.2" class="anchored" data-anchor-id="simple-summaries"><span class="header-section-number">1.2.2</span> Simple summaries</h3>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(agpop<span class="sc">$</span>acres92, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308582.4</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(agpop<span class="sc">$</span>acres92, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 425312.8</code></pre>
 </div>
@@ -497,82 +454,55 @@ window.Quarto = {
 <h2 data-number="1.3" class="anchored" data-anchor-id="the-native-pipe"><span class="header-section-number">1.3</span> The native pipe</h2>
 <p>The native pipe <code>|&gt;</code> takes the value on its left and passes it as the <strong>first argument</strong> to the function on its right, so <code>x |&gt; f()</code> is another way of writing <code>f(x)</code>. Pipes chain, so the output of one step feeds the next.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="cn">NA</span>)</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># without the pipe</span></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 15</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">base =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.176091</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">exp</span>(<span class="fu">log</span>(<span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">base =</span> <span class="dv">10</span>)), <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.24</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the same computations, read left to right</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 15</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">log</span>(<span class="at">base =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.176091</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">log</span>(<span class="at">base =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span> <span class="fu">exp</span>() <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.24</code></pre>
 </div>
 </div>
 <p>Extra arguments are supplied by name at each step; only the first argument comes from the pipe.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>, <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>() <span class="sc">|&gt;</span></span>
 <span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5.5</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="cn">NA</span>, <span class="dv">3</span>, <span class="dv">9</span>) <span class="sc">|&gt;</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>, <span class="at">na.last =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(<span class="at">trim =</span> <span class="fl">0.1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4.5</code></pre>
 </div>
 </div>
 <p>When the piped value belongs in an argument other than the first, mark its position with the placeholder <code>_</code>. The argument holding <code>_</code> must be named. This requires R 4.2.0 or later.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mtcars is the `data` argument of lm(), not its first argument</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> mtcars)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -582,10 +512,7 @@ Coefficients:
 (Intercept)         disp  
    29.59985     -0.04122  </code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> _)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -601,8 +528,6 @@ Coefficients:
 <h2 data-number="1.4" class="anchored" data-anchor-id="data-manipulation-with-dplyr"><span class="header-section-number">1.4</span> Data manipulation with dplyr</h2>
 <p><code>dplyr</code> verbs take a data frame as their first argument, which makes them natural pipe targets.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mutate() creates several columns at once, replacing repeated $ assignment</span></span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>stat245_scores <span class="ot">&lt;-</span> stat245_scores <span class="sc">|&gt;</span></span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -610,7 +535,6 @@ Coefficients:
 <span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">adj  =</span> perc <span class="sc">+</span> <span class="dv">10</span></span>
 <span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>stat245_scores</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -620,21 +544,16 @@ Coefficients:
 </div>
 </div>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filter() subsets rows</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>agpop_AK <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(state <span class="sc">==</span> <span class="st">"AK"</span>)</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>agpop_W  <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">"W"</span>)</span>
 <span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>agpop_lg <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(largef92 <span class="sc">&gt;</span> <span class="dv">10</span>)</span>
 <span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">AK =</span> <span class="fu">nrow</span>(agpop_AK), <span class="at">W =</span> <span class="fu">nrow</span>(agpop_W), <span class="at">largefarm =</span> <span class="fu">nrow</span>(agpop_lg))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>       AK         W largefarm 
         5       422      2184 </code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># slice() subsets rows by position and select() subsets columns;</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co"># together they replace agpop[1:20, c("acres92", "largef92")]</span></span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>agpop_subset <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span></span>
@@ -642,7 +561,6 @@ Coefficients:
 <span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(acres92, largef92)</span>
 <span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agpop_subset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -652,8 +570,6 @@ Coefficients:
 </div>
 </div>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>vars_of_interest <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"acres92"</span>, <span class="st">"acres87"</span>, <span class="st">"farms92"</span>, <span class="st">"largef92"</span>, <span class="st">"smallf92"</span>)</span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="co"># group_by() + summarize() + across(): mean and variance of each variable by</span></span>
@@ -670,7 +586,6 @@ Coefficients:
 <span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
 <span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a>ag_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -688,8 +603,6 @@ Coefficients:
 <h3 data-number="1.5.1" class="anchored" data-anchor-id="spanning-headers-grouped-by-statistic"><span class="header-section-number">1.5.1</span> Spanning headers grouped by statistic</h3>
 <p><code>tab_spanner()</code> groups columns under a shared header. Here the means are grouped together and the variances are grouped together.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="sc">|&gt;</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
@@ -714,25 +627,30 @@ Coefficients:
 <span id="cb55-22"><a href="#cb55-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>), <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
 <span id="cb55-23"><a href="#cb55-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>), <span class="at">decimals =</span> <span class="dv">0</span>, <span class="at">sep_mark =</span> <span class="st">","</span>) <span class="sc">|&gt;</span></span>
 <span id="cb55-24"><a href="#cb55-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">table.width =</span> <span class="fu">pct</span>(<span class="dv">100</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div id="tbl-region-summary-by-statistic" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-region-summary-by-statistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.1: Regional summary of five variables, grouped by statistic
+</figcaption>
+<div aria-describedby="tbl-region-summary-by-statistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="tdcqjtwgio" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#tdcqjtwgio table {
+<div id="ftejsgewiq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ftejsgewiq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#tdcqjtwgio thead, #tdcqjtwgio tbody, #tdcqjtwgio tfoot, #tdcqjtwgio tr, #tdcqjtwgio td, #tdcqjtwgio th {
+#ftejsgewiq thead, #ftejsgewiq tbody, #ftejsgewiq tfoot, #ftejsgewiq tr, #ftejsgewiq td, #ftejsgewiq th {
   border-style: none;
 }
 
-#tdcqjtwgio p {
+#ftejsgewiq p {
   margin: 0;
   padding: 0;
 }
 
-#tdcqjtwgio .gt_table {
+#ftejsgewiq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -758,12 +676,12 @@ Coefficients:
   border-left-color: #D3D3D3;
 }
 
-#tdcqjtwgio .gt_caption {
+#ftejsgewiq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#tdcqjtwgio .gt_title {
+#ftejsgewiq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -775,7 +693,7 @@ Coefficients:
   border-bottom-width: 0;
 }
 
-#tdcqjtwgio .gt_subtitle {
+#ftejsgewiq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -787,7 +705,7 @@ Coefficients:
   border-top-width: 0;
 }
 
-#tdcqjtwgio .gt_heading {
+#ftejsgewiq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -799,13 +717,13 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#tdcqjtwgio .gt_bottom_border {
+#ftejsgewiq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#tdcqjtwgio .gt_col_headings {
+#ftejsgewiq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -820,7 +738,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#tdcqjtwgio .gt_col_heading {
+#ftejsgewiq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -840,7 +758,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-#tdcqjtwgio .gt_column_spanner_outer {
+#ftejsgewiq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -852,15 +770,15 @@ Coefficients:
   padding-right: 4px;
 }
 
-#tdcqjtwgio .gt_column_spanner_outer:first-child {
+#ftejsgewiq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#tdcqjtwgio .gt_column_spanner_outer:last-child {
+#ftejsgewiq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#tdcqjtwgio .gt_column_spanner {
+#ftejsgewiq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -872,11 +790,11 @@ Coefficients:
   width: 100%;
 }
 
-#tdcqjtwgio .gt_spanner_row {
+#ftejsgewiq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#tdcqjtwgio .gt_group_heading {
+#ftejsgewiq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -902,7 +820,7 @@ Coefficients:
   text-align: left;
 }
 
-#tdcqjtwgio .gt_empty_group_heading {
+#ftejsgewiq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -917,15 +835,15 @@ Coefficients:
   vertical-align: middle;
 }
 
-#tdcqjtwgio .gt_from_md > :first-child {
+#ftejsgewiq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#tdcqjtwgio .gt_from_md > :last-child {
+#ftejsgewiq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#tdcqjtwgio .gt_row {
+#ftejsgewiq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -944,7 +862,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-#tdcqjtwgio .gt_stub {
+#ftejsgewiq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -957,7 +875,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-#tdcqjtwgio .gt_stub_row_group {
+#ftejsgewiq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -971,15 +889,15 @@ Coefficients:
   vertical-align: top;
 }
 
-#tdcqjtwgio .gt_row_group_first td {
+#ftejsgewiq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#tdcqjtwgio .gt_row_group_first th {
+#ftejsgewiq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#tdcqjtwgio .gt_summary_row {
+#ftejsgewiq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -989,16 +907,16 @@ Coefficients:
   padding-right: 5px;
 }
 
-#tdcqjtwgio .gt_first_summary_row {
+#ftejsgewiq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#tdcqjtwgio .gt_first_summary_row.thick {
+#ftejsgewiq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#tdcqjtwgio .gt_last_summary_row {
+#ftejsgewiq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1008,7 +926,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-#tdcqjtwgio .gt_grand_summary_row {
+#ftejsgewiq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1018,7 +936,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-#tdcqjtwgio .gt_first_grand_summary_row {
+#ftejsgewiq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1028,7 +946,7 @@ Coefficients:
   border-top-color: #D3D3D3;
 }
 
-#tdcqjtwgio .gt_last_grand_summary_row_top {
+#ftejsgewiq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1038,11 +956,11 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-#tdcqjtwgio .gt_striped {
+#ftejsgewiq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#tdcqjtwgio .gt_table_body {
+#ftejsgewiq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1051,7 +969,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-#tdcqjtwgio .gt_footnotes {
+#ftejsgewiq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1065,7 +983,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#tdcqjtwgio .gt_footnote {
+#ftejsgewiq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1074,7 +992,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-#tdcqjtwgio .gt_sourcenotes {
+#ftejsgewiq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1088,7 +1006,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#tdcqjtwgio .gt_sourcenote {
+#ftejsgewiq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1096,77 +1014,77 @@ Coefficients:
   padding-right: 5px;
 }
 
-#tdcqjtwgio .gt_left {
+#ftejsgewiq .gt_left {
   text-align: left;
 }
 
-#tdcqjtwgio .gt_center {
+#ftejsgewiq .gt_center {
   text-align: center;
 }
 
-#tdcqjtwgio .gt_right {
+#ftejsgewiq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#tdcqjtwgio .gt_font_normal {
+#ftejsgewiq .gt_font_normal {
   font-weight: normal;
 }
 
-#tdcqjtwgio .gt_font_bold {
+#ftejsgewiq .gt_font_bold {
   font-weight: bold;
 }
 
-#tdcqjtwgio .gt_font_italic {
+#ftejsgewiq .gt_font_italic {
   font-style: italic;
 }
 
-#tdcqjtwgio .gt_super {
+#ftejsgewiq .gt_super {
   font-size: 65%;
 }
 
-#tdcqjtwgio .gt_footnote_marks {
+#ftejsgewiq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#tdcqjtwgio .gt_asterisk {
+#ftejsgewiq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#tdcqjtwgio .gt_indent_1 {
+#ftejsgewiq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#tdcqjtwgio .gt_indent_2 {
+#ftejsgewiq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#tdcqjtwgio .gt_indent_3 {
+#ftejsgewiq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#tdcqjtwgio .gt_indent_4 {
+#ftejsgewiq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#tdcqjtwgio .gt_indent_5 {
+#ftejsgewiq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#tdcqjtwgio .katex-display {
+#ftejsgewiq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#tdcqjtwgio div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ftejsgewiq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<table class="gt_table cell caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <colgroup>
 <col style="width: 9%">
 <col style="width: 9%">
@@ -1268,14 +1186,15 @@ Coefficients:
 </div>
 </div>
 </div>
+</figure>
+</div>
+</div>
 <p>The <code>$...$</code> labels are typeset by the HTML math engine after the table is written into the page; they are not processed by <code>gt</code> itself, and will appear as literal dollar signs in the Typst output. For a target-independent version, replace them with plain text or Unicode labels.</p>
 </section>
 <section id="spanning-headers-grouped-by-variable" class="level3" data-number="1.5.2">
 <h3 data-number="1.5.2" class="anchored" data-anchor-id="spanning-headers-grouped-by-variable"><span class="header-section-number">1.5.2</span> Spanning headers grouped by variable</h3>
 <p>Reordering the columns with <code>select()</code> puts each variable’s mean and variance side by side under one spanner.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>ag_summary <span class="sc">|&gt;</span></span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
 <span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>    region,</span>
@@ -1307,25 +1226,30 @@ Coefficients:
 <span id="cb56-29"><a href="#cb56-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_mean"</span>), <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
 <span id="cb56-30"><a href="#cb56-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">ends_with</span>(<span class="st">"_var"</span>), <span class="at">decimals =</span> <span class="dv">0</span>, <span class="at">sep_mark =</span> <span class="st">","</span>) <span class="sc">|&gt;</span></span>
 <span id="cb56-31"><a href="#cb56-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">table.width =</span> <span class="fu">pct</span>(<span class="dv">100</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div id="tbl-region-summary-by-variable" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-region-summary-by-variable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.2: Regional summary of five variables, grouped by variable
+</figcaption>
+<div aria-describedby="tbl-region-summary-by-variable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="xtwqeytjoq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#xtwqeytjoq table {
+<div id="gnwitxjqee" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gnwitxjqee table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#xtwqeytjoq thead, #xtwqeytjoq tbody, #xtwqeytjoq tfoot, #xtwqeytjoq tr, #xtwqeytjoq td, #xtwqeytjoq th {
+#gnwitxjqee thead, #gnwitxjqee tbody, #gnwitxjqee tfoot, #gnwitxjqee tr, #gnwitxjqee td, #gnwitxjqee th {
   border-style: none;
 }
 
-#xtwqeytjoq p {
+#gnwitxjqee p {
   margin: 0;
   padding: 0;
 }
 
-#xtwqeytjoq .gt_table {
+#gnwitxjqee .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1351,12 +1275,12 @@ Coefficients:
   border-left-color: #D3D3D3;
 }
 
-#xtwqeytjoq .gt_caption {
+#gnwitxjqee .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#xtwqeytjoq .gt_title {
+#gnwitxjqee .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1368,7 +1292,7 @@ Coefficients:
   border-bottom-width: 0;
 }
 
-#xtwqeytjoq .gt_subtitle {
+#gnwitxjqee .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1380,7 +1304,7 @@ Coefficients:
   border-top-width: 0;
 }
 
-#xtwqeytjoq .gt_heading {
+#gnwitxjqee .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1392,13 +1316,13 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#xtwqeytjoq .gt_bottom_border {
+#gnwitxjqee .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#xtwqeytjoq .gt_col_headings {
+#gnwitxjqee .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1413,7 +1337,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#xtwqeytjoq .gt_col_heading {
+#gnwitxjqee .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1433,7 +1357,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-#xtwqeytjoq .gt_column_spanner_outer {
+#gnwitxjqee .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1445,15 +1369,15 @@ Coefficients:
   padding-right: 4px;
 }
 
-#xtwqeytjoq .gt_column_spanner_outer:first-child {
+#gnwitxjqee .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#xtwqeytjoq .gt_column_spanner_outer:last-child {
+#gnwitxjqee .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#xtwqeytjoq .gt_column_spanner {
+#gnwitxjqee .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1465,11 +1389,11 @@ Coefficients:
   width: 100%;
 }
 
-#xtwqeytjoq .gt_spanner_row {
+#gnwitxjqee .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#xtwqeytjoq .gt_group_heading {
+#gnwitxjqee .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1495,7 +1419,7 @@ Coefficients:
   text-align: left;
 }
 
-#xtwqeytjoq .gt_empty_group_heading {
+#gnwitxjqee .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1510,15 +1434,15 @@ Coefficients:
   vertical-align: middle;
 }
 
-#xtwqeytjoq .gt_from_md > :first-child {
+#gnwitxjqee .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#xtwqeytjoq .gt_from_md > :last-child {
+#gnwitxjqee .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#xtwqeytjoq .gt_row {
+#gnwitxjqee .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1537,7 +1461,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-#xtwqeytjoq .gt_stub {
+#gnwitxjqee .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1550,7 +1474,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-#xtwqeytjoq .gt_stub_row_group {
+#gnwitxjqee .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1564,15 +1488,15 @@ Coefficients:
   vertical-align: top;
 }
 
-#xtwqeytjoq .gt_row_group_first td {
+#gnwitxjqee .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#xtwqeytjoq .gt_row_group_first th {
+#gnwitxjqee .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#xtwqeytjoq .gt_summary_row {
+#gnwitxjqee .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1582,16 +1506,16 @@ Coefficients:
   padding-right: 5px;
 }
 
-#xtwqeytjoq .gt_first_summary_row {
+#gnwitxjqee .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#xtwqeytjoq .gt_first_summary_row.thick {
+#gnwitxjqee .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#xtwqeytjoq .gt_last_summary_row {
+#gnwitxjqee .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1601,7 +1525,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-#xtwqeytjoq .gt_grand_summary_row {
+#gnwitxjqee .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1611,7 +1535,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-#xtwqeytjoq .gt_first_grand_summary_row {
+#gnwitxjqee .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1621,7 +1545,7 @@ Coefficients:
   border-top-color: #D3D3D3;
 }
 
-#xtwqeytjoq .gt_last_grand_summary_row_top {
+#gnwitxjqee .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1631,11 +1555,11 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-#xtwqeytjoq .gt_striped {
+#gnwitxjqee .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#xtwqeytjoq .gt_table_body {
+#gnwitxjqee .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1644,7 +1568,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-#xtwqeytjoq .gt_footnotes {
+#gnwitxjqee .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1658,7 +1582,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#xtwqeytjoq .gt_footnote {
+#gnwitxjqee .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1667,7 +1591,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-#xtwqeytjoq .gt_sourcenotes {
+#gnwitxjqee .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1681,7 +1605,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#xtwqeytjoq .gt_sourcenote {
+#gnwitxjqee .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1689,77 +1613,77 @@ Coefficients:
   padding-right: 5px;
 }
 
-#xtwqeytjoq .gt_left {
+#gnwitxjqee .gt_left {
   text-align: left;
 }
 
-#xtwqeytjoq .gt_center {
+#gnwitxjqee .gt_center {
   text-align: center;
 }
 
-#xtwqeytjoq .gt_right {
+#gnwitxjqee .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xtwqeytjoq .gt_font_normal {
+#gnwitxjqee .gt_font_normal {
   font-weight: normal;
 }
 
-#xtwqeytjoq .gt_font_bold {
+#gnwitxjqee .gt_font_bold {
   font-weight: bold;
 }
 
-#xtwqeytjoq .gt_font_italic {
+#gnwitxjqee .gt_font_italic {
   font-style: italic;
 }
 
-#xtwqeytjoq .gt_super {
+#gnwitxjqee .gt_super {
   font-size: 65%;
 }
 
-#xtwqeytjoq .gt_footnote_marks {
+#gnwitxjqee .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#xtwqeytjoq .gt_asterisk {
+#gnwitxjqee .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#xtwqeytjoq .gt_indent_1 {
+#gnwitxjqee .gt_indent_1 {
   text-indent: 5px;
 }
 
-#xtwqeytjoq .gt_indent_2 {
+#gnwitxjqee .gt_indent_2 {
   text-indent: 10px;
 }
 
-#xtwqeytjoq .gt_indent_3 {
+#gnwitxjqee .gt_indent_3 {
   text-indent: 15px;
 }
 
-#xtwqeytjoq .gt_indent_4 {
+#gnwitxjqee .gt_indent_4 {
   text-indent: 20px;
 }
 
-#xtwqeytjoq .gt_indent_5 {
+#gnwitxjqee .gt_indent_5 {
   text-indent: 25px;
 }
 
-#xtwqeytjoq .katex-display {
+#gnwitxjqee .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#xtwqeytjoq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#gnwitxjqee div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<table class="gt_table cell caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <colgroup>
 <col style="width: 9%">
 <col style="width: 9%">
@@ -1870,39 +1794,45 @@ Coefficients:
 </div>
 </div>
 </div>
+</figure>
+</div>
+</div>
 <p>Both tables report identical numbers; only the grouping differs. Grouping by variable eases comparison of a variable’s mean against its variance, whereas grouping by statistic eases comparison of means across variables.</p>
 </section>
 <section id="automatic-summary-tables-with-gtsummary" class="level3" data-number="1.5.3">
 <h3 data-number="1.5.3" class="anchored" data-anchor-id="automatic-summary-tables-with-gtsummary"><span class="header-section-number">1.5.3</span> Automatic summary tables with gtsummary</h3>
 <p><code>gtsummary::tbl_summary()</code> produces a descriptive table directly from the raw data, without a <code>summarize()</code> step.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>agpop <span class="sc">|&gt;</span></span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, acres92, acres87, largef92, farms92) <span class="sc">|&gt;</span></span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
 <span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> region,</span>
 <span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(<span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>)</span>
 <span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div id="tbl-gtsummary-region" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-gtsummary-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.3: Automatic descriptive summary of agpop variables by region
+</figcaption>
+<div aria-describedby="tbl-gtsummary-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="ooohlrqvew" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ooohlrqvew table {
+<div id="gbmrrfobsk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gbmrrfobsk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ooohlrqvew thead, #ooohlrqvew tbody, #ooohlrqvew tfoot, #ooohlrqvew tr, #ooohlrqvew td, #ooohlrqvew th {
+#gbmrrfobsk thead, #gbmrrfobsk tbody, #gbmrrfobsk tfoot, #gbmrrfobsk tr, #gbmrrfobsk td, #gbmrrfobsk th {
   border-style: none;
 }
 
-#ooohlrqvew p {
+#gbmrrfobsk p {
   margin: 0;
   padding: 0;
 }
 
-#ooohlrqvew .gt_table {
+#gbmrrfobsk .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1928,12 +1858,12 @@ Coefficients:
   border-left-color: #D3D3D3;
 }
 
-#ooohlrqvew .gt_caption {
+#gbmrrfobsk .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ooohlrqvew .gt_title {
+#gbmrrfobsk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1945,7 +1875,7 @@ Coefficients:
   border-bottom-width: 0;
 }
 
-#ooohlrqvew .gt_subtitle {
+#gbmrrfobsk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1957,7 +1887,7 @@ Coefficients:
   border-top-width: 0;
 }
 
-#ooohlrqvew .gt_heading {
+#gbmrrfobsk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1969,13 +1899,13 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#ooohlrqvew .gt_bottom_border {
+#gbmrrfobsk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ooohlrqvew .gt_col_headings {
+#gbmrrfobsk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1990,7 +1920,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#ooohlrqvew .gt_col_heading {
+#gbmrrfobsk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2010,7 +1940,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-#ooohlrqvew .gt_column_spanner_outer {
+#gbmrrfobsk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2022,15 +1952,15 @@ Coefficients:
   padding-right: 4px;
 }
 
-#ooohlrqvew .gt_column_spanner_outer:first-child {
+#gbmrrfobsk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ooohlrqvew .gt_column_spanner_outer:last-child {
+#gbmrrfobsk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ooohlrqvew .gt_column_spanner {
+#gbmrrfobsk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2042,11 +1972,11 @@ Coefficients:
   width: 100%;
 }
 
-#ooohlrqvew .gt_spanner_row {
+#gbmrrfobsk .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ooohlrqvew .gt_group_heading {
+#gbmrrfobsk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2072,7 +2002,7 @@ Coefficients:
   text-align: left;
 }
 
-#ooohlrqvew .gt_empty_group_heading {
+#gbmrrfobsk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2087,15 +2017,15 @@ Coefficients:
   vertical-align: middle;
 }
 
-#ooohlrqvew .gt_from_md > :first-child {
+#gbmrrfobsk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ooohlrqvew .gt_from_md > :last-child {
+#gbmrrfobsk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ooohlrqvew .gt_row {
+#gbmrrfobsk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2114,7 +2044,7 @@ Coefficients:
   overflow-x: hidden;
 }
 
-#ooohlrqvew .gt_stub {
+#gbmrrfobsk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2127,7 +2057,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-#ooohlrqvew .gt_stub_row_group {
+#gbmrrfobsk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2141,15 +2071,15 @@ Coefficients:
   vertical-align: top;
 }
 
-#ooohlrqvew .gt_row_group_first td {
+#gbmrrfobsk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ooohlrqvew .gt_row_group_first th {
+#gbmrrfobsk .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ooohlrqvew .gt_summary_row {
+#gbmrrfobsk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2159,16 +2089,16 @@ Coefficients:
   padding-right: 5px;
 }
 
-#ooohlrqvew .gt_first_summary_row {
+#gbmrrfobsk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ooohlrqvew .gt_first_summary_row.thick {
+#gbmrrfobsk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ooohlrqvew .gt_last_summary_row {
+#gbmrrfobsk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2178,7 +2108,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-#ooohlrqvew .gt_grand_summary_row {
+#gbmrrfobsk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2188,7 +2118,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-#ooohlrqvew .gt_first_grand_summary_row {
+#gbmrrfobsk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2198,7 +2128,7 @@ Coefficients:
   border-top-color: #D3D3D3;
 }
 
-#ooohlrqvew .gt_last_grand_summary_row_top {
+#gbmrrfobsk .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2208,11 +2138,11 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-#ooohlrqvew .gt_striped {
+#gbmrrfobsk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ooohlrqvew .gt_table_body {
+#gbmrrfobsk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2221,7 +2151,7 @@ Coefficients:
   border-bottom-color: #D3D3D3;
 }
 
-#ooohlrqvew .gt_footnotes {
+#gbmrrfobsk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2235,7 +2165,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#ooohlrqvew .gt_footnote {
+#gbmrrfobsk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2244,7 +2174,7 @@ Coefficients:
   padding-right: 5px;
 }
 
-#ooohlrqvew .gt_sourcenotes {
+#gbmrrfobsk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2258,7 +2188,7 @@ Coefficients:
   border-right-color: #D3D3D3;
 }
 
-#ooohlrqvew .gt_sourcenote {
+#gbmrrfobsk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2266,77 +2196,77 @@ Coefficients:
   padding-right: 5px;
 }
 
-#ooohlrqvew .gt_left {
+#gbmrrfobsk .gt_left {
   text-align: left;
 }
 
-#ooohlrqvew .gt_center {
+#gbmrrfobsk .gt_center {
   text-align: center;
 }
 
-#ooohlrqvew .gt_right {
+#gbmrrfobsk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ooohlrqvew .gt_font_normal {
+#gbmrrfobsk .gt_font_normal {
   font-weight: normal;
 }
 
-#ooohlrqvew .gt_font_bold {
+#gbmrrfobsk .gt_font_bold {
   font-weight: bold;
 }
 
-#ooohlrqvew .gt_font_italic {
+#gbmrrfobsk .gt_font_italic {
   font-style: italic;
 }
 
-#ooohlrqvew .gt_super {
+#gbmrrfobsk .gt_super {
   font-size: 65%;
 }
 
-#ooohlrqvew .gt_footnote_marks {
+#gbmrrfobsk .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ooohlrqvew .gt_asterisk {
+#gbmrrfobsk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ooohlrqvew .gt_indent_1 {
+#gbmrrfobsk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ooohlrqvew .gt_indent_2 {
+#gbmrrfobsk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ooohlrqvew .gt_indent_3 {
+#gbmrrfobsk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ooohlrqvew .gt_indent_4 {
+#gbmrrfobsk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ooohlrqvew .gt_indent_5 {
+#gbmrrfobsk .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ooohlrqvew .katex-display {
+#gbmrrfobsk .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ooohlrqvew div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#gbmrrfobsk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<table class="gt_table cell caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <colgroup>
 <col style="width: 20%">
 <col style="width: 20%">
@@ -2411,6 +2341,9 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 </div>
 </div>
 </div>
+</figure>
+</div>
+</div>
 </section>
 </section>
 <section id="graphics" class="level2" data-number="1.6">
@@ -2419,28 +2352,34 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <h3 data-number="1.6.1" class="anchored" data-anchor-id="base-r-graphics"><span class="header-section-number">1.6.1</span> Base R graphics</h3>
 <p>Base R is convenient for quick diagnostic plots.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(agpop<span class="sc">$</span>acres92, <span class="at">main =</span> <span class="st">"Histogram of 1992 Acres"</span>, <span class="at">xlab =</span> <span class="st">"Acres"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="introR_files/figure-html/base-r-plots-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-agpop-acres92-hist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agpop-acres92-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="introR_files/figure-html/fig-agpop-acres92-hist-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agpop-acres92-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Histogram of 1992 farm acreage
+</figcaption>
 </figure>
 </div>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
+</div>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(agpop<span class="sc">$</span>acres87, agpop<span class="sc">$</span>acres92,</span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"1992 vs 1987 Acreage"</span>,</span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Acres 1987"</span>, <span class="at">ylab =</span> <span class="st">"Acres 1992"</span>)</span>
 <span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="introR_files/figure-html/base-r-plots-2.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-agpop-acres-scatter" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agpop-acres-scatter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="introR_files/figure-html/fig-agpop-acres-scatter-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agpop-acres-scatter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: 1992 vs.&nbsp;1987 farm acreage, with the 1:1 line
+</figcaption>
 </figure>
 </div>
 </div>
@@ -2450,8 +2389,6 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <h3 data-number="1.6.2" class="anchored" data-anchor-id="saving-and-re-inserting-an-external-plot"><span class="header-section-number">1.6.2</span> Saving and re-inserting an external plot</h3>
 <p>A high-resolution figure for a journal or a slide deck can be written straight to disk: open a graphics device (<code>png()</code>, <code>pdf()</code>, <code>jpeg()</code>), run the plotting code, then close the device with <code>dev.off()</code>. When <code>res</code> is raised, <code>width</code> and <code>height</code> must be given in inches so the figure does not shrink.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"figures"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"figures/agpop_scatter_highres.png"</span>,</span>
@@ -2463,19 +2400,19 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
 <span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 </div>
 <p>The saved file can then be placed back into the document with <code>knitr::include_graphics()</code>.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figures/agpop_scatter_highres.png"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figures/agpop_scatter_highres.png" class="img-fluid figure-img" width="900"></p>
-<figcaption>The saved high-resolution PNG, re-inserted</figcaption>
+<div id="fig-agpop-scatter-highres" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agpop-scatter-highres-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/agpop_scatter_highres.png" class="img-fluid figure-img" width="900">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agpop-scatter-highres-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.3: The saved high-resolution PNG, re-inserted
+</figcaption>
 </figure>
 </div>
 </div>
@@ -2485,8 +2422,6 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <h3 data-number="1.6.3" class="anchored" data-anchor-id="advanced-visualization-with-ggplot2"><span class="header-section-number">1.6.3</span> Advanced visualization with ggplot2</h3>
 <p><code>ggplot2</code> provides a grammar of graphics for layered displays. Below, a histogram of log-transformed 1992 acreage carries both an empirical density curve and a fitted normal curve.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>ag_clean <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span></span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(acres92), acres92 <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_acres =</span> <span class="fu">log</span>(acres92))</span>
@@ -2510,11 +2445,15 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
 <span id="cb62-22"><a href="#cb62-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb62-23"><a href="#cb62-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="introR_files/figure-html/ggplot-histogram-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-log-acres-hist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-log-acres-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="introR_files/figure-html/fig-log-acres-hist-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-log-acres-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.4: Distribution of log(acres92): histogram with empirical density and normal fit
+</figcaption>
 </figure>
 </div>
 </div>
@@ -2525,8 +2464,6 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <section id="writing-your-own-function" class="level2" data-number="1.7">
 <h2 data-number="1.7" class="anchored" data-anchor-id="writing-your-own-function"><span class="header-section-number">1.7</span> Writing your own function</h2>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="do">## data is a matrix or data frame; returns the mean of each column</span></span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>means_col <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">ncol</span>(data)</span>
@@ -2537,12 +2474,9 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(cmeans) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(data)</span>
 <span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>  cmeans</span>
 <span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 </div>
 <p>Indexing with <code>data[[j]]</code> extracts column <code>j</code> as a vector for both data frames and tibbles, whereas <code>data[, j]</code> returns a one-column tibble in the tibble case. <code>seq_len(n)</code> is used in place of <code>1:n</code> so that a zero-column input yields an empty loop rather than iterating over <code>1, 0</code>.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>agpop_numeric <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">where</span>(is.numeric))</span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>custom_means  <span class="ot">&lt;-</span> <span class="fu">means_col</span>(agpop_numeric)</span>
@@ -2565,7 +2499,12 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">Built_in        =</span> <span class="fu">md</span>(<span class="st">"**Base `colMeans()`**"</span>)</span>
 <span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(Custom_Function, Built_in), <span class="at">decimals =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div id="tbl-means-custom-vs-builtin" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-means-custom-vs-builtin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.4: Comparing column means: custom function vs.&nbsp;base R colMeans()
+</figcaption>
+<div aria-describedby="tbl-means-custom-vs-builtin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <div id="ismzvlqggf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ismzvlqggf table {
@@ -3017,7 +2956,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<table class="gt_table cell caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading header">
 <td colspan="3" class="gt_heading gt_title gt_font_normal">Comparing Mean Calculations</td>
@@ -3098,11 +3037,11 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 </div>
 </div>
 </div>
+</figure>
+</div>
+</div>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(custom_means, builtin_means)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
@@ -3513,6 +3452,18 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Preface">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./srs.html" class="pagination-link" aria-label="Simple Random Sampling">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

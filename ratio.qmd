@@ -74,10 +74,14 @@ We want to estimate the volume of wood in cherry trees using their diameter as a
 
 First, let's load the data and verify that a strong linear relationship passing near the origin exists between volume and diameter.
 
-```{r cherry-load-plot}
+```{r tbl-cherry-sample-data}
+#| tbl-cap: "Sample data: cherry tree volume and diameter"
 cherry <- read.csv("data/cherry.csv", header = T)
 head(cherry) |> gt()
+```
 
+```{r fig-cherry-volume-diameter}
+#| fig-cap: "Cherry tree volume vs. diameter"
 plot(cherry$volume ~ cherry$diameter, main = "Volume vs Diameter")
 anova(lm(cherry$volume ~ 0 + cherry$diameter))
 ```
@@ -112,7 +116,10 @@ N <- 2967
 
 res_ratio_model <- ratio_est(ydata, xdata, N = N, estimate = "model")
 res_ratio_model$table
+```
 
+```{r fig-cherry-ratio-fit}
+#| fig-cap: "Cherry tree volume vs. diameter with the fitted ratio line"
 plot(cherry$volume ~ cherry$diameter, main="Ratio Estimation Fit")
 abline(a = 0, b = res_ratio_model$estimate["Est."], col="blue", lwd=2)
 ```
@@ -179,10 +186,15 @@ tyU <- sum(agpop[, "acres92"])
 # suppose known for ratio estimate
 txU <- sum(agpop[, "acres87"]) 
 B <- tyU / txU
+```
 
+```{r fig-agpop-acres8792-ratio-line}
+#| fig-cap: "1992 vs. 1987 county acreage with the true ratio line"
 plot(agpop[, "acres87"], agpop[, "acres92"], main="Acres 1992 vs Acres 1987")
 abline(a = 0, b = B, col="red")
+```
 
+```{r agpop-load-lm}
 # linear model output
 lm_gt <- format_lm_gt(lm(agpop$acres92 ~ agpop$acres87))
 lm_gt$coef
@@ -196,7 +208,8 @@ exp_var_red
 
 ### Simulation Studies
 
-```{r agpop-simulation, cache=TRUE}
+```{r fig-agpop-ratio-simulation-boxplot, cache=TRUE}
+#| fig-cap: "Estimator variance under repeated sampling: SRS vs. ratio estimator (2000 simulations)"
 nsim <- 2000
 sim_rat <- data.frame(simple = rep(0, nsim), ratio = rep(0, nsim), B = rep(0, nsim))
 
@@ -218,7 +231,8 @@ abline(h = tyU, col = "red", lwd=2)
 
 We now calculate the actual variance across our 2000 simulations.
 
-```{r agpop-sim-variance}
+```{r tbl-agpop-ratio-variance-reduction}
+#| tbl-cap: "Simulated variance and variance reduction: ratio estimator vs. SRS"
 sim_var <- sapply(sim_rat[, 1:2], var)
 ratio_sim_var <- sim_var / sim_var[1]
 percentage_reduction <- 1 - ratio_sim_var
@@ -287,7 +301,8 @@ Nh <- c(NC = 1054, NE = 220, S = 1382, W = 422)
 
 **Create $n_h^{\text{post-strat}} = n \times \frac{N_h}{N}$**, instead of using the randomly observed $n_h$.
 
-```{r agsrs-poststrat-table}
+```{r tbl-agsrs-poststrat-summary}
+#| tbl-cap: "Observed vs. population stratum proportions and post-stratified sample sizes"
 nh_post <- Nh / sum(Nh) * n
 
 ## regional summary for stratified sampling estimation
@@ -346,7 +361,8 @@ prop.table(table(teacher[, 2:1]), margin = "gender")
 
 ### Domain Summary
 
-```{r teacher-domain-summary}
+```{r tbl-teacher-domain-summary}
+#| tbl-cap: "Domain summary statistics for the teacher-aspiration dataset, by gender"
 n <- nrow(teacher)
 ybarh <- tapply(teacher$teacher, INDEX = teacher$gender, FUN = mean)
 sh <- tapply(teacher$teacher, INDEX = teacher$gender, FUN = sd)
@@ -390,7 +406,8 @@ prop_h_pop <- Nh / sum(Nh)
 prop_h_pop
 ```
 #### Create $n_h^{\text{post-strat}} = n \times \frac{N_h}{N}$ {-}
-```{r teacher-poststrat-table}
+```{r tbl-teacher-poststrat-summary}
+#| tbl-cap: "Observed vs. population gender proportions and post-stratified sample sizes"
 nh_post <- Nh / sum(Nh) * n
 
 ## show the differences
@@ -476,7 +493,10 @@ lmfit <- lm(ydata ~ xdata)
 lmfit_gt <- format_lm_gt(lmfit)
 lmfit_gt$coef
 lmfit_gt$fit
+```
 
+```{r fig-cherry-regression-fit}
+#| fig-cap: "Cherry tree volume vs. diameter with the fitted regression line"
 plot(xdata, ydata, main="Linear Regression: Volume vs Diameter")
 abline(lmfit, col="green", lwd=2)
 ```
@@ -532,7 +552,10 @@ lmfit <- lm(fieldcounts ~ photocounts)
 lmfit_gt <- format_lm_gt(lmfit)
 lmfit_gt$coef
 lmfit_gt$fit
+```
 
+```{r fig-deadtrees-regression-fit}
+#| fig-cap: "Field counts vs. photo counts of dead trees with the fitted regression line"
 plot(photocounts, fieldcounts, main="Field Counts vs Photo Counts")
 abline(lmfit, col="purple", lwd=2)
 ```

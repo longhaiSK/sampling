@@ -203,7 +203,8 @@ To demonstrate the Central Limit Theorem and unbiasedness of the estimator, draw
 
 *(Note: We use `show.details = FALSE` and pull out just `$estimate` here, so the loop skips building 5,000 working tables and stays fast.)*
 
-```{r srs-simulation, fig.height=10}
+```{r fig-srs-simulation-distribution, fig.height=10}
+#| fig-cap: "Population distribution and sampling distribution of the SRS sample mean over 5000 repeated samples (n = 300)"
 nres <- 5000 # number of repeated sampling
 simulation.results <- matrix (0, nres, 4) # matrix recording repeated results
 colnames(simulation.results) <- c( "Est.",   "S.E.",   "ci.low", "ci.upp")
@@ -236,7 +237,8 @@ true.se.ybar
 
 Verify the reliability of the 95% confidence intervals by checking whether the true population mean falls within the calculated bounds for each of the 5,000 samples. The empirical coverage rate should closely approximate 0.95. The plot highlights the first 100 intervals, flagging those that fail to capture the true mean in a distinct color.
 
-```{r srs-coverage, fig.height=6}
+```{r fig-srs-coverage-intervals, fig.height=6}
+#| fig-cap: "First 100 simulated 95% confidence intervals for the SRS sample mean, with coverage failures highlighted"
 library(dplyr)
 library(plotrix) 
 
@@ -263,7 +265,7 @@ mean(simulation.results$`Covered?`)
 
 ```
 
-## Interactive Demonstration
+## Interactive Demonstration {#sec-app-srs}
 
 The static plots above show a snapshot of 5,000 repeated samples. The app below
 draws SRS samples one at a time, or continuously with **Play** until **Stop** or

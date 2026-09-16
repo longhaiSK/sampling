@@ -68,19 +68,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./strata.html" rel="next">
+<link href="./introR.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-f79c7fb6db380d32be398468f2fb58cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a7b5894d5a4c39c6aa3484761f021c1f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/custombook-1.0.0/num_eq.js"></script>
-<script src="site_libs/quarto-contrib/custombook-1.0.0/merge-toc.js"></script>
-<link href="site_libs/quarto-contrib/custombook-1.0.0/bookstyles.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-87aed0b8589e23e45aa8556edf37a91b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <meta name="shinylive:serviceworker_dir" content=".">
 <script src="site_libs/quarto-contrib/shinylive-0.10.12/shinylive/load-shinylive-sw.js" type="module"></script>
 <script src="site_libs/quarto-contrib/shinylive-0.10.12/shinylive/run-python-blocks.js" type="module"></script>
@@ -113,8 +112,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -167,7 +164,7 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
@@ -238,6 +235,12 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Figures, Tables, and Apps</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./appendix.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Estimating Functions Source Code</span></span></a>
   </div>
@@ -246,37 +249,33 @@ window.Quarto = {
   </li>
     </ul>
     </div>
-    <nav id="TOC" role="doc-toc" class="toc-active">
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#analysis-of-agsrs.csv-data" id="toc-analysis-of-agsrs.csv-data" class="nav-link active" data-scroll-target="#analysis-of-agsrs.csv-data"><span class="header-section-number">2.1</span> Analysis of agsrs.csv Data</a>
-  <ul>
-  <li><a href="#step-by-step-calculation-without-using-a-function" id="toc-step-by-step-calculation-without-using-a-function" class="nav-link" data-scroll-target="#step-by-step-calculation-without-using-a-function"><span class="header-section-number">2.1.1</span> Step by step calculation without using a function</a></li>
-  <li><a href="#write-a-function-for-repeated-use" id="toc-write-a-function-for-repeated-use" class="nav-link" data-scroll-target="#write-a-function-for-repeated-use"><span class="header-section-number">2.1.2</span> Write a function for repeated use</a>
   <ul class="collapse">
-  <li><a href="#a-function-for-doing-data-analysis-for-srs-sample" id="toc-a-function-for-doing-data-analysis-for-srs-sample" class="nav-link" data-scroll-target="#a-function-for-doing-data-analysis-for-srs-sample"><span class="header-section-number">2.1.2.1</span> A function for doing data analysis for srs sample</a></li>
-  <li><a href="#apply-srs_est-to-agsrs.csv-data" id="toc-apply-srs_est-to-agsrs.csv-data" class="nav-link" data-scroll-target="#apply-srs_est-to-agsrs.csv-data"><span class="header-section-number">2.1.2.2</span> Apply srs_est to agsrs.csv data</a></li>
-  </ul></li>
+  <li><a href="#step-by-step-calculation-without-using-a-function" id="toc-step-by-step-calculation-without-using-a-function" class="nav-link" data-scroll-target="#step-by-step-calculation-without-using-a-function"><span class="header-section-number">2.1.1</span> Step by step calculation without using a function</a></li>
+  <li><a href="#write-a-function-for-repeated-use" id="toc-write-a-function-for-repeated-use" class="nav-link" data-scroll-target="#write-a-function-for-repeated-use"><span class="header-section-number">2.1.2</span> Write a function for repeated use</a></li>
   <li><a href="#comparing-with-true-value" id="toc-comparing-with-true-value" class="nav-link" data-scroll-target="#comparing-with-true-value"><span class="header-section-number">2.1.3</span> Comparing with true value</a></li>
   </ul></li>
   <li><a href="#a-simulation-demonstration-of-srs-inference" id="toc-a-simulation-demonstration-of-srs-inference" class="nav-link" data-scroll-target="#a-simulation-demonstration-of-srs-inference"><span class="header-section-number">2.2</span> A Simulation Demonstration of SRS Inference</a>
-  <ul>
+  <ul class="collapse">
   <li><a href="#true-values" id="toc-true-values" class="nav-link" data-scroll-target="#true-values"><span class="header-section-number">2.2.1</span> True Values</a></li>
   <li><a href="#one-srs-sampling" id="toc-one-srs-sampling" class="nav-link" data-scroll-target="#one-srs-sampling"><span class="header-section-number">2.2.2</span> One SRS sampling</a></li>
   <li><a href="#repeating-srs-sampling-5000-times" id="toc-repeating-srs-sampling-5000-times" class="nav-link" data-scroll-target="#repeating-srs-sampling-5000-times"><span class="header-section-number">2.2.3</span> Repeating SRS sampling 5000 times</a></li>
   <li><a href="#empirical-coverage-rate-of-cis" id="toc-empirical-coverage-rate-of-cis" class="nav-link" data-scroll-target="#empirical-coverage-rate-of-cis"><span class="header-section-number">2.2.4</span> Empirical Coverage Rate of CIs</a></li>
   </ul></li>
-  <li><a href="#interactive-demonstration" id="toc-interactive-demonstration" class="nav-link" data-scroll-target="#interactive-demonstration"><span class="header-section-number">2.3</span> Interactive Demonstration</a></li>
+  <li><a href="#sec-app-srs" id="toc-sec-app-srs" class="nav-link" data-scroll-target="#sec-app-srs"><span class="header-section-number">2.3</span> Interactive Demonstration</a></li>
   </ul>
 </nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content column-page-right" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -285,7 +284,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta column-page-right">
+<div class="quarto-title-meta">
 
     
   
@@ -310,12 +309,9 @@ window.Quarto = {
 <li><strong>Population Total:</strong> <span class="math inline">\(\hat{t} = N\bar{y}\)</span></li>
 </ul>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## read survey data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>agsrs <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/agsrs.csv"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agsrs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -323,8 +319,6 @@ window.Quarto = {
   </script>
 </div>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## extract the variable of interest</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sdata <span class="ot">&lt;-</span> agsrs<span class="sc">$</span>acres92</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">3078</span></span>
@@ -337,16 +331,12 @@ window.Quarto = {
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="do">## return estimate vector for pop mean</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span> (<span class="at">Est. =</span> ybar, <span class="at">S.E. =</span> se.ybar, <span class="at">ci.low =</span> ybar <span class="sc">-</span> mem, <span class="at">ci.upp =</span> ybar <span class="sc">+</span> mem)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Est.      S.E.    ci.low    ci.upp 
 297897.05  18898.43 260706.26 335087.84 </code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## return estimate vector for pop total</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span> (<span class="at">Est. =</span> ybar, <span class="at">S.E. =</span> se.ybar, <span class="at">ci.low =</span> ybar <span class="sc">-</span> mem, <span class="at">ci.upp =</span> ybar <span class="sc">+</span> mem) <span class="sc">*</span> N</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      Est.       S.E.     ci.low     ci.upp 
  916927110   58169381  802453859 1031400361 </code></pre>
@@ -1185,19 +1175,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <p><em>Import Data</em></p>
 <p>Load the survey sample data representing US counties.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>agsrs <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/agsrs.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 </div>
 <p><em>Estimating the mean of acre92</em></p>
 <p>Calculate the estimated average farm acreage per county using the custom function. The function’s <code>$table</code> shows the row-level working values (truncated to the first 6 rows + Sum), and <code>$estimate</code> holds the final point estimate, SE, and CI, formatted with <code>format_est_gt()</code>.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>res_mean <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(agsrs[,<span class="st">"acres92"</span>], <span class="at">N =</span> <span class="dv">3078</span>, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>res_mean<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="gomqvicdoq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gomqvicdoq table {
@@ -1729,10 +1713,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 
 </div>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res_mean<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="noqxgayykw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#noqxgayykw table {
@@ -2209,11 +2190,8 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <p><em>Estimating the total of acre92</em></p>
 <p>Set <code>estimate = "total"</code> to have the function itself scale the mean and confidence interval by the population size (<span class="math inline">\(N = 3078\)</span>) to estimate the total farm acreage across all counties.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>res_total <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(agsrs[,<span class="st">"acres92"</span>], <span class="at">N =</span> <span class="dv">3078</span>, <span class="at">estimate =</span> <span class="st">"total"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>res_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="cgsoyirqpt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#cgsoyirqpt table {
@@ -2690,19 +2668,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <p><em>Estimating the proportion of counties with fewer than 200K acres for farming in 1992</em></p>
 <p>To estimate a proportion under SRS, create an indicator variable (<span class="math inline">\(y_i = 1\)</span> if true, <span class="math inline">\(0\)</span> if false). The mean of this indicator variable serves as the sample proportion (<span class="math inline">\(\hat{p} = \bar{y}_{indicator}\)</span>).</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>acres92.is.fewer<span class="fl">.200</span>k <span class="ot">&lt;-</span> <span class="fu">as.numeric</span> (agsrs[,<span class="st">"acres92"</span>] <span class="sc">&lt;</span> <span class="dv">200000</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(acres92.is.fewer<span class="fl">.200</span>k)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 1 1 1 1 1</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>res_prop <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(acres92.is.fewer<span class="fl">.200</span>k, <span class="at">N =</span> <span class="dv">3078</span>, <span class="at">estimate =</span> <span class="st">"mean"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>res_prop<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="nealzuuisc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#nealzuuisc table {
@@ -3179,11 +3151,8 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <p><em>Estimating the total number of counties with fewer than 200K acres for farming in 1992</em></p>
 <p>Set <code>estimate = "total"</code> to estimate the absolute count of counties meeting the criteria.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>res_prop_total <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(acres92.is.fewer<span class="fl">.200</span>k, <span class="at">N =</span> <span class="dv">3078</span>, <span class="at">estimate =</span> <span class="st">"total"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>res_prop_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="ansyuseant" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ansyuseant table {
@@ -3663,36 +3632,24 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <h3 data-number="2.1.3" class="anchored" data-anchor-id="comparing-with-true-value"><span class="header-section-number">2.1.3</span> Comparing with true value</h3>
 <p>Load the complete census (population) dataset to calculate the true parameters. This allows us to assess the accuracy of our previous SRS estimates against the exact population values.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/agpop.csv"</span>, <span class="at">na =</span> <span class="st">"-99"</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#true mean</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span> (agpop[, <span class="st">"acres92"</span>], <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308582.4</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># true total</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span> (agpop[, <span class="st">"acres92"</span>], <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 943953599</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># true proportion of counties with less than 200K acres for farming</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span> (agpop[, <span class="st">"acres92"</span>] <span class="sc">&lt;</span> <span class="dv">200000</span>, <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.5145472</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># true number of counties with less than 200K acres for farming</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span> (agpop[, <span class="st">"acres92"</span>] <span class="sc">&lt;</span> <span class="dv">200000</span>, <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1574</code></pre>
 </div>
@@ -3703,13 +3660,10 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <h2 data-number="2.2" class="anchored" data-anchor-id="a-simulation-demonstration-of-srs-inference"><span class="header-section-number">2.2</span> A Simulation Demonstration of SRS Inference</h2>
 <p>Load the full population data and filter out missing values to serve as a complete, known finite population for resampling experiments.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read population data </span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"data/agpop.csv"</span>)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># remove those counties with na</span></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">subset</span>( agpop, acres92 <span class="sc">!=</span> <span class="sc">-</span><span class="dv">99</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 </div>
 <section id="true-values" class="level3" data-number="2.2.1">
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="true-values"><span class="header-section-number">2.2.1</span> True Values</h3>
@@ -3717,29 +3671,20 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <p><strong>Theoretical Standard Error:</strong></p>
 <p><span class="math display">\[\mathrm{SE}_{true}(\bar{y}) = \sqrt{1 - \frac{n}{N}} \left(\frac{S}{\sqrt{n}}\right)\]</span></p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sample size</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">300</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># population size</span></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span> (agpop); N</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3059</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># true value of population mean</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>ybarU <span class="ot">&lt;-</span> <span class="fu">mean</span> (agpop[,<span class="st">"acres92"</span>]); ybarU</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308582.4</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># true value of deviation of sample mean</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>true.se.ybar <span class="ot">&lt;-</span> <span class="fu">sqrt</span> (<span class="dv">1</span><span class="sc">-</span> n<span class="sc">/</span>N) <span class="sc">*</span> <span class="fu">sd</span> (agpop[,<span class="st">"acres92"</span>]) <span class="sc">/</span> <span class="fu">sqrt</span> (n); true.se.ybar</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 23320.29</code></pre>
 </div>
@@ -3749,13 +3694,10 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <h3 data-number="2.2.2" class="anchored" data-anchor-id="one-srs-sampling"><span class="header-section-number">2.2.2</span> One SRS sampling</h3>
 <p>Draw a single random sample of size <span class="math inline">\(n=300\)</span> from the population and run our estimator function to see a single instance of survey inference.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># srs sampling</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>srs <span class="ot">&lt;-</span> <span class="fu">sample</span> (<span class="dv">1</span><span class="sc">:</span>N,n)</span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agpop [srs, ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -3763,14 +3705,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   </script>
 </div>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get data of variable "acres92"</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>sdata <span class="ot">&lt;-</span> agpop [srs, <span class="st">"acres92"</span>]</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># analysis</span></span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>res_one <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(sdata, N, <span class="at">estimate =</span> <span class="st">"mean"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>res_one<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <div id="vtymyaiijd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#vtymyaiijd table {
@@ -4250,8 +4189,6 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <p>To demonstrate the Central Limit Theorem and unbiasedness of the estimator, draw 5,000 independent samples, storing the estimates from each iteration. We plot the resulting sampling distribution against the true population mean.</p>
 <p><em>(Note: We use <code>show.details = FALSE</code> and pull out just <code>$estimate</code> here, so the loop skips building 5,000 working tables and stays fast.)</em></p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>nres <span class="ot">&lt;-</span> <span class="dv">5000</span> <span class="co"># number of repeated sampling</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>simulation.results <span class="ot">&lt;-</span> <span class="fu">matrix</span> (<span class="dv">0</span>, nres, <span class="dv">4</span>) <span class="co"># matrix recording repeated results</span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(simulation.results) <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"Est."</span>,   <span class="st">"S.E."</span>,   <span class="st">"ci.low"</span>, <span class="st">"ci.upp"</span>)</span>
@@ -4264,7 +4201,6 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(simulation.results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>         Est.     S.E.   ci.low   ci.upp
 [1,] 286222.3 18927.04 248975.2 323469.4
@@ -4274,8 +4210,6 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 [5,] 296503.0 18925.28 259259.3 333746.6
 [6,] 311325.7 25990.48 260178.2 362473.1</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># look at the distribution of sample mean</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span> (<span class="at">mfrow=</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span> (agpop<span class="sc">$</span>acres92,<span class="at">main =</span> <span class="st">"Population Distribution of acre92"</span>)</span>
@@ -4283,42 +4217,35 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span> (<span class="at">v =</span> ybarU, <span class="at">col =</span> <span class="st">"red"</span>)</span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span> (simulation.results[,<span class="dv">1</span>], <span class="at">main=</span><span class="st">"QQ plot of Sample Mean"</span>); <span class="fu">qqline</span>(simulation.results[,<span class="dv">1</span>])</span>
 <span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span> (simulation.results[,<span class="dv">1</span>], <span class="at">main =</span> <span class="st">"Boxplot of Sample Mean"</span>)</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span> (<span class="at">h =</span> ybarU, <span class="at">col =</span> <span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="srs_files/figure-html/srs-simulation-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span> (simulation.results[,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span> (<span class="at">h =</span> ybarU, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span> (simulation.results[,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308678.2</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>ybarU</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>ybarU</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308582.4</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span> (simulation.results [,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span> (simulation.results [,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 23078.62</code></pre>
 </div>
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>true.se.ybar</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>true.se.ybar</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 23320.29</code></pre>
+</div>
+<div class="cell-output-display">
+<div id="fig-srs-simulation-distribution" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-srs-simulation-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="srs_files/figure-html/fig-srs-simulation-distribution-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-srs-simulation-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: Population distribution and sampling distribution of the SRS sample mean over 5000 repeated samples (n = 300)
+</figcaption>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -4326,28 +4253,25 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <h3 data-number="2.2.4" class="anchored" data-anchor-id="empirical-coverage-rate-of-cis"><span class="header-section-number">2.2.4</span> Empirical Coverage Rate of CIs</h3>
 <p>Verify the reliability of the 95% confidence intervals by checking whether the true population mean falls within the calculated bounds for each of the 5,000 samples. The empirical coverage rate should closely approximate 0.95. The plot highlights the first 100 intervals, flagging those that fail to capture the true mean in a distinct color.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotrix) </span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to data frame (if it was a matrix) and use mutate to evaluate coverage</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>simulation.results <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(simulation.results) <span class="sc">|&gt;</span></span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Covered?</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(ci.low <span class="sc">&lt;</span> ybarU <span class="sc">&amp;</span> ybarU <span class="sc">&lt;</span> ci.upp)</span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(simulation.results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output-display">
-<div data-pagedtable="false">
-  <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Est."],"name":[1],"type":["dbl"],"align":["right"]},{"label":["S.E."],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ci.low"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["ci.upp"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Covered?"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"286222.3","2":"18927.04","3":"248975.2","4":"323469.4","5":"1","_rn_":"1"},{"1":"347565.3","2":"30340.50","3":"287857.4","4":"407273.3","5":"1","_rn_":"2"},{"1":"276351.8","2":"16116.52","3":"244635.6","4":"308067.9","5":"0","_rn_":"3"},{"1":"293295.5","2":"19449.34","3":"255020.6","4":"331570.4","5":"1","_rn_":"4"},{"1":"296503.0","2":"18925.28","3":"259259.3","4":"333746.6","5":"1","_rn_":"5"},{"1":"311325.7","2":"25990.48","3":"260178.2","4":"362473.1","5":"1","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotrix) </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to data frame (if it was a matrix) and use mutate to evaluate coverage</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>simulation.results <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(simulation.results) <span class="sc">|&gt;</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Covered?</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(ci.low <span class="sc">&lt;</span> ybarU <span class="sc">&amp;</span> ybarU <span class="sc">&lt;</span> ci.upp)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(simulation.results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Est.     S.E.   ci.low   ci.upp Covered?
+1 286222.3 18927.04 248975.2 323469.4        1
+2 347565.3 30340.50 287857.4 407273.3        1
+3 276351.8 16116.52 244635.6 308067.9        0
+4 293295.5 19449.34 255020.6 331570.4        1
+5 296503.0 18925.28 259259.3 333746.6        1
+6 311325.7 25990.48 260178.2 362473.1        1</code></pre>
 </div>
-</div>
-<details open="" class="code-fold">
-<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotCI</span>(</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>,</span>
@@ -4356,28 +4280,30 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ui =</span> simulation.results<span class="sc">$</span>ci.upp[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],</span>
 <span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="dv">2</span> <span class="sc">-</span> simulation.results<span class="sc">$</span><span class="st">`</span><span class="at">Covered?</span><span class="st">`</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>]</span>
 <span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> ybarU, <span class="at">col =</span> <span class="st">"blue"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="srs_files/figure-html/srs-coverage-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Empirical coverage rate</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(simulation.results<span class="sc">$</span><span class="st">`</span><span class="at">Covered?</span><span class="st">`</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> ybarU, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Empirical coverage rate</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(simulation.results<span class="sc">$</span><span class="st">`</span><span class="at">Covered?</span><span class="st">`</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9342</code></pre>
 </div>
+<div class="cell-output-display">
+<div id="fig-srs-coverage-intervals" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-srs-coverage-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="srs_files/figure-html/fig-srs-coverage-intervals-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-srs-coverage-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.2: First 100 simulated 95% confidence intervals for the SRS sample mean, with coverage failures highlighted
+</figcaption>
+</figure>
+</div>
+</div>
 </div>
 </section>
 </section>
-<section id="interactive-demonstration" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="interactive-demonstration"><span class="header-section-number">2.3</span> Interactive Demonstration</h2>
+<section id="sec-app-srs" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-app-srs"><span class="header-section-number">2.3</span> Interactive Demonstration</h2>
 <p>The static plots above show a snapshot of 5,000 repeated samples. The app below draws SRS samples one at a time, or continuously with <strong>Play</strong> until <strong>Stop</strong> or until the requested number of samples has been reached.</p>
 <p>The top panel shows the population of <code>acres92</code>: the grey curve is a kernel density estimate and the grey points below the axis are the raw values, jittered vertically. The axis is broken at twice the population mean; counties above the cut are compressed, in rank order, into the narrow lane at the right, so that a tail unit drawn into the sample is still visible. Points selected into the current sample turn red.</p>
 <p>The bottom panel accumulates the sample means. Its window is fixed at five theoretical standard errors for <span class="math inline">\(n = 100\)</span> on either side of <span class="math inline">\(\mu\)</span>, so the spread is comparable across sample sizes; for <span class="math inline">\(n &lt; 100\)</span> some means fall outside the window and are counted in the legend. The interval above the histogram belongs to the current sample, drawn green when it covers <span class="math inline">\(\mu\)</span> and red when it does not, and replaced at every draw. Both panels are centred on <span class="math inline">\(\mu\)</span>, so the two dashed lines are vertically aligned.</p>
@@ -5003,6 +4929,18 @@ shinyApp(ui, server)
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./introR.html" class="pagination-link" aria-label="Data Analysis with R">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./strata.html" class="pagination-link" aria-label="Stratified Random Sampling">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

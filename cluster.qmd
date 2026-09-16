@@ -61,7 +61,8 @@ Consider a population of 187 high school algebra classes in a city. An investiga
 
 We read the raw data and display it using `gt`'s interactive pagination feature to keep the document clean.
 
-```{r algebra-load}
+```{r tbl-algebra-raw-data}
+#| tbl-cap: "Raw data: algebra classes (sample)"
 algebra <- read.csv("data/algebra.csv")
 
 algebra |>
@@ -99,7 +100,8 @@ alg_res$estimate |> format_est_gt("ratio_mean")
 In two-stage cluster sampling, we sample clusters, and then subsample elements within them. In this dataset, researcher Arnold investigated coot eggs. He first selected a random sample of clutches (the clusters), and then measured the volume of a random subsample of eggs within each selected clutch.
 
 
-```{r coots-load}
+```{r tbl-coots-raw-data}
+#| tbl-cap: "Raw data: coot egg clutches (sample)"
 coots <- read.csv("data/coots.csv")
 
 coots |>
