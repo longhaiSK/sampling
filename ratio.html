@@ -68,18 +68,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./cluster.html" rel="next">
-<link href="./strata.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-f79c7fb6db380d32be398468f2fb58cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87aed0b8589e23e45aa8556edf37a91b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a7b5894d5a4c39c6aa3484761f021c1f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/custombook-1.0.0/num_eq.js"></script>
+<script src="site_libs/quarto-contrib/custombook-1.0.0/merge-toc.js"></script>
+<link href="site_libs/quarto-contrib/custombook-1.0.0/bookstyles.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -107,6 +108,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -159,7 +162,7 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
@@ -244,53 +247,70 @@ window.Quarto = {
   </li>
     </ul>
     </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+    <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
   <li><a href="#functions-and-packages-for-analyzing-data" id="toc-functions-and-packages-for-analyzing-data" class="nav-link active" data-scroll-target="#functions-and-packages-for-analyzing-data"><span class="header-section-number">4.1</span> Functions and packages for Analyzing Data</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#general-functions-for-ratio-and-regression-estimation" id="toc-general-functions-for-ratio-and-regression-estimation" class="nav-link" data-scroll-target="#general-functions-for-ratio-and-regression-estimation"><span class="header-section-number">4.1.1</span> General functions for ratio and regression estimation</a></li>
   </ul></li>
   <li><a href="#ratio-estimation-for-cherry.csv-dataset" id="toc-ratio-estimation-for-cherry.csv-dataset" class="nav-link" data-scroll-target="#ratio-estimation-for-cherry.csv-dataset"><span class="header-section-number">4.2</span> Ratio Estimation for cherry.csv dataset</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data"><span class="header-section-number">4.2.1</span> Importing data</a></li>
   <li><a href="#srs-estimate" id="toc-srs-estimate" class="nav-link" data-scroll-target="#srs-estimate"><span class="header-section-number">4.2.2</span> SRS estimate</a></li>
-  <li><a href="#ratio-estimation-using-the-function" id="toc-ratio-estimation-using-the-function" class="nav-link" data-scroll-target="#ratio-estimation-using-the-function"><span class="header-section-number">4.2.3</span> Ratio Estimation Using the Function</a></li>
+  <li><a href="#ratio-estimation-using-the-function" id="toc-ratio-estimation-using-the-function" class="nav-link" data-scroll-target="#ratio-estimation-using-the-function"><span class="header-section-number">4.2.3</span> Ratio Estimation Using the Function</a>
+  <ul class="collapse">
+  <li><a href="#estimating-the-mean-volume-of-wood" id="toc-estimating-the-mean-volume-of-wood" class="nav-link" data-scroll-target="#estimating-the-mean-volume-of-wood"><span class="header-section-number">4.2.3.1</span> Estimating the mean volume of wood</a></li>
+  <li><a href="#estimating-the-total-volume-of-wood" id="toc-estimating-the-total-volume-of-wood" class="nav-link" data-scroll-target="#estimating-the-total-volume-of-wood"><span class="header-section-number">4.2.3.2</span> Estimating the total volume of wood</a></li>
+  <li><a href="#percentage-of-variance-reduction" id="toc-percentage-of-variance-reduction" class="nav-link" data-scroll-target="#percentage-of-variance-reduction"><span class="header-section-number">4.2.3.3</span> Percentage of Variance Reduction</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#simulation-study-with-agpop.csv" id="toc-simulation-study-with-agpop.csv" class="nav-link" data-scroll-target="#simulation-study-with-agpop.csv"><span class="header-section-number">4.3</span> Simulation study with agpop.csv</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#information-of-population-data" id="toc-information-of-population-data" class="nav-link" data-scroll-target="#information-of-population-data"><span class="header-section-number">4.3.1</span> Information of population data</a></li>
   <li><a href="#simulation-studies" id="toc-simulation-studies" class="nav-link" data-scroll-target="#simulation-studies"><span class="header-section-number">4.3.2</span> Simulation Studies</a></li>
   </ul></li>
   <li><a href="#estimating-domain-means-and-post-stratification-with-agsrs.csv-example" id="toc-estimating-domain-means-and-post-stratification-with-agsrs.csv-example" class="nav-link" data-scroll-target="#estimating-domain-means-and-post-stratification-with-agsrs.csv-example"><span class="header-section-number">4.4</span> Estimating Domain Means and Post-stratification with agsrs.csv example</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#estimating-domain-means" id="toc-estimating-domain-means" class="nav-link" data-scroll-target="#estimating-domain-means"><span class="header-section-number">4.4.1</span> Estimating Domain Means</a></li>
   <li><a href="#post-stratification-analysis" id="toc-post-stratification-analysis" class="nav-link" data-scroll-target="#post-stratification-analysis"><span class="header-section-number">4.4.2</span> Post-stratification Analysis</a></li>
   </ul></li>
   <li><a href="#estimating-domain-means-and-post-stratification-with-teacher-example" id="toc-estimating-domain-means-and-post-stratification-with-teacher-example" class="nav-link" data-scroll-target="#estimating-domain-means-and-post-stratification-with-teacher-example"><span class="header-section-number">4.5</span> Estimating Domain Means and Post-stratification with teacher example</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#importing-data-and-calculating-contingency-table" id="toc-importing-data-and-calculating-contingency-table" class="nav-link" data-scroll-target="#importing-data-and-calculating-contingency-table"><span class="header-section-number">4.5.1</span> Importing Data and Calculating Contingency Table</a></li>
   <li><a href="#domain-summary" id="toc-domain-summary" class="nav-link" data-scroll-target="#domain-summary"><span class="header-section-number">4.5.2</span> Domain Summary</a></li>
   <li><a href="#estimating-domain-means-1" id="toc-estimating-domain-means-1" class="nav-link" data-scroll-target="#estimating-domain-means-1"><span class="header-section-number">4.5.3</span> Estimating Domain Means</a></li>
-  <li><a href="#post-stratification-analysis-1" id="toc-post-stratification-analysis-1" class="nav-link" data-scroll-target="#post-stratification-analysis-1"><span class="header-section-number">4.5.4</span> Post-stratification Analysis</a></li>
+  <li><a href="#post-stratification-analysis-1" id="toc-post-stratification-analysis-1" class="nav-link" data-scroll-target="#post-stratification-analysis-1"><span class="header-section-number">4.5.4</span> Post-stratification Analysis</a>
+  <ul class="collapse">
+  <li><a href="#create-n_htextpost-strat-n-times-fracn_hn" id="toc-create-n_htextpost-strat-n-times-fracn_hn" class="nav-link" data-scroll-target="#create-n_htextpost-strat-n-times-fracn_hn">Create <span class="math inline">\(n_h^{\text{post-strat}} = n \times \frac{N_h}{N}\)</span></a></li>
+  </ul></li>
   <li><a href="#comparing-to-the-analysis-with-srs" id="toc-comparing-to-the-analysis-with-srs" class="nav-link" data-scroll-target="#comparing-to-the-analysis-with-srs"><span class="header-section-number">4.5.5</span> Comparing to the Analysis with SRS</a></li>
   </ul></li>
   <li><a href="#regression-estimation-for-the-cherry.csv-dataset" id="toc-regression-estimation-for-the-cherry.csv-dataset" class="nav-link" data-scroll-target="#regression-estimation-for-the-cherry.csv-dataset"><span class="header-section-number">4.6</span> Regression Estimation for the cherry.csv dataset</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#importing-data-1" id="toc-importing-data-1" class="nav-link" data-scroll-target="#importing-data-1"><span class="header-section-number">4.6.1</span> Importing data</a></li>
-  <li><a href="#regression-estimation-using-the-function" id="toc-regression-estimation-using-the-function" class="nav-link" data-scroll-target="#regression-estimation-using-the-function"><span class="header-section-number">4.6.2</span> Regression Estimation Using the Function</a></li>
+  <li><a href="#regression-estimation-using-the-function" id="toc-regression-estimation-using-the-function" class="nav-link" data-scroll-target="#regression-estimation-using-the-function"><span class="header-section-number">4.6.2</span> Regression Estimation Using the Function</a>
+  <ul class="collapse">
+  <li><a href="#fitting-a-linear-regression-model" id="toc-fitting-a-linear-regression-model" class="nav-link" data-scroll-target="#fitting-a-linear-regression-model"><span class="header-section-number">4.6.2.1</span> Fitting a linear regression model</a></li>
+  <li><a href="#estimate-the-mean" id="toc-estimate-the-mean" class="nav-link" data-scroll-target="#estimate-the-mean"><span class="header-section-number">4.6.2.2</span> Estimate the mean</a></li>
+  <li><a href="#estimate-the-total" id="toc-estimate-the-total" class="nav-link" data-scroll-target="#estimate-the-total"><span class="header-section-number">4.6.2.3</span> Estimate the total</a></li>
+  <li><a href="#percentage-of-variance-reduction-1" id="toc-percentage-of-variance-reduction-1" class="nav-link" data-scroll-target="#percentage-of-variance-reduction-1"><span class="header-section-number">4.6.2.4</span> Percentage of Variance Reduction</a></li>
   </ul></li>
-  <li><a href="#regression-estimation-for-photo-counts-of-dead-trees" id="toc-regression-estimation-for-photo-counts-of-dead-trees" class="nav-link" data-scroll-target="#regression-estimation-for-photo-counts-of-dead-trees"><span class="header-section-number">4.7</span> Regression estimation for photo counts of dead trees</a></li>
+  </ul></li>
+  <li><a href="#regression-estimation-for-photo-counts-of-dead-trees" id="toc-regression-estimation-for-photo-counts-of-dead-trees" class="nav-link" data-scroll-target="#regression-estimation-for-photo-counts-of-dead-trees"><span class="header-section-number">4.7</span> Regression estimation for photo counts of dead trees</a>
+  <ul>
+  <li><a href="#output-note" id="toc-output-note" class="nav-link" data-scroll-target="#output-note">Output Note:</a></li>
+  </ul></li>
   </ul>
 </nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -299,7 +319,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page-right">
 
     
   
@@ -1168,8 +1188,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="importing-data"><span class="header-section-number">4.2.1</span> Importing data</h3>
 <p>First, let’s load the data and verify that a strong linear relationship passing near the origin exists between volume and diameter.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cherry <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/cherry.csv"</span>, <span class="at">header =</span> T)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cherry) <span class="sc">|&gt;</span> <span class="fu">gt</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div id="tbl-cherry-sample-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cherry-sample-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1676,8 +1699,11 @@ Table&nbsp;4.1: Sample data: cherry tree volume and diameter
 </div>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cherry<span class="sc">$</span>volume <span class="sc">~</span> cherry<span class="sc">$</span>diameter, <span class="at">main =</span> <span class="st">"Volume vs Diameter"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(<span class="fu">lm</span>(cherry<span class="sc">$</span>volume <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> cherry<span class="sc">$</span>diameter))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
@@ -1707,11 +1733,14 @@ Figure&nbsp;4.1: Cherry tree volume vs.&nbsp;diameter
 <h3 data-number="4.2.2" class="anchored" data-anchor-id="srs-estimate"><span class="header-section-number">4.2.2</span> SRS estimate</h3>
 <p>To establish a baseline, we first estimate the mean and total volume using standard Simple Random Sampling (ignoring the auxiliary variable).</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">2967</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="do">## estimating the mean of volume</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>res_srs_vol <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(cherry<span class="sc">$</span>volume, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"mean"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>srs_mean_vol_raw <span class="ot">&lt;-</span> res_srs_vol<span class="sc">$</span>estimate</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>srs_mean_vol_raw <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="twqvwbgtqj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#twqvwbgtqj table {
@@ -2184,10 +2213,13 @@ Figure&nbsp;4.1: Cherry tree volume vs.&nbsp;diameter
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## estimating the total of volume</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>res_srs_total_vol <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(cherry<span class="sc">$</span>volume, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>srs_total_vol_raw <span class="ot">&lt;-</span> res_srs_total_vol<span class="sc">$</span>estimate</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>srs_total_vol_raw <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="iujyblokha" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#iujyblokha table {
@@ -2667,12 +2699,15 @@ Figure&nbsp;4.1: Cherry tree volume vs.&nbsp;diameter
 <h3 data-number="4.2.3" class="anchored" data-anchor-id="ratio-estimation-using-the-function"><span class="header-section-number">4.2.3</span> Ratio Estimation Using the Function</h3>
 <p>We calculate the ratio <span class="math inline">\(\hat{B} = \overline{y}/\overline{x}\)</span>; the function’s <code>$table</code> shows the row-level working values <span class="math inline">\(x_i\)</span>, <span class="math inline">\(y_i\)</span>, fitted <span class="math inline">\(\hat{y}_i = \hat{B}x_i\)</span>, residuals <span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>, and <span class="math inline">\(e_i^2\)</span> (with a Sum row and a footnote giving <span class="math inline">\(\hat B\)</span> and <span class="math inline">\(s_e^2\)</span>), so we no longer need to build this table by hand.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ydata <span class="ot">&lt;-</span> cherry<span class="sc">$</span>volume</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>xdata <span class="ot">&lt;-</span> cherry<span class="sc">$</span>diameter</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">2967</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>res_ratio_model <span class="ot">&lt;-</span> <span class="fu">ratio_est</span>(ydata, xdata, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"model"</span>)</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>res_ratio_model<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="czqieiaxyh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#czqieiaxyh table {
@@ -3224,8 +3259,11 @@ Figure&nbsp;4.1: Cherry tree volume vs.&nbsp;diameter
 </div>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cherry<span class="sc">$</span>volume <span class="sc">~</span> cherry<span class="sc">$</span>diameter, <span class="at">main=</span><span class="st">"Ratio Estimation Fit"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> res_ratio_model<span class="sc">$</span>estimate[<span class="st">"Est."</span>], <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="fig-cherry-ratio-fit" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -3241,8 +3279,11 @@ Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 </div>
 <p><strong>Output Note:</strong> The blue line represents our estimated ratio <span class="math inline">\(\hat{B} \approx 2.28\)</span>. The working table above shows the individual residuals used to estimate <span class="math inline">\(s_e^2\)</span>.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>B_v2d <span class="ot">&lt;-</span> res_ratio_model<span class="sc">$</span>estimate</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>B_v2d <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"ratio"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="mdxrjbbxsg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#mdxrjbbxsg table {
@@ -3721,9 +3762,12 @@ Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 <h4 data-number="4.2.3.1" class="anchored" data-anchor-id="estimating-the-mean-volume-of-wood"><span class="header-section-number">4.2.3.1</span> Estimating the mean volume of wood</h4>
 <p>If we know the true total of the population diameters is 41,835, we can derive the population mean diameter <span class="math inline">\(\overline{x}_{\text{U}}\)</span> and pass it as <code>xbarU</code> with <code>estimate = "mean"</code>.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mean_diameters <span class="ot">&lt;-</span> <span class="dv">41835</span> <span class="sc">/</span> N</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>res_ratio_mean <span class="ot">&lt;-</span> <span class="fu">ratio_est</span>(ydata, xdata, <span class="at">xbarU =</span> mean_diameters, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>res_ratio_mean<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="qcawtcryci" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#qcawtcryci table {
@@ -4273,8 +4317,11 @@ Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ratio_mean_volume_raw <span class="ot">&lt;-</span> res_ratio_mean<span class="sc">$</span>estimate</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ratio_mean_volume_raw <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="igjtczpeoq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#igjtczpeoq table {
@@ -4753,10 +4800,13 @@ Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 <h4 data-number="4.2.3.2" class="anchored" data-anchor-id="estimating-the-total-volume-of-wood"><span class="header-section-number">4.2.3.2</span> Estimating the total volume of wood</h4>
 <p>Using <code>estimate = "total"</code> with the known population total diameter gives the estimated population total volume directly.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>t_diameters <span class="ot">&lt;-</span> <span class="dv">41835</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>res_ratio_total <span class="ot">&lt;-</span> <span class="fu">ratio_est</span>(ydata, xdata, <span class="at">xbarU =</span> t_diameters <span class="sc">/</span> N, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>)</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>res_ratio_total<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="rrulymuyzk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rrulymuyzk table {
@@ -5306,8 +5356,11 @@ Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ratio_total_volume <span class="ot">&lt;-</span> res_ratio_total<span class="sc">$</span>estimate</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ratio_total_volume <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="lszzvtqpds" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#lszzvtqpds table {
@@ -5786,8 +5839,11 @@ Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 <h4 data-number="4.2.3.3" class="anchored" data-anchor-id="percentage-of-variance-reduction"><span class="header-section-number">4.2.3.3</span> Percentage of Variance Reduction</h4>
 <p>How much did ratio estimation help compared to ignoring the auxiliary variable?</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>variance_reduction <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (ratio_mean_volume_raw[<span class="st">"S.E."</span>] <span class="sc">/</span> srs_mean_vol_raw[<span class="st">"S.E."</span>])<span class="sc">^</span><span class="dv">2</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unname</span>(variance_reduction)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.6057237</code></pre>
 </div>
@@ -5802,6 +5858,8 @@ Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 <section id="information-of-population-data" class="level3" data-number="4.3.1">
 <h3 data-number="4.3.1" class="anchored" data-anchor-id="information-of-population-data"><span class="header-section-number">4.3.1</span> Information of population data</h3>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/agpop.csv"</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> agpop[agpop<span class="sc">$</span>acres92 <span class="sc">!=</span> <span class="sc">-</span><span class="dv">99</span>, ] <span class="do">## remove those counties with na</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -5815,10 +5873,14 @@ Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 <span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># suppose known for ratio estimate</span></span>
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>txU <span class="ot">&lt;-</span> <span class="fu">sum</span>(agpop[, <span class="st">"acres87"</span>]) </span>
 <span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> tyU <span class="sc">/</span> txU</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(agpop[, <span class="st">"acres87"</span>], agpop[, <span class="st">"acres92"</span>], <span class="at">main=</span><span class="st">"Acres 1992 vs Acres 1987"</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> B, <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="fig-agpop-acres8792-ratio-line" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -5833,9 +5895,12 @@ Figure&nbsp;4.3: 1992 vs.&nbsp;1987 county acreage with the true ratio line
 </div>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># linear model output</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>lm_gt <span class="ot">&lt;-</span> <span class="fu">format_lm_gt</span>(<span class="fu">lm</span>(agpop<span class="sc">$</span>acres92 <span class="sc">~</span> agpop<span class="sc">$</span>acres87))</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>lm_gt<span class="sc">$</span>coef</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="gnisubslfp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gnisubslfp table {
@@ -6320,7 +6385,10 @@ Figure&nbsp;4.3: 1992 vs.&nbsp;1987 county acreage with the true ratio line
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>lm_gt<span class="sc">$</span>fit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="ipguntikye" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ipguntikye table {
@@ -6798,9 +6866,12 @@ Figure&nbsp;4.3: 1992 vs.&nbsp;1987 county acreage with the true ratio line
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># expected reduction of variance of ratio estimate to srs</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>exp_var_red <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">var</span>(agpop<span class="sc">$</span>acres92 <span class="sc">-</span> B <span class="sc">*</span> agpop<span class="sc">$</span>acres87) <span class="sc">/</span> <span class="fu">var</span>(agpop<span class="sc">$</span>acres92)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>exp_var_red</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9917355</code></pre>
 </div>
@@ -6810,6 +6881,8 @@ Figure&nbsp;4.3: 1992 vs.&nbsp;1987 county acreage with the true ratio line
 <section id="simulation-studies" class="level3" data-number="4.3.2">
 <h3 data-number="4.3.2" class="anchored" data-anchor-id="simulation-studies"><span class="header-section-number">4.3.2</span> Simulation Studies</h3>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>nsim <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>sim_rat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">simple =</span> <span class="fu">rep</span>(<span class="dv">0</span>, nsim), <span class="at">ratio =</span> <span class="fu">rep</span>(<span class="dv">0</span>, nsim), <span class="at">B =</span> <span class="fu">rep</span>(<span class="dv">0</span>, nsim))</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -6827,6 +6900,7 @@ Figure&nbsp;4.3: 1992 vs.&nbsp;1987 county acreage with the true ratio line
 <span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(sim_rat[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">main=</span><span class="st">"Estimator Variance: SRS vs Ratio"</span>)</span>
 <span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> tyU, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="fig-agpop-ratio-simulation-boxplot" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -6842,6 +6916,8 @@ Figure&nbsp;4.4: Estimator variance under repeated sampling: SRS vs.&nbsp;ratio 
 </div>
 <p>We now calculate the actual variance across our 2000 simulations.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sim_var <span class="ot">&lt;-</span> <span class="fu">sapply</span>(sim_rat[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], var)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>ratio_sim_var <span class="ot">&lt;-</span> sim_var <span class="sc">/</span> sim_var[<span class="dv">1</span>]</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>percentage_reduction <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> ratio_sim_var</span>
@@ -6856,6 +6932,7 @@ Figure&nbsp;4.4: Estimator variance under repeated sampling: SRS vs.&nbsp;ratio 
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(sim_var), <span class="at">decimals =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_percent</span>(<span class="at">columns =</span> <span class="fu">c</span>(percentage_reduction), <span class="at">decimals =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
 <span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(ratio_sim_var), <span class="at">decimals =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div id="tbl-agpop-ratio-variance-reduction" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-agpop-ratio-variance-reduction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -7353,6 +7430,8 @@ Table&nbsp;4.2: Simulated variance and variance reduction: ratio estimator vs.&n
 <h3 data-number="4.4.1" class="anchored" data-anchor-id="estimating-domain-means"><span class="header-section-number">4.4.1</span> Estimating Domain Means</h3>
 <p>When estimating the mean for a specific subgroup (like a region), the sample size in that subgroup (<span class="math inline">\(n_d\)</span>) is a random variable, which increases our uncertainty.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>agsrs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/agsrs.csv"</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(agsrs)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -7365,6 +7444,7 @@ Table&nbsp;4.2: Simulated variance and variance reduction: ratio estimator vs.&n
 <span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>))</span>
 <span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>region_agsrs_domain <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"domain_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="zeijqsclwl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#zeijqsclwl table {
@@ -7863,6 +7943,8 @@ Table&nbsp;4.2: Simulated variance and variance reduction: ratio estimator vs.&n
 </div>
 <p>If we incorrectly used the standard SRS formula (pretending <span class="math inline">\(n_d\)</span> was fixed), our standard errors would be artificially low:</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="do">## naively applying SRS estimation to each domain (incorrect analysis)</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>region_agsrs_srs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">rbind</span>(</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">NC =</span> <span class="fu">srs_est</span>(agsrs<span class="sc">$</span>acres92[agsrs<span class="sc">$</span>region<span class="sc">==</span><span class="st">"NC"</span>], <span class="at">N =</span> <span class="dv">1054</span>, <span class="at">estimate =</span> <span class="st">"mean"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>estimate,</span>
@@ -7872,6 +7954,7 @@ Table&nbsp;4.2: Simulated variance and variance reduction: ratio estimator vs.&n
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>))</span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>region_agsrs_srs <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="taqusohvvn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#taqusohvvn table {
@@ -8374,15 +8457,20 @@ Table&nbsp;4.2: Simulated variance and variance reduction: ratio estimator vs.&n
 <h3 data-number="4.4.2" class="anchored" data-anchor-id="post-stratification-analysis"><span class="header-section-number">4.4.2</span> Post-stratification Analysis</h3>
 <p>If we know the true regional population sizes (<span class="math inline">\(N_h\)</span>), we can post-stratify our SRS data.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>nh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(agsrs[, <span class="st">"acres92"</span>], agsrs[,<span class="st">"region"</span>], length)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">sum</span>(nh)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(agsrs[, <span class="st">"acres92"</span>], agsrs[,<span class="st">"region"</span>], sd)</span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>ybarh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(agsrs[, <span class="st">"acres92"</span>], agsrs[,<span class="st">"region"</span>], mean)</span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create a vector with external information</span></span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>Nh <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">NC =</span> <span class="dv">1054</span>, <span class="at">NE =</span> <span class="dv">220</span>, <span class="at">S =</span> <span class="dv">1382</span>, <span class="at">W =</span> <span class="dv">422</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <p><strong>Create <span class="math inline">\(n_h^{\text{post-strat}} = n \times \frac{N_h}{N}\)</span></strong>, instead of using the randomly observed <span class="math inline">\(n_h\)</span>.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>nh_post <span class="ot">&lt;-</span> Nh <span class="sc">/</span> <span class="fu">sum</span>(Nh) <span class="sc">*</span> n</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="do">## regional summary for stratified sampling estimation</span></span>
@@ -8406,6 +8494,7 @@ Table&nbsp;4.2: Simulated variance and variance reduction: ratio estimator vs.&n
 <span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">nh_post =</span> <span class="fu">md</span>(<span class="st">"$n_h^{</span><span class="sc">\\</span><span class="st">text{post}}$"</span>)</span>
 <span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(ybarh, sh, pi_obs, pi_pop, nh_post), <span class="at">decimals =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div id="tbl-agsrs-poststrat-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-agsrs-poststrat-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -8928,9 +9017,12 @@ Table&nbsp;4.3: Observed vs.&nbsp;population stratum proportions and post-strati
 </div>
 <p><strong>Output Note:</strong> The table above shows the difference between the sample proportion (<span class="math inline">\(\pi^{obs}_h\)</span>) and the true population proportion (<span class="math inline">\(\pi^{pop}_h\)</span>). Post-stratification forces the weights to reflect the true population structure.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="do">## strata mean estimate</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>res_post_strat <span class="ot">&lt;-</span> <span class="fu">str_est</span>(ybarh, sh, nh_post, Nh, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>res_post_strat<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="xrdtjazfod" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xrdtjazfod table {
@@ -9470,8 +9562,11 @@ Table&nbsp;4.3: Observed vs.&nbsp;population stratum proportions and post-strati
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>post_strat_est <span class="ot">&lt;-</span> res_post_strat<span class="sc">$</span>estimate</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>post_strat_est <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="aaqauoslnm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#aaqauoslnm table {
@@ -9944,10 +10039,13 @@ Table&nbsp;4.3: Observed vs.&nbsp;population stratum proportions and post-strati
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="do">## compare with SRS estimate</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>res_srs_est <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(agsrs<span class="sc">$</span>acres92, <span class="at">N =</span> <span class="dv">3087</span>, <span class="at">estimate =</span> <span class="st">"mean"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>srs_est_raw <span class="ot">&lt;-</span> res_srs_est<span class="sc">$</span>estimate</span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>srs_est_raw <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="eoiorwavpo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#eoiorwavpo table {
@@ -10420,8 +10518,11 @@ Table&nbsp;4.3: Observed vs.&nbsp;population stratum proportions and post-strati
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="do">## true mean check</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(agpop<span class="sc">$</span>acres92)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 308582.4</code></pre>
 </div>
@@ -10434,24 +10535,33 @@ Table&nbsp;4.3: Observed vs.&nbsp;population stratum proportions and post-strati
 <section id="importing-data-and-calculating-contingency-table" class="level3" data-number="4.5.1">
 <h3 data-number="4.5.1" class="anchored" data-anchor-id="importing-data-and-calculating-contingency-table"><span class="header-section-number">4.5.1</span> Importing Data and Calculating Contingency Table</h3>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>teacher <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/college_teacher.csv"</span>)</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(teacher[, <span class="dv">2</span><span class="sc">:</span><span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      teacher
 gender   0   1
      1 156  84
      2 120  40</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">addmargins</span>(<span class="fu">table</span>(teacher[, <span class="dv">2</span><span class="sc">:</span><span class="dv">1</span>]), <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      teacher
 gender   0   1 Sum
      1 156  84 240
      2 120  40 160</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Proportions of students who want to become a teacher in two domains (female and male)</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(teacher[, <span class="dv">2</span><span class="sc">:</span><span class="dv">1</span>]), <span class="at">margin =</span> <span class="st">"gender"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      teacher
 gender    0    1
@@ -10463,6 +10573,8 @@ gender    0    1
 <section id="domain-summary" class="level3" data-number="4.5.2">
 <h3 data-number="4.5.2" class="anchored" data-anchor-id="domain-summary"><span class="header-section-number">4.5.2</span> Domain Summary</h3>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(teacher)</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>ybarh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(teacher<span class="sc">$</span>teacher, <span class="at">INDEX =</span> teacher<span class="sc">$</span>gender, <span class="at">FUN =</span> mean)</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">tapply</span>(teacher<span class="sc">$</span>teacher, <span class="at">INDEX =</span> teacher<span class="sc">$</span>gender, <span class="at">FUN =</span> sd)</span>
@@ -10483,6 +10595,7 @@ gender    0    1
 <span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">pi_obs =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">pi^{</span><span class="sc">\\</span><span class="st">text{obs}}_h$"</span>)</span>
 <span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">everything</span>(), <span class="at">decimals =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div id="tbl-teacher-domain-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-teacher-domain-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -10978,6 +11091,8 @@ Table&nbsp;4.4: Domain summary statistics for the teacher-aspiration dataset, by
 <section id="estimating-domain-means-1" class="level3" data-number="4.5.3">
 <h3 data-number="4.5.3" class="anchored" data-anchor-id="estimating-domain-means-1"><span class="header-section-number">4.5.3</span> Estimating Domain Means</h3>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>Nh <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3000</span>, <span class="dv">1000</span>)</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(teacher)</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>domain_teacher_est <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">rbind</span>(</span>
@@ -10986,6 +11101,7 @@ Table&nbsp;4.4: Domain summary statistics for the teacher-aspiration dataset, by
 <span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>))</span>
 <span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>domain_teacher_est <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"domain_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="nshiwpmwer" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#nshiwpmwer table {
@@ -11472,9 +11588,12 @@ Table&nbsp;4.4: Domain summary statistics for the teacher-aspiration dataset, by
 <section id="post-stratification-analysis-1" class="level3" data-number="4.5.4">
 <h3 data-number="4.5.4" class="anchored" data-anchor-id="post-stratification-analysis-1"><span class="header-section-number">4.5.4</span> Post-stratification Analysis</h3>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>Nh <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3000</span>, <span class="dv">1000</span>)</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>prop_h_pop <span class="ot">&lt;-</span> Nh <span class="sc">/</span> <span class="fu">sum</span>(Nh)</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>prop_h_pop</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.75 0.25</code></pre>
 </div>
@@ -11482,6 +11601,8 @@ Table&nbsp;4.4: Domain summary statistics for the teacher-aspiration dataset, by
 <section id="create-n_htextpost-strat-n-times-fracn_hn" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="create-n_htextpost-strat-n-times-fracn_hn">Create <span class="math inline">\(n_h^{\text{post-strat}} = n \times \frac{N_h}{N}\)</span></h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>nh_post <span class="ot">&lt;-</span> Nh <span class="sc">/</span> <span class="fu">sum</span>(Nh) <span class="sc">*</span> n</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="do">## show the differences</span></span>
@@ -11505,6 +11626,7 @@ Table&nbsp;4.4: Domain summary statistics for the teacher-aspiration dataset, by
 <span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">nh_post =</span> <span class="fu">md</span>(<span class="st">"$n_h^{</span><span class="sc">\\</span><span class="st">text{post-strat}}$"</span>)</span>
 <span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(phat, sh, pi_obs, pi_pop, nh_post), <span class="at">decimals =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div id="tbl-teacher-poststrat-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-teacher-poststrat-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -12007,9 +12129,12 @@ Table&nbsp;4.5: Observed vs.&nbsp;population gender proportions and post-stratif
 </div>
 <p>Calculate the post-stratification estimation of the mean:</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="do">## poststratification estimation of mean</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>res_teacher_post_strat <span class="ot">&lt;-</span> <span class="fu">str_est</span>(ybarh, sh, nh_post, Nh, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>res_teacher_post_strat<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="urzuyjhaes" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#urzuyjhaes table {
@@ -12529,8 +12654,11 @@ Table&nbsp;4.5: Observed vs.&nbsp;population gender proportions and post-stratif
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>teacher_post_strat <span class="ot">&lt;-</span> res_teacher_post_strat<span class="sc">$</span>estimate</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>teacher_post_strat <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="odglizkzfm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#odglizkzfm table {
@@ -13006,8 +13134,11 @@ Table&nbsp;4.5: Observed vs.&nbsp;population gender proportions and post-stratif
 </div>
 <p>This post-stratification estimate explicitly corrects for the sampling imbalance using the true strata sizes:</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.35 * 0.75 + 0.25 * 0.25 </span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>(ybarh[<span class="dv">1</span>] <span class="sc">*</span> prop_h_pop[<span class="dv">1</span>]) <span class="sc">+</span> (ybarh[<span class="dv">2</span>] <span class="sc">*</span> prop_h_pop[<span class="dv">2</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>    1 
 0.325 </code></pre>
@@ -13019,13 +13150,19 @@ Table&nbsp;4.5: Observed vs.&nbsp;population gender proportions and post-stratif
 <h3 data-number="4.5.5" class="anchored" data-anchor-id="comparing-to-the-analysis-with-srs"><span class="header-section-number">4.5.5</span> Comparing to the Analysis with SRS</h3>
 <p>If we didn’t post-stratify, the simple mean is heavily weighted toward males because they were over-sampled by chance (40% in sample vs 25% in population).</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>res_teacher_srs <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(teacher<span class="sc">$</span>teacher, <span class="at">N=</span><span class="fu">sum</span>(Nh), <span class="at">estimate =</span> <span class="st">"mean"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>res_teacher_srs<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>NULL</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>teacher_srs <span class="ot">&lt;-</span> res_teacher_srs<span class="sc">$</span>estimate</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>teacher_srs <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="iizjcxyclu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#iizjcxyclu table {
@@ -13501,8 +13638,11 @@ Table&nbsp;4.5: Observed vs.&nbsp;population gender proportions and post-stratif
 </div>
 <p>This equals the naive sample proportion:</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.35 * 0.6 + 0.25 * 0.4</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(teacher<span class="sc">$</span>teacher <span class="sc">==</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.31</code></pre>
 </div>
@@ -13515,12 +13655,15 @@ Table&nbsp;4.5: Observed vs.&nbsp;population gender proportions and post-stratif
 <section id="importing-data-1" class="level3" data-number="4.6.1">
 <h3 data-number="4.6.1" class="anchored" data-anchor-id="importing-data-1"><span class="header-section-number">4.6.1</span> Importing data</h3>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>cherry <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/cherry.csv"</span>, <span class="at">header =</span> T)</span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>ydata <span class="ot">&lt;-</span> cherry<span class="sc">$</span>volume </span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>xdata <span class="ot">&lt;-</span> cherry<span class="sc">$</span>diameter</span>
 <span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>t_diameters <span class="ot">&lt;-</span> <span class="dv">41835</span></span>
 <span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>xbarU <span class="ot">&lt;-</span> t_diameters <span class="sc">/</span> <span class="dv">2967</span> </span>
 <span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">2967</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="regression-estimation-using-the-function" class="level3" data-number="4.6.2">
@@ -13528,10 +13671,13 @@ Table&nbsp;4.5: Observed vs.&nbsp;population gender proportions and post-stratif
 <section id="fitting-a-linear-regression-model" class="level4" data-number="4.6.2.1">
 <h4 data-number="4.6.2.1" class="anchored" data-anchor-id="fitting-a-linear-regression-model"><span class="header-section-number">4.6.2.1</span> Fitting a linear regression model</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(ydata)</span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>lmfit <span class="ot">&lt;-</span> <span class="fu">lm</span>(ydata <span class="sc">~</span> xdata)</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>lmfit_gt <span class="ot">&lt;-</span> <span class="fu">format_lm_gt</span>(lmfit)</span>
 <span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>lmfit_gt<span class="sc">$</span>coef</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="obnxhywwon" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#obnxhywwon table {
@@ -14016,7 +14162,10 @@ Table&nbsp;4.5: Observed vs.&nbsp;population gender proportions and post-stratif
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>lmfit_gt<span class="sc">$</span>fit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="qddbjydxhc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#qddbjydxhc table {
@@ -14496,8 +14645,11 @@ Table&nbsp;4.5: Observed vs.&nbsp;population gender proportions and post-stratif
 </div>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xdata, ydata, <span class="at">main=</span><span class="st">"Linear Regression: Volume vs Diameter"</span>)</span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(lmfit, <span class="at">col=</span><span class="st">"green"</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="fig-cherry-regression-fit" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -14513,8 +14665,11 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 </div>
 <p>The function’s <code>$table</code> shows the row-level working values <span class="math inline">\(x_i\)</span>, <span class="math inline">\(y_i\)</span>, fitted <span class="math inline">\(\hat{y}_i = \hat{B}_0 + \hat{B}_1 x_i\)</span>, residuals <span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>, and <span class="math inline">\(e_i^2\)</span> (with a Sum row and a footnote giving <span class="math inline">\(\hat B_0\)</span>, <span class="math inline">\(\hat B_1\)</span>, and <span class="math inline">\(s_e^2\)</span>):</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>res_reg_model <span class="ot">&lt;-</span> <span class="fu">reg_est</span>(ydata, xdata, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"model"</span>)</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>res_reg_model<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="twicpwlmah" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#twicpwlmah table {
@@ -15070,8 +15225,11 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 <h4 data-number="4.6.2.2" class="anchored" data-anchor-id="estimate-the-mean"><span class="header-section-number">4.6.2.2</span> Estimate the mean</h4>
 <p>We compute the regression estimate <span class="math inline">\(\overline{y}_{reg}\)</span> by passing <code>xbarU</code> with <code>estimate = "mean"</code>.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>res_reg_mean <span class="ot">&lt;-</span> <span class="fu">reg_est</span>(ydata, xdata, <span class="at">xbarU =</span> xbarU, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>res_reg_mean<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="vetjpuznjr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#vetjpuznjr table {
@@ -15621,8 +15779,11 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>output_reg <span class="ot">&lt;-</span> res_reg_mean<span class="sc">$</span>estimate</span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>output_reg <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"reg_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="vtimvyvfgj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#vtimvyvfgj table {
@@ -16101,8 +16262,11 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 <section id="estimate-the-total" class="level4" data-number="4.6.2.3">
 <h4 data-number="4.6.2.3" class="anchored" data-anchor-id="estimate-the-total"><span class="header-section-number">4.6.2.3</span> Estimate the total</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>reg_total_volume_raw <span class="ot">&lt;-</span> <span class="fu">reg_est</span>(ydata, xdata, <span class="at">xbarU =</span> xbarU, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>)<span class="sc">$</span>estimate</span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>reg_total_volume_raw <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"reg_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="oapcbqdxon" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#oapcbqdxon table {
@@ -16580,9 +16744,12 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 <section id="percentage-of-variance-reduction-1" class="level4" data-number="4.6.2.4">
 <h4 data-number="4.6.2.4" class="anchored" data-anchor-id="percentage-of-variance-reduction-1"><span class="header-section-number">4.6.2.4</span> Percentage of Variance Reduction</h4>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>reg_mean_volume_raw <span class="ot">&lt;-</span> output_reg</span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>var_reduction_reg <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (reg_mean_volume_raw[<span class="st">"S.E."</span>] <span class="sc">/</span> srs_mean_vol_raw[<span class="st">"S.E."</span>])<span class="sc">^</span><span class="dv">2</span></span>
 <span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unname</span>(var_reduction_reg)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9330895</code></pre>
 </div>
@@ -16595,6 +16762,8 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 <h2 data-number="4.7" class="anchored" data-anchor-id="regression-estimation-for-photo-counts-of-dead-trees"><span class="header-section-number">4.7</span> Regression estimation for photo counts of dead trees</h2>
 <p>To estimate the number of dead trees in an area, we divide the area into 100 square plots and count dead trees on photographs. We select an SRS of 25 plots for exact field counts. We know the true mean photo count is 11.3.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>photocounts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">12</span>, <span class="dv">7</span>, <span class="dv">13</span>, <span class="dv">13</span>, <span class="dv">6</span>, <span class="dv">17</span>, <span class="dv">16</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">14</span>, <span class="dv">12</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">12</span>, <span class="dv">10</span>,</span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>                 <span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">6</span>, <span class="dv">11</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">10</span>, <span class="dv">10</span>)</span>
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -16604,6 +16773,7 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 <span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>lmfit <span class="ot">&lt;-</span> <span class="fu">lm</span>(fieldcounts <span class="sc">~</span> photocounts)</span>
 <span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>lmfit_gt <span class="ot">&lt;-</span> <span class="fu">format_lm_gt</span>(lmfit)</span>
 <span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>lmfit_gt<span class="sc">$</span>coef</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="ojywdqobqy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ojywdqobqy table {
@@ -17088,7 +17258,10 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>lmfit_gt<span class="sc">$</span>fit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="niladgznbr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#niladgznbr table {
@@ -17568,8 +17741,11 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 </div>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(photocounts, fieldcounts, <span class="at">main=</span><span class="st">"Field Counts vs Photo Counts"</span>)</span>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(lmfit, <span class="at">col=</span><span class="st">"purple"</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="fig-deadtrees-regression-fit" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -17585,9 +17761,12 @@ Figure&nbsp;4.6: Field counts vs.&nbsp;photo counts of dead trees with the fitte
 </div>
 <p>Let’s compare the three different estimation methods to see which provides the lowest Standard Error for the population mean.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Regression estimate for the mean</span></span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>res_dt_reg <span class="ot">&lt;-</span> <span class="fu">reg_est</span>(<span class="at">ydata =</span> fieldcounts, <span class="at">xdata =</span> photocounts, <span class="at">xbarU =</span> <span class="fl">11.3</span>, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>res_dt_reg<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="xnnkwiqjnc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xnnkwiqjnc table {
@@ -18137,8 +18316,11 @@ Figure&nbsp;4.6: Field counts vs.&nbsp;photo counts of dead trees with the fitte
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>dt_reg_raw <span class="ot">&lt;-</span> res_dt_reg<span class="sc">$</span>estimate</span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>dt_reg_raw <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"reg_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="tnicwchmcx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tnicwchmcx table {
@@ -18611,9 +18793,12 @@ Figure&nbsp;4.6: Field counts vs.&nbsp;photo counts of dead trees with the fitte
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (And estimating the total)</span></span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="fu">reg_est</span>(<span class="at">ydata =</span> fieldcounts, <span class="at">xdata =</span> photocounts, <span class="at">xbarU =</span> <span class="fl">11.3</span>, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">estimate =</span> <span class="st">"total"</span>)<span class="sc">$</span>estimate <span class="sc">|&gt;</span></span>
 <span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_est_gt</span>(<span class="st">"reg_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="gilxzidjeq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gilxzidjeq table {
@@ -19086,10 +19271,13 @@ Figure&nbsp;4.6: Field counts vs.&nbsp;photo counts of dead trees with the fitte
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Simple random sampling estimate for the mean (Ignoring photo counts)</span></span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>res_dt_srs <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(<span class="at">sdata =</span> fieldcounts, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">estimate =</span> <span class="st">"mean"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>dt_srs_raw <span class="ot">&lt;-</span> res_dt_srs<span class="sc">$</span>estimate</span>
 <span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>dt_srs_raw <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="jtdimkavyx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#jtdimkavyx table {
@@ -19562,9 +19750,12 @@ Figure&nbsp;4.6: Field counts vs.&nbsp;photo counts of dead trees with the fitte
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Ratio estimate for the mean</span></span>
 <span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>res_dt_ratio <span class="ot">&lt;-</span> <span class="fu">ratio_est</span>(<span class="at">ydata =</span> fieldcounts, <span class="at">xdata =</span> photocounts, <span class="at">xbarU =</span> <span class="fl">11.3</span>, <span class="at">N =</span> <span class="dv">100</span>, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>res_dt_ratio<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="ukoeftoajb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ukoeftoajb table {
@@ -20114,8 +20305,11 @@ Figure&nbsp;4.6: Field counts vs.&nbsp;photo counts of dead trees with the fitte
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>dt_ratio_raw <span class="ot">&lt;-</span> res_dt_ratio<span class="sc">$</span>estimate</span>
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>dt_ratio_raw <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="yapxfvgqnr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#yapxfvgqnr table {
@@ -21003,18 +21197,6 @@ Figure&nbsp;4.6: Field counts vs.&nbsp;photo counts of dead trees with the fitte
     }
   });
   </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="./strata.html" class="pagination-link" aria-label="Stratified Random Sampling">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="./cluster.html" class="pagination-link" aria-label="Cluster Sampling">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
 
 

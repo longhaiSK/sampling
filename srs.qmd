@@ -278,12 +278,14 @@ cut are compressed, in rank order, into the narrow lane at the right, so that a
 tail unit drawn into the sample is still visible. Points selected into the
 current sample turn red.
 
-The bottom panel accumulates the sample means. Its window is fixed at five
-theoretical standard errors for $n = 100$ on either side of $\mu$, so the spread
-is comparable across sample sizes; for $n < 100$ some means fall outside the
-window and are counted in the legend. The interval above the histogram belongs to
-the current sample, drawn green when it covers $\mu$ and red when it does not,
-and replaced at every draw. Both panels are centred on $\mu$, so the two dashed
+The bottom panel accumulates the sample means, drawn as a density histogram so
+its scale matches the orange curve overlaid on it: the theoretical sampling
+distribution $N(\mu, \mathrm{SE}(\bar y))$ at the current sample size. Its window
+is fixed at five theoretical standard errors for $n = 100$ on either side of
+$\mu$, so the spread is comparable across sample sizes; for $n < 100$ some means
+fall outside the window and are counted in the legend. The interval above the
+histogram belongs to the current sample, drawn green when it covers $\mu$ and red
+when it does not, and replaced at every draw. Both panels are centred on $\mu$, so the two dashed
 lines are vertically aligned.
 
 ```{shinylive-r}
@@ -469,13 +471,20 @@ server <- function(input, output, session) {
     hi <- max(xlim_b[2], max(rv$means)) + bw
     h  <- hist(rv$means, breaks = seq(lo, hi, by = bw), plot = FALSE)
 
-    vis <- h$counts[h$mids >= xlim_b[1] & h$mids <= xlim_b[2]]
-    top <- max(c(vis, 1))
+    # theoretical sampling distribution of the mean at the current sample size
+    n         <- input$n
+    se_theory <- sqrt(1 - n / N) * S / sqrt(n)
+    curve_pk  <- dnorm(ybarU, mean = ybarU, sd = se_theory)
 
-    plot(h, col = "skyblue", border = "white",
+    vis <- h$density[h$mids >= xlim_b[1] & h$mids <= xlim_b[2]]
+    top <- max(c(vis, curve_pk, 1e-6))
+
+    plot(h, freq = FALSE, col = "skyblue", border = "white",
          xlim = xlim_b, ylim = c(0, top * 1.30),
-         xlab = "Sample mean of acres92", ylab = "Frequency",
+         xlab = "Sample mean of acres92", ylab = "Density",
          main = "Sampling distribution of the sample mean")
+    curve(dnorm(x, mean = ybarU, sd = se_theory), from = xlim_b[1], to = xlim_b[2],
+          col = "darkorange", lwd = 2, add = TRUE)
     abline(v = ybarU, col = "black", lwd = 2, lty = 2)
 
     # transient interval, for the current sample only
@@ -488,6 +497,7 @@ server <- function(input, output, session) {
     outside <- sum(rv$means < xlim_b[1] | rv$means > xlim_b[2])
     leg <- c(
       sprintf("True mean = %s", fmt(ybarU)),
+      sprintf("Theoretical SE (n = %d) = %s", n, fmt(se_theory)),
       sprintf("Samples drawn = %d of %d", length(rv$means), nrep()),
       sprintf("Empirical coverage = %.1f%% (nominal %.0f%%)",
               100 * mean(rv$hits), 100 * input$conf),
@@ -495,7 +505,11 @@ server <- function(input, output, session) {
     )
     if (outside > 0)
       leg <- c(leg, sprintf("%d mean(s) beyond the axis", outside))
-    legend("topright", bty = "n", cex = 0.95, legend = leg)
+    legend("topright", bty = "n", cex = 0.95,
+           legend = c("Theoretical Normal", leg),
+           lty = c(1, rep(NA, length(leg))),
+           lwd = c(2, rep(NA, length(leg))),
+           col = c("darkorange", rep(NA, length(leg))))
   })
 }
 

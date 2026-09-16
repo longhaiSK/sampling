@@ -68,18 +68,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./gallery.html" rel="next">
-<link href="./cluster.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-f79c7fb6db380d32be398468f2fb58cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-87aed0b8589e23e45aa8556edf37a91b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a7b5894d5a4c39c6aa3484761f021c1f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/custombook-1.0.0/num_eq.js"></script>
+<script src="site_libs/quarto-contrib/custombook-1.0.0/merge-toc.js"></script>
+<link href="site_libs/quarto-contrib/custombook-1.0.0/bookstyles.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -107,6 +108,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -159,7 +162,7 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
@@ -244,11 +247,7 @@ window.Quarto = {
   </li>
     </ul>
     </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+    <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
@@ -256,20 +255,24 @@ window.Quarto = {
   <li><a href="#functions-and-packages" id="toc-functions-and-packages" class="nav-link" data-scroll-target="#functions-and-packages"><span class="header-section-number">6.2</span> Functions and Packages</a></li>
   <li><a href="#analysis-of-a-dataset-on-student-study-hours-collected-by-upswr" id="toc-analysis-of-a-dataset-on-student-study-hours-collected-by-upswr" class="nav-link" data-scroll-target="#analysis-of-a-dataset-on-student-study-hours-collected-by-upswr"><span class="header-section-number">6.3</span> Analysis of a dataset on student study hours collected by UPSWR</a></li>
   <li><a href="#analysis-of-statepop.csv-collected-with-one-stage-upswr" id="toc-analysis-of-statepop.csv-collected-with-one-stage-upswr" class="nav-link" data-scroll-target="#analysis-of-statepop.csv-collected-with-one-stage-upswr"><span class="header-section-number">6.4</span> Analysis of <code>statepop.csv</code> collected with one-stage UPSWR</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#compare-with-an-estimate-based-on-an-srs-sample" id="toc-compare-with-an-estimate-based-on-an-srs-sample" class="nav-link" data-scroll-target="#compare-with-an-estimate-based-on-an-srs-sample"><span class="header-section-number">6.4.1</span> Compare with an estimate based on an SRS sample</a></li>
   </ul></li>
   <li><a href="#analysis-of-studenthrs.csv-collected-with-two-stage-upswr" id="toc-analysis-of-studenthrs.csv-collected-with-two-stage-upswr" class="nav-link" data-scroll-target="#analysis-of-studenthrs.csv-collected-with-two-stage-upswr"><span class="header-section-number">6.5</span> Analysis of <code>studenthrs.csv</code> collected with two-stage UPSWR</a></li>
   <li><a href="#simulation-studies-for-upswr-using-agpop-data" id="toc-simulation-studies-for-upswr-using-agpop-data" class="nav-link" data-scroll-target="#simulation-studies-for-upswr-using-agpop-data"><span class="header-section-number">6.6</span> Simulation Studies for UPSWR using <code>agpop</code> data</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#visualizing-estimator-variance" id="toc-visualizing-estimator-variance" class="nav-link" data-scroll-target="#visualizing-estimator-variance"><span class="header-section-number">6.6.1</span> Visualizing Estimator Variance</a></li>
   </ul></li>
   <li><a href="#analysis-of-a-dataset-on-student-study-hours-collected-by-upswo" id="toc-analysis-of-a-dataset-on-student-study-hours-collected-by-upswo" class="nav-link" data-scroll-target="#analysis-of-a-dataset-on-student-study-hours-collected-by-upswo"><span class="header-section-number">6.7</span> Analysis of a dataset on student study hours collected by UPSWO</a></li>
   </ul>
 </nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -278,7 +281,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page-right">
 
     
   
@@ -1133,6 +1136,8 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <h2 data-number="6.3" class="anchored" data-anchor-id="analysis-of-a-dataset-on-student-study-hours-collected-by-upswr"><span class="header-section-number">6.3</span> Analysis of a dataset on student study hours collected by UPSWR</h2>
 <p>We first manually define a small dataset describing hours spent studying, where the probability of sampling a specific student group (<span class="math inline">\(\psi_i\)</span>) was proportional to the number of students in that group (<span class="math inline">\(M_i\)</span>).</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Define the raw data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>psi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">100</span>, <span class="dv">100</span>, <span class="dv">76</span>, <span class="dv">44</span>) <span class="sc">/</span> <span class="dv">647</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Mi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">100</span>, <span class="dv">100</span>, <span class="dv">76</span>, <span class="dv">44</span>)</span>
@@ -1147,6 +1152,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">hrs =</span> <span class="fu">md</span>(<span class="st">"**Total Hours ($y_i$)**"</span>)</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> psi, <span class="at">decimals =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div id="tbl-studyhrs-raw-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-studyhrs-raw-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1648,9 +1654,12 @@ Table&nbsp;6.1: Raw data: student study hours by group, with selection probabili
 </div>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hrs <span class="sc">~</span> Mi, <span class="at">main =</span> <span class="st">"Study Hours vs Number of Students"</span>, </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Students (Mi)"</span>, <span class="at">ylab =</span> <span class="st">"Study Hours (hrs)"</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(hrs <span class="sc">~</span> Mi), <span class="at">col =</span> <span class="st">"blue"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="fig-studyhrs-vs-Mi" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1666,9 +1675,12 @@ Figure&nbsp;6.1: Study hours vs.&nbsp;number of students, by group
 </div>
 <p><strong>Estimate the total and mean study hours:</strong></p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the total hours spent by all students</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>res_hrs_total <span class="ot">&lt;-</span> <span class="fu">upswr_total</span>(<span class="at">total =</span> hrs, <span class="at">psi =</span> psi, <span class="at">show.details =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>res_hrs_total<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="jjlxfogjqf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#jjlxfogjqf table {
@@ -2188,7 +2200,10 @@ Figure&nbsp;6.1: Study hours vs.&nbsp;number of students, by group
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>res_hrs_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="olppvzugvm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#olppvzugvm table {
@@ -2661,8 +2676,11 @@ Figure&nbsp;6.1: Study hours vs.&nbsp;number of students, by group
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the mean hours spent by each student (SE and CI scale down too)</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>(res_hrs_total<span class="sc">$</span>estimate <span class="sc">/</span> <span class="dv">647</span>) <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="gqudqoodwk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gqudqoodwk table {
@@ -3135,9 +3153,12 @@ Figure&nbsp;6.1: Study hours vs.&nbsp;number of students, by group
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the mean hours spent by each student</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>res_hrs_ratio <span class="ot">&lt;-</span> <span class="fu">upswr_ratio</span>(<span class="at">total =</span> hrs, <span class="at">M =</span> Mi, <span class="at">psi =</span> psi, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>res_hrs_ratio<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="uyxywcgxkj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#uyxywcgxkj table {
@@ -3671,7 +3692,10 @@ Figure&nbsp;6.1: Study hours vs.&nbsp;number of students, by group
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>res_hrs_ratio<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="cbbjkkuoey" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#cbbjkkuoey table {
@@ -4150,6 +4174,8 @@ Figure&nbsp;6.1: Study hours vs.&nbsp;number of students, by group
 <h2 data-number="6.4" class="anchored" data-anchor-id="analysis-of-statepop.csv-collected-with-one-stage-upswr"><span class="header-section-number">6.4</span> Analysis of <code>statepop.csv</code> collected with one-stage UPSWR</h2>
 <p>The file <code>statepop.csv</code> contains data from an unequal-probability sample of 100 U.S. counties. Counties were chosen with probabilities proportional to their populations. The total U.S. population is <span class="math inline">\(M_0 = 255,077,536\)</span>. Because sampling was done <strong>with replacement</strong>, large counties like Los Angeles occur multiple times in the sample.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>statepop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/statepop.csv"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Constants</span></span>
@@ -4165,6 +4191,7 @@ Figure&nbsp;6.1: Study hours vs.&nbsp;number of students, by group
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"U.S. County Data (Sample)"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_options</span>(<span class="at">container.height =</span> <span class="fu">px</span>(<span class="dv">300</span>), <span class="at">container.overflow.y =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div id="tbl-statepop-sample-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-statepop-sample-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -5346,9 +5373,12 @@ Table&nbsp;6.2: Sample of U.S. county population and physician counts
 </div>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(popn, phys, <span class="at">log =</span> <span class="st">"xy"</span>, </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Physicians vs Population (Log Scale)"</span>, </span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Population"</span>, <span class="at">ylab =</span> <span class="st">"Physicians"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="fig-statepop-phys-vs-popn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -5364,9 +5394,12 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 </div>
 <p><strong>Estimate the Total and Per Capita Physicians:</strong></p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the total number of physicians in the USA</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>res_phys_total <span class="ot">&lt;-</span> <span class="fu">upswr_total</span>(phys, psi, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>res_phys_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="fvooqhgsqk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#fvooqhgsqk table {
@@ -5839,9 +5872,12 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the number of physicians per capita (Ratio)</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>res_phys_ratio <span class="ot">&lt;-</span> <span class="fu">upswr_ratio</span>(phys, popn, psi, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>res_phys_ratio<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="tvhivlzuvp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tvhivlzuvp table {
@@ -6391,7 +6427,10 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>res_phys_ratio<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="zivhowwxbm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#zivhowwxbm table {
@@ -6870,6 +6909,8 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <h3 data-number="6.4.1" class="anchored" data-anchor-id="compare-with-an-estimate-based-on-an-srs-sample"><span class="header-section-number">6.4.1</span> Compare with an estimate based on an SRS sample</h3>
 <p>Let’s compare our UPSWR results against a naive Simple Random Sample of 100 counties.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read SRS sample, treating -99 as NA</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>counties <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/counties.csv"</span>, <span class="at">na.strings =</span> <span class="st">"-99"</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>totpop <span class="ot">&lt;-</span> <span class="dv">255077536</span></span>
@@ -6878,6 +6919,7 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Naive SRS estimate for total</span></span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>res_counties_srs <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(counties<span class="sc">$</span>physician, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>res_counties_srs<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="gvjgbfjegc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gvjgbfjegc table {
@@ -7350,9 +7392,12 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Ratio estimate for total using SRS data</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>res_counties_ratio <span class="ot">&lt;-</span> <span class="fu">ratio_est</span>(counties<span class="sc">$</span>physician, counties<span class="sc">$</span>totpop, <span class="at">xbarU =</span> totpop<span class="sc">/</span>N, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>res_counties_ratio<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="owivbzhjcb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#owivbzhjcb table {
@@ -7902,7 +7947,10 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>res_counties_ratio<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="tumvzwxart" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tumvzwxart table {
@@ -8375,9 +8423,12 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Regression estimate for total using SRS data</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>res_counties_reg <span class="ot">&lt;-</span> <span class="fu">reg_est</span>(counties<span class="sc">$</span>physician, counties<span class="sc">$</span>totpop, <span class="at">xbarU =</span> totpop<span class="sc">/</span>N, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>res_counties_reg<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="vrxxnrbywy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#vrxxnrbywy table {
@@ -8927,7 +8978,10 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 
 </div>
 </div>
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>res_counties_reg<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"reg_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="ienpgketut" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ienpgketut table {
@@ -9408,6 +9462,8 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <h2 data-number="6.5" class="anchored" data-anchor-id="analysis-of-studenthrs.csv-collected-with-two-stage-upswr"><span class="header-section-number">6.5</span> Analysis of <code>studenthrs.csv</code> collected with two-stage UPSWR</h2>
 <p>Here, we sample classes (Primary Sampling Units) with replacement based on class size, and then subsample students within them to ask about their study hours.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>studenthrs <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"data/studentshrs.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate sampling probability (cpsi) based on known total students (647)</span></span>
@@ -9426,6 +9482,7 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the cluster-level working table</span></span>
 <span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>res_hrs<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="wldleaknef" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#wldleaknef table {
@@ -9962,7 +10019,10 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 </div>
 <p><strong>Estimate the overall mean study hours:</strong></p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>res_hrs<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="nuennflfvj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#nuennflfvj table {
@@ -10441,6 +10501,8 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <h2 data-number="6.6" class="anchored" data-anchor-id="simulation-studies-for-upswr-using-agpop-data"><span class="header-section-number">6.6</span> Simulation Studies for UPSWR using <code>agpop</code> data</h2>
 <p>Let’s simulate 2000 random samples to see how UPSWR empirically compares to Simple Random Sampling.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read population data</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/agpop.csv"</span>, <span class="at">na.strings =</span> <span class="st">"-99"</span>)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(acres92), <span class="sc">!</span><span class="fu">is.na</span>(acres87))</span>
@@ -10472,10 +10534,13 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>  psi <span class="ot">&lt;-</span> (acres87 <span class="sc">/</span> <span class="fu">sum</span>(acres87))[ups300]</span>
 <span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>  est_ups300_acres87[i] <span class="ot">&lt;-</span> <span class="fu">upswr_total</span>(acres92_ups300, psi, <span class="at">show.details =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>estimate[<span class="dv">1</span>]</span>
 <span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <section id="visualizing-estimator-variance" class="level3" data-number="6.6.1">
 <h3 data-number="6.6.1" class="anchored" data-anchor-id="visualizing-estimator-variance"><span class="header-section-number">6.6.1</span> Visualizing Estimator Variance</h3>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare Naive SRS, Regression SRS, and UPSWR</span></span>
@@ -10491,6 +10556,7 @@ Figure&nbsp;6.2: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"SRS Regression"</span>, <span class="st">"UPSWR"</span>),</span>
 <span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightgreen"</span>, <span class="st">"salmon"</span>))</span>
 <span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> total_acres92, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="fig-upswr-sim-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -10511,6 +10577,8 @@ Figure&nbsp;6.3: Estimator variance: naive SRS vs.&nbsp;SRS regression vs.&nbsp;
 <h2 data-number="6.7" class="anchored" data-anchor-id="analysis-of-a-dataset-on-student-study-hours-collected-by-upswo"><span class="header-section-number">6.7</span> Analysis of a dataset on student study hours collected by UPSWO</h2>
 <p>When sampling <strong>Without Replacement</strong> with unequal probabilities, we rely on the inclusion probabilities (<span class="math inline">\(\pi_k\)</span>) rather than single-draw probabilities (<span class="math inline">\(\psi_i\)</span>).</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>classpps <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/classpps.csv"</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>res_upswo <span class="ot">&lt;-</span> <span class="fu">cluster_upswo_ratio</span>(</span>
@@ -10524,6 +10592,7 @@ Figure&nbsp;6.3: Estimator variance: naive SRS vs.&nbsp;SRS regression vs.&nbsp;
 <span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the cluster-level working table</span></span>
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>res_upswo<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="jetdwqwupj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#jetdwqwupj table {
@@ -11060,7 +11129,10 @@ Figure&nbsp;6.3: Estimator variance: naive SRS vs.&nbsp;SRS regression vs.&nbsp;
 </div>
 <p><strong>Estimate the overall mean study hours (Horvitz-Thompson ratio style):</strong></p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>res_upswo<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div id="qhbshzkavg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#qhbshzkavg table {
@@ -11939,18 +12011,6 @@ Figure&nbsp;6.3: Estimator variance: naive SRS vs.&nbsp;SRS regression vs.&nbsp;
     }
   });
   </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="./cluster.html" class="pagination-link" aria-label="Cluster Sampling">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="./gallery.html" class="pagination-link" aria-label="Figures, Tables, and Apps">
-        <span class="nav-page-text">Figures, Tables, and Apps</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
 
 
