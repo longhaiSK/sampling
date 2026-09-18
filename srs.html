@@ -273,7 +273,13 @@ window.Quarto = {
   <li><a href="#repeating-srs-sampling-5000-times" id="toc-repeating-srs-sampling-5000-times" class="nav-link" data-scroll-target="#repeating-srs-sampling-5000-times"><span class="header-section-number">2.2.3</span> Repeating SRS sampling 5000 times</a></li>
   <li><a href="#empirical-coverage-rate-of-cis" id="toc-empirical-coverage-rate-of-cis" class="nav-link" data-scroll-target="#empirical-coverage-rate-of-cis"><span class="header-section-number">2.2.4</span> Empirical Coverage Rate of CIs</a></li>
   </ul></li>
-  <li><a href="#sec-app-srs" id="toc-sec-app-srs" class="nav-link" data-scroll-target="#sec-app-srs"><span class="header-section-number">2.3</span> Interactive Demonstration</a></li>
+  <li><a href="#sec-app-srs" id="toc-sec-app-srs" class="nav-link" data-scroll-target="#sec-app-srs"><span class="header-section-number">2.3</span> Shinylive App for Illustrating SRS Theory</a></li>
+  <li><a href="#sec-pred-srs" id="toc-sec-pred-srs" class="nav-link" data-scroll-target="#sec-pred-srs"><span class="header-section-number">2.4</span> Prediction-Based Theory for Simple Random Sampling</a>
+  <ul>
+  <li><a href="#sec-pred-setup" id="toc-sec-pred-setup" class="nav-link" data-scroll-target="#sec-pred-setup"><span class="header-section-number">2.4.1</span> Setup</a></li>
+  <li><a href="#sec-pred-known-mu" id="toc-sec-pred-known-mu" class="nav-link" data-scroll-target="#sec-pred-known-mu"><span class="header-section-number">2.4.2</span> Known <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span></a></li>
+  <li><a href="#sec-pred-sample-mean" id="toc-sec-pred-sample-mean" class="nav-link" data-scroll-target="#sec-pred-sample-mean"><span class="header-section-number">2.4.3</span> Unknown <span class="math inline">\(\mu\)</span>: prediction by the sample mean</a></li>
+  </ul></li>
   </ul>
 </nav>
 </nav>
@@ -4408,7 +4414,7 @@ Figure&nbsp;2.2: First 100 simulated 95% confidence intervals for the SRS sample
 </section>
 </section>
 <section id="sec-app-srs" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="sec-app-srs"><span class="header-section-number">2.3</span> Interactive Demonstration</h2>
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-app-srs"><span class="header-section-number">2.3</span> Shinylive App for Illustrating SRS Theory</h2>
 <p>The static plots above show a snapshot of 5,000 repeated samples. The app below draws SRS samples one at a time, or continuously with <strong>Play</strong> until <strong>Stop</strong> or until the requested number of samples has been reached.</p>
 <p>The top panel shows the population of <code>acres92</code>: the grey curve is a kernel density estimate and the grey points below the axis are the raw values, jittered vertically. The axis is broken at twice the population mean; counties above the cut are compressed, in rank order, into the narrow lane at the right, so that a tail unit drawn into the sample is still visible. Points selected into the current sample turn red.</p>
 <p>The bottom panel accumulates the sample means, drawn as a density histogram so its scale matches the orange curve overlaid on it: the theoretical sampling distribution <span class="math inline">\(N(\mu, \mathrm{SE}(\bar y))\)</span> at the current sample size. Its window is fixed at five theoretical standard errors for <span class="math inline">\(n = 100\)</span> on either side of <span class="math inline">\(\mu\)</span>, so the spread is comparable across sample sizes; for <span class="math inline">\(n &lt; 100\)</span> some means fall outside the window and are counted in the legend. The interval above the histogram belongs to the current sample, drawn green when it covers <span class="math inline">\(\mu\)</span> and red when it does not, and replaced at every draw. Both panels are centred on <span class="math inline">\(\mu\)</span>, so the two dashed lines are vertically aligned.</p>
@@ -4641,8 +4647,83 @@ server &lt;- function(input, output, session) {
 
 shinyApp(ui, server)
 </code></pre>
+</section>
+<section id="sec-pred-srs" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="sec-pred-srs"><span class="header-section-number">2.4</span> Prediction-Based Theory for Simple Random Sampling</h2>
+<section id="sec-pred-setup" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="sec-pred-setup"><span class="header-section-number">2.4.1</span> Setup</h3>
+<p>Let <span class="math inline">\(U=\{1,\dots,N\}\)</span> index the finite population and let <span class="math inline">\(Y_i\)</span> denote the study variable. A sample <span class="math inline">\(S\subset U\)</span> of size <span class="math inline">\(n\)</span> is observed; write <span class="math inline">\(R=U\setminus S\)</span> for the <span class="math inline">\(N-n\)</span> non-sampled units. The targets are <span class="math display">\[
+T=\sum_{i\in U}Y_i,\qquad \bar Y_U=T/N .
+\]</span></p>
+<p>The prediction approach treats <span class="math inline">\(Y_1,\dots,Y_N\)</span> as random variables generated by a model <span class="math inline">\(\xi\)</span>, and treats <span class="math inline">\(S\)</span> as fixed. All expectations below are with respect to <span class="math inline">\(\xi\)</span>, not with respect to the randomization distribution. The role of simple random sampling is only to guarantee that selection carries no information about <span class="math inline">\(Y_i\)</span>, so that the model assumed for the sampled units also holds for the non-sampled ones.</p>
+<p>Throughout, the working model is <span id="eq-model"><span class="math display">\[
+\xi:\quad E(Y_i)=\mu,\quad \operatorname{Var}(Y_i)=\sigma^2,\quad \operatorname{Cov}(Y_i,Y_j)=0\ (i\ne j).
+\tag{2.1}\]</span></span></p>
+<p>It is convenient to write the model errors as <span id="eq-errors"><span class="math display">\[
+e_i=Y_i-\mu,\qquad E(e_i)=0,\quad \operatorname{Var}(e_i)=\sigma^2,\quad \operatorname{Cov}(e_i,e_j)=0\ (i\ne j),
+\tag{2.2}\]</span></span> and <span class="math inline">\(\bar e_A=|A|^{-1}\sum_{i\in A}e_i\)</span> for any index set <span class="math inline">\(A\)</span>. Every derivation below proceeds by subtracting and adding <span class="math inline">\(\mu\)</span> so that the prediction error is expressed in the <span class="math inline">\(e_i\)</span>, whose moments are given by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>.</p>
+<p>Any predictor of <span class="math inline">\(T\)</span> has the form <span class="math inline">\(\hat T=\sum_{i\in U}\hat Y_i\)</span>, and its accuracy is measured by the <strong>mean squared prediction error</strong> <span id="eq-mspe"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=E\left[\left(\hat T-T\right)^{2}\right]
+=E\left[\left(\sum_{i\in U}(\hat Y_i-Y_i)\right)^{2}\right].
+\tag{2.3}\]</span></span></p>
+<p>The name matters: <span class="math inline">\(T\)</span> is a random quantity to be predicted, not a fixed parameter to be estimated, so <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> measures prediction error rather than estimation error.</p>
+</section>
+<section id="sec-pred-known-mu" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="sec-pred-known-mu"><span class="header-section-number">2.4.2</span> Known <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span></h3>
+<p>Suppose <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> are known and we set <span class="math inline">\(\hat Y_i=\mu\)</span> for every <span class="math inline">\(i\in U\)</span>, ignoring the observed data. Then <span class="math inline">\(\hat T=N\mu\)</span>, and subtracting and adding <span class="math inline">\(\mu\)</span> inside each term gives <span class="math display">\[
+\hat T-T=\sum_{i\in U}\left(\mu-Y_i\right)=-\sum_{i\in U}\left(Y_i-\mu\right)=-\sum_{i\in U}e_i .
+\]</span></p>
+<p>The prediction error is a sum of zero-mean model errors, so <span class="math inline">\(\hat T\)</span> is model-unbiased, and <span id="eq-mspe-blind"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=E\left[\left(\sum_{i\in U}e_i\right)^{2}\right]
+=\sum_{i\in U}E(e_i^2)+\sum_{i\ne j}E(e_ie_j)=N\sigma^2 ,
+\tag{2.4}\]</span></span> the cross-products vanishing by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>. For the population mean, <span class="math inline">\(\hat{\bar y}_U=\mu\)</span> gives <span class="math display">\[
+\operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2}{N}.
+\]</span></p>
+<p>Two points deserve emphasis. First, the error is not zero even though the model is known exactly: <span class="math inline">\(T\)</span> is a realized sum of random variables, so it cannot be recovered from <span class="math inline">\(\mu\)</span> alone. This is the essential difference between predicting a finite-population quantity and estimating a superpopulation parameter. Second, <span class="math inline">\(\sigma^2/N\)</span> is negligible for large <span class="math inline">\(N\)</span>, which is why the distinction is usually invisible in treatments that condition on the population.</p>
+<p>The predictor <span class="math inline">\(N\mu\)</span> is nonetheless wasteful, since it predicts <span class="math inline">\(Y_i\)</span> for units whose values we have already seen. Replacing <span class="math inline">\(\hat Y_i\)</span> by <span class="math inline">\(Y_i\)</span> for <span class="math inline">\(i\in S\)</span> gives <span class="math display">\[
+\hat T=\sum_{i\in S}Y_i+(N-n)\mu,\qquad
+\hat T-T=\sum_{i\in R}\left(\mu-Y_i\right)=-\sum_{i\in R}e_i ,
+\]</span> so that <span id="eq-mspe-oracle"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=(N-n)\sigma^2 .
+\tag{2.5}\]</span></span></p>
+<p>The <span class="math inline">\(n\)</span> observed terms have simply dropped out. Expression <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a> is the irreducible part of the problem: the unobserved units vary about their mean, and no predictor can remove that variation. The result of the next section is <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a> plus a penalty for not knowing <span class="math inline">\(\mu\)</span>.</p>
+</section>
+<section id="sec-pred-sample-mean" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="sec-pred-sample-mean"><span class="header-section-number">2.4.3</span> Unknown <span class="math inline">\(\mu\)</span>: prediction by the sample mean</h3>
+<p>Now let <span class="math inline">\(\mu\)</span> be unknown and estimate it by <span class="math inline">\(\bar y_S=n^{-1}\sum_{i\in S}Y_i\)</span>. Take <span id="eq-expansion"><span class="math display">\[
+\hat Y_i=
+\begin{cases}
+Y_i, &amp; i\in S,\\
+\bar y_S, &amp; i\in R,
+\end{cases}
+\qquad\text{so that}\qquad
+\hat T=\sum_{i\in S}Y_i+(N-n)\bar y_S=N\bar y_S .
+\tag{2.6}\]</span></span></p>
+<p>The familiar expansion estimator thus arises as a predictor, not as a design-unbiased estimator. Its prediction error involves only the non-sampled units, and subtracting and adding <span class="math inline">\(\mu\)</span> in each term separates the two sources of error: <span id="eq-error-decomp"><span class="math display">\[
+\hat T-T=\sum_{i\in R}\left(\bar y_S-Y_i\right)
+=\sum_{i\in R}\Big\{\underbrace{(\bar y_S-\mu)}_{\bar e_S}-\underbrace{(Y_i-\mu)}_{e_i}\Big\}
+=(N-n)\,\bar e_S-\sum_{i\in R}e_i .
+\tag{2.7}\]</span></span></p>
+<p>The first term in <a href="#eq-error-decomp" class="quarto-xref">Equation&nbsp;<span>2.7</span></a> is the error made in locating <span class="math inline">\(\mu\)</span> from the sample; the second is the intrinsic scatter of the unobserved units about <span class="math inline">\(\mu\)</span>. Both have mean zero, so <span class="math inline">\(\hat T\)</span> is model-unbiased. Squaring and taking expectations, <span class="math display">\[
+\operatorname{MSPE}(\hat T)=(N-n)^2E\left(\bar e_S^{\,2}\right)
+-2(N-n)E\left(\bar e_S\sum_{i\in R}e_i\right)
++E\left[\left(\sum_{i\in R}e_i\right)^{2}\right].
+\]</span></p>
+<p>The three terms are evaluated separately. Since <span class="math inline">\(E(\bar e_S^{\,2})=\sigma^2/n\)</span>, the first equals <span class="math inline">\((N-n)^2\sigma^2/n\)</span>. The cross term vanishes because <span class="math inline">\(S\)</span> and <span class="math inline">\(R\)</span> are disjoint, so every product <span class="math inline">\(e_ie_j\)</span> appearing in it has <span class="math inline">\(i\ne j\)</span>. The third equals <span class="math inline">\((N-n)\sigma^2\)</span>, again by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>. Hence <span id="eq-mspe-total"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=\frac{(N-n)^2}{n}\sigma^2+(N-n)\sigma^2
+=(N-n)\sigma^2\left(\frac{N-n}{n}+1\right)
+=\frac{N(N-n)}{n}\,\sigma^2 ,
+\tag{2.8}\]</span></span> and, dividing by <span class="math inline">\(N^2\)</span>, <span id="eq-mspe-mean"><span class="math display">\[
+\operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2}{n}\left(1-\frac{n}{N}\right).
+\tag{2.9}\]</span></span></p>
+<p>Expression <a href="#eq-mspe-mean" class="quarto-xref">Equation&nbsp;<span>2.9</span></a> is the classical simple-random-sampling variance, with the superpopulation variance <span class="math inline">\(\sigma^2\)</span> in place of the population variance <span class="math inline">\(S^2\)</span>, obtained without any appeal to randomization. Three features are worth drawing out.</p>
+<p>The two components of <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.8</span></a> have distinct meanings. The term <span class="math inline">\((N-n)\sigma^2\)</span> is the irreducible variation identified in <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>; the term <span class="math inline">\((N-n)^2\sigma^2/n\)</span> is the price of estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> observations, and it alone shrinks as <span class="math inline">\(n\)</span> grows.</p>
+<p>The finite-population correction is not an artifact of sampling without replacement. It emerges from the arithmetic of a census of <span class="math inline">\(S\)</span>: the <span class="math inline">\(n\)</span> observed units contribute exactly zero to <a href="#eq-error-decomp" class="quarto-xref">Equation&nbsp;<span>2.7</span></a>, so only <span class="math inline">\(N-n\)</span> terms remain to be predicted. When <span class="math inline">\(n=N\)</span> the MSPE is zero because nothing is left to predict.</p>
+<p>Finally, comparing <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.8</span></a> with <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>, the cost of not knowing <span class="math inline">\(\mu\)</span> is the factor <span class="math inline">\(N/n\)</span>. For the population mean, the MSPE rises from <span class="math inline">\(\sigma^2/N\)</span> to approximately <span class="math inline">\(\sigma^2/n\)</span>; the sample size, not the population size, governs precision.</p>
+<p>A natural next step is to estimate <span class="math inline">\(\sigma^2\)</span> by the sample variance <span class="math inline">\(s_S^2\)</span> and to verify that <span class="math inline">\(E(s_S^2)=\sigma^2\)</span> under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>, which yields the usual variance estimator and closes the loop with the design-based formulas.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
