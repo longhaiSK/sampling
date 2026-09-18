@@ -237,10 +237,9 @@ true.se.ybar
 
 Verify the reliability of the 95% confidence intervals by checking whether the true population mean falls within the calculated bounds for each of the 5,000 samples. The empirical coverage rate should closely approximate 0.95. The plot highlights the first 100 intervals, flagging those that fail to capture the true mean in a distinct color.
 
-```{r fig-srs-coverage-intervals, fig.height=6}
-#| fig-cap: "First 100 simulated 95% confidence intervals for the SRS sample mean, with coverage failures highlighted"
+```{r srs-coverage-setup}
 library(dplyr)
-library(plotrix) 
+library(plotrix)
 
 # Convert to data frame (if it was a matrix) and use mutate to evaluate coverage
 simulation.results <- as.data.frame(simulation.results) |>
@@ -249,7 +248,10 @@ simulation.results <- as.data.frame(simulation.results) |>
   )
 
 head(simulation.results)
+```
 
+```{r fig-srs-coverage-intervals, fig.height=6}
+#| fig-cap: "First 100 simulated 95% confidence intervals for the SRS sample mean, with coverage failures highlighted"
 par(mfrow=c(1,1))
 plotCI(
   x = 1:100,

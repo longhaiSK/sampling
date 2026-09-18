@@ -165,13 +165,18 @@ format_lm_gt <- function (lmfit)
 ##              "total" returns the population TOTAL estimate (N * mean,
 ##              with SE/CI scaled accordingly); requires finite N
 ## show.details --- if TRUE (default), also return a gt table of the
-##                  row-level working values y_i, y_i-\bar y, (y_i-\bar y)^2,
-##                  with a Sum row and a footnote showing s_y^2; NULL otherwise
+##                  row-level working values y_i, the fitted value \hat y_i
+##                  (constant, and equal to \bar y under the SRS model),
+##                  e_i = y_i-\hat y_i, and e_i^2, with a Sum row and a
+##                  footnote showing s_y^2; NULL otherwise
+## col_labels --- named list (y, yhat, dev); a partial list fills in the
+##                remaining defaults, so callers can override just one label
 ## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
 srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
-                      show.details = TRUE, col_labels = list (y = "y_i", ybar="\\bar y", dev="e_i"))
+                      show.details = TRUE, col_labels = list (y = "y_i", yhat = "\\hat y_i", dev = "e_i"))
 {
     estimate <- match.arg (estimate)
+    col_labels <- modifyList (list (y = "y_i", yhat = "\\hat y_i", dev = "e_i"), col_labels)
 
     n <- length (sdata)
     ybar <- mean (sdata)
@@ -200,7 +205,7 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
     working <- data.frame (
         i    = c (seq_len (n), "Sum"),
         y    = c (sdata, sum (sdata)),
-        ybar = rep (ybar, n + 1),
+        yhat = rep (ybar, n + 1),
         dev  = c (dev, sum (dev)),
         dev2 = c (dev^2, sum (dev^2))
     )
@@ -211,19 +216,20 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
         cols_label (
             i    = md ("$i$"),
             y    = md (sprintf ("$%s$", col_labels$y)),
-            ybar    = md (sprintf ("$%s$", col_labels$ybar)),
+            yhat = md (sprintf ("$%s$", col_labels$yhat)),
             dev  = md (sprintf ("$%s$", col_labels$dev)),
-            dev2 = md (sprintf ("$(%s-\\bar y)^2$", col_labels$y))
+            dev2 = md (sprintf ("$(%s-%s)^2$", col_labels$y, col_labels$yhat))
         ) |>
         cols_width (i ~ px (40), everything () ~ px (110)) |>
-        fmt_auto (data = working, columns = c ("y", "ybar", "dev", "dev2"), decimals = 3) |>
+        fmt_auto (data = working, columns = c ("y", "yhat", "dev", "dev2"), decimals = 3) |>
         sub_missing (missing_text = "...") |>
         tab_style (
             style     = cell_text (weight = "bold"),
             locations = cells_body (rows = i == "Sum")
         ) |>
         tab_footnote (
-            footnote  = md (sprintf ("$s_y^2 = \\sum_i (%s-\\bar y)^2/(n-1) = %.4f$.", col_labels$y, s2y)),
+            footnote  = md (sprintf ("$%s = \\bar y$ for every unit under the SRS model; $s_y^2 = \\sum_i (%s-%s)^2/(n-1) = %.4f$.",
+                                      col_labels$yhat, col_labels$y, col_labels$yhat, s2y)),
             locations = cells_column_labels (columns = dev2)
         ) |>
         tab_source_note (

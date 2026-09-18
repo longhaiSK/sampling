@@ -83,6 +83,9 @@ head(cherry) |> gt()
 ```{r fig-cherry-volume-diameter}
 #| fig-cap: "Cherry tree volume vs. diameter"
 plot(cherry$volume ~ cherry$diameter, main = "Volume vs Diameter")
+```
+
+```{r cherry-load-anova}
 anova(lm(cherry$volume ~ 0 + cherry$diameter))
 ```
 **Output Note:** The plot and the linear model output (which forces a 0 intercept) confirm a very strong relationship, making this a prime candidate for Ratio estimation.
