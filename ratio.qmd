@@ -253,6 +253,196 @@ data.frame(sim_var, ratio_sim_var, percentage_reduction) |>
 ```
 **Output Note:** The boxplot dramatically illustrates the precision gain. The variance of the ratio estimator is only `r round(ratio_sim_var["ratio"] * 100, 1)`% of the SRS variance, confirming our theoretical expectations.
 
+## The app
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 720
+
+## file: app.R
+library(shiny)
+
+## ---------------------------------------------------------------- population
+data_url <- "https://raw.githubusercontent.com/longhaiSK/sampling/main/agpop.csv"
+
+pop <- tryCatch({
+  download.file(data_url, "agpop.csv")
+  d <- read.csv("agpop.csv")
+  d <- d[d$acres92 != -99 & d$acres87 != -99, ]
+  data.frame(x = d$acres87, y = d$acres92)
+}, error = function(e) NULL)
+
+if (is.null(pop)) {            # fallback so the app runs before the file is committed
+  set.seed(1)
+  Nf <- 3000
+  xf <- rgamma(Nf, shape = 1.2, scale = 1.8e5)
+  pop <- data.frame(x = xf, y = pmax(0, 0.93 * xf + rnorm(Nf, 0, 0.5 * xf^0.85)))
+}
+
+N     <- nrow(pop)
+ybarU <- mean(pop$y)
+B     <- sum(pop$y) / sum(pop$x)
+Vy    <- var(pop$y)                  # SRS population variance
+Ve    <- var(pop$y - B * pop$x)      # ratio (residual) population variance
+
+## display-only vertical jitter, fixed once so the cloud does not shimmer
+set.seed(11)
+ypl <- pop$y + rnorm(N, 0, 0.012 * diff(range(pop$y)))
+
+se_theory <- function(n, type) {
+  sqrt((1 - n / N) * (if (type == "ratio") Ve else Vy) / n)
+}
+
+## predictions for the non-sampled units, under either working model
+predict_rest <- function(s, type) {
+  if (type == "ratio") {
+    (sum(pop$y[s]) / sum(pop$x[s])) * pop$x[-s]
+  } else {
+    rep(mean(pop$y[s]), N - length(s))
+  }
+}
+
+col_pop  <- "#9aa0a640"
+col_pred <- "#1f77b4"
+col_samp <- "#d62728"
+
+## ---------------------------------------------------------------------- ui
+ui <- fluidPage(
+  tags$style(HTML(
+    ".well {padding: 10px 12px; margin-bottom: 10px;}
+     .form-group {margin-bottom: 6px;}
+     .irs {margin-bottom: 0;}
+     .btn {margin-bottom: 6px;}"
+  )),
+  wellPanel(
+    fluidRow(
+      column(
+        2,
+        radioButtons("est", "Estimator",
+                     c("Ratio" = "ratio", "Average" = "srs"),
+                     selected = "ratio")
+      ),
+      column(3, sliderInput("n", "Sample size n", 10, 500, 100, step = 10)),
+      column(3, sliderInput("reps", "Replications", 50, 2000, 500, step = 50)),
+      column(
+        2,
+        actionButton("new", "Draw a new sample", width = "100%"),
+        actionButton("play", "Play", class = "btn-primary", width = "100%")
+      ),
+      column(
+        2,
+        actionButton("reset", "Clear the histogram", width = "100%"),
+        div(style = "font-size: 90%;", textOutput("counter"))
+      )
+    )
+  ),
+  plotOutput("mainplot", height = "520px")
+)
+
+## ------------------------------------------------------------------- server
+server <- function(input, output, session) {
+
+  rv <- reactiveValues(s = NULL, type = "ratio", ests = numeric(0),
+                       playing = FALSE)
+
+  draw_sample <- function() {
+    type <- input$est
+    s    <- sample.int(N, input$n)
+    rv$s    <- s
+    rv$type <- type
+    rv$ests <- c(rv$ests, (sum(pop$y[s]) + sum(predict_rest(s, type))) / N)
+  }
+
+  ## changing n or the estimator invalidates the accumulated replications
+  observeEvent(list(input$n, input$est), {
+    rv$ests <- numeric(0)
+    draw_sample()
+  }, ignoreInit = FALSE)
+
+  observeEvent(input$new,   draw_sample())
+  observeEvent(input$reset, { rv$ests <- numeric(0); draw_sample() })
+
+  observeEvent(input$play, {
+    rv$playing <- !rv$playing
+    updateActionButton(session, "play", label = if (rv$playing) "Pause" else "Play")
+  })
+
+  observe({
+    if (!rv$playing) return()
+    invalidateLater(150, session)
+    isolate({
+      if (length(rv$ests) >= input$reps) {
+        rv$playing <- FALSE
+        updateActionButton(session, "play", label = "Play")
+      } else {
+        draw_sample()
+      }
+    })
+  })
+
+  output$counter <- renderText(
+    sprintf("%d of %d replications", length(rv$ests), input$reps)
+  )
+
+  output$mainplot <- renderPlot({
+    s <- rv$s
+    req(s)
+    type <- rv$type
+    n    <- length(s)
+    pred <- predict_rest(s, type)
+    est  <- (sum(pop$y[s]) + sum(pred)) / N
+
+    layout(matrix(1:2, nrow = 1), widths = c(2.5, 1))
+
+    ## ---- left: population, sample, predictions ----
+    par(mar = c(4.2, 4.6, 3.0, 0.8))
+    plot(pop$x, ypl, pch = 16, cex = 0.45, col = col_pop,
+         xlab = "x: acres87", ylab = "y: acres92",
+         main = sprintf("%s estimator, n = %d",
+                        if (type == "ratio") "Ratio" else "Average", n))
+    if (type == "ratio") {
+      abline(0, sum(pop$y[s]) / sum(pop$x[s]), col = col_pred, lwd = 2)
+    } else {
+      abline(h = mean(pop$y[s]), col = col_pred, lwd = 2)
+    }
+    points(pop$x[-s], pred, pch = 16, cex = 0.5, col = col_pred)
+    points(pop$x[s], ypl[s], pch = 16, cex = 0.9, col = col_samp)
+    abline(h = ybarU, col = col_samp, lty = 3)
+    abline(h = est, col = col_pred, lty = 2)
+    points(par("usr")[1], est, pch = 17, cex = 1.5, col = col_pred, xpd = NA)
+    legend("topleft", bty = "n", pch = c(16, 16, NA), lty = c(NA, NA, 3),
+           col = c(col_samp, col_pred, col_samp), cex = 0.9,
+           legend = c("sampled y", "predicted y", "population mean"))
+
+    ## ---- right: sampling distribution of the estimate ----
+    se <- se_theory(n, type)
+    lo <- ybarU - 4 * se
+    hi <- ybarU + 4 * se
+    br <- seq(lo, hi, length.out = 41)
+    yy <- seq(lo, hi, length.out = 200)
+    dn <- dnorm(yy, ybarU, se)
+
+    par(mar = c(4.2, 4.6, 3.0, 0.8))
+    mcsd <- if (length(rv$ests) > 2) sd(rv$ests) else NA
+    plot(NA, xlim = c(0, max(dn) * 1.15), ylim = c(lo, hi),
+         xlab = "density", ylab = "estimate of the population mean",
+         main = sprintf("SE: %s (Monte Carlo) / %s (theory)",
+                        if (is.na(mcsd)) "--" else format(round(mcsd), big.mark = ","),
+                        format(round(se), big.mark = ",")))
+    if (length(rv$ests) > 0) {
+      h <- hist(pmin(pmax(rv$ests, lo), hi), breaks = br, plot = FALSE)
+      rect(0, br[-41], h$density, br[-1], col = "#1f77b455", border = "white")
+    }
+    lines(dn, yy, col = "#2ca02c", lwd = 2)
+    abline(h = ybarU, col = col_samp, lty = 3)
+    abline(h = est, col = col_pred, lty = 2)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+
 ## Estimating Domain Means and Post-stratification with agsrs.csv example
 
 ### Estimating Domain Means

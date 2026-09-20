@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Figures, Tables, and Apps – Elements of Sampling Survey</title>
+<title>Appendix A — List of Figures, Tables, and Apps – Elements of Sampling Survey</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -74,35 +74,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -115,7 +86,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./gallery.html">Appendices</a></li><li class="breadcrumb-item"><a href="./gallery.html">Figures, Tables, and Apps</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./gallery.html">Appendices</a></li><li class="breadcrumb-item"><a href="./gallery.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">List of Figures, Tables, and Apps</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -197,13 +168,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./gallery.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Figures, Tables, and Apps</span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">List of Figures, Tables, and Apps</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./appendix.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Estimating Functions Source Code</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Estimating Functions Source Code</span></span></a>
   </div>
 </li>
       </ul>
@@ -214,23 +185,12 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#interactive-apps" id="toc-interactive-apps" class="nav-link active" data-scroll-target="#interactive-apps">Interactive apps</a></li>
-  <li><a href="#figures" id="toc-figures" class="nav-link" data-scroll-target="#figures">Figures</a>
+  <li><a href="#list-of-shinylive-apps" id="toc-list-of-shinylive-apps" class="nav-link active" data-scroll-target="#list-of-shinylive-apps"><span class="header-section-number">A.1</span> List of Shinylive Apps</a></li>
+  <li><a href="#list-of-figures" id="toc-list-of-figures" class="nav-link" data-scroll-target="#list-of-figures"><span class="header-section-number">A.2</span> List of Figures</a>
   <ul>
-  <li><a href="#data-analysis-with-r" id="toc-data-analysis-with-r" class="nav-link" data-scroll-target="#data-analysis-with-r">Data Analysis with R</a></li>
-  <li><a href="#simple-random-sampling" id="toc-simple-random-sampling" class="nav-link" data-scroll-target="#simple-random-sampling">Simple Random Sampling</a></li>
-  <li><a href="#stratified-random-sampling" id="toc-stratified-random-sampling" class="nav-link" data-scroll-target="#stratified-random-sampling">Stratified Random Sampling</a></li>
-  <li><a href="#ratio-regression-and-domain-estimation" id="toc-ratio-regression-and-domain-estimation" class="nav-link" data-scroll-target="#ratio-regression-and-domain-estimation">Ratio, Regression, and Domain Estimation</a></li>
-  <li><a href="#unequal-probability-sampling" id="toc-unequal-probability-sampling" class="nav-link" data-scroll-target="#unequal-probability-sampling">Unequal Probability Sampling</a></li>
+  <li><a href="#simple-random-sampling" id="toc-simple-random-sampling" class="nav-link" data-scroll-target="#simple-random-sampling"><span class="header-section-number">A.2.1</span> Simple Random Sampling</a></li>
   </ul></li>
-  <li><a href="#tables" id="toc-tables" class="nav-link" data-scroll-target="#tables">Tables</a>
-  <ul>
-  <li><a href="#data-analysis-with-r-1" id="toc-data-analysis-with-r-1" class="nav-link" data-scroll-target="#data-analysis-with-r-1">Data Analysis with R</a></li>
-  <li><a href="#stratified-random-sampling-1" id="toc-stratified-random-sampling-1" class="nav-link" data-scroll-target="#stratified-random-sampling-1">Stratified Random Sampling</a></li>
-  <li><a href="#ratio-regression-and-domain-estimation-1" id="toc-ratio-regression-and-domain-estimation-1" class="nav-link" data-scroll-target="#ratio-regression-and-domain-estimation-1">Ratio, Regression, and Domain Estimation</a></li>
-  <li><a href="#cluster-sampling" id="toc-cluster-sampling" class="nav-link" data-scroll-target="#cluster-sampling">Cluster Sampling</a></li>
-  <li><a href="#unequal-probability-sampling-1" id="toc-unequal-probability-sampling-1" class="nav-link" data-scroll-target="#unequal-probability-sampling-1">Unequal Probability Sampling</a></li>
-  </ul></li>
+  <li><a href="#list-of-tables" id="toc-list-of-tables" class="nav-link" data-scroll-target="#list-of-tables"><span class="header-section-number">A.3</span> List of Tables</a></li>
   </ul>
 </nav>
 </nav>
@@ -241,9 +201,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content column-page-right" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./gallery.html">Appendices</a></li><li class="breadcrumb-item"><a href="./gallery.html">Figures, Tables, and Apps</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./gallery.html">Appendices</a></li><li class="breadcrumb-item"><a href="./gallery.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">List of Figures, Tables, and Apps</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Figures, Tables, and Apps</h1>
+<h1 class="title">Appendix A — List of Figures, Tables, and Apps</h1>
 </div>
 
 
@@ -261,108 +221,22 @@ window.Quarto = {
 
 
 <p>A consolidated index of every numbered figure and table in the book, plus the interactive Shiny apps. Click any entry to jump to it in context.</p>
-<section id="interactive-apps" class="level2">
-<h2 class="anchored" data-anchor-id="interactive-apps">Interactive apps</h2>
-<ul>
-<li><a href="srs.html#sec-app-srs" class="quarto-xref"><span>Interactive Demonstration</span></a> (in <em>Simple Random Sampling</em>) — draw SRS samples one at a time or continuously, and watch the sampling distribution of <span class="math inline">\(\bar y\)</span> accumulate against the true population mean.</li>
-<li><a href="strata.html#sec-app-stratification" class="quarto-xref"><span>Interactive Demonstration: Stratification by acres82</span></a> (in <em>Stratified Random Sampling</em>) — compare simple random, proportional, and Neyman-allocated stratified samples drawn from the same <code>acres82</code>-quartile population.</li>
-</ul>
+<section id="list-of-shinylive-apps" class="level2" data-number="A.1">
+<h2 data-number="A.1" class="anchored" data-anchor-id="list-of-shinylive-apps"><span class="header-section-number">A.1</span> List of Shinylive Apps</h2>
 </section>
-<section id="figures" class="level2">
-<h2 class="anchored" data-anchor-id="figures">Figures</h2>
-<section id="data-analysis-with-r" class="level3">
-<h3 class="anchored" data-anchor-id="data-analysis-with-r">Data Analysis with R</h3>
+<section id="list-of-figures" class="level2" data-number="A.2">
+<h2 data-number="A.2" class="anchored" data-anchor-id="list-of-figures"><span class="header-section-number">A.2</span> List of Figures</h2>
+<section id="simple-random-sampling" class="level3" data-number="A.2.1">
+<h3 data-number="A.2.1" class="anchored" data-anchor-id="simple-random-sampling"><span class="header-section-number">A.2.1</span> Simple Random Sampling</h3>
 <ul>
-<li><a href="introR.html#fig-agpop-acres92-hist" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> — histogram of 1992 farm acreage.</li>
-<li><a href="introR.html#fig-agpop-acres-scatter" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> — 1992 vs.&nbsp;1987 farm acreage, with the 1:1 line.</li>
-<li><a href="introR.html#fig-agpop-scatter-highres" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> — the saved high-resolution PNG, re-inserted.</li>
-<li><a href="introR.html#fig-log-acres-hist" class="quarto-xref">Figure&nbsp;<span>1.4</span></a> — distribution of log(acres92), with empirical density and normal fit.</li>
-</ul>
-</section>
-<section id="simple-random-sampling" class="level3">
-<h3 class="anchored" data-anchor-id="simple-random-sampling">Simple Random Sampling</h3>
-<ul>
-<li><a href="srs.html#fig-srs-simulation-distribution" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> — population and sampling distribution of the SRS sample mean over 5000 repeated samples.</li>
-<li><a href="srs.html#fig-srs-coverage-intervals" class="quarto-xref">Figure&nbsp;<span>2.2</span></a> — first 100 simulated 95% confidence intervals, with coverage failures highlighted.</li>
-</ul>
-</section>
-<section id="stratified-random-sampling" class="level3">
-<h3 class="anchored" data-anchor-id="stratified-random-sampling">Stratified Random Sampling</h3>
-<ul>
-<li><a href="strata.html#fig-agpop-region-boxplot" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> — 1992 farm acreage by region stratum.</li>
-<li><a href="strata.html#fig-agpop-region-compare-boxplot" class="quarto-xref">Figure&nbsp;<span>3.2</span></a> — sampling distribution of the mean under SRS, proportional, and Neyman allocation (region strata).</li>
-<li><a href="strata.html#fig-agpop-acres82-boxplot" class="quarto-xref">Figure&nbsp;<span>3.3</span></a> — 1992 farm acreage by acres82 quartile stratum.</li>
-<li><a href="strata.html#fig-agpop-acres82-compare-boxplot" class="quarto-xref">Figure&nbsp;<span>3.4</span></a> — sampling distribution of the mean under SRS, proportional, and Neyman allocation (acres82 strata).</li>
-</ul>
-</section>
-<section id="ratio-regression-and-domain-estimation" class="level3">
-<h3 class="anchored" data-anchor-id="ratio-regression-and-domain-estimation">Ratio, Regression, and Domain Estimation</h3>
-<ul>
-<li><a href="ratio.html#fig-cherry-volume-diameter" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> — cherry tree volume vs.&nbsp;diameter.</li>
-<li><a href="ratio.html#fig-cherry-ratio-fit" class="quarto-xref">Figure&nbsp;<span>4.2</span></a> — cherry tree volume vs.&nbsp;diameter with the fitted ratio line.</li>
-<li><a href="ratio.html#fig-agpop-acres8792-ratio-line" class="quarto-xref">Figure&nbsp;<span>4.3</span></a> — 1992 vs.&nbsp;1987 county acreage with the true ratio line.</li>
-<li><a href="ratio.html#fig-agpop-ratio-simulation-boxplot" class="quarto-xref">Figure&nbsp;<span>4.4</span></a> — estimator variance under repeated sampling, SRS vs.&nbsp;ratio.</li>
-<li><a href="ratio.html#fig-cherry-regression-fit" class="quarto-xref">Figure&nbsp;<span>4.5</span></a> — cherry tree volume vs.&nbsp;diameter with the fitted regression line.</li>
-<li><a href="ratio.html#fig-deadtrees-regression-fit" class="quarto-xref">Figure&nbsp;<span>4.6</span></a> — field counts vs.&nbsp;photo counts of dead trees, with the fitted regression line.</li>
-</ul>
-</section>
-<section id="unequal-probability-sampling" class="level3">
-<h3 class="anchored" data-anchor-id="unequal-probability-sampling">Unequal Probability Sampling</h3>
-<ul>
-<li><a href="ups.html#fig-studyhrs-vs-Mi" class="quarto-xref">Figure&nbsp;<span>6.1</span></a> — study hours vs.&nbsp;number of students, by group.</li>
-<li><a href="ups.html#fig-statepop-phys-vs-popn" class="quarto-xref">Figure&nbsp;<span>6.2</span></a> — physicians vs.&nbsp;population (log-log scale), sample of U.S. counties.</li>
-<li><a href="ups.html#fig-upswr-sim-comparison" class="quarto-xref">Figure&nbsp;<span>6.3</span></a> — estimator variance: naive SRS vs.&nbsp;SRS regression vs.&nbsp;UPSWR.</li>
+<li><a href="srs.html#fig-srs-index" class="quarto-xref">Figure&nbsp;<span>2.4</span></a> — One realized population under the model.</li>
 </ul>
 </section>
 </section>
-<section id="tables" class="level2">
-<h2 class="anchored" data-anchor-id="tables">Tables</h2>
-<section id="data-analysis-with-r-1" class="level3">
-<h3 class="anchored" data-anchor-id="data-analysis-with-r-1">Data Analysis with R</h3>
-<ul>
-<li><a href="introR.html#tbl-region-summary-by-statistic" class="quarto-xref">Table&nbsp;<span>1.1</span></a> — regional summary of five variables, grouped by statistic.</li>
-<li><a href="introR.html#tbl-region-summary-by-variable" class="quarto-xref">Table&nbsp;<span>1.2</span></a> — regional summary of five variables, grouped by variable.</li>
-<li><a href="introR.html#tbl-gtsummary-region" class="quarto-xref">Table&nbsp;<span>1.3</span></a> — automatic descriptive summary of <code>agpop</code> variables by region.</li>
-<li><a href="introR.html#tbl-means-custom-vs-builtin" class="quarto-xref">Table&nbsp;<span>1.4</span></a> — comparing column means, custom function vs.&nbsp;base R <code>colMeans()</code>.</li>
-</ul>
-</section>
-<section id="stratified-random-sampling-1" class="level3">
-<h3 class="anchored" data-anchor-id="stratified-random-sampling-1">Stratified Random Sampling</h3>
-<ul>
-<li><a href="strata.html#tbl-agstrat-sample-data" class="quarto-xref">Table&nbsp;<span>3.1</span></a> — sample survey data for <code>agstrat.csv</code>, including stratum and weight.</li>
-<li><a href="strata.html#tbl-agstrat-summary-by-region" class="quarto-xref">Table&nbsp;<span>3.2</span></a> — sample summary statistics for <code>acres92</code> by region stratum.</li>
-<li><a href="strata.html#tbl-seals-neyman-allocation" class="quarto-xref">Table&nbsp;<span>3.3</span></a> — Neyman-optimal allocation proportions for the seals survey zones.</li>
-<li><a href="strata.html#tbl-agpop-region-neyman-allocation" class="quarto-xref">Table&nbsp;<span>3.4</span></a> — population sizes and Neyman-optimal sample sizes by region stratum.</li>
-<li><a href="strata.html#tbl-agpop-region-compare-methods" class="quarto-xref">Table&nbsp;<span>3.5</span></a> — simulated mean, variance, and variance reduction by allocation method (region strata).</li>
-<li><a href="strata.html#tbl-agpop-acres82-compare-methods" class="quarto-xref">Table&nbsp;<span>3.6</span></a> — simulated mean, variance, and variance reduction by allocation method (acres82 strata).</li>
-</ul>
-</section>
-<section id="ratio-regression-and-domain-estimation-1" class="level3">
-<h3 class="anchored" data-anchor-id="ratio-regression-and-domain-estimation-1">Ratio, Regression, and Domain Estimation</h3>
-<ul>
-<li><a href="ratio.html#tbl-cherry-sample-data" class="quarto-xref">Table&nbsp;<span>4.1</span></a> — sample data: cherry tree volume and diameter.</li>
-<li><a href="ratio.html#tbl-agpop-ratio-variance-reduction" class="quarto-xref">Table&nbsp;<span>4.2</span></a> — simulated variance and variance reduction, ratio estimator vs.&nbsp;SRS.</li>
-<li><a href="ratio.html#tbl-agsrs-poststrat-summary" class="quarto-xref">Table&nbsp;<span>4.3</span></a> — observed vs.&nbsp;population stratum proportions and post-stratified sample sizes.</li>
-<li><a href="ratio.html#tbl-teacher-domain-summary" class="quarto-xref">Table&nbsp;<span>4.4</span></a> — domain summary statistics for the teacher-aspiration dataset, by gender.</li>
-<li><a href="ratio.html#tbl-teacher-poststrat-summary" class="quarto-xref">Table&nbsp;<span>4.5</span></a> — observed vs.&nbsp;population gender proportions and post-stratified sample sizes.</li>
-</ul>
-</section>
-<section id="cluster-sampling" class="level3">
-<h3 class="anchored" data-anchor-id="cluster-sampling">Cluster Sampling</h3>
-<ul>
-<li><a href="cluster.html#tbl-algebra-raw-data" class="quarto-xref">Table&nbsp;<span>5.1</span></a> — raw data: algebra classes (sample).</li>
-<li><a href="cluster.html#tbl-coots-raw-data" class="quarto-xref">Table&nbsp;<span>5.2</span></a> — raw data: coot egg clutches (sample).</li>
-</ul>
-</section>
-<section id="unequal-probability-sampling-1" class="level3">
-<h3 class="anchored" data-anchor-id="unequal-probability-sampling-1">Unequal Probability Sampling</h3>
-<ul>
-<li><a href="ups.html#tbl-studyhrs-raw-data" class="quarto-xref">Table&nbsp;<span>6.1</span></a> — raw data: student study hours by group, with selection probabilities.</li>
-<li><a href="ups.html#tbl-statepop-sample-data" class="quarto-xref">Table&nbsp;<span>6.2</span></a> — sample of U.S. county population and physician counts.</li>
-</ul>
+<section id="list-of-tables" class="level2" data-number="A.3">
+<h2 data-number="A.3" class="anchored" data-anchor-id="list-of-tables"><span class="header-section-number">A.3</span> List of Tables</h2>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

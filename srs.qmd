@@ -290,6 +290,7 @@ histogram belongs to the current sample, drawn green when it covers $\mu$ and re
 when it does not, and replaced at every draw. Both panels are centred on $\mu$, so the two dashed
 lines are vertically aligned.
 
+::: {#fig-app-srs}
 ```{shinylive-r}
 #| standalone: true
 #| viewerHeight: 830
@@ -518,6 +519,12 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 
 ```
+
+Interactive Shinylive app for simple random sampling: draw samples of a chosen
+size from the `acres92` population, watch the sampled units highlight on the
+population panel, and accumulate the resulting sample means against the
+theoretical sampling distribution and confidence-interval coverage.
+:::
 
 
 ## Prediction-Based Theory for Simple Random Sampling (Optional) {#sec-pred-srs}

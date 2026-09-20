@@ -239,13 +239,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./gallery.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Figures, Tables, and Apps</span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">List of Figures, Tables, and Apps</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./appendix.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Estimating Functions Source Code</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Estimating Functions Source Code</span></span></a>
   </div>
 </li>
       </ul>
@@ -4413,6 +4413,9 @@ Figure&nbsp;2.2: First 100 simulated 95% confidence intervals for the SRS sample
 <p>The static plots above show a snapshot of 5,000 repeated samples. The app below draws SRS samples one at a time, or continuously with <strong>Play</strong> until <strong>Stop</strong> or until the requested number of samples has been reached.</p>
 <p>The top panel shows the population of <code>acres92</code>: the grey curve is a kernel density estimate and the grey points below the axis are the raw values, jittered vertically. The axis is broken at twice the population mean; counties above the cut are compressed, in rank order, into the narrow lane at the right, so that a tail unit drawn into the sample is still visible. Points selected into the current sample turn red.</p>
 <p>The bottom panel accumulates the sample means, drawn as a density histogram so its scale matches the orange curve overlaid on it: the theoretical sampling distribution <span class="math inline">\(N(\mu, \mathrm{SE}(\bar y))\)</span> at the current sample size. Its window is fixed at five theoretical standard errors for <span class="math inline">\(n = 100\)</span> on either side of <span class="math inline">\(\mu\)</span>, so the spread is comparable across sample sizes; for <span class="math inline">\(n &lt; 100\)</span> some means fall outside the window and are counted in the legend. The interval above the histogram belongs to the current sample, drawn green when it covers <span class="math inline">\(\mu\)</span> and red when it does not, and replaced at every draw. Both panels are centred on <span class="math inline">\(\mu\)</span>, so the two dashed lines are vertically aligned.</p>
+<div id="fig-app-srs" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-app-srs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
@@ -4642,6 +4645,12 @@ server &lt;- function(input, output, session) {
 
 shinyApp(ui, server)
 </code></pre>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-app-srs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.3: Interactive Shinylive app for simple random sampling: draw samples of a chosen size from the <code>acres92</code> population, watch the sampled units highlight on the population panel, and accumulate the resulting sample means against the theoretical sampling distribution and confidence-interval coverage.
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="sec-pred-srs" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="sec-pred-srs"><span class="header-section-number">2.4</span> Prediction-Based Theory for Simple Random Sampling (Optional)</h2>
@@ -4716,7 +4725,7 @@ Y_i, &amp; i\in S,\\
 </section>
 <section id="sec-pred-demo" class="level3" data-number="2.4.4">
 <h3 data-number="2.4.4" class="anchored" data-anchor-id="sec-pred-demo"><span class="header-section-number">2.4.4</span> Illustration</h3>
-<p><a href="#fig-srs-index" class="quarto-xref">Figure&nbsp;<span>2.3</span></a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
+<p><a href="#fig-srs-index" class="quarto-xref">Figure&nbsp;<span>2.4</span></a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-srs-index" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -4725,7 +4734,7 @@ Y_i, &amp; i\in S,\\
 <img src="srs_files/figure-html/fig-srs-index-1.png" class="img-fluid figure-img" width="720">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-srs-index-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.3: One realized population under the model. The sample occupies the shaded region on the left; the remaining units are to be predicted. Horizontal lines: the model mean <span class="math inline">\(\mu\)</span> (orange), the estimand <span class="math inline">\(\bar Y_U\)</span> (red), and the predictor <span class="math inline">\(\bar y_S\)</span> (blue, dashed).
+Figure&nbsp;2.4: One realized population under the model. The sample occupies the shaded region on the left; the remaining units are to be predicted. Horizontal lines: the model mean <span class="math inline">\(\mu\)</span> (orange), the estimand <span class="math inline">\(\bar Y_U\)</span> (red), and the predictor <span class="math inline">\(\bar y_S\)</span> (blue, dashed).
 </figcaption>
 </figure>
 </div>
