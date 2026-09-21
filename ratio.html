@@ -21003,7 +21003,7 @@ ui &lt;- fluidPage(
   wellPanel(
     fluidRow(
       column(
-        2,
+        3,
         selectInput("xvar", "Auxiliary x", choices = xvars, selected = xdef),
         checkboxInput("logx", "Use log(1 + x)", FALSE),
         checkboxInput("brk", "Break the axes", TRUE)
@@ -21015,10 +21015,10 @@ ui &lt;- fluidPage(
                                        "Average" = "srs"),
                            selected = EST)
       ),
-      column(3, sliderInput("n", "Sample size n", 10, 500, 100, step = 10)),
-      column(3, sliderInput("reps", "Replications", 50, 2000, 500, step = 50)),
+      column(2, sliderInput("n", "Sample size n", 10, 500, 100, step = 10)),
+      column(2, sliderInput("reps", "Replications", 50, 2000, 500, step = 50)),
       column(
-        2,
+        3,
         actionButton("reset", "One single sample", width = "100%"),
         actionButton("new", "More samples", width = "100%"),
         actionButton("play", "Play", class = "btn-primary", width = "100%"),
