@@ -270,8 +270,10 @@ mean(simulation.results$`Covered?`)
 ## Shinylive App for Illustrating SRS Theory {#sec-app-srs}
 
 The static plots above show a snapshot of 5,000 repeated samples. The app below
-draws SRS samples one at a time, or continuously with **Play** until **Stop** or
-until the requested number of samples has been reached.
+draws SRS samples one at a time, or continuously with play (▶) until pause (❚❚) or
+until the requested number of samples has been reached. The skip button (▶▶❘)
+draws all remaining samples at once, leaving the full histogram and the last
+sample on display.
 
 The top panel shows the population of `acres92`: the grey curve is a kernel
 density estimate and the grey points below the axis are the raw values, jittered
@@ -336,6 +338,14 @@ xlim_b <- ybarU + c(-1, 1) * half
 
 MAR <- c(4.5, 4.5, 3, 1.5)   # identical in both panels, so the scales align
 
+## ---- inline SVG button icons (no font or icon-library dependency) ----------
+svg_icon <- function(paths)
+  HTML(sprintf(paste0('<svg width="16" height="16" viewBox="0 0 16 16" ',
+                      'fill="currentColor" style="vertical-align:-2px">%s</svg>'), paths))
+icon_play  <- svg_icon('<path d="M3 2v12l10-6z"/>')
+icon_pause <- svg_icon('<rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/>')
+icon_skip  <- svg_icon('<path d="M1 2v12l7-6zM8 2v12l6-6z"/><rect x="14" y="2" width="2" height="12"/>')
+
 ui <- fluidPage(
   titlePanel("Simple random sampling: sampling distribution and CI coverage"),
   sidebarLayout(
@@ -346,8 +356,12 @@ ui <- fluidPage(
       actionButton("draw", "Draw new sample", class = "btn-primary", width = "100%"),
       br(), br(),
       fluidRow(
-        column(6, actionButton("play", "Play", class = "btn-success", width = "100%")),
-        column(6, actionButton("stop", "Stop", class = "btn-danger",  width = "100%"))
+        column(4, actionButton("play",  icon_play,  class = "btn-success", width = "100%",
+                               title = "Play")),
+        column(4, actionButton("pause", icon_pause, class = "btn-warning", width = "100%",
+                               title = "Pause")),
+        column(4, actionButton("skip",  icon_skip,  class = "btn-info",    width = "100%",
+                               title = "Skip to the end"))
       ),
       br(),
       sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),
@@ -377,27 +391,41 @@ server <- function(input, output, session) {
     if (is.null(v) || is.na(v) || v < 1) 1L else min(as.integer(v), 20000L)
   })
 
-  draw_one <- function() {
+  # draw k samples; the last one becomes the "current" sample, and the reactive
+  # state is written once so a large batch triggers a single redraw
+  draw_many <- function(k) {
     n    <- isolate(input$n)
     conf <- isolate(input$conf)
-    idx  <- sample(N, n)
-    s    <- pop[idx]
-    m    <- mean(s)
-    se   <- sqrt(1 - n / N) * sd(s) / sqrt(n)
-    me   <- qt(1 - (1 - conf) / 2, df = n - 1) * se
-
+    tq   <- qt(1 - (1 - conf) / 2, df = n - 1)
+    means <- numeric(k); hits <- logical(k)
+    for (i in seq_len(k)) {
+      idx <- sample(N, n)
+      s   <- pop[idx]
+      m   <- mean(s)
+      me  <- tq * sqrt(1 - n / N) * sd(s) / sqrt(n)
+      means[i] <- m
+      hits[i]  <- (m - me) <= ybarU && ybarU <= (m + me)
+    }
     rv$idx     <- idx
     rv$mean    <- m
     rv$ci      <- c(m - me, m + me)
-    rv$covered <- (m - me) <= ybarU && ybarU <= (m + me)
-    rv$means   <- c(rv$means, m)
-    rv$hits    <- c(rv$hits, rv$covered)
+    rv$covered <- hits[k]
+    rv$means   <- c(rv$means, means)
+    rv$hits    <- c(rv$hits, hits)
   }
+  draw_one <- function() draw_many(1)
 
-  # one sample per click; Play repeats until Stop or until the cap is reached
-  observeEvent(input$draw, { running(FALSE); draw_one() })
-  observeEvent(input$play, running(TRUE))
-  observeEvent(input$stop, running(FALSE))
+  # one sample per click; Play repeats until Pause or until the cap is reached
+  observeEvent(input$draw,  { running(FALSE); draw_one() })
+  observeEvent(input$play,  running(TRUE))
+  observeEvent(input$pause, running(FALSE))
+
+  # Skip: draw every remaining sample up to the cap in one go
+  observeEvent(input$skip, {
+    running(FALSE)
+    k <- nrep() - length(rv$means)
+    if (k > 0) draw_many(k)
+  })
 
   observe({
     if (!isTRUE(running())) return()
