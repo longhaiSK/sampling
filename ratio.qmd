@@ -744,6 +744,18 @@ ci_bar <- function(x, est, ci, col, pch, covered, tf = identity, cap = 0.012) {
   points(x, tf(est), pch = pch, col = col, cex = 1.7)
 }
 
+## symmetric density polygon, drawn vertically about x = at, so the estimate
+## runs along the y axis and lines up with the scatterplot
+violin <- function(x, at, col, w = 0.32) {
+  if (length(x) < 10 || diff(range(x)) <= 0) return(invisible())
+  d  <- density(x)
+  hw <- w * d$y / max(d$y)
+  polygon(c(at + hw, rev(at - hw)), c(d$x, rev(d$x)),
+          col = adjustcolor(col, 0.35), border = col)
+  m <- median(x)
+  segments(at - w * 0.6, m, at + w * 0.6, m, col = col, lwd = 2)
+}
+
 pct <- function(v) if (is.na(v)) "--" else sprintf("%.1f%%", 100 * v)
 
 ## ---------------------------------------------------------------------- ui
@@ -942,43 +954,36 @@ server <- function(input, output, session) {
     legend("topleft", bty = "n", cex = 0.9, inset = c(0.15, 0.01),
            legend = leg$l, col = leg$c, lty = leg$lt, pch = leg$p, lwd = leg$w)
 
-    ## ---- right: sampling distributions, on their own narrow scale ----
+    ## ---- right: sampling distributions as vertical violins, with current CIs ----
+    ## ylim is symmetric about ybarU, so the population mean sits at mid-height,
+    ## level with its position in the scatterplot
     par(mar = c(4.2, 4.8, 3.0, 1.0))
-    br <- seq(lo, hi, length.out = 41)
-    yy <- seq(lo, hi, length.out = 300)
-    dens <- lapply(sel, function(k) dnorm(yy, ybarU, se_th[[k]]))
-    names(dens) <- sel
-    hs <- NULL
-    if (nrep > 0) {
-      hs <- lapply(sel, function(k)
-        hist(pmin(pmax(M[, paste0("est_", k)], lo), hi), breaks = br, plot = FALSE)$density)
-      names(hs) <- sel
-    }
-    dmax <- max(unlist(dens), unlist(hs))
-
-    plot(NA, xlim = c(0, 1.05), ylim = c(lo, hi), axes = FALSE,
-         xlab = "scaled density", ylab = paste0("estimate", unit_lab(divy)),
+    k_n <- length(sel)
+    at  <- setNames(seq_len(k_n), sel)
+    plot(NA, xlim = c(0.4, k_n + 0.6), ylim = c(lo, hi), axes = FALSE,
+         xlab = "", ylab = paste0("estimate", unit_lab(divy)),
          main = "Sampling distributions of the estimates")
-    rect(0, lo, 1.05, hi, col = col_band, border = NA)
-    ord <- sel[order(se_th[sel], decreasing = TRUE)]   # widest at the back
-    if (!is.null(hs)) for (k in ord)
-      rect(0, br[-41], hs[[k]] / dmax, br[-1],
-           col = adjustcolor(COL[[k]], alpha.f = 0.40), border = NA)
-    for (k in ord) lines(dens[[k]] / dmax, yy, col = COL[[k]], lwd = 2)
+    usr <- par("usr")
+    rect(usr[1], usr[3], usr[2], usr[4], col = col_band, border = NA)
     abline(h = ybarU, col = col_samp, lty = 3)
-    for (k in sel) ci_bar(xpos[[k]], cur[[paste0("est_", k)]],
-                          c(cur[[paste0("lo_", k)]], cur[[paste0("hi_", k)]]),
-                          COL[[k]], PCH[[k]], cur[[paste0("cov_", k)]] == 1)
+    for (k in sel) {
+      violin(M[, paste0("est_", k)], at[[k]], COL[[k]])
+      ci <- c(cur[[paste0("lo_", k)]], cur[[paste0("hi_", k)]])
+      bc <- if (cur[[paste0("cov_", k)]] == 1) COL[[k]] else col_samp
+      segments(at[[k]], ci[1], at[[k]], ci[2], col = bc, lwd = 2.5)
+      segments(at[[k]] - 0.08, ci, at[[k]] + 0.08, ci, col = bc, lwd = 2.5)
+      points(at[[k]], cur[[paste0("est_", k)]], pch = PCH[[k]], col = COL[[k]], cex = 1.7)
+    }
     box()
     vy <- pretty(c(lo, hi), 5)
     vy <- vy[vy >= lo & vy <= hi]
     axis(2, at = vy, labels = formatC(vy / divy, format = "f",
                                       digits = if ((hi - lo) / divy < 40) 1 else 0,
                                       big.mark = ","), las = 1, cex.axis = 0.75)
-    axis(1, at = c(0, 0.5, 1), labels = c("0", "0.5", "1"), cex.axis = 0.75)
+    axis(1, at = at, labels = LAB[sel], tick = FALSE, cex.axis = 0.9)
 
     cov_txt <- function(k) if (nrep >= 10) pct(mean(M[, paste0("cov_", k)])) else "--"
-    legend("topleft", bty = "n", cex = 0.9, inset = c(0.15, 0.01),
+    legend("topleft", bty = "n", cex = 0.9, inset = c(0.02, 0.01),
            title = "95% CI coverage", fill = COL[sel], border = NA,
            legend = paste(LAB[sel], vapply(sel, cov_txt, "")))
 
@@ -991,7 +996,7 @@ server <- function(input, output, session) {
         list(txt = sprintf("%s %s (theory %s)", LAB[[k]], pct(mc), pct(th)),
              neg = if (is.na(mc)) th < 0 else mc < 0)
       })
-      legend("bottomleft", bty = "n", cex = 0.9, inset = c(0.15, 0.01),
+      legend("bottomleft", bty = "n", cex = 0.9, inset = c(0.02, 0.01),
              title = "Variance reduction vs. average", title.col = "black",
              fill = COL[cmp], border = NA,
              legend = vapply(red, `[[`, "", "txt"),
@@ -1006,4 +1011,3 @@ shinyApp(ui, server)
 **Shinylive App Illustrating Ratio Estimation and Regression Estimation**
 
 :::
-
