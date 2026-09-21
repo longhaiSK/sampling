@@ -7488,17 +7488,32 @@ if (is.null(pop)) {            # fallback so the app runs before the file is com
 
 N     &lt;- nrow(pop)
 ybarU &lt;- mean(pop$y)
-B     &lt;- sum(pop$y) / sum(pop$x)
+xbarU &lt;- mean(pop$x)
+B     &lt;- sum(pop$y) / sum(pop$x)     # population ratio, for the true line
 Vy    &lt;- var(pop$y)                  # average (SRS) population variance
 Ve    &lt;- var(pop$y - B * pop$x)      # ratio (residual) population variance
 red_theory &lt;- 1 - Ve / Vy
+ZCRIT &lt;- 1.96                        # nominal 95% intervals
 
 set.seed(11)                         # display-only vertical jitter, fixed once
 ypl &lt;- pop$y + rnorm(N, 0, 0.012 * diff(range(pop$y)))
 rgx &lt;- range(pop$x)
 rgy &lt;- range(ypl)
-cutx &lt;- as.numeric(quantile(pop$x, 0.95))   # where the upper tail is compressed
-cuty &lt;- as.numeric(quantile(ypl,   0.95))
+
+## ------------------------------------------------------- broken-axis mapping
+## Linear from the minimum up to a cut, a single break near the top, then the
+## sparse upper tail compressed into a thin strip. The cut is placed so that the
+## population mean falls at mid-height, matching the centre of the right panel.
+BRK_TOP &lt;- 0.12
+BRK_GAP &lt;- 0.025
+BRK_MAIN &lt;- 1 - BRK_TOP - BRK_GAP
+
+cut_at_centre &lt;- function(rmin, rmax, m) {
+  cut &lt;- rmin + (m - rmin) * BRK_MAIN / 0.5
+  if (!is.finite(cut) || cut &gt;= rmax) as.numeric(quantile(c(rmin, rmax), 0.95)) else cut
+}
+cuty &lt;- cut_at_centre(rgy[1], rgy[2], ybarU)
+cutx &lt;- cut_at_centre(rgx[1], rgx[2], xbarU)
 
 se_theory &lt;- function(n, type) {
   sqrt((1 - n / N) * (if (type == "ratio") Ve else Vy) / n)
@@ -7507,24 +7522,20 @@ se_theory &lt;- function(n, type) {
 col_rat  &lt;- "#1f77b4"
 col_avg  &lt;- "#e07b39"
 col_samp &lt;- "#d62728"
+col_true &lt;- "black"
 col_pop  &lt;- "#9aa0a640"
 col_band &lt;- "#eef3f8"
 
-## ------------------------------------------------------- broken-axis mapping
-## The bulk of the data, [rmin, cut], keeps a linear scale over most of the
-## axis; above a single break near the top, the sparse upper tail [cut, rmax]
-## is compressed into a thin strip so the extreme counties stay visible.
-mk_break &lt;- function(rmin, rmax, cut, top = 0.12, gap = 0.025) {
+mk_break &lt;- function(rmin, rmax, cut) {
   eps &lt;- 1e-9 * (rmax - rmin)
   cut &lt;- min(max(cut, rmin + eps), rmax - eps)
-  main &lt;- 1 - top - gap
   tf &lt;- function(v) {
     v &lt;- pmin(pmax(v, rmin), rmax)
-    ifelse(v &lt;= cut, (v - rmin) / (cut - rmin) * main,
-           main + gap + (v - cut) / (rmax - cut) * top)
+    ifelse(v &lt;= cut, (v - rmin) / (cut - rmin) * BRK_MAIN,
+           BRK_MAIN + BRK_GAP + (v - cut) / (rmax - cut) * BRK_TOP)
   }
   list(tf = tf, rmin = rmin, rmax = rmax, cut = cut,
-       gap = c(main, main + gap))
+       gap = c(BRK_MAIN, BRK_MAIN + BRK_GAP))
 }
 
 mk_plain &lt;- function(rmin, rmax) {
@@ -7549,7 +7560,6 @@ draw_axis &lt;- function(bk, side) {
   axis(side, at = bk$tf(v), labels = fmtk(v, 0), las = 1, cex.axis = 0.75)
 }
 
-## white out the gap band, then mark the break on the axis
 mask_gap &lt;- function(bk, side) {
   if (is.null(bk$gap)) return(invisible())
   usr &lt;- par("usr")
@@ -7568,6 +7578,13 @@ mask_gap &lt;- function(bk, side) {
   }
 }
 
+## interval drawn as a capped vertical bar with the estimate marked on it
+ci_bar &lt;- function(x, est, ci, col, pch, tf = identity, cap = 0.012) {
+  segments(x, tf(ci[1]), x, tf(ci[2]), col = col, lwd = 2)
+  segments(x - cap, tf(ci), x + cap, tf(ci), col = col, lwd = 2)
+  points(x, tf(est), pch = pch, col = col, cex = 1.7)
+}
+
 ## ---------------------------------------------------------------------- ui
 ui &lt;- fluidPage(
   tags$style(HTML(
@@ -7580,20 +7597,19 @@ ui &lt;- fluidPage(
     fluidRow(
       column(
         2,
-        radioButtons("est", "Scatterplot shows",
-                     c("Ratio" = "ratio", "Average" = "srs"), selected = "ratio"),
-        checkboxInput("brk", "Break the axes", TRUE)
+        checkboxInput("brk", "Break the axes", TRUE),
+        checkboxInput("shp", "Show predicted points", TRUE)
       ),
       column(3, sliderInput("n", "Sample size n", 10, 500, 100, step = 10)),
       column(3, sliderInput("reps", "Replications", 50, 2000, 500, step = 50)),
       column(
         2,
-        actionButton("new", "Draw a new sample", width = "100%"),
+        actionButton("new", "More samples", width = "100%"),
         actionButton("play", "Play", class = "btn-primary", width = "100%")
       ),
       column(
         2,
-        actionButton("reset", "Clear the histograms", width = "100%"),
+        actionButton("reset", "A single sample", width = "100%"),
         div(style = "font-size: 90%;", textOutput("counter"))
       )
     )
@@ -7611,9 +7627,18 @@ server &lt;- function(input, output, session) {
     n    &lt;- input$n
     s    &lt;- sample.int(N, n)
     ys   &lt;- pop$y[s]
-    Bhat &lt;- sum(ys) / sum(pop$x[s])
-    e &lt;- c(ratio = (sum(ys) + Bhat * sum(pop$x[-s])) / N,
-           srs   = mean(ys))
+    xs   &lt;- pop$x[s]
+    Bhat &lt;- sum(ys) / sum(xs)
+    est_r &lt;- (sum(ys) + Bhat * sum(pop$x[-s])) / N
+    est_a &lt;- mean(ys)
+    fpc   &lt;- 1 - n / N
+    se_r  &lt;- (xbarU / mean(xs)) * sqrt(fpc * var(ys - Bhat * xs) / n)
+    se_a  &lt;- sqrt(fpc * var(ys) / n)
+    e &lt;- c(ratio = est_r, srs = est_a, Bhat = Bhat,
+           lo_r = est_r - ZCRIT * se_r, hi_r = est_r + ZCRIT * se_r,
+           lo_a = est_a - ZCRIT * se_a, hi_a = est_a + ZCRIT * se_a,
+           cov_r = as.numeric(abs(est_r - ybarU) &lt;= ZCRIT * se_r),
+           cov_a = as.numeric(abs(est_a - ybarU) &lt;= ZCRIT * se_a))
     rv$s    &lt;- s
     rv$n    &lt;- n
     rv$ests &lt;- rbind(rv$ests, e)
@@ -7648,13 +7673,14 @@ server &lt;- function(input, output, session) {
   output$mainplot &lt;- renderPlot({
     s &lt;- rv$s
     req(s)
-    type &lt;- input$est
-    n    &lt;- rv$n
-    ys   &lt;- pop$y[s]
-    Bhat &lt;- sum(ys) / sum(pop$x[s])
-    pred &lt;- if (type == "ratio") Bhat * pop$x[-s] else rep(mean(ys), N - n)
-    est  &lt;- (sum(ys) + sum(pred)) / N
-    col_e &lt;- if (type == "ratio") col_rat else col_avg
+    n   &lt;- rv$n
+    cur &lt;- rv$ests[NROW(rv$ests), ]
+    Bhat   &lt;- cur[["Bhat"]]
+    est_r  &lt;- cur[["ratio"]]
+    est_a  &lt;- cur[["srs"]]
+    ci_r   &lt;- c(cur[["lo_r"]], cur[["hi_r"]])
+    ci_a   &lt;- c(cur[["lo_a"]], cur[["hi_a"]])
+    pred_r &lt;- Bhat * pop$x[-s]
 
     ## histogram window: wide enough for the average estimator, so the ratio
     ## histogram sits inside it. Much narrower than the scatterplot's y range.
@@ -7675,29 +7701,36 @@ server &lt;- function(input, output, session) {
 
     layout(matrix(1:2, nrow = 1), widths = c(1, 1))
 
-    ## ---- left: population, sample, predictions ----
+    ## ---- left: population, sample, both sets of predictions ----
     par(mar = c(4.2, 4.8, 3.0, 1.0))
     plot(NA, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE,
          xlab = "x: acres87 (thousands)", ylab = "y: acres92 (thousands)",
-         main = sprintf("%s estimator, n = %d",
-                        if (type == "ratio") "Ratio" else "Average", n))
-    rect(0, tfy(lo), 1, tfy(hi), col = col_band, border = NA)  # right panel's window
-    points(tfx(pop$x), tfy(ypl), pch = 16, cex = 0.4, col = col_pop)
-    if (type == "ratio") {
-      xg &lt;- seq(rgx[1], rgx[2], length.out = 1500)
-      lines(tfx(xg), tfy(Bhat * xg), col = col_rat, lwd = 2)
-    } else {
-      abline(h = tfy(mean(ys)), col = col_avg, lwd = 2)
+         main = sprintf("Population, sample and predictions, n = %d", n))
+    rect(0, tfy(lo), 1, tfy(hi), col = col_band, border = NA)
+    points(tfx(pop$x), tfy(ypl), pch = 16, cex = 0.6, col = col_pop)
+
+    xg &lt;- seq(rgx[1], rgx[2], length.out = 1500)
+    lines(tfx(xg), tfy(B * xg), col = col_true, lwd = 1.8)            # true y = Bx
+    lines(tfx(xg), tfy(Bhat * xg), col = col_rat, lwd = 2, lty = 2)   # fitted ratio
+    abline(h = tfy(est_a), col = col_avg, lwd = 2, lty = 2)           # fitted average
+    if (isTRUE(input$shp)) {
+      points(tfx(pop$x[-s]), tfy(rep(est_a, N - n)), pch = 16, cex = 0.6, col = col_avg)
+      points(tfx(pop$x[-s]), tfy(pred_r), pch = 16, cex = 0.6, col = col_rat)
     }
-    points(tfx(pop$x[-s]), tfy(pred), pch = 16, cex = 0.45, col = col_e)
-    points(tfx(pop$x[s]), tfy(ypl[s]), pch = 16, cex = 0.8, col = col_samp)
+    points(tfx(pop$x[s]), tfy(ypl[s]), pch = 16, cex = 1.2, col = col_samp)
+
     abline(h = tfy(ybarU), col = col_samp, lty = 3)
-    abline(h = tfy(est), col = col_e, lty = 2)
+    ci_bar(0.02, est_r, ci_r, col_rat, 16, tfy)
+    ci_bar(0.06, est_a, ci_a, col_avg, 17, tfy)
+
     mask_gap(bky, 2); mask_gap(bkx, 1)
     box(); draw_axis(bky, 2); draw_axis(bkx, 1)
-    legend("topleft", bty = "n", cex = 0.85, pch = c(16, 16, NA), lty = c(NA, NA, 3),
-           col = c(col_samp, col_e, col_samp),
-           legend = c("sampled y", "predicted y", "population mean"))
+    legend("topleft", bty = "n", cex = 0.78,
+           pch = c(16, NA, NA, NA, NA), lty = c(NA, 1, 2, 2, 3),
+           lwd = c(NA, 1.8, 2, 2, 1),
+           col = c(col_samp, col_true, col_rat, col_avg, col_samp),
+           legend = c("sampled y", "true Bx", "ratio fit", "average fit",
+                      "population mean"))
 
     ## ---- right: both sampling distributions, on their own narrow scale ----
     par(mar = c(4.2, 4.8, 3.0, 1.0))
@@ -7707,13 +7740,15 @@ server &lt;- function(input, output, session) {
     da &lt;- dnorm(yy, ybarU, se_a)
     dmax &lt;- max(dr)
     hr &lt;- ha &lt;- NULL
-    if (NROW(rv$ests) &gt; 0) {
+    nrep &lt;- NROW(rv$ests)
+    if (nrep &gt; 0) {
       hr &lt;- hist(pmin(pmax(rv$ests[, "ratio"], lo), hi), breaks = br, plot = FALSE)
       ha &lt;- hist(pmin(pmax(rv$ests[, "srs"],   lo), hi), breaks = br, plot = FALSE)
       dmax &lt;- max(dmax, hr$density, ha$density)
     }
-    red_mc &lt;- if (NROW(rv$ests) &gt; 5)
-      1 - var(rv$ests[, "ratio"]) / var(rv$ests[, "srs"]) else NA
+    red_mc &lt;- if (nrep &gt; 5) 1 - var(rv$ests[, "ratio"]) / var(rv$ests[, "srs"]) else NA
+    cov_txt &lt;- function(col) if (nrep &gt;= 10)
+      sprintf("%.1f%%", 100 * mean(rv$ests[, col])) else "--"
 
     plot(NA, xlim = c(0, 1.05), ylim = c(lo, hi), axes = FALSE,
          xlab = "scaled density", ylab = "estimate (thousands)",
@@ -7730,15 +7765,18 @@ server &lt;- function(input, output, session) {
     lines(da / dmax, yy, col = col_avg, lwd = 2)
     lines(dr / dmax, yy, col = col_rat, lwd = 2)
     abline(h = ybarU, col = col_samp, lty = 3)
-    abline(h = est, col = col_e, lty = 2)
+    ci_bar(0.02, est_r, ci_r, col_rat, 16, cap = 0.012)
+    ci_bar(0.06, est_a, ci_a, col_avg, 17, cap = 0.012)
     box()
     vy &lt;- pretty(c(lo, hi), 5)
     vy &lt;- vy[vy &gt;= lo &amp; vy &lt;= hi]
     axis(2, at = vy, labels = fmtk(vy, if (hi - lo &lt; 4e4) 1 else 0),
          las = 1, cex.axis = 0.75)
     axis(1, at = c(0, 0.5, 1), labels = c("0", "0.5", "1"), cex.axis = 0.75)
-    legend("topright", bty = "n", cex = 0.85, fill = c(col_rat, col_avg),
-           border = NA, legend = c("ratio", "average"))
+    legend("topleft", bty = "n", cex = 0.78, title = "95% CI coverage",
+           fill = c(col_rat, col_avg), border = NA,
+           legend = c(paste("ratio", cov_txt("cov_r")),
+                      paste("average", cov_txt("cov_a"))))
   })
 }
 
