@@ -597,6 +597,7 @@ dt_ratio_raw |> format_est_gt("ratio_mean")
 
 Because the intercept of the true line is non-zero, the **Regression estimator** provides the most precise estimate in this scenario.
 
+
 ## Shinylive App Illustrating Ratio Estimation and Regression Estimation
 
 ::: {#fig-ratio-app}
@@ -734,10 +735,12 @@ mask_gap <- function(bk, side) {
   }
 }
 
-## interval drawn as a capped vertical bar with the estimate marked on it
-ci_bar <- function(x, est, ci, col, pch, tf = identity, cap = 0.012) {
-  segments(x, tf(ci[1]), x, tf(ci[2]), col = col, lwd = 2)
-  segments(x - cap, tf(ci), x + cap, tf(ci), col = col, lwd = 2)
+## interval drawn as a capped vertical bar with the estimate marked on it;
+## the bar turns red when the interval misses the population mean
+ci_bar <- function(x, est, ci, col, pch, covered, tf = identity, cap = 0.012) {
+  bcol <- if (covered) col else col_samp
+  segments(x, tf(ci[1]), x, tf(ci[2]), col = bcol, lwd = 2)
+  segments(x - cap, tf(ci), x + cap, tf(ci), col = bcol, lwd = 2)
   points(x, tf(est), pch = pch, col = col, cex = 1.7)
 }
 
@@ -771,9 +774,9 @@ ui <- fluidPage(
       column(3, sliderInput("reps", "Replications", 50, 2000, 500, step = 50)),
       column(
         2,
+        actionButton("reset", "One single sample", width = "100%"),
         actionButton("new", "More samples", width = "100%"),
         actionButton("play", "Play", class = "btn-primary", width = "100%"),
-        actionButton("reset", "A single sample", width = "100%"),
         div(style = "font-size: 90%;", textOutput("counter"))
       )
     )
@@ -921,7 +924,7 @@ server <- function(input, output, session) {
     abline(h = tfy(ybarU), col = col_samp, lty = 3)
     for (k in sel) ci_bar(xpos[[k]], cur[[paste0("est_", k)]],
                           c(cur[[paste0("lo_", k)]], cur[[paste0("hi_", k)]]),
-                          COL[[k]], PCH[[k]], tfy)
+                          COL[[k]], PCH[[k]], cur[[paste0("cov_", k)]] == 1, tfy)
 
     mask_gap(bky, 2); mask_gap(bkx, 1)
     box(); draw_axis(bky, 2, divy); draw_axis(bkx, 1, divx)
@@ -936,7 +939,7 @@ server <- function(input, output, session) {
     if ("srs" %in% sel) leg <- rbind(leg, data.frame(
       l = "average fit", c = COL[["srs"]], lt = 2, p = NA, w = 2))
     leg <- rbind(leg, data.frame(l = "population mean", c = col_samp, lt = 3, p = NA, w = 1))
-    legend("topleft", bty = "n", cex = 0.75, inset = c(0.15, 0.01),
+    legend("topleft", bty = "n", cex = 0.9, inset = c(0.15, 0.01),
            legend = leg$l, col = leg$c, lty = leg$lt, pch = leg$p, lwd = leg$w)
 
     ## ---- right: sampling distributions, on their own narrow scale ----
@@ -965,7 +968,7 @@ server <- function(input, output, session) {
     abline(h = ybarU, col = col_samp, lty = 3)
     for (k in sel) ci_bar(xpos[[k]], cur[[paste0("est_", k)]],
                           c(cur[[paste0("lo_", k)]], cur[[paste0("hi_", k)]]),
-                          COL[[k]], PCH[[k]])
+                          COL[[k]], PCH[[k]], cur[[paste0("cov_", k)]] == 1)
     box()
     vy <- pretty(c(lo, hi), 5)
     vy <- vy[vy >= lo & vy <= hi]
@@ -975,20 +978,24 @@ server <- function(input, output, session) {
     axis(1, at = c(0, 0.5, 1), labels = c("0", "0.5", "1"), cex.axis = 0.75)
 
     cov_txt <- function(k) if (nrep >= 10) pct(mean(M[, paste0("cov_", k)])) else "--"
-    legend("topleft", bty = "n", cex = 0.75, inset = c(0.15, 0.01),
+    legend("topleft", bty = "n", cex = 0.9, inset = c(0.15, 0.01),
            title = "95% CI coverage", fill = COL[sel], border = NA,
            legend = paste(LAB[sel], vapply(sel, cov_txt, "")))
 
     ## reductions are relative to the average, which is always simulated
     cmp <- setdiff(sel, "srs")
     if (length(cmp)) {
-      red_txt <- vapply(cmp, function(k) {
+      red <- lapply(cmp, function(k) {
         mc <- if (nrep > 5) 1 - var(M[, paste0("est_", k)]) / var(M[, "est_srs"]) else NA
-        sprintf("%s %s (theory %s)", LAB[[k]], pct(mc), pct(1 - a$V[[k]] / Vy))
-      }, "")
-      legend("bottomleft", bty = "n", cex = 0.75, inset = c(0.15, 0.01),
-             title = "Variance reduction vs. average", fill = COL[cmp], border = NA,
-             legend = red_txt)
+        th <- 1 - a$V[[k]] / Vy
+        list(txt = sprintf("%s %s (theory %s)", LAB[[k]], pct(mc), pct(th)),
+             neg = if (is.na(mc)) th < 0 else mc < 0)
+      })
+      legend("bottomleft", bty = "n", cex = 0.9, inset = c(0.15, 0.01),
+             title = "Variance reduction vs. average", title.col = "black",
+             fill = COL[cmp], border = NA,
+             legend = vapply(red, `[[`, "", "txt"),
+             text.col = ifelse(vapply(red, `[[`, TRUE, "neg"), col_samp, "black"))
     }
   })
 }
@@ -999,5 +1006,4 @@ shinyApp(ui, server)
 **Shinylive App Illustrating Ratio Estimation and Regression Estimation**
 
 :::
-
 
