@@ -22,21 +22,20 @@ $\psi_i$, where $\sum_{i=1}^N \psi_i = 1$. A unit may be selected more than once
   $u_i = t_i/\psi_i$ of $t$. The HH estimator is their average, and the SE comes from
   their sample standard deviation $s_u$:
   $$
-  \hat{t}_{HH} = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{\psi_i}, \qquad
-  \widehat{SE}(\hat{t}_{HH}) = \frac{s_u}{\sqrt{n}}, \qquad
-  s_u^2 = \frac{1}{n-1}\sum_{i=1}^n \left(\frac{t_i}{\psi_i} - \hat{t}_{HH}\right)^2 .
+  \hat{t}_{\mathrm{HH}} = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{\psi_i}, \qquad
+  \widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}}) = \frac{s_u}{\sqrt{n}}, \qquad
+  s_u^2 = \frac{1}{n-1}\sum_{i=1}^n \left(\frac{t_i}{\psi_i} - \hat{t}_{\mathrm{HH}}\right)^2 .
   $$
   Dividing by $N$ gives the HH estimator of the mean per unit, and its SE:
   $$
-  \hat{\bar{t}}_{HH} = \frac{\hat{t}_{HH}}{N} = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{N\psi_i}, \qquad
-  \widehat{SE}(\hat{\bar{t}}_{HH}) = \frac{\widehat{SE}(\hat{t}_{HH})}{N}
-  = \frac{1}{N}\sqrt{\frac{1}{n(n-1)}\sum_{i=1}^n \left(\frac{t_i}{\psi_i} - \hat{t}_{HH}\right)^2} .
+  \hat{\bar{t}}_{\mathrm{HH}} = \frac{\hat{t}_{\mathrm{HH}}}{N} = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{N\psi_i}, \qquad
+  \widehat{\mathrm{SE}}(\hat{\bar{t}}_{\mathrm{HH}}) = \frac{\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})}{N}.
   $$
 
 * **Hansen–Hurwitz ratio estimator.** Dividing the HH estimator of $t$ by the HH
   estimator of the total of an auxiliary variable $x$ gives
   $$
-  \hat{\bar{y}}_{\psi,r} = \frac{\hat{t}_{HH}}{\hat{t}_{x,HH}}
+  \hat{\bar{y}}_{\mathrm{HH},r} = \frac{\hat{t}_{\mathrm{HH}}}{\hat{t}_{x,\mathrm{HH}}}
   = \frac{\sum_{i=1}^n t_i/\psi_i}{\sum_{i=1}^n x_i/\psi_i},
   $$
   which estimates $t/t_x$. Multiplying by $\bar{x}_U$ or $t_x$ gives estimators of $\bar{t}_U$ or $t$.
@@ -47,28 +46,26 @@ $\psi_i$, where $\sum_{i=1}^N \psi_i = 1$. A unit may be selected more than once
 * **The PPS special case.** Under probability proportional to size, $\psi_i = M_i/M_0$.
   Then every draw has $M_i/\psi_i = M_0$, so with $x_i = M_i$ the denominator is exactly $nM_0$ and
   $$
-  \hat{\bar{y}}_{\psi,r} = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{M_i}
+  \hat{\bar{y}}_{\mathrm{HH},r} = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{M_i}
   = \frac{1}{n}\sum_{i=1}^n \bar{y}_i ,
   $$
-  the plain average of the sampled means per element $\bar{y}_i = t_i/M_i$, with
-  $\widehat{SE} = s_{\bar{y}}/\sqrt{n}$. It is also HH up to a known constant:
+  the plain average of the sampled means per element $\bar{y}_i = t_i/M_i$. Its SE
+  comes from the sample variance $s_{\bar{y}}^2$ of the $\bar{y}_i$:
   $$
-  \hat{t}_{HH} = M_0\,\hat{\bar{y}}_{\psi,r}, \qquad
-  \hat{\bar{t}}_{HH} = \frac{M_0}{N}\,\hat{\bar{y}}_{\psi,r}.
+  \widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH},r}) = \frac{s_{\bar{y}}}{\sqrt{n}}
+  = \sqrt{\frac{1}{n(n-1)}\sum_{i=1}^n \left(\bar{y}_i - \hat{\bar{y}}_{\mathrm{HH},r}\right)^2},
+  \qquad
+  s_{\bar{y}}^2 = \frac{1}{n-1}\sum_{i=1}^n \left(\bar{y}_i - \hat{\bar{y}}_{\mathrm{HH},r}\right)^2 .
+  $$
+  It is also HH up to a known constant:
+  $$
+  \hat{t}_{\mathrm{HH}} = M_0\,\hat{\bar{y}}_{\mathrm{HH},r}, \qquad
+  \hat{\bar{t}}_{\mathrm{HH}} = \frac{M_0}{N}\,\hat{\bar{y}}_{\mathrm{HH},r}=\overline M \hat{\bar{y}}_{\mathrm{HH},r}.
   $$
   So under PPS the ratio step adds nothing new: the design already uses $M_i$ fully.
   HH is most precise when $t_i/\psi_i$ is nearly constant, i.e. when $t_i$ is nearly proportional to $M_i$.
 
-**2. UPS Without Replacement (UPSWO)**
-
-When sampling without replacement, the inclusion probability of unit $i$ across all draws is $\pi_i$.
-
-* **Horvitz–Thompson estimator of the total:**
-  $$
-  \hat{t}_{HT} = \sum_{i=1}^n \frac{t_i}{\pi_i}.
-  $$
-
-**3. SRS estimators, for comparison**
+**2. SRS estimators, for comparison**
 
 Under a simple random sample of $n$ units drawn without replacement, the usual estimators of $\bar{t}_U$ are
 $$
@@ -78,6 +75,59 @@ $$
 with SEs $\sqrt{(1 - n/N)\,s_t^2/n}$ and $(\bar{x}_U/\bar{x})\sqrt{(1 - n/N)\,s_e^2/n}$, where $e_i = t_i - \hat{B}x_i$.
 UPSWR and the SRS ratio estimator both exploit a size variable, but in different ways:
 UPSWR uses it at the **design** stage, while the ratio estimator uses it at the **estimation** stage.
+
+**Estimating $\bar{t}_U$: SRS + ratio vs. UPSWR with $\psi_i \propto x_i$.**
+This is the comparison made by the app in @sec-ups-app, when the same variable is chosen for $M_i$ and $x_i$.
+The target is the mean per unit, $\bar{t}_U = t/N$, and $x_i$ is used either at the
+estimation stage (SRS) or at the design stage (UPSWR). Write $r_i = t_i/x_i$ and $B = t/t_x$.
+
+* **SRS + ratio.** Use $x_i$ only at the estimation stage:
+  $$
+  \hat{\bar{t}}_{r} = \hat{B}\,\bar{x}_U, \quad \hat{B} = \frac{\sum_{i=1}^n t_i}{\sum_{i=1}^n x_i}, \qquad
+  \widehat{\mathrm{SE}}(\hat{\bar{t}}_{r}) = \frac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\frac{n}{N}\right)\frac{s_e^2}{n}}, \qquad
+  s_e^2 = \frac{1}{n-1}\sum_{i=1}^n \left(t_i - \hat{B}x_i\right)^2 .
+  $$
+
+* **UPSWR + ratio.** Use $x_i$ at the design stage, with $\psi_i = x_i/t_x$. Every draw
+  then has $x_i/\psi_i = t_x$. So the HH ratio estimator, scaled by $\bar{x}_U$, is exactly
+  the HH estimator of the mean, $\hat{t}_{\mathrm{HH}}/N$, and it reduces to $\bar{x}_U$
+  times the average of the sampled ratios $r_i$:
+  $$
+  \hat{\bar{t}}_{\mathrm{HH}} = \bar{x}_U\,\hat{\bar{y}}_{\mathrm{HH},r}
+  = \bar{x}_U\,\frac{\sum_{i=1}^n t_i/\psi_i}{\sum_{i=1}^n x_i/\psi_i}
+  = \frac{\hat{t}_{\mathrm{HH}}}{N}
+  = \bar{x}_U\,\frac{1}{n}\sum_{i=1}^n r_i ,
+  $$
+  $$
+  \widehat{\mathrm{SE}}(\hat{\bar{t}}_{\mathrm{HH}}) = \bar{x}_U\,\frac{s_r}{\sqrt{n}}, \qquad
+  s_r^2 = \frac{1}{n-1}\sum_{i=1}^n \left(r_i - \frac{1}{n}\sum_{j=1}^n r_j\right)^2 .
+  $$
+
+The two estimators differ only in how they estimate the slope $B$ before multiplying by $\bar{x}_U$.
+SRS uses a *ratio of sample totals* $\sum t_i/\sum x_i$, with every unit equally likely.
+UPSWR uses a *mean of ratios* $\frac{1}{n}\sum t_i/x_i$, over a sample tilted towards large $x_i$.
+Both are driven by the residuals $e_i = t_i - B x_i$ from the line through the origin.
+Ignoring the finite population correction (and taking $N - 1 \approx N$), their variances are
+$$
+V(\hat{\bar{t}}_{r}) \approx \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2,
+\qquad
+V(\hat{\bar{t}}_{\mathrm{HH}}) = \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2\,\frac{\bar{x}_U}{x_i}.
+$$
+So UPSWR reweights each squared residual by $\bar{x}_U/x_i$: units larger than
+average count less, and smaller ones count more. UPSWR therefore wins when the large
+residuals belong to the units with $x_i > \bar{x}_U$, i.e. when the spread of $t_i$
+about the line grows with $x_i$, as it typically does for size-related data such as
+county acreages. When the spread is constant in $x_i$, the SRS ratio estimator does better.
+
+**3. UPS Without Replacement (UPSWO)**
+
+When sampling without replacement, the inclusion probability of unit $i$ across all draws is $\pi_i$.
+
+* **Horvitz–Thompson estimator of the total:**
+  $$
+  \hat{t}_{HT} = \sum_{i=1}^n \frac{t_i}{\pi_i}.
+  $$
+
 
 ---
 
@@ -144,16 +194,17 @@ abline(lm(hrs ~ Mi), col = "blue")
 # Estimate the total hours spent by all students
 res_hrs_total <- upswr_total(total = hrs, psi = psi, show.details = TRUE)
 res_hrs_total$table
-res_hrs_total$estimate |> format_est_gt("total")
+res_hrs_total$estimate |> format_est_gt("hh_total")
 
-# Estimate the mean hours spent by each student (SE and CI scale down too)
-(res_hrs_total$estimate / 647) |> format_est_gt("mean")
+# Estimate the mean hours spent by each student (SE and CI scale down too);
+# under PPS, t_HH / M_0 is exactly the HH ratio estimator
+(res_hrs_total$estimate / 647) |> format_est_gt("hh_ratio_mean")
 
 
 # Estimate the mean hours spent by each student
 res_hrs_ratio <- upswr_ratio(total = hrs, M = Mi, psi = psi, estimate = "mean")
 res_hrs_ratio$table
-res_hrs_ratio$estimate |> format_est_gt("ratio_mean")
+res_hrs_ratio$estimate |> format_est_gt("hh_ratio_mean")
 ```
 
 ## Analysis of `statepop.csv` collected with one-stage UPSWR
@@ -191,12 +242,12 @@ plot(popn, phys, log = "xy",
 ```{r statepop-upswr-est}
 # Estimate the total number of physicians in the USA
 res_phys_total <- upswr_total(phys, psi, show.details = FALSE)
-res_phys_total$estimate |> format_est_gt("total")
+res_phys_total$estimate |> format_est_gt("hh_total")
 
 # Estimate the number of physicians per capita (Ratio)
 res_phys_ratio <- upswr_ratio(phys, popn, psi, estimate = "mean")
 res_phys_ratio$table
-res_phys_ratio$estimate |> format_est_gt("ratio_mean")
+res_phys_ratio$estimate |> format_est_gt("hh_ratio_mean")
 ```
 **Output Note:** The total estimator heavily leverages the selection probabilities to estimate that there are roughly `r round(res_phys_total$estimate["Est."])` physicians in the US.
 
@@ -254,7 +305,7 @@ res_hrs$table
 **Estimate the overall mean study hours:**
 
 ```{r studenthrs-mean-est}
-res_hrs$estimate |> format_est_gt("ratio_mean")
+res_hrs$estimate |> format_est_gt("hh_ratio_mean")
 ```
 
 ## Simulation Studies for UPSWR using `agpop` data
@@ -345,50 +396,14 @@ res_upswo$estimate |> format_est_gt("ratio_mean")
 
 
 
-## Shinylive App Comparing SRS and UPSWR
+## Shinylive App Comparing SRS and UPSWR {#sec-ups-app}
 
-This app puts the formulas of @sec-ups-formulas side by side on the `agpop` data.
-The unit value $t_i$ is `acres92` for county $i$, and the target is its mean per county,
-$\bar{t}_U$. The app uses two auxiliary variables, and you can pick each one:
-
-* $M_i$, the **auxiliary variable for UPS**, which sets the PPS selection probabilities $\psi_i = M_i/M_0$;
-* $x_i$, the **auxiliary variable for estimation**, used by the SRS ratio estimator.
-
-Each replication draws an SRS and a separate UPSWR sample, both of size $n$,
-and computes three estimates of $\bar{t}_U$:
-
-* **SRS + average:** $\hat{\bar{t}}$;
-* **SRS + ratio:** $\hat{\bar{t}}_r = \hat{B}\bar{x}_U$;
-* **UPSWR + HH:** $\hat{\bar{t}}_{HH} = \hat{t}_{HH}/N = (M_0/N)\,\hat{\bar{y}}_{\psi,r}$.
-
-The left panel shows the population as a scatterplot of $t_i$. The SRS view plots $t_i$
-against $x_i$, and the UPSWR view plots it against $M_i$.
-Point size shows each unit's selection probability per draw for the design you choose:
-under SRS every unit has probability $1/N$, and under UPSWR it is $\psi_i$. Sampled
-units are shown in blue, and a unit drawn more than once is labelled with its number of draws.
-The two designs look at the population differently, so the axes are broken differently:
-
-* **SRS view:** most counties are small, so the dense lower range is shown at full scale and the sparse upper tail is squeezed into a thin strip.
-* **UPSWR view:** the lower range is squeezed instead. This range holds most of the counties but only 20% of $M_0$, so PPS draws land there only 20% of the time. The large counties that dominate a PPS sample are spread out.
-
-Each view draws its own fitted line through the origin, next to the true line:
-
-* **UPSWR view:** the line in the $(M, t)$ plane has slope $\hat{\bar{y}}_{\psi,r} = \frac{1}{n}\sum t_i/M_i$, the average of the sampled ratios (the PPS special case above). The true slope is $t/M_0$.
-* **SRS view:** the ratio fit in the $(x, t)$ plane has slope $\hat{B} = \sum t_i/\sum x_i$, the ratio of the sample totals. The true slope is $t/t_x$.
-
-The right panel collects the estimates from repeated samples as violins. It also shows
-the current 95% intervals (red when they miss $\bar{t}_U$), the running coverage rates,
-and each estimator's variance reduction relative to the SRS average, next to its theoretical value.
-
-Draw new samples adds one replication. Play keeps drawing until you press Pause,
-or until the "Stop after" cap is reached. Skip draws all remaining replications
-at once. Reset starts over.
 
 ::: {#fig-ups-app}
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 800
+#| viewerHeight: 860
 
 library(shiny)
 
@@ -571,6 +586,7 @@ icon_skip  <- svg_icon('<path d="M1 2v12l7-6zM8 2v12l6-6z"/><rect x="14" y="2" w
 
 ## ---------------------------------------------------------------------- ui
 ui <- fluidPage(
+  titlePanel("Shinylive App for UPSWR"),
   tags$style(HTML(
     ".well {padding: 10px 12px; margin-bottom: 10px;}
      .form-group {margin-bottom: 6px;}
@@ -593,7 +609,7 @@ ui <- fluidPage(
         checkboxGroupInput("show", "Estimators",
                            choices = c("SRS + average" = "srs",
                                        "SRS + ratio" = "ratio",
-                                       "UPSWR + HH" = "hh"),
+                                       "UPSWR + HH ratio" = "hh"),
                            selected = EST),
         sliderInput("n", "Sample size (n)", 10, 500, 100, step = 10)
       ),

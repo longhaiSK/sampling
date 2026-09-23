@@ -67,7 +67,8 @@ truncate_working <- function (working, id_col, head_n = 6)
 }
 
 # Helper function to format estimation outputs with appropriate mathematical headers
-format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_mean", "reg_total", "ratio_mean", "domain_mean")) {
+format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_mean", "reg_total", "ratio_mean", "domain_mean",
+                                                 "hh_total", "hh_mean", "hh_ratio_mean")) {
   est_type <- match.arg(est_type)
 
   sym_map <- list(
@@ -77,7 +78,14 @@ format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_
     "reg_mean"    = c(est = "$\\bar{y}_{reg}$",   se = "$\\mathrm{SE}(\\bar{y}_{reg})$"),
     "reg_total"   = c(est = "$\\hat{t}_{reg}$",   se = "$\\mathrm{SE}(\\hat{t}_{reg})$"),
     "ratio_mean"  = c(est = "$\\bar{y}_{r}$",     se = "$\\mathrm{SE}(\\bar{y}_{r})$"),
-    "domain_mean" = c(est = "$\\bar{y}_{d}$",     se = "$\\mathrm{SE}(\\bar{y}_{d})$")
+    "domain_mean" = c(est = "$\\bar{y}_{d}$",     se = "$\\mathrm{SE}(\\bar{y}_{d})$"),
+    ## UPSWR (Hansen-Hurwitz): total, mean per unit, and ratio (mean per element)
+    "hh_total"      = c(est = "$\\hat{t}_{\\mathrm{HH}}$",
+                        se  = "$\\mathrm{SE}(\\hat{t}_{\\mathrm{HH}})$"),
+    "hh_mean"       = c(est = "$\\hat{\\bar{t}}_{\\mathrm{HH}}$",
+                        se  = "$\\mathrm{SE}(\\hat{\\bar{t}}_{\\mathrm{HH}})$"),
+    "hh_ratio_mean" = c(est = "$\\hat{\\bar{y}}_{\\mathrm{HH},r}$",
+                        se  = "$\\mathrm{SE}(\\hat{\\bar{y}}_{\\mathrm{HH},r})$")
   )
 
   est_sym <- sym_map[[est_type]]["est"]
@@ -169,14 +177,21 @@ format_lm_gt <- function (lmfit)
 ##                  (constant, and equal to \bar y under the SRS model),
 ##                  e_i = y_i-\hat y_i, and e_i^2, with a Sum row and a
 ##                  footnote showing s_y^2; NULL otherwise
-## col_labels --- named list (y, yhat, dev); a partial list fills in the
-##                remaining defaults, so callers can override just one label
+## col_labels --- named list (y, yhat, dev, ybar, s) of RAW latex: the
+##                data, fitted and deviation columns, the symbol for the
+##                sample mean, and for the sample SD; a partial list fills in
+##                the remaining defaults, so callers can override just one label
+## title --- the working table's title
 ## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
 srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
-                      show.details = TRUE, col_labels = list (y = "y_i", yhat = "\\hat y_i", dev = "e_i"))
+                      show.details = TRUE, col_labels = list (),
+                      title = "SRS Mean Estimation: Working Table")
 {
     estimate <- match.arg (estimate)
-    col_labels <- modifyList (list (y = "y_i", yhat = "\\hat y_i", dev = "e_i"), col_labels)
+    col_labels <- modifyList (list (y = "y_i", yhat = "\\hat y_i", dev = "e_i",
+                                    ybar = "\\bar y", s = "s_y"), col_labels)
+    ybar_lab <- col_labels$ybar
+    s_lab    <- col_labels$s
 
     n <- length (sdata)
     ybar <- mean (sdata)
@@ -212,7 +227,7 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
     working <- truncate_working (working, id_col = "i")
 
     table <- gt (working) |>
-        tab_header (title = "SRS Mean Estimation: Working Table", subtitle = md (sprintf ("$n = %d$", n))) |>
+        tab_header (title = title, subtitle = md (sprintf ("$n = %d$", n))) |>
         cols_label (
             i    = md ("$i$"),
             y    = md (sprintf ("$%s$", col_labels$y)),
@@ -228,28 +243,31 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
             locations = cells_body (rows = i == "Sum")
         ) |>
         tab_footnote (
-            footnote  = md (sprintf ("$%s = \\bar y$ for every unit under the SRS model; $s_y^2 = \\sum_i (%s-%s)^2/(n-1) = %.4f$.",
-                                      col_labels$yhat, col_labels$y, col_labels$yhat, s2y)),
+            footnote  = md (paste0 (
+                if (col_labels$yhat != ybar_lab)
+                    sprintf ("$%s = %s$ for every unit under the SRS model; ", col_labels$yhat, ybar_lab),
+                sprintf ("$%s^2 = \\sum_i (%s-%s)^2/(n-1) = %.4f$.",
+                         s_lab, col_labels$y, col_labels$yhat, s2y))),
             locations = cells_column_labels (columns = dev2)
         ) |>
         tab_source_note (
             source_note = md (if (estimate == "total")
-                sprintf ("$\\hat t = N\\bar y = %s \\times %s = %s$",
-                         fmt_num (N, 0), fmt_num (ybar), fmt_num (est))
+                sprintf ("$\\hat t = N%s = %s \\times %s = %s$",
+                         ybar_lab, fmt_num (N, 0), fmt_num (ybar), fmt_num (est))
             else
-                sprintf ("$\\bar y = \\dfrac{\\sum_i %s}{n} = \\dfrac{%s}{%d} = %s$",
-                         col_labels$y, fmt_num (sum (sdata)), n, fmt_num (ybar)))
+                sprintf ("$%s = \\dfrac{\\sum_i %s}{n} = \\dfrac{%s}{%d} = %s$",
+                         ybar_lab, col_labels$y, fmt_num (sum (sdata)), n, fmt_num (ybar)))
         ) |>
         tab_source_note (
             source_note = md (if (estimate == "total")
-                sprintf ("$\\mathrm{SE}(\\hat t) = N \\times \\mathrm{SE}(\\bar y) = %s \\times %s = %s$",
-                         fmt_num (N, 0), fmt_num (se.ybar), fmt_num (se.est))
+                sprintf ("$\\mathrm{SE}(\\hat t) = N \\times \\mathrm{SE}(%s) = %s \\times %s = %s$",
+                         ybar_lab, fmt_num (N, 0), fmt_num (se.ybar), fmt_num (se.est))
             else if (is.finite (N))
-                sprintf ("$\\mathrm{SE}(\\bar y) = \\sqrt{1-\\dfrac{n}{N}}\\,\\dfrac{s}{\\sqrt n} = \\sqrt{1-\\dfrac{%d}{%d}}\\,\\dfrac{%s}{\\sqrt{%d}} = %s$",
-                         n, N, fmt_num (sqrt (s2y)), n, fmt_num (se.ybar))
+                sprintf ("$\\mathrm{SE}(%s) = \\sqrt{1-\\dfrac{n}{N}}\\,\\dfrac{%s}{\\sqrt n} = \\sqrt{1-\\dfrac{%d}{%d}}\\,\\dfrac{%s}{\\sqrt{%d}} = %s$",
+                         ybar_lab, s_lab, n, N, fmt_num (sqrt (s2y)), n, fmt_num (se.ybar))
             else
-                sprintf ("$\\mathrm{SE}(\\bar y) = \\dfrac{s}{\\sqrt n} = \\dfrac{%s}{\\sqrt{%d}} = %s$",
-                         fmt_num (sqrt (s2y)), n, fmt_num (se.ybar)))
+                sprintf ("$\\mathrm{SE}(%s) = \\dfrac{%s}{\\sqrt n} = \\dfrac{%s}{\\sqrt{%d}} = %s$",
+                         ybar_lab, s_lab, fmt_num (sqrt (s2y)), n, fmt_num (se.ybar)))
         )
 
     list (estimate = estimate_vec, table = table)
@@ -726,8 +744,11 @@ cluster_ratio <- function (data, cname, csize, yvar, N = Inf,
 upswr_total <- function (total, psi, N = Inf, estimate = c ("total", "mean"), show.details = TRUE)
 {
   estimate <- match.arg (estimate)
-  res <- srs_est (total/psi, N = N, estimate = "mean", show.details = show.details,
-                  col_labels = list (y = "t_i/\\psi_i"))
+  ## N = Inf: draws are with replacement, so no finite population correction
+  res <- srs_est (total/psi, N = Inf, estimate = "mean", show.details = show.details,
+                  col_labels = list (y = "t_i/\\psi_i", yhat = "\\hat t_{\\mathrm{HH}}",
+                                     ybar = "\\hat t_{\\mathrm{HH}}", s = "s_u"),
+                  title = "UPSWR Hansen-Hurwitz Estimation: Working Table")
   if (estimate == "mean")
   {
       if (!is.finite (N)) stop ("N must be finite to compute estimate = \"mean\" (mean total per psu)")
