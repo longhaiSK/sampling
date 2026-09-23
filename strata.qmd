@@ -811,7 +811,7 @@ server <- function(input, output, session) {
     ## ---- left: population by stratum, with the highlighted sample ----
     par(mar = MAR, yaxs = "i")
     plot(NA, xlim = c(0.3, H + 0.9), ylim = c(0, ymax_top),
-         xlab = "", ylab = "acres92", xaxt = "n", yaxt = "n", bty = "n",
+         xlab = "", ylab = "acres92 (thousands)", xaxt = "n", yaxt = "n", bty = "n",
          main = sprintf("Population by %s stratum, with the %s sample", strat_label(), METHOD[j]))
 
     for (h in seq_len(H)) {
@@ -845,19 +845,21 @@ server <- function(input, output, session) {
     }
 
     at <- pretty(c(0, cut), 6); at <- at[at <= cut]
-    axis(2, at = at, labels = format(at, big.mark = ",", trim = TRUE), las = 1)
+    axis(2, at = at, labels = format(at / 1000, big.mark = ",", trim = TRUE), las = 1)
     segments(0.3, cut, H + 0.7, cut, col = "grey60", lty = 3)
-    text(H + 0.65, cut + lane_w / 2, sprintf("compressed: > %s", fmt(cut)),
+    text(H + 0.65, cut + lane_w / 2, sprintf("compressed: > %s", fmt(cut / 1000)),
          adj = c(1, 0), col = "grey40", cex = 0.7)
     abline(h = ybarU, col = "black", lwd = 2, lty = 2)
 
     ## ---- right: sampling distributions of the three estimates, as violins ----
     par(mar = MAR, yaxs = "i")
-    plot(NA, xlim = c(0.4, 3.6), ylim = est_range, xaxt = "n", bty = "n",
-         xlab = "", ylab = "Sample mean of acres92",
+    plot(NA, xlim = c(0.4, 3.6), ylim = est_range, xaxt = "n", yaxt = "n", bty = "n",
+         xlab = "", ylab = "Sample mean of acres92 (thousands)",
          main = "Sampling distributions of the three estimators")
     abline(h = ybarU, col = "black", lwd = 2, lty = 2)
     axis(1, at = 1:3, labels = METHOD, tick = FALSE, line = -0.5)
+    at_r <- pretty(est_range, 6); at_r <- at_r[at_r >= est_range[1] & at_r <= est_range[2]]
+    axis(2, at = at_r, labels = format(at_r / 1000, big.mark = ",", trim = TRUE), las = 1)
 
     if (is.null(rv$M)) {
       text(2, ybarU, "Click 'Draw new samples' or Play to begin", col = "grey50")
