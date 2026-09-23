@@ -281,7 +281,9 @@ the population: the grey curve is a sideways kernel density estimate and the
 grey points to its left are the raw values, jittered horizontally. The axis is
 broken at twice the population mean; counties above the cut are compressed, in
 rank order, into the narrow lane at the top, so that a tail unit drawn into the
-sample is still visible. Points selected into the current sample turn red.
+sample is still visible. Points selected into the current sample turn blue,
+matching the sample mean and CI bar drawn beside them, and the sample means
+and density accumulated in the right panel.
 
 The right panel accumulates the sample means as a blue density histogram
 (bars now run horizontally, density on the x-axis), with a blue curve tracing
@@ -292,7 +294,8 @@ for $n = 100$ on either side of $\mu$, so the spread is comparable across
 sample sizes; for $n < 100$ some means fall outside the window and are counted
 in the legend. The interval to the right belongs to the current sample, drawn
 green when it covers $\mu$ and red when it does not, and replaced at every
-draw; the grey dashed bar beside it is the theoretical margin of deviation
+draw; the red dashed bar at the base of the histogram, close to the y-axis, is
+the theoretical margin of deviation
 $\pm z_{\alpha/2}\,\mathrm{SE}(\bar y)$ from the normal approximation, centred
 on $\mu$ and fixed for the current $n$ and confidence
 level.
@@ -478,7 +481,7 @@ server <- function(input, output, session) {
     points(rug_y, px, pch = 16, cex = 0.5, col = adjustcolor("grey60", 0.5))
     if (!is.null(rv$idx))
       points(rug_y[rv$idx], px[rv$idx], pch = 16, cex = 0.6,
-             col = adjustcolor("red", 0.85))
+             col = adjustcolor("blue", 0.85))
 
     # axis up to the cut, then the break marker and the lane
     at <- pretty(c(0, cut), 6); at <- at[at <= cut]
@@ -496,7 +499,7 @@ server <- function(input, output, session) {
 
     legend("topright", bty = "o", bg = "white", box.col = NA, cex = 0.8, inset = c(0.01, 0.12),
            legend = c("Population", "Current sample", "Sample mean and CI", "True mean"),
-           col = c("grey60", "red", "blue", "black"),
+           col = c("grey60", "blue", "blue", "black"),
            pch = c(16, 16, 19, NA), lty = c(NA, NA, NA, 2))
 
     ## ---- right: sampling distribution of the sample mean (same y axis units) ----
@@ -551,13 +554,14 @@ server <- function(input, output, session) {
     points(x, rv$mean, pch = 19, cex = 1.3, col = ci_col)
 
     # theoretical margin of deviation from the normal approximation, centred on
-    # mu and fixed for the current n and confidence level (not the sample CI)
+    # mu and fixed for the current n and confidence level (not the sample CI);
+    # drawn close to the y-axis, at the base of the histogram bars
     z_crit    <- qnorm(1 - (1 - input$conf) / 2)
     me_normal <- z_crit * se_theory
-    x2        <- top * 0.74
-    segments(x2, ybarU - me_normal, x2, ybarU + me_normal, col = "grey40", lwd = 2, lty = 2)
+    x2        <- top * 0.06
+    segments(x2, ybarU - me_normal, x2, ybarU + me_normal, col = "red", lwd = 2, lty = 2)
     segments(x2 - top * 0.03, ybarU + c(-1, 1) * me_normal,
-              x2 + top * 0.03, ybarU + c(-1, 1) * me_normal, col = "grey40", lwd = 2)
+              x2 + top * 0.03, ybarU + c(-1, 1) * me_normal, col = "red", lwd = 2)
 
     outside <- sum(rv$means < xlim_b[1] | rv$means > xlim_b[2])
     leg <- c(
@@ -575,7 +579,7 @@ server <- function(input, output, session) {
            legend = c("Theoretical Normal", "Empirical density", "Normal-approx margin", leg),
            lty = c(1, 1, 2, rep(NA, length(leg))),
            lwd = c(2, 2, 2, rep(NA, length(leg))),
-           col = c("red", "blue", "grey40", rep(NA, length(leg))))
+           col = c("red", "blue", "red", rep(NA, length(leg))))
   })
 }
 
