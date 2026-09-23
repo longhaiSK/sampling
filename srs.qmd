@@ -275,26 +275,27 @@ until the requested number of samples has been reached. The skip button (▶▶�
 draws all remaining samples at once, leaving the full histogram and the last
 sample on display.
 
-The two panels sit side by side. The left panel shows the population of
-`acres92`: the grey curve is a kernel density estimate and the grey points
-below the axis are the raw values, jittered vertically. The axis is broken at
-twice the population mean; counties above the cut are compressed, in rank
-order, into the narrow lane at the right, so that a tail unit drawn into the
+The two panels sit side by side and share `acres92` on the y-axis, so the two
+dashed lines at $\mu$ line up horizontally across both. The left panel shows
+the population: the grey curve is a sideways kernel density estimate and the
+grey points to its left are the raw values, jittered horizontally. The axis is
+broken at twice the population mean; counties above the cut are compressed, in
+rank order, into the narrow lane at the top, so that a tail unit drawn into the
 sample is still visible. Points selected into the current sample turn red.
 
-The right panel accumulates the sample means as a blue density histogram, with
-a blue curve tracing their empirical density once enough draws have
-accumulated, and a red curve for the theoretical sampling distribution
-$N(\mu, \mathrm{SE}(\bar y))$ at the current sample size. Its window is fixed at
-five theoretical standard errors for $n = 100$ on either side of $\mu$, so the
-spread is comparable across sample sizes; for $n < 100$ some means fall outside
-the window and are counted in the legend. The upper interval belongs to the
-current sample, drawn green when it covers $\mu$ and red when it does not, and
-replaced at every draw; the grey dashed bar below it is the theoretical margin
-of deviation $\pm z_{\alpha/2}\,\mathrm{SE}(\bar y)$ from the normal
-approximation, centred on $\mu$ and fixed for the current $n$ and confidence
-level. Both panels are centred on $\mu$, so the two dashed lines are vertically
-aligned.
+The right panel accumulates the sample means as a blue density histogram
+(bars now run horizontally, density on the x-axis), with a blue curve tracing
+their empirical density once enough draws have accumulated, and a red curve
+for the theoretical sampling distribution $N(\mu, \mathrm{SE}(\bar y))$ at the
+current sample size. Its window is fixed at five theoretical standard errors
+for $n = 100$ on either side of $\mu$, so the spread is comparable across
+sample sizes; for $n < 100$ some means fall outside the window and are counted
+in the legend. The interval to the right belongs to the current sample, drawn
+green when it covers $\mu$ and red when it does not, and replaced at every
+draw; the grey dashed bar beside it is the theoretical margin of deviation
+$\pm z_{\alpha/2}\,\mathrm{SE}(\bar y)$ from the normal approximation, centred
+on $\mu$ and fixed for the current $n$ and confidence
+level.
 
 ::: {#fig-app-srs}
 ```{shinylive-r}
@@ -466,49 +467,47 @@ server <- function(input, output, session) {
   output$mainplot <- renderPlot({
     layout(matrix(1:2, nrow = 1), widths = c(1, 1))
 
-    ## ---- left: population, with the current SRS sample ----
-    par(mar = MAR, xaxs = "i")
-    plot(dens$x, dens_y, type = "l", col = "grey40", lwd = 2,
-         xlim = c(0, xmax_top), ylim = c(-0.62, 1.15),
-         xlab = "acres92", ylab = "", xaxt = "n", yaxt = "n", bty = "n",
+    ## ---- left: population, with the current SRS sample (acres92 on the y axis) ----
+    par(mar = MAR, yaxs = "i")
+    plot(dens_y, dens$x, type = "l", col = "grey40", lwd = 2,
+         xlim = c(-0.62, 1.15), ylim = c(0, xmax_top),
+         xlab = "", ylab = "acres92", xaxt = "n", yaxt = "n", bty = "n",
          main = "Population distribution with the current SRS sample")
 
     # raw values, jittered; tail units sit in the compressed lane
-    points(px, rug_y, pch = 16, cex = 0.5, col = adjustcolor("grey60", 0.5))
+    points(rug_y, px, pch = 16, cex = 0.5, col = adjustcolor("grey60", 0.5))
     if (!is.null(rv$idx))
-      points(px[rv$idx], rug_y[rv$idx], pch = 16, cex = 0.6,
+      points(rug_y[rv$idx], px[rv$idx], pch = 16, cex = 0.6,
              col = adjustcolor("red", 0.85))
 
     # axis up to the cut, then the break marker and the lane
     at <- pretty(c(0, cut), 6); at <- at[at <= cut]
-    axis(1, at = at, labels = format(at, big.mark = ",", trim = TRUE))
-    segments(cut, -0.62, cut, 1.05, col = "grey75", lty = 3)
-    text(cut, -0.70, "//", col = "grey40", cex = 1.3, xpd = NA)
-    text(cut + lane_w / 2, -0.70,
-         sprintf("> %s\n(%d counties)", fmt(cut), n_tail),
-         col = "grey40", cex = 0.75, xpd = NA)
+    axis(2, at = at, labels = format(at, big.mark = ",", trim = TRUE), las = 1)
+    segments(-0.62, cut, 1.15, cut, col = "grey75", lty = 3)
+    text(1.10, cut + lane_w / 2, sprintf("compressed: > %s (%d counties)", fmt(cut), n_tail),
+         adj = c(1, 0), col = "grey40", cex = 0.7)
 
     # current sample mean and interval
     if (!is.null(rv$mean)) {
-      segments(rv$ci[1], -0.55, rv$ci[2], -0.55, col = "blue", lwd = 3)
-      points(rv$mean, -0.55, pch = 19, cex = 1.3, col = "blue")
+      segments(-0.55, rv$ci[1], -0.55, rv$ci[2], col = "blue", lwd = 3)
+      points(-0.55, rv$mean, pch = 19, cex = 1.3, col = "blue")
     }
-    abline(v = ybarU, col = "black", lwd = 2, lty = 2)
+    abline(h = ybarU, col = "black", lwd = 2, lty = 2)
 
-    legend("topright", bty = "n", inset = c(0.12, 0),
+    legend("topright", bty = "o", bg = "white", box.col = NA, cex = 0.8, inset = c(0.01, 0.12),
            legend = c("Population", "Current sample", "Sample mean and CI", "True mean"),
            col = c("grey60", "red", "blue", "black"),
            pch = c(16, 16, 19, NA), lty = c(NA, NA, NA, 2))
 
-    ## ---- right: sampling distribution of the sample mean ----
-    par(mar = MAR, xaxs = "i")
+    ## ---- right: sampling distribution of the sample mean (same y axis units) ----
+    par(mar = MAR, yaxs = "i")
 
     if (length(rv$means) == 0) {
-      plot(1, type = "n", xlim = xlim_b, ylim = c(0, 1), bty = "n", yaxt = "n",
-           xlab = "Sample mean of acres92", ylab = "",
+      plot(1, type = "n", xlim = c(0, 1), ylim = xlim_b, bty = "n", xaxt = "n",
+           xlab = "", ylab = "Sample mean of acres92",
            main = "Sampling distribution of the sample mean")
-      abline(v = ybarU, col = "black", lwd = 2, lty = 2)
-      text(ybarU, 0.5, "Click 'Draw new sample' or 'Play' to begin", col = "grey50")
+      abline(h = ybarU, col = "black", lwd = 2, lty = 2)
+      text(0.5, ybarU, "Click 'Draw new sample' or Play to begin", col = "grey50")
       return(invisible())
     }
 
@@ -529,30 +528,32 @@ server <- function(input, output, session) {
     vis <- h$density[h$mids >= xlim_b[1] & h$mids <= xlim_b[2]]
     top <- max(c(vis, curve_pk, if (!is.null(dens_emp)) dens_emp$y else NULL, 1e-6))
 
-    plot(h, freq = FALSE, col = adjustcolor("steelblue", 0.55), border = "white",
-         xlim = xlim_b, ylim = c(0, top * 1.30),
-         xlab = "Sample mean of acres92", ylab = "Density",
+    # histogram bars drawn horizontally: density along x, sample mean along y
+    plot(NA, xlim = c(0, top * 1.30), ylim = xlim_b, bty = "n",
+         xlab = "Density", ylab = "Sample mean of acres92",
          main = "Sampling distribution of the sample mean")
-    if (!is.null(dens_emp)) lines(dens_emp, col = "blue", lwd = 2)
-    curve(dnorm(x, mean = ybarU, sd = se_theory), from = xlim_b[1], to = xlim_b[2],
-          col = "red", lwd = 2, add = TRUE)
-    abline(v = ybarU, col = "black", lwd = 2, lty = 2)
+    rect(0, h$breaks[-length(h$breaks)], h$density, h$breaks[-1],
+         col = adjustcolor("steelblue", 0.55), border = "white")
+    if (!is.null(dens_emp)) lines(dens_emp$y, dens_emp$x, col = "blue", lwd = 2)
+    yg <- seq(xlim_b[1], xlim_b[2], length.out = 300)
+    lines(dnorm(yg, mean = ybarU, sd = se_theory), yg, col = "red", lwd = 2)
+    abline(h = ybarU, col = "black", lwd = 2, lty = 2)
 
     # transient interval, for the current sample only (t-based, from its own sd)
     ci_col <- if (rv$covered) "forestgreen" else "red"
-    y      <- top * 0.90
-    segments(rv$ci[1], y, rv$ci[2], y, col = ci_col, lwd = 3)
-    segments(rv$ci, y - top * 0.045, rv$ci, y + top * 0.045, col = ci_col, lwd = 3)
-    points(rv$mean, y, pch = 19, cex = 1.3, col = ci_col)
+    x      <- top * 0.90
+    segments(x, rv$ci[1], x, rv$ci[2], col = ci_col, lwd = 3)
+    segments(x - top * 0.045, rv$ci, x + top * 0.045, rv$ci, col = ci_col, lwd = 3)
+    points(x, rv$mean, pch = 19, cex = 1.3, col = ci_col)
 
     # theoretical margin of deviation from the normal approximation, centred on
     # mu and fixed for the current n and confidence level (not the sample CI)
     z_crit    <- qnorm(1 - (1 - input$conf) / 2)
     me_normal <- z_crit * se_theory
-    y2        <- top * 0.74
-    segments(ybarU - me_normal, y2, ybarU + me_normal, y2, col = "grey40", lwd = 2, lty = 2)
-    segments(ybarU + c(-1, 1) * me_normal, y2 - top * 0.03,
-              ybarU + c(-1, 1) * me_normal, y2 + top * 0.03, col = "grey40", lwd = 2)
+    x2        <- top * 0.74
+    segments(x2, ybarU - me_normal, x2, ybarU + me_normal, col = "grey40", lwd = 2, lty = 2)
+    segments(x2 - top * 0.03, ybarU + c(-1, 1) * me_normal,
+              x2 + top * 0.03, ybarU + c(-1, 1) * me_normal, col = "grey40", lwd = 2)
 
     outside <- sum(rv$means < xlim_b[1] | rv$means > xlim_b[2])
     leg <- c(
@@ -566,7 +567,7 @@ server <- function(input, output, session) {
     )
     if (outside > 0)
       leg <- c(leg, sprintf("%d mean(s) beyond the axis", outside))
-    legend("topright", bty = "n", cex = 0.82,
+    legend("topright", bty = "n", cex = 0.8,
            legend = c("Theoretical Normal", "Empirical density", "Normal-approx margin", leg),
            lty = c(1, 1, 2, rep(NA, length(leg))),
            lwd = c(2, 2, 2, rep(NA, length(leg))),
