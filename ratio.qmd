@@ -609,7 +609,7 @@ Because the intercept of the true line is non-zero, the **Regression estimator**
 library(shiny)
 
 ## ---------------------------------------------------------------- population
-data_url <- "https://raw.githubusercontent.com/longhaiSK/sampling/main/agpop.csv"
+data_url <- "https://raw.githubusercontent.com/longhaiSK/sampling/main/data/agpop.csv"
 
 raw <- tryCatch({
   download.file(data_url, "agpop.csv")
@@ -660,6 +660,7 @@ COL <- c(ratio = "#1f77b4", reg = "#2ca02c", srs = "#e07b39")
 PCH <- c(ratio = 16, reg = 15, srs = 17)
 
 col_samp <- "#d62728"
+col_pts  <- "blue"                   # sampled observations
 col_true <- "black"
 col_pop  <- "#9aa0a640"
 col_band <- "#eef3f8"
@@ -758,6 +759,14 @@ violin <- function(x, at, col, w = 0.32) {
 
 pct <- function(v) if (is.na(v)) "--" else sprintf("%.1f%%", 100 * v)
 
+## ---- inline SVG button icons (no font or icon-library dependency) ----------
+svg_icon <- function(paths)
+  HTML(sprintf(paste0('<svg width="16" height="16" viewBox="0 0 16 16" ',
+                      'fill="currentColor" style="vertical-align:-2px">%s</svg>'), paths))
+icon_play  <- svg_icon('<path d="M3 2v12l10-6z"/>')
+icon_pause <- svg_icon('<rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/>')
+icon_skip  <- svg_icon('<path d="M1 2v12l7-6zM8 2v12l6-6z"/><rect x="14" y="2" width="2" height="12"/>')
+
 ## ---------------------------------------------------------------------- ui
 ui <- fluidPage(
   tags$style(HTML(
@@ -776,19 +785,32 @@ ui <- fluidPage(
         checkboxInput("brk", "Break the axes", TRUE)
       ),
       column(
-        2,
+        3,
         checkboxGroupInput("show", "Estimators",
                            choices = c("Ratio" = "ratio", "Regression" = "reg",
                                        "Average" = "srs"),
-                           selected = EST)
+                           selected = EST),
+        sliderInput("n", "Sample size (n)", 10, 500, 100, step = 10)
       ),
-      column(2, sliderInput("n", "Sample size n", 10, 500, 100, step = 10)),
-      column(2, sliderInput("reps", "Replications", 50, 2000, 500, step = 50)),
       column(
         3,
-        actionButton("reset", "One single sample", width = "100%"),
-        actionButton("new", "More samples", width = "100%"),
-        actionButton("play", "Play", class = "btn-primary", width = "100%"),
+        sliderInput("speed", "Samples per second", min = 1, max = 10, value = 5, step = 1),
+        numericInput("nrep", "Stop after this many samples",
+                     value = 500, min = 10, max = 20000, step = 50)
+      ),
+      column(
+        3,
+        actionButton("draw", "Draw new samples", class = "btn-primary", width = "100%"),
+        br(), br(),
+        fluidRow(
+          column(4, actionButton("play",  icon_play,  class = "btn-success", width = "100%",
+                                 title = "Play")),
+          column(4, actionButton("pause", icon_pause, class = "btn-warning", width = "100%",
+                                 title = "Pause")),
+          column(4, actionButton("skip",  icon_skip,  class = "btn-info",    width = "100%",
+                                 title = "Skip to the end"))
+        ),
+        actionButton("reset", "Reset", width = "100%"),
         div(style = "font-size: 90%;", textOutput("counter"))
       )
     )
@@ -799,7 +821,13 @@ ui <- fluidPage(
 ## ------------------------------------------------------------------- server
 server <- function(input, output, session) {
 
-  rv <- reactiveValues(s = NULL, n = 100, ests = NULL, playing = FALSE)
+  rv <- reactiveValues(s = NULL, n = 100, ests = NULL)
+  running <- reactiveVal(FALSE)
+
+  nrep <- reactive({
+    v <- input$nrep
+    if (is.null(v) || is.na(v) || v < 1) 1L else min(as.integer(v), 20000L)
+  })
 
   ## everything that depends on the chosen auxiliary variable
   aux <- reactive({
@@ -817,9 +845,7 @@ server <- function(input, output, session) {
   })
 
   ## one sample feeds all three estimators, so the histograms are paired
-  draw_sample <- function() {
-    a   <- aux()
-    n   <- input$n
+  one_draw <- function(a, n) {
     s   <- sample.int(N, n)
     ys  <- yv[s]
     xs  <- a$x[s]
@@ -841,37 +867,54 @@ server <- function(input, output, session) {
            setNames(est + ZCRIT * se, paste0("hi_", EST)),
            setNames(as.numeric(abs(est - ybarU) <= ZCRIT * se), paste0("cov_", EST)),
            Bhat = Bhat, b0 = b0, b1 = b1)
-    rv$s    <- s
-    rv$n    <- n
-    rv$ests <- rbind(rv$ests, e)
+    list(s = s, e = e)
   }
 
-  observeEvent(list(input$n, input$xvar, input$logx), {
-    rv$ests <- NULL; draw_sample()
-  }, ignoreInit = FALSE)
-  observeEvent(input$new,   draw_sample())
-  observeEvent(input$reset, { rv$ests <- NULL; draw_sample() })
+  ## draw k replications; only the last one's sample is kept for the left
+  ## panel. "Skip" calls this with the full remaining count.
+  draw_many <- function(k) {
+    a <- isolate(aux())
+    n <- isolate(input$n)
+    E <- vector("list", k)
+    for (i in seq_len(k)) {
+      d <- one_draw(a, n)
+      E[[i]] <- d$e
+    }
+    rv$s    <- d$s
+    rv$n    <- n
+    rv$ests <- rbind(rv$ests, do.call(rbind, E))
+  }
+  draw_one <- function() draw_many(1)
 
-  observeEvent(input$play, {
-    rv$playing <- !rv$playing
-    updateActionButton(session, "play", label = if (rv$playing) "Pause" else "Play")
+  ## a fresh history always starts from one sample, so the plot is never empty
+  reset_history <- function() {
+    running(FALSE)
+    rv$ests <- NULL
+    draw_one()
+  }
+  observeEvent(list(input$n, input$xvar, input$logx), reset_history(),
+               ignoreInit = FALSE)
+  observeEvent(input$reset, reset_history())
+
+  ## one sample per click; Play repeats until Pause or until the cap is reached
+  observeEvent(input$draw,  { running(FALSE); draw_one() })
+  observeEvent(input$play,  running(TRUE))
+  observeEvent(input$pause, running(FALSE))
+  observeEvent(input$skip, {
+    running(FALSE)
+    k <- nrep() - NROW(rv$ests)
+    if (k > 0) draw_many(k)
   })
 
   observe({
-    if (!rv$playing) return()
-    invalidateLater(150, session)
-    isolate({
-      if (NROW(rv$ests) >= input$reps) {
-        rv$playing <- FALSE
-        updateActionButton(session, "play", label = "Play")
-      } else {
-        draw_sample()
-      }
-    })
+    if (!isTRUE(running())) return()
+    if (NROW(isolate(rv$ests)) >= isolate(nrep())) { running(FALSE); return() }
+    invalidateLater(1000 / isolate(input$speed), session)
+    isolate(draw_one())
   })
 
   output$counter <- renderText(
-    sprintf("%d of %d replications", NROW(rv$ests), input$reps)
+    sprintf("%d of %d samples", NROW(rv$ests), nrep())
   )
 
   output$mainplot <- renderPlot({
@@ -931,7 +974,7 @@ server <- function(input, output, session) {
       draw_line(cur[["b0"]] + cur[["b1"]] * xg, col = COL["reg"], lwd = 2, lty = 2)
     }
     if ("srs" %in% sel) abline(h = tfy(cur[["est_srs"]]), col = COL["srs"], lwd = 2, lty = 2)
-    points(tfx(a$x[s]), tfy(ypl[s]), pch = 16, cex = 1.2, col = col_samp)
+    points(tfx(a$x[s]), tfy(ypl[s]), pch = 16, cex = 1.2, col = col_pts)
 
     abline(h = tfy(ybarU), col = col_samp, lty = 3)
     for (k in sel) ci_bar(xpos[[k]], cur[[paste0("est_", k)]],
@@ -941,7 +984,7 @@ server <- function(input, output, session) {
     mask_gap(bky, 2); mask_gap(bkx, 1)
     box(); draw_axis(bky, 2, divy); draw_axis(bkx, 1, divx)
 
-    leg <- data.frame(l = "sampled y", c = col_samp, lt = NA, p = 16, w = NA)
+    leg <- data.frame(l = "sampled y", c = col_pts, lt = NA, p = 16, w = NA)
     if ("ratio" %in% sel) leg <- rbind(leg, data.frame(
       l = c("true Bx", "ratio fit"), c = c(col_true, COL[["ratio"]]),
       lt = c(1, 2), p = NA, w = c(1.8, 2)))
