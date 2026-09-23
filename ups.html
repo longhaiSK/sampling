@@ -342,28 +342,7 @@ s_{\bar{y}}^2 = \frac{1}{n-1}\sum_{i=1}^n \left(\bar{y}_i - \hat{\bar{y}}_{\math
 \hat{\bar{t}} = \frac{1}{n}\sum_{i=1}^n t_i, \qquad
 \hat{\bar{t}}_r = \hat{B}\,\bar{x}_U, \quad \hat{B} = \frac{\sum_{i=1}^n t_i}{\sum_{i=1}^n x_i},
 \]</span> with SEs <span class="math inline">\(\sqrt{(1 - n/N)\,s_t^2/n}\)</span> and <span class="math inline">\((\bar{x}_U/\bar{x})\sqrt{(1 - n/N)\,s_e^2/n}\)</span>, where <span class="math inline">\(e_i = t_i - \hat{B}x_i\)</span>. UPSWR and the SRS ratio estimator both exploit a size variable, but in different ways: UPSWR uses it at the <strong>design</strong> stage, while the ratio estimator uses it at the <strong>estimation</strong> stage.</p>
-<p><strong>Estimating <span class="math inline">\(\bar{t}_U\)</span>: SRS + ratio vs.&nbsp;UPSWR with <span class="math inline">\(\psi_i \propto x_i\)</span>.</strong> This is the comparison made by the app in <a href="#sec-ups-app" class="quarto-xref"><span>Section 6.8</span></a>, when the same variable is chosen for <span class="math inline">\(M_i\)</span> and <span class="math inline">\(x_i\)</span>. The target is the mean per unit, <span class="math inline">\(\bar{t}_U = t/N\)</span>, and <span class="math inline">\(x_i\)</span> is used either at the estimation stage (SRS) or at the design stage (UPSWR). Write <span class="math inline">\(r_i = t_i/x_i\)</span> and <span class="math inline">\(B = t/t_x\)</span>.</p>
-<ul>
-<li><p><strong>SRS + ratio.</strong> Use <span class="math inline">\(x_i\)</span> only at the estimation stage: <span class="math display">\[
-\hat{\bar{t}}_{r} = \hat{B}\,\bar{x}_U, \quad \hat{B} = \frac{\sum_{i=1}^n t_i}{\sum_{i=1}^n x_i}, \qquad
-\widehat{\mathrm{SE}}(\hat{\bar{t}}_{r}) = \frac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\frac{n}{N}\right)\frac{s_e^2}{n}}, \qquad
-s_e^2 = \frac{1}{n-1}\sum_{i=1}^n \left(t_i - \hat{B}x_i\right)^2 .
-\]</span></p></li>
-<li><p><strong>UPSWR + ratio.</strong> Use <span class="math inline">\(x_i\)</span> at the design stage, with <span class="math inline">\(\psi_i = x_i/t_x\)</span>. Every draw then has <span class="math inline">\(x_i/\psi_i = t_x\)</span>. So the HH ratio estimator, scaled by <span class="math inline">\(\bar{x}_U\)</span>, is exactly the HH estimator of the mean, <span class="math inline">\(\hat{t}_{\mathrm{HH}}/N\)</span>, and it reduces to <span class="math inline">\(\bar{x}_U\)</span> times the average of the sampled ratios <span class="math inline">\(r_i\)</span>: <span class="math display">\[
-\hat{\bar{t}}_{\mathrm{HH}} = \bar{x}_U\,\hat{\bar{y}}_{\mathrm{HH},r}
-= \bar{x}_U\,\frac{\sum_{i=1}^n t_i/\psi_i}{\sum_{i=1}^n x_i/\psi_i}
-= \frac{\hat{t}_{\mathrm{HH}}}{N}
-= \bar{x}_U\,\frac{1}{n}\sum_{i=1}^n r_i ,
-\]</span> <span class="math display">\[
-\widehat{\mathrm{SE}}(\hat{\bar{t}}_{\mathrm{HH}}) = \bar{x}_U\,\frac{s_r}{\sqrt{n}}, \qquad
-s_r^2 = \frac{1}{n-1}\sum_{i=1}^n \left(r_i - \frac{1}{n}\sum_{j=1}^n r_j\right)^2 .
-\]</span></p></li>
-</ul>
-<p>The two estimators differ only in how they estimate the slope <span class="math inline">\(B\)</span> before multiplying by <span class="math inline">\(\bar{x}_U\)</span>. SRS uses a <em>ratio of sample totals</em> <span class="math inline">\(\sum t_i/\sum x_i\)</span>, with every unit equally likely. UPSWR uses a <em>mean of ratios</em> <span class="math inline">\(\frac{1}{n}\sum t_i/x_i\)</span>, over a sample tilted towards large <span class="math inline">\(x_i\)</span>. Both are driven by the residuals <span class="math inline">\(e_i = t_i - B x_i\)</span> from the line through the origin. Ignoring the finite population correction (and taking <span class="math inline">\(N - 1 \approx N\)</span>), their variances are <span class="math display">\[
-V(\hat{\bar{t}}_{r}) \approx \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2,
-\qquad
-V(\hat{\bar{t}}_{\mathrm{HH}}) = \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2\,\frac{\bar{x}_U}{x_i}.
-\]</span> So UPSWR reweights each squared residual by <span class="math inline">\(\bar{x}_U/x_i\)</span>: units larger than average count less, and smaller ones count more. UPSWR therefore wins when the large residuals belong to the units with <span class="math inline">\(x_i &gt; \bar{x}_U\)</span>, i.e.&nbsp;when the spread of <span class="math inline">\(t_i\)</span> about the line grows with <span class="math inline">\(x_i\)</span>, as it typically does for size-related data such as county acreages. When the spread is constant in <span class="math inline">\(x_i\)</span>, the SRS ratio estimator does better.</p>
+<p>A direct comparison of the SRS ratio estimator with UPSWR, both using the same size variable, is given with the app in <a href="#sec-ups-app" class="quarto-xref"><span>Section 6.8</span></a>.</p>
 <p><strong>3. UPS Without Replacement (UPSWO)</strong></p>
 <p>When sampling without replacement, the inclusion probability of unit <span class="math inline">\(i\)</span> across all draws is <span class="math inline">\(\pi_i\)</span>.</p>
 <ul>
@@ -11712,6 +11691,44 @@ Figure&nbsp;6.3: Estimator variance: naive SRS vs.&nbsp;SRS regression vs.&nbsp;
 </section>
 <section id="sec-ups-app" class="level2" data-number="6.8">
 <h2 data-number="6.8" class="anchored" data-anchor-id="sec-ups-app"><span class="header-section-number">6.8</span> Shinylive App Comparing SRS and UPSWR</h2>
+<p>The app compares two ways of using a size variable <span class="math inline">\(x_i\)</span> to estimate the mean per unit <span class="math inline">\(\bar{t}_U = t/N\)</span> (here <span class="math inline">\(t_i\)</span> is <code>acres92</code> for county <span class="math inline">\(i\)</span>): at the <strong>estimation</strong> stage (SRS + ratio) or at the <strong>design</strong> stage (UPSWR with <span class="math inline">\(\psi_i = x_i/t_x\)</span>). Choosing the same variable for <span class="math inline">\(M_i\)</span> and <span class="math inline">\(x_i\)</span> in the app gives exactly this comparison. The plain SRS average is included as a baseline. Throughout, write <span class="math display">\[
+B = \frac{t}{t_x}, \qquad r_i = \frac{t_i}{x_i}, \qquad e_i = t_i - B x_i ,
+\]</span> so <span class="math inline">\(e_i\)</span> is unit <span class="math inline">\(i\)</span>’s residual from the line through the origin with the population slope. Note that <span class="math inline">\(\sum_{i=1}^N e_i = t - B t_x = 0\)</span>.</p>
+<p><strong>SRS + ratio.</strong> Use <span class="math inline">\(x_i\)</span> only at the estimation stage: <span class="math display">\[
+\hat{\bar{t}}_{r} = \hat{B}\,\bar{x}_U, \quad \hat{B} = \frac{\sum_{i=1}^n t_i}{\sum_{i=1}^n x_i}, \qquad
+\widehat{\mathrm{SE}}(\hat{\bar{t}}_{r}) = \frac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\frac{n}{N}\right)\frac{s_e^2}{n}}, \qquad
+s_e^2 = \frac{1}{n-1}\sum_{i=1}^n \left(t_i - \hat{B}x_i\right)^2 .
+\]</span></p>
+<p><strong>UPSWR + ratio.</strong> Use <span class="math inline">\(x_i\)</span> at the design stage, with <span class="math inline">\(\psi_i = x_i/t_x\)</span>. Every draw then has <span class="math inline">\(x_i/\psi_i = t_x\)</span>. So the HH ratio estimator, scaled by <span class="math inline">\(\bar{x}_U\)</span>, is exactly the HH estimator of the mean, <span class="math inline">\(\hat{t}_{\mathrm{HH}}/N\)</span>, and it reduces to <span class="math inline">\(\bar{x}_U\)</span> times the average of the sampled ratios <span class="math inline">\(r_i\)</span>: <span class="math display">\[
+\hat{\bar{t}}_{\mathrm{HH}} = \bar{x}_U\,\hat{\bar{y}}_{\mathrm{HH},r}
+= \bar{x}_U\,\frac{\sum_{i=1}^n t_i/\psi_i}{\sum_{i=1}^n x_i/\psi_i}
+= \frac{\hat{t}_{\mathrm{HH}}}{N}
+= \bar{x}_U\,\frac{1}{n}\sum_{i=1}^n r_i ,
+\]</span> <span class="math display">\[
+\widehat{\mathrm{SE}}(\hat{\bar{t}}_{\mathrm{HH}}) = \bar{x}_U\,\frac{s_r}{\sqrt{n}}, \qquad
+s_r^2 = \frac{1}{n-1}\sum_{i=1}^n \left(r_i - \frac{1}{n}\sum_{j=1}^n r_j\right)^2 .
+\]</span></p>
+<p><strong>Why the residuals <span class="math inline">\(e_i\)</span> drive both variances.</strong> Both estimators are <span class="math inline">\(\bar{x}_U\)</span> times an estimate of the slope <span class="math inline">\(B\)</span>. SRS uses a <em>ratio of sample totals</em>, with every unit equally likely. UPSWR uses a <em>mean of ratios</em>, over a sample tilted towards large <span class="math inline">\(x_i\)</span>. Their errors can be written in terms of the <span class="math inline">\(e_i\)</span> of the sampled units:</p>
+<ul>
+<li><p><strong>UPSWR.</strong> Each draw contributes <span class="math inline">\(\bar{x}_U r_i\)</span>, and its error is exactly a scaled residual: <span class="math display">\[
+\bar{x}_U r_i - \bar{t}_U = \bar{x}_U\,(r_i - B) = \bar{x}_U\,\frac{t_i - Bx_i}{x_i} = \frac{\bar{x}_U}{x_i}\,e_i .
+\]</span> A draw lands on unit <span class="math inline">\(i\)</span> with probability <span class="math inline">\(\psi_i = x_i/t_x\)</span>, so these errors average to <span class="math inline">\(\sum_i \psi_i\,\bar{x}_U e_i/x_i = \sum_i e_i/N = 0\)</span>; this is why HH is unbiased. The <span class="math inline">\(n\)</span> draws are independent, so the variance is <span class="math inline">\(1/n\)</span> times the <span class="math inline">\(\psi\)</span>-weighted mean square of the draw errors: <span class="math display">\[
+V(\hat{\bar{t}}_{\mathrm{HH}}) = \frac{1}{n}\sum_{i=1}^N \psi_i \left(\frac{\bar{x}_U}{x_i}\,e_i\right)^2
+= \frac{1}{n}\sum_{i=1}^N \frac{x_i}{N\bar{x}_U}\cdot\frac{\bar{x}_U^2}{x_i^2}\,e_i^2
+= \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2\,\frac{\bar{x}_U}{x_i} .
+\]</span> A unit is drawn in proportion to <span class="math inline">\(x_i\)</span>, but its error is scaled by <span class="math inline">\(1/x_i\)</span>. It squares to <span class="math inline">\(1/x_i^2\)</span>, so each unit’s net contribution is proportional to <span class="math inline">\(e_i^2/x_i\)</span>.</p></li>
+<li><p><strong>SRS + ratio.</strong> Since <span class="math inline">\(\sum_{i=1}^n t_i - B\sum_{i=1}^n x_i = \sum_{i=1}^n e_i\)</span>, <span class="math display">\[
+\hat{\bar{t}}_{r} - \bar{t}_U = \bar{x}_U\,(\hat{B} - B) = \frac{\bar{x}_U}{\bar{x}}\,\bar{e},
+\qquad \bar{e} = \frac{1}{n}\sum_{i=1}^n e_i ,
+\]</span> so the error is (up to <span class="math inline">\(\bar{x}_U/\bar{x} \approx 1\)</span>) the SRS mean of the residuals. Their population mean is <span class="math inline">\(0\)</span>, so <span class="math display">\[
+V(\hat{\bar{t}}_{r}) \approx \left(1-\frac{n}{N}\right)\frac{1}{n}\cdot\frac{1}{N-1}\sum_{i=1}^N e_i^2 .
+\]</span></p></li>
+</ul>
+<p>Ignoring the finite population correction (and taking <span class="math inline">\(N - 1 \approx N\)</span>), the two variances differ only by the weight <span class="math inline">\(\bar{x}_U/x_i\)</span> on each squared residual: <span class="math display">\[
+V(\hat{\bar{t}}_{r}) \approx \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2,
+\qquad
+V(\hat{\bar{t}}_{\mathrm{HH}}) = \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2\,\frac{\bar{x}_U}{x_i}.
+\]</span> Under UPSWR, units larger than average count less and smaller ones count more. UPSWR therefore wins when the large residuals belong to the units with <span class="math inline">\(x_i &gt; \bar{x}_U\)</span>, i.e. when the spread of <span class="math inline">\(t_i\)</span> about the line grows with <span class="math inline">\(x_i\)</span>, as it does for county acreages. When the spread is constant in <span class="math inline">\(x_i\)</span>, the SRS ratio estimator does better. The app’s “Variance reduction vs.&nbsp;SRS average” legend reports both variances, simulated and theoretical, relative to the plain SRS average <span class="math inline">\(\hat{\bar{t}}\)</span>.</p>
 <div id="fig-ups-app" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ups-app-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -11918,6 +11935,7 @@ ui &lt;- fluidPage(
                     choices = xvars, selected = mdef),
         selectInput("xvar", HTML("Aux. var. for estimation (x&lt;sub&gt;i&lt;/sub&gt;)"),
                     choices = xvars, selected = xdef),
+        checkboxInput("sync", HTML("Same variable (M&lt;sub&gt;i&lt;/sub&gt; = x&lt;sub&gt;i&lt;/sub&gt;)"), TRUE),
         checkboxInput("brk", "Break the axes", TRUE)
       ),
       column(
@@ -12046,6 +12064,16 @@ server &lt;- function(input, output, session) {
     draw_one()
   }
   observeEvent(list(input$n, input$mvar, input$xvar), reset_history(), ignoreInit = FALSE)
+
+  ## keep M and x the same while "Same variable" is ticked: a change to either
+  ## box is copied to the other, and ticking the box copies M to x
+  sync_to &lt;- function(id, v) {
+    if (isTRUE(input$sync) &amp;&amp; !identical(input[[id]], v))
+      updateSelectInput(session, id, selected = v)
+  }
+  observeEvent(input$mvar, sync_to("xvar", input$mvar))
+  observeEvent(input$xvar, sync_to("mvar", input$xvar))
+  observeEvent(input$sync, sync_to("xvar", input$mvar))
   observeEvent(input$reset, reset_history())
 
   ## one sample per click; Play repeats until Pause or until the cap is reached
