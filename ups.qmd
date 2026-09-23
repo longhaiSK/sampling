@@ -1,19 +1,83 @@
 # Unequal Probability Sampling
 
-## Key Concepts and Formulas
+## Key Concepts and Formulas {#sec-ups-formulas}
 
 Unequal Probability Sampling (UPS) improves estimation precision by sampling units with probabilities proportional to their size (PPS). If a cluster or county is larger, it has a higher chance of being included in the sample. This approach prevents extreme variance when cluster sizes vary drastically.
 
-**1. UPS With Replacement (UPSWR)**
-When sampling with replacement, we draw $n$ units. A single unit $i$ has a selection probability $\psi_i$ on each draw. 
+**Notation.** The population has $N$ units (clusters, counties, ...). Unit $i$ has
 
-*   **Total Estimator (Hansen-Hurwitz):** $\hat{t}_{pwr} = \frac{1}{n} \sum_{i=1}^n \frac{y_i}{\psi_i}$
-*   **Ratio Estimator (Mean):** $\hat{\bar{y}}_{r} = \frac{\sum_{i=1}^n \frac{y_i}{\psi_i}}{\sum_{i=1}^n \frac{M_i}{\psi_i}}$
+* a value $t_i$ of the study variable. For a cluster, $t_i$ is its total; for a county, it is the county's value. The population total is $t = \sum_{i=1}^N t_i$, and the mean per unit is $\bar{t}_U = t/N$;
+* a size $M_i$ (e.g. the number of elements in a cluster), with $M_0 = \sum_{i=1}^N M_i$. The mean per element is then $\bar{y}_U = t/M_0$;
+* possibly another auxiliary variable $x_i$ with known total $t_x = \sum_{i=1}^N x_i$ and mean $\bar{x}_U = t_x/N$.
+
+We write $t_i$ rather than $y_i$ so that $\bar{t}_U$, the mean per unit, is kept
+apart from $\bar{y}_U$, the mean per unit of size that ratio estimators target.
+
+**1. UPS With Replacement (UPSWR)**
+
+We make $n$ independent draws. On each draw, unit $i$ is selected with probability
+$\psi_i$, where $\sum_{i=1}^N \psi_i = 1$. A unit may be selected more than once, and it then appears in the sample once per draw.
+
+* **Hansen–Hurwitz estimator of the total.** Each draw gives an unbiased estimate
+  $u_i = t_i/\psi_i$ of $t$. The HH estimator is their average, and the SE comes from
+  their sample standard deviation $s_u$:
+  $$
+  \hat{t}_{HH} = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{\psi_i}, \qquad
+  \widehat{SE}(\hat{t}_{HH}) = \frac{s_u}{\sqrt{n}}, \qquad
+  s_u^2 = \frac{1}{n-1}\sum_{i=1}^n \left(\frac{t_i}{\psi_i} - \hat{t}_{HH}\right)^2 .
+  $$
+  Dividing by $N$ gives the HH estimator of the mean per unit, and its SE:
+  $$
+  \hat{\bar{t}}_{HH} = \frac{\hat{t}_{HH}}{N} = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{N\psi_i}, \qquad
+  \widehat{SE}(\hat{\bar{t}}_{HH}) = \frac{\widehat{SE}(\hat{t}_{HH})}{N}
+  = \frac{1}{N}\sqrt{\frac{1}{n(n-1)}\sum_{i=1}^n \left(\frac{t_i}{\psi_i} - \hat{t}_{HH}\right)^2} .
+  $$
+
+* **Hansen–Hurwitz ratio estimator.** Dividing the HH estimator of $t$ by the HH
+  estimator of the total of an auxiliary variable $x$ gives
+  $$
+  \hat{\bar{y}}_{\psi,r} = \frac{\hat{t}_{HH}}{\hat{t}_{x,HH}}
+  = \frac{\sum_{i=1}^n t_i/\psi_i}{\sum_{i=1}^n x_i/\psi_i},
+  $$
+  which estimates $t/t_x$. Multiplying by $\bar{x}_U$ or $t_x$ gives estimators of $\bar{t}_U$ or $t$.
+  Its SE is that of an ordinary ratio estimator, applied to the pairs
+  $(t_i/\psi_i,\; x_i/\psi_i)$. The most common choice is $x_i = M_i$, which gives the mean per element $\bar{y}_U = t/M_0$.
+  In that case $M_0$ need not be known, only the $\psi_i$.
+
+* **The PPS special case.** Under probability proportional to size, $\psi_i = M_i/M_0$.
+  Then every draw has $M_i/\psi_i = M_0$, so with $x_i = M_i$ the denominator is exactly $nM_0$ and
+  $$
+  \hat{\bar{y}}_{\psi,r} = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{M_i}
+  = \frac{1}{n}\sum_{i=1}^n \bar{y}_i ,
+  $$
+  the plain average of the sampled means per element $\bar{y}_i = t_i/M_i$, with
+  $\widehat{SE} = s_{\bar{y}}/\sqrt{n}$. It is also HH up to a known constant:
+  $$
+  \hat{t}_{HH} = M_0\,\hat{\bar{y}}_{\psi,r}, \qquad
+  \hat{\bar{t}}_{HH} = \frac{M_0}{N}\,\hat{\bar{y}}_{\psi,r}.
+  $$
+  So under PPS the ratio step adds nothing new: the design already uses $M_i$ fully.
+  HH is most precise when $t_i/\psi_i$ is nearly constant, i.e. when $t_i$ is nearly proportional to $M_i$.
 
 **2. UPS Without Replacement (UPSWO)**
-When sampling without replacement, the inclusion probability for unit $i$ across all draws is $\pi_i$.
 
-*   **Total Estimator (Horvitz-Thompson):** $\hat{t}_{HT} = \sum_{i=1}^n \frac{y_i}{\pi_i}$
+When sampling without replacement, the inclusion probability of unit $i$ across all draws is $\pi_i$.
+
+* **Horvitz–Thompson estimator of the total:**
+  $$
+  \hat{t}_{HT} = \sum_{i=1}^n \frac{t_i}{\pi_i}.
+  $$
+
+**3. SRS estimators, for comparison**
+
+Under a simple random sample of $n$ units drawn without replacement, the usual estimators of $\bar{t}_U$ are
+$$
+\hat{\bar{t}} = \frac{1}{n}\sum_{i=1}^n t_i, \qquad
+\hat{\bar{t}}_r = \hat{B}\,\bar{x}_U, \quad \hat{B} = \frac{\sum_{i=1}^n t_i}{\sum_{i=1}^n x_i},
+$$
+with SEs $\sqrt{(1 - n/N)\,s_t^2/n}$ and $(\bar{x}_U/\bar{x})\sqrt{(1 - n/N)\,s_e^2/n}$, where $e_i = t_i - \hat{B}x_i$.
+UPSWR and the SRS ratio estimator both exploit a size variable, but in different ways:
+UPSWR uses it at the **design** stage, while the ratio estimator uses it at the **estimation** stage.
 
 ---
 
@@ -283,22 +347,21 @@ res_upswo$estimate |> format_est_gt("ratio_mean")
 
 ## Shinylive App Comparing SRS and UPSWR
 
-This app estimates the population mean of `acres92` in the `agpop` data in
-three ways, using the same sample size $n$. It uses two auxiliary variables, and you
-can pick each one in the app:
+This app puts the formulas of @sec-ups-formulas side by side on the `agpop` data.
+The unit value $t_i$ is `acres92` for county $i$, and the target is its mean per county,
+$\bar{t}_U$. The app uses two auxiliary variables, and you can pick each one:
 
-* $M_i$, the **size variable for UPS**, which sets the selection probabilities
-  $\psi_i = M_i / M_0$, where $M_0 = \sum_{k=1}^N M_k$;
-* $x_i$, the **auxiliary variable for estimation**, used by the SRS ratio estimator,
-  with known population mean $\bar{x}_U$.
+* $M_i$, the **auxiliary variable for UPS**, which sets the PPS selection probabilities $\psi_i = M_i/M_0$;
+* $x_i$, the **auxiliary variable for estimation**, used by the SRS ratio estimator.
 
-The three estimators are:
+Each replication draws an SRS and a separate UPSWR sample, both of size $n$,
+and computes three estimates of $\bar{t}_U$:
 
-* **SRS + average**: the sample mean $\bar{y}$ of a simple random sample drawn without replacement;
-* **SRS + ratio**: the ratio estimator $\hat{B}\bar{x}_U$ from the same SRS, with $\hat{B} = \sum y_i / \sum x_i$;
-* **UPSWR + HH**: the Hansen–Hurwitz estimator $\frac{1}{N}\cdot\frac{1}{n}\sum_{i=1}^n y_i/\psi_i$ from a separate sample drawn with replacement. The SE uses the $n$ values $y_i/(N\psi_i)$.
+* **SRS + average:** $\hat{\bar{t}}$;
+* **SRS + ratio:** $\hat{\bar{t}}_r = \hat{B}\bar{x}_U$;
+* **UPSWR + HH:** $\hat{\bar{t}}_{HH} = \hat{t}_{HH}/N = (M_0/N)\,\hat{\bar{y}}_{\psi,r}$.
 
-The left panel shows the population as a scatterplot of $y$. The SRS view plots $y$
+The left panel shows the population as a scatterplot of $t_i$. The SRS view plots $t_i$
 against $x_i$, and the UPSWR view plots it against $M_i$.
 Point size shows each unit's selection probability per draw for the design you choose:
 under SRS every unit has probability $1/N$, and under UPSWR it is $\psi_i$. Sampled
@@ -308,15 +371,13 @@ The two designs look at the population differently, so the axes are broken diffe
 * **SRS view:** most counties are small, so the dense lower range is shown at full scale and the sparse upper tail is squeezed into a thin strip.
 * **UPSWR view:** the lower range is squeezed instead. This range holds most of the counties but only 20% of $M_0$, so PPS draws land there only 20% of the time. The large counties that dominate a PPS sample are spread out.
 
-Because $\psi_i = M_i/M_0$, the HH estimate of the total is
-$\hat{t}_{HH} = M_0 \cdot \frac{1}{n}\sum y_i/M_i$. So HH behaves like a line through
-the origin in the $(M, y)$ plane, with slope equal to the average of $y_i/M_i$.
-The SRS ratio estimator instead fits a line in the $(x, y)$ plane with slope
-$\hat{B} = \sum y_i/\sum x_i$. Each view draws its own fitted line, along with the
-true line through the origin (slope $t_y/M_0$ or $t_y/t_x$).
+Each view draws its own fitted line through the origin, next to the true line:
+
+* **UPSWR view:** the line in the $(M, t)$ plane has slope $\hat{\bar{y}}_{\psi,r} = \frac{1}{n}\sum t_i/M_i$, the average of the sampled ratios (the PPS special case above). The true slope is $t/M_0$.
+* **SRS view:** the ratio fit in the $(x, t)$ plane has slope $\hat{B} = \sum t_i/\sum x_i$, the ratio of the sample totals. The true slope is $t/t_x$.
 
 The right panel collects the estimates from repeated samples as violins. It also shows
-the current 95% intervals (red when they miss $\bar{y}_U$), the running coverage rates,
+the current 95% intervals (red when they miss $\bar{t}_U$), the running coverage rates,
 and each estimator's variance reduction relative to the SRS average, next to its theoretical value.
 
 Draw new samples adds one replication. Play keeps drawing until you press Pause,
@@ -725,7 +786,7 @@ server <- function(input, output, session) {
     par(mar = c(4.2, 4.8, 3.0, 1.0))
     plot(NA, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE,
          xlab = paste0(if (ups) "M: " else "x: ", h$name, unit_lab(divx)),
-         ylab = paste0("y: acres92", unit_lab(divy)),
+         ylab = paste0("t: acres92", unit_lab(divy)),
          main = sprintf("Population and %s sample, n = %d",
                         if (ups) "UPSWR" else "SRS", n))
     rect(0, tfy(lo), 1, tfy(hi), col = col_band, border = NA)
@@ -759,12 +820,12 @@ server <- function(input, output, session) {
     box(); draw_axis(bky, 2, divy); draw_axis(bkx, 1, divx)
 
     leg <- data.frame(l = c(if (ups) "size ~ psi = M / M0" else "size ~ 1/N (equal)",
-                            "sampled y"),
+                            "sampled t"),
                       c = c("grey55", col_pts), lt = NA, p = 16, w = NA)
-    leg <- rbind(leg, data.frame(l = if (ups) "true y = (ty/M0) M" else "true y = (ty/tx) x",
+    leg <- rbind(leg, data.frame(l = if (ups) "true t = (t/M0) M" else "true t = (t/tx) x",
                                  c = col_true, lt = 1, p = NA, w = 1.8))
     if (ups && "hh" %in% sel) leg <- rbind(leg, data.frame(
-      l = "HH slope mean(y/M)", c = COL[["hh"]], lt = 2, p = NA, w = 2))
+      l = "HH slope mean(t/M)", c = COL[["hh"]], lt = 2, p = NA, w = 2))
     if (!ups && "ratio" %in% sel) leg <- rbind(leg, data.frame(
       l = "ratio fit", c = COL[["ratio"]], lt = 2, p = NA, w = 2))
     if (!ups && "srs" %in% sel) leg <- rbind(leg, data.frame(
@@ -778,7 +839,7 @@ server <- function(input, output, session) {
     k_n <- length(sel)
     at  <- setNames(seq_len(k_n), sel)
     plot(NA, xlim = c(0.4, k_n + 0.6), ylim = c(lo, hi), axes = FALSE,
-         xlab = "", ylab = paste0("estimate of mean acres92", unit_lab(divy)),
+         xlab = "", ylab = paste0("estimate of mean t (acres92)", unit_lab(divy)),
          main = "Sampling distributions of the estimates")
     usr <- par("usr")
     rect(usr[1], usr[3], usr[2], usr[4], col = col_band, border = NA)
