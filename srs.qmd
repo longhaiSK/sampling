@@ -471,7 +471,7 @@ server <- function(input, output, session) {
     par(mar = MAR, yaxs = "i")
     plot(dens_y, dens$x, type = "l", col = "grey40", lwd = 2,
          xlim = c(-0.62, 1.15), ylim = c(0, xmax_top),
-         xlab = "", ylab = "acres92", xaxt = "n", yaxt = "n", bty = "n",
+         xlab = "", ylab = "acres92 (thousands)", xaxt = "n", yaxt = "n", bty = "n",
          main = "Population distribution with the current SRS sample")
 
     # raw values, jittered; tail units sit in the compressed lane
@@ -482,9 +482,9 @@ server <- function(input, output, session) {
 
     # axis up to the cut, then the break marker and the lane
     at <- pretty(c(0, cut), 6); at <- at[at <= cut]
-    axis(2, at = at, labels = format(at, big.mark = ",", trim = TRUE), las = 1)
+    axis(2, at = at, labels = format(at / 1000, big.mark = ",", trim = TRUE), las = 1)
     segments(-0.62, cut, 1.15, cut, col = "grey75", lty = 3)
-    text(1.10, cut + lane_w / 2, sprintf("compressed: > %s (%d counties)", fmt(cut), n_tail),
+    text(1.10, cut + lane_w / 2, sprintf("compressed: > %s (%d counties)", fmt(cut / 1000), n_tail),
          adj = c(1, 0), col = "grey40", cex = 0.7)
 
     # current sample mean and interval
@@ -503,9 +503,11 @@ server <- function(input, output, session) {
     par(mar = MAR, yaxs = "i")
 
     if (length(rv$means) == 0) {
-      plot(1, type = "n", xlim = c(0, 1), ylim = xlim_b, bty = "n", xaxt = "n",
-           xlab = "", ylab = "Sample mean of acres92",
+      plot(1, type = "n", xlim = c(0, 1), ylim = xlim_b, bty = "n", xaxt = "n", yaxt = "n",
+           xlab = "", ylab = "Sample mean of acres92 (thousands)",
            main = "Sampling distribution of the sample mean")
+      at_r <- pretty(xlim_b, 6); at_r <- at_r[at_r >= xlim_b[1] & at_r <= xlim_b[2]]
+      axis(2, at = at_r, labels = format(at_r / 1000, big.mark = ",", trim = TRUE), las = 1)
       abline(h = ybarU, col = "black", lwd = 2, lty = 2)
       text(0.5, ybarU, "Click 'Draw new sample' or Play to begin", col = "grey50")
       return(invisible())
@@ -529,9 +531,11 @@ server <- function(input, output, session) {
     top <- max(c(vis, curve_pk, if (!is.null(dens_emp)) dens_emp$y else NULL, 1e-6))
 
     # histogram bars drawn horizontally: density along x, sample mean along y
-    plot(NA, xlim = c(0, top * 1.30), ylim = xlim_b, bty = "n",
-         xlab = "Density", ylab = "Sample mean of acres92",
+    plot(NA, xlim = c(0, top * 1.30), ylim = xlim_b, yaxt = "n", bty = "n",
+         xlab = "Density", ylab = "Sample mean of acres92 (thousands)",
          main = "Sampling distribution of the sample mean")
+    at_r <- pretty(xlim_b, 6); at_r <- at_r[at_r >= xlim_b[1] & at_r <= xlim_b[2]]
+    axis(2, at = at_r, labels = format(at_r / 1000, big.mark = ",", trim = TRUE), las = 1)
     rect(0, h$breaks[-length(h$breaks)], h$density, h$breaks[-1],
          col = adjustcolor("steelblue", 0.55), border = "white")
     if (!is.null(dens_emp)) lines(dens_emp$y, dens_emp$x, col = "blue", lwd = 2)
@@ -557,9 +561,9 @@ server <- function(input, output, session) {
 
     outside <- sum(rv$means < xlim_b[1] | rv$means > xlim_b[2])
     leg <- c(
-      sprintf("True mean = %s", fmt(ybarU)),
-      sprintf("Theoretical SE (n = %d) = %s", n, fmt(se_theory)),
-      sprintf("Normal-approx %.0f%% margin = ±%s", 100 * input$conf, fmt(me_normal)),
+      sprintf("True mean = %sK", fmt(ybarU / 1000)),
+      sprintf("Theoretical SE (n = %d) = %sK", n, fmt(se_theory / 1000)),
+      sprintf("Normal-approx %.0f%% margin = ±%sK", 100 * input$conf, fmt(me_normal / 1000)),
       sprintf("Samples drawn = %d of %d", length(rv$means), nrep()),
       sprintf("Empirical coverage = %.1f%% (nominal %.0f%%)",
               100 * mean(rv$hits), 100 * input$conf),
