@@ -488,14 +488,17 @@ data.frame(
 ```
 **Output Note:** The table shows dramatic results: Proportional allocation reduces variance by `r round(sim_var_reduction["Prop2size"] * 100, 1)`%, and Neyman allocation reduces it by `r round(sim_var_reduction["Neyman"] * 100, 1)`%. Stratifying by a highly correlated variable is immensely powerful.
 
-## Interactive Demonstration: Stratification by `acres82` {#sec-app-stratification}
+## Interactive Demonstration: Stratification by `acres82` or `region` {#sec-app-stratification}
 
 The app below draws three samples of the same total size $n$ at every step: a
 simple random sample, a stratified sample with proportional allocation, and a
-stratified sample with Neyman allocation. The strata are the `acres82` quartile
-groups defined above, labelled Q1 to Q4.
+stratified sample with Neyman allocation. It uses the full `agpop.csv`
+population (with the `-99` missing-value codes recoded to `NA` and dropped),
+and a radio button lets you choose the stratification variable: the `acres82`
+quartile groups defined above (labelled Q1 to Q4), or the four `region`
+categories (NC, NE, S, W) used earlier in this chapter.
 
-The top panel shows the population split into its four strata, each drawn as a
+The top panel shows the population split into its strata, each drawn as a
 band of jittered points on a broken `acres92` axis; the radio buttons choose
 which of the three samples is highlighted in red, and each band is labelled with
 its $N_h$ and the $n_h$ that the chosen allocation assigns to it.
@@ -516,23 +519,48 @@ and coverage rate appear at the right of each row.
 ## file: app.R
 library(shiny)
 
-data_url <- "https://raw.githubusercontent.com/longhaiSK/sampling/main/acres92_stratum.csv"
-download.file(data_url, "acres92_stratum.csv")
-dat <- read.csv("acres92_stratum.csv")
-dat <- dat[order(dat$stratum), ]
+data_url <- "https://raw.githubusercontent.com/longhaiSK/sampling/main/data/agpop.csv"
+download.file(data_url, "agpop.csv")
+dat <- read.csv("agpop.csv")
 
-pop     <- dat$acres92
-stratum <- factor(dat$stratum)
-lev     <- sub("^acres82", "", levels(stratum))   # acres82Q1 -> Q1
-H       <- length(lev)
-N       <- length(pop)
-ybarU   <- mean(pop)
-S       <- sd(pop)
+## -99 is the missing-value code in agpop.csv; recode to NA and drop
+## counties missing either the response (acres92) or the acres82 stratifier,
+## so that the same population underlies both stratification choices below.
+dat$acres92[dat$acres92 == -99] <- NA
+dat$acres82[dat$acres82 == -99] <- NA
+dat <- dat[!is.na(dat$acres92) & !is.na(dat$acres82), ]
 
-idx_h <- split(seq_len(N), stratum)      # population indices by stratum
-Nh    <- sapply(idx_h, length)
-Sh    <- sapply(idx_h, function(i) sd(pop[i]))
-W     <- Nh / N
+pop   <- dat$acres92
+N     <- length(pop)
+ybarU <- mean(pop)
+S     <- sd(pop)
+
+## build the stratum factor, population index list, and per-stratum summaries
+## for either stratification variable ("acres82" quartiles or "region")
+make_strata <- function(method) {
+  if (method == "acres82") {
+    stratum <- cut(dat$acres82,
+                    breaks = quantile(dat$acres82, probs = c(0, 0.25, 0.75, 0.95, 1)),
+                    include.lowest = TRUE)
+    levels(stratum) <- paste0("Q", seq_along(levels(stratum)))
+  } else {
+    stratum <- factor(dat$region)
+  }
+  H     <- nlevels(stratum)
+  idx_h <- split(seq_len(N), stratum)
+  Nh    <- sapply(idx_h, length)
+  Sh    <- sapply(idx_h, function(i) sd(pop[i]))
+  W     <- Nh / N
+
+  set.seed(42)
+  band  <- as.integer(stratum)
+  y_pop <- (H + 1 - band) + runif(N, -0.30, 0.30)   # stratum 1 in the top band
+
+  list(lev = levels(stratum), H = H, idx_h = idx_h,
+       Nh = Nh, Sh = Sh, W = W, y_pop = y_pop)
+}
+
+STRAT_CHOICES <- c("acres82 quartiles" = "acres82", "region" = "region")
 
 ## ---- broken x-axis, shared by both panels ----------------------------------
 ## Drawn region [0, 2 * ybarU]: visible scale [0, cut] plus a compressed lane
@@ -550,10 +578,6 @@ if (n_tail > 0) {
   px[tail_id] <- cut + lane_w * (0.10 + 0.80 * r)
 }
 
-set.seed(42)
-band  <- as.integer(stratum)
-y_pop <- (H + 1 - band) + runif(N, -0.30, 0.30)   # Q1 in the top band
-
 ## ---- fixed window for the sampling distributions ---------------------------
 se100  <- sqrt(1 - 100 / N) * S / sqrt(100)
 xlim_b <- ybarU + c(-1, 1) * 5 * se100
@@ -563,7 +587,7 @@ MCOL   <- c("grey35", "steelblue", "darkorange")
 MAR    <- c(4.5, 7, 3, 1.5)   # identical in both panels, so the scales align
 
 ## allocation with at least 2 units per stratum, summing to n
-alloc <- function(w, n) {
+alloc <- function(w, n, Nh) {
   nh <- pmin(pmax(2, round(w / sum(w) * n)), Nh)
   while (sum(nh) > n && any(nh > 2)) {
     i <- which.max(nh - 2); nh[i] <- nh[i] - 1
@@ -586,10 +610,12 @@ violin <- function(x, at, col, w = 0.32) {
 }
 
 ui <- fluidPage(
-  titlePanel("Stratified sampling by acres82 quartiles, against simple random sampling"),
+  titlePanel("Stratified sampling (by acres82 quartiles or region), against simple random sampling"),
   sidebarLayout(
     sidebarPanel(
       width = 3,
+      radioButtons("stratvar", "Stratification variable", choices = STRAT_CHOICES,
+                   selected = "acres82"),
       sliderInput("n", "Total sample size (n)", min = 40, max = 1000, value = 300, step = 10),
       sliderInput("conf", "Confidence level", min = 0.80, max = 0.99, value = 0.95, step = 0.01),
       radioButtons("show", "Highlight sample from", choiceNames = METHOD,
@@ -630,13 +656,22 @@ server <- function(input, output, session) {
     if (is.null(v) || is.na(v) || v < 1) 1L else min(as.integer(v), 20000L)
   })
 
-  nh_prop   <- reactive(alloc(Nh,      input$n))
-  nh_neyman <- reactive(alloc(Nh * Sh, input$n))
+  si <- reactive(make_strata(input$stratvar))
+
+  strat_label <- reactive(names(STRAT_CHOICES)[STRAT_CHOICES == input$stratvar])
+
+  nh_prop   <- reactive({ s <- si(); alloc(s$Nh,          input$n, s$Nh) })
+  nh_neyman <- reactive({ s <- si(); alloc(s$Nh * s$Sh,   input$n, s$Nh) })
 
   draw_one <- function() {
     n    <- isolate(input$n)
     conf <- isolate(input$conf)
     a    <- 1 - (1 - conf) / 2
+    s    <- isolate(si())
+    H     <- s$H
+    idx_h <- s$idx_h
+    Nh    <- s$Nh
+    W     <- s$W
 
     # simple random sample
     i_srs <- sample(N, n)
@@ -687,20 +722,23 @@ server <- function(input, output, session) {
     rv$idx <- NULL; rv$est <- NULL; rv$M <- NULL; rv$HIT <- NULL
     rv$jit <- numeric(0)
   }
-  observeEvent(input$reset, reset_history())
-  observeEvent(input$n,     reset_history())
-  observeEvent(input$conf,  reset_history())
+  observeEvent(input$reset,    reset_history())
+  observeEvent(input$n,        reset_history())
+  observeEvent(input$conf,     reset_history())
+  observeEvent(input$stratvar, reset_history())
 
   fmt <- function(x) format(round(x), big.mark = ",")
 
   output$popPlot <- renderPlot({
+    s  <- si()
+    H  <- s$H; Nh <- s$Nh; lev <- s$lev; y_pop <- s$y_pop
     j  <- as.integer(input$show)
     nh <- switch(j, rep(NA_integer_, H), nh_prop(), nh_neyman())
 
     par(mar = MAR, xaxs = "i")
     plot(NA, xlim = c(0, xmax_top), ylim = c(0.3, H + 0.9),
          xlab = "acres92", ylab = "", xaxt = "n", yaxt = "n", bty = "n",
-         main = sprintf("Population by acres82 stratum, with the %s sample", METHOD[j]))
+         main = sprintf("Population by %s stratum, with the %s sample", strat_label(), METHOD[j]))
 
     for (h in seq_len(H)) {
       yc <- H + 1 - h
