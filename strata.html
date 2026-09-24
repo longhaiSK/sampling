@@ -259,9 +259,10 @@ window.Quarto = {
   <li><a href="#key-formulas-for-stratified-sampling" id="toc-key-formulas-for-stratified-sampling" class="nav-link active" data-scroll-target="#key-formulas-for-stratified-sampling"><span class="header-section-number">3.1</span> Key Formulas for Stratified Sampling</a>
   <ul>
   <li><a href="#stratified-population-mean-estimator" id="toc-stratified-population-mean-estimator" class="nav-link" data-scroll-target="#stratified-population-mean-estimator">1. Stratified Population Mean Estimator</a></li>
-  <li><a href="#variance-of-the-stratified-mean" id="toc-variance-of-the-stratified-mean" class="nav-link" data-scroll-target="#variance-of-the-stratified-mean">2. Variance of the Stratified Mean</a></li>
-  <li><a href="#proportional-allocation" id="toc-proportional-allocation" class="nav-link" data-scroll-target="#proportional-allocation">3. Proportional Allocation</a></li>
-  <li><a href="#neyman-optimal-allocation" id="toc-neyman-optimal-allocation" class="nav-link" data-scroll-target="#neyman-optimal-allocation">4. Neyman (Optimal) Allocation</a></li>
+  <li><a href="#estimated-variance-se-and-confidence-interval" id="toc-estimated-variance-se-and-confidence-interval" class="nav-link" data-scroll-target="#estimated-variance-se-and-confidence-interval">2. Estimated Variance, SE, and Confidence Interval</a></li>
+  <li><a href="#estimating-the-population-total" id="toc-estimating-the-population-total" class="nav-link" data-scroll-target="#estimating-the-population-total">3. Estimating the Population Total</a></li>
+  <li><a href="#proportional-allocation" id="toc-proportional-allocation" class="nav-link" data-scroll-target="#proportional-allocation">4. Proportional Allocation</a></li>
+  <li><a href="#neyman-optimal-allocation" id="toc-neyman-optimal-allocation" class="nav-link" data-scroll-target="#neyman-optimal-allocation">5. Neyman (Optimal) Allocation</a></li>
   </ul></li>
   <li><a href="#functions-and-packages-for-analyzing-data" id="toc-functions-and-packages-for-analyzing-data" class="nav-link" data-scroll-target="#functions-and-packages-for-analyzing-data"><span class="header-section-number">3.2</span> Functions and packages for Analyzing Data</a></li>
   <li><a href="#analysis-of-agstrat.csv-data" id="toc-analysis-of-agstrat.csv-data" class="nav-link" data-scroll-target="#analysis-of-agstrat.csv-data"><span class="header-section-number">3.3</span> Analysis of “agstrat.csv” data</a>
@@ -335,29 +336,45 @@ window.Quarto = {
 <section id="key-formulas-for-stratified-sampling" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="key-formulas-for-stratified-sampling"><span class="header-section-number">3.1</span> Key Formulas for Stratified Sampling</h2>
 <p>Stratified random sampling divides a population of size <span class="math inline">\(N\)</span> into <span class="math inline">\(H\)</span> mutually exclusive strata. A simple random sample of size <span class="math inline">\(n_h\)</span> is then drawn from each stratum of size <span class="math inline">\(N_h\)</span>. This design often yields higher precision than Simple Random Sampling (SRS).</p>
+<p>Write <span class="math inline">\(N_h\)</span>, <span class="math inline">\(n_h\)</span> for the population and sample sizes of stratum <span class="math inline">\(h\)</span> (<span class="math inline">\(\sum_h N_h = N\)</span>, <span class="math inline">\(\sum_h n_h = n\)</span>), <span class="math inline">\(\pi_h = N_h/N\)</span> for the stratum weight, <span class="math inline">\(\bar{y}_h\)</span> and <span class="math inline">\(s_h^2\)</span> for the sample mean and variance in stratum <span class="math inline">\(h\)</span>, and <span class="math inline">\(S_h^2\)</span> for the population variance in stratum <span class="math inline">\(h\)</span>.</p>
 <section id="stratified-population-mean-estimator" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="stratified-population-mean-estimator">1. Stratified Population Mean Estimator</h4>
 <p>The estimated population mean is a weighted average of the sample means from each stratum: <span class="math display">\[
-\overline{y}_{str} = \sum_{h=1}^H \pi_h \overline{y}_h.
-\]</span> Where <span class="math inline">\(\pi_h = \frac{N_h}{N}\)</span> is the stratum weight, and <span class="math inline">\(\overline{y}_h\)</span> is the sample mean of stratum <span class="math inline">\(h\)</span>.</p>
+\overline{y}_{str} = \sum_{h=1}^H \pi_h \overline{y}_h, \qquad \pi_h = \frac{N_h}{N}.
+\]</span> Because the strata are sampled independently, its variance is the weighted sum of the within-stratum SRS variances. Only the within-stratum variability counts; the differences between strata do not: <span class="math display">\[
+V(\overline{y}_{str}) = \sum_{h=1}^H \pi_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{S_h^2}{n_h}.
+\]</span></p>
 </section>
-<section id="variance-of-the-stratified-mean" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="variance-of-the-stratified-mean">2. Variance of the Stratified Mean</h4>
-<p>The estimated variance accounts for the finite population correction in each stratum: <span class="math display">\[
-\hat{V}(\overline{y}_{str}) = \sum_{h=1}^H \pi_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}.
-\]</span> Where <span class="math inline">\(s_h^2\)</span> is the sample variance in stratum <span class="math inline">\(h\)</span>.</p>
+<section id="estimated-variance-se-and-confidence-interval" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="estimated-variance-se-and-confidence-interval">2. Estimated Variance, SE, and Confidence Interval</h4>
+<p>The estimated variance replaces each <span class="math inline">\(S_h^2\)</span> by <span class="math inline">\(s_h^2\)</span>, keeping the finite population correction in each stratum: <span class="math display">\[
+\hat{V}(\overline{y}_{str}) = \sum_{h=1}^H v_h, \qquad
+v_h = \pi_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}, \qquad
+\mathrm{SE}(\overline{y}_{str}) = \sqrt{\hat{V}(\overline{y}_{str})},
+\]</span> where <span class="math inline">\(v_h\)</span> is stratum <span class="math inline">\(h\)</span>’s contribution (the <span class="math inline">\(v_h\)</span> column of the working tables below). An approximate <span class="math inline">\(95\%\)</span> confidence interval is <span class="math inline">\(\overline{y}_{str} \pm 1.96\,\mathrm{SE}(\overline{y}_{str})\)</span>.</p>
+</section>
+<section id="estimating-the-population-total" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="estimating-the-population-total">3. Estimating the Population Total</h4>
+<p><span class="math display">\[
+\hat{t}_{str} = N\overline{y}_{str} = \sum_{h=1}^H N_h \overline{y}_h, \qquad
+\hat{V}(\hat{t}_{str}) = N^2\,\hat{V}(\overline{y}_{str}) = \sum_{h=1}^H N_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}.
+\]</span></p>
 </section>
 <section id="proportional-allocation" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="proportional-allocation">3. Proportional Allocation</h4>
+<h4 class="unnumbered anchored" data-anchor-id="proportional-allocation">4. Proportional Allocation</h4>
 <p>Sample sizes are allocated proportional to the size of the stratum: <span class="math display">\[
-n_h = n \left( \frac{N_h}{N} \right).
-\]</span></p>
+n_h = n \left( \frac{N_h}{N} \right) = n\pi_h .
+\]</span> Every stratum then has the same sampling fraction <span class="math inline">\(n/N\)</span>, and the variance simplifies to <span class="math display">\[
+V_{prop}(\overline{y}_{str}) = \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h S_h^2 ,
+\]</span> which is never larger than the SRS variance <span class="math inline">\((1 - n/N)S^2/n\)</span>, up to terms of order <span class="math inline">\(1/N_h\)</span>.</p>
 </section>
 <section id="neyman-optimal-allocation" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="neyman-optimal-allocation">4. Neyman (Optimal) Allocation</h4>
+<h4 class="unnumbered anchored" data-anchor-id="neyman-optimal-allocation">5. Neyman (Optimal) Allocation</h4>
 <p>If surveying costs are equal across strata, Neyman allocation minimizes the variance of the estimator by sampling more heavily from larger and more highly variable strata: <span class="math display">\[
-n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
-\]</span></p>
+n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h},
+\]</span> which gives the smallest possible variance for a total sample size <span class="math inline">\(n\)</span>: <span class="math display">\[
+V_{opt}(\overline{y}_{str}) = \frac{1}{n}\left(\sum_{h=1}^H \pi_h S_h\right)^2 - \frac{1}{N}\sum_{h=1}^H \pi_h S_h^2 .
+\]</span> In practice the <span class="math inline">\(S_h\)</span> are unknown and are replaced by estimates from a previous survey or a pilot sample.</p>
 <hr>
 </section>
 </section>

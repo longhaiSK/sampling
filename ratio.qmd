@@ -1,37 +1,79 @@
 # Ratio, Regression, and Domain Estimation
 
-:::{.callout-note}
-
-### Key formulae
+## Ratio, Regression, and Domain Estimation {#sec-ratio-formulas}
 
 When auxiliary information (a variable $x$) is highly correlated with our target variable of interest ($y$), we can use **Ratio** or **Regression** estimation to improve precision without increasing the sample size. We can also use auxiliary population structures to adjust our estimates after the fact via **Post-stratification**, or estimate means for specific sub-populations (**Domains**).
 
+Throughout, $(x_i, y_i)$, $i = 1, \ldots, n$, is an SRS of size $n$ from a population of
+$N$ units, and $\overline{x}_U$ (equivalently $t_x = N\overline{x}_U$) is known.
+
 #### 1. Ratio Estimation {-}
-If the relationship between $y$ and $x$ passes through the origin, we estimate the ratio $B$ and use it to adjust the mean:
-
-*   **Ratio:** $\hat{B} = \frac{\overline{y}}{\overline{x}}$
-*   **Mean Estimator:** $\overline{y}_r = \hat{B} \overline{x}_{\text{U}}$ (where $\overline{x}_{\text{U}}$ is the true population mean of $x$)
-
-*   **Estimated Variance:** $\hat{V}(\overline{y}_r) = \left(\frac{\overline{x}_{\text{U}}}{\overline{x}}\right)^2 \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}$, where $s_e^2$ is the sample variance of the residuals $e_i = y_i - \hat{B}x_i$.
+If the relationship between $y$ and $x$ passes through the origin, we estimate the ratio $B = \overline{y}_U/\overline{x}_U$ and use it to adjust the mean:
+$$
+\hat{B} = \frac{\overline{y}}{\overline{x}} = \frac{\sum_{i=1}^n y_i}{\sum_{i=1}^n x_i}, \qquad
+\overline{y}_r = \hat{B}\,\overline{x}_U, \qquad
+\hat{t}_r = \hat{B}\,t_x = N\overline{y}_r .
+$$
+Its error is driven by the residuals $e_i = y_i - \hat{B}x_i$ from the line through the origin:
+$$
+\hat{V}(\hat{B}) = \frac{1}{\overline{x}^2}\left(1 - \frac{n}{N}\right)\frac{s_e^2}{n}, \qquad
+\hat{V}(\overline{y}_r) = \overline{x}_U^2\,\hat{V}(\hat{B}) = \left(\frac{\overline{x}_U}{\overline{x}}\right)^2 \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}, \qquad
+s_e^2 = \frac{1}{n-1}\sum_{i=1}^n \left(y_i - \hat{B}x_i\right)^2 ,
+$$
+with $\hat{V}(\hat{t}_r) = N^2\hat{V}(\overline{y}_r)$ and $95\%$ intervals using $t_{0.975,\,n-1}$.
+The ratio estimator is slightly biased, but the bias is negligible when $n$ is large.
 
 #### 2. Regression Estimation {-}
-If the relationship does not pass through the origin, a linear regression is more appropriate:
-
-*   **Mean Estimator:** $\overline{y}_{reg} = \hat{B}_0 + \hat{B}_1 \overline{x}_{\text{U}}$ (where $\hat{B}_0$ and $\hat{B}_1$ are OLS coefficients)
-*   **Estimated Variance:** $\hat{V}(\overline{y}_{reg}) = \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}$, where $s_e^2$ is the Mean Square Error (Residuals) from the regression.
+If the relationship does not pass through the origin, a linear regression is more appropriate. With the OLS coefficients
+$$
+\hat{B}_1 = \frac{\sum_{i=1}^n (x_i - \overline{x})(y_i - \overline{y})}{\sum_{i=1}^n (x_i - \overline{x})^2}, \qquad
+\hat{B}_0 = \overline{y} - \hat{B}_1\overline{x},
+$$
+the regression estimator of the mean is the fitted line evaluated at $\overline{x}_U$:
+$$
+\overline{y}_{reg} = \hat{B}_0 + \hat{B}_1 \overline{x}_U = \overline{y} + \hat{B}_1\left(\overline{x}_U - \overline{x}\right), \qquad
+\hat{t}_{reg} = N\overline{y}_{reg} .
+$$
+Its estimated variance uses the residual mean square of the regression:
+$$
+\hat{V}(\overline{y}_{reg}) = \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}, \qquad
+s_e^2 = \frac{1}{n-2}\sum_{i=1}^n \left(y_i - \hat{B}_0 - \hat{B}_1 x_i\right)^2 ,
+$$
+with $\hat{V}(\hat{t}_{reg}) = N^2\hat{V}(\overline{y}_{reg})$ and $95\%$ intervals using $t_{0.975,\,n-2}$.
 
 #### 3. Domain Estimation {-}
-To estimate the mean of a subgroup (domain $d$) when the domain sample size $n_d$ is a random variable:
-
-*   **Mean Estimator:** $\overline{y}_d = \frac{1}{n_d} \sum_{i \in U_d} y_i$
-*   **Estimated Variance:** $\hat{V}(\overline{y}_d) = \left(1 - \frac{n}{N}\right) \frac{s_d^2}{n_d}$, where $n$ is the overall sample size, $N$ is the population size, and $s_d^2$ is the sample variance of $y$ among the $n_d$ units observed in domain $d$.
+To estimate the mean of a subgroup (domain $d$) when the domain sample size $n_d$ is a random variable, use the $n_d$ sampled units that fall in the domain:
+$$
+\overline{y}_d = \frac{1}{n_d} \sum_{i \in S_d} y_i, \qquad
+\hat{V}(\overline{y}_d) = \left(1 - \frac{n}{N}\right) \frac{s_d^2}{n_d}, \qquad
+s_d^2 = \frac{1}{n_d - 1}\sum_{i \in S_d}\left(y_i - \overline{y}_d\right)^2 ,
+$$
+where $S_d$ is the set of sampled units in domain $d$, $n$ is the overall sample size, and
+$N$ is the population size. $95\%$ intervals use $t_{0.975,\,n_d-1}$. The fpc uses the overall
+sampling fraction $n/N$, because the domain's population size $N_d$ is usually unknown.
+$\overline{y}_d$ is in fact a ratio estimator, $\sum_{i=1}^n u_i/\sum_{i=1}^n x_i$ with
+$x_i = 1$ if unit $i$ is in the domain and $u_i = x_i y_i$.
 
 #### 4. Post-stratification {-}
-If we know the true population sizes ($N_h$) of strata, but we used a Simple Random Sample, we can post-stratify to reduce variance. We substitute $n_h$ with expected proportional sample sizes:
+If we know the true population sizes $N_h$ of $H$ groups (post-strata), but used a Simple Random Sample, we can post-stratify to reduce variance.
+We weight the group sample means by the known $\pi_h = N_h/N$, as in stratified sampling:
+$$
+\overline{y}_{post} = \sum_{h=1}^H \pi_h\,\overline{y}_h .
+$$
+The observed group sizes $n_h$ are random, so for the variance we substitute their expected
+values under SRS, the proportional sample sizes
+$$
+n_h^{post} = n\,\frac{N_h}{N} = n\pi_h ,
+$$
+into the stratified variance formula. Every group then has sampling fraction $n/N$, and the variance becomes
+$$
+\hat{V}(\overline{y}_{post}) = \sum_{h=1}^H \pi_h^2\left(1 - \frac{n_h^{post}}{N_h}\right)\frac{s_h^2}{n_h^{post}}
+= \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h s_h^2 ,
+$$
+the variance of proportional stratified sampling. With $\hat{t}_{post} = N\overline{y}_{post}$,
+$\hat{V}(\hat{t}_{post}) = N^2\hat{V}(\overline{y}_{post})$.
 
-*   $n_h^{post-strat} = n \frac{N_h}{N}$
-
-:::
+---
 
 ## Functions and packages for Analyzing Data
 

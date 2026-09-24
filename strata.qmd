@@ -4,31 +4,59 @@
 
 Stratified random sampling divides a population of size $N$ into $H$ mutually exclusive strata. A simple random sample of size $n_h$ is then drawn from each stratum of size $N_h$. This design often yields higher precision than Simple Random Sampling (SRS).
 
+Write $N_h$, $n_h$ for the population and sample sizes of stratum $h$ ($\sum_h N_h = N$, $\sum_h n_h = n$),
+$\pi_h = N_h/N$ for the stratum weight, $\bar{y}_h$ and $s_h^2$ for the sample mean and
+variance in stratum $h$, and $S_h^2$ for the population variance in stratum $h$.
+
 #### 1. Stratified Population Mean Estimator {-}
 The estimated population mean is a weighted average of the sample means from each stratum:
 $$
-\overline{y}_{str} = \sum_{h=1}^H \pi_h \overline{y}_h.
+\overline{y}_{str} = \sum_{h=1}^H \pi_h \overline{y}_h, \qquad \pi_h = \frac{N_h}{N}.
 $$
-Where $\pi_h = \frac{N_h}{N}$ is the stratum weight, and $\overline{y}_h$ is the sample mean of stratum $h$.
+Because the strata are sampled independently, its variance is the weighted sum of the
+within-stratum SRS variances. Only the within-stratum variability counts;
+the differences between strata do not:
+$$
+V(\overline{y}_{str}) = \sum_{h=1}^H \pi_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{S_h^2}{n_h}.
+$$
 
-#### 2. Variance of the Stratified Mean {-}
-The estimated variance accounts for the finite population correction in each stratum:
+#### 2. Estimated Variance, SE, and Confidence Interval {-}
+The estimated variance replaces each $S_h^2$ by $s_h^2$, keeping the finite population correction in each stratum:
 $$
-\hat{V}(\overline{y}_{str}) = \sum_{h=1}^H \pi_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}.
+\hat{V}(\overline{y}_{str}) = \sum_{h=1}^H v_h, \qquad
+v_h = \pi_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}, \qquad
+\mathrm{SE}(\overline{y}_{str}) = \sqrt{\hat{V}(\overline{y}_{str})},
 $$
-Where $s_h^2$ is the sample variance in stratum $h$.
+where $v_h$ is stratum $h$'s contribution (the $v_h$ column of the working tables below).
+An approximate $95\%$ confidence interval is $\overline{y}_{str} \pm 1.96\,\mathrm{SE}(\overline{y}_{str})$.
 
-#### 3. Proportional Allocation {-}
+#### 3. Estimating the Population Total {-}
+$$
+\hat{t}_{str} = N\overline{y}_{str} = \sum_{h=1}^H N_h \overline{y}_h, \qquad
+\hat{V}(\hat{t}_{str}) = N^2\,\hat{V}(\overline{y}_{str}) = \sum_{h=1}^H N_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}.
+$$
+
+#### 4. Proportional Allocation {-}
 Sample sizes are allocated proportional to the size of the stratum:
 $$
-n_h = n \left( \frac{N_h}{N} \right).
+n_h = n \left( \frac{N_h}{N} \right) = n\pi_h .
 $$
+Every stratum then has the same sampling fraction $n/N$, and the variance simplifies to
+$$
+V_{prop}(\overline{y}_{str}) = \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h S_h^2 ,
+$$
+which is never larger than the SRS variance $(1 - n/N)S^2/n$, up to terms of order $1/N_h$.
 
-#### 4. Neyman (Optimal) Allocation {-}
+#### 5. Neyman (Optimal) Allocation {-}
 If surveying costs are equal across strata, Neyman allocation minimizes the variance of the estimator by sampling more heavily from larger and more highly variable strata:
 $$
-n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
+n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h},
 $$
+which gives the smallest possible variance for a total sample size $n$:
+$$
+V_{opt}(\overline{y}_{str}) = \frac{1}{n}\left(\sum_{h=1}^H \pi_h S_h\right)^2 - \frac{1}{N}\sum_{h=1}^H \pi_h S_h^2 .
+$$
+In practice the $S_h$ are unknown and are replaced by estimates from a previous survey or a pilot sample.
 
 ---
 
