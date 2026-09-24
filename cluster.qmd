@@ -292,72 +292,40 @@ computation above.
 
 ## Interactive Demonstration: Clustering by State or at Random {#sec-app-cluster}
 
-The app below draws two samples of the same size at every step. The first is a
-**two-stage cluster sample**: an SRS of $n$ clusters, followed by an SRS of
-$m_i = p \, M_i$ counties inside each selected cluster. The second is an
-ordinary **SRS of counties**, drawn directly from the whole population with
-exactly as many counties as the cluster sample happened to collect, so the two
-designs are compared at equal sample size. The population is the full
-`agpop.csv` file (with the `-99` missing-value codes recoded to `NA` and
-dropped), and the variable of interest is again `acres92`.
+The app below repeats this exercise many times over. At every step it draws a
+**two-stage cluster sample** --- an SRS of $n$ clusters, then an SRS of
+$m_i = p \, M_i$ counties inside each --- together with an ordinary **SRS of
+counties** of the same size, from the full `agpop.csv` population (with the
+`-99` codes dropped). It estimates the mean of `acres92` from each: the ratio
+estimator $\overline{y}_r = \sum \hat{t}_i / \sum M_i$ for the cluster sample,
+and the plain sample average for the SRS.
 
 A radio button chooses the clustering variable:
 
 *   **state** --- the 50 real states, the natural clusters of `agpop.csv`.
-    Counties in the same state resemble one another, so these clusters are
-    internally homogeneous.
-*   **Random** --- the state labels randomly permuted. The clusters keep
-    *exactly* the same sizes $M_i$, but membership is now arbitrary, so all
-    homogeneity inside clusters is destroyed. Comparing the two settings
-    isolates the effect of within-cluster homogeneity and nothing else.
+*   **Random** --- the state labels randomly permuted, which keeps the cluster
+    sizes $M_i$ exactly as they are but scrambles which counties belong
+    together.
 
-Two sliders set the design: $n$, the number of clusters drawn, and $p =
-m_i/M_i$, the percentage of counties subsampled from each selected cluster.
-Setting $p = 100\%$ measures every county in the chosen clusters, which is
-one-stage cluster sampling.
+Two sliders set the design: $n$, the number of clusters drawn, and
+$p = m_i/M_i$, the percentage of counties subsampled from each selected cluster
+($p = 100\%$ gives a one-stage sample). Play advances the simulation one draw at
+a time, Pause stops it, Skip jumps straight to the end, and changing any setting
+clears the accumulated history.
 
-The two estimators shown are the ones from the formulas above: the ratio
-estimator $\overline{y}_r = \sum \hat{t}_i / \sum M_i$ with the cluster sizes
-$M_i$ as the auxiliary variable, and the plain sample average of the SRS. The
-cluster estimator's confidence interval uses the full two-stage variance --- the
-between-cluster term plus the within-cluster term
-$\sum_i \hat{v}_i / (nN\overline{M}^2)$ --- exactly as `cluster_ratio()`
-computes it, on $n - 1$ degrees of freedom.
+The left panel shows the population split into its clusters, with the
+highlighted sample in red. For the cluster design the selected clusters are
+shaded and labelled $m_i/M_i$, a bar marks each subsample mean
+$\overline{y}_i$, and the ratio estimate $\overline{y}_r$ runs across the
+panel; for the SRS a single bar marks the sample mean.
 
-The left panel shows the population split into its clusters along the x-axis,
-each drawn as a column of jittered points on a broken `acres92` axis. When the
-cluster sample is highlighted, the selected clusters are shaded and labelled
-with $m_i/M_i$, and a horizontal bar marks each subsample mean
-$\overline{y}_i$, with the overall ratio estimate $\overline{y}_r$ drawn across
-the panel. When the SRS is highlighted instead, the red points are scattered
-over every cluster and a single bar marks the sample mean --- the visual
-signature of the difference between the two designs.
-
-The right panel accumulates the estimates of both designs on a common axis, one
-column each, with a violin summarising each cloud once enough draws have
-accumulated. The bar beside each column is the current confidence interval,
-green when it covers $\mu$ and red when it does not. The legends report the
-running CI coverage and the **design effect**, the simulated variance of the
-ratio estimator divided by that of the SRS average, alongside its theoretical
-counterpart computed from the true population $M_i$, $t_i$, and $S_i^2$. The
-subtitle also gives the between-cluster $R^2$ of `acres92`.
-
-With `state` clusters the design effect is far above 1 --- cluster sampling
-loses badly to an SRS of the same size, because counties within a state carry
-largely the same information. With `Random` clusters the design effect drops to
-about 1: once the clusters are internally as variable as the population,
-cluster sampling costs nothing statistically. With `state` clusters, raising
-$n$ helps a great deal, while raising $p$ at fixed $n$ barely moves the
-variance --- going from $p = 30\%$ to a full census of each sampled state
-($p = 100\%$) triples the fieldwork and buys only a few percent. This is the
-central lesson of cluster sampling: when clusters are homogeneous, precision is
-bought with *clusters*, not with elements inside them.
-
-Play advances the simulation one draw at a time; Pause stops it; Skip jumps
-straight to the final violin plots by drawing every remaining replication up to
-the cap in a single step. Changing any design setting clears the accumulated
-history, so every coverage rate on screen belongs to the settings currently
-shown.
+The right panel accumulates the estimates of both designs, one column each, with
+a violin summarising each cloud once enough draws have accumulated. The bar
+beside each column is the current confidence interval, green when it covers
+$\mu$ and red when it does not. The legends report the running CI coverage and
+the design effect --- the variance of the ratio estimator relative to the SRS
+average, simulated and theoretical --- and the subtitle gives the
+between-cluster $R^2$ of `acres92`.
 
 ::: {#fig-cluster-app}
 
@@ -648,7 +616,7 @@ ui <- fluidPage(
       ),
       column(
         3,
-        sliderInput("n", "Number of clusters drawn (n)", min = 2, max = 40,
+        sliderInput("n", "Number of clusters drawn (n)", min = 2, max = 50,
                     value = 10, step = 1),
         sliderInput("p", "Percentage sampled per cluster (p = m_i/M_i)",
                     min = 0.05, max = 1, value = 0.30, step = 0.05)
