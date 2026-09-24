@@ -64,6 +64,10 @@ DIV_FENCE_RE = re.compile(r'^:{3,}')
 DIV_OPEN_RE = re.compile(r'^:{3,}\s*\{([^}]*)\}\s*$')
 DIV_ID_IN_ATTRS_RE = re.compile(r'#([\w-]+)')
 CHUNK_START_RE = re.compile(r'^```\{(r|shinylive-r)[^}]*\}')
+# A chunk label may also sit in the header itself, knitr-style: either as the
+# first bare token ("```{r fig-foo, echo=FALSE}") or as label="fig-foo".
+HEADER_LABEL_RE = re.compile(r'^```\{(?:r|shinylive-r)[\s,]+([\w.-]+)\s*[,}]')
+HEADER_LABEL_OPT_RE = re.compile(r'\blabel\s*=\s*["\']([\w.-]+)["\']')
 KABLE_CAPTION_RE = re.compile(r'caption\s*=\s*(["\'])(.*?)\1')
 # A real chunk option always has exactly one space after "#|" (knitr/quarto
 # convention: "#| key: value"). A continuation line of a multi-line quoted
@@ -252,6 +256,10 @@ def parse_chapter(path):
                         code_lines.append(lines[i])
                 i += 1
             label = opts.get('label', '')
+            if not label:
+                hm = HEADER_LABEL_RE.match(lines[start]) or HEADER_LABEL_OPT_RE.search(lines[start])
+                if hm:
+                    label = hm.group(1)
 
             if label.startswith('fig-') and 'fig-cap' in opts:
                 figs.append((label, first_sentence(clean_caption(opts['fig-cap']))))
