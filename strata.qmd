@@ -69,7 +69,7 @@ We will estimate the average 1992 farm acreage (`acres92`) across US counties, u
 
 ```{r tbl-agstrat-sample-data}
 #| tbl-cap: "Sample survey data for agstrat.csv, including stratum and weight"
-agstrat <- read.csv("data/agstrat.csv")
+agstrat <- acres_in_thousands(read.csv("data/agstrat.csv"))
 head(agstrat) |> gt()
 ```
 **Output Note:** The table above shows the sample survey data, including the stratum (region) and weights for each county.
@@ -115,7 +115,7 @@ Extracting `$estimate` gives our overall result.
 ```{r agstrat-mean-estimate}
 res_str_mean$estimate |> format_est_gt("mean")
 ```
-**Output Note:** The overall result indicates an estimated mean of `r format(round(res_str_mean$estimate["Est."], 0), big.mark=",")` acres, with a 95% confidence interval of [`r format(round(res_str_mean$estimate["ci.low"], 0), big.mark=",")`, `r format(round(res_str_mean$estimate["ci.upp"], 0), big.mark=",")`].
+**Output Note:** The overall result indicates an estimated mean of `r round(res_str_mean$estimate["Est."], 1)` thousand acres, with a 95% confidence interval of [`r round(res_str_mean$estimate["ci.low"], 1)`, `r round(res_str_mean$estimate["ci.upp"], 1)`] thousand acres.
 
 To find the population total (total acreage across all US counties), set `estimate = "total"`.
 
@@ -124,7 +124,7 @@ To find the population total (total acreage across all US counties), set `estima
 res_str_total <- str_est(ybarh, sh, nh, Nh, estimate = "total")
 res_str_total$estimate |> format_est_gt("total")
 ```
-**Output Note:** This scales the estimates up to the total area of `r format(round(res_str_total$estimate["Est."], 0), big.mark=",", scientific=FALSE)` acres.
+**Output Note:** This scales the estimates up to the total area of `r format(round(res_str_total$estimate["Est."], 0), big.mark=",", scientific=FALSE)` thousand acres.
 
 ### Using the function "str_est_data"
 
@@ -157,11 +157,11 @@ res_agstrat_smallf92$estimate |> format_est_gt("mean")
 To see the benefit of stratifying, we compare our stratified estimates against a Simple Random Sample approach on the same population.
 
 ```{r agsrs-compare-load}
-agsrs <- read.csv("data/agsrs.csv")
+agsrs <- acres_in_thousands(read.csv("data/agsrs.csv"))
 res_agsrs_srs <- srs_est(agsrs[, "acres92"], N=3078, estimate = "mean", show.details = FALSE)
 res_agsrs_srs$estimate |> format_est_gt("mean")
 ```
-**Output Note:** The Simple Random Sample standard error is noticeably higher at `r format(round(res_agsrs_srs$estimate["S.E."], 0), big.mark=",")`.
+**Output Note:** The Simple Random Sample standard error is noticeably higher at `r round(res_agsrs_srs$estimate["S.E."], 1)` thousand acres.
 
 ```{r agstrat-srs-var-ratio}
 ## the ratio of estimated variance (Stratified SE / SRS SE)^2
@@ -234,8 +234,8 @@ We will use the full `agpop.csv` dataset (acting as our true population) to run 
 #### Read Population Data
 
 ```{r agpop-region-load}
-agpop <- read.csv("data/agpop.csv")
-agpop <- agpop[agpop$acres92 != -99, ] ## remove those counties with na
+agpop <- acres_in_thousands(read.csv("data/agpop.csv"))
+agpop <- agpop[!is.na(agpop$acres92), ] ## remove those counties with na
 N <- nrow(agpop)
 ```
 
@@ -377,8 +377,9 @@ What if we stratify by a variable highly correlated with our target, like the ac
 #### Read Population Data
 
 ```{r agpop-acres82-load}
-agpop <- read.csv("data/agpop.csv")
-agpop <- agpop[agpop$acres92 != -99, ] 
+agpop <- acres_in_thousands(read.csv("data/agpop.csv"))
+## acres82 is the stratifier here, so drop the counties missing either variable
+agpop <- agpop[!is.na(agpop$acres92) & !is.na(agpop$acres82), ] 
 N <- nrow(agpop)
 ```
 

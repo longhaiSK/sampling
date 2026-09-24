@@ -19,14 +19,18 @@ suppressPackageStartupMessages({
 ## too small (< `small` in absolute value) or too large (>= `large`), in
 ## which case it switches that column to scientific notation (rendered as
 ## "m x 10^n" via gt's exp_style = "x10n") instead.
-fmt_auto <- function (gt_tbl, data, columns, decimals = 3, small = 1e-3, large = 1e5)
+fmt_auto <- function (gt_tbl, data, columns, decimals = 2, small = 1e-3, large = 1e5)
 {
     for (col in columns)
     {
         x <- data[[col]]
         x <- x[is.finite (x) & x != 0]
         if (length (x) == 0) next
-        if (any (abs (x) < small) || any (abs (x) >= large))
+        ## judge by the column's TYPICAL magnitude, not by its extremes: the
+        ## Sum row is n times the size of a data row, and one residual that
+        ## lands near zero should not push a whole column into scientific
+        typical <- stats::median (abs (x))
+        if (typical < small || typical >= large)
             gt_tbl <- fmt_scientific (gt_tbl, columns = tidyselect::all_of (col), decimals = decimals, exp_style = "x10n")
         else
             gt_tbl <- fmt_number (gt_tbl, columns = tidyselect::all_of (col), decimals = decimals)
@@ -39,7 +43,7 @@ fmt_auto <- function (gt_tbl, data, columns, decimals = 3, small = 1e-3, large =
 ## notation for very small or very large magnitudes, mirroring fmt_auto()'s
 ## use of exp_style = "x10n") --- used to show worked-example steps such as
 ## \bar y = sum/n with the actual numbers plugged in.
-fmt_num <- function (x, decimals = 3, small = 1e-3, large = 1e5)
+fmt_num <- function (x, decimals = 2, small = 1e-3, large = 1e5)
 {
     use_sci <- is.finite (x) & x != 0 & (abs (x) < small | abs (x) >= large)
     exps    <- ifelse (x == 0, 0, floor (log10 (abs (x))))
@@ -47,6 +51,21 @@ fmt_num <- function (x, decimals = 3, small = 1e-3, large = 1e5)
     ifelse (use_sci,
             sprintf ("%s \\times 10^{%d}", formatC (mant, format = "f", digits = decimals), exps),
             formatC (x, format = "f", digits = decimals, big.mark = ","))
+}
+
+## The agriculture files (agpop.csv and the samples drawn from it: agsrs.csv,
+## agstrat.csv, ...) record county acreages in acres, which run into the
+## millions and make every working table below hard to read. This converts the
+## acreage columns to THOUSANDS of acres, so a mean reads as 297.9 rather than
+## 297,897, and a variance as 2.0e5 rather than 2.0e11. The file's missing-value
+## code, -99, becomes NA first, so it cannot be silently rescaled to -0.099.
+## d --- data frame just read from one of those files
+## cols --- acreage columns to convert (those absent from d are ignored)
+acres_in_thousands <- function (d, cols = c ("acres92", "acres87", "acres82"))
+{
+    cols <- intersect (cols, names (d))
+    d[cols] <- lapply (d[cols], function (x) { x[x == -99] <- NA; x / 1000 })
+    d
 }
 
 ## Truncates a row-level working data.frame whose LAST row is a summary row
@@ -114,7 +133,7 @@ format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_
     ) |>
     fmt_number(
       columns = everything(),
-      decimals = 4
+      decimals = 2
     ) |>
     tab_options(table.width = pct(70))
 }
@@ -236,7 +255,7 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
             dev2 = md (sprintf ("$(%s-%s)^2$", col_labels$y, col_labels$yhat))
         ) |>
         cols_width (i ~ px (40), everything () ~ px (110)) |>
-        fmt_auto (data = working, columns = c ("y", "yhat", "dev", "dev2"), decimals = 3) |>
+        fmt_auto (data = working, columns = c ("y", "yhat", "dev", "dev2"), decimals = 2) |>
         sub_missing (missing_text = "...") |>
         tab_style (
             style     = cell_text (weight = "bold"),
@@ -246,8 +265,8 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
             footnote  = md (paste0 (
                 if (col_labels$yhat != ybar_lab)
                     sprintf ("$%s = %s$ for every unit under the SRS model; ", col_labels$yhat, ybar_lab),
-                sprintf ("$%s^2 = \\sum_i (%s-%s)^2/(n-1) = %.4f$.",
-                         s_lab, col_labels$y, col_labels$yhat, s2y))),
+                sprintf ("$%s^2 = \\sum_i (%s-%s)^2/(n-1) = %s$.",
+                         s_lab, col_labels$y, col_labels$yhat, fmt_num (s2y)))),
             locations = cells_column_labels (columns = dev2)
         ) |>
         tab_source_note (
@@ -402,15 +421,15 @@ ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
   table <- do.call (cols_label, c (list (table), label_args))
   table <- table |>
       cols_width (i ~ px (40), everything () ~ px (100)) |>
-      fmt_auto (data = working, columns = fmt_cols, decimals = 3) |>
+      fmt_auto (data = working, columns = fmt_cols, decimals = 2) |>
       sub_missing (missing_text = "...") |>
       tab_style (
           style     = cell_text (weight = "bold"),
           locations = cells_body (rows = i == "Sum")
       ) |>
       tab_footnote (
-          footnote  = md (sprintf ("$\\hat B = \\sum_i %s / \\sum_i %s = %.4f$, $%s = \\hat B\\, %s$, $s_e^2 = %.4f$.",
-                                    col_labels$y, col_labels$x, B_hat, col_labels$yhat, col_labels$x, var_e)),
+          footnote  = md (sprintf ("$\\hat B = \\sum_i %s / \\sum_i %s = %s$, $%s = \\hat B\\, %s$, $s_e^2 = %s$.",
+                                    col_labels$y, col_labels$x, fmt_num (B_hat), col_labels$yhat, col_labels$x, fmt_num (var_e))),
           locations = cells_column_labels (columns = yhat)
       )
   ## an extra column's formula documents how it feeds the y column; a tail
@@ -546,15 +565,15 @@ reg_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
           e2   = md ("$e_i^2$")
       ) |>
       cols_width (i ~ px (40), everything () ~ px (100)) |>
-      fmt_auto (data = working, columns = c ("y", "x", "yhat", "e", "e2"), decimals = 3) |>
+      fmt_auto (data = working, columns = c ("y", "x", "yhat", "e", "e2"), decimals = 2) |>
       sub_missing (missing_text = "...") |>
       tab_style (
           style     = cell_text (weight = "bold"),
           locations = cells_body (rows = i == "Sum")
       ) |>
       tab_footnote (
-          footnote  = md (sprintf ("$\\hat B_0 = %.4f$, $\\hat B_1 = %.4f$, $\\hat y_i = \\hat B_0 + \\hat B_1 x_i$, $s_e^2 = %.4f$.",
-                                    Bhat[1], Bhat[2], SSe)),
+          footnote  = md (sprintf ("$\\hat B_0 = %s$, $\\hat B_1 = %s$, $\\hat y_i = \\hat B_0 + \\hat B_1 x_i$, $s_e^2 = %s$.",
+                                    fmt_num (Bhat[1]), fmt_num (Bhat[2]), fmt_num (SSe))),
           locations = cells_column_labels (columns = yhat)
       ) |>
       tab_source_note (

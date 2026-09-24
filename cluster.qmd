@@ -169,8 +169,7 @@ We take a two-stage sample in the obvious way: an SRS of $n = 10$ states,
 followed by an SRS of $m_i = 30\%$ of the counties in each selected state.
 
 ```{r agpop-two-stage-sample}
-agpop <- read.csv("data/agpop.csv")
-agpop$acres92[agpop$acres92 == -99] <- NA
+agpop <- acres_in_thousands(read.csv("data/agpop.csv"))
 agpop <- agpop[!is.na(agpop$acres92), ]
 
 ## cluster sizes M_i: the number of counties in each state
@@ -205,13 +204,14 @@ ybari <- tapply(agclus$acres92, agclus$state, mean)              # subsample mea
 si2   <- tapply(agclus$acres92, agclus$state, var)               # within-cluster vars
 thati <- Mi * ybari                                              # estimated totals
 
-data.frame(Mi, mi, ybari, si2, thati) |>
+clus_summary <- data.frame(Mi, mi, ybari, si2, thati)
+
+clus_summary |>
   gt(rownames_to_stub = TRUE) |>
   cols_label(Mi    = md("$M_i$"),    mi  = md("$m_i$"),
              ybari = md("$\\bar y_i$"), si2 = md("$s_i^2$"),
              thati = md("$\\hat t_i$")) |>
-  fmt_number(columns = c(ybari, thati), decimals = 0) |>
-  fmt_scientific(columns = si2, decimals = 2)
+  fmt_auto(data = clus_summary, columns = c("ybari", "si2", "thati"))
 ```
 **Output Note:** The states drawn range from `r min(Mi)` to `r max(Mi)` counties,
 of which `r min(mi)` to `r max(mi)` were visited. $s_i^2$ is large throughout:
@@ -258,9 +258,9 @@ mem <- qt(0.975, df = n - 1) * SE
 c(Est. = ybarr, S.E. = SE, ci.low = ybarr - mem, ci.upp = ybarr + mem)
 ```
 **Output Note:** The estimated mean 1992 acreage per county is
-`r format(round(ybarr), big.mark = ",")` acres, with a 95% confidence interval
-of [`r format(round(ybarr - mem), big.mark = ",")`,
-`r format(round(ybarr + mem), big.mark = ",")`]. The interval is wide: only 10
+`r round(ybarr, 1)` thousand acres, with a 95% confidence interval
+of [`r round(ybarr - mem, 1)`, `r round(ybarr + mem, 1)`] thousand acres. The
+interval is wide: only 10
 states were visited, so $n - 1 = 9$ degrees of freedom is all the between-cluster
 scatter provides.
 

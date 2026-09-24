@@ -11,6 +11,11 @@ execute:
 
 ## Analysis of agsrs.csv Data
 
+Throughout the agriculture examples in this book, county acreages are expressed
+in **thousands of acres** --- the raw figures run into the millions, and every
+mean, variance, and total below reads far more easily on that scale. The helper
+`acres_in_thousands()` performs the conversion as the data is read.
+
 ### Step by step calculation without using a function
 
 To evaluate a Simple Random Sample (SRS), we calculate the point estimate, the standard error (incorporating the Finite Population Correction factor), and the margin of error to construct a 95% confidence interval.
@@ -25,6 +30,8 @@ To evaluate a Simple Random Sample (SRS), we calculate the point estimate, the s
 ```{r srs-manual-calc}
 ## read survey data
 agsrs <- read.csv ("data/agsrs.csv")
+## work in thousands of acres, the unit used for every agriculture example here
+agsrs[c("acres92", "acres87", "acres82")] <- agsrs[c("acres92", "acres87", "acres82")] / 1000
 head(agsrs)
 
 ## extract the variable of interest
@@ -80,7 +87,7 @@ cat("\n```\n")
 Load the survey sample data representing US counties.
 
 ```{r agsrs-load}
-agsrs <- read.csv ("data/agsrs.csv")
+agsrs <- acres_in_thousands (read.csv ("data/agsrs.csv"))
 
 ```
 
@@ -110,7 +117,7 @@ res_total$estimate |> format_est_gt("total")
 To estimate a proportion under SRS, create an indicator variable ($y_i = 1$ if true, $0$ if false). The mean of this indicator variable serves as the sample proportion ($\hat{p} = \bar{y}_{indicator}$).
 
 ```{r agsrs-prop-est}
-acres92.is.fewer.200k <- as.numeric (agsrs[,"acres92"] < 200000)
+acres92.is.fewer.200k <- as.numeric (agsrs[,"acres92"] < 200)   # 200 thousand acres
 head(acres92.is.fewer.200k)
 
 res_prop <- srs_est(acres92.is.fewer.200k, N = 3078, estimate = "mean", show.details = FALSE)
@@ -133,16 +140,16 @@ res_prop_total$estimate |> format_est_gt("total")
 Load the complete census (population) dataset to calculate the true parameters. This allows us to assess the accuracy of our previous SRS estimates against the exact population values.
 
 ```{r agpop-true-values}
-agpop <- read.csv ("data/agpop.csv", na = "-99")
-#true mean
+agpop <- acres_in_thousands (read.csv ("data/agpop.csv"))
+#true mean (thousands of acres)
 mean (agpop[, "acres92"], na.rm = T)
-# true total
+# true total (thousands of acres)
 sum (agpop[, "acres92"], na.rm = T)
 
 # true proportion of counties with less than 200K acres for farming
-mean (agpop[, "acres92"] < 200000, na.rm = T)
+mean (agpop[, "acres92"] < 200, na.rm = T)
 # true number of counties with less than 200K acres for farming
-sum (agpop[, "acres92"] < 200000, na.rm = T)
+sum (agpop[, "acres92"] < 200, na.rm = T)
 
 ```
 
@@ -151,10 +158,10 @@ sum (agpop[, "acres92"] < 200000, na.rm = T)
 Load the full population data and filter out missing values to serve as a complete, known finite population for resampling experiments.
 
 ```{r agpop-load-clean}
-# read population data 
-agpop <- read.csv ("data/agpop.csv")
+# read population data, with acreages in thousands of acres
+agpop <- acres_in_thousands (read.csv ("data/agpop.csv"))
 # remove those counties with na
-agpop <- subset( agpop, acres92 != -99)
+agpop <- subset( agpop, !is.na (acres92))
 
 ```
 

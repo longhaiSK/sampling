@@ -274,7 +274,7 @@ Let's simulate 2000 random samples to see how UPSWR empirically compares to Simp
 
 ```{r agpop-upswr-sim, message=FALSE, warning=FALSE, cache=TRUE}
 # Read population data
-agpop <- read.csv("data/agpop.csv", na.strings = "-99")
+agpop <- acres_in_thousands(read.csv("data/agpop.csv", na.strings = "-99"))
 agpop <- agpop |> filter(!is.na(acres92), !is.na(acres87))
 
 N <- nrow(agpop)

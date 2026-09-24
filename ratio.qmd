@@ -176,8 +176,9 @@ Let's test this practically by drawing 2000 random samples and seeing how SRS an
 ### Information of population data 
 
 ```{r agpop-load}
-agpop <- read.csv("data/agpop.csv")
-agpop <- agpop[agpop$acres92 != -99, ] ## remove those counties with na
+agpop <- acres_in_thousands(read.csv("data/agpop.csv"))
+## acres87 is the auxiliary variable, so drop counties missing either one
+agpop <- agpop[!is.na(agpop$acres92) & !is.na(agpop$acres87), ]
 
 # sample size
 n <- 300
@@ -262,7 +263,7 @@ data.frame(sim_var, ratio_sim_var, percentage_reduction) |>
 When estimating the mean for a specific subgroup (like a region), the sample size in that subgroup ($n_d$) is a random variable, which increases our uncertainty.
 
 ```{r agsrs-domain-est}
-agsrs <- read.csv("data/agsrs.csv")
+agsrs <- acres_in_thousands(read.csv("data/agsrs.csv"))
 n <- nrow(agsrs)
 
 ## estimating domain means
