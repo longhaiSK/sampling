@@ -319,9 +319,9 @@ shaded and labelled $m_i/M_i$, a bar marks each subsample mean
 $\overline{y}_i$, and the ratio estimate $\overline{y}_r$ runs across the
 panel; for the SRS a single bar marks the sample mean.
 
-The right panel accumulates the estimates of both designs, one column each, with
-a violin summarising each cloud once enough draws have accumulated. The bar
-beside each column is the current confidence interval, green when it covers
+The right panel accumulates the estimates of both designs, one column each,
+drawn as a violin once enough draws have accumulated. The bar beside each
+column is the current confidence interval, green when it covers
 $\mu$ and red when it does not. The legends report the running CI coverage and
 the design effect --- the variance of the ratio estimator relative to the SRS
 average, simulated and theoretical --- and the subtitle gives the
@@ -556,8 +556,6 @@ panel_dist <- function(s, rv, est_range, th, n, p, conf, nrep) {
 
   k <- NROW(rv$M)
   for (jj in 1:2) {
-    points(jj + rv$jit, rv$M[, jj], pch = 16, cex = 0.45,
-           col = adjustcolor(MCOL[jj], 0.30))
     violin(rv$M[, jj], at = jj, col = MCOL[jj])
 
     ci_col <- if (rv$HIT[k, jj]) "forestgreen" else "red"
@@ -656,8 +654,7 @@ server <- function(input, output, session) {
     est = NULL,   # matrix 2 x 3: estimate, lower, upper (last draw)
     nel = NA,     # number of counties in the last sample
     M   = NULL,   # accumulated estimates, one column per design
-    HIT = NULL,   # accumulated coverage indicators
-    jit = numeric(0)
+    HIT = NULL    # accumulated coverage indicators
   )
   running <- reactiveVal(FALSE)
 
@@ -688,7 +685,6 @@ server <- function(input, output, session) {
 
     Mnew   <- matrix(0, k, 2)
     HITnew <- matrix(FALSE, k, 2)
-    jitnew <- numeric(k)
 
     for (i in seq_len(k)) {
       cl <- clu_draw(s, n, p, a)
@@ -699,7 +695,6 @@ server <- function(input, output, session) {
 
       Mnew[i, ]   <- est[, 1]
       HITnew[i, ] <- est[, 2] <= ybarU & ybarU <= est[, 3]
-      jitnew[i]   <- runif(1, -0.09, 0.09)
 
       if (i == k) {
         rv$clu <- cl; rv$srs <- sr; rv$est <- est; rv$nel <- length(cl$ii)
@@ -707,7 +702,6 @@ server <- function(input, output, session) {
     }
     rv$M   <- rbind(rv$M,   Mnew)
     rv$HIT <- rbind(rv$HIT, HITnew)
-    rv$jit <- c(rv$jit, jitnew)
   }
   draw_one <- function() draw_many(1)
 
@@ -731,7 +725,7 @@ server <- function(input, output, session) {
   reset_history <- function() {
     running(FALSE)
     rv$clu <- NULL; rv$srs <- NULL; rv$est <- NULL; rv$nel <- NA
-    rv$M <- NULL; rv$HIT <- NULL; rv$jit <- numeric(0)
+    rv$M <- NULL; rv$HIT <- NULL
   }
   observeEvent(input$reset,    reset_history())
   observeEvent(input$n,        reset_history())

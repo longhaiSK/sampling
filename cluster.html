@@ -9097,7 +9097,7 @@ Table&nbsp;5.3: Cluster-level summaries for the 10 sampled states
 </ul>
 <p>Two sliders set the design: <span class="math inline">\(n\)</span>, the number of clusters drawn, and <span class="math inline">\(p = m_i/M_i\)</span>, the percentage of counties subsampled from each selected cluster (<span class="math inline">\(p = 100\%\)</span> gives a one-stage sample). Play advances the simulation one draw at a time, Pause stops it, Skip jumps straight to the end, and changing any setting clears the accumulated history.</p>
 <p>The left panel shows the population split into its clusters, with the highlighted sample in red. For the cluster design the selected clusters are shaded and labelled <span class="math inline">\(m_i/M_i\)</span>, a bar marks each subsample mean <span class="math inline">\(\overline{y}_i\)</span>, and the ratio estimate <span class="math inline">\(\overline{y}_r\)</span> runs across the panel; for the SRS a single bar marks the sample mean.</p>
-<p>The right panel accumulates the estimates of both designs, one column each, with a violin summarising each cloud once enough draws have accumulated. The bar beside each column is the current confidence interval, green when it covers <span class="math inline">\(\mu\)</span> and red when it does not. The legends report the running CI coverage and the design effect — the variance of the ratio estimator relative to the SRS average, simulated and theoretical — and the subtitle gives the between-cluster <span class="math inline">\(R^2\)</span> of <code>acres92</code>.</p>
+<p>The right panel accumulates the estimates of both designs, one column each, drawn as a violin once enough draws have accumulated. The bar beside each column is the current confidence interval, green when it covers <span class="math inline">\(\mu\)</span> and red when it does not. The legends report the running CI coverage and the design effect — the variance of the ratio estimator relative to the SRS average, simulated and theoretical — and the subtitle gives the between-cluster <span class="math inline">\(R^2\)</span> of <code>acres92</code>.</p>
 <div id="fig-cluster-app" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cluster-app-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -9330,8 +9330,6 @@ panel_dist &lt;- function(s, rv, est_range, th, n, p, conf, nrep) {
 
   k &lt;- NROW(rv$M)
   for (jj in 1:2) {
-    points(jj + rv$jit, rv$M[, jj], pch = 16, cex = 0.45,
-           col = adjustcolor(MCOL[jj], 0.30))
     violin(rv$M[, jj], at = jj, col = MCOL[jj])
 
     ci_col &lt;- if (rv$HIT[k, jj]) "forestgreen" else "red"
@@ -9430,8 +9428,7 @@ server &lt;- function(input, output, session) {
     est = NULL,   # matrix 2 x 3: estimate, lower, upper (last draw)
     nel = NA,     # number of counties in the last sample
     M   = NULL,   # accumulated estimates, one column per design
-    HIT = NULL,   # accumulated coverage indicators
-    jit = numeric(0)
+    HIT = NULL    # accumulated coverage indicators
   )
   running &lt;- reactiveVal(FALSE)
 
@@ -9462,7 +9459,6 @@ server &lt;- function(input, output, session) {
 
     Mnew   &lt;- matrix(0, k, 2)
     HITnew &lt;- matrix(FALSE, k, 2)
-    jitnew &lt;- numeric(k)
 
     for (i in seq_len(k)) {
       cl &lt;- clu_draw(s, n, p, a)
@@ -9473,7 +9469,6 @@ server &lt;- function(input, output, session) {
 
       Mnew[i, ]   &lt;- est[, 1]
       HITnew[i, ] &lt;- est[, 2] &lt;= ybarU &amp; ybarU &lt;= est[, 3]
-      jitnew[i]   &lt;- runif(1, -0.09, 0.09)
 
       if (i == k) {
         rv$clu &lt;- cl; rv$srs &lt;- sr; rv$est &lt;- est; rv$nel &lt;- length(cl$ii)
@@ -9481,7 +9476,6 @@ server &lt;- function(input, output, session) {
     }
     rv$M   &lt;- rbind(rv$M,   Mnew)
     rv$HIT &lt;- rbind(rv$HIT, HITnew)
-    rv$jit &lt;- c(rv$jit, jitnew)
   }
   draw_one &lt;- function() draw_many(1)
 
@@ -9505,7 +9499,7 @@ server &lt;- function(input, output, session) {
   reset_history &lt;- function() {
     running(FALSE)
     rv$clu &lt;- NULL; rv$srs &lt;- NULL; rv$est &lt;- NULL; rv$nel &lt;- NA
-    rv$M &lt;- NULL; rv$HIT &lt;- NULL; rv$jit &lt;- numeric(0)
+    rv$M &lt;- NULL; rv$HIT &lt;- NULL
   }
   observeEvent(input$reset,    reset_history())
   observeEvent(input$n,        reset_history())
