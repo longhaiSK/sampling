@@ -4411,8 +4411,8 @@ Figure&nbsp;2.2: First 100 simulated 95% confidence intervals for the SRS sample
 <section id="sec-app-srs" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="sec-app-srs"><span class="header-section-number">2.3</span> Shinylive App for Illustrating SRS Theory</h2>
 <p>The static plots above show a snapshot of 5,000 repeated samples. The app below draws SRS samples one at a time, or continuously with play (▶) until pause (❚❚) or until the requested number of samples has been reached. The skip button (▶▶❘) draws all remaining samples at once, leaving the full histogram and the last sample on display.</p>
-<p>The top panel shows the population of <code>acres92</code>: the grey curve is a kernel density estimate and the grey points below the axis are the raw values, jittered vertically. The axis is broken at twice the population mean; counties above the cut are compressed, in rank order, into the narrow lane at the right, so that a tail unit drawn into the sample is still visible. Points selected into the current sample turn red.</p>
-<p>The bottom panel accumulates the sample means, drawn as a density histogram so its scale matches the orange curve overlaid on it: the theoretical sampling distribution <span class="math inline">\(N(\mu, \mathrm{SE}(\bar y))\)</span> at the current sample size. Its window is fixed at five theoretical standard errors for <span class="math inline">\(n = 100\)</span> on either side of <span class="math inline">\(\mu\)</span>, so the spread is comparable across sample sizes; for <span class="math inline">\(n &lt; 100\)</span> some means fall outside the window and are counted in the legend. The interval above the histogram belongs to the current sample, drawn green when it covers <span class="math inline">\(\mu\)</span> and red when it does not, and replaced at every draw. Both panels are centred on <span class="math inline">\(\mu\)</span>, so the two dashed lines are vertically aligned.</p>
+<p>The two panels sit side by side and share <code>acres92</code> on the y-axis, so the two dashed lines at <span class="math inline">\(\mu\)</span> line up horizontally across both. The left panel shows the population: the grey curve is a sideways kernel density estimate and the grey points to its left are the raw values, jittered horizontally. The axis is broken at twice the population mean; counties above the cut are compressed, in rank order, into the narrow lane at the top, so that a tail unit drawn into the sample is still visible. Points selected into the current sample turn blue, matching the sample mean and CI bar drawn beside them, and the sample means and density accumulated in the right panel.</p>
+<p>The right panel accumulates the sample means as a blue density histogram (bars now run horizontally, density on the x-axis), with a blue curve tracing their empirical density once enough draws have accumulated, and a red curve for the theoretical sampling distribution <span class="math inline">\(N(\mu, \mathrm{SE}(\bar y))\)</span> at the current sample size. Its window is fixed at five theoretical standard errors for <span class="math inline">\(n = 100\)</span> on either side of <span class="math inline">\(\mu\)</span>, so the spread is comparable across sample sizes; for <span class="math inline">\(n &lt; 100\)</span> some means fall outside the window and are counted in the legend. The interval to the right belongs to the current sample, drawn green when it covers <span class="math inline">\(\mu\)</span> and red when it does not, and replaced at every draw; the red dashed bar at the base of the histogram, close to the y-axis, is the theoretical margin of deviation <span class="math inline">\(\pm z_{\alpha/2}\,\mathrm{SE}(\bar y)\)</span> from the normal approximation, centred on <span class="math inline">\(\mu\)</span> and fixed for the current <span class="math inline">\(n\)</span> and confidence level.</p>
 <div id="fig-app-srs" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-app-srs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -4420,7 +4420,7 @@ Figure&nbsp;2.2: First 100 simulated 95% confidence intervals for the SRS sample
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
 #| standalone: true
-#| viewerHeight: 830
+#| viewerHeight: 780
 
 ## file: app.R
 library(shiny)
@@ -4472,34 +4472,44 @@ icon_pause &lt;- svg_icon('&lt;rect x="3" y="2" width="4" height="12"/&gt;&lt;re
 icon_skip  &lt;- svg_icon('&lt;path d="M1 2v12l7-6zM8 2v12l6-6z"/&gt;&lt;rect x="14" y="2" width="2" height="12"/&gt;')
 
 ui &lt;- fluidPage(
-  titlePanel("Simple random sampling: sampling distribution and CI coverage"),
-  sidebarLayout(
-    sidebarPanel(
-      width = 3,
-      sliderInput("n", "Sample size (n)", min = 10, max = 1000, value = 300, step = 10),
-      sliderInput("conf", "Confidence level", min = 0.80, max = 0.99, value = 0.95, step = 0.01),
-      actionButton("draw", "Draw new sample", class = "btn-primary", width = "100%"),
-      br(), br(),
-      fluidRow(
-        column(4, actionButton("play",  icon_play,  class = "btn-success", width = "100%",
-                               title = "Play")),
-        column(4, actionButton("pause", icon_pause, class = "btn-warning", width = "100%",
-                               title = "Pause")),
-        column(4, actionButton("skip",  icon_skip,  class = "btn-info",    width = "100%",
-                               title = "Skip to the end"))
+  titlePanel("Shinylive App for Simple Random Sampling"),
+  tags$style(HTML(
+    ".well {padding: 10px 12px; margin-bottom: 10px;}
+     .form-group {margin-bottom: 6px;}
+     .irs {margin-bottom: 0;}
+     .btn {margin-bottom: 6px;}"
+  )),
+  wellPanel(
+    fluidRow(
+      column(
+        4,
+        sliderInput("n", "Sample size (n)", min = 10, max = 1000, value = 300, step = 10),
+        sliderInput("conf", "Confidence level", min = 0.80, max = 0.99, value = 0.95, step = 0.01)
       ),
-      br(),
-      sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),
-      numericInput("nrep", "Stop after this many samples",
-                   value = 500, min = 10, max = 20000, step = 50),
-      actionButton("reset", "Reset", width = "100%")
-    ),
-    mainPanel(
-      width = 9,
-      plotOutput("popPlot",  height = "340px"),
-      plotOutput("histPlot", height = "360px")
+      column(
+        4,
+        sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),
+        numericInput("nrep", "Stop after this many samples",
+                     value = 500, min = 10, max = 20000, step = 50)
+      ),
+      column(
+        4,
+        actionButton("draw", "Draw new sample", class = "btn-primary", width = "100%"),
+        br(), br(),
+        fluidRow(
+          column(4, actionButton("play",  icon_play,  class = "btn-success", width = "100%",
+                                 title = "Play")),
+          column(4, actionButton("pause", icon_pause, class = "btn-warning", width = "100%",
+                                 title = "Pause")),
+          column(4, actionButton("skip",  icon_skip,  class = "btn-info",    width = "100%",
+                                 title = "Skip to the end"))
+        ),
+        br(),
+        actionButton("reset", "Reset", width = "100%")
+      )
     )
-  )
+  ),
+  plotOutput("mainplot", height = "480px")
 )
 
 server &lt;- function(input, output, session) {
@@ -4574,50 +4584,52 @@ server &lt;- function(input, output, session) {
 
   fmt &lt;- function(x) format(round(x), big.mark = ",")
 
-  output$popPlot &lt;- renderPlot({
-    par(mar = MAR, xaxs = "i")
-    plot(dens$x, dens_y, type = "l", col = "grey40", lwd = 2,
-         xlim = c(0, xmax_top), ylim = c(-0.62, 1.15),
-         xlab = "acres92", ylab = "", xaxt = "n", yaxt = "n", bty = "n",
+  output$mainplot &lt;- renderPlot({
+    layout(matrix(1:2, nrow = 1), widths = c(1, 1))
+
+    ## ---- left: population, with the current SRS sample (acres92 on the y axis) ----
+    par(mar = MAR, yaxs = "i")
+    plot(dens_y, dens$x, type = "l", col = "grey40", lwd = 2,
+         xlim = c(-0.62, 1.15), ylim = c(0, xmax_top),
+         xlab = "", ylab = "acres92 (thousands)", xaxt = "n", yaxt = "n", bty = "n",
          main = "Population distribution with the current SRS sample")
 
     # raw values, jittered; tail units sit in the compressed lane
-    points(px, rug_y, pch = 16, cex = 0.5, col = adjustcolor("grey60", 0.5))
+    points(rug_y, px, pch = 16, cex = 0.5, col = adjustcolor("grey60", 0.5))
     if (!is.null(rv$idx))
-      points(px[rv$idx], rug_y[rv$idx], pch = 16, cex = 0.6,
-             col = adjustcolor("red", 0.85))
+      points(rug_y[rv$idx], px[rv$idx], pch = 16, cex = 0.6,
+             col = adjustcolor("blue", 0.85))
 
     # axis up to the cut, then the break marker and the lane
     at &lt;- pretty(c(0, cut), 6); at &lt;- at[at &lt;= cut]
-    axis(1, at = at, labels = format(at, big.mark = ",", trim = TRUE))
-    segments(cut, -0.62, cut, 1.05, col = "grey75", lty = 3)
-    text(cut, -0.70, "//", col = "grey40", cex = 1.3, xpd = NA)
-    text(cut + lane_w / 2, -0.70,
-         sprintf("&gt; %s\n(%d counties)", fmt(cut), n_tail),
-         col = "grey40", cex = 0.75, xpd = NA)
+    axis(2, at = at, labels = format(at / 1000, big.mark = ",", trim = TRUE), las = 1)
+    segments(-0.62, cut, 1.15, cut, col = "grey75", lty = 3)
+    text(1.10, cut + lane_w / 2, sprintf("compressed: &gt; %s (%d counties)", fmt(cut / 1000), n_tail),
+         adj = c(1, 0), col = "grey40", cex = 0.7)
 
     # current sample mean and interval
     if (!is.null(rv$mean)) {
-      segments(rv$ci[1], -0.55, rv$ci[2], -0.55, col = "blue", lwd = 3)
-      points(rv$mean, -0.55, pch = 19, cex = 1.3, col = "blue")
+      segments(-0.55, rv$ci[1], -0.55, rv$ci[2], col = "blue", lwd = 3)
+      points(-0.55, rv$mean, pch = 19, cex = 1.3, col = "blue")
     }
-    abline(v = ybarU, col = "black", lwd = 2, lty = 2)
+    abline(h = ybarU, col = "black", lwd = 2, lty = 2)
 
-    legend("topright", bty = "n", inset = c(0.12, 0),
+    legend("topright", bty = "o", bg = "white", box.col = NA, cex = 0.8, inset = c(0.01, 0.12),
            legend = c("Population", "Current sample", "Sample mean and CI", "True mean"),
-           col = c("grey60", "red", "blue", "black"),
+           col = c("grey60", "blue", "blue", "black"),
            pch = c(16, 16, 19, NA), lty = c(NA, NA, NA, 2))
-  })
 
-  output$histPlot &lt;- renderPlot({
-    par(mar = MAR, xaxs = "i")
+    ## ---- right: sampling distribution of the sample mean (same y axis units) ----
+    par(mar = MAR, yaxs = "i")
 
     if (length(rv$means) == 0) {
-      plot(1, type = "n", xlim = xlim_b, ylim = c(0, 1), bty = "n", yaxt = "n",
-           xlab = "Sample mean of acres92", ylab = "",
+      plot(1, type = "n", xlim = c(0, 1), ylim = xlim_b, bty = "n", xaxt = "n", yaxt = "n",
+           xlab = "", ylab = "Sample mean of acres92 (thousands)",
            main = "Sampling distribution of the sample mean")
-      abline(v = ybarU, col = "black", lwd = 2, lty = 2)
-      text(ybarU, 0.5, "Click 'Draw new sample' or 'Play' to begin", col = "grey50")
+      at_r &lt;- pretty(xlim_b, 6); at_r &lt;- at_r[at_r &gt;= xlim_b[1] &amp; at_r &lt;= xlim_b[2]]
+      axis(2, at = at_r, labels = format(at_r / 1000, big.mark = ",", trim = TRUE), las = 1)
+      abline(h = ybarU, col = "black", lwd = 2, lty = 2)
+      text(0.5, ybarU, "Click 'Draw new sample' or Play to begin", col = "grey50")
       return(invisible())
     }
 
@@ -4632,28 +4644,47 @@ server &lt;- function(input, output, session) {
     se_theory &lt;- sqrt(1 - n / N) * S / sqrt(n)
     curve_pk  &lt;- dnorm(ybarU, mean = ybarU, sd = se_theory)
 
+    # empirical density of the accumulated means, once there are enough of them
+    dens_emp  &lt;- if (length(rv$means) &gt;= 10) density(rv$means) else NULL
+
     vis &lt;- h$density[h$mids &gt;= xlim_b[1] &amp; h$mids &lt;= xlim_b[2]]
-    top &lt;- max(c(vis, curve_pk, 1e-6))
+    top &lt;- max(c(vis, curve_pk, if (!is.null(dens_emp)) dens_emp$y else NULL, 1e-6))
 
-    plot(h, freq = FALSE, col = "skyblue", border = "white",
-         xlim = xlim_b, ylim = c(0, top * 1.30),
-         xlab = "Sample mean of acres92", ylab = "Density",
+    # histogram bars drawn horizontally: density along x, sample mean along y
+    plot(NA, xlim = c(0, top * 1.30), ylim = xlim_b, yaxt = "n", bty = "n",
+         xlab = "Density", ylab = "Sample mean of acres92 (thousands)",
          main = "Sampling distribution of the sample mean")
-    curve(dnorm(x, mean = ybarU, sd = se_theory), from = xlim_b[1], to = xlim_b[2],
-          col = "darkorange", lwd = 2, add = TRUE)
-    abline(v = ybarU, col = "black", lwd = 2, lty = 2)
+    at_r &lt;- pretty(xlim_b, 6); at_r &lt;- at_r[at_r &gt;= xlim_b[1] &amp; at_r &lt;= xlim_b[2]]
+    axis(2, at = at_r, labels = format(at_r / 1000, big.mark = ",", trim = TRUE), las = 1)
+    rect(0, h$breaks[-length(h$breaks)], h$density, h$breaks[-1],
+         col = adjustcolor("steelblue", 0.55), border = "white")
+    if (!is.null(dens_emp)) lines(dens_emp$y, dens_emp$x, col = "blue", lwd = 2)
+    yg &lt;- seq(xlim_b[1], xlim_b[2], length.out = 300)
+    lines(dnorm(yg, mean = ybarU, sd = se_theory), yg, col = "red", lwd = 2)
+    abline(h = ybarU, col = "black", lwd = 2, lty = 2)
 
-    # transient interval, for the current sample only
+    # transient interval, for the current sample only (t-based, from its own sd)
     ci_col &lt;- if (rv$covered) "forestgreen" else "red"
-    y      &lt;- top * 0.9
-    segments(rv$ci[1], y, rv$ci[2], y, col = ci_col, lwd = 3)
-    segments(rv$ci, y - top * 0.045, rv$ci, y + top * 0.045, col = ci_col, lwd = 3)
-    points(rv$mean, y, pch = 19, cex = 1.3, col = ci_col)
+    x      &lt;- top * 0.90
+    segments(x, rv$ci[1], x, rv$ci[2], col = ci_col, lwd = 3)
+    segments(x - top * 0.045, rv$ci, x + top * 0.045, rv$ci, col = ci_col, lwd = 3)
+    points(x, rv$mean, pch = 19, cex = 1.3, col = ci_col)
+
+    # theoretical margin of deviation from the normal approximation, centred on
+    # mu and fixed for the current n and confidence level (not the sample CI);
+    # drawn close to the y-axis, at the base of the histogram bars
+    z_crit    &lt;- qnorm(1 - (1 - input$conf) / 2)
+    me_normal &lt;- z_crit * se_theory
+    x2        &lt;- top * 0.06
+    segments(x2, ybarU - me_normal, x2, ybarU + me_normal, col = "red", lwd = 2, lty = 2)
+    segments(x2 - top * 0.03, ybarU + c(-1, 1) * me_normal,
+              x2 + top * 0.03, ybarU + c(-1, 1) * me_normal, col = "red", lwd = 2)
 
     outside &lt;- sum(rv$means &lt; xlim_b[1] | rv$means &gt; xlim_b[2])
     leg &lt;- c(
-      sprintf("True mean = %s", fmt(ybarU)),
-      sprintf("Theoretical SE (n = %d) = %s", n, fmt(se_theory)),
+      sprintf("True mean = %sK", fmt(ybarU / 1000)),
+      sprintf("Theoretical SE (n = %d) = %sK", n, fmt(se_theory / 1000)),
+      sprintf("Normal-approx %.0f%% margin = ±%sK", 100 * input$conf, fmt(me_normal / 1000)),
       sprintf("Samples drawn = %d of %d", length(rv$means), nrep()),
       sprintf("Empirical coverage = %.1f%% (nominal %.0f%%)",
               100 * mean(rv$hits), 100 * input$conf),
@@ -4661,11 +4692,11 @@ server &lt;- function(input, output, session) {
     )
     if (outside &gt; 0)
       leg &lt;- c(leg, sprintf("%d mean(s) beyond the axis", outside))
-    legend("topright", bty = "n", cex = 0.95,
-           legend = c("Theoretical Normal", leg),
-           lty = c(1, rep(NA, length(leg))),
-           lwd = c(2, rep(NA, length(leg))),
-           col = c("darkorange", rep(NA, length(leg))))
+    legend("topright", bty = "n", cex = 0.8,
+           legend = c("Theoretical Normal", "Empirical density", "Normal-approx margin", leg),
+           lty = c(1, 1, 2, rep(NA, length(leg))),
+           lwd = c(2, 2, 2, rep(NA, length(leg))),
+           col = c("red", "blue", "red", rep(NA, length(leg))))
   })
 }
 
@@ -4695,13 +4726,13 @@ e_i=Y_i-\mu,\qquad E(e_i)=0,\quad E(e_i^2)=\sigma^2,\quad E(e_ie_j)=0\ (i\neq j)
 \operatorname{MSPE}(\hat T)=E\left[(\hat T-T)^2\right]
 =E\left[\left(\sum_{i\in U}(\hat Y_i-Y_i)\right)^{2}\right].
 \tag{2.3}\]</span></span></p>
-<p>Because <span class="math inline">\(T\)</span> is a random quantity to be predicted rather than a fixed parameter to be estimated, <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe</span></a> measures prediction error. Each derivation below subtracts and adds <span class="math inline">\(\mu\)</span> within every term, expressing the prediction error in the <span class="math inline">\(e_i\)</span>, whose moments are given by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-errors</span></a>.</p>
+<p>Because <span class="math inline">\(T\)</span> is a random quantity to be predicted rather than a fixed parameter to be estimated, <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> measures prediction error. Each derivation below subtracts and adds <span class="math inline">\(\mu\)</span> within every term, expressing the prediction error in the <span class="math inline">\(e_i\)</span>, whose moments are given by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>.</p>
 </section>
 <section id="sec-pred-known-mu" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="sec-pred-known-mu"><span class="header-section-number">2.4.2</span> Known <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span></h3>
 <p>Let <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> be known and set <span class="math inline">\(\hat Y_i=\mu\)</span> for all <span class="math inline">\(i\in U\)</span>, ignoring the data. Then <span class="math inline">\(\hat T=N\mu\)</span> and <span class="math display">\[
 \hat T-T=\sum_{i\in U}(\mu-Y_i)=-\sum_{i\in U}(Y_i-\mu)=-\sum_{i\in U}e_i ,
-\]</span> so that <span class="math inline">\(E(\hat T-T)=0\)</span> and, by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-errors</span></a>, <span id="eq-mspe-blind"><span class="math display">\[
+\]</span> so that <span class="math inline">\(E(\hat T-T)=0\)</span> and, by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>, <span id="eq-mspe-blind"><span class="math display">\[
 \operatorname{MSPE}(\hat T)
 =\sum_{i\in U}E(e_i^2)+\sum_{i\neq j}E(e_ie_j)=N\sigma^2 ,
 \qquad
@@ -4714,7 +4745,7 @@ e_i=Y_i-\mu,\qquad E(e_i)=0,\quad E(e_i^2)=\sigma^2,\quad E(e_ie_j)=0\ (i\neq j)
 \]</span> whence <span id="eq-mspe-oracle"><span class="math display">\[
 \operatorname{MSPE}(\hat T)=(N-n)\sigma^2 .
 \tag{2.5}\]</span></span></p>
-<p>The <span class="math inline">\(n\)</span> observed terms drop out. Expression <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-oracle</span></a> is irreducible: the unobserved units vary about their mean, and no predictor removes that variation.</p>
+<p>The <span class="math inline">\(n\)</span> observed terms drop out. Expression <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a> is irreducible: the unobserved units vary about their mean, and no predictor removes that variation.</p>
 </section>
 <section id="sec-pred-sample-mean" class="level3" data-number="2.4.3">
 <h3 data-number="2.4.3" class="anchored" data-anchor-id="sec-pred-sample-mean"><span class="header-section-number">2.4.3</span> Unknown <span class="math inline">\(\mu\)</span>: prediction by the sample mean</h3>
@@ -4742,16 +4773,16 @@ Y_i, &amp; i\in S,\\
 \tag{2.8}\]</span></span> <span id="eq-mspe-mean"><span class="math display">\[
 \operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2}{n}\left(1-\frac{n}{N}\right).
 \tag{2.9}\]</span></span></p>
-<p>Expression <a href="#eq-mspe-mean" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-mean</span></a> is the classical simple-random-sampling variance with <span class="math inline">\(\sigma^2\)</span> in place of the population variance <span class="math inline">\(S^2\)</span>, obtained without appeal to randomization. Three consequences follow.</p>
+<p>Expression <a href="#eq-mspe-mean" class="quarto-xref">Equation&nbsp;<span>2.9</span></a> is the classical simple-random-sampling variance with <span class="math inline">\(\sigma^2\)</span> in place of the population variance <span class="math inline">\(S^2\)</span>, obtained without appeal to randomization. Three consequences follow.</p>
 <ol type="1">
-<li>The two terms of <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-total</span></a> have distinct meanings. The term <span class="math inline">\((N-n)\sigma^2\)</span> is the irreducible variation of <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-oracle</span></a>; the term <span class="math inline">\((N-n)^2\sigma^2/n\)</span> is the cost of estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> observations and alone decreases with <span class="math inline">\(n\)</span>.</li>
-<li>The finite-population correction is not an artifact of sampling without replacement. The <span class="math inline">\(n\)</span> observed units contribute exactly zero to <a href="#eq-error-decomp" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-error-decomp</span></a>, leaving <span class="math inline">\(N-n\)</span> terms to predict; at <span class="math inline">\(n=N\)</span> the MSPE is zero.</li>
-<li>The cost of not knowing <span class="math inline">\(\mu\)</span> is the factor <span class="math inline">\(N/n\)</span> applied to <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-oracle</span></a>. For the population mean the MSPE rises from <span class="math inline">\(\sigma^2/N\)</span> to approximately <span class="math inline">\(\sigma^2/n\)</span>, so precision is governed by the sample size rather than the population size.</li>
+<li>The two terms of <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.8</span></a> have distinct meanings. The term <span class="math inline">\((N-n)\sigma^2\)</span> is the irreducible variation of <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>; the term <span class="math inline">\((N-n)^2\sigma^2/n\)</span> is the cost of estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> observations and alone decreases with <span class="math inline">\(n\)</span>.</li>
+<li>The finite-population correction is not an artifact of sampling without replacement. The <span class="math inline">\(n\)</span> observed units contribute exactly zero to <a href="#eq-error-decomp" class="quarto-xref">Equation&nbsp;<span>2.7</span></a>, leaving <span class="math inline">\(N-n\)</span> terms to predict; at <span class="math inline">\(n=N\)</span> the MSPE is zero.</li>
+<li>The cost of not knowing <span class="math inline">\(\mu\)</span> is the factor <span class="math inline">\(N/n\)</span> applied to <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>. For the population mean the MSPE rises from <span class="math inline">\(\sigma^2/N\)</span> to approximately <span class="math inline">\(\sigma^2/n\)</span>, so precision is governed by the sample size rather than the population size.</li>
 </ol>
 </section>
 <section id="sec-pred-demo" class="level3" data-number="2.4.4">
 <h3 data-number="2.4.4" class="anchored" data-anchor-id="sec-pred-demo"><span class="header-section-number">2.4.4</span> Illustration</h3>
-<p><a href="#fig-srs-index" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-srs-index</span></a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-model</span></a>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
+<p><a href="#fig-srs-index" class="quarto-xref">Figure&nbsp;<span>2.4</span></a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-srs-index" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -4766,7 +4797,7 @@ Figure&nbsp;2.4: One realized population under the model. The sample occupies th
 </div>
 </div>
 </div>
-<p>The three lines correspond to the three quantities of the theory. The gap between the orange and red lines is the finite-population variation of <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-oracle</span></a>, present even when <span class="math inline">\(\mu\)</span> is known; its root mean square is <span class="math inline">\(\sigma/\sqrt{N}\)</span>. The gap between the orange and blue lines is the error in estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> units, with root mean square <span class="math inline">\(\sigma/\sqrt{n}\)</span>. The realized prediction error is the gap between the blue and red lines, scaled by <span class="math inline">\(N\)</span>; <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-total</span></a> states that its root mean square is <span class="math inline">\(\sigma\sqrt{N(N-n)/n}\)</span>.</p>
+<p>The three lines correspond to the three quantities of the theory. The gap between the orange and red lines is the finite-population variation of <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>, present even when <span class="math inline">\(\mu\)</span> is known; its root mean square is <span class="math inline">\(\sigma/\sqrt{N}\)</span>. The gap between the orange and blue lines is the error in estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> units, with root mean square <span class="math inline">\(\sigma/\sqrt{n}\)</span>. The realized prediction error is the gap between the blue and red lines, scaled by <span class="math inline">\(N\)</span>; <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.8</span></a> states that its root mean square is <span class="math inline">\(\sigma\sqrt{N(N-n)/n}\)</span>.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -4779,7 +4810,7 @@ Figure&nbsp;2.4: One realized population under the model. The sample occupies th
    50.00000    50.09382    49.66874   -85.01523   226.27417 </code></pre>
 </div>
 </div>
-<p>Estimating <span class="math inline">\(\sigma^2\)</span> by the sample variance <span class="math inline">\(s_S^2\)</span>, which satisfies <span class="math inline">\(E(s_S^2)=\sigma^2\)</span> under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-model</span></a>, yields the usual variance estimator and recovers the design-based formulas.</p>
+<p>Estimating <span class="math inline">\(\sigma^2\)</span> by the sample variance <span class="math inline">\(s_S^2\)</span>, which satisfies <span class="math inline">\(E(s_S^2)=\sigma^2\)</span> under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>, yields the usual variance estimator and recovers the design-based formulas.</p>
 
 
 </section>

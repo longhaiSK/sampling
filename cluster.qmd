@@ -27,6 +27,29 @@ In a two-stage design, we first sample $n$ clusters, then take a subsample of $m
 \overline{y}_r = \frac{\sum_{i=1}^n \hat{t}_i}{\sum_{i=1}^n M_i}
 $$
 
+*   **Estimated Variance of the Mean:** because $\hat{t}_i$ is now itself an
+    estimate, the variance picks up a second-stage term on top of the
+    between-cluster term:
+    $$
+\hat{V}(\overline{y}_r) =
+\underbrace{\left(1 - \frac{n}{N}\right) \frac{1}{n\overline{M}^2}
+  \frac{\sum_{i=1}^n (\hat{t}_i - \overline{y}_r M_i)^2}{n-1}}_{\text{between clusters}}
++ \underbrace{\frac{1}{nN\overline{M}^2} \sum_{i=1}^n \hat{v}_i}_{\text{within clusters}},
+\qquad
+\hat{v}_i = \left(1 - \frac{m_i}{M_i}\right) M_i^2 \frac{s_i^2}{m_i},
+$$
+    where $s_i^2$ is the sample variance of the $m_i$ elements measured in
+    cluster $i$.
+
+Why is the second term there at all? The between-cluster sum of squares is
+computed from the *estimated* totals $\hat{t}_i$, so it already carries some of
+the sub-sampling noise --- but only the fraction $1 - n/N$ of it. The
+within-cluster term adds back the missing part. It vanishes in two familiar
+cases: a one-stage sample ($m_i = M_i$, so $1 - m_i/M_i = 0$), and a population
+with $N$ unknown or effectively infinite (where $1/(nN) \to 0$ and $s_e^2$
+alone already does the whole job). It matters most when an appreciable fraction
+of the clusters is sampled and the elements within a cluster are heterogeneous.
+
 ---
 
 ## Functions and packages for Analyzing Data
@@ -124,13 +147,148 @@ coots_res <- cluster_ratio(data = coots,
 
 coots_res$table
 ```
-**Output Note:** Unlike the previous example, we only measured a subset of eggs per clutch. The function automatically estimates the total volume of each clutch ($\hat{t}_i$) by multiplying the true clutch size ($M_i$) by the observed subsample mean ($\overline{y}_i$); the working table (truncated to the first 6 rows + Sum) shows these estimated totals alongside the ratio fit and residuals.
+**Output Note:** Unlike the previous example, we only measured a subset of eggs per clutch, and the working table now carries an $m_i$ column recording how many. The function automatically estimates the total volume of each clutch ($\hat{t}_i$) by multiplying the true clutch size ($M_i$) by the observed subsample mean ($\overline{y}_i$); the working table (truncated to the first 6 rows + Sum) shows these estimated totals alongside the ratio fit and residuals. No within-cluster variance column appears here: with $N$ unknown (`N = Inf`), the factor $1/(nN)$ in front of the second-stage term is zero, and $s_e^2$ already carries all of the sub-sampling noise on its own.
 
 ```{r coots-ratio-mean}
 # Display the overall ratio estimate
 coots_res$estimate |> format_est_gt("ratio_mean")
 ```
 **Output Note:** The estimated overall average egg volume is `r round(coots_res$estimate["Est."], 3)` units. Because the total number of clutches in the population ($N$) is not explicitly provided (set to `Inf` by default), the finite population correction factor is safely omitted from the standard error calculation.
+
+## Two-stage cluster sampling with a finite $N$ for Estimating Agriculture Acreages for Farming
+
+Neither example above actually exercises the within-cluster term --- `algebra`
+is one-stage, and `coots` has an unknown $N$. To see it at work we need a
+population whose clusters we can count. The `agpop.csv` file provides one: its
+3,059 counties (dropping those coded `-99`) sit inside exactly $N = 50$ states,
+so the states are clusters of known number and known sizes $M_i$.
+
+### Drawing the sample
+
+We take a two-stage sample in the obvious way: an SRS of $n = 10$ states,
+followed by an SRS of $m_i = 30\%$ of the counties in each selected state.
+
+```{r agpop-two-stage-sample}
+agpop <- read.csv("data/agpop.csv")
+agpop$acres92[agpop$acres92 == -99] <- NA
+agpop <- agpop[!is.na(agpop$acres92), ]
+
+## cluster sizes M_i: the number of counties in each state
+Mi_all <- table(agpop$state)
+agpop$Mi <- as.integer(Mi_all[agpop$state])
+
+set.seed(2026)
+states <- sample(names(Mi_all), 10)                 # stage 1: n = 10 clusters
+agclus <- do.call(rbind, lapply(states, function(st) {
+  rows <- which(agpop$state == st)                  # stage 2: m_i = 0.3 M_i
+  agpop[sample(rows, max(1, round(0.30 * length(rows)))), ]
+}))
+
+c(clusters = length(states), counties = nrow(agclus))
+```
+
+### Computing the estimate directly
+
+Everything the estimator needs is a cluster-level summary: the known size $M_i$
+of each sampled state, the number of counties actually measured in it ($m_i$),
+their mean $\overline{y}_i$ and variance $s_i^2$, and the estimated state total
+$\hat{t}_i = M_i \overline{y}_i$.
+
+```{r tbl-agpop-cluster-summary}
+#| tbl-cap: "Cluster-level summaries for the 10 sampled states"
+n  <- length(states)                                            # clusters drawn
+N  <- 50                                                        # clusters in all
+
+Mi    <- tapply(agclus$Mi,      agclus$state, function(x) x[1])  # cluster sizes
+mi    <- tapply(agclus$acres92, agclus$state, length)            # counties measured
+ybari <- tapply(agclus$acres92, agclus$state, mean)              # subsample means
+si2   <- tapply(agclus$acres92, agclus$state, var)               # within-cluster vars
+thati <- Mi * ybari                                              # estimated totals
+
+data.frame(Mi, mi, ybari, si2, thati) |>
+  gt(rownames_to_stub = TRUE) |>
+  cols_label(Mi    = md("$M_i$"),    mi  = md("$m_i$"),
+             ybari = md("$\\bar y_i$"), si2 = md("$s_i^2$"),
+             thati = md("$\\hat t_i$")) |>
+  fmt_number(columns = c(ybari, thati), decimals = 0) |>
+  fmt_scientific(columns = si2, decimals = 2)
+```
+**Output Note:** The states drawn range from `r min(Mi)` to `r max(Mi)` counties,
+of which `r min(mi)` to `r max(mi)` were visited. $s_i^2$ is large throughout:
+county acreages vary enormously even inside a single state, and that is the
+variability the second-stage term will account for.
+
+The ratio estimate itself divides the estimated totals by the cluster sizes.
+
+```{r agpop-ratio-estimate}
+Mbar  <- mean(Mi)                  # average size of the sampled clusters
+ybarr <- sum(thati) / sum(Mi)      # ybar_r = sum(t_i hat) / sum(M_i)
+
+c(Mbar = Mbar, ybar_r = ybarr)
+```
+
+Its variance has two pieces. The first measures how the estimated totals scatter
+about the fitted line $\overline{y}_r M_i$; the second collects what each state
+contributes through sub-sampling.
+
+```{r agpop-variance-between}
+## between-cluster term
+ei  <- thati - ybarr * Mi          # ratio residuals
+se2 <- sum(ei^2) / (n - 1)         # s_e^2
+V_between <- (1 - n / N) * se2 / (n * Mbar^2)
+
+c(s_e2 = se2, V_between = V_between)
+```
+
+```{r agpop-variance-within}
+## within-cluster term
+vi <- (1 - mi / Mi) * Mi^2 * si2 / mi        # v_i hat, one per sampled state
+V_within <- sum(vi) / (n * N * Mbar^2)
+
+c(sum_vi = sum(vi), V_within = V_within)
+```
+
+Adding them gives the standard error, and the interval uses $n - 1$ degrees of
+freedom --- the clusters, not the counties, are the units that were randomised.
+
+```{r agpop-se-ci}
+SE  <- sqrt(V_between + V_within)
+mem <- qt(0.975, df = n - 1) * SE
+
+c(Est. = ybarr, S.E. = SE, ci.low = ybarr - mem, ci.upp = ybarr + mem)
+```
+**Output Note:** The estimated mean 1992 acreage per county is
+`r format(round(ybarr), big.mark = ",")` acres, with a 95% confidence interval
+of [`r format(round(ybarr - mem), big.mark = ",")`,
+`r format(round(ybarr + mem), big.mark = ",")`]. The interval is wide: only 10
+states were visited, so $n - 1 = 9$ degrees of freedom is all the between-cluster
+scatter provides.
+
+### Using the function `cluster_ratio`
+
+The function performs exactly these steps, provided $N$ is supplied.
+
+```{r agpop-cluster-ratio}
+clus_res <- cluster_ratio(data = agclus,
+                          cname = "state",
+                          csize = "Mi",
+                          yvar = "acres92",
+                          N = 50)
+
+clus_res$table
+```
+**Output Note:** Because this sample is two-stage *and* $N$ is finite, the
+working table carries the three extra columns computed above: $m_i$, the number
+of counties measured in each state; $s_i^2$, the variance among them; and
+$\hat v_i = (1 - m_i/M_i) M_i^2 s_i^2/m_i$, that state's contribution to the
+second-stage variance, whose Sum row feeds the $1/(nN)$ term. The source note
+under the table spells the standard error out as the sum of the two pieces.
+
+```{r agpop-cluster-estimate}
+clus_res$estimate |> format_est_gt("ratio_mean")
+```
+**Output Note:** The estimate, standard error, and interval reproduce the direct
+computation above.
 
 ## Interactive Demonstration: Clustering by State or at Random {#sec-app-cluster}
 
@@ -160,9 +318,11 @@ one-stage cluster sampling.
 
 The two estimators shown are the ones from the formulas above: the ratio
 estimator $\overline{y}_r = \sum \hat{t}_i / \sum M_i$ with the cluster sizes
-$M_i$ as the auxiliary variable (with $\hat{t}_i = M_i \overline{y}_i$ and
-$\hat{V}(\overline{y}_r) = (1 - n/N) \sum (\hat{t}_i - \overline{y}_r
-M_i)^2 / [n(n-1)\overline{M}^2]$), and the plain sample average of the SRS.
+$M_i$ as the auxiliary variable, and the plain sample average of the SRS. The
+cluster estimator's confidence interval uses the full two-stage variance --- the
+between-cluster term plus the within-cluster term
+$\sum_i \hat{v}_i / (nN\overline{M}^2)$ --- exactly as `cluster_ratio()`
+computes it, on $n - 1$ degrees of freedom.
 
 The left panel shows the population split into its clusters along the x-axis,
 each drawn as a column of jittered points on a broken `acres92` axis. When the
@@ -195,7 +355,9 @@ bought with *clusters*, not with elements inside them.
 
 Play advances the simulation one draw at a time; Pause stops it; Skip jumps
 straight to the final violin plots by drawing every remaining replication up to
-the cap in a single step.
+the cap in a single step. Changing any design setting clears the accumulated
+history, so every coverage rate on screen belongs to the settings currently
+shown.
 
 ::: {#fig-cluster-app}
 
@@ -271,19 +433,26 @@ theory <- function(s, n, p) {
 
 ## One two-stage cluster sample: an SRS of n clusters, then an SRS of
 ## m_i = p M_i counties inside each sampled cluster. The estimate is the ratio
-## estimator with M_i as the auxiliary variable, ybar_r = sum(t_i hat)/sum(M_i).
+## estimator with M_i as the auxiliary variable, ybar_r = sum(t_i hat)/sum(M_i),
+## and its variance is estimated exactly as cluster_ratio() does: the
+## between-cluster term plus the within-cluster (second-stage) term
+##   sum_i (1 - m_i/M_i) M_i^2 s_i^2 / m_i / (n N Mbar^2),
+## which the between-cluster sum of squares misses a fraction n/N of.
 clu_draw <- function(s, n, p, a) {
   ci  <- sort(sample(s$H, n))
   Mis <- s$Mi[ci]
   mi  <- subsize(Mis, p)
   ii  <- unlist(lapply(seq_len(n), function(k) sample(s$idx[[ci[k]]], mi[k])))
-  ybari <- sapply(split(pop[ii], rep(seq_len(n), mi)), mean)
+  yl    <- split(pop[ii], rep(seq_len(n), mi))
+  ybari <- sapply(yl, mean)
+  si2   <- sapply(yl, function(v) if (length(v) > 1) var(v) else 0)
   that  <- Mis * ybari                       # t_i hat = M_i ybar_i
   Mbar  <- mean(Mis)
   m     <- sum(that) / sum(Mis)
-  v     <- (1 - n / s$H) * sum((that - m * Mis)^2) / (n - 1) / (n * Mbar^2)
+  v1    <- (1 - n / s$H) * sum((that - m * Mis)^2) / (n - 1) / (n * Mbar^2)
+  v2    <- sum((1 - mi / Mis) * Mis^2 * si2 / mi) / (n * s$H * Mbar^2)
   list(ci = ci, mi = mi, Mi = Mis, ii = ii, ybari = ybari,
-       est = c(m, qt(a, df = n - 1) * sqrt(v)))
+       est = c(m, qt(a, df = n - 1) * sqrt(v1 + v2)))
 }
 
 ## One simple random sample of counties, of the same size as the cluster
@@ -386,7 +555,8 @@ panel_pop <- function(s, j, clu, srs, p, lab) {
   if (j == 2 && !is.null(clu) && length(clu$ci) <= 20)
     mtext(sprintf("%d/%d", clu$mi, clu$Mi), side = 1, at = clu$ci, line = 1.9,
           las = 2, cex = 0.5, col = "red")
-  mtext(if (j == 2) sprintf("clusters (sampled ones shaded, labelled m_i/M_i; p = %.0f%%)",
+  mtext(if (j == 2) sprintf("clusters (sampled ones shaded%s; p = %.0f%%)",
+                            if (length(clu$ci) <= 20) ", labelled m_i/M_i" else "",
                             100 * p)
         else "clusters",
         side = 1, line = 3.6, cex = 0.72, col = "grey30")

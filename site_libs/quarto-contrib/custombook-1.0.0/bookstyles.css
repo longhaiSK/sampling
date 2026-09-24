@@ -58,6 +58,16 @@ a:hover { text-decoration: underline; }
 /* =========================================
    3. HEADINGS
    ========================================= */
+/* The body text is justified; headings never are --- a wrapped heading whose
+   words get stretched to the full measure reads as a mistake. This covers the
+   section headings, the chapter/document title block, and the callout titles. */
+h1, h2, h3, h4, h5, h6,
+#title-block-header .title, #title-block-header .subtitle,
+.quarto-title .title, .quarto-title .subtitle,
+.chapter-title, .callout-title-container, .callout-title {
+  text-align: left;
+}
+
 h1 { font-size: 2em; font-weight: bold; }
 
 h2 {

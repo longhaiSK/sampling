@@ -291,17 +291,30 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
 ##                working-table columns, so this function can be reused
 ##                (e.g. by cluster_ratio(), upswr_ratio()) with
 ##                context-appropriate labels
-## extra_col --- optional list (label, values, formula) adding one extra
-##               RAW-latex-labelled column of per-unit `values` right before
+## extra_col --- optional column spec, or list of column specs, adding
+##               RAW-latex-labelled columns of per-unit `values` right before
 ##               the y column of the working table (e.g. the within-cluster
 ##               means $\bar y_i$ used by cluster_ratio() to build $\hat
-##               t_i = \bar y_i M_i$); `formula` (optional) is shown as a
-##               footnote on the y column documenting that relationship
+##               t_i = \bar y_i M_i$); a spec is a list (label, values,
+##               formula, total): `formula` (optional) is shown as a footnote
+##               on the y column documenting that relationship, and
+##               `total = TRUE` puts the column's sum in the Sum row
+## tail_col --- optional column spec, or list of specs, in the same format,
+##              appended AFTER the $e_i^2$ column (e.g. the per-cluster
+##              second-stage variance contributions $\hat v_i$); each spec's
+##              `formula` is footnoted on its own column
+## var2 --- extra variance component to add to $\hat V(\hat B)\,\bar x^2$,
+##          i.e. $\hat V(\hat B) = [(1-n/N) s_e^2/n + \mathrm{var2}]/\bar x^2$;
+##          0 (default) gives the usual one-stage ratio variance. Used by
+##          cluster_ratio() to add the within-cluster (second-stage) term
+## var2_label --- RAW latex for that extra term, shown symbolically in the
+##                standard-error source note when var2 > 0
 ## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
 ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
                         estimate = c ("mean", "total", "model"), show.details = TRUE,
                         col_labels = list (y = "y_i", x = "x_i", yhat = "\\hat y_i"),
-                        extra_col = NULL, B_label = "\\hat B")
+                        extra_col = NULL, B_label = "\\hat B",
+                        tail_col = NULL, var2 = 0, var2_label = NULL)
 {
   estimate <- match.arg (estimate)
 
@@ -312,7 +325,7 @@ ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
   yhat <- B_hat * xdata
   e <- ydata - yhat
   var_e <- sum (e^2) / (n - 1)
-  sd_B_hat <- sqrt ((1 - n/N) * var_e / n) / xbar
+  sd_B_hat <- sqrt ((1 - n/N) * var_e / n + var2) / xbar
 
   if (estimate == "model")
   {
@@ -343,28 +356,46 @@ ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
   if (!show.details)
       return (list (estimate = estimate_vec, table = NULL))
 
-  working_cols <- list (i = c (seq_len (n), "Sum"))
-  if (!is.null (extra_col))
-      working_cols$extra <- c (extra_col$values, NA)
+  ## a column spec is list (label, values, formula, total); accept either one
+  ## spec or a list of them, so callers can add several columns at once
+  norm_specs <- function (x)
+      if (is.null (x)) list () else if (!is.null (x$label)) list (x) else x
+  extras <- norm_specs (extra_col)
+  tails  <- norm_specs (tail_col)
+  nm     <- function (specs, prefix) if (length (specs)) paste0 (prefix, seq_along (specs)) else character (0)
+  e_nms  <- nm (extras, "extra")
+  t_nms  <- nm (tails,  "tail")
+
+  add_specs <- function (cols, specs, nms)
+  {
+      for (k in seq_along (specs))
+          cols[[nms[k]]] <- c (specs[[k]]$values,
+                               if (isTRUE (specs[[k]]$total)) sum (specs[[k]]$values) else NA)
+      cols
+  }
+
+  working_cols <- add_specs (list (i = c (seq_len (n), "Sum")), extras, e_nms)
   working_cols$y    <- c (ydata, sum (ydata))
   working_cols$x    <- c (xdata, sum (xdata))
   working_cols$yhat <- c (yhat, sum (yhat))
   working_cols$e    <- c (e, sum (e))
   working_cols$e2   <- c (e^2, sum (e^2))
+  working_cols <- add_specs (working_cols, tails, t_nms)
   working <- as.data.frame (working_cols, check.names = FALSE)
   working <- truncate_working (working, id_col = "i")
 
-  fmt_cols <- c ("y", "x", "yhat", "e", "e2")
-  if (!is.null (extra_col)) fmt_cols <- c ("extra", fmt_cols)
+  fmt_cols <- c (e_nms, "y", "x", "yhat", "e", "e2", t_nms)
 
   label_args <- list (i = md ("$i$"))
-  if (!is.null (extra_col))
-      label_args$extra <- md (sprintf ("$%s$", extra_col$label))
+  for (k in seq_along (extras))
+      label_args[[e_nms[k]]] <- md (sprintf ("$%s$", extras[[k]]$label))
   label_args$y    <- md (sprintf ("$%s$", col_labels$y))
   label_args$x    <- md (sprintf ("$%s$", col_labels$x))
   label_args$yhat <- md (sprintf ("$%s$", col_labels$yhat))
   label_args$e    <- md ("$e_i$")
   label_args$e2   <- md ("$e_i^2$")
+  for (k in seq_along (tails))
+      label_args[[t_nms[k]]] <- md (sprintf ("$%s$", tails[[k]]$label))
 
   table <- gt (working) |>
       tab_header (title = "Ratio Estimation: Working Table", subtitle = md (sprintf ("$n = %d$", n)))
@@ -382,12 +413,22 @@ ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
                                     col_labels$y, col_labels$x, B_hat, col_labels$yhat, col_labels$x, var_e)),
           locations = cells_column_labels (columns = yhat)
       )
-  if (!is.null (extra_col) && !is.null (extra_col$formula))
-      table <- table |>
-          tab_footnote (
-              footnote  = md (sprintf ("$%s$.", extra_col$formula)),
-              locations = cells_column_labels (columns = y)
-          )
+  ## an extra column's formula documents how it feeds the y column; a tail
+  ## column's formula belongs on the tail column itself
+  for (k in seq_along (extras))
+      if (!is.null (extras[[k]]$formula))
+          table <- table |>
+              tab_footnote (
+                  footnote  = md (sprintf ("$%s$.", extras[[k]]$formula)),
+                  locations = cells_column_labels (columns = y)
+              )
+  for (k in seq_along (tails))
+      if (!is.null (tails[[k]]$formula))
+          table <- table |>
+              tab_footnote (
+                  footnote  = md (sprintf ("$%s$.", tails[[k]]$formula)),
+                  locations = cells_column_labels (columns = tidyselect::all_of (t_nms[k]))
+              )
   table <- table |>
       tab_source_note (
           source_note = md (if (estimate == "model")
@@ -402,7 +443,11 @@ ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
       ) |>
       tab_source_note (
           source_note = md (if (estimate == "model")
-              (if (is.finite (N))
+              (if (var2 > 0)
+                  sprintf ("$\\mathrm{SE}(%s) = \\dfrac{1}{\\bar x}\\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n} + %s} = \\dfrac{1}{%s}\\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d} + %s} = %s$",
+                          B_label, if (is.null (var2_label)) "\\mathrm{var}_2" else var2_label,
+                          fmt_num (xbar), n, N, fmt_num (var_e), n, fmt_num (var2), fmt_num (sd_B_hat))
+              else if (is.finite (N))
                   sprintf ("$\\mathrm{SE}(%s) = \\dfrac{1}{\\bar x}\\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n}} = \\dfrac{1}{%s}\\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d}} = %s$",
                           B_label, fmt_num (xbar), n, N, fmt_num (var_e), n, fmt_num (sd_B_hat))
               else
@@ -696,8 +741,26 @@ str_est_data <- function (stratdata, y, stratum, weight, estimate = c ("mean", "
 ## Mtotal_U --- population total of the cluster-size variable; required
 ##              when estimate = "total"
 ## show.details --- if TRUE, also return a gt table of the cluster-level
-##                  working values (t_hat_i, M_i, fitted, e_i, e_i^2), via
-##                  ratio_est()'s own working table
+##                  working values (m_i, ybar_i, s_i^2, t_hat_i, M_i,
+##                  fitted, e_i, e_i^2, v_hat_i), via ratio_est()'s own
+##                  working table
+##
+## Variance. The between-cluster term alone,
+##   $\hat V_1 = (1 - n/N)\, s_e^2 / (n \bar M^2)$, with
+##   $s_e^2 = \sum_i (\hat t_i - \bar y_r M_i)^2/(n-1)$,
+## is what a one-stage sample needs. Under SUB-sampling $\hat t_i =
+## M_i \bar y_i$ is itself an estimate, and $s_e^2$ recovers only the
+## fraction $1 - n/N$ of that second-stage noise, so the standard two-stage
+## variance estimator adds the within-cluster term back (Lohr, Sampling:
+## Design and Analysis):
+##   $\hat V(\bar y_r) = \hat V_1
+##      + \dfrac{1}{n N \bar M^2}\sum_{i \in S} \hat v_i$,
+##   $\hat v_i = (1 - m_i/M_i)\, M_i^2 s_i^2 / m_i$,
+## where $m_i$ is the number of elements measured in cluster $i$ and $s_i^2$
+## their sample variance. The correction vanishes for a one-stage sample
+## ($m_i = M_i$) and for an unknown or infinite $N$ (where $s_e^2$ already
+## carries all of the sub-sampling noise); it matters most when a sizeable
+## fraction of the clusters is sampled.
 ## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
 cluster_ratio <- function (data, cname, csize, yvar, N = Inf,
                             estimate = c ("mean", "total", "model"),
@@ -709,11 +772,33 @@ cluster_ratio <- function (data, cname, csize, yvar, N = Inf,
   ydata <- data[, yvar]
 
   ybari <- tapply (ydata, clust, mean)
+  mi    <- tapply (ydata, clust, length)           # elements measured in cluster i
+  si2   <- tapply (ydata, clust, function (v) if (length (v) > 1) var (v) else 0)
   Mi    <- tapply (data[, csize], clust, function (x) x[1])
   ## same as the cluster total if all Mi elements were measured (mi = Mi)
   t_hat_cls <- ybari * Mi
+  n <- length (Mi)
+
+  ## second-stage (within-cluster) variance contributions, and the term they
+  ## add to V(Bhat) * xbar^2 --- see the note above for when it is non-zero
+  vi        <- (1 - mi / Mi) * Mi^2 * si2 / mi
+  subsampled <- any (mi < Mi)
+  two_stage <- subsampled && is.finite (N)
+  var2      <- if (two_stage) sum (vi) / (n * N) else 0
 
   ybar_col <- list (label = "\\bar y_i", values = ybari, formula = "\\hat t_i = \\bar y_i \\, M_i")
+  m_col    <- list (label = "m_i",   values = mi,  total = TRUE)
+  s2_col   <- list (label = "s_i^2", values = si2)
+  v_col    <- list (label = "\\hat v_i", values = vi, total = TRUE,
+                    formula = "\\hat v_i = \\left(1-\\dfrac{m_i}{M_i}\\right) M_i^2 \\dfrac{s_i^2}{m_i}")
+
+  ## m_i is shown whenever the clusters were sub-sampled; s_i^2 and v_hat_i
+  ## only when they actually enter the standard error
+  extras <- if (two_stage) list (m_col, ybar_col, s2_col)
+            else if (subsampled) list (m_col, ybar_col)
+            else list (ybar_col)
+  tails  <- if (two_stage) list (v_col) else NULL
+  v2_lab <- "\\dfrac{1}{nN}\\sum_i \\hat v_i"
 
   if (estimate == "total")
   {
@@ -721,13 +806,14 @@ cluster_ratio <- function (data, cname, csize, yvar, N = Inf,
           stop ("Mtotal_U (population total of the cluster-size variable) is required when estimate = \"total\"")
       ratio_est (t_hat_cls, Mi, xbarU = Mtotal_U, N = N, estimate = "mean", show.details = show.details,
                  col_labels = list (y = "\\hat t_i", x = "M_i", yhat = "\\hat B M_i"),
-                 extra_col = ybar_col)
+                 extra_col = extras, tail_col = tails, var2 = var2, var2_label = v2_lab)
   }
   else
   {
       ratio_est (t_hat_cls, Mi, N = N, estimate = "model", show.details = show.details,
                  col_labels = list (y = "\\hat t_i", x = "M_i", yhat = "\\hat B M_i"),
-                 extra_col = ybar_col, B_label = "\\bar y_r")
+                 extra_col = extras, tail_col = tails, var2 = var2, var2_label = v2_lab,
+                 B_label = "\\bar y_r")
   }
 }
 
