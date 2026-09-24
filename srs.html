@@ -4695,13 +4695,13 @@ e_i=Y_i-\mu,\qquad E(e_i)=0,\quad E(e_i^2)=\sigma^2,\quad E(e_ie_j)=0\ (i\neq j)
 \operatorname{MSPE}(\hat T)=E\left[(\hat T-T)^2\right]
 =E\left[\left(\sum_{i\in U}(\hat Y_i-Y_i)\right)^{2}\right].
 \tag{2.3}\]</span></span></p>
-<p>Because <span class="math inline">\(T\)</span> is a random quantity to be predicted rather than a fixed parameter to be estimated, <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> measures prediction error. Each derivation below subtracts and adds <span class="math inline">\(\mu\)</span> within every term, expressing the prediction error in the <span class="math inline">\(e_i\)</span>, whose moments are given by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>.</p>
+<p>Because <span class="math inline">\(T\)</span> is a random quantity to be predicted rather than a fixed parameter to be estimated, <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe</span></a> measures prediction error. Each derivation below subtracts and adds <span class="math inline">\(\mu\)</span> within every term, expressing the prediction error in the <span class="math inline">\(e_i\)</span>, whose moments are given by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-errors</span></a>.</p>
 </section>
 <section id="sec-pred-known-mu" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="sec-pred-known-mu"><span class="header-section-number">2.4.2</span> Known <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span></h3>
 <p>Let <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> be known and set <span class="math inline">\(\hat Y_i=\mu\)</span> for all <span class="math inline">\(i\in U\)</span>, ignoring the data. Then <span class="math inline">\(\hat T=N\mu\)</span> and <span class="math display">\[
 \hat T-T=\sum_{i\in U}(\mu-Y_i)=-\sum_{i\in U}(Y_i-\mu)=-\sum_{i\in U}e_i ,
-\]</span> so that <span class="math inline">\(E(\hat T-T)=0\)</span> and, by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>, <span id="eq-mspe-blind"><span class="math display">\[
+\]</span> so that <span class="math inline">\(E(\hat T-T)=0\)</span> and, by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-errors</span></a>, <span id="eq-mspe-blind"><span class="math display">\[
 \operatorname{MSPE}(\hat T)
 =\sum_{i\in U}E(e_i^2)+\sum_{i\neq j}E(e_ie_j)=N\sigma^2 ,
 \qquad
@@ -4714,7 +4714,7 @@ e_i=Y_i-\mu,\qquad E(e_i)=0,\quad E(e_i^2)=\sigma^2,\quad E(e_ie_j)=0\ (i\neq j)
 \]</span> whence <span id="eq-mspe-oracle"><span class="math display">\[
 \operatorname{MSPE}(\hat T)=(N-n)\sigma^2 .
 \tag{2.5}\]</span></span></p>
-<p>The <span class="math inline">\(n\)</span> observed terms drop out. Expression <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a> is irreducible: the unobserved units vary about their mean, and no predictor removes that variation.</p>
+<p>The <span class="math inline">\(n\)</span> observed terms drop out. Expression <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-oracle</span></a> is irreducible: the unobserved units vary about their mean, and no predictor removes that variation.</p>
 </section>
 <section id="sec-pred-sample-mean" class="level3" data-number="2.4.3">
 <h3 data-number="2.4.3" class="anchored" data-anchor-id="sec-pred-sample-mean"><span class="header-section-number">2.4.3</span> Unknown <span class="math inline">\(\mu\)</span>: prediction by the sample mean</h3>
@@ -4742,16 +4742,16 @@ Y_i, &amp; i\in S,\\
 \tag{2.8}\]</span></span> <span id="eq-mspe-mean"><span class="math display">\[
 \operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2}{n}\left(1-\frac{n}{N}\right).
 \tag{2.9}\]</span></span></p>
-<p>Expression <a href="#eq-mspe-mean" class="quarto-xref">Equation&nbsp;<span>2.9</span></a> is the classical simple-random-sampling variance with <span class="math inline">\(\sigma^2\)</span> in place of the population variance <span class="math inline">\(S^2\)</span>, obtained without appeal to randomization. Three consequences follow.</p>
+<p>Expression <a href="#eq-mspe-mean" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-mean</span></a> is the classical simple-random-sampling variance with <span class="math inline">\(\sigma^2\)</span> in place of the population variance <span class="math inline">\(S^2\)</span>, obtained without appeal to randomization. Three consequences follow.</p>
 <ol type="1">
-<li>The two terms of <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.8</span></a> have distinct meanings. The term <span class="math inline">\((N-n)\sigma^2\)</span> is the irreducible variation of <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>; the term <span class="math inline">\((N-n)^2\sigma^2/n\)</span> is the cost of estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> observations and alone decreases with <span class="math inline">\(n\)</span>.</li>
-<li>The finite-population correction is not an artifact of sampling without replacement. The <span class="math inline">\(n\)</span> observed units contribute exactly zero to <a href="#eq-error-decomp" class="quarto-xref">Equation&nbsp;<span>2.7</span></a>, leaving <span class="math inline">\(N-n\)</span> terms to predict; at <span class="math inline">\(n=N\)</span> the MSPE is zero.</li>
-<li>The cost of not knowing <span class="math inline">\(\mu\)</span> is the factor <span class="math inline">\(N/n\)</span> applied to <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>. For the population mean the MSPE rises from <span class="math inline">\(\sigma^2/N\)</span> to approximately <span class="math inline">\(\sigma^2/n\)</span>, so precision is governed by the sample size rather than the population size.</li>
+<li>The two terms of <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-total</span></a> have distinct meanings. The term <span class="math inline">\((N-n)\sigma^2\)</span> is the irreducible variation of <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-oracle</span></a>; the term <span class="math inline">\((N-n)^2\sigma^2/n\)</span> is the cost of estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> observations and alone decreases with <span class="math inline">\(n\)</span>.</li>
+<li>The finite-population correction is not an artifact of sampling without replacement. The <span class="math inline">\(n\)</span> observed units contribute exactly zero to <a href="#eq-error-decomp" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-error-decomp</span></a>, leaving <span class="math inline">\(N-n\)</span> terms to predict; at <span class="math inline">\(n=N\)</span> the MSPE is zero.</li>
+<li>The cost of not knowing <span class="math inline">\(\mu\)</span> is the factor <span class="math inline">\(N/n\)</span> applied to <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-oracle</span></a>. For the population mean the MSPE rises from <span class="math inline">\(\sigma^2/N\)</span> to approximately <span class="math inline">\(\sigma^2/n\)</span>, so precision is governed by the sample size rather than the population size.</li>
 </ol>
 </section>
 <section id="sec-pred-demo" class="level3" data-number="2.4.4">
 <h3 data-number="2.4.4" class="anchored" data-anchor-id="sec-pred-demo"><span class="header-section-number">2.4.4</span> Illustration</h3>
-<p><a href="#fig-srs-index" class="quarto-xref">Figure&nbsp;<span>2.4</span></a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
+<p><a href="#fig-srs-index" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-srs-index</span></a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-model</span></a>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-srs-index" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -4766,7 +4766,7 @@ Figure&nbsp;2.4: One realized population under the model. The sample occupies th
 </div>
 </div>
 </div>
-<p>The three lines correspond to the three quantities of the theory. The gap between the orange and red lines is the finite-population variation of <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>, present even when <span class="math inline">\(\mu\)</span> is known; its root mean square is <span class="math inline">\(\sigma/\sqrt{N}\)</span>. The gap between the orange and blue lines is the error in estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> units, with root mean square <span class="math inline">\(\sigma/\sqrt{n}\)</span>. The realized prediction error is the gap between the blue and red lines, scaled by <span class="math inline">\(N\)</span>; <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.8</span></a> states that its root mean square is <span class="math inline">\(\sigma\sqrt{N(N-n)/n}\)</span>.</p>
+<p>The three lines correspond to the three quantities of the theory. The gap between the orange and red lines is the finite-population variation of <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-oracle</span></a>, present even when <span class="math inline">\(\mu\)</span> is known; its root mean square is <span class="math inline">\(\sigma/\sqrt{N}\)</span>. The gap between the orange and blue lines is the error in estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> units, with root mean square <span class="math inline">\(\sigma/\sqrt{n}\)</span>. The realized prediction error is the gap between the blue and red lines, scaled by <span class="math inline">\(N\)</span>; <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mspe-total</span></a> states that its root mean square is <span class="math inline">\(\sigma\sqrt{N(N-n)/n}\)</span>.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -4779,7 +4779,7 @@ Figure&nbsp;2.4: One realized population under the model. The sample occupies th
    50.00000    50.09382    49.66874   -85.01523   226.27417 </code></pre>
 </div>
 </div>
-<p>Estimating <span class="math inline">\(\sigma^2\)</span> by the sample variance <span class="math inline">\(s_S^2\)</span>, which satisfies <span class="math inline">\(E(s_S^2)=\sigma^2\)</span> under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>, yields the usual variance estimator and recovers the design-based formulas.</p>
+<p>Estimating <span class="math inline">\(\sigma^2\)</span> by the sample variance <span class="math inline">\(s_S^2\)</span>, which satisfies <span class="math inline">\(E(s_S^2)=\sigma^2\)</span> under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-model</span></a>, yields the usual variance estimator and recovers the design-based formulas.</p>
 
 
 </section>
