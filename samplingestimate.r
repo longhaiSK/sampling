@@ -328,12 +328,15 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
 ##          cluster_ratio() to add the within-cluster (second-stage) term
 ## var2_label --- RAW latex for that extra term, shown symbolically in the
 ##                standard-error source note when var2 > 0
+## xbar_label --- RAW latex naming $\bar x$ in the standard-error note
+##                (cluster_ratio() passes "\\bar M", the mean cluster size)
 ## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
 ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
                         estimate = c ("mean", "total", "model"), show.details = TRUE,
                         col_labels = list (y = "y_i", x = "x_i", yhat = "\\hat y_i"),
                         extra_col = NULL, B_label = "\\hat B",
-                        tail_col = NULL, var2 = 0, var2_label = NULL)
+                        tail_col = NULL, var2 = 0, var2_label = NULL,
+                        xbar_label = "\\bar x")
 {
   estimate <- match.arg (estimate)
 
@@ -463,9 +466,13 @@ ratio_est <- function (ydata, xdata, xbarU = NULL, N = Inf,
       tab_source_note (
           source_note = md (if (estimate == "model")
               (if (var2 > 0)
-                  sprintf ("$\\mathrm{SE}(%s) = \\dfrac{1}{\\bar x}\\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n} + %s} = \\dfrac{1}{%s}\\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d} + %s} = %s$",
-                          B_label, if (is.null (var2_label)) "\\mathrm{var}_2" else var2_label,
-                          fmt_num (xbar), n, N, fmt_num (var_e), n, fmt_num (var2), fmt_num (sd_B_hat))
+                  ## two parts: the ratio variance over the sampled units, plus
+                  ## whatever second-stage variance the caller supplied
+                  sprintf ("$\\mathrm{SE}(%s) = \\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n\\,%s^2} + %s} = \\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d \\times %s^2} + %s} = %s$",
+                          B_label, xbar_label,
+                          if (is.null (var2_label)) "\\mathrm{var}_2" else var2_label,
+                          n, N, fmt_num (var_e), n, fmt_num (xbar),
+                          fmt_num (var2 / xbar^2), fmt_num (sd_B_hat))
               else if (is.finite (N))
                   sprintf ("$\\mathrm{SE}(%s) = \\dfrac{1}{\\bar x}\\sqrt{\\left(1-\\dfrac{n}{N}\\right)\\dfrac{s_e^2}{n}} = \\dfrac{1}{%s}\\sqrt{\\left(1-\\dfrac{%d}{%d}\\right)\\dfrac{%s}{%d}} = %s$",
                           B_label, fmt_num (xbar), n, N, fmt_num (var_e), n, fmt_num (sd_B_hat))
@@ -764,22 +771,24 @@ str_est_data <- function (stratdata, y, stratum, weight, estimate = c ("mean", "
 ##                  fitted, e_i, e_i^2, v_hat_i), via ratio_est()'s own
 ##                  working table
 ##
-## Variance. The between-cluster term alone,
-##   $\hat V_1 = (1 - n/N)\, s_e^2 / (n \bar M^2)$, with
+## Variance, in two readable parts (Lohr, Sampling: Design and Analysis):
+##   $\hat V(\bar y_r) = \hat V_{\mathrm{ratio}} + (n/N)\, \hat V_{\mathrm{str}}$.
+## The first part is the variance of the RATIO estimate $\sum \hat t_i /
+## \sum M_i$ formed from the n sampled clusters,
+##   $\hat V_{\mathrm{ratio}} = (1 - n/N)\, s_e^2 / (n \bar M^2)$, with
 ##   $s_e^2 = \sum_i (\hat t_i - \bar y_r M_i)^2/(n-1)$,
-## is what a one-stage sample needs. Under SUB-sampling $\hat t_i =
-## M_i \bar y_i$ is itself an estimate, and $s_e^2$ recovers only the
-## fraction $1 - n/N$ of that second-stage noise, so the standard two-stage
-## variance estimator adds the within-cluster term back (Lohr, Sampling:
-## Design and Analysis):
-##   $\hat V(\bar y_r) = \hat V_1
-##      + \dfrac{1}{n N \bar M^2}\sum_{i \in S} \hat v_i$,
-##   $\hat v_i = (1 - m_i/M_i)\, M_i^2 s_i^2 / m_i$,
+## and is all a one-stage sample needs. The second part is the variance of a
+## STRATIFIED sample in which the n sampled clusters are the strata, of sizes
+## $M_i$ inside $M = \sum_{i \in S} M_i = n \bar M$ elements:
+##   $\hat V_{\mathrm{str}} = \sum_{i \in S} \hat v_i$,
+##   $\hat v_i = (M_i/M)^2 (1 - m_i/M_i)\, s_i^2 / m_i$,
 ## where $m_i$ is the number of elements measured in cluster $i$ and $s_i^2$
-## their sample variance. The correction vanishes for a one-stage sample
-## ($m_i = M_i$) and for an unknown or infinite $N$ (where $s_e^2$ already
-## carries all of the sub-sampling noise); it matters most when a sizeable
-## fraction of the clusters is sampled.
+## their sample variance. Sub-sampling makes $\hat t_i = M_i \bar y_i$ an
+## estimate rather than a total, and $s_e^2$ recovers only the fraction
+## $1 - n/N$ of that noise; the $(n/N)\hat V_{\mathrm{str}}$ term adds back
+## the rest. It vanishes for a one-stage sample ($m_i = M_i$) and for an
+## unknown or infinite $N$, and at $n = N$ it is the whole variance --- a
+## census of the clusters IS a stratified sample, and the formula says so.
 ## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
 cluster_ratio <- function (data, cname, csize, yvar, N = Inf,
                             estimate = c ("mean", "total", "model"),
@@ -798,18 +807,24 @@ cluster_ratio <- function (data, cname, csize, yvar, N = Inf,
   t_hat_cls <- ybari * Mi
   n <- length (Mi)
 
-  ## second-stage (within-cluster) variance contributions, and the term they
-  ## add to V(Bhat) * xbar^2 --- see the note above for when it is non-zero
-  vi        <- (1 - mi / Mi) * Mi^2 * si2 / mi
+  ## Second-stage contributions: treat the n sampled clusters as strata of
+  ## sizes M_i within M = sum_{i in S} M_i = n Mbar elements, so sum(vi) is
+  ## exactly the stratified variance V_str and the term to add is (n/N) V_str.
+  ## ratio_est() divides by xbar^2 = Mbar^2, so var2 carries that factor back.
+  M          <- sum (Mi)
+  vi         <- (Mi / M)^2 * (1 - mi / Mi) * si2 / mi
   subsampled <- any (mi < Mi)
-  two_stage <- subsampled && is.finite (N)
-  var2      <- if (two_stage) sum (vi) / (n * N) else 0
+  two_stage  <- subsampled && is.finite (N)
+  var2       <- if (two_stage) (n / N) * sum (vi) * mean (Mi)^2 else 0
 
   ybar_col <- list (label = "\\bar y_i", values = ybari, formula = "\\hat t_i = \\bar y_i \\, M_i")
   m_col    <- list (label = "m_i",   values = mi,  total = TRUE)
   s2_col   <- list (label = "s_i^2", values = si2)
   v_col    <- list (label = "\\hat v_i", values = vi, total = TRUE,
-                    formula = "\\hat v_i = \\left(1-\\dfrac{m_i}{M_i}\\right) M_i^2 \\dfrac{s_i^2}{m_i}")
+                    formula = paste0 ("\\hat v_i = \\left(\\dfrac{M_i}{M}\\right)^2",
+                                      "\\left(1-\\dfrac{m_i}{M_i}\\right)\\dfrac{s_i^2}{m_i},",
+                                      "\\quad M = \\sum_i M_i = n\\bar M,",
+                                      "\\quad \\sum_i \\hat v_i = \\hat V_{\\mathrm{str}}"))
 
   ## m_i is shown whenever the clusters were sub-sampled; s_i^2 and v_hat_i
   ## only when they actually enter the standard error
@@ -817,7 +832,7 @@ cluster_ratio <- function (data, cname, csize, yvar, N = Inf,
             else if (subsampled) list (m_col, ybar_col)
             else list (ybar_col)
   tails  <- if (two_stage) list (v_col) else NULL
-  v2_lab <- "\\dfrac{1}{nN}\\sum_i \\hat v_i"
+  v2_lab <- "\\dfrac{n}{N}\\sum_i \\hat v_i"
 
   if (estimate == "total")
   {
@@ -825,14 +840,15 @@ cluster_ratio <- function (data, cname, csize, yvar, N = Inf,
           stop ("Mtotal_U (population total of the cluster-size variable) is required when estimate = \"total\"")
       ratio_est (t_hat_cls, Mi, xbarU = Mtotal_U, N = N, estimate = "mean", show.details = show.details,
                  col_labels = list (y = "\\hat t_i", x = "M_i", yhat = "\\hat B M_i"),
-                 extra_col = extras, tail_col = tails, var2 = var2, var2_label = v2_lab)
+                 extra_col = extras, tail_col = tails, var2 = var2, var2_label = v2_lab,
+                 xbar_label = "\\bar M")
   }
   else
   {
       ratio_est (t_hat_cls, Mi, N = N, estimate = "model", show.details = show.details,
                  col_labels = list (y = "\\hat t_i", x = "M_i", yhat = "\\hat B M_i"),
                  extra_col = extras, tail_col = tails, var2 = var2, var2_label = v2_lab,
-                 B_label = "\\bar y_r")
+                 xbar_label = "\\bar M", B_label = "\\bar y_r")
   }
 }
 

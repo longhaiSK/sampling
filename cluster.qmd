@@ -27,28 +27,45 @@ In a two-stage design, we first sample $n$ clusters, then take a subsample of $m
 \overline{y}_r = \frac{\sum_{i=1}^n \hat{t}_i}{\sum_{i=1}^n M_i}
 $$
 
-*   **Estimated Variance of the Mean:** because $\hat{t}_i$ is now itself an
-    estimate, the variance picks up a second-stage term on top of the
-    between-cluster term:
+*   **Estimated Variance of the Mean:** it splits into two recognisable pieces
+    --- the variance of a **ratio** estimate computed over the $n$ sampled
+    clusters, plus the cluster sampling fraction $n/N$ times the variance of a
+    **stratified** sample in which those same clusters are the strata:
     $$
 \hat{V}(\overline{y}_r) =
 \underbrace{\left(1 - \frac{n}{N}\right) \frac{1}{n\overline{M}^2}
-  \frac{\sum_{i=1}^n (\hat{t}_i - \overline{y}_r M_i)^2}{n-1}}_{\text{between clusters}}
-+ \underbrace{\frac{1}{nN\overline{M}^2} \sum_{i=1}^n \hat{v}_i}_{\text{within clusters}},
-\qquad
-\hat{v}_i = \left(1 - \frac{m_i}{M_i}\right) M_i^2 \frac{s_i^2}{m_i},
+  \frac{\sum_{i=1}^n (\hat{t}_i - \overline{y}_r M_i)^2}{n-1}}_{\textstyle \hat{V}_{\mathrm{ratio}}}
+\;+\;
+\frac{n}{N}
+\underbrace{\sum_{i=1}^n \left(\frac{M_i}{M}\right)^{2}
+  \left(1 - \frac{m_i}{M_i}\right)\frac{s_i^2}{m_i}}_{\textstyle \hat{V}_{\mathrm{str}}},
+\qquad M = \sum_{i=1}^n M_i = n\overline{M} .
 $$
-    where $s_i^2$ is the sample variance of the $m_i$ elements measured in
-    cluster $i$.
+    Here $s_i^2$ is the sample variance of the $m_i$ elements measured in
+    cluster $i$, and $M$ is the number of elements the sampled clusters
+    contain. $\hat{V}_{\mathrm{ratio}}$ is exactly the ratio-estimate variance
+    for $\sum \hat{t}_i / \sum M_i$, and $\hat{V}_{\mathrm{str}}$ is exactly the
+    stratified variance $\sum_h W_h^2(1 - n_h/N_h)s_h^2/n_h$ with the sampled
+    clusters as strata: stratum sizes $N_h = M_i$, sample sizes $n_h = m_i$, and
+    weights $W_h = M_i/M$. Each term
+    $$\hat{v}_i = \left(\frac{M_i}{M}\right)^{2}\left(1 - \frac{m_i}{M_i}\right)\frac{s_i^2}{m_i}$$
+    is one stratum's contribution; the working tables below carry them in a
+    $\hat{v}_i$ column whose Sum is $\hat{V}_{\mathrm{str}}$.
 
-Why is the second term there at all? The between-cluster sum of squares is
-computed from the *estimated* totals $\hat{t}_i$, so it already carries some of
-the sub-sampling noise --- but only the fraction $1 - n/N$ of it. The
-within-cluster term adds back the missing part. It vanishes in two familiar
-cases: a one-stage sample ($m_i = M_i$, so $1 - m_i/M_i = 0$), and a population
-with $N$ unknown or effectively infinite (where $1/(nN) \to 0$ and $s_e^2$
-alone already does the whole job). It matters most when an appreciable fraction
-of the clusters is sampled and the elements within a cluster are heterogeneous.
+Why is the second piece there at all? If we could see the true cluster totals
+$t_i$, the ratio piece alone would be the whole variance. Sub-sampling replaces
+$t_i$ by the estimate $\hat{t}_i$, and the between-cluster sum of squares
+absorbs only the fraction $1 - n/N$ of the noise that creates; the stratified
+piece pays the rest. Three special cases follow straight from the formula:
+
+*   **One-stage sampling** ($m_i = M_i$): every $\hat{v}_i = 0$, and only the
+    ratio piece survives.
+*   **$N$ unknown or effectively infinite**: $n/N \to 0$, the stratified piece
+    drops out, and $s_e^2$ alone does the whole job.
+*   **A census of clusters** ($n = N$): the factor $1 - n/N$ kills the ratio
+    piece and $n/N = 1$ leaves $\hat{V}(\overline{y}_r) = \hat{V}_{\mathrm{str}}$
+    exactly --- drawing every cluster *is* stratified sampling, and the formula
+    says so.
 
 ---
 
@@ -227,32 +244,38 @@ ybarr <- sum(thati) / sum(Mi)      # ybar_r = sum(t_i hat) / sum(M_i)
 c(Mbar = Mbar, ybar_r = ybarr)
 ```
 
-Its variance has two pieces. The first measures how the estimated totals scatter
-about the fitted line $\overline{y}_r M_i$; the second collects what each state
-contributes through sub-sampling.
+Its variance has the two pieces from the formula above. The **ratio** piece
+measures how the estimated totals scatter about the fitted line
+$\overline{y}_r M_i$:
 
-```{r agpop-variance-between}
-## between-cluster term
+```{r agpop-variance-ratio}
+## ratio piece: the variance of the ratio estimate over the 10 sampled states
 ei  <- thati - ybarr * Mi          # ratio residuals
 se2 <- sum(ei^2) / (n - 1)         # s_e^2
-V_between <- (1 - n / N) * se2 / (n * Mbar^2)
+V_ratio <- (1 - n / N) * se2 / (n * Mbar^2)
 
-c(s_e2 = se2, V_between = V_between)
+c(s_e2 = se2, V_ratio = V_ratio)
 ```
 
-```{r agpop-variance-within}
-## within-cluster term
-vi <- (1 - mi / Mi) * Mi^2 * si2 / mi        # v_i hat, one per sampled state
-V_within <- sum(vi) / (n * N * Mbar^2)
+The **stratified** piece treats those same 10 states as strata, of sizes $M_i$
+inside the $M = \sum_i M_i$ counties they contain, and is then scaled by the
+cluster sampling fraction $n/N$:
 
-c(sum_vi = sum(vi), V_within = V_within)
+```{r agpop-variance-str}
+## stratified piece: strata = the sampled states, weights W_i = M_i / M
+M     <- sum(Mi)                                  # elements in the 10 states
+vi    <- (Mi / M)^2 * (1 - mi / Mi) * si2 / mi    # each stratum's contribution
+V_str <- sum(vi)                                  # the stratified variance
+
+c(M = M, n_Mbar = n * Mbar, V_str = V_str, scaled = (n / N) * V_str)
 ```
 
-Adding them gives the standard error, and the interval uses $n - 1$ degrees of
-freedom --- the clusters, not the counties, are the units that were randomised.
+Adding the two gives the standard error, and the interval uses $n - 1$ degrees
+of freedom --- the clusters, not the counties, are the units that were
+randomised.
 
 ```{r agpop-se-ci}
-SE  <- sqrt(V_between + V_within)
+SE  <- sqrt(V_ratio + (n / N) * V_str)
 mem <- qt(0.975, df = n - 1) * SE
 
 c(Est. = ybarr, S.E. = SE, ci.low = ybarr - mem, ci.upp = ybarr + mem)
@@ -280,9 +303,10 @@ clus_res$table
 **Output Note:** Because this sample is two-stage *and* $N$ is finite, the
 working table carries the three extra columns computed above: $m_i$, the number
 of counties measured in each state; $s_i^2$, the variance among them; and
-$\hat v_i = (1 - m_i/M_i) M_i^2 s_i^2/m_i$, that state's contribution to the
-second-stage variance, whose Sum row feeds the $1/(nN)$ term. The source note
-under the table spells the standard error out as the sum of the two pieces.
+$\hat v_i = (M_i/M)^2 (1 - m_i/M_i) s_i^2/m_i$, that state's contribution to the
+stratified variance. The Sum of the $\hat v_i$ column is
+$\hat{V}_{\mathrm{str}}$ itself, and the source note under the table spells the
+standard error out as $\hat{V}_{\mathrm{ratio}} + (n/N)\hat{V}_{\mathrm{str}}$.
 
 ```{r agpop-cluster-estimate}
 clus_res$estimate |> format_est_gt("ratio_mean")
@@ -402,10 +426,10 @@ theory <- function(s, n, p) {
 ## One two-stage cluster sample: an SRS of n clusters, then an SRS of
 ## m_i = p M_i counties inside each sampled cluster. The estimate is the ratio
 ## estimator with M_i as the auxiliary variable, ybar_r = sum(t_i hat)/sum(M_i),
-## and its variance is estimated exactly as cluster_ratio() does: the
-## between-cluster term plus the within-cluster (second-stage) term
-##   sum_i (1 - m_i/M_i) M_i^2 s_i^2 / m_i / (n N Mbar^2),
-## which the between-cluster sum of squares misses a fraction n/N of.
+## and its variance is estimated exactly as cluster_ratio() does: the ratio
+## variance over the sampled clusters, plus n/N times the stratified variance
+##   V_str = sum_i (M_i/M)^2 (1 - m_i/M_i) s_i^2/m_i,   M = sum_i M_i,
+## that treats the sampled clusters as strata of sizes M_i.
 clu_draw <- function(s, n, p, a) {
   ci  <- sort(sample(s$H, n))
   Mis <- s$Mi[ci]
@@ -417,8 +441,9 @@ clu_draw <- function(s, n, p, a) {
   that  <- Mis * ybari                       # t_i hat = M_i ybar_i
   Mbar  <- mean(Mis)
   m     <- sum(that) / sum(Mis)
+  Mtot  <- sum(Mis)
   v1    <- (1 - n / s$H) * sum((that - m * Mis)^2) / (n - 1) / (n * Mbar^2)
-  v2    <- sum((1 - mi / Mis) * Mis^2 * si2 / mi) / (n * s$H * Mbar^2)
+  v2    <- (n / s$H) * sum((Mis / Mtot)^2 * (1 - mi / Mis) * si2 / mi)
   list(ci = ci, mi = mi, Mi = Mis, ii = ii, ybari = ybari,
        est = c(m, qt(a, df = n - 1) * sqrt(v1 + v2)))
 }
