@@ -9,6 +9,61 @@ execute:
 ---
 
 
+## Estimators for Simple Random Sampling {#sec-srs-formulas}
+
+A simple random sample (SRS) of $n$ units is drawn **without replacement** from a
+population of $N$ units, so that every subset of $n$ units is equally likely.
+Write $y_i$ for the value of unit $i$, $\bar{y}_U = \frac{1}{N}\sum_{i=1}^N y_i$ for the
+population mean, $t = N\bar{y}_U$ for the population total, and
+$$
+S^2 = \frac{1}{N-1}\sum_{i=1}^N (y_i - \bar{y}_U)^2
+$$
+for the population variance.
+
+#### 1. Estimating the Population Mean {-}
+
+The sample mean is unbiased for $\bar{y}_U$:
+$$
+\bar{y} = \frac{1}{n}\sum_{i=1}^n y_i .
+$$
+Its true variance and its estimate, which replaces $S^2$ by the sample variance $s^2$, are
+$$
+V(\bar{y}) = \left(1 - \frac{n}{N}\right)\frac{S^2}{n}, \qquad
+\hat{V}(\bar{y}) = \left(1 - \frac{n}{N}\right)\frac{s^2}{n}, \qquad
+s^2 = \frac{1}{n-1}\sum_{i=1}^n (y_i - \bar{y})^2 ,
+$$
+and $\mathrm{SE}(\bar{y}) = \sqrt{\hat{V}(\bar{y})}$. The factor $1 - n/N$ is the
+**finite population correction** (fpc). It is close to $1$ when the sampling fraction $n/N$ is small.
+
+#### 2. Estimating the Population Total {-}
+
+$$
+\hat{t} = N\bar{y}, \qquad
+\hat{V}(\hat{t}) = N^2\,\hat{V}(\bar{y}) = N^2\left(1 - \frac{n}{N}\right)\frac{s^2}{n}, \qquad
+\mathrm{SE}(\hat{t}) = N\,\mathrm{SE}(\bar{y}).
+$$
+
+#### 3. Estimating a Proportion {-}
+
+For a 0/1 indicator $y_i$, the population mean is the proportion $p$, and the sample mean is the sample proportion $\hat{p}$.
+Since then $s^2 = \frac{n}{n-1}\hat{p}(1-\hat{p})$,
+$$
+\hat{p} = \frac{1}{n}\sum_{i=1}^n y_i, \qquad
+\hat{V}(\hat{p}) = \left(1 - \frac{n}{N}\right)\frac{\hat{p}(1 - \hat{p})}{n-1}.
+$$
+
+#### 4. Confidence Intervals {-}
+
+By the central limit theorem for sample means, an approximate $95\%$ confidence interval is
+$$
+\bar{y} \pm t_{0.975,\,n-1}\,\mathrm{SE}(\bar{y}),
+$$
+and likewise for $\hat{t}$ and $\hat{p}$. With a skewed population, $n$ must be larger for the
+normal approximation, and hence the nominal coverage, to hold.
+The simulation and the app later in this chapter show this.
+
+---
+
 ## Analysis of agsrs.csv Data
 
 Throughout the agriculture examples in this book, county acreages are expressed

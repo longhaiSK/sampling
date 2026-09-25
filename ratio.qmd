@@ -1,90 +1,113 @@
 # Ratio and Regression Estimation
 
-
-
-## Key formulae
+## Ratio, Regression, and Domain Estimation {#sec-ratio-formulas}
 
 When auxiliary information (a variable $x$) is highly correlated with our target variable of interest ($y$), we can use **Ratio** or **Regression** estimation to improve precision without increasing the sample size. We can also use auxiliary population structures to adjust our estimates after the fact via **Post-stratification**, or estimate means for specific sub-populations (**Domains**).
 
+Throughout, $(x_i, y_i)$, $i = 1, \ldots, n$, is an SRS of size $n$ from a population of
+$N$ units, and $\overline{x}_U$ (equivalently $t_x = N\overline{x}_U$) is known.
+
 ### 1. Ratio Estimation {-}
-If the relationship between $y$ and $x$ passes through the origin, we estimate the ratio $B$ and use it to adjust the mean:
+If the relationship between $y$ and $x$ passes through the origin, we estimate the ratio $B = \overline{y}_U/\overline{x}_U$ and use it to adjust the mean:
+$$
+\hat{B} = \frac{\overline{y}}{\overline{x}} = \frac{\sum_{i=1}^n y_i}{\sum_{i=1}^n x_i}, \qquad
+\overline{y}_r = \hat{B}\,\overline{x}_U, \qquad
+\hat{t}_r = \hat{B}\,t_x = N\overline{y}_r .
+$$
+Its error is driven by the residuals $e_i = y_i - \hat{B}x_i$ from the line through the origin:
+$$
+\hat{V}(\hat{B}) = \frac{1}{\overline{x}^2}\left(1 - \frac{n}{N}\right)\frac{s_e^2}{n}, \qquad
+\hat{V}(\overline{y}_r) = \overline{x}_U^2\,\hat{V}(\hat{B}) = \left(\frac{\overline{x}_U}{\overline{x}}\right)^2 \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}, \qquad
+s_e^2 = \frac{1}{n-1}\sum_{i=1}^n \left(y_i - \hat{B}x_i\right)^2 ,
+$$
+with $\hat{V}(\hat{t}_r) = N^2\hat{V}(\overline{y}_r)$ and $95\%$ intervals using $t_{0.975,\,n-1}$.
+The ratio estimator is slightly biased, but the bias is negligible when $n$ is large.
 
-*   **Ratio:** $\hat{B} = \frac{\overline{y}}{\overline{x}}$
-*   **Mean Estimator:** $\overline{y}_r = \hat{B} \overline{x}_{\text{U}}$ (where $\overline{x}_{\text{U}}$ is the true population mean of $x$)
-
-*   **Estimated Variance:** $\hat{V}(\overline{y}_r) = \left(\frac{\overline{x}_{\text{U}}}{\overline{x}}\right)^2 \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}$, built from the residuals
-    $$
-    e_i = y_i - \hat{B}x_i, \qquad s_e^2 = \frac{1}{n-1}\sum_{i=1}^n e_i^2 .
-    $$
-    $e_i$ is the vertical distance from the point $(x_i, y_i)$ to the fitted line through
-    the origin, $y = \hat{B}x$. No centring appears in $s_e^2$ because
-    $\hat{B} = \overline{y}/\overline{x}$ forces
-    $\sum_i e_i = \sum_i y_i - \hat{B}\sum_i x_i = 0$ exactly, so the residuals already
-    average to zero; the divisor is $n-1$ for the one parameter $\hat{B}$ estimated from
-    the sample. Compare this with the SRS variance $\left(1 - \frac{n}{N}\right)s_y^2/n$:
-    ratio estimation replaces the scatter of $y$ about $\overline{y}$ by the scatter about
-    the line. That is the whole source of the gain --- and the whole risk, since a $x$ that
-    predicts $y$ poorly gives $s_e^2 > s_y^2$ and a *less* precise estimate than the plain
-    sample mean.
+$e_i$ is the vertical distance from the point $(x_i, y_i)$ to the fitted line through the
+origin, $y = \hat{B}x$. No centring appears in $s_e^2$ because $\hat{B} = \overline{y}/\overline{x}$
+forces $\sum_i e_i = \sum_i y_i - \hat{B}\sum_i x_i = 0$ exactly, so the residuals already
+average to zero; the divisor is $n-1$ for the one parameter $\hat{B}$ estimated from the
+sample. Compare the variance with the SRS one, $\left(1-\frac{n}{N}\right)s_y^2/n$: ratio
+estimation replaces the scatter of $y$ about $\overline{y}$ by the scatter about the line.
+That is the whole source of the gain --- and the whole risk, since an $x$ that predicts $y$
+poorly gives $s_e^2 > s_y^2$ and a *less* precise estimate than the plain sample mean.
 
 ### 2. Regression Estimation {-}
-If the relationship does not pass through the origin, a linear regression is more appropriate:
-
-*   **Mean Estimator:** $\overline{y}_{reg} = \hat{B}_0 + \hat{B}_1 \overline{x}_{\text{U}}$ (where $\hat{B}_0$ and $\hat{B}_1$ are OLS coefficients)
-*   **Estimated Variance:** $\hat{V}(\overline{y}_{reg}) = \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}$, with
-    $$
-    e_i = y_i - \hat{B}_0 - \hat{B}_1 x_i, \qquad s_e^2 = \frac{1}{n-2}\sum_{i=1}^n e_i^2 ,
-    $$
-    the ordinary least-squares residuals and their mean square error. The divisor is now
-    $n-2$, since both $\hat{B}_0$ and $\hat{B}_1$ are estimated. For the same data
-    $\sum_i e_i^2$ can only be smaller here than under the ratio fit --- the ratio line is
-    the special case $\hat{B}_0 = 0$ --- so the regression estimator is the safer of the
-    two whenever the relationship misses the origin, at the cost of one degree of freedom.
-    Note also that the factor $(\overline{x}_{\text{U}}/\overline{x})^2$ is absent: the
-    regression estimator is evaluated at $\overline{x}_{\text{U}}$ directly, so no
-    correction for $\overline{x} \neq \overline{x}_{\text{U}}$ is needed.
+If the relationship does not pass through the origin, a linear regression is more appropriate. With the OLS coefficients
+$$
+\hat{B}_1 = \frac{\sum_{i=1}^n (x_i - \overline{x})(y_i - \overline{y})}{\sum_{i=1}^n (x_i - \overline{x})^2}, \qquad
+\hat{B}_0 = \overline{y} - \hat{B}_1\overline{x},
+$$
+the regression estimator of the mean is the fitted line evaluated at $\overline{x}_U$:
+$$
+\overline{y}_{reg} = \hat{B}_0 + \hat{B}_1 \overline{x}_U = \overline{y} + \hat{B}_1\left(\overline{x}_U - \overline{x}\right), \qquad
+\hat{t}_{reg} = N\overline{y}_{reg} .
+$$
+Its estimated variance uses the residual mean square of the regression:
+$$
+\hat{V}(\overline{y}_{reg}) = \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}, \qquad
+s_e^2 = \frac{1}{n-2}\sum_{i=1}^n \left(y_i - \hat{B}_0 - \hat{B}_1 x_i\right)^2 ,
+$$
+with $\hat{V}(\hat{t}_{reg}) = N^2\hat{V}(\overline{y}_{reg})$ and $95\%$ intervals using $t_{0.975,\,n-2}$.
+The divisor is now $n-2$, since both $\hat{B}_0$ and $\hat{B}_1$ are estimated. For the same
+data $\sum_i e_i^2$ can only be smaller here than under the ratio fit --- the ratio line is
+the special case $\hat{B}_0 = 0$ --- so the regression estimator is the safer of the two
+whenever the relationship misses the origin, at the cost of one degree of freedom. Note also
+that the factor $(\overline{x}_U/\overline{x})^2$ is absent: the fitted line is evaluated at
+$\overline{x}_U$ directly, so no correction for $\overline{x} \neq \overline{x}_U$ is needed.
 
 ### 3. Domain Estimation {-}
-To estimate the mean of a subgroup (domain $d$) when the domain sample size $n_d$ is a random variable:
-
-*   **Mean Estimator:** $\overline{y}_d = \frac{1}{n_d} \sum_{i \in U_d} y_i$
-*   **Estimated Variance:** $\hat{V}(\overline{y}_d) = \left(1 - \frac{n}{N}\right) \frac{s_d^2}{n_d}$, where $n$ is the overall sample size, $N$ is the population size, and $s_d^2$ is the sample variance of $y$ among the $n_d$ units observed in domain $d$.
+To estimate the mean of a subgroup (domain $d$) when the domain sample size $n_d$ is a random variable, use the $n_d$ sampled units that fall in the domain:
+$$
+\overline{y}_d = \frac{1}{n_d} \sum_{i \in S_d} y_i, \qquad
+\hat{V}(\overline{y}_d) = \left(1 - \frac{n}{N}\right) \frac{s_d^2}{n_d}, \qquad
+s_d^2 = \frac{1}{n_d - 1}\sum_{i \in S_d}\left(y_i - \overline{y}_d\right)^2 ,
+$$
+where $S_d$ is the set of sampled units in domain $d$, $n$ is the overall sample size, and
+$N$ is the population size. $95\%$ intervals use $t_{0.975,\,n_d-1}$. The fpc uses the overall
+sampling fraction $n/N$, because the domain's population size $N_d$ is usually unknown.
+$\overline{y}_d$ is in fact a ratio estimator, $\sum_{i=1}^n u_i/\sum_{i=1}^n x_i$ with
+$x_i = 1$ if unit $i$ is in the domain and $u_i = x_i y_i$.
 
 ### 4. Post-stratification {-}
-If we know the true population sizes ($N_h$) of strata, but we used a Simple Random Sample, we can post-stratify to reduce variance. Write $W_h = N_h/N$ for the known population weights, and let $n_h$, $\overline{y}_h$ and $s_h^2$ be the count, mean and variance of the units the sample happened to place in stratum $h$ (so $\sum_h n_h = n$, and each $n_h$ is random).
-
-*   **Mean Estimator:** $\overline{y}_{post} = \sum_h W_h \overline{y}_h$ --- the stratified estimator, but with the *known* population weights in place of the sample proportions $n_h/n$.
-*   **Expected sample sizes:** the variance is computed as if the design had produced the proportional allocation
-    $$
-    n_h^{post} = n\,W_h = n\frac{N_h}{N} .
-    $$
-*   **Estimated Variance:** substituting $n_h^{post}$ into the stratified variance, and using $n_h^{post}/N_h = n/N$ for every $h$,
-    $$
-    \hat{V}(\overline{y}_{post})
-    = \sum_h \left(1 - \frac{n_h^{post}}{N_h}\right) W_h^2 \frac{s_h^2}{n_h^{post}}
-    = \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_h W_h s_h^2 .
-    $$
-    This is exactly the variance of a proportionally allocated stratified sample: knowing the $N_h$ after the fact recovers almost all of the precision that stratifying in advance would have given. The approximation is treating the $n_h$ as fixed at $n W_h$; carrying the randomness of $n_h$ adds a second-order term $\frac{1}{n^2}\sum_h (1 - W_h)s_h^2$, which is negligible unless some $n_h$ are small. Every stratum needs $n_h \geq 2$ for $s_h^2$ to exist at all.
-
-
+If we know the true population sizes $N_h$ of $H$ groups (post-strata), but used a Simple Random Sample, we can post-stratify to reduce variance.
+We weight the group sample means by the known $\pi_h = N_h/N$, as in stratified sampling:
+$$
+\overline{y}_{post} = \sum_{h=1}^H \pi_h\,\overline{y}_h .
+$$
+The observed group sizes $n_h$ are random, so for the variance we substitute their expected
+values under SRS, the proportional sample sizes
+$$
+n_h^{post} = n\,\frac{N_h}{N} = n\pi_h ,
+$$
+into the stratified variance formula. Every group then has sampling fraction $n/N$, and the variance becomes
+$$
+\hat{V}(\overline{y}_{post}) = \sum_{h=1}^H \pi_h^2\left(1 - \frac{n_h^{post}}{N_h}\right)\frac{s_h^2}{n_h^{post}}
+= \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h s_h^2 ,
+$$
+the variance of proportional stratified sampling. With $\hat{t}_{post} = N\overline{y}_{post}$,
+$\hat{V}(\hat{t}_{post}) = N^2\hat{V}(\overline{y}_{post})$.
+Here $n_h$, $\overline{y}_h$ and $s_h^2$ are the count, mean and variance of the units the
+sample happened to place in group $h$, so every group needs $n_h \geq 2$ for $s_h^2$ to exist.
+Substituting $n_h^{post}$ treats the $n_h$ as fixed at $n\pi_h$; carrying their randomness adds
+a second-order term $\frac{1}{n^2}\sum_h (1-\pi_h)s_h^2$, negligible unless some $n_h$ are small.
 
 ### Post-stratification Viewed as a Special Regression Estimation {-}
 
-Post-stratification is not a separate technique: it is the regression estimator of §2
-with the **stratum indicators** as the auxiliary variables. Take the $H$ dummies
-$x_{ih} = \mathbf{1}\{i \in \text{stratum } h\}$ and fit without an intercept. Then
+Post-stratification is not a separate technique: it is the regression estimator of Section 2
+with the **group indicators** as the auxiliary variables. Take the $H$ dummies
+$x_{ih} = \mathbf{1}\{i \in \text{group } h\}$ and fit without an intercept. Then
 
-*   the fitted coefficients are the stratum means, $\hat{B}_h = \overline{y}_h$;
-*   the population means of those dummies are the known weights, $\overline{x}_{\text{U},h} = N_h/N = W_h$;
+*   the fitted coefficients are the group means, $\hat{B}_h = \overline{y}_h$;
+*   the population means of those dummies are the known weights, $\overline{x}_{U,h} = N_h/N = \pi_h$;
 
 so the regression estimator *is* the post-stratified one,
 $$
-\overline{y}_{reg} = \sum_h \hat{B}_h\,\overline{x}_{\text{U},h} = \sum_h W_h \overline{y}_h = \overline{y}_{post} .
+\overline{y}_{reg} = \sum_h \hat{B}_h\,\overline{x}_{U,h} = \sum_h \pi_h \overline{y}_h = \overline{y}_{post} .
 $$
 
-Its residuals are each unit's deviation from its own stratum mean,
-$e_i = y_i - \overline{y}_{h(i)}$, and the general variance $\left(1-\frac{n}{N}\right)s_e^2/n$
-applies with $p = H$ fitted parameters:
+Its residuals are each unit's deviation from its own group mean, $e_i = y_i - \overline{y}_{h(i)}$,
+and the general variance $\left(1-\frac{n}{N}\right)s_e^2/n$ applies with $p = H$ fitted parameters:
 $$
 s_e^2 = \frac{1}{n-H}\sum_h \sum_{i \in h} \left(y_i - \overline{y}_h\right)^2
       = \frac{1}{n-H}\sum_h (n_h - 1)\,s_h^2 .
@@ -95,26 +118,25 @@ $s_h^2$; only the weights differ,
 $$
 \underbrace{\frac{n_h-1}{n-H}}_{\text{sample proportions}}
 \qquad \text{versus} \qquad
-\underbrace{W_h = \frac{N_h}{N}}_{\text{population proportions}} ,
+\underbrace{\pi_h = \frac{N_h}{N}}_{\text{population proportions}} ,
 $$
-so the substitution $n_h \to n W_h$ of the previous subsection is simply: *pool the
-residuals with the weights we know, not with the ones the sample happened to deliver.*
-It is the same reasoning that puts $\overline{x}_{\text{U}}$, rather than $\overline{x}$,
-in the ratio estimator.
+so the substitution $n_h \to n\pi_h$ above is simply: *pool the residuals with the weights we
+know, not with the ones the sample happened to deliver.* It is the same reasoning that puts
+$\overline{x}_U$, rather than $\overline{x}$, in the ratio estimator.
 
-Seen this way, the estimators above are one estimator with different auxiliary variables,
-and $s_e^2 = \frac{1}{n-p}\sum_i e_i^2$ throughout, where $p$ is the number of fitted
-parameters:
+Seen this way, the estimators above are one estimator with different auxiliary variables, and
+$s_e^2 = \frac{1}{n-p}\sum_i e_i^2$ throughout, where $p$ is the number of fitted parameters:
 
 | Estimator | Auxiliary variables | Residual $e_i$ | $p$ |
 |:--|:--|:--|:-:|
 | Ratio | one $x$, line forced through the origin | $y_i - \hat{B}x_i$ | 1 |
 | Regression | intercept and $x$ | $y_i - \hat{B}_0 - \hat{B}_1 x_i$ | 2 |
-| Post-stratification | $H$ stratum indicators | $y_i - \overline{y}_h$ | $H$ |
+| Post-stratification | $H$ group indicators | $y_i - \overline{y}_h$ | $H$ |
 
-Domain estimation stands slightly apart: there the divisor is the random $n_d$ rather than
-the full $n$, because only the units falling in the domain carry information about it.
+Domain estimation stands slightly apart: there the divisor is the random $n_d$ rather than the
+full $n$, because only the units falling in the domain carry information about it.
 
+---
 
 ## Functions and packages for Analyzing Data
 
