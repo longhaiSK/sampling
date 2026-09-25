@@ -1,19 +1,23 @@
 # Unequal Probability Sampling
 
-## Key Concepts and Formulas {#sec-ups-formulas}
+## Estimation for UPS {#sec-ups-formulas}
 
 Unequal Probability Sampling (UPS) improves estimation precision by sampling units with probabilities proportional to their size (PPS). If a cluster or county is larger, it has a higher chance of being included in the sample. This approach prevents extreme variance when cluster sizes vary drastically.
 
 **Notation.** The population has $N$ units (clusters, counties, ...). Unit $i$ has
 
 * a value $t_i$ of the study variable. For a cluster, $t_i$ is its total; for a county, it is the county's value. The population total is $t = \sum_{i=1}^N t_i$, and the mean per unit is $\bar{t}_U = t/N$;
-* a size $M_i$ (e.g. the number of elements in a cluster), with $M_0 = \sum_{i=1}^N M_i$. The mean per element is then $\bar{y}_U = t/M_0$;
-* possibly another auxiliary variable $x_i$ with known total $t_x = \sum_{i=1}^N x_i$ and mean $\bar{x}_U = t_x/N$.
+* a size $M_i$ (e.g. the number of elements in a cluster), with total $M = \sum_{i=1}^N M_i$ and mean size $\bar{M} = M/N$. The mean per element is then $\bar{y}_U = t/M$;
+* possibly another auxiliary variable $x_i$ with known total $t_x = \sum_{i=1}^N x_i$ and mean $\bar{x}_U = t_x/N$. The size variable is the special case
+  $$
+  x_i = M_i, \qquad t_x = M, \qquad \bar{x}_U = \bar{M},
+  $$
+  and every formula below is written first for a general $x$, then in this form.
 
 We write $t_i$ rather than $y_i$ so that $\bar{t}_U$, the mean per unit, is kept
 apart from $\bar{y}_U$, the mean per unit of size that ratio estimators target.
 
-**1. UPS With Replacement (UPSWR)**
+**1. General Formulas for UPS With Replacement (UPSWR)**
 
 We make $n$ independent draws. On each draw, unit $i$ is selected with probability
 $\psi_i$, where $\sum_{i=1}^N \psi_i = 1$. A unit may be selected more than once, and it then appears in the sample once per draw.
@@ -40,32 +44,51 @@ $\psi_i$, where $\sum_{i=1}^N \psi_i = 1$. A unit may be selected more than once
   $$
   which estimates $t/t_x$. Multiplying by $\bar{x}_U$ or $t_x$ gives estimators of $\bar{t}_U$ or $t$.
   Its SE is that of an ordinary ratio estimator, applied to the pairs
-  $(t_i/\psi_i,\; x_i/\psi_i)$. The most common choice is $x_i = M_i$, which gives the mean per element $\bar{y}_U = t/M_0$.
-  In that case $M_0$ need not be known, only the $\psi_i$.
+  $(t_i/\psi_i,\; x_i/\psi_i)$. Note that $\hat{\bar{y}}_{\mathrm{HH},r}$ itself never uses
+  $t_x$ --- only the $\psi_i$; the total $t_x$ enters only when converting the ratio to
+  $\bar{t}_U$ or $t$.
 
-* **The PPS special case.** Under probability proportional to size, $\psi_i = M_i/M_0$.
-  Then every draw has $M_i/\psi_i = M_0$, so with $x_i = M_i$ the denominator is exactly $nM_0$ and
+**2. The PPS Special Case**
+
+PPS is the general design with the auxiliary variable taken to *be* the size, and the
+selection probabilities taken proportional to it:
+$$
+x_i = M_i, \qquad t_x = M, \qquad \bar{x}_U = \bar{M}, \qquad
+\psi_i = \frac{x_i}{t_x} = \frac{M_i}{M} .
+$$
+
+* **The ratio estimator collapses to an average.** Every draw now has
+  $x_i/\psi_i = t_x$, a constant, so the denominator of the ratio estimator is exactly
+  $n\,t_x = nM$ and
   $$
-  \hat{\bar{y}}_{\mathrm{HH},r} = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{M_i}
+  \hat{\bar{y}}_{\mathrm{HH},r}
+  = \frac{\sum_{i=1}^n t_i/\psi_i}{\sum_{i=1}^n x_i/\psi_i}
+  = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{x_i}
+  = \frac{1}{n}\sum_{i=1}^n \frac{t_i}{M_i}
   = \frac{1}{n}\sum_{i=1}^n \bar{y}_i ,
   $$
   the plain average of the sampled means per element $\bar{y}_i = t_i/M_i$. Its SE
   comes from the sample variance $s_{\bar{y}}^2$ of the $\bar{y}_i$:
   $$
-  \widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH},r}) = \frac{s_{\bar{y}}}{\sqrt{n}}
-  = \sqrt{\frac{1}{n(n-1)}\sum_{i=1}^n \left(\bar{y}_i - \hat{\bar{y}}_{\mathrm{HH},r}\right)^2},
+  \widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH},r}) = \frac{s_{\bar{y}}}{\sqrt{n}} ,
   \qquad
   s_{\bar{y}}^2 = \frac{1}{n-1}\sum_{i=1}^n \left(\bar{y}_i - \hat{\bar{y}}_{\mathrm{HH},r}\right)^2 .
   $$
-  It is also HH up to a known constant:
-  $$
-  \hat{t}_{\mathrm{HH}} = M_0\,\hat{\bar{y}}_{\mathrm{HH},r}, \qquad
-  \hat{\bar{t}}_{\mathrm{HH}} = \frac{M_0}{N}\,\hat{\bar{y}}_{\mathrm{HH},r}=\overline M \hat{\bar{y}}_{\mathrm{HH},r}.
-  $$
-  So under PPS the ratio step adds nothing new: the design already uses $M_i$ fully.
-  HH is most precise when $t_i/\psi_i$ is nearly constant, i.e. when $t_i$ is nearly proportional to $M_i$.
 
-**2. SRS estimators, for comparison**
+* **Converting to a total or a per-unit mean** uses the general factors $t_x$ and
+  $\bar{x}_U$, which here are $M$ and $\bar{M}$:
+  $$
+  \hat{t}_{\mathrm{HH}} = t_x\,\hat{\bar{y}}_{\mathrm{HH},r} = M\,\hat{\bar{y}}_{\mathrm{HH},r},
+  \qquad
+  \hat{\bar{t}}_{\mathrm{HH}} = \bar{x}_U\,\hat{\bar{y}}_{\mathrm{HH},r}
+  = \bar{M}\,\hat{\bar{y}}_{\mathrm{HH},r} = \frac{M}{N}\,\hat{\bar{y}}_{\mathrm{HH},r} .
+  $$
+
+So under PPS the ratio step adds nothing new: the design already uses $M_i$ fully, and
+HH is most precise when $t_i/\psi_i$ is nearly constant --- that is, when $t_i$ is
+nearly proportional to $M_i$.
+
+**Comparison with the SRS Ratio Estimator of $\bar{t}_U$**
 
 Under a simple random sample of $n$ units drawn without replacement, the usual estimators of $\bar{t}_U$ are
 $$
@@ -89,7 +112,7 @@ When sampling without replacement, the inclusion probability of unit $i$ across 
   $$
 
 
----
+
 
 ## Functions and Packages
 
@@ -157,7 +180,7 @@ res_hrs_total$table
 res_hrs_total$estimate |> format_est_gt("hh_total")
 
 # Estimate the mean hours spent by each student (SE and CI scale down too);
-# under PPS, t_HH / M_0 is exactly the HH ratio estimator
+# under PPS, t_HH / M is exactly the HH ratio estimator
 (res_hrs_total$estimate / 647) |> format_est_gt("hh_ratio_mean")
 
 
@@ -169,25 +192,23 @@ res_hrs_ratio$estimate |> format_est_gt("hh_ratio_mean")
 
 ## Analysis of `statepop.csv` collected with one-stage UPSWR
 
-The file `statepop.csv` contains data from an unequal-probability sample of 100 U.S. counties. Counties were chosen with probabilities proportional to their populations. The total U.S. population is $M_0 = 255,077,536$. Because sampling was done **with replacement**, large counties like Los Angeles occur multiple times in the sample.
+The file `statepop.csv` contains data from an unequal-probability sample of 100 U.S. counties. Counties were chosen with probabilities proportional to their populations. The total U.S. population is $M = 255,077,536$. Because sampling was done **with replacement**, large counties like Los Angeles occur multiple times in the sample.
 
 ```{r tbl-statepop-sample-data}
 #| tbl-cap: "Sample of U.S. county population and physician counts"
 statepop <- read.csv("data/statepop.csv")
 
 # Constants
-M0 <- 255077536 
-popn <- statepop$popn 
-psi <- popn / M0
+M    <- 255077536
+popn <- statepop$popn
+psi  <- popn / M
 phys <- statepop$phys
 
-# Display a subset of the raw data in a scrollable box
-statepop |> 
-  select(state, county, popn, phys) |> 
-  mutate(psi = popn / M0) |> 
-  gt() |> 
-  tab_header(title = "U.S. County Data (Sample)") |> 
-  tab_options(container.height = px(300), container.overflow.y = TRUE)
+# Paged display of the raw data: printing a data frame under `df-print: paged`
+# draws one page at a time instead of a long scrolling box
+statepop |>
+  select(state, county, popn, phys) |>
+  mutate(psi = popn / M)
 ```
 
 ```{r fig-statepop-phys-vs-popn}
@@ -197,19 +218,49 @@ plot(popn, phys, log = "xy",
      xlab = "Population", ylab = "Physicians")
 ```
 
-**Estimate the Total and Per Capita Physicians:**
+**Estimating physicians three ways.** One sample answers three different questions,
+using the three estimators of @sec-ups-formulas: the population total $t$, the mean per
+unit $\bar{t}_U$ (physicians per county), and the mean per element $\bar{y}_U$
+(physicians per capita).
 
-```{r statepop-upswr-est}
-# Estimate the total number of physicians in the USA
+*Total physicians in the US,* $\hat{t}_{\mathrm{HH}}$:
+
+```{r statepop-upswr-total}
 res_phys_total <- upswr_total(phys, psi, show.details = FALSE)
 res_phys_total$estimate |> format_est_gt("hh_total")
+```
+**Output Note:** Each draw contributes $\mathrm{phys}_i/\psi_i$, an unbiased estimate of
+the national total on its own; their average puts about
+`r format(round(res_phys_total$estimate["Est."]), big.mark = ",")` physicians in the US,
+with a 95% interval of [`r format(round(res_phys_total$estimate["ci.low"]), big.mark = ",")`,
+`r format(round(res_phys_total$estimate["ci.upp"]), big.mark = ",")`].
 
-# Estimate the number of physicians per capita (Ratio)
+*Physicians per county,* $\hat{\bar{t}}_{\mathrm{HH}} = \hat{t}_{\mathrm{HH}}/N$:
+
+```{r statepop-upswr-per-county}
+N <- 3141   # counties in the US
+res_phys_county <- upswr_total(phys, psi, N = N, estimate = "mean", show.details = FALSE)
+res_phys_county$estimate |> format_est_gt("hh_mean")
+```
+**Output Note:** This is the same estimate divided by the known $N$, so its standard error
+shrinks by the same factor and the two statements carry identical information. It averages
+over *counties*, each weighted equally, so the many small rural counties pull it down to
+about `r round(res_phys_county$estimate["Est."])` physicians per county.
+
+*Physicians per capita,* $\hat{\bar{y}}_{\mathrm{HH},r}$:
+
+```{r statepop-upswr-per-capita}
 res_phys_ratio <- upswr_ratio(phys, popn, psi, estimate = "mean")
 res_phys_ratio$table
 res_phys_ratio$estimate |> format_est_gt("hh_ratio_mean")
 ```
-**Output Note:** The total estimator heavily leverages the selection probabilities to estimate that there are roughly `r round(res_phys_total$estimate["Est."])` physicians in the US.
+**Output Note:** Here the size variable is the auxiliary one ($x_i = \mathrm{popn}_i$) and
+the design is PPS on it, so this is exactly the collapse of Section 2: every
+$x_i/\psi_i$ equals $M$, and the ratio estimator reduces to the plain average of the
+county rates $\mathrm{phys}_i/\mathrm{popn}_i$. The working table shows those pairs. The
+estimate is about `r signif(res_phys_ratio$estimate["Est."], 3)` physicians per person, i.e.
+roughly `r round(res_phys_ratio$estimate["Est."] * 1e5)` per 100,000 people --- a
+population-weighted figure, unlike the per-county average above.
 
 ### Compare with an estimate based on an SRS sample
 
@@ -328,33 +379,6 @@ abline(h = total_acres92, col = "red", lwd = 2)
 ```
 **Output Note:** The red line represents the true total acreage. The naive SRS estimator has massive variance. Both SRS Regression and UPSWR drastically reduce variance, centering tightly around the true mean.
 
-## Analysis of a dataset on student study hours collected by UPSWO 
-
-When sampling **Without Replacement** with unequal probabilities, we rely on the inclusion probabilities ($\pi_k$) rather than single-draw probabilities ($\psi_i$). 
-
-```{r classpps-upswo}
-classpps <- read.csv("data/classpps.csv")
-
-res_upswo <- cluster_upswo_ratio(
-  data = classpps,
-  cname = "class",
-  csize = "clssize",
-  cpik = "clssize", # Assuming inclusion prob is proportional to class size
-  yvar = "hours",
-  estimate = "mean"
-)
-
-# Display the cluster-level working table
-res_upswo$table
-```
-
-**Estimate the overall mean study hours (Horvitz-Thompson ratio style):**
-
-```{r classpps-upswo-est}
-res_upswo$estimate |> format_est_gt("ratio_mean")
-```
-
-
 
 ## Shinylive App Comparing SRS and UPSWR {#sec-ups-app}
 
@@ -391,54 +415,11 @@ $$
 s_r^2 = \frac{1}{n-1}\sum_{i=1}^n \left(r_i - \frac{1}{n}\sum_{j=1}^n r_j\right)^2 .
 $$
 
-**Why the residuals $e_i$ drive both variances.** Both estimators are $\bar{x}_U$ times an
-estimate of the slope $B$. SRS uses a *ratio of sample totals*, with every unit equally
-likely. UPSWR uses a *mean of ratios*, over a sample tilted towards large $x_i$. Their
-errors can be written in terms of the $e_i$ of the sampled units:
-
-* **UPSWR.** Each draw contributes $\bar{x}_U r_i$, and its error is exactly a scaled residual:
-  $$
-  \bar{x}_U r_i - \bar{t}_U = \bar{x}_U\,(r_i - B) = \bar{x}_U\,\frac{t_i - Bx_i}{x_i} = \frac{\bar{x}_U}{x_i}\,e_i .
-  $$
-  A draw lands on unit $i$ with probability $\psi_i = x_i/t_x$, so these errors average to
-  $\sum_i \psi_i\,\bar{x}_U e_i/x_i = \sum_i e_i/N = 0$; this is why HH is unbiased. The $n$ draws are
-  independent, so the variance is $1/n$ times the $\psi$-weighted mean square of the draw errors:
-  $$
-  V(\hat{\bar{t}}_{\mathrm{HH}}) = \frac{1}{n}\sum_{i=1}^N \psi_i \left(\frac{\bar{x}_U}{x_i}\,e_i\right)^2
-  = \frac{1}{n}\sum_{i=1}^N \frac{x_i}{N\bar{x}_U}\cdot\frac{\bar{x}_U^2}{x_i^2}\,e_i^2
-  = \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2\,\frac{\bar{x}_U}{x_i} .
-  $$
-  A unit is drawn in proportion to $x_i$, but its error is scaled by $1/x_i$. It squares to
-  $1/x_i^2$, so each unit's net contribution is proportional to $e_i^2/x_i$.
-
-* **SRS + ratio.** Since $\sum_{i=1}^n t_i - B\sum_{i=1}^n x_i = \sum_{i=1}^n e_i$,
-  $$
-  \hat{\bar{t}}_{r} - \bar{t}_U = \bar{x}_U\,(\hat{B} - B) = \frac{\bar{x}_U}{\bar{x}}\,\bar{e},
-  \qquad \bar{e} = \frac{1}{n}\sum_{i=1}^n e_i ,
-  $$
-  so the error is (up to $\bar{x}_U/\bar{x} \approx 1$) the SRS mean of the residuals. Their
-  population mean is $0$, so
-  $$
-  V(\hat{\bar{t}}_{r}) \approx \left(1-\frac{n}{N}\right)\frac{1}{n}\cdot\frac{1}{N-1}\sum_{i=1}^N e_i^2 .
-  $$
-
-Ignoring the finite population correction (and taking $N - 1 \approx N$), the two
-variances differ only by the weight $\bar{x}_U/x_i$ on each squared residual:
-$$
-V(\hat{\bar{t}}_{r}) \approx \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2,
-\qquad
-V(\hat{\bar{t}}_{\mathrm{HH}}) = \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2\,\frac{\bar{x}_U}{x_i}.
-$$
-Under UPSWR, units larger than average count less and smaller ones count more. UPSWR
-therefore wins when the large residuals belong to the units with $x_i > \bar{x}_U$, i.e.
-when the spread of $t_i$ about the line grows with $x_i$, as it does for county acreages.
-When the spread is constant in $x_i$, the SRS ratio estimator does better. The app's
-"Variance reduction vs. SRS average" legend reports both variances, simulated and
-theoretical, relative to the plain SRS average $\hat{\bar{t}}$.
 
 ::: {#fig-ups-app}
 
 ```{shinylive-r}
+#| label: upswr-app
 #| standalone: true
 #| viewerHeight: 860
 
@@ -954,3 +935,80 @@ shinyApp(ui, server)
 **Shinylive App Comparing SRS (average and ratio) with UPSWR (Hansen–Hurwitz)**
 
 :::
+
+
+
+### Why the residuals $e_i$ drive both variances
+
+Both estimators are $\bar{x}_U$ times an
+estimate of the slope $B$. SRS uses a *ratio of sample totals*, with every unit equally
+likely. UPSWR uses a *mean of ratios*, over a sample tilted towards large $x_i$. Their
+errors can be written in terms of the $e_i$ of the sampled units:
+
+* **UPSWR.** Each draw contributes $\bar{x}_U r_i$, and its error is exactly a scaled residual:
+  $$
+  \bar{x}_U r_i - \bar{t}_U = \bar{x}_U\,(r_i - B) = \bar{x}_U\,\frac{t_i - Bx_i}{x_i} = \frac{\bar{x}_U}{x_i}\,e_i .
+  $$
+  A draw lands on unit $i$ with probability $\psi_i = x_i/t_x$, so these errors average to
+  $\sum_i \psi_i\,\bar{x}_U e_i/x_i = \sum_i e_i/N = 0$; this is why HH is unbiased. The $n$ draws are
+  independent, so the variance is $1/n$ times the $\psi$-weighted mean square of the draw errors:
+  $$
+  V(\hat{\bar{t}}_{\mathrm{HH}}) = \frac{1}{n}\sum_{i=1}^N \psi_i \left(\frac{\bar{x}_U}{x_i}\,e_i\right)^2
+  = \frac{1}{n}\sum_{i=1}^N \frac{x_i}{N\bar{x}_U}\cdot\frac{\bar{x}_U^2}{x_i^2}\,e_i^2
+  = \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2\,\frac{\bar{x}_U}{x_i} .
+  $$
+  A unit is drawn in proportion to $x_i$, but its error is scaled by $1/x_i$. It squares to
+  $1/x_i^2$, so each unit's net contribution is proportional to $e_i^2/x_i$.
+
+* **SRS + ratio.** Since $\sum_{i=1}^n t_i - B\sum_{i=1}^n x_i = \sum_{i=1}^n e_i$,
+  $$
+  \hat{\bar{t}}_{r} - \bar{t}_U = \bar{x}_U\,(\hat{B} - B) = \frac{\bar{x}_U}{\bar{x}}\,\bar{e},
+  \qquad \bar{e} = \frac{1}{n}\sum_{i=1}^n e_i ,
+  $$
+  so the error is (up to $\bar{x}_U/\bar{x} \approx 1$) the SRS mean of the residuals. Their
+  population mean is $0$, so
+  $$
+  V(\hat{\bar{t}}_{r}) \approx \left(1-\frac{n}{N}\right)\frac{1}{n}\cdot\frac{1}{N-1}\sum_{i=1}^N e_i^2 .
+  $$
+
+Ignoring the finite population correction (and taking $N - 1 \approx N$), the two
+variances differ only by the weight $\bar{x}_U/x_i$ on each squared residual:
+$$
+V(\hat{\bar{t}}_{r}) \approx \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2,
+\qquad
+V(\hat{\bar{t}}_{\mathrm{HH}}) = \frac{1}{n}\cdot\frac{1}{N}\sum_{i=1}^N e_i^2\,\frac{\bar{x}_U}{x_i}.
+$$
+Under UPSWR, units larger than average count less and smaller ones count more. UPSWR
+therefore wins when the large residuals belong to the units with $x_i > \bar{x}_U$, i.e.
+when the spread of $t_i$ about the line grows with $x_i$, as it does for county acreages.
+When the spread is constant in $x_i$, the SRS ratio estimator does better. The app's
+"Variance reduction vs. SRS average" legend reports both variances, simulated and
+theoretical, relative to the plain SRS average $\hat{\bar{t}}$.
+
+## Analysis of a dataset on student study hours collected by UPSWO 
+
+When sampling **Without Replacement** with unequal probabilities, we rely on the inclusion probabilities ($\pi_k$) rather than single-draw probabilities ($\psi_i$). 
+
+```{r classpps-upswo}
+classpps <- read.csv("data/classpps.csv")
+
+res_upswo <- cluster_upswo_ratio(
+  data = classpps,
+  cname = "class",
+  csize = "clssize",
+  cpik = "clssize", # Assuming inclusion prob is proportional to class size
+  yvar = "hours",
+  estimate = "mean"
+)
+
+# Display the cluster-level working table
+res_upswo$table
+```
+
+**Estimate the overall mean study hours (Horvitz-Thompson ratio style):**
+
+```{r classpps-upswo-est}
+res_upswo$estimate |> format_est_gt("ratio_mean")
+```
+
+

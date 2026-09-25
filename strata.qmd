@@ -1,6 +1,6 @@
 # Stratified Random Sampling
 
-## Key Formulas for Stratified Sampling
+## Estimation for Stratified Sampling
 
 Stratified random sampling divides a population of size $N$ into $H$ mutually exclusive strata. A simple random sample of size $n_h$ is then drawn from each stratum of size $N_h$. This design often yields higher precision than Simple Random Sampling (SRS).
 
@@ -30,9 +30,8 @@ $$
 n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h}
 $$
 
----
 
-## Functions and packages for Analyzing Data
+## Functions for Analyzing Data
 
 The estimating functions used throughout this book (including `str_est`, `str_est_data`, and `srs_est`, used below to compute the stratified mean, standard error, and confidence intervals) live in a single shared file, `samplingestimate.r`, which we source below. `str_est_data` computes these directly from a dataset, while `str_est` computes them from pre-calculated summary statistics.
 
@@ -61,7 +60,7 @@ cat("\n```\n")
 
 :::
 
-## Analysis of "agstrat.csv" data
+## Example: Analysis of "agstrat.csv" data
 
 We will estimate the average 1992 farm acreage (`acres92`) across US counties, using geographic region (`region`) as the stratification variable.
 
@@ -631,7 +630,7 @@ icon_pause <- svg_icon('<rect x="3" y="2" width="4" height="12"/><rect x="9" y="
 icon_skip  <- svg_icon('<path d="M1 2v12l7-6zM8 2v12l6-6z"/><rect x="14" y="2" width="2" height="12"/>')
 
 ui <- fluidPage(
-  titlePanel("Shinylive Simulation for Stratified Sampling"),
+  titlePanel("Shinylive App for Stratified Sampling"),
   tags$style(HTML(
     ".well {padding: 10px 12px; margin-bottom: 10px;}
      .form-group {margin-bottom: 6px;}
@@ -908,6 +907,6 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 
 ```
-**Shinyapp for Stratified Sampling**
+**Shinylive App for Illustrating Stratified Sampling**
 
 :::
