@@ -411,7 +411,10 @@ N <- nrow(agpop)
 ```
 
 #### Define Stratum Variable with Quantiles of "acres82"
-We convert the continuous `acres82` variable into four distinct categorical strata based on quantiles.
+We convert the continuous `acres82` variable into four categorical strata by cutting
+it at the 25th, 75th and 95th percentiles. The cut is deliberately uneven: the top
+5% of counties, where the acreages run away, get a stratum of their own, which is
+what makes the stratification so effective below.
 
 ```{r agpop-acres82-stratum}
 agpop$stratum <- cut(agpop$acres82,
@@ -424,7 +427,7 @@ agpop <- agpop[order(agpop$stratum), ]
 Let's check the explanatory power of this new stratification variable.
 
 ```{r fig-agpop-acres82-boxplot}
-#| fig-cap: "1992 farm acreage by acres82 quartile stratum"
+#| fig-cap: "1992 farm acreage by acres82 quantile stratum"
 boxplot(acres92 ~ stratum, data = agpop)
 ```
 
@@ -523,7 +526,7 @@ simple random sample, a stratified sample with proportional allocation, and a
 stratified sample with Neyman allocation. It uses the full `agpop.csv`
 population (with the `-99` missing-value codes recoded to `NA` and dropped),
 and a radio button lets you choose the stratification variable: the `acres82`
-quartile groups defined above (labelled Q1 to Q4), or the four `region`
+quantile groups defined above (labelled Q1 to Q4), or the four `region`
 categories (NC, NE, S, W) used earlier in this chapter.
 
 The two panels sit side by side. The left panel shows the population split into
@@ -574,7 +577,7 @@ ybarU <- mean(pop)
 S     <- sd(pop)
 
 ## build the stratum factor, population index list, and per-stratum summaries
-## for either stratification variable ("acres82" quartiles or "region"); x_pos
+## for either stratification variable ("acres82" quantiles or "region"); x_pos
 ## jitters each unit about its stratum's integer position, 1 (left) to H (right)
 make_strata <- function(method) {
   if (method == "acres82") {
@@ -598,7 +601,7 @@ make_strata <- function(method) {
        Nh = Nh, Sh = Sh, W = W, x_pos = x_pos)
 }
 
-STRAT_CHOICES <- c("acres82 quartiles" = "acres82", "region" = "region")
+STRAT_CHOICES <- c("acres82Quantiles" = "acres82", "region" = "region")
 
 ## ---- broken y-axis, shared by the left panel --------------------------------
 ## Drawn region [0, 2 * ybarU]: visible scale [0, cut] plus a compressed lane

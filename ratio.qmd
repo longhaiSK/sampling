@@ -1182,8 +1182,11 @@ visible in the "mean SE" printed under each column and in the coverage rates. Th
 is the identity of the previous subsection, drawn.
 
 A drop-down selects the post-stratification variable: the four real regions, the
-quartile groups of `acres82`, `acres87` or `farms92`, or random labels carrying no
-signal at all. The remaining controls set $n$, the confidence level, and the
+quantile groups of `acres82`, `acres87` or `farms92`, or random labels carrying no
+signal at all. The quantile groups are cut at the 25th, 75th and 95th percentiles,
+as in @sec-app-stratification, so the runaway top 5% of counties forms a group of
+its own --- that uneven split lifts the between-group $R^2$ of `acres82` from 46%
+to 74%, and the variance reduction follows it. The remaining controls set $n$, the confidence level, and the
 simulation speed.
 
 The left panel shows the population split into post-strata, the current sample in
@@ -1196,9 +1199,38 @@ The right panel accumulates the three estimators over repeated samples, with the
 current confidence interval beside each violin (green when it covers $\mu$), the
 running coverage, and the variance reduction relative to the plain average.
 
-Try `acres82` quartiles against `random labels`: the reduction tracks the
+Try `acres82Quantiles` against `random labels`: the reduction tracks the
 between-group $R^2$ almost exactly, and a variable that explains nothing buys
 nothing.
+
+#### The biased-SRS option {-}
+
+The **Biased SRS** slider turns the simple random sample into a deliberately
+unrepresentative one. Every county keeps selection weight 1 except those in the
+top 5% of `acres82`, which get weight $B$; the $n$ units are then drawn *without
+replacement* with those weights, so the sample size stays exactly $n$ while that
+group is over-represented. This is the standard picture of a survey that reaches
+the largest units too easily. Two details make it work:
+
+*   the over-sampling is applied to whole groups, and every county *within* the
+    group keeps the same weight, so the units observed in a group are still a
+    simple random sample of it --- which is precisely the condition under which
+    post-stratification repairs the damage;
+*   the mechanism is always tied to `acres82`, whichever variable you choose to
+    post-stratify on.
+
+At $B = 3$ and $n = 300$ the plain average is biased upward by roughly 113,000
+acres and its 95% intervals cover $\mu$ about 4% of the time, while
+post-stratifying on `acres82Quantiles` removes the bias almost exactly and
+restores coverage to 96%. The average is no longer estimating $\mu$ at all, so the
+app says so in red and drops the "theory" figures, which assume an SRS.
+
+Now change the post-stratification variable with the bias left on. `acres87Quantiles`
+also repairs it (that variable is nearly a copy of `acres82`); `region` repairs
+about two-thirds of it; `farms92Quantiles` and `random labels` repair none of it and
+leave coverage at 4%. **Post-stratification only removes the bias it can see** ---
+it corrects a distorted sample along the variable you post-stratify on, and is
+blind to any distortion orthogonal to it.
 
 ::: {#fig-poststrat-app}
 
@@ -1224,12 +1256,12 @@ N     <- length(pop)
 ybarU <- mean(pop)
 S     <- sd(pop)
 
-## The post-stratifier is chosen from a list: the real regions, quartile groups
+## The post-stratifier is chosen from a list: the real regions, quantile groups
 ## of a numeric auxiliary, or random labels (a variable with no signal at all).
-GROUP_CHOICES <- c("region (NC, NE, S, W)"   = "region",
-                   "acres82 quartiles"       = "acres82",
-                   "acres87 quartiles"       = "acres87",
-                   "farms92 quartiles"       = "farms92",
+GROUP_CHOICES <- c("region (NC, NE, S, W)"      = "region",
+                   "acres82Quantiles"          = "acres82",
+                   "acres87Quantiles"          = "acres87",
+                   "farms92Quantiles"          = "farms92",
                    "random labels (no signal)" = "random")
 
 make_groups <- function(key) {
@@ -1239,8 +1271,13 @@ make_groups <- function(key) {
     set.seed(7)
     g <- factor(sample(rep(paste0("R", 1:4), length.out = N)))
   } else {
+    ## The same uneven quantile cut as the stratified-sampling app: the top
+    ## 5% of counties, where the acreages run away, get a group of their own.
+    ## Splitting at 25/75/95 rather than into equal quarters roughly doubles
+    ## the between-group share of the variance, so the gain is unmistakable.
     x <- dat[[key]]
-    g <- cut(x, breaks = quantile(x, probs = seq(0, 1, 0.25)), include.lowest = TRUE)
+    g <- cut(x, breaks = quantile(x, probs = c(0, 0.25, 0.75, 0.95, 1)),
+             include.lowest = TRUE)
     levels(g) <- paste0("Q", seq_len(nlevels(g)))
   }
   H     <- nlevels(g)
@@ -1256,6 +1293,26 @@ make_groups <- function(key) {
   list(lab = levels(g), H = H, g = g, idx = idx, Nh = Nh, W = W,
        Sh2 = Sh2, ybarh = ybarh, x_pos = x_pos,
        R2 = 1 - sum(W * Sh2) / S^2)     # between-group share of the variance
+}
+
+## ---- the "biased SRS" option -----------------------------------------------
+## Selection weights: every county carries weight 1 except those in the top 5%
+## of acres82, which carry weight B. Drawing n units WITHOUT replacement with
+## these weights keeps the sample size exactly n while over-representing that
+## group, so the plain average drifts upward. Crucially every county inside the
+## group keeps the same weight, so the sample within a group is still a simple
+## random sample of it -- which is exactly what lets post-stratification undo
+## the damage. The mechanism is always tied to acres82, whatever variable is
+## chosen for post-stratification.
+bias_grp <- cut(dat$acres82,
+                breaks = quantile(dat$acres82, probs = c(0, 0.25, 0.75, 0.95, 1)),
+                include.lowest = TRUE)
+bias_top <- which(as.integer(bias_grp) == nlevels(bias_grp))
+
+draw_sample <- function(n, B) {
+  if (B <= 1) return(sample(N, n))
+  w <- rep(1, N); w[bias_top] <- B
+  sample(N, n, prob = w)
 }
 
 EST  <- c("Average", "Post-strat (pps)", "Regression")
@@ -1333,18 +1390,28 @@ violin <- function(x, at, col, w = 0.30) {
   segments(at - w * 0.6, median(x), at + w * 0.6, median(x), col = col, lwd = 2)
 }
 
+## ---- fixed window for the sampling distributions ---------------------------
+## Deliberately NOT reactive. The axis has to stay put as n and the
+## post-stratifier change, so that a smaller standard error shows up as a
+## narrower violin rather than being rescaled away. Same convention as the
+## stratified-sampling app (five standard errors of an n = 100 SRS), so the
+## two can be read against one another.
+se100     <- sqrt(1 - 100 / N) * S / sqrt(100)
+est_range <- ybarU + c(-1, 1) * 5 * se100
+
 pct <- function(v) if (is.na(v)) "--" else sprintf("%.1f%%", 100 * v)
 fmt <- function(x) format(round(x), big.mark = ",")
 
 ## ---- left panel: the population by post-stratum, with the SRS on it ---------
 ## j selects which estimator's FITTED VALUES are drawn: the overall mean for
 ## the average (an intercept-only fit), the group means for the other two.
-panel_pop <- function(s, j, cur, n, lab) {
+panel_pop <- function(s, j, cur, n, lab, B = 1) {
   H <- s$H
   par(mar = MAR, yaxs = "i")
   plot(NA, xlim = c(0.3, H + 0.7), ylim = c(0, ymax_top),
        xlab = "", ylab = "acres92 (thousands)", xaxt = "n", yaxt = "n", bty = "n",
-       main = sprintf("Population by %s, with one SRS and the %s fit", lab, EST[j]))
+       main = sprintf("Population by %s, with one %s and the %s fit",
+                      lab, if (B > 1) "biased sample" else "SRS", EST[j]))
 
   for (h in seq_len(H))
     rect(h - 0.38, 0, h + 0.38, ymax_top, col = adjustcolor("grey92", 0.6), border = NA)
@@ -1389,7 +1456,7 @@ panel_pop <- function(s, j, cur, n, lab) {
 }
 
 ## ---- right panel: the three sampling distributions -------------------------
-panel_dist <- function(s, rv, est_range, th, n, conf, nrep) {
+panel_dist <- function(s, rv, est_range, th, n, conf, nrep, B = 1) {
   par(mar = MAR, yaxs = "i")
   plot(NA, xlim = c(0.4, 3.6), ylim = est_range, xaxt = "n", yaxt = "n", bty = "n",
        xlab = "", ylab = "Estimated mean of acres92 (thousands)",
@@ -1424,14 +1491,21 @@ panel_dist <- function(s, rv, est_range, th, n, conf, nrep) {
   if (k > 1) {
     v0  <- var(rv$M[, 1])
     emp <- vapply(2:3, function(jj) pct(1 - var(rv$M[, jj]) / v0), "")
-    thr <- pct(1 - th["ps"] / th["avg"])
+    ## the theoretical figures assume an SRS, so drop them once selection is biased
+    thr <- if (B > 1) c("", "") else
+      c(sprintf(" (theory %s)", pct(1 - th["ps"] / th["avg"])), " (same theory)")
     legend("bottomleft", bty = "n", cex = 0.85, inset = c(0.02, 0.01),
            title = "Variance reduction vs. the average", fill = MCOL[2:3], border = NA,
-           legend = c(sprintf("%s %s (theory %s)", EST[2], emp[1], thr),
-                      sprintf("%s %s (same theory)", EST[3], emp[2])))
+           legend = c(sprintf("%s %s%s", EST[2], emp[1], thr[1]),
+                      sprintf("%s %s%s", EST[3], emp[2], thr[2])))
+    if (B > 1)
+      legend("bottomright", bty = "n", cex = 0.8, inset = c(0.02, 0.01), text.col = "red",
+             legend = c("biased selection:", "the average is not estimating mu"))
   }
 
   sub <- sprintf("n = %d  |  between-group R2 = %s  |  %d of %d draws", n, pct(s$R2), k, nrep)
+  if (B > 1) sub <- sprintf("n = %d  |  acres82 top 5%% over-sampled x%.1f  |  R2 = %s  |  %d of %d draws",
+                            n, B, pct(s$R2), k, nrep)
   outside <- sum(rv$M < est_range[1] | rv$M > est_range[2])
   if (outside > 0) sub <- paste0(sub, sprintf("  |  %d off axis", outside))
   mtext(sub, side = 3, line = -0.2, cex = 0.72, col = "grey30")
@@ -1466,17 +1540,19 @@ ui <- fluidPage(
       column(
         3,
         sliderInput("n", "Sample size (n)", min = 40, max = 1000, value = 300, step = 10),
+        sliderInput("bias", "Biased SRS: over-sample the acres82 top 5% by",
+                    min = 1, max = 5, value = 1, step = 0.5)
+      ),
+      column(
+        3,
         sliderInput("conf", "Confidence level", min = 0.80, max = 0.99,
-                    value = 0.95, step = 0.01)
+                    value = 0.95, step = 0.01),
+        sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1)
       ),
       column(
         3,
-        sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),
         numericInput("nrep", "Stop after this many samples",
-                     value = 500, min = 10, max = 20000, step = 50)
-      ),
-      column(
-        3,
+                     value = 500, min = 10, max = 20000, step = 50),
         actionButton("draw", "Draw new sample", class = "btn-primary", width = "100%"),
         br(), br(),
         fluidRow(
@@ -1511,19 +1587,18 @@ server <- function(input, output, session) {
   glab <- reactive(names(GROUP_CHOICES)[GROUP_CHOICES == input$groupvar])
   th   <- reactive(theory(si(), input$n))
 
-  est_range <- reactive(ybarU + c(-1, 1) * 4 * sqrt(th()["avg"]))
-
   draw_many <- function(k) {
     n    <- isolate(input$n)
     a    <- 1 - (1 - isolate(input$conf)) / 2
     s    <- isolate(si())
+    B    <- isolate(input$bias)
 
     Mnew   <- matrix(0, k, 3)
     SEnew  <- matrix(0, k, 3)
     HITnew <- matrix(FALSE, k, 3)
 
     for (i in seq_len(k)) {
-      r <- estimate_all(s, sample(N, n), a)
+      r <- estimate_all(s, draw_sample(n, B), a)
       Mnew[i, ]   <- r$est[, 1]
       SEnew[i, ]  <- r$se
       HITnew[i, ] <- r$est[, 2] <= ybarU & ybarU <= r$est[, 3]
@@ -1558,12 +1633,13 @@ server <- function(input, output, session) {
   observeEvent(input$reset,    reset_history())
   observeEvent(input$n,        reset_history())
   observeEvent(input$conf,     reset_history())
+  observeEvent(input$bias,     reset_history())
   observeEvent(input$groupvar, reset_history())
 
   output$mainplot <- renderPlot({
     layout(matrix(1:2, nrow = 1), widths = c(1.15, 1))
-    panel_pop(si(), as.integer(input$show), rv$cur, input$n, glab())
-    panel_dist(si(), rv, est_range(), th(), input$n, input$conf, nrep())
+    panel_pop(si(), as.integer(input$show), rv$cur, input$n, glab(), input$bias)
+    panel_dist(si(), rv, est_range, th(), input$n, input$conf, nrep(), input$bias)
   })
 }
 
