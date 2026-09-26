@@ -1160,3 +1160,416 @@ shinyApp(ui, server)
 **Shinylive App Illustrating Ratio Estimation and Regression Estimation**
 
 :::
+
+## Interactive Demonstration: Post-stratifying a Simple Random Sample {#sec-poststrat-app}
+
+The app below draws one **simple random sample** of $n$ counties from the full
+`agpop.csv` population and estimates the mean of `acres92` from it three ways ---
+the three rows of the table in @sec-ratio-formulas, all fitted to the *same* sample:
+
+*   **Average** --- the plain $\overline{y}$. In regression terms this is the
+    intercept-only fit: one fitted value for every county, $p = 1$.
+*   **Post-strat (pps)** --- $\overline{y}_{post} = \sum_h \pi_h \overline{y}_h$,
+    with the variance pooled using the known **population** weights,
+    $\hat{V} = \left(1-\frac{n}{N}\right)\frac{1}{n}\sum_h \pi_h s_h^2$.
+*   **Regression** --- the same estimator written as a regression on the group
+    indicators, with the variance pooled using the **sample** weights, that is the
+    ANOVA residual mean square $s_e^2 = \frac{1}{n-H}\sum_h (n_h-1)s_h^2$.
+
+The last two are the same estimator, so their point estimates coincide exactly and
+their violins are identical; they differ only in how $s_e^2$ is pooled, which is
+visible in the "mean SE" printed under each column and in the coverage rates. That
+is the identity of the previous subsection, drawn.
+
+A drop-down selects the post-stratification variable: the four real regions, the
+quartile groups of `acres82`, `acres87` or `farms92`, or random labels carrying no
+signal at all. The remaining controls set $n$, the confidence level, and the
+simulation speed.
+
+The left panel shows the population split into post-strata, the current sample in
+red, and the fitted values of the chosen estimator --- one flat line for the
+average, one line per group for the other two. Under each group it prints $N_h$,
+the observed $n_h$, and the $n\pi_h$ that a stratified design would have fixed in
+advance: post-stratification exists precisely because those two differ.
+
+The right panel accumulates the three estimators over repeated samples, with the
+current confidence interval beside each violin (green when it covers $\mu$), the
+running coverage, and the variance reduction relative to the plain average.
+
+Try `acres82` quartiles against `random labels`: the reduction tracks the
+between-group $R^2$ almost exactly, and a variable that explains nothing buys
+nothing.
+
+::: {#fig-poststrat-app}
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 840
+
+## file: app.R
+library(shiny)
+
+data_url <- "https://raw.githubusercontent.com/longhaiSK/sampling/main/data/agpop.csv"
+download.file(data_url, "agpop.csv")
+dat <- read.csv("agpop.csv")
+
+## -99 is the missing-value code in agpop.csv; drop the counties missing any of
+## the variables offered as post-stratifiers, so one population serves them all
+for (v in c("acres92", "acres87", "acres82", "farms92"))
+  dat[[v]][dat[[v]] == -99] <- NA
+dat <- dat[complete.cases(dat[, c("acres92", "acres87", "acres82", "farms92")]), ]
+
+pop   <- dat$acres92
+N     <- length(pop)
+ybarU <- mean(pop)
+S     <- sd(pop)
+
+## The post-stratifier is chosen from a list: the real regions, quartile groups
+## of a numeric auxiliary, or random labels (a variable with no signal at all).
+GROUP_CHOICES <- c("region (NC, NE, S, W)"   = "region",
+                   "acres82 quartiles"       = "acres82",
+                   "acres87 quartiles"       = "acres87",
+                   "farms92 quartiles"       = "farms92",
+                   "random labels (no signal)" = "random")
+
+make_groups <- function(key) {
+  if (key == "region") {
+    g <- factor(dat$region)
+  } else if (key == "random") {
+    set.seed(7)
+    g <- factor(sample(rep(paste0("R", 1:4), length.out = N)))
+  } else {
+    x <- dat[[key]]
+    g <- cut(x, breaks = quantile(x, probs = seq(0, 1, 0.25)), include.lowest = TRUE)
+    levels(g) <- paste0("Q", seq_len(nlevels(g)))
+  }
+  H     <- nlevels(g)
+  idx   <- split(seq_len(N), g)
+  Nh    <- sapply(idx, length)
+  W     <- Nh / N                       # pi_h, the known population weights
+  Sh2   <- sapply(idx, function(i) var(pop[i]))
+  ybarh <- sapply(idx, function(i) mean(pop[i]))
+
+  set.seed(42)
+  x_pos <- as.integer(g) + runif(N, -0.30, 0.30)
+
+  list(lab = levels(g), H = H, g = g, idx = idx, Nh = Nh, W = W,
+       Sh2 = Sh2, ybarh = ybarh, x_pos = x_pos,
+       R2 = 1 - sum(W * Sh2) / S^2)     # between-group share of the variance
+}
+
+EST  <- c("Average", "Post-strat (pps)", "Regression")
+MCOL <- c("grey35", "#2ca02c", "#9467bd")
+MAR  <- c(5.2, 4.5, 3.0, 1.0)
+
+## All three estimators from ONE simple random sample.
+##   Average      y-bar, the intercept-only fit (p = 1)
+##   Post-strat   sum pi_h ybar_h, variance pooled with the POPULATION weights
+##   Regression   the same estimate as the GREG on group indicators (p = H),
+##                variance pooled with the SAMPLE weights (the ANOVA MSE)
+## Groups with fewer than 2 sampled units carry no s_h^2, so they are dropped
+## and the weights renormalised -- the usual collapsing rule.
+estimate_all <- function(s, ii, a) {
+  y  <- pop[ii]
+  n  <- length(y)
+  gh <- s$g[ii]
+  nh   <- as.vector(table(gh))
+  ybh  <- as.vector(tapply(y, gh, mean))
+  sh2  <- as.vector(tapply(y, gh, var))
+  keep <- which(!is.na(nh) & nh >= 2)
+  Hk   <- length(keep)
+  Wk   <- s$W[keep] / sum(s$W[keep])
+  fpc  <- 1 - n / N
+
+  m_avg <- mean(y)
+  v_avg <- fpc * var(y) / n
+
+  m_ps  <- sum(Wk * ybh[keep])
+  v_ps  <- fpc * sum(Wk * sh2[keep]) / n
+
+  ## pooled residual mean square of the dummy-variable regression
+  s2e   <- sum((nh[keep] - 1) * sh2[keep]) / (sum(nh[keep]) - Hk)
+  m_reg <- m_ps
+  v_reg <- fpc * s2e / n
+
+  m  <- c(m_avg, m_ps, m_reg)
+  se <- sqrt(c(v_avg, v_ps, v_reg))
+  df <- c(n - 1, n - Hk, n - Hk)
+  d  <- qt(a, df = df) * se
+  list(m = m, se = se, ii = ii, nh = nh, ybh = ybh, keep = keep,
+       dropped = s$H - Hk,
+       est = cbind(m, m - d, m + d))
+}
+
+## Anticipated variances from the full population, for the "theory" figures.
+theory <- function(s, n) {
+  fpc <- 1 - n / N
+  c(avg = fpc * S^2 / n,
+    ps  = fpc * sum(s$W * s$Sh2) / n,    # post-strat and regression share this
+    reg = fpc * sum(s$W * s$Sh2) / n)
+}
+
+## ---- broken y-axis for the left panel --------------------------------------
+## Linear over [0, cut], then the sparse upper tail squeezed into a thin lane,
+## so the population mean sits at mid-height.
+lane_frac <- 0.10
+cut       <- 2 * ybarU / (1 + lane_frac)
+lane_w    <- lane_frac * cut
+ymax_top  <- cut + lane_w
+
+py      <- pop
+tail_id <- which(pop > cut)
+if (length(tail_id) > 0) {
+  r <- rank(pop[tail_id], ties.method = "first") / (length(tail_id) + 1)
+  py[tail_id] <- cut + lane_w * (0.10 + 0.80 * r)
+}
+
+violin <- function(x, at, col, w = 0.30) {
+  if (length(x) < 10 || diff(range(x)) <= 0) return(invisible())
+  d  <- density(x)
+  hw <- w * d$y / max(d$y)
+  polygon(c(at + hw, rev(at - hw)), c(d$x, rev(d$x)),
+          col = adjustcolor(col, 0.35), border = col)
+  segments(at - w * 0.6, median(x), at + w * 0.6, median(x), col = col, lwd = 2)
+}
+
+pct <- function(v) if (is.na(v)) "--" else sprintf("%.1f%%", 100 * v)
+fmt <- function(x) format(round(x), big.mark = ",")
+
+## ---- left panel: the population by post-stratum, with the SRS on it ---------
+## j selects which estimator's FITTED VALUES are drawn: the overall mean for
+## the average (an intercept-only fit), the group means for the other two.
+panel_pop <- function(s, j, cur, n, lab) {
+  H <- s$H
+  par(mar = MAR, yaxs = "i")
+  plot(NA, xlim = c(0.3, H + 0.7), ylim = c(0, ymax_top),
+       xlab = "", ylab = "acres92 (thousands)", xaxt = "n", yaxt = "n", bty = "n",
+       main = sprintf("Population by %s, with one SRS and the %s fit", lab, EST[j]))
+
+  for (h in seq_len(H))
+    rect(h - 0.38, 0, h + 0.38, ymax_top, col = adjustcolor("grey92", 0.6), border = NA)
+  points(s$x_pos, py, pch = 16, cex = 0.42, col = adjustcolor("grey55", 0.5))
+
+  if (!is.null(cur)) {
+    points(s$x_pos[cur$ii], py[cur$ii], pch = 16, cex = 0.55,
+           col = adjustcolor("red", 0.85))
+    if (j == 1) {
+      segments(0.3, cur$m[1], H + 0.7, cur$m[1], col = MCOL[1], lwd = 3)
+    } else {
+      ok <- which(!is.na(cur$ybh))
+      segments(ok - 0.38, cur$ybh[ok], ok + 0.38, cur$ybh[ok], col = MCOL[j], lwd = 3)
+      abline(h = cur$m[j], col = MCOL[j], lwd = 1.5, lty = 4)
+    }
+    legend("topleft", bty = "o", bg = "white", box.col = NA, cex = 0.75,
+           inset = c(0.005, 0.01),
+           legend = if (j == 1) c("Population mean", "Fitted value (one mean)")
+                    else c("Population mean", "Fitted values (group means)",
+                           sprintf("%s estimate", EST[j])),
+           col = if (j == 1) c("black", MCOL[1]) else c("black", MCOL[j], MCOL[j]),
+           lty = if (j == 1) c(2, 1) else c(2, 1, 4),
+           lwd = if (j == 1) c(2, 3) else c(2, 3, 1.5))
+  }
+
+  cx <- if (H > 8) 0.55 else 0.75
+  for (h in seq_len(H))
+    mtext(s$lab[h], side = 1, at = h, line = 0.2, cex = cx, col = "grey30")
+  if (!is.null(cur))
+    mtext(sprintf("N=%d\nn=%d (exp %.0f)", s$Nh, cur$nh, n * s$W),
+          side = 1, at = seq_len(H), line = 2.3, cex = 0.62, col = "grey30")
+  mtext(paste("post-strata: the observed n_h are random; post-stratification",
+              "reweights them to the known pi_h"),
+        side = 1, line = 4.1, cex = 0.7, col = "grey30")
+
+  at <- pretty(c(0, cut), 6); at <- at[at <= cut]
+  axis(2, at = at, labels = format(at / 1000, big.mark = ",", trim = TRUE), las = 1)
+  segments(0.3, cut, H + 0.6, cut, col = "grey60", lty = 3)
+  text(H + 0.6, cut + lane_w / 2, sprintf("compressed: > %s", fmt(cut / 1000)),
+       adj = c(1, 0), col = "grey40", cex = 0.7)
+  abline(h = ybarU, col = "black", lwd = 2, lty = 2)
+}
+
+## ---- right panel: the three sampling distributions -------------------------
+panel_dist <- function(s, rv, est_range, th, n, conf, nrep) {
+  par(mar = MAR, yaxs = "i")
+  plot(NA, xlim = c(0.4, 3.6), ylim = est_range, xaxt = "n", yaxt = "n", bty = "n",
+       xlab = "", ylab = "Estimated mean of acres92 (thousands)",
+       main = "Sampling distributions of the three estimators")
+  abline(h = ybarU, col = "black", lwd = 2, lty = 2)
+  axis(1, at = 1:3, labels = EST, tick = FALSE, line = -0.5)
+  at_r <- pretty(est_range, 6); at_r <- at_r[at_r >= est_range[1] & at_r <= est_range[2]]
+  axis(2, at = at_r, labels = format(at_r / 1000, big.mark = ",", trim = TRUE), las = 1)
+
+  if (is.null(rv$M)) {
+    text(2, ybarU, "Click 'Draw new sample' or Play to begin", col = "grey50")
+    return(invisible())
+  }
+
+  k <- NROW(rv$M)
+  for (jj in 1:3) {
+    violin(rv$M[, jj], at = jj, col = MCOL[jj])
+    ci_col <- if (rv$HIT[k, jj]) "forestgreen" else "red"
+    xb     <- jj + 0.40
+    segments(xb, rv$est[jj, 2], xb, rv$est[jj, 3], col = ci_col, lwd = 3)
+    segments(xb - 0.06, rv$est[jj, 2:3], xb + 0.06, rv$est[jj, 2:3], col = ci_col, lwd = 3)
+    points(xb, rv$est[jj, 1], pch = 19, cex = 1.1, col = ci_col)
+    ## the mean estimated SE: where Post-strat and Regression actually differ
+    mtext(sprintf("mean SE %.1fK", mean(rv$SE[, jj]) / 1000), side = 1, at = jj,
+          line = 1.1, cex = 0.7, col = MCOL[jj])
+  }
+
+  legend("topleft", bty = "n", cex = 0.85, inset = c(0.02, 0.01),
+         title = sprintf("%.0f%% CI coverage", 100 * conf), fill = MCOL, border = NA,
+         legend = paste(EST, vapply(1:3, function(jj) pct(mean(rv$HIT[, jj])), "")))
+
+  if (k > 1) {
+    v0  <- var(rv$M[, 1])
+    emp <- vapply(2:3, function(jj) pct(1 - var(rv$M[, jj]) / v0), "")
+    thr <- pct(1 - th["ps"] / th["avg"])
+    legend("bottomleft", bty = "n", cex = 0.85, inset = c(0.02, 0.01),
+           title = "Variance reduction vs. the average", fill = MCOL[2:3], border = NA,
+           legend = c(sprintf("%s %s (theory %s)", EST[2], emp[1], thr),
+                      sprintf("%s %s (same theory)", EST[3], emp[2])))
+  }
+
+  sub <- sprintf("n = %d  |  between-group R2 = %s  |  %d of %d draws", n, pct(s$R2), k, nrep)
+  outside <- sum(rv$M < est_range[1] | rv$M > est_range[2])
+  if (outside > 0) sub <- paste0(sub, sprintf("  |  %d off axis", outside))
+  mtext(sub, side = 3, line = -0.2, cex = 0.72, col = "grey30")
+}
+
+## ---- inline SVG button icons (no font or icon-library dependency) ----------
+svg_icon <- function(paths)
+  HTML(sprintf(paste0('<svg width="16" height="16" viewBox="0 0 16 16" ',
+                      'fill="currentColor" style="vertical-align:-2px">%s</svg>'), paths))
+icon_play  <- svg_icon('<path d="M3 2v12l10-6z"/>')
+icon_pause <- svg_icon('<rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/>')
+icon_skip  <- svg_icon('<path d="M1 2v12l7-6zM8 2v12l6-6z"/><rect x="14" y="2" width="2" height="12"/>')
+
+ui <- fluidPage(
+  titlePanel("Shinylive Simulation for Post-stratification of an SRS"),
+  tags$style(HTML(
+    ".well {padding: 10px 12px; margin-bottom: 10px;}
+     .form-group {margin-bottom: 6px;}
+     .radio {margin-top: 2px; margin-bottom: 2px;}
+     .irs {margin-bottom: 0;}
+     .btn {margin-bottom: 6px;}"
+  )),
+  wellPanel(
+    fluidRow(
+      column(
+        3,
+        selectInput("groupvar", "Post-stratification variable",
+                    choices = GROUP_CHOICES, selected = "acres82"),
+        radioButtons("show", "Estimator", choiceNames = EST,
+                     choiceValues = as.character(1:3), selected = "2")
+      ),
+      column(
+        3,
+        sliderInput("n", "Sample size (n)", min = 40, max = 1000, value = 300, step = 10),
+        sliderInput("conf", "Confidence level", min = 0.80, max = 0.99,
+                    value = 0.95, step = 0.01)
+      ),
+      column(
+        3,
+        sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),
+        numericInput("nrep", "Stop after this many samples",
+                     value = 500, min = 10, max = 20000, step = 50)
+      ),
+      column(
+        3,
+        actionButton("draw", "Draw new sample", class = "btn-primary", width = "100%"),
+        br(), br(),
+        fluidRow(
+          column(4, actionButton("play",  icon_play,  class = "btn-success", width = "100%", title = "Play")),
+          column(4, actionButton("pause", icon_pause, class = "btn-warning", width = "100%", title = "Pause")),
+          column(4, actionButton("skip",  icon_skip,  class = "btn-info",    width = "100%", title = "Skip to the end"))
+        ),
+        actionButton("reset", "Reset", width = "100%")
+      )
+    )
+  ),
+  plotOutput("mainplot", height = "540px")
+)
+
+server <- function(input, output, session) {
+
+  rv <- reactiveValues(
+    cur = NULL,   # the last sample and its three estimates
+    est = NULL,   # matrix 3 x 3: estimate, lower, upper (last draw)
+    M   = NULL,   # accumulated estimates, one column per estimator
+    SE  = NULL,   # accumulated standard errors
+    HIT = NULL    # accumulated coverage indicators
+  )
+  running <- reactiveVal(FALSE)
+
+  nrep <- reactive({
+    v <- input$nrep
+    if (is.null(v) || is.na(v) || v < 1) 1L else min(as.integer(v), 20000L)
+  })
+
+  si   <- reactive(make_groups(input$groupvar))
+  glab <- reactive(names(GROUP_CHOICES)[GROUP_CHOICES == input$groupvar])
+  th   <- reactive(theory(si(), input$n))
+
+  est_range <- reactive(ybarU + c(-1, 1) * 4 * sqrt(th()["avg"]))
+
+  draw_many <- function(k) {
+    n    <- isolate(input$n)
+    a    <- 1 - (1 - isolate(input$conf)) / 2
+    s    <- isolate(si())
+
+    Mnew   <- matrix(0, k, 3)
+    SEnew  <- matrix(0, k, 3)
+    HITnew <- matrix(FALSE, k, 3)
+
+    for (i in seq_len(k)) {
+      r <- estimate_all(s, sample(N, n), a)
+      Mnew[i, ]   <- r$est[, 1]
+      SEnew[i, ]  <- r$se
+      HITnew[i, ] <- r$est[, 2] <= ybarU & ybarU <= r$est[, 3]
+      if (i == k) { rv$cur <- r; rv$est <- r$est }
+    }
+    rv$M   <- rbind(rv$M,   Mnew)
+    rv$SE  <- rbind(rv$SE,  SEnew)
+    rv$HIT <- rbind(rv$HIT, HITnew)
+  }
+  draw_one <- function() draw_many(1)
+
+  observeEvent(input$draw,  { running(FALSE); draw_one() })
+  observeEvent(input$play,  running(TRUE))
+  observeEvent(input$pause, running(FALSE))
+  observeEvent(input$skip, {
+    running(FALSE)
+    k <- nrep() - NROW(rv$M)
+    if (k > 0) draw_many(k)
+  })
+
+  observe({
+    if (!isTRUE(running())) return()
+    if (NROW(isolate(rv$M)) >= isolate(nrep())) { running(FALSE); return() }
+    invalidateLater(1000 / isolate(input$speed), session)
+    isolate(draw_one())
+  })
+
+  reset_history <- function() {
+    running(FALSE)
+    rv$cur <- NULL; rv$est <- NULL; rv$M <- NULL; rv$SE <- NULL; rv$HIT <- NULL
+  }
+  observeEvent(input$reset,    reset_history())
+  observeEvent(input$n,        reset_history())
+  observeEvent(input$conf,     reset_history())
+  observeEvent(input$groupvar, reset_history())
+
+  output$mainplot <- renderPlot({
+    layout(matrix(1:2, nrow = 1), widths = c(1.15, 1))
+    panel_pop(si(), as.integer(input$show), rv$cur, input$n, glab())
+    panel_dist(si(), rv, est_range(), th(), input$n, input$conf, nrep())
+  })
+}
+
+shinyApp(ui, server)
+```
+
+**Shinylive App Demonstrating Post-stratification of a Simple Random Sample**
+
+:::
