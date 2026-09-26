@@ -776,7 +776,7 @@ ypl <- yv + rnorm(N, 0, 0.012 * diff(range(yv)))
 rgy <- range(ypl)
 
 ## ------------------------------------------------------------ estimator specs
-EST <- c("ratio", "reg", "srs")
+EST <- c("srs", "ratio", "reg")      # the average leads: the baseline to beat
 LAB <- c(ratio = "ratio", reg = "regression", srs = "average")
 COL <- c(ratio = "#1f77b4", reg = "#2ca02c", srs = "#e07b39")
 PCH <- c(ratio = 16, reg = 15, srs = 17)
@@ -908,13 +908,10 @@ ui <- fluidPage(
       ),
       column(
         3,
-        checkboxGroupInput("show", "Estimators",
-                           choices = c("Ratio" = "ratio", "Regression" = "reg",
-                                       "Average" = "srs"),
-                           selected = EST),
-        sliderInput("n", "Sample size (n)", 10, 500, 100, step = 10),
-        sliderInput("bias", "Biased SRS: over-sample the acres82 top 5% by",
-                    min = 1, max = 5, value = 1, step = 0.5)
+        selectInput("n", "Sample size n",
+                    choices = c(10, 25, 50, 100, 200, 300, 500), selected = 100),
+        selectInput("bias", "Biased SRS: over-sample acres82 top 5% by", choices = c("1 (none)" = 1, "1.5" = 1.5, "2" = 2,
+                                "3" = 3, "4" = 4, "5" = 5), selected = 1)
       ),
       column(
         3,
@@ -986,10 +983,13 @@ server <- function(input, output, session) {
              reg   = sqrt(fpc * var(ys - b0 - b1 * xs) / n),
              srs   = sqrt(fpc * var(ys) / n))
 
-    e <- c(setNames(est, paste0("est_", EST)),
-           setNames(est - ZCRIT * se, paste0("lo_", EST)),
-           setNames(est + ZCRIT * se, paste0("hi_", EST)),
-           setNames(as.numeric(abs(est - ybarU) <= ZCRIT * se), paste0("cov_", EST)),
+    ## reorder by NAME before relabelling: est/se are built in a fixed order,
+    ## so a positional setNames() would mislabel them whenever EST is reordered
+    e <- c(setNames(est[EST],                    paste0("est_", EST)),
+           setNames((est - ZCRIT * se)[EST],     paste0("lo_",  EST)),
+           setNames((est + ZCRIT * se)[EST],     paste0("hi_",  EST)),
+           setNames(as.numeric((abs(est - ybarU) <= ZCRIT * se)[EST]),
+                    paste0("cov_", EST)),
            Bhat = Bhat, b0 = b0, b1 = b1)
     list(s = s, e = e)
   }
@@ -998,8 +998,8 @@ server <- function(input, output, session) {
   ## panel. "Skip" calls this with the full remaining count.
   draw_many <- function(k) {
     a <- isolate(aux())
-    n <- isolate(input$n)
-    B <- isolate(input$bias)
+    n <- as.numeric(isolate(input$n))
+    B <- as.numeric(isolate(input$bias))
     E <- vector("list", k)
     for (i in seq_len(k)) {
       d <- one_draw(a, n, B)
@@ -1045,8 +1045,7 @@ server <- function(input, output, session) {
   output$mainplot <- renderPlot({
     s <- rv$s
     req(s)
-    sel <- EST[EST %in% input$show]
-    validate(need(length(sel) > 0, "Select at least one estimator."))
+    sel <- EST                       # all three estimators, always
 
     a    <- aux()
     n    <- rv$n
@@ -1087,7 +1086,7 @@ server <- function(input, output, session) {
          xlab = paste0("x: ", a$name, unit_lab(divx)),
          ylab = paste0("y: acres92", unit_lab(divy)),
          main = sprintf("Population, %s and fitted lines, n = %d",
-                        if (isTRUE(input$bias > 1)) "biased sample" else "sample", n))
+                        if (as.numeric(input$bias) > 1) "biased sample" else "sample", n))
     rect(0, tfy(lo), 1, tfy(hi), col = col_band, border = NA)
     points(tfx(a$x), tfy(ypl), pch = 16, cex = 0.6, col = col_pop)
 
@@ -1132,8 +1131,9 @@ server <- function(input, output, session) {
     plot(NA, xlim = c(0.4, k_n + 0.6), ylim = c(lo, hi), axes = FALSE,
          xlab = "", ylab = paste0("estimate", unit_lab(divy)),
          main = "Sampling distributions of the estimates")
-    if (isTRUE(input$bias > 1))
-      mtext(sprintf("biased selection x%.1f: the average is not estimating mu", input$bias),
+    if (as.numeric(input$bias) > 1)
+      mtext(sprintf("biased selection x%.1f: the average is not estimating mu",
+                    as.numeric(input$bias)),
             side = 3, line = -0.3, cex = 0.8, col = col_samp)
     usr <- par("usr")
     rect(usr[1], usr[3], usr[2], usr[4], col = col_band, border = NA)
@@ -1162,7 +1162,7 @@ server <- function(input, output, session) {
     ## reductions are relative to the average, which is always simulated
     cmp <- setdiff(sel, "srs")
     if (length(cmp)) {
-      biased <- isTRUE(input$bias > 1)
+      biased <- as.numeric(input$bias) > 1
       red <- lapply(cmp, function(k) {
         mc <- if (nrep > 5) 1 - var(M[, paste0("est_", k)]) / var(M[, "est_srs"]) else NA
         th <- 1 - a$V[[k]] / Vy
@@ -1356,7 +1356,7 @@ draw_sample <- function(n, B) {
 }
 
 EST  <- c("Average", "Post-strat (pps)", "Regression")
-MCOL <- c("grey35", "#2ca02c", "#9467bd")
+MCOL <- c("#e07b39", "#2ca02c", "#9467bd")   # orange average, as in the ratio app
 MAR  <- c(5.2, 4.5, 3.0, 1.0)
 
 ## All three estimators from ONE simple random sample.
@@ -1445,13 +1445,13 @@ fmt <- function(x) format(round(x), big.mark = ",")
 ## ---- left panel: the population by post-stratum, with the SRS on it ---------
 ## j selects which estimator's FITTED VALUES are drawn: the overall mean for
 ## the average (an intercept-only fit), the group means for the other two.
-panel_pop <- function(s, j, cur, n, lab, B = 1) {
+panel_pop <- function(s, cur, n, lab, B = 1) {
   H <- s$H
   par(mar = MAR, yaxs = "i")
   plot(NA, xlim = c(0.3, H + 0.7), ylim = c(0, ymax_top),
        xlab = "", ylab = "acres92 (thousands)", xaxt = "n", yaxt = "n", bty = "n",
-       main = sprintf("Population by %s, with one %s and the %s fit",
-                      lab, if (B > 1) "biased sample" else "SRS", EST[j]))
+       main = sprintf("Population by %s, with one %s and the fitted values",
+                      lab, if (B > 1) "biased sample" else "SRS"))
 
   for (h in seq_len(H))
     rect(h - 0.38, 0, h + 0.38, ymax_top, col = adjustcolor("grey92", 0.6), border = NA)
@@ -1460,21 +1460,20 @@ panel_pop <- function(s, j, cur, n, lab, B = 1) {
   if (!is.null(cur)) {
     points(s$x_pos[cur$ii], py[cur$ii], pch = 16, cex = 0.55,
            col = adjustcolor("red", 0.85))
-    if (j == 1) {
-      segments(0.3, cur$m[1], H + 0.7, cur$m[1], col = MCOL[1], lwd = 3)
-    } else {
-      ok <- which(!is.na(cur$ybh))
-      segments(ok - 0.38, cur$ybh[ok], ok + 0.38, cur$ybh[ok], col = MCOL[j], lwd = 3)
-      abline(h = cur$m[j], col = MCOL[j], lwd = 1.5, lty = 4)
-    }
-    legend("topleft", bty = "o", bg = "white", box.col = NA, cex = 0.75,
+    ## Both fits at once: the average is one flat line, while the other two
+    ## share a fitted value per group and therefore share the same estimate.
+    segments(0.3, cur$m[1], H + 0.7, cur$m[1], col = MCOL[1], lwd = 3)
+    ok <- which(!is.na(cur$ybh))
+    segments(ok - 0.38, cur$ybh[ok], ok + 0.38, cur$ybh[ok], col = MCOL[2], lwd = 3)
+    abline(h = cur$m[2], col = MCOL[2], lwd = 1.5, lty = 4)
+    legend("topleft", bty = "o", bg = "white", box.col = NA, cex = 0.72,
            inset = c(0.005, 0.01),
-           legend = if (j == 1) c("Population mean", "Fitted value (one mean)")
-                    else c("Population mean", "Fitted values (group means)",
-                           sprintf("%s estimate", EST[j])),
-           col = if (j == 1) c("black", MCOL[1]) else c("black", MCOL[j], MCOL[j]),
-           lty = if (j == 1) c(2, 1) else c(2, 1, 4),
-           lwd = if (j == 1) c(2, 3) else c(2, 3, 1.5))
+           legend = c("Population mean",
+                      sprintf("%s: one fitted value", EST[1]),
+                      "Post-strat / Regression: group means",
+                      "their (shared) estimate"),
+           col = c("black", MCOL[1], MCOL[2], MCOL[2]),
+           lty = c(2, 1, 1, 4), lwd = c(2, 3, 3, 1.5))
   }
 
   cx <- if (H > 8) 0.55 else 0.75
@@ -1573,15 +1572,14 @@ ui <- fluidPage(
       column(
         3,
         selectInput("groupvar", "Post-stratification variable",
-                    choices = GROUP_CHOICES, selected = "acres82"),
-        radioButtons("show", "Estimator", choiceNames = EST,
-                     choiceValues = as.character(1:3), selected = "2")
+                    choices = GROUP_CHOICES, selected = "acres82")
       ),
       column(
         3,
-        sliderInput("n", "Sample size (n)", min = 40, max = 1000, value = 300, step = 10),
-        sliderInput("bias", "Biased SRS: over-sample the acres82 top 5% by",
-                    min = 1, max = 5, value = 1, step = 0.5)
+        selectInput("n", "Sample size n",
+                    choices = c(40, 60, 100, 200, 300, 500, 1000), selected = 300),
+        selectInput("bias", "Biased SRS: over-sample acres82 top 5% by", choices = c("1 (none)" = 1, "1.5" = 1.5, "2" = 2,
+                                "3" = 3, "4" = 4, "5" = 5), selected = 1)
       ),
       column(
         3,
@@ -1623,15 +1621,17 @@ server <- function(input, output, session) {
     if (is.null(v) || is.na(v) || v < 1) 1L else min(as.integer(v), 20000L)
   })
 
+  nn   <- reactive(as.numeric(input$n))     # selectInput returns character
+  bb   <- reactive(as.numeric(input$bias))
   si   <- reactive(make_groups(input$groupvar))
   glab <- reactive(names(GROUP_CHOICES)[GROUP_CHOICES == input$groupvar])
-  th   <- reactive(theory(si(), input$n))
+  th   <- reactive(theory(si(), nn()))
 
   draw_many <- function(k) {
-    n    <- isolate(input$n)
+    n    <- isolate(nn())
     a    <- 1 - (1 - isolate(input$conf)) / 2
     s    <- isolate(si())
-    B    <- isolate(input$bias)
+    B    <- isolate(bb())
 
     Mnew   <- matrix(0, k, 3)
     SEnew  <- matrix(0, k, 3)
@@ -1678,8 +1678,8 @@ server <- function(input, output, session) {
 
   output$mainplot <- renderPlot({
     layout(matrix(1:2, nrow = 1), widths = c(1.15, 1))
-    panel_pop(si(), as.integer(input$show), rv$cur, input$n, glab(), input$bias)
-    panel_dist(si(), rv, est_range, th(), input$n, input$conf, nrep(), input$bias)
+    panel_pop(si(), rv$cur, nn(), glab(), bb())
+    panel_dist(si(), rv, est_range, th(), nn(), input$conf, nrep(), bb())
   })
 }
 

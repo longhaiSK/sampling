@@ -1,0 +1,505 @@
+---
+title: "Shinylive App Illustrating Ratio Estimation and Regression Estimation"
+format:
+  html:
+    theme: flatly
+    page-layout: full
+    toc: false
+    css: shinyliveapps.css
+engine: knitr
+filters:
+  - shinylive
+---
+
+```{=html}
+<nav class="appnav">
+  <a href="shinyliveapps_sampling.html">All apps</a>
+  <a href="app-srs.html">SRS</a>
+  <a href="app-stratified.html">Stratified</a>
+  <a href="app-ratio.html" class="active">Ratio &amp; regression</a>
+  <a href="app-poststrat.html">Post-stratification</a>
+  <a href="app-cluster.html">Cluster</a>
+  <a href="app-ups.html">UPS</a>
+  <a class="book" href="index.html">&#8592; back to the book</a>
+</nav>
+```
+
+::: {.appsource}
+From [Ratio and Regression Estimation](ratio.html#fig-ratio-app)
+in *Elements of Sampling Survey*.
+:::
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 740
+
+library(shiny)
+
+## ---------------------------------------------------------------- population
+data_url <- "https://raw.githubusercontent.com/longhaiSK/sampling/main/data/agpop.csv"
+
+raw <- tryCatch({
+  download.file(data_url, "agpop.csv")
+  read.csv("agpop.csv")
+}, error = function(e) NULL)
+
+if (is.null(raw)) {            # fallback so the app runs before the file is committed
+  set.seed(1)
+  Nf <- 3000
+  x1 <- rgamma(Nf, shape = 1.2, scale = 1.8e5)
+  raw <- data.frame(
+    acres92 = pmax(0, 0.93 * x1 + rnorm(Nf, 0, 0.5 * x1^0.85)),
+    acres87 = x1,
+    farms92 = pmax(1, round(300 + x1 / 6000 + rnorm(Nf, 0, 250)))
+  )
+}
+
+raw <- raw[is.finite(raw$acres92) & raw$acres92 != -99, ]
+yv  <- raw$acres92
+N   <- length(yv)
+
+## every numeric column other than y is a candidate auxiliary variable;
+## -99 marks a missing entry and is replaced by the mean of the rest
+num <- vapply(raw, is.numeric, logical(1))
+X <- raw[, num & names(raw) != "acres92", drop = FALSE]
+X <- as.data.frame(lapply(X, function(v) {
+  v[!is.finite(v) | v == -99] <- NA
+  v[is.na(v)] <- mean(v, na.rm = TRUE)
+  v
+}))
+keep <- vapply(X, function(v) all(is.finite(v)) && sum(v) > 0 && var(v) > 0, logical(1))
+X <- X[, keep, drop = FALSE]
+xvars <- names(X)
+xdef  <- if ("acres87" %in% xvars) "acres87" else xvars[1]
+
+## ---- the "biased SRS" option -----------------------------------------------
+## The same mechanism as the post-stratification app: counties in the top 5% of
+## acres82 carry selection weight B instead of 1, and n units are drawn WITHOUT
+## replacement with those weights, so the sample size stays exactly n while
+## large counties are over-represented. The mechanism is tied to acres82
+## whatever auxiliary x is selected, so one can ask whether the chosen x is able
+## to see -- and therefore repair -- the distortion.
+bias_var <- if ("acres82" %in% xvars) "acres82" else xdef
+bias_top <- which(X[[bias_var]] >= quantile(X[[bias_var]], 0.95))
+
+draw_sample <- function(n, B) {
+  if (B <= 1) return(sample.int(N, n))
+  w <- rep(1, N); w[bias_top] <- B
+  sample.int(N, n, prob = w)
+}
+
+ybarU <- mean(yv)
+Vy    <- var(yv)                     # average (SRS) population variance
+ZCRIT <- 1.96                        # nominal 95% intervals
+
+set.seed(11)                         # display-only vertical jitter, fixed once
+ypl <- yv + rnorm(N, 0, 0.012 * diff(range(yv)))
+rgy <- range(ypl)
+
+## ------------------------------------------------------------ estimator specs
+EST <- c("srs", "ratio", "reg")      # the average leads: the baseline to beat
+LAB <- c(ratio = "ratio", reg = "regression", srs = "average")
+COL <- c(ratio = "#1f77b4", reg = "#2ca02c", srs = "#e07b39")
+PCH <- c(ratio = 16, reg = 15, srs = 17)
+
+col_samp <- "#d62728"
+col_pts  <- "blue"                   # sampled observations
+col_true <- "black"
+col_pop  <- "#9aa0a640"
+col_band <- "#eef3f8"
+
+## ------------------------------------------------------- broken-axis mapping
+## Linear from the minimum up to a cut, a single break near the top, then the
+## sparse upper tail compressed into a thin strip. The cut is placed so that the
+## population mean falls at mid-height, matching the centre of the right panel.
+BRK_TOP  <- 0.12
+BRK_GAP  <- 0.025
+BRK_MAIN <- 1 - BRK_TOP - BRK_GAP
+
+cut_at_centre <- function(rmin, rmax, m) {
+  cut <- rmin + (m - rmin) * BRK_MAIN / 0.5
+  if (!is.finite(cut) || cut >= rmax) rmin + 0.95 * (rmax - rmin) else cut
+}
+cuty <- cut_at_centre(rgy[1], rgy[2], ybarU)
+
+mk_break <- function(rmin, rmax, cut) {
+  eps <- 1e-9 * (rmax - rmin)
+  cut <- min(max(cut, rmin + eps), rmax - eps)
+  tf <- function(v) {
+    v <- pmin(pmax(v, rmin), rmax)
+    ifelse(v <= cut, (v - rmin) / (cut - rmin) * BRK_MAIN,
+           BRK_MAIN + BRK_GAP + (v - cut) / (rmax - cut) * BRK_TOP)
+  }
+  list(tf = tf, rmin = rmin, rmax = rmax, cut = cut,
+       gap = c(BRK_MAIN, BRK_MAIN + BRK_GAP))
+}
+
+mk_plain <- function(rmin, rmax) {
+  list(tf = function(v) (pmin(pmax(v, rmin), rmax) - rmin) / (rmax - rmin),
+       rmin = rmin, rmax = rmax, cut = NA, gap = NULL)
+}
+
+## counts stay as counts, acreages are shown in thousands
+unit_div <- function(rmax) if (rmax >= 1e5) 1000 else 1
+unit_lab <- function(div) if (div == 1000) " (thousands)" else ""
+
+axis_at <- function(bk, side, div, rg, nt) {
+  v <- pretty(rg, nt)
+  v <- v[v >= rg[1] & v <= rg[2]]
+  if (!length(v)) return(invisible())
+  d <- if (diff(range(v)) / div < 40) 1 else 0
+  axis(side, at = bk$tf(v), labels = formatC(v / div, format = "f", digits = d,
+                                             big.mark = ","), las = 1, cex.axis = 0.75)
+}
+
+draw_axis <- function(bk, side, div) {
+  if (is.null(bk$gap)) {
+    axis_at(bk, side, div, c(bk$rmin, bk$rmax), 5)
+  } else {
+    axis_at(bk, side, div, c(bk$rmin, bk$cut), 5)
+    axis_at(bk, side, div, c(bk$cut + 1e-9, bk$rmax), 2)
+  }
+}
+
+mask_gap <- function(bk, side) {
+  if (is.null(bk$gap)) return(invisible())
+  usr <- par("usr")
+  g <- bk$gap
+  m <- mean(g)
+  if (side == 2) {
+    rect(usr[1], g[1], usr[2], g[2], col = "white", border = NA)
+    d <- 0.010 * (usr[2] - usr[1])
+    segments(usr[1] - d, c(m - 0.012, m + 0.004), usr[1] + d,
+             c(m - 0.004, m + 0.012), xpd = NA, lwd = 1.2)
+  } else {
+    rect(g[1], usr[3], g[2], usr[4], col = "white", border = NA)
+    d <- 0.010 * (usr[4] - usr[3])
+    segments(c(m - 0.012, m + 0.004), usr[3] - d, c(m - 0.004, m + 0.012),
+             usr[3] + d, xpd = NA, lwd = 1.2)
+  }
+}
+
+## interval drawn as a capped vertical bar with the estimate marked on it;
+## the bar turns red when the interval misses the population mean
+ci_bar <- function(x, est, ci, col, pch, covered, tf = identity, cap = 0.012) {
+  bcol <- if (covered) col else col_samp
+  segments(x, tf(ci[1]), x, tf(ci[2]), col = bcol, lwd = 2)
+  segments(x - cap, tf(ci), x + cap, tf(ci), col = bcol, lwd = 2)
+  points(x, tf(est), pch = pch, col = col, cex = 1.7)
+}
+
+## symmetric density polygon, drawn vertically about x = at, so the estimate
+## runs along the y axis and lines up with the scatterplot
+violin <- function(x, at, col, w = 0.32) {
+  if (length(x) < 10 || diff(range(x)) <= 0) return(invisible())
+  d  <- density(x)
+  hw <- w * d$y / max(d$y)
+  polygon(c(at + hw, rev(at - hw)), c(d$x, rev(d$x)),
+          col = adjustcolor(col, 0.35), border = col)
+  m <- median(x)
+  segments(at - w * 0.6, m, at + w * 0.6, m, col = col, lwd = 2)
+}
+
+pct <- function(v) if (is.na(v)) "--" else sprintf("%.1f%%", 100 * v)
+
+## ---- inline SVG button icons (no font or icon-library dependency) ----------
+svg_icon <- function(paths)
+  HTML(sprintf(paste0('<svg width="16" height="16" viewBox="0 0 16 16" ',
+                      'fill="currentColor" style="vertical-align:-2px">%s</svg>'), paths))
+icon_play  <- svg_icon('<path d="M3 2v12l10-6z"/>')
+icon_pause <- svg_icon('<rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/>')
+icon_skip  <- svg_icon('<path d="M1 2v12l7-6zM8 2v12l6-6z"/><rect x="14" y="2" width="2" height="12"/>')
+
+## ---------------------------------------------------------------------- ui
+ui <- fluidPage(
+  tags$style(HTML(
+    ".well {padding: 10px 12px; margin-bottom: 10px;}
+     .form-group {margin-bottom: 6px;}
+     .checkbox {margin-top: 2px; margin-bottom: 2px;}
+     .irs {margin-bottom: 0;}
+     .btn {margin-bottom: 6px;}"
+  )),
+  wellPanel(
+    fluidRow(
+      column(
+        3,
+        selectInput("xvar", "Auxiliary x", choices = xvars, selected = xdef),
+        checkboxInput("logx", "Use log(1 + x)", FALSE),
+        checkboxInput("brk", "Break the axes", TRUE)
+      ),
+      column(
+        3,
+        selectInput("n", "Sample size n",
+                    choices = c(10, 25, 50, 100, 200, 300, 500), selected = 100),
+        selectInput("bias", "Biased SRS: over-sample acres82 top 5% by", choices = c("1 (none)" = 1, "1.5" = 1.5, "2" = 2,
+                                "3" = 3, "4" = 4, "5" = 5), selected = 1)
+      ),
+      column(
+        3,
+        sliderInput("speed", "Samples per second", min = 1, max = 10, value = 5, step = 1),
+        numericInput("nrep", "Stop after this many samples",
+                     value = 500, min = 10, max = 20000, step = 50)
+      ),
+      column(
+        3,
+        actionButton("draw", "Draw new samples", class = "btn-primary", width = "100%"),
+        br(), br(),
+        fluidRow(
+          column(4, actionButton("play",  icon_play,  class = "btn-success", width = "100%",
+                                 title = "Play")),
+          column(4, actionButton("pause", icon_pause, class = "btn-warning", width = "100%",
+                                 title = "Pause")),
+          column(4, actionButton("skip",  icon_skip,  class = "btn-info",    width = "100%",
+                                 title = "Skip to the end"))
+        ),
+        actionButton("reset", "Reset", width = "100%"),
+        div(style = "font-size: 90%;", textOutput("counter"))
+      )
+    )
+  ),
+  plotOutput("mainplot", height = "520px")
+)
+
+## ------------------------------------------------------------------- server
+server <- function(input, output, session) {
+
+  rv <- reactiveValues(s = NULL, n = 100, ests = NULL)
+  running <- reactiveVal(FALSE)
+
+  nrep <- reactive({
+    v <- input$nrep
+    if (is.null(v) || is.na(v) || v < 1) 1L else min(as.integer(v), 20000L)
+  })
+
+  ## everything that depends on the chosen auxiliary variable
+  aux <- reactive({
+    xv <- X[[input$xvar]]
+    lg <- isTRUE(input$logx)
+    if (lg) xv <- log1p(pmax(xv, 0))     # deliberately misspecified working model
+    B  <- sum(yv) / sum(xv)
+    a1 <- cov(xv, yv) / var(xv)          # population regression line
+    a0 <- ybarU - a1 * mean(xv)
+    rgx <- range(xv)
+    list(x = xv, B = B, a0 = a0, a1 = a1, xbar = mean(xv),
+         V = c(ratio = var(yv - B * xv), reg = var(yv - a0 - a1 * xv), srs = Vy),
+         rgx = rgx, cutx = cut_at_centre(rgx[1], rgx[2], mean(xv)),
+         name = if (lg) paste0("log(1 + ", input$xvar, ")") else input$xvar)
+  })
+
+  ## one sample feeds all three estimators, so the histograms are paired
+  one_draw <- function(a, n, B) {
+    s   <- draw_sample(n, B)
+    ys  <- yv[s]
+    xs  <- a$x[s]
+    fpc <- 1 - n / N
+
+    Bhat <- if (sum(xs) > 0) sum(ys) / sum(xs) else 0
+    b1   <- if (var(xs) > 0) cov(xs, ys) / var(xs) else 0
+    b0   <- mean(ys) - b1 * mean(xs)
+
+    est <- c(ratio = (sum(ys) + Bhat * sum(a$x[-s])) / N,
+             reg   = mean(ys) + b1 * (a$xbar - mean(xs)),
+             srs   = mean(ys))
+    se  <- c(ratio = (a$xbar / mean(xs)) * sqrt(fpc * var(ys - Bhat * xs) / n),
+             reg   = sqrt(fpc * var(ys - b0 - b1 * xs) / n),
+             srs   = sqrt(fpc * var(ys) / n))
+
+    ## reorder by NAME before relabelling: est/se are built in a fixed order,
+    ## so a positional setNames() would mislabel them whenever EST is reordered
+    e <- c(setNames(est[EST],                    paste0("est_", EST)),
+           setNames((est - ZCRIT * se)[EST],     paste0("lo_",  EST)),
+           setNames((est + ZCRIT * se)[EST],     paste0("hi_",  EST)),
+           setNames(as.numeric((abs(est - ybarU) <= ZCRIT * se)[EST]),
+                    paste0("cov_", EST)),
+           Bhat = Bhat, b0 = b0, b1 = b1)
+    list(s = s, e = e)
+  }
+
+  ## draw k replications; only the last one's sample is kept for the left
+  ## panel. "Skip" calls this with the full remaining count.
+  draw_many <- function(k) {
+    a <- isolate(aux())
+    n <- as.numeric(isolate(input$n))
+    B <- as.numeric(isolate(input$bias))
+    E <- vector("list", k)
+    for (i in seq_len(k)) {
+      d <- one_draw(a, n, B)
+      E[[i]] <- d$e
+    }
+    rv$s    <- d$s
+    rv$n    <- n
+    rv$ests <- rbind(rv$ests, do.call(rbind, E))
+  }
+  draw_one <- function() draw_many(1)
+
+  ## a fresh history always starts from one sample, so the plot is never empty
+  reset_history <- function() {
+    running(FALSE)
+    rv$ests <- NULL
+    draw_one()
+  }
+  observeEvent(list(input$n, input$xvar, input$logx, input$bias), reset_history(),
+               ignoreInit = FALSE)
+  observeEvent(input$reset, reset_history())
+
+  ## one sample per click; Play repeats until Pause or until the cap is reached
+  observeEvent(input$draw,  { running(FALSE); draw_one() })
+  observeEvent(input$play,  running(TRUE))
+  observeEvent(input$pause, running(FALSE))
+  observeEvent(input$skip, {
+    running(FALSE)
+    k <- nrep() - NROW(rv$ests)
+    if (k > 0) draw_many(k)
+  })
+
+  observe({
+    if (!isTRUE(running())) return()
+    if (NROW(isolate(rv$ests)) >= isolate(nrep())) { running(FALSE); return() }
+    invalidateLater(1000 / isolate(input$speed), session)
+    isolate(draw_one())
+  })
+
+  output$counter <- renderText(
+    sprintf("%d of %d samples", NROW(rv$ests), nrep())
+  )
+
+  output$mainplot <- renderPlot({
+    s <- rv$s
+    req(s)
+    sel <- EST                       # all three estimators, always
+
+    a    <- aux()
+    n    <- rv$n
+    M    <- rv$ests
+    nrep <- NROW(M)
+    cur  <- M[nrep, ]
+    xpos <- setNames(0.02 + 0.04 * (seq_along(sel) - 1), sel)   # CI bar positions
+
+    ## histogram window, wide enough for the least precise estimator shown
+    se_th <- sqrt((1 - n / N) * a$V / n)
+    half  <- 4 * max(se_th[sel])
+    lo <- ybarU - half
+    hi <- ybarU + half
+
+    if (isTRUE(input$brk)) {
+      bky <- mk_break(rgy[1], rgy[2], cuty)
+      bkx <- mk_break(a$rgx[1], a$rgx[2], a$cutx)
+    } else {
+      bky <- mk_plain(rgy[1], rgy[2])
+      bkx <- mk_plain(a$rgx[1], a$rgx[2])
+    }
+    tfy <- bky$tf
+    tfx <- bkx$tf
+    divy <- unit_div(rgy[2])
+    divx <- unit_div(a$rgx[2])
+
+    xg <- seq(a$rgx[1], a$rgx[2], length.out = 1500)
+    draw_line <- function(yl, ...) {          # stop the line at the frame
+      yl[yl < rgy[1] | yl > rgy[2]] <- NA
+      lines(tfx(xg), tfy(yl), ...)
+    }
+
+    layout(matrix(1:2, nrow = 1), widths = c(1, 1))
+
+    ## ---- left: population, sample, fitted lines ----
+    par(mar = c(4.2, 4.8, 3.0, 1.0))
+    plot(NA, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE,
+         xlab = paste0("x: ", a$name, unit_lab(divx)),
+         ylab = paste0("y: acres92", unit_lab(divy)),
+         main = sprintf("Population, %s and fitted lines, n = %d",
+                        if (as.numeric(input$bias) > 1) "biased sample" else "sample", n))
+    rect(0, tfy(lo), 1, tfy(hi), col = col_band, border = NA)
+    points(tfx(a$x), tfy(ypl), pch = 16, cex = 0.6, col = col_pop)
+
+    if ("ratio" %in% sel) {
+      draw_line(a$B * xg, col = col_true, lwd = 1.8)
+      draw_line(cur[["Bhat"]] * xg, col = COL["ratio"], lwd = 2, lty = 2)
+    }
+    if ("reg" %in% sel) {
+      draw_line(a$a0 + a$a1 * xg, col = col_true, lwd = 1.8, lty = 4)
+      draw_line(cur[["b0"]] + cur[["b1"]] * xg, col = COL["reg"], lwd = 2, lty = 2)
+    }
+    if ("srs" %in% sel) abline(h = tfy(cur[["est_srs"]]), col = COL["srs"], lwd = 2, lty = 2)
+    points(tfx(a$x[s]), tfy(ypl[s]), pch = 16, cex = 1.2, col = col_pts)
+
+    abline(h = tfy(ybarU), col = col_samp, lty = 3)
+    for (k in sel) ci_bar(xpos[[k]], cur[[paste0("est_", k)]],
+                          c(cur[[paste0("lo_", k)]], cur[[paste0("hi_", k)]]),
+                          COL[[k]], PCH[[k]], cur[[paste0("cov_", k)]] == 1, tfy)
+
+    mask_gap(bky, 2); mask_gap(bkx, 1)
+    box(); draw_axis(bky, 2, divy); draw_axis(bkx, 1, divx)
+
+    leg <- data.frame(l = "sampled y", c = col_pts, lt = NA, p = 16, w = NA)
+    if ("ratio" %in% sel) leg <- rbind(leg, data.frame(
+      l = c("true Bx", "ratio fit"), c = c(col_true, COL[["ratio"]]),
+      lt = c(1, 2), p = NA, w = c(1.8, 2)))
+    if ("reg" %in% sel) leg <- rbind(leg, data.frame(
+      l = c("true a + bx", "regression fit"), c = c(col_true, COL[["reg"]]),
+      lt = c(4, 2), p = NA, w = c(1.8, 2)))
+    if ("srs" %in% sel) leg <- rbind(leg, data.frame(
+      l = "average fit", c = COL[["srs"]], lt = 2, p = NA, w = 2))
+    leg <- rbind(leg, data.frame(l = "population mean", c = col_samp, lt = 3, p = NA, w = 1))
+    legend("topleft", bty = "n", cex = 0.9, inset = c(0.15, 0.01),
+           legend = leg$l, col = leg$c, lty = leg$lt, pch = leg$p, lwd = leg$w)
+
+    ## ---- right: sampling distributions as vertical violins, with current CIs ----
+    ## ylim is symmetric about ybarU, so the population mean sits at mid-height,
+    ## level with its position in the scatterplot
+    par(mar = c(4.2, 4.8, 3.0, 1.0))
+    k_n <- length(sel)
+    at  <- setNames(seq_len(k_n), sel)
+    plot(NA, xlim = c(0.4, k_n + 0.6), ylim = c(lo, hi), axes = FALSE,
+         xlab = "", ylab = paste0("estimate", unit_lab(divy)),
+         main = "Sampling distributions of the estimates")
+    if (as.numeric(input$bias) > 1)
+      mtext(sprintf("biased selection x%.1f: the average is not estimating mu",
+                    as.numeric(input$bias)),
+            side = 3, line = -0.3, cex = 0.8, col = col_samp)
+    usr <- par("usr")
+    rect(usr[1], usr[3], usr[2], usr[4], col = col_band, border = NA)
+    abline(h = ybarU, col = col_samp, lty = 3)
+    for (k in sel) {
+      violin(M[, paste0("est_", k)], at[[k]], COL[[k]])
+      ci <- c(cur[[paste0("lo_", k)]], cur[[paste0("hi_", k)]])
+      bc <- if (cur[[paste0("cov_", k)]] == 1) COL[[k]] else col_samp
+      segments(at[[k]], ci[1], at[[k]], ci[2], col = bc, lwd = 2.5)
+      segments(at[[k]] - 0.08, ci, at[[k]] + 0.08, ci, col = bc, lwd = 2.5)
+      points(at[[k]], cur[[paste0("est_", k)]], pch = PCH[[k]], col = COL[[k]], cex = 1.7)
+    }
+    box()
+    vy <- pretty(c(lo, hi), 5)
+    vy <- vy[vy >= lo & vy <= hi]
+    axis(2, at = vy, labels = formatC(vy / divy, format = "f",
+                                      digits = if ((hi - lo) / divy < 40) 1 else 0,
+                                      big.mark = ","), las = 1, cex.axis = 0.75)
+    axis(1, at = at, labels = LAB[sel], tick = FALSE, cex.axis = 0.9)
+
+    cov_txt <- function(k) if (nrep >= 10) pct(mean(M[, paste0("cov_", k)])) else "--"
+    legend("topleft", bty = "n", cex = 0.9, inset = c(0.02, 0.01),
+           title = "95% CI coverage", fill = COL[sel], border = NA,
+           legend = paste(LAB[sel], vapply(sel, cov_txt, "")))
+
+    ## reductions are relative to the average, which is always simulated
+    cmp <- setdiff(sel, "srs")
+    if (length(cmp)) {
+      biased <- as.numeric(input$bias) > 1
+      red <- lapply(cmp, function(k) {
+        mc <- if (nrep > 5) 1 - var(M[, paste0("est_", k)]) / var(M[, "est_srs"]) else NA
+        th <- 1 - a$V[[k]] / Vy
+        ## the theoretical figure assumes an SRS, so drop it when selection is biased
+        list(txt = if (biased) sprintf("%s %s", LAB[[k]], pct(mc))
+                   else sprintf("%s %s (theory %s)", LAB[[k]], pct(mc), pct(th)),
+             neg = if (is.na(mc)) th < 0 else mc < 0)
+      })
+      legend("bottomleft", bty = "n", cex = 0.9, inset = c(0.02, 0.01),
+             title = "Variance reduction vs. average", title.col = "black",
+             fill = COL[cmp], border = NA,
+             legend = vapply(red, `[[`, "", "txt"),
+             text.col = ifelse(vapply(red, `[[`, TRUE, "neg"), col_samp, "black"))
+    }
+  })
+}
+
+shinyApp(ui, server)
+```

@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Shinylive App Illustrating Ratio Estimation and Regression Estimation</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="app-ratio_files/libs/clipboard/clipboard.min.js"></script>
+<script src="app-ratio_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="app-ratio_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="app-ratio_files/libs/quarto-html/popper.min.js"></script>
+<script src="app-ratio_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="app-ratio_files/libs/quarto-html/anchor.min.js"></script>
+<link href="app-ratio_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="app-ratio_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="app-ratio_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="app-ratio_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="app-ratio_files/libs/bootstrap/bootstrap-1a9011c99ff3470dca5095ea45ed0705.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="app-ratio_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="app-ratio_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/run-python-blocks.js" type="module"></script>
+<link href="app-ratio_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/shinylive.css" rel="stylesheet">
+<link href="app-ratio_files/libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="shinyliveapps.css">
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-full">
+
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Shinylive App Illustrating Ratio Estimation and Regression Estimation</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<nav class="appnav">
+  <a href="shinyliveapps_sampling.html">All apps</a>
+  <a href="app-srs.html">SRS</a>
+  <a href="app-stratified.html">Stratified</a>
+  <a href="app-ratio.html" class="active">Ratio &amp; regression</a>
+  <a href="app-poststrat.html">Post-stratification</a>
+  <a href="app-cluster.html">Cluster</a>
+  <a href="app-ups.html">UPS</a>
+  <a class="book" href="index.html">← back to the book</a>
+</nav>
+<div class="appsource">
+<p>From <a href="ratio.html#fig-ratio-app">Ratio and Regression Estimation</a> in <em>Elements of Sampling Survey</em>.</p>
+</div>
+<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
+#|   shinylive does not work in self-contained HTML documents.
+#|   Please set `embed-resources: false` in your metadata.
+#| standalone: true
+#| viewerHeight: 740
+
+library(shiny)
+
+## ---------------------------------------------------------------- population
+data_url &lt;- "https://raw.githubusercontent.com/longhaiSK/sampling/main/data/agpop.csv"
+
+raw &lt;- tryCatch({
+  download.file(data_url, "agpop.csv")
+  read.csv("agpop.csv")
+}, error = function(e) NULL)
+
+if (is.null(raw)) {            # fallback so the app runs before the file is committed
+  set.seed(1)
+  Nf &lt;- 3000
+  x1 &lt;- rgamma(Nf, shape = 1.2, scale = 1.8e5)
+  raw &lt;- data.frame(
+    acres92 = pmax(0, 0.93 * x1 + rnorm(Nf, 0, 0.5 * x1^0.85)),
+    acres87 = x1,
+    farms92 = pmax(1, round(300 + x1 / 6000 + rnorm(Nf, 0, 250)))
+  )
+}
+
+raw &lt;- raw[is.finite(raw$acres92) &amp; raw$acres92 != -99, ]
+yv  &lt;- raw$acres92
+N   &lt;- length(yv)
+
+## every numeric column other than y is a candidate auxiliary variable;
+## -99 marks a missing entry and is replaced by the mean of the rest
+num &lt;- vapply(raw, is.numeric, logical(1))
+X &lt;- raw[, num &amp; names(raw) != "acres92", drop = FALSE]
+X &lt;- as.data.frame(lapply(X, function(v) {
+  v[!is.finite(v) | v == -99] &lt;- NA
+  v[is.na(v)] &lt;- mean(v, na.rm = TRUE)
+  v
+}))
+keep &lt;- vapply(X, function(v) all(is.finite(v)) &amp;&amp; sum(v) &gt; 0 &amp;&amp; var(v) &gt; 0, logical(1))
+X &lt;- X[, keep, drop = FALSE]
+xvars &lt;- names(X)
+xdef  &lt;- if ("acres87" %in% xvars) "acres87" else xvars[1]
+
+## ---- the "biased SRS" option -----------------------------------------------
+## The same mechanism as the post-stratification app: counties in the top 5% of
+## acres82 carry selection weight B instead of 1, and n units are drawn WITHOUT
+## replacement with those weights, so the sample size stays exactly n while
+## large counties are over-represented. The mechanism is tied to acres82
+## whatever auxiliary x is selected, so one can ask whether the chosen x is able
+## to see -- and therefore repair -- the distortion.
+bias_var &lt;- if ("acres82" %in% xvars) "acres82" else xdef
+bias_top &lt;- which(X[[bias_var]] &gt;= quantile(X[[bias_var]], 0.95))
+
+draw_sample &lt;- function(n, B) {
+  if (B &lt;= 1) return(sample.int(N, n))
+  w &lt;- rep(1, N); w[bias_top] &lt;- B
+  sample.int(N, n, prob = w)
+}
+
+ybarU &lt;- mean(yv)
+Vy    &lt;- var(yv)                     # average (SRS) population variance
+ZCRIT &lt;- 1.96                        # nominal 95% intervals
+
+set.seed(11)                         # display-only vertical jitter, fixed once
+ypl &lt;- yv + rnorm(N, 0, 0.012 * diff(range(yv)))
+rgy &lt;- range(ypl)
+
+## ------------------------------------------------------------ estimator specs
+EST &lt;- c("srs", "ratio", "reg")      # the average leads: the baseline to beat
+LAB &lt;- c(ratio = "ratio", reg = "regression", srs = "average")
+COL &lt;- c(ratio = "#1f77b4", reg = "#2ca02c", srs = "#e07b39")
+PCH &lt;- c(ratio = 16, reg = 15, srs = 17)
+
+col_samp &lt;- "#d62728"
+col_pts  &lt;- "blue"                   # sampled observations
+col_true &lt;- "black"
+col_pop  &lt;- "#9aa0a640"
+col_band &lt;- "#eef3f8"
+
+## ------------------------------------------------------- broken-axis mapping
+## Linear from the minimum up to a cut, a single break near the top, then the
+## sparse upper tail compressed into a thin strip. The cut is placed so that the
+## population mean falls at mid-height, matching the centre of the right panel.
+BRK_TOP  &lt;- 0.12
+BRK_GAP  &lt;- 0.025
+BRK_MAIN &lt;- 1 - BRK_TOP - BRK_GAP
+
+cut_at_centre &lt;- function(rmin, rmax, m) {
+  cut &lt;- rmin + (m - rmin) * BRK_MAIN / 0.5
+  if (!is.finite(cut) || cut &gt;= rmax) rmin + 0.95 * (rmax - rmin) else cut
+}
+cuty &lt;- cut_at_centre(rgy[1], rgy[2], ybarU)
+
+mk_break &lt;- function(rmin, rmax, cut) {
+  eps &lt;- 1e-9 * (rmax - rmin)
+  cut &lt;- min(max(cut, rmin + eps), rmax - eps)
+  tf &lt;- function(v) {
+    v &lt;- pmin(pmax(v, rmin), rmax)
+    ifelse(v &lt;= cut, (v - rmin) / (cut - rmin) * BRK_MAIN,
+           BRK_MAIN + BRK_GAP + (v - cut) / (rmax - cut) * BRK_TOP)
+  }
+  list(tf = tf, rmin = rmin, rmax = rmax, cut = cut,
+       gap = c(BRK_MAIN, BRK_MAIN + BRK_GAP))
+}
+
+mk_plain &lt;- function(rmin, rmax) {
+  list(tf = function(v) (pmin(pmax(v, rmin), rmax) - rmin) / (rmax - rmin),
+       rmin = rmin, rmax = rmax, cut = NA, gap = NULL)
+}
+
+## counts stay as counts, acreages are shown in thousands
+unit_div &lt;- function(rmax) if (rmax &gt;= 1e5) 1000 else 1
+unit_lab &lt;- function(div) if (div == 1000) " (thousands)" else ""
+
+axis_at &lt;- function(bk, side, div, rg, nt) {
+  v &lt;- pretty(rg, nt)
+  v &lt;- v[v &gt;= rg[1] &amp; v &lt;= rg[2]]
+  if (!length(v)) return(invisible())
+  d &lt;- if (diff(range(v)) / div &lt; 40) 1 else 0
+  axis(side, at = bk$tf(v), labels = formatC(v / div, format = "f", digits = d,
+                                             big.mark = ","), las = 1, cex.axis = 0.75)
+}
+
+draw_axis &lt;- function(bk, side, div) {
+  if (is.null(bk$gap)) {
+    axis_at(bk, side, div, c(bk$rmin, bk$rmax), 5)
+  } else {
+    axis_at(bk, side, div, c(bk$rmin, bk$cut), 5)
+    axis_at(bk, side, div, c(bk$cut + 1e-9, bk$rmax), 2)
+  }
+}
+
+mask_gap &lt;- function(bk, side) {
+  if (is.null(bk$gap)) return(invisible())
+  usr &lt;- par("usr")
+  g &lt;- bk$gap
+  m &lt;- mean(g)
+  if (side == 2) {
+    rect(usr[1], g[1], usr[2], g[2], col = "white", border = NA)
+    d &lt;- 0.010 * (usr[2] - usr[1])
+    segments(usr[1] - d, c(m - 0.012, m + 0.004), usr[1] + d,
+             c(m - 0.004, m + 0.012), xpd = NA, lwd = 1.2)
+  } else {
+    rect(g[1], usr[3], g[2], usr[4], col = "white", border = NA)
+    d &lt;- 0.010 * (usr[4] - usr[3])
+    segments(c(m - 0.012, m + 0.004), usr[3] - d, c(m - 0.004, m + 0.012),
+             usr[3] + d, xpd = NA, lwd = 1.2)
+  }
+}
+
+## interval drawn as a capped vertical bar with the estimate marked on it;
+## the bar turns red when the interval misses the population mean
+ci_bar &lt;- function(x, est, ci, col, pch, covered, tf = identity, cap = 0.012) {
+  bcol &lt;- if (covered) col else col_samp
+  segments(x, tf(ci[1]), x, tf(ci[2]), col = bcol, lwd = 2)
+  segments(x - cap, tf(ci), x + cap, tf(ci), col = bcol, lwd = 2)
+  points(x, tf(est), pch = pch, col = col, cex = 1.7)
+}
+
+## symmetric density polygon, drawn vertically about x = at, so the estimate
+## runs along the y axis and lines up with the scatterplot
+violin &lt;- function(x, at, col, w = 0.32) {
+  if (length(x) &lt; 10 || diff(range(x)) &lt;= 0) return(invisible())
+  d  &lt;- density(x)
+  hw &lt;- w * d$y / max(d$y)
+  polygon(c(at + hw, rev(at - hw)), c(d$x, rev(d$x)),
+          col = adjustcolor(col, 0.35), border = col)
+  m &lt;- median(x)
+  segments(at - w * 0.6, m, at + w * 0.6, m, col = col, lwd = 2)
+}
+
+pct &lt;- function(v) if (is.na(v)) "--" else sprintf("%.1f%%", 100 * v)
+
+## ---- inline SVG button icons (no font or icon-library dependency) ----------
+svg_icon &lt;- function(paths)
+  HTML(sprintf(paste0('&lt;svg width="16" height="16" viewBox="0 0 16 16" ',
+                      'fill="currentColor" style="vertical-align:-2px"&gt;%s&lt;/svg&gt;'), paths))
+icon_play  &lt;- svg_icon('&lt;path d="M3 2v12l10-6z"/&gt;')
+icon_pause &lt;- svg_icon('&lt;rect x="3" y="2" width="4" height="12"/&gt;&lt;rect x="9" y="2" width="4" height="12"/&gt;')
+icon_skip  &lt;- svg_icon('&lt;path d="M1 2v12l7-6zM8 2v12l6-6z"/&gt;&lt;rect x="14" y="2" width="2" height="12"/&gt;')
+
+## ---------------------------------------------------------------------- ui
+ui &lt;- fluidPage(
+  tags$style(HTML(
+    ".well {padding: 10px 12px; margin-bottom: 10px;}
+     .form-group {margin-bottom: 6px;}
+     .checkbox {margin-top: 2px; margin-bottom: 2px;}
+     .irs {margin-bottom: 0;}
+     .btn {margin-bottom: 6px;}"
+  )),
+  wellPanel(
+    fluidRow(
+      column(
+        3,
+        selectInput("xvar", "Auxiliary x", choices = xvars, selected = xdef),
+        checkboxInput("logx", "Use log(1 + x)", FALSE),
+        checkboxInput("brk", "Break the axes", TRUE)
+      ),
+      column(
+        3,
+        selectInput("n", "Sample size n",
+                    choices = c(10, 25, 50, 100, 200, 300, 500), selected = 100),
+        selectInput("bias", "Biased SRS: over-sample acres82 top 5% by", choices = c("1 (none)" = 1, "1.5" = 1.5, "2" = 2,
+                                "3" = 3, "4" = 4, "5" = 5), selected = 1)
+      ),
+      column(
+        3,
+        sliderInput("speed", "Samples per second", min = 1, max = 10, value = 5, step = 1),
+        numericInput("nrep", "Stop after this many samples",
+                     value = 500, min = 10, max = 20000, step = 50)
+      ),
+      column(
+        3,
+        actionButton("draw", "Draw new samples", class = "btn-primary", width = "100%"),
+        br(), br(),
+        fluidRow(
+          column(4, actionButton("play",  icon_play,  class = "btn-success", width = "100%",
+                                 title = "Play")),
+          column(4, actionButton("pause", icon_pause, class = "btn-warning", width = "100%",
+                                 title = "Pause")),
+          column(4, actionButton("skip",  icon_skip,  class = "btn-info",    width = "100%",
+                                 title = "Skip to the end"))
+        ),
+        actionButton("reset", "Reset", width = "100%"),
+        div(style = "font-size: 90%;", textOutput("counter"))
+      )
+    )
+  ),
+  plotOutput("mainplot", height = "520px")
+)
+
+## ------------------------------------------------------------------- server
+server &lt;- function(input, output, session) {
+
+  rv &lt;- reactiveValues(s = NULL, n = 100, ests = NULL)
+  running &lt;- reactiveVal(FALSE)
+
+  nrep &lt;- reactive({
+    v &lt;- input$nrep
+    if (is.null(v) || is.na(v) || v &lt; 1) 1L else min(as.integer(v), 20000L)
+  })
+
+  ## everything that depends on the chosen auxiliary variable
+  aux &lt;- reactive({
+    xv &lt;- X[[input$xvar]]
+    lg &lt;- isTRUE(input$logx)
+    if (lg) xv &lt;- log1p(pmax(xv, 0))     # deliberately misspecified working model
+    B  &lt;- sum(yv) / sum(xv)
+    a1 &lt;- cov(xv, yv) / var(xv)          # population regression line
+    a0 &lt;- ybarU - a1 * mean(xv)
+    rgx &lt;- range(xv)
+    list(x = xv, B = B, a0 = a0, a1 = a1, xbar = mean(xv),
+         V = c(ratio = var(yv - B * xv), reg = var(yv - a0 - a1 * xv), srs = Vy),
+         rgx = rgx, cutx = cut_at_centre(rgx[1], rgx[2], mean(xv)),
+         name = if (lg) paste0("log(1 + ", input$xvar, ")") else input$xvar)
+  })
+
+  ## one sample feeds all three estimators, so the histograms are paired
+  one_draw &lt;- function(a, n, B) {
+    s   &lt;- draw_sample(n, B)
+    ys  &lt;- yv[s]
+    xs  &lt;- a$x[s]
+    fpc &lt;- 1 - n / N
+
+    Bhat &lt;- if (sum(xs) &gt; 0) sum(ys) / sum(xs) else 0
+    b1   &lt;- if (var(xs) &gt; 0) cov(xs, ys) / var(xs) else 0
+    b0   &lt;- mean(ys) - b1 * mean(xs)
+
+    est &lt;- c(ratio = (sum(ys) + Bhat * sum(a$x[-s])) / N,
+             reg   = mean(ys) + b1 * (a$xbar - mean(xs)),
+             srs   = mean(ys))
+    se  &lt;- c(ratio = (a$xbar / mean(xs)) * sqrt(fpc * var(ys - Bhat * xs) / n),
+             reg   = sqrt(fpc * var(ys - b0 - b1 * xs) / n),
+             srs   = sqrt(fpc * var(ys) / n))
+
+    ## reorder by NAME before relabelling: est/se are built in a fixed order,
+    ## so a positional setNames() would mislabel them whenever EST is reordered
+    e &lt;- c(setNames(est[EST],                    paste0("est_", EST)),
+           setNames((est - ZCRIT * se)[EST],     paste0("lo_",  EST)),
+           setNames((est + ZCRIT * se)[EST],     paste0("hi_",  EST)),
+           setNames(as.numeric((abs(est - ybarU) &lt;= ZCRIT * se)[EST]),
+                    paste0("cov_", EST)),
+           Bhat = Bhat, b0 = b0, b1 = b1)
+    list(s = s, e = e)
+  }
+
+  ## draw k replications; only the last one's sample is kept for the left
+  ## panel. "Skip" calls this with the full remaining count.
+  draw_many &lt;- function(k) {
+    a &lt;- isolate(aux())
+    n &lt;- as.numeric(isolate(input$n))
+    B &lt;- as.numeric(isolate(input$bias))
+    E &lt;- vector("list", k)
+    for (i in seq_len(k)) {
+      d &lt;- one_draw(a, n, B)
+      E[[i]] &lt;- d$e
+    }
+    rv$s    &lt;- d$s
+    rv$n    &lt;- n
+    rv$ests &lt;- rbind(rv$ests, do.call(rbind, E))
+  }
+  draw_one &lt;- function() draw_many(1)
+
+  ## a fresh history always starts from one sample, so the plot is never empty
+  reset_history &lt;- function() {
+    running(FALSE)
+    rv$ests &lt;- NULL
+    draw_one()
+  }
+  observeEvent(list(input$n, input$xvar, input$logx, input$bias), reset_history(),
+               ignoreInit = FALSE)
+  observeEvent(input$reset, reset_history())
+
+  ## one sample per click; Play repeats until Pause or until the cap is reached
+  observeEvent(input$draw,  { running(FALSE); draw_one() })
+  observeEvent(input$play,  running(TRUE))
+  observeEvent(input$pause, running(FALSE))
+  observeEvent(input$skip, {
+    running(FALSE)
+    k &lt;- nrep() - NROW(rv$ests)
+    if (k &gt; 0) draw_many(k)
+  })
+
+  observe({
+    if (!isTRUE(running())) return()
+    if (NROW(isolate(rv$ests)) &gt;= isolate(nrep())) { running(FALSE); return() }
+    invalidateLater(1000 / isolate(input$speed), session)
+    isolate(draw_one())
+  })
+
+  output$counter &lt;- renderText(
+    sprintf("%d of %d samples", NROW(rv$ests), nrep())
+  )
+
+  output$mainplot &lt;- renderPlot({
+    s &lt;- rv$s
+    req(s)
+    sel &lt;- EST                       # all three estimators, always
+
+    a    &lt;- aux()
+    n    &lt;- rv$n
+    M    &lt;- rv$ests
+    nrep &lt;- NROW(M)
+    cur  &lt;- M[nrep, ]
+    xpos &lt;- setNames(0.02 + 0.04 * (seq_along(sel) - 1), sel)   # CI bar positions
+
+    ## histogram window, wide enough for the least precise estimator shown
+    se_th &lt;- sqrt((1 - n / N) * a$V / n)
+    half  &lt;- 4 * max(se_th[sel])
+    lo &lt;- ybarU - half
+    hi &lt;- ybarU + half
+
+    if (isTRUE(input$brk)) {
+      bky &lt;- mk_break(rgy[1], rgy[2], cuty)
+      bkx &lt;- mk_break(a$rgx[1], a$rgx[2], a$cutx)
+    } else {
+      bky &lt;- mk_plain(rgy[1], rgy[2])
+      bkx &lt;- mk_plain(a$rgx[1], a$rgx[2])
+    }
+    tfy &lt;- bky$tf
+    tfx &lt;- bkx$tf
+    divy &lt;- unit_div(rgy[2])
+    divx &lt;- unit_div(a$rgx[2])
+
+    xg &lt;- seq(a$rgx[1], a$rgx[2], length.out = 1500)
+    draw_line &lt;- function(yl, ...) {          # stop the line at the frame
+      yl[yl &lt; rgy[1] | yl &gt; rgy[2]] &lt;- NA
+      lines(tfx(xg), tfy(yl), ...)
+    }
+
+    layout(matrix(1:2, nrow = 1), widths = c(1, 1))
+
+    ## ---- left: population, sample, fitted lines ----
+    par(mar = c(4.2, 4.8, 3.0, 1.0))
+    plot(NA, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE,
+         xlab = paste0("x: ", a$name, unit_lab(divx)),
+         ylab = paste0("y: acres92", unit_lab(divy)),
+         main = sprintf("Population, %s and fitted lines, n = %d",
+                        if (as.numeric(input$bias) &gt; 1) "biased sample" else "sample", n))
+    rect(0, tfy(lo), 1, tfy(hi), col = col_band, border = NA)
+    points(tfx(a$x), tfy(ypl), pch = 16, cex = 0.6, col = col_pop)
+
+    if ("ratio" %in% sel) {
+      draw_line(a$B * xg, col = col_true, lwd = 1.8)
+      draw_line(cur[["Bhat"]] * xg, col = COL["ratio"], lwd = 2, lty = 2)
+    }
+    if ("reg" %in% sel) {
+      draw_line(a$a0 + a$a1 * xg, col = col_true, lwd = 1.8, lty = 4)
+      draw_line(cur[["b0"]] + cur[["b1"]] * xg, col = COL["reg"], lwd = 2, lty = 2)
+    }
+    if ("srs" %in% sel) abline(h = tfy(cur[["est_srs"]]), col = COL["srs"], lwd = 2, lty = 2)
+    points(tfx(a$x[s]), tfy(ypl[s]), pch = 16, cex = 1.2, col = col_pts)
+
+    abline(h = tfy(ybarU), col = col_samp, lty = 3)
+    for (k in sel) ci_bar(xpos[[k]], cur[[paste0("est_", k)]],
+                          c(cur[[paste0("lo_", k)]], cur[[paste0("hi_", k)]]),
+                          COL[[k]], PCH[[k]], cur[[paste0("cov_", k)]] == 1, tfy)
+
+    mask_gap(bky, 2); mask_gap(bkx, 1)
+    box(); draw_axis(bky, 2, divy); draw_axis(bkx, 1, divx)
+
+    leg &lt;- data.frame(l = "sampled y", c = col_pts, lt = NA, p = 16, w = NA)
+    if ("ratio" %in% sel) leg &lt;- rbind(leg, data.frame(
+      l = c("true Bx", "ratio fit"), c = c(col_true, COL[["ratio"]]),
+      lt = c(1, 2), p = NA, w = c(1.8, 2)))
+    if ("reg" %in% sel) leg &lt;- rbind(leg, data.frame(
+      l = c("true a + bx", "regression fit"), c = c(col_true, COL[["reg"]]),
+      lt = c(4, 2), p = NA, w = c(1.8, 2)))
+    if ("srs" %in% sel) leg &lt;- rbind(leg, data.frame(
+      l = "average fit", c = COL[["srs"]], lt = 2, p = NA, w = 2))
+    leg &lt;- rbind(leg, data.frame(l = "population mean", c = col_samp, lt = 3, p = NA, w = 1))
+    legend("topleft", bty = "n", cex = 0.9, inset = c(0.15, 0.01),
+           legend = leg$l, col = leg$c, lty = leg$lt, pch = leg$p, lwd = leg$w)
+
+    ## ---- right: sampling distributions as vertical violins, with current CIs ----
+    ## ylim is symmetric about ybarU, so the population mean sits at mid-height,
+    ## level with its position in the scatterplot
+    par(mar = c(4.2, 4.8, 3.0, 1.0))
+    k_n &lt;- length(sel)
+    at  &lt;- setNames(seq_len(k_n), sel)
+    plot(NA, xlim = c(0.4, k_n + 0.6), ylim = c(lo, hi), axes = FALSE,
+         xlab = "", ylab = paste0("estimate", unit_lab(divy)),
+         main = "Sampling distributions of the estimates")
+    if (as.numeric(input$bias) &gt; 1)
+      mtext(sprintf("biased selection x%.1f: the average is not estimating mu",
+                    as.numeric(input$bias)),
+            side = 3, line = -0.3, cex = 0.8, col = col_samp)
+    usr &lt;- par("usr")
+    rect(usr[1], usr[3], usr[2], usr[4], col = col_band, border = NA)
+    abline(h = ybarU, col = col_samp, lty = 3)
+    for (k in sel) {
+      violin(M[, paste0("est_", k)], at[[k]], COL[[k]])
+      ci &lt;- c(cur[[paste0("lo_", k)]], cur[[paste0("hi_", k)]])
+      bc &lt;- if (cur[[paste0("cov_", k)]] == 1) COL[[k]] else col_samp
+      segments(at[[k]], ci[1], at[[k]], ci[2], col = bc, lwd = 2.5)
+      segments(at[[k]] - 0.08, ci, at[[k]] + 0.08, ci, col = bc, lwd = 2.5)
+      points(at[[k]], cur[[paste0("est_", k)]], pch = PCH[[k]], col = COL[[k]], cex = 1.7)
+    }
+    box()
+    vy &lt;- pretty(c(lo, hi), 5)
+    vy &lt;- vy[vy &gt;= lo &amp; vy &lt;= hi]
+    axis(2, at = vy, labels = formatC(vy / divy, format = "f",
+                                      digits = if ((hi - lo) / divy &lt; 40) 1 else 0,
+                                      big.mark = ","), las = 1, cex.axis = 0.75)
+    axis(1, at = at, labels = LAB[sel], tick = FALSE, cex.axis = 0.9)
+
+    cov_txt &lt;- function(k) if (nrep &gt;= 10) pct(mean(M[, paste0("cov_", k)])) else "--"
+    legend("topleft", bty = "n", cex = 0.9, inset = c(0.02, 0.01),
+           title = "95% CI coverage", fill = COL[sel], border = NA,
+           legend = paste(LAB[sel], vapply(sel, cov_txt, "")))
+
+    ## reductions are relative to the average, which is always simulated
+    cmp &lt;- setdiff(sel, "srs")
+    if (length(cmp)) {
+      biased &lt;- as.numeric(input$bias) &gt; 1
+      red &lt;- lapply(cmp, function(k) {
+        mc &lt;- if (nrep &gt; 5) 1 - var(M[, paste0("est_", k)]) / var(M[, "est_srs"]) else NA
+        th &lt;- 1 - a$V[[k]] / Vy
+        ## the theoretical figure assumes an SRS, so drop it when selection is biased
+        list(txt = if (biased) sprintf("%s %s", LAB[[k]], pct(mc))
+                   else sprintf("%s %s (theory %s)", LAB[[k]], pct(mc), pct(th)),
+             neg = if (is.na(mc)) th &lt; 0 else mc &lt; 0)
+      })
+      legend("bottomleft", bty = "n", cex = 0.9, inset = c(0.02, 0.01),
+             title = "Variance reduction vs. average", title.col = "black",
+             fill = COL[cmp], border = NA,
+             legend = vapply(red, `[[`, "", "txt"),
+             text.col = ifelse(vapply(red, `[[`, TRUE, "neg"), col_samp, "black"))
+    }
+  })
+}
+
+shinyApp(ui, server)</code></pre>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

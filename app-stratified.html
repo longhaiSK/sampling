@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Shinylive App for Illustrating Stratified Sampling</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="app-stratified_files/libs/clipboard/clipboard.min.js"></script>
+<script src="app-stratified_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="app-stratified_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="app-stratified_files/libs/quarto-html/popper.min.js"></script>
+<script src="app-stratified_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="app-stratified_files/libs/quarto-html/anchor.min.js"></script>
+<link href="app-stratified_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="app-stratified_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="app-stratified_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="app-stratified_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="app-stratified_files/libs/bootstrap/bootstrap-1a9011c99ff3470dca5095ea45ed0705.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="app-stratified_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="app-stratified_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/run-python-blocks.js" type="module"></script>
+<link href="app-stratified_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/shinylive.css" rel="stylesheet">
+<link href="app-stratified_files/libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="shinyliveapps.css">
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-full">
+
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Shinylive App for Illustrating Stratified Sampling</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<nav class="appnav">
+  <a href="shinyliveapps_sampling.html">All apps</a>
+  <a href="app-srs.html">SRS</a>
+  <a href="app-stratified.html" class="active">Stratified</a>
+  <a href="app-ratio.html">Ratio &amp; regression</a>
+  <a href="app-poststrat.html">Post-stratification</a>
+  <a href="app-cluster.html">Cluster</a>
+  <a href="app-ups.html">UPS</a>
+  <a class="book" href="index.html">← back to the book</a>
+</nav>
+<div class="appsource">
+<p>From <a href="strata.html#fig-strat-app">Stratified Random Sampling</a> in <em>Elements of Sampling Survey</em>.</p>
+</div>
+<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
+#|   shinylive does not work in self-contained HTML documents.
+#|   Please set `embed-resources: false` in your metadata.
+#| standalone: true
+#| viewerHeight: 800
+
+## file: app.R
+library(shiny)
+
+data_url &lt;- "https://raw.githubusercontent.com/longhaiSK/sampling/main/data/agpop.csv"
+download.file(data_url, "agpop.csv")
+dat &lt;- read.csv("agpop.csv")
+
+## -99 is the missing-value code in agpop.csv; recode to NA and drop
+## counties missing either the response (acres92) or the acres82 stratifier,
+## so that the same population underlies both stratification choices below.
+dat$acres92[dat$acres92 == -99] &lt;- NA
+dat$acres82[dat$acres82 == -99] &lt;- NA
+dat &lt;- dat[!is.na(dat$acres92) &amp; !is.na(dat$acres82), ]
+
+pop   &lt;- dat$acres92
+N     &lt;- length(pop)
+ybarU &lt;- mean(pop)
+S     &lt;- sd(pop)
+
+## build the stratum factor, population index list, and per-stratum summaries
+## for either stratification variable ("acres82" quantiles or "region"); x_pos
+## jitters each unit about its stratum's integer position, 1 (left) to H (right)
+make_strata &lt;- function(method) {
+  if (method == "acres82") {
+    stratum &lt;- cut(dat$acres82,
+                    breaks = quantile(dat$acres82, probs = c(0, 0.25, 0.75, 0.95, 1)),
+                    include.lowest = TRUE)
+    levels(stratum) &lt;- paste0("Q", seq_along(levels(stratum)))
+  } else {
+    stratum &lt;- factor(dat$region)
+  }
+  H     &lt;- nlevels(stratum)
+  idx_h &lt;- split(seq_len(N), stratum)
+  Nh    &lt;- sapply(idx_h, length)
+  Sh    &lt;- sapply(idx_h, function(i) sd(pop[i]))
+  W     &lt;- Nh / N
+
+  set.seed(42)
+  x_pos &lt;- as.integer(stratum) + runif(N, -0.30, 0.30)
+
+  list(lev = levels(stratum), H = H, idx_h = idx_h,
+       Nh = Nh, Sh = Sh, W = W, x_pos = x_pos)
+}
+
+STRAT_CHOICES &lt;- c("acres82Quantiles" = "acres82", "region" = "region")
+
+## ---- broken y-axis, shared by the left panel --------------------------------
+## Drawn region [0, 2 * ybarU]: visible scale [0, cut] plus a compressed lane
+## for the right tail, so the population mean sits at the midpoint of the panel.
+lane_frac &lt;- 0.10
+cut       &lt;- 2 * ybarU / (1 + lane_frac)
+lane_w    &lt;- lane_frac * cut
+ymax_top  &lt;- cut + lane_w
+
+py      &lt;- pop                                 # plotting positions on the y axis
+tail_id &lt;- which(pop &gt; cut)
+n_tail  &lt;- length(tail_id)
+if (n_tail &gt; 0) {
+  r &lt;- rank(pop[tail_id], ties.method = "first") / (n_tail + 1)
+  py[tail_id] &lt;- cut + lane_w * (0.10 + 0.80 * r)
+}
+
+## ---- fixed window for the sampling distributions ---------------------------
+se100     &lt;- sqrt(1 - 100 / N) * S / sqrt(100)
+est_range &lt;- ybarU + c(-1, 1) * 5 * se100
+
+METHOD &lt;- c("SRS", "Proportional", "Neyman")
+MCOL   &lt;- c("grey35", "steelblue", "darkorange")
+MAR    &lt;- c(6.5, 4.5, 3.0, 1.0)   # identical in both panels, so the scales align
+
+## allocation with at least 2 units per stratum, summing to n
+alloc &lt;- function(w, n, Nh) {
+  nh &lt;- pmin(pmax(2, round(w / sum(w) * n)), Nh)
+  while (sum(nh) &gt; n &amp;&amp; any(nh &gt; 2)) {
+    i &lt;- which.max(nh - 2); nh[i] &lt;- nh[i] - 1
+  }
+  while (sum(nh) &lt; n &amp;&amp; any(nh &lt; Nh)) {
+    i &lt;- which.max(Nh - nh); nh[i] &lt;- nh[i] + 1
+  }
+  nh
+}
+
+## symmetric density polygon, drawn vertically about x = at
+violin &lt;- function(x, at, col, w = 0.32) {
+  if (length(x) &lt; 10 || diff(range(x)) &lt;= 0) return(invisible())
+  d  &lt;- density(x)
+  hw &lt;- w * d$y / max(d$y)
+  polygon(c(at + hw, rev(at - hw)), c(d$x, rev(d$x)),
+          col = adjustcolor(col, 0.35), border = col)
+  m &lt;- median(x)
+  segments(at - w * 0.6, m, at + w * 0.6, m, col = col, lwd = 2)
+}
+
+pct &lt;- function(v) if (is.na(v)) "--" else sprintf("%.1f%%", 100 * v)
+
+## ---- inline SVG button icons (no font or icon-library dependency) ----------
+svg_icon &lt;- function(paths)
+  HTML(sprintf(paste0('&lt;svg width="16" height="16" viewBox="0 0 16 16" ',
+                      'fill="currentColor" style="vertical-align:-2px"&gt;%s&lt;/svg&gt;'), paths))
+icon_play  &lt;- svg_icon('&lt;path d="M3 2v12l10-6z"/&gt;')
+icon_pause &lt;- svg_icon('&lt;rect x="3" y="2" width="4" height="12"/&gt;&lt;rect x="9" y="2" width="4" height="12"/&gt;')
+icon_skip  &lt;- svg_icon('&lt;path d="M1 2v12l7-6zM8 2v12l6-6z"/&gt;&lt;rect x="14" y="2" width="2" height="12"/&gt;')
+
+ui &lt;- fluidPage(
+  titlePanel("Shinylive App for Stratified Sampling"),
+  tags$style(HTML(
+    ".well {padding: 10px 12px; margin-bottom: 10px;}
+     .form-group {margin-bottom: 6px;}
+     .radio {margin-top: 2px; margin-bottom: 2px;}
+     .irs {margin-bottom: 0;}
+     .btn {margin-bottom: 6px;}"
+  )),
+  wellPanel(
+    fluidRow(
+      column(
+        3,
+        radioButtons("stratvar", "Stratification variable", choices = STRAT_CHOICES,
+                     selected = "acres82"),
+        radioButtons("show", "Highlight sample from", choiceNames = METHOD,
+                     choiceValues = as.character(1:3), selected = "3")
+      ),
+      column(
+        3,
+        sliderInput("n", "Total sample size (n)", min = 40, max = 1000, value = 300, step = 10),
+        sliderInput("conf", "Confidence level", min = 0.80, max = 0.99, value = 0.95, step = 0.01)
+      ),
+      column(
+        3,
+        sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),
+        numericInput("nrep", "Stop after this many samples",
+                     value = 500, min = 10, max = 20000, step = 50)
+      ),
+      column(
+        3,
+        actionButton("draw", "Draw new samples", class = "btn-primary", width = "100%"),
+        br(), br(),
+        fluidRow(
+          column(4, actionButton("play",  icon_play,  class = "btn-success", width = "100%",
+                                 title = "Play")),
+          column(4, actionButton("pause", icon_pause, class = "btn-warning", width = "100%",
+                                 title = "Pause")),
+          column(4, actionButton("skip",  icon_skip,  class = "btn-info",    width = "100%",
+                                 title = "Skip to the end"))
+        ),
+        br(),
+        actionButton("reset", "Reset", width = "100%")
+      )
+    )
+  ),
+  plotOutput("mainplot", height = "520px")
+)
+
+server &lt;- function(input, output, session) {
+
+  rv &lt;- reactiveValues(
+    idx = NULL,      # list of sampled indices, one element per design (last draw)
+    est = NULL,      # matrix 3 x 3: mean, lower, upper (last draw)
+    mh_prop   = NULL, # per-stratum sample means, proportional design (last draw)
+    mh_neyman = NULL, # per-stratum sample means, Neyman design (last draw)
+    M   = NULL,      # accumulated means, one column per design
+    HIT = NULL       # accumulated coverage indicators
+  )
+  running &lt;- reactiveVal(FALSE)
+
+  nrep &lt;- reactive({
+    v &lt;- input$nrep
+    if (is.null(v) || is.na(v) || v &lt; 1) 1L else min(as.integer(v), 20000L)
+  })
+
+  si &lt;- reactive(make_strata(input$stratvar))
+
+  strat_label &lt;- reactive(names(STRAT_CHOICES)[STRAT_CHOICES == input$stratvar])
+
+  nh_prop   &lt;- reactive({ s &lt;- si(); alloc(s$Nh,        input$n, s$Nh) })
+  nh_neyman &lt;- reactive({ s &lt;- si(); alloc(s$Nh * s$Sh, input$n, s$Nh) })
+
+  # draw k replications; every replication draws its own SRS, proportional, and
+  # Neyman samples of total size n. Only the last replication's sampled indices
+  # are kept, for highlighting in the left panel; "Skip" calls this with the
+  # full remaining count so it jumps straight to the final violin plots.
+  draw_many &lt;- function(k) {
+    n    &lt;- isolate(input$n)
+    conf &lt;- isolate(input$conf)
+    a    &lt;- 1 - (1 - conf) / 2
+    s    &lt;- isolate(si())
+    H     &lt;- s$H
+    idx_h &lt;- s$idx_h
+    Nh    &lt;- s$Nh
+    W     &lt;- s$W
+    npv   &lt;- isolate(nh_prop())
+    npy   &lt;- isolate(nh_neyman())
+
+    # stratified: ybar_str = sum W_h ybar_h, V = sum W_h^2 (1 - n_h/N_h) s_h^2 / n_h
+    # returns both the stratum-level means (mh) and the design estimate (est)
+    str_draw &lt;- function(nh) {
+      ii &lt;- unlist(lapply(seq_len(H), function(h) sample(idx_h[[h]], nh[h])))
+      yh &lt;- split(pop[ii], rep(seq_len(H), nh))
+      mh &lt;- sapply(yh, mean)
+      sh &lt;- sapply(yh, sd)
+      m  &lt;- sum(W * mh)
+      v  &lt;- sum(W^2 * (1 - nh / Nh) * sh^2 / nh)
+      list(mh = mh, est = c(m, qt(a, df = sum(nh) - H) * sqrt(v)))
+    }
+    take &lt;- function(nh) unlist(lapply(seq_len(H), function(h) sample(idx_h[[h]], nh[h])))
+
+    Mnew   &lt;- matrix(0, k, 3)
+    HITnew &lt;- matrix(FALSE, k, 3)
+
+    for (i in seq_len(k)) {
+      i_srs &lt;- sample(N, n)
+      y     &lt;- pop[i_srs]
+      m_srs &lt;- mean(y)
+      se    &lt;- sqrt(1 - n / N) * sd(y) / sqrt(n)
+      d_srs &lt;- qt(a, df = n - 1) * se
+
+      p &lt;- str_draw(npv)
+      q &lt;- str_draw(npy)
+
+      est &lt;- rbind(c(m_srs,      m_srs      - d_srs,      m_srs      + d_srs),
+                   c(p$est[1],   p$est[1]   - p$est[2],   p$est[1]   + p$est[2]),
+                   c(q$est[1],   q$est[1]   - q$est[2],   q$est[1]   + q$est[2]))
+
+      Mnew[i, ]   &lt;- est[, 1]
+      HITnew[i, ] &lt;- est[, 2] &lt;= ybarU &amp; ybarU &lt;= est[, 3]
+
+      if (i == k) {
+        rv$idx       &lt;- list(i_srs, take(npv), take(npy))
+        rv$est       &lt;- est
+        rv$mh_prop   &lt;- p$mh
+        rv$mh_neyman &lt;- q$mh
+      }
+    }
+    rv$M   &lt;- rbind(rv$M,   Mnew)
+    rv$HIT &lt;- rbind(rv$HIT, HITnew)
+  }
+  draw_one &lt;- function() draw_many(1)
+
+  # one sample per click; Play repeats until Pause or until the cap is reached
+  observeEvent(input$draw,  { running(FALSE); draw_one() })
+  observeEvent(input$play,  running(TRUE))
+  observeEvent(input$pause, running(FALSE))
+
+  # Skip: draw every remaining replication up to the cap in one go, landing
+  # directly on the final violin plots of the three estimators
+  observeEvent(input$skip, {
+    running(FALSE)
+    k &lt;- nrep() - NROW(rv$M)
+    if (k &gt; 0) draw_many(k)
+  })
+
+  observe({
+    if (!isTRUE(running())) return()
+    if (NROW(isolate(rv$M)) &gt;= isolate(nrep())) { running(FALSE); return() }
+    invalidateLater(1000 / isolate(input$speed), session)
+    isolate(draw_one())
+  })
+
+  reset_history &lt;- function() {
+    running(FALSE)
+    rv$idx &lt;- NULL; rv$est &lt;- NULL; rv$M &lt;- NULL; rv$HIT &lt;- NULL
+    rv$mh_prop &lt;- NULL; rv$mh_neyman &lt;- NULL
+  }
+  observeEvent(input$reset,    reset_history())
+  observeEvent(input$n,        reset_history())
+  observeEvent(input$conf,     reset_history())
+  observeEvent(input$stratvar, reset_history())
+
+  fmt &lt;- function(x) format(round(x), big.mark = ",")
+
+  output$mainplot &lt;- renderPlot({
+    s  &lt;- si()
+    H  &lt;- s$H; Nh &lt;- s$Nh; lev &lt;- s$lev; x_pos &lt;- s$x_pos
+    j  &lt;- as.integer(input$show)
+    nh &lt;- switch(j, rep(NA_integer_, H), nh_prop(), nh_neyman())
+
+    layout(matrix(1:2, nrow = 1), widths = c(1, 1))
+
+    ## ---- left: population by stratum, with the highlighted sample ----
+    par(mar = MAR, yaxs = "i")
+    plot(NA, xlim = c(0.3, H + 0.9), ylim = c(0, ymax_top),
+         xlab = "", ylab = "acres92 (thousands)", xaxt = "n", yaxt = "n", bty = "n",
+         main = sprintf("Population by %s stratum, with the %s sample", strat_label(), METHOD[j]))
+
+    for (h in seq_len(H)) {
+      rect(h - 0.36, 0, h + 0.36, ymax_top,
+           col = adjustcolor("grey92", 0.6), border = NA)
+    }
+    points(x_pos, py, pch = 16, cex = 0.5, col = adjustcolor("grey55", 0.5))
+    if (!is.null(rv$idx))
+      points(x_pos[rv$idx[[j]]], py[rv$idx[[j]]], pch = 16, cex = 0.6,
+             col = adjustcolor("red", 0.85))
+
+    # sample mean(s) of the highlighted design: one bar per stratum for the two
+    # stratified designs, or a single bar spanning all strata for SRS
+    if (!is.null(rv$idx)) {
+      if (j == 1) {
+        segments(0.3, rv$est[1, 1], H + 0.9, rv$est[1, 1], col = MCOL[1], lwd = 3)
+      } else {
+        mh &lt;- if (j == 2) rv$mh_prop else rv$mh_neyman
+        segments(seq_len(H) - 0.36, mh, seq_len(H) + 0.36, mh, col = MCOL[j], lwd = 3)
+      }
+      legend("topleft", bty = "o", bg = "white", box.col = NA, cex = 0.8, inset = c(0.01, 0.01),
+             legend = c("Population mean", if (j == 1) "Sample mean" else "Stratum sample means"),
+             col = c("black", MCOL[j]), lty = c(2, 1), lwd = c(2, 3))
+    }
+
+    axis(1, at = seq_len(H), labels = lev, tick = FALSE, line = -0.5)
+    for (h in seq_len(H)) {
+      lab &lt;- if (j == 1) sprintf("N = %d", Nh[h])
+             else        sprintf("N = %d\nn = %d", Nh[h], nh[h])
+      mtext(lab, side = 1, at = h, line = 2.0, cex = 0.7, col = "grey30")
+    }
+
+    at &lt;- pretty(c(0, cut), 6); at &lt;- at[at &lt;= cut]
+    axis(2, at = at, labels = format(at / 1000, big.mark = ",", trim = TRUE), las = 1)
+    segments(0.3, cut, H + 0.7, cut, col = "grey60", lty = 3)
+    text(H + 0.65, cut + lane_w / 2, sprintf("compressed: &gt; %s", fmt(cut / 1000)),
+         adj = c(1, 0), col = "grey40", cex = 0.7)
+    abline(h = ybarU, col = "black", lwd = 2, lty = 2)
+
+    ## ---- right: sampling distributions of the three estimates, as violins ----
+    par(mar = MAR, yaxs = "i")
+    plot(NA, xlim = c(0.4, 3.6), ylim = est_range, xaxt = "n", yaxt = "n", bty = "n",
+         xlab = "", ylab = "Sample mean of acres92 (thousands)",
+         main = "Sampling distributions of the three estimators")
+    abline(h = ybarU, col = "black", lwd = 2, lty = 2)
+    axis(1, at = 1:3, labels = METHOD, tick = FALSE, line = -0.5)
+    at_r &lt;- pretty(est_range, 6); at_r &lt;- at_r[at_r &gt;= est_range[1] &amp; at_r &lt;= est_range[2]]
+    axis(2, at = at_r, labels = format(at_r / 1000, big.mark = ",", trim = TRUE), las = 1)
+
+    if (is.null(rv$M)) {
+      text(2, ybarU, "Click 'Draw new samples' or Play to begin", col = "grey50")
+      return(invisible())
+    }
+
+    k     &lt;- NROW(rv$M)
+    v_srs &lt;- if (k &gt; 1) var(rv$M[, 1]) else NA_real_
+
+    for (jj in 1:3) {
+      xc &lt;- jj
+      violin(rv$M[, jj], at = xc, col = MCOL[jj])
+
+      # transient interval for the current draw
+      ci_col &lt;- if (rv$HIT[k, jj]) "forestgreen" else "red"
+      xb     &lt;- xc + 0.42
+      segments(xb, rv$est[jj, 2], xb, rv$est[jj, 3], col = ci_col, lwd = 3)
+      segments(xb - 0.06, rv$est[jj, 2:3], xb + 0.06, rv$est[jj, 2:3], col = ci_col, lwd = 3)
+      points(xb, rv$est[jj, 1], pch = 19, cex = 1.1, col = ci_col)
+    }
+
+    legend("topleft", bty = "n", cex = 0.85, inset = c(0.02, 0.01),
+           title = "95% CI coverage", fill = MCOL, border = NA,
+           legend = paste(METHOD, vapply(1:3, function(jj) pct(mean(rv$HIT[, jj])), "")))
+
+    if (k &gt; 1) {
+      # theoretical reduction, from the true population Nh/Sh and the current
+      # allocation, alongside the empirical reduction observed so far
+      V_srs_th &lt;- (1 - input$n / N) * S^2 / input$n
+      nh_des   &lt;- list(nh_prop(), nh_neyman())
+      th_txt   &lt;- vapply(nh_des, function(nh) {
+        V_th &lt;- sum(s$W^2 * (1 - nh / s$Nh) * s$Sh^2 / nh)
+        pct(1 - V_th / V_srs_th)
+      }, "")
+      emp_txt  &lt;- vapply(2:3, function(jj) pct(1 - var(rv$M[, jj]) / v_srs), "")
+
+      legend("bottomleft", bty = "n", cex = 0.85, inset = c(0.02, 0.01),
+             title = "Variance reduction vs. SRS", fill = MCOL[2:3], border = NA,
+             legend = sprintf("%s %s (theory %s)", METHOD[2:3], emp_txt, th_txt))
+    }
+
+    outside &lt;- sum(rv$M &lt; est_range[1] | rv$M &gt; est_range[2])
+    sub &lt;- sprintf("n = %d per design   |   samples drawn = %d of %d   |   nominal %.0f%%",
+                   input$n, k, nrep(), 100 * input$conf)
+    if (outside &gt; 0) sub &lt;- paste0(sub, sprintf("   |   %d mean(s) beyond the axis", outside))
+    mtext(sub, side = 3, line = -0.2, cex = 0.75, col = "grey30")
+  })
+}
+
+shinyApp(ui, server)</code></pre>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
