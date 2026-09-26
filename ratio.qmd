@@ -751,6 +751,22 @@ X <- X[, keep, drop = FALSE]
 xvars <- names(X)
 xdef  <- if ("acres87" %in% xvars) "acres87" else xvars[1]
 
+## ---- the "biased SRS" option -----------------------------------------------
+## The same mechanism as the post-stratification app: counties in the top 5% of
+## acres82 carry selection weight B instead of 1, and n units are drawn WITHOUT
+## replacement with those weights, so the sample size stays exactly n while
+## large counties are over-represented. The mechanism is tied to acres82
+## whatever auxiliary x is selected, so one can ask whether the chosen x is able
+## to see -- and therefore repair -- the distortion.
+bias_var <- if ("acres82" %in% xvars) "acres82" else xdef
+bias_top <- which(X[[bias_var]] >= quantile(X[[bias_var]], 0.95))
+
+draw_sample <- function(n, B) {
+  if (B <= 1) return(sample.int(N, n))
+  w <- rep(1, N); w[bias_top] <- B
+  sample.int(N, n, prob = w)
+}
+
 ybarU <- mean(yv)
 Vy    <- var(yv)                     # average (SRS) population variance
 ZCRIT <- 1.96                        # nominal 95% intervals
@@ -896,7 +912,9 @@ ui <- fluidPage(
                            choices = c("Ratio" = "ratio", "Regression" = "reg",
                                        "Average" = "srs"),
                            selected = EST),
-        sliderInput("n", "Sample size (n)", 10, 500, 100, step = 10)
+        sliderInput("n", "Sample size (n)", 10, 500, 100, step = 10),
+        sliderInput("bias", "Biased SRS: over-sample the acres82 top 5% by",
+                    min = 1, max = 5, value = 1, step = 0.5)
       ),
       column(
         3,
@@ -951,8 +969,8 @@ server <- function(input, output, session) {
   })
 
   ## one sample feeds all three estimators, so the histograms are paired
-  one_draw <- function(a, n) {
-    s   <- sample.int(N, n)
+  one_draw <- function(a, n, B) {
+    s   <- draw_sample(n, B)
     ys  <- yv[s]
     xs  <- a$x[s]
     fpc <- 1 - n / N
@@ -981,9 +999,10 @@ server <- function(input, output, session) {
   draw_many <- function(k) {
     a <- isolate(aux())
     n <- isolate(input$n)
+    B <- isolate(input$bias)
     E <- vector("list", k)
     for (i in seq_len(k)) {
-      d <- one_draw(a, n)
+      d <- one_draw(a, n, B)
       E[[i]] <- d$e
     }
     rv$s    <- d$s
@@ -998,7 +1017,7 @@ server <- function(input, output, session) {
     rv$ests <- NULL
     draw_one()
   }
-  observeEvent(list(input$n, input$xvar, input$logx), reset_history(),
+  observeEvent(list(input$n, input$xvar, input$logx, input$bias), reset_history(),
                ignoreInit = FALSE)
   observeEvent(input$reset, reset_history())
 
@@ -1067,7 +1086,8 @@ server <- function(input, output, session) {
     plot(NA, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE,
          xlab = paste0("x: ", a$name, unit_lab(divx)),
          ylab = paste0("y: acres92", unit_lab(divy)),
-         main = sprintf("Population, sample and fitted lines, n = %d", n))
+         main = sprintf("Population, %s and fitted lines, n = %d",
+                        if (isTRUE(input$bias > 1)) "biased sample" else "sample", n))
     rect(0, tfy(lo), 1, tfy(hi), col = col_band, border = NA)
     points(tfx(a$x), tfy(ypl), pch = 16, cex = 0.6, col = col_pop)
 
@@ -1112,6 +1132,9 @@ server <- function(input, output, session) {
     plot(NA, xlim = c(0.4, k_n + 0.6), ylim = c(lo, hi), axes = FALSE,
          xlab = "", ylab = paste0("estimate", unit_lab(divy)),
          main = "Sampling distributions of the estimates")
+    if (isTRUE(input$bias > 1))
+      mtext(sprintf("biased selection x%.1f: the average is not estimating mu", input$bias),
+            side = 3, line = -0.3, cex = 0.8, col = col_samp)
     usr <- par("usr")
     rect(usr[1], usr[3], usr[2], usr[4], col = col_band, border = NA)
     abline(h = ybarU, col = col_samp, lty = 3)
@@ -1139,10 +1162,13 @@ server <- function(input, output, session) {
     ## reductions are relative to the average, which is always simulated
     cmp <- setdiff(sel, "srs")
     if (length(cmp)) {
+      biased <- isTRUE(input$bias > 1)
       red <- lapply(cmp, function(k) {
         mc <- if (nrep > 5) 1 - var(M[, paste0("est_", k)]) / var(M[, "est_srs"]) else NA
         th <- 1 - a$V[[k]] / Vy
-        list(txt = sprintf("%s %s (theory %s)", LAB[[k]], pct(mc), pct(th)),
+        ## the theoretical figure assumes an SRS, so drop it when selection is biased
+        list(txt = if (biased) sprintf("%s %s", LAB[[k]], pct(mc))
+                   else sprintf("%s %s (theory %s)", LAB[[k]], pct(mc), pct(th)),
              neg = if (is.na(mc)) th < 0 else mc < 0)
       })
       legend("bottomleft", bty = "n", cex = 0.9, inset = c(0.02, 0.01),
@@ -1156,6 +1182,20 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 ```
+
+The **Biased SRS** slider uses the same mechanism as the post-stratification app
+at the end of this chapter: counties in the top 5% of `acres82` are given
+selection weight $B$ instead of 1, and the $n$ units are drawn without
+replacement with those weights, so the sample size stays exactly $n$ while large
+counties are over-represented. It is tied to `acres82` whatever auxiliary you
+select, which is the point --- calibrating on a known total repairs the bias
+*along that variable only*. At $B = 3$ and $n = 100$ the plain average is biased
+upward by about 126,000 acres; with $x =$ `acres82` the ratio and regression
+estimators cut that to roughly 2,000 and 500, and with $x =$ `acres87`, nearly a
+copy of it, they do the same. Switch to `farms92` or `smallf92` and all three
+estimators stay biased by the full amount: the auxiliary cannot see the
+distortion, so calibrating on it cannot undo it. This is the continuous
+counterpart of what post-stratification does with groups.
 
 **Shinylive App Illustrating Ratio Estimation and Regression Estimation**
 
