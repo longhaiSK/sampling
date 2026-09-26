@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Stratified Sampling">
 
 <title>Shinylive App for Illustrating Stratified Sampling</title>
 <style>
@@ -43,6 +44,35 @@ ul.task-list li input[type="checkbox"] {
 <link href="app-stratified_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/shinylive.css" rel="stylesheet">
 <link href="app-stratified_files/libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="shinyliveapps.css">
 </head>
@@ -58,6 +88,11 @@ ul.task-list li input[type="checkbox"] {
 <h1 class="title">Shinylive App for Illustrating Stratified Sampling</h1>
 </div>
 
+<div>
+  <div class="description">
+    Stratified Sampling
+  </div>
+</div>
 
 
 <div class="quarto-title-meta column-page">
@@ -72,6 +107,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<!-- nav:start -->
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
   <a href="app-srs.html">SRS</a>
@@ -82,9 +118,7 @@ ul.task-list li input[type="checkbox"] {
   <a href="app-ups.html">UPS</a>
   <a class="book" href="index.html">← back to the book</a>
 </nav>
-<div class="appsource">
-<p>From <a href="strata.html#fig-strat-app">Stratified Random Sampling</a> in <em>Elements of Sampling Survey</em>.</p>
-</div>
+<!-- nav:end -->
 <pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
@@ -469,7 +503,18 @@ server &lt;- function(input, output, session) {
   })
 }
 
-shinyApp(ui, server)</code></pre>
+shinyApp(ui, server)
+</code></pre>
+<section id="about-this-app" class="level2">
+<h2 class="anchored" data-anchor-id="about-this-app">About this app</h2>
+<p>This app draws three samples of the same total size <span class="math inline">\(n\)</span> at every step: a simple random sample, a stratified sample with proportional allocation, and a stratified sample with Neyman allocation. It uses the full <code>agpop.csv</code> population (with the <code>-99</code> missing-value codes recoded to <code>NA</code> and dropped), and a radio button lets you choose the stratification variable: the <code>acres82</code> quantile groups (cut at the 25th, 75th and 95th percentiles and labelled Q1 to Q4), or the four <code>region</code> categories (NC, NE, S, W).</p>
+<p>The two panels sit side by side. The left panel shows the population split into its strata along the x-axis, each drawn as a column of jittered points on a broken <code>acres92</code> axis; the radio buttons choose which of the three samples is highlighted in red, and each stratum is labelled with its <span class="math inline">\(N_h\)</span> and the <span class="math inline">\(n_h\)</span> that the chosen allocation assigns to it. A horizontal bar marks the sample mean of the highlighted design: one bar per stratum for the two stratified designs, or a single bar spanning the whole population for SRS, which has no stratum-level breakdown.</p>
+<p>The right panel accumulates the sample means of all three designs on a common <code>acres92</code> axis, one column per design (SRS, Proportional, Neyman), drawn as a violin once enough draws have accumulated. The bar beside each column is the current confidence interval for that design, green when it covers <span class="math inline">\(\mu\)</span> and red when it does not, and replaced at every draw. The running CI coverage rate and the variance reduction relative to SRS are shown as legends, the latter alongside its theoretical counterpart (in brackets), computed from the true population <span class="math inline">\(N_h\)</span> and <span class="math inline">\(S_h\)</span> at the current allocation.</p>
+<p>Play advances the simulation one draw at a time; Pause stops it; Skip jumps straight to the final violin plots by drawing every remaining replication up to the cap in a single step.</p>
+<div class="appsource">
+<p>This app accompanies <a href="strata.html#sec-app-stratification" target="_blank">Interactive Demonstration: Stratification by <code>acres82</code> or <code>region</code></a> in <em>Elements of Sampling Survey</em>.</p>
+</div>
+</section>
 
 </main>
 <!-- /main column -->

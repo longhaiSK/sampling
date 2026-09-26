@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Two-Stage Cluster Sampling (ratio estimator) with SRS">
 
 <title>Shinylive App Comparing Two-Stage Cluster Sampling (ratio estimator) with SRS</title>
 <style>
@@ -43,6 +44,35 @@ ul.task-list li input[type="checkbox"] {
 <link href="app-cluster_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/shinylive.css" rel="stylesheet">
 <link href="app-cluster_files/libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="shinyliveapps.css">
 </head>
@@ -58,6 +88,11 @@ ul.task-list li input[type="checkbox"] {
 <h1 class="title">Shinylive App Comparing Two-Stage Cluster Sampling (ratio estimator) with SRS</h1>
 </div>
 
+<div>
+  <div class="description">
+    Two-Stage Cluster Sampling (ratio estimator) with SRS
+  </div>
+</div>
 
 
 <div class="quarto-title-meta column-page">
@@ -72,6 +107,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<!-- nav:start -->
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
   <a href="app-srs.html">SRS</a>
@@ -82,9 +118,7 @@ ul.task-list li input[type="checkbox"] {
   <a href="app-ups.html">UPS</a>
   <a class="book" href="index.html">← back to the book</a>
 </nav>
-<div class="appsource">
-<p>From <a href="cluster.html#fig-cluster-app">Cluster Sampling</a> in <em>Elements of Sampling Survey</em>.</p>
-</div>
+<!-- nav:end -->
 <pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
@@ -500,6 +534,21 @@ server &lt;- function(input, output, session) {
 }
 
 shinyApp(ui, server)</code></pre>
+<section id="about-this-app" class="level2">
+<h2 class="anchored" data-anchor-id="about-this-app">About this app</h2>
+<p>This app repeats the chapter’s worked example many times over. At every step it draws a <strong>two-stage cluster sample</strong> — an SRS of <span class="math inline">\(n\)</span> clusters, then an SRS of <span class="math inline">\(m_i = p \, M_i\)</span> counties inside each — together with an ordinary <strong>SRS of counties</strong> of the same size, from the full <code>agpop.csv</code> population (with the <code>-99</code> codes dropped). It estimates the mean of <code>acres92</code> from each: the ratio estimator <span class="math inline">\(\overline{y}_r = \sum \hat{t}_i / \sum M_i\)</span> for the cluster sample, and the plain sample average for the SRS.</p>
+<p>A radio button chooses the clustering variable:</p>
+<ul>
+<li><strong>state</strong> — the 50 real states, the natural clusters of <code>agpop.csv</code>.</li>
+<li><strong>Random</strong> — the state labels randomly permuted, which keeps the cluster sizes <span class="math inline">\(M_i\)</span> exactly as they are but scrambles which counties belong together.</li>
+</ul>
+<p>Two sliders set the design: <span class="math inline">\(n\)</span>, the number of clusters drawn, and <span class="math inline">\(p = m_i/M_i\)</span>, the percentage of counties subsampled from each selected cluster (<span class="math inline">\(p = 100\%\)</span> gives a one-stage sample). Play advances the simulation one draw at a time, Pause stops it, Skip jumps straight to the end, and changing any setting clears the accumulated history.</p>
+<p>The left panel shows the population split into its clusters, with the highlighted sample in red. For the cluster design the selected clusters are shaded and labelled <span class="math inline">\(m_i/M_i\)</span>, a bar marks each subsample mean <span class="math inline">\(\overline{y}_i\)</span>, and the ratio estimate <span class="math inline">\(\overline{y}_r\)</span> runs across the panel; for the SRS a single bar marks the sample mean.</p>
+<p>The right panel accumulates the estimates of both designs, one column each, drawn as a violin once enough draws have accumulated. The bar beside each column is the current confidence interval, green when it covers <span class="math inline">\(\mu\)</span> and red when it does not. The legends report the running CI coverage and the design effect — the variance of the ratio estimator relative to the SRS average, simulated and theoretical — and the subtitle gives the between-cluster <span class="math inline">\(R^2\)</span> of <code>acres92</code>.</p>
+<div class="appsource">
+<p>This app accompanies <a href="cluster.html#sec-app-cluster" target="_blank">Interactive Demonstration: Clustering by State or at Random</a> in <em>Elements of Sampling Survey</em>.</p>
+</div>
+</section>
 
 </main>
 <!-- /main column -->

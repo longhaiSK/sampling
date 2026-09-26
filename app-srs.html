@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Simple random sampling">
 
-<title>fig-app-srs</title>
+<title>Shinylive app for simple random sampling</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -43,6 +44,35 @@ ul.task-list li input[type="checkbox"] {
 <link href="app-srs_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/shinylive.css" rel="stylesheet">
 <link href="app-srs_files/libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="shinyliveapps.css">
 </head>
@@ -55,9 +85,14 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">fig-app-srs</h1>
+<h1 class="title">Shinylive app for simple random sampling</h1>
 </div>
 
+<div>
+  <div class="description">
+    Simple random sampling
+  </div>
+</div>
 
 
 <div class="quarto-title-meta column-page">
@@ -72,6 +107,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<!-- nav:start -->
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
   <a href="app-srs.html" class="active">SRS</a>
@@ -82,9 +118,7 @@ ul.task-list li input[type="checkbox"] {
   <a href="app-ups.html">UPS</a>
   <a class="book" href="index.html">← back to the book</a>
 </nav>
-<div class="appsource">
-<p>From <a href="srs.html#fig-app-srs">true total (thousands of acres)</a> in <em>Elements of Sampling Survey</em>.</p>
-</div>
+<!-- nav:end -->
 <pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
@@ -369,7 +403,17 @@ server &lt;- function(input, output, session) {
   })
 }
 
-shinyApp(ui, server)</code></pre>
+shinyApp(ui, server)
+</code></pre>
+<section id="about-this-app" class="level2">
+<h2 class="anchored" data-anchor-id="about-this-app">About this app</h2>
+<p>This app draws SRS samples one at a time, or continuously with play (▶) until pause (❚❚) or until the requested number of samples has been reached. The skip button (▶▶❘) draws all remaining samples at once, leaving the full histogram and the last sample on display.</p>
+<p>The two panels sit side by side and share <code>acres92</code> on the y-axis, so the two dashed lines at <span class="math inline">\(\mu\)</span> line up horizontally across both. The left panel shows the population: the grey curve is a sideways kernel density estimate and the grey points to its left are the raw values, jittered horizontally. The axis is broken at twice the population mean; counties above the cut are compressed, in rank order, into the narrow lane at the top, so that a tail unit drawn into the sample is still visible. Points selected into the current sample turn blue, matching the sample mean and CI bar drawn beside them, and the sample means and density accumulated in the right panel.</p>
+<p>The right panel accumulates the sample means as a blue density histogram (bars now run horizontally, density on the x-axis), with a blue curve tracing their empirical density once enough draws have accumulated, and a red curve for the theoretical sampling distribution <span class="math inline">\(N(\mu, \mathrm{SE}(\bar y))\)</span> at the current sample size. Its window is fixed at five theoretical standard errors for <span class="math inline">\(n = 100\)</span> on either side of <span class="math inline">\(\mu\)</span>, so the spread is comparable across sample sizes; for <span class="math inline">\(n &lt; 100\)</span> some means fall outside the window and are counted in the legend. The interval to the right belongs to the current sample, drawn green when it covers <span class="math inline">\(\mu\)</span> and red when it does not, and replaced at every draw; the red dashed bar at the base of the histogram, close to the y-axis, is the theoretical margin of deviation <span class="math inline">\(\pm z_{\alpha/2}\,\mathrm{SE}(\bar y)\)</span> from the normal approximation, centred on <span class="math inline">\(\mu\)</span> and fixed for the current <span class="math inline">\(n\)</span> and confidence level.</p>
+<div class="appsource">
+<p>This app accompanies <a href="srs.html#sec-app-srs" target="_blank">Shinylive App for Illustrating SRS Theory</a> in <em>Elements of Sampling Survey</em>.</p>
+</div>
+</section>
 
 </main>
 <!-- /main column -->

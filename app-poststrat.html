@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Post-stratification of a Simple Random Sample">
 
 <title>Shinylive App Demonstrating Post-stratification of a Simple Random Sample</title>
 <style>
@@ -43,6 +44,35 @@ ul.task-list li input[type="checkbox"] {
 <link href="app-poststrat_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/shinylive.css" rel="stylesheet">
 <link href="app-poststrat_files/libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="shinyliveapps.css">
 </head>
@@ -58,6 +88,11 @@ ul.task-list li input[type="checkbox"] {
 <h1 class="title">Shinylive App Demonstrating Post-stratification of a Simple Random Sample</h1>
 </div>
 
+<div>
+  <div class="description">
+    Post-stratification of a Simple Random Sample
+  </div>
+</div>
 
 
 <div class="quarto-title-meta column-page">
@@ -72,6 +107,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<!-- nav:start -->
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
   <a href="app-srs.html">SRS</a>
@@ -82,9 +118,7 @@ ul.task-list li input[type="checkbox"] {
   <a href="app-ups.html">UPS</a>
   <a class="book" href="index.html">← back to the book</a>
 </nav>
-<div class="appsource">
-<p>From <a href="ratio.html#fig-poststrat-app">Ratio and Regression Estimation</a> in <em>Elements of Sampling Survey</em>.</p>
-</div>
+<!-- nav:end -->
 <pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
@@ -497,6 +531,33 @@ server &lt;- function(input, output, session) {
 }
 
 shinyApp(ui, server)</code></pre>
+<section id="about-this-app" class="level2">
+<h2 class="anchored" data-anchor-id="about-this-app">About this app</h2>
+<p>This app draws one <strong>simple random sample</strong> of <span class="math inline">\(n\)</span> counties from the full <code>agpop.csv</code> population and estimates the mean of <code>acres92</code> from it three ways — the three rows of the table in the <a href="ratio.html#sec-ratio-formulas" target="_blank">chapter’s formula section</a>, all fitted to the <em>same</em> sample:</p>
+<ul>
+<li><strong>Average</strong> — the plain <span class="math inline">\(\overline{y}\)</span>. In regression terms this is the intercept-only fit: one fitted value for every county, <span class="math inline">\(p = 1\)</span>.</li>
+<li><strong>Post-strat (pps)</strong> — <span class="math inline">\(\overline{y}_{post} = \sum_h \pi_h \overline{y}_h\)</span>, with the variance pooled using the known <strong>population</strong> weights, <span class="math inline">\(\hat{V} = \left(1-\frac{n}{N}\right)\frac{1}{n}\sum_h \pi_h s_h^2\)</span>.</li>
+<li><strong>Regression</strong> — the same estimator written as a regression on the group indicators, with the variance pooled using the <strong>sample</strong> weights, that is the ANOVA residual mean square <span class="math inline">\(s_e^2 = \frac{1}{n-H}\sum_h (n_h-1)s_h^2\)</span>.</li>
+</ul>
+<p>The last two are the same estimator, so their point estimates coincide exactly and their violins are identical; they differ only in how <span class="math inline">\(s_e^2\)</span> is pooled, which is visible in the “mean SE” printed under each column and in the coverage rates. That is the identity of the previous subsection, drawn.</p>
+<p>A drop-down selects the post-stratification variable: the four real regions, the quantile groups of <code>acres82</code>, <code>acres87</code> or <code>farms92</code>, or random labels carrying no signal at all. The quantile groups are cut at the 25th, 75th and 95th percentiles, as in the <a href="app-stratified.html">stratified-sampling app</a>, so the runaway top 5% of counties forms a group of its own — that uneven split lifts the between-group <span class="math inline">\(R^2\)</span> of <code>acres82</code> from 46% to 74%, and the variance reduction follows it. The remaining controls set <span class="math inline">\(n\)</span>, the confidence level, and the simulation speed.</p>
+<p>The left panel shows the population split into post-strata, the current sample in red, and the fitted values of the chosen estimator — one flat line for the average, one line per group for the other two. Under each group it prints <span class="math inline">\(N_h\)</span>, the observed <span class="math inline">\(n_h\)</span>, and the <span class="math inline">\(n\pi_h\)</span> that a stratified design would have fixed in advance: post-stratification exists precisely because those two differ.</p>
+<p>The right panel accumulates the three estimators over repeated samples, with the current confidence interval beside each violin (green when it covers <span class="math inline">\(\mu\)</span>), the running coverage, and the variance reduction relative to the plain average.</p>
+<p>Try <code>acres82Quantiles</code> against <code>random labels</code>: the reduction tracks the between-group <span class="math inline">\(R^2\)</span> almost exactly, and a variable that explains nothing buys nothing.</p>
+<section id="the-biased-srs-option" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="the-biased-srs-option">The biased-SRS option</h3>
+<p>The <strong>Biased SRS</strong> slider turns the simple random sample into a deliberately unrepresentative one. Every county keeps selection weight 1 except those in the top 5% of <code>acres82</code>, which get weight <span class="math inline">\(B\)</span>; the <span class="math inline">\(n\)</span> units are then drawn <em>without replacement</em> with those weights, so the sample size stays exactly <span class="math inline">\(n\)</span> while that group is over-represented. This is the standard picture of a survey that reaches the largest units too easily. Two details make it work:</p>
+<ul>
+<li>the over-sampling is applied to whole groups, and every county <em>within</em> the group keeps the same weight, so the units observed in a group are still a simple random sample of it — which is precisely the condition under which post-stratification repairs the damage;</li>
+<li>the mechanism is always tied to <code>acres82</code>, whichever variable you choose to post-stratify on.</li>
+</ul>
+<p>At <span class="math inline">\(B = 3\)</span> and <span class="math inline">\(n = 300\)</span> the plain average is biased upward by roughly 113,000 acres and its 95% intervals cover <span class="math inline">\(\mu\)</span> about 4% of the time, while post-stratifying on <code>acres82Quantiles</code> removes the bias almost exactly and restores coverage to 96%. The average is no longer estimating <span class="math inline">\(\mu\)</span> at all, so the app says so in red and drops the “theory” figures, which assume an SRS.</p>
+<p>Now change the post-stratification variable with the bias left on. <code>acres87Quantiles</code> also repairs it (that variable is nearly a copy of <code>acres82</code>); <code>region</code> repairs about two-thirds of it; <code>farms92Quantiles</code> and <code>random labels</code> repair none of it and leave coverage at 4%. <strong>Post-stratification only removes the bias it can see</strong> — it corrects a distorted sample along the variable you post-stratify on, and is blind to any distortion orthogonal to it.</p>
+<div class="appsource">
+<p>This app accompanies <a href="ratio.html#sec-poststrat-app" target="_blank">Interactive Demonstration: Post-stratifying a Simple Random Sample</a> in <em>Elements of Sampling Survey</em>.</p>
+</div>
+</section>
+</section>
 
 </main>
 <!-- /main column -->

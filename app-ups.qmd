@@ -1,5 +1,6 @@
 ---
 title: "Shinylive App Comparing SRS (average and ratio) with UPSWR (Hansen–Hurwitz)"
+description: "SRS (average and ratio) with UPSWR (Hansen–Hurwitz)"
 format:
   html:
     theme: flatly
@@ -11,6 +12,7 @@ filters:
   - shinylive
 ---
 
+<!-- nav:start -->
 ```{=html}
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
@@ -23,11 +25,7 @@ filters:
   <a class="book" href="index.html">&#8592; back to the book</a>
 </nav>
 ```
-
-::: {.appsource}
-From [Unequal Probability Sampling](ups.html#fig-ups-app)
-in *Elements of Sampling Survey*.
-:::
+<!-- nav:end -->
 
 ```{shinylive-r}
 #| label: upswr-app
@@ -542,3 +540,43 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 ```
+
+## About this app
+
+The app compares two ways of using a size variable $x_i$ to estimate the mean per
+unit $\bar{t}_U = t/N$ (here $t_i$ is `acres92` for county $i$): at the **estimation**
+stage (SRS + ratio) or at the **design** stage (UPSWR with $\psi_i = x_i/t_x$). Choosing the
+same variable for $M_i$ and $x_i$ in the app gives exactly this comparison. The plain SRS
+average is included as a baseline. Throughout, write
+$$
+B = \frac{t}{t_x}, \qquad r_i = \frac{t_i}{x_i}, \qquad e_i = t_i - B x_i ,
+$$
+so $e_i$ is unit $i$'s residual from the line through the origin with the population slope.
+Note that $\sum_{i=1}^N e_i = t - B t_x = 0$.
+
+**SRS + ratio.** Use $x_i$ only at the estimation stage:
+$$
+\hat{\bar{t}}_{r} = \hat{B}\,\bar{x}_U, \quad \hat{B} = \frac{\sum_{i=1}^n t_i}{\sum_{i=1}^n x_i}, \qquad
+\widehat{\mathrm{SE}}(\hat{\bar{t}}_{r}) = \frac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\frac{n}{N}\right)\frac{s_e^2}{n}}, \qquad
+s_e^2 = \frac{1}{n-1}\sum_{i=1}^n \left(t_i - \hat{B}x_i\right)^2 .
+$$
+
+**UPSWR + ratio.** Use $x_i$ at the design stage, with $\psi_i = x_i/t_x$. Every draw
+then has $x_i/\psi_i = t_x$. So the HH ratio estimator, scaled by $\bar{x}_U$, is exactly
+the HH estimator of the mean, $\hat{t}_{\mathrm{HH}}/N$, and it reduces to $\bar{x}_U$
+times the average of the sampled ratios $r_i$:
+$$
+\hat{\bar{t}}_{\mathrm{HH}} = \bar{x}_U\,\hat{\bar{y}}_{\mathrm{HH},r}
+= \bar{x}_U\,\frac{\sum_{i=1}^n t_i/\psi_i}{\sum_{i=1}^n x_i/\psi_i}
+= \frac{\hat{t}_{\mathrm{HH}}}{N}
+= \bar{x}_U\,\frac{1}{n}\sum_{i=1}^n r_i ,
+$$
+$$
+\widehat{\mathrm{SE}}(\hat{\bar{t}}_{\mathrm{HH}}) = \bar{x}_U\,\frac{s_r}{\sqrt{n}}, \qquad
+s_r^2 = \frac{1}{n-1}\sum_{i=1}^n \left(r_i - \frac{1}{n}\sum_{j=1}^n r_j\right)^2 .
+$$
+
+::: {.appsource}
+This app accompanies [Shinylive App Comparing SRS and UPSWR](ups.html#sec-ups-app){target="_blank"}
+in *Elements of Sampling Survey*.
+:::

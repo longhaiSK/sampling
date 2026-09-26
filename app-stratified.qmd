@@ -1,5 +1,6 @@
 ---
 title: "Shinylive App for Illustrating Stratified Sampling"
+description: "Stratified Sampling"
 format:
   html:
     theme: flatly
@@ -11,6 +12,7 @@ filters:
   - shinylive
 ---
 
+<!-- nav:start -->
 ```{=html}
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
@@ -23,11 +25,7 @@ filters:
   <a class="book" href="index.html">&#8592; back to the book</a>
 </nav>
 ```
-
-::: {.appsource}
-From [Stratified Random Sampling](strata.html#fig-strat-app)
-in *Elements of Sampling Survey*.
-:::
+<!-- nav:end -->
 
 ```{shinylive-r}
 #| standalone: true
@@ -412,4 +410,42 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
 ```
+
+## About this app
+
+This app draws three samples of the same total size $n$ at every step: a
+simple random sample, a stratified sample with proportional allocation, and a
+stratified sample with Neyman allocation. It uses the full `agpop.csv`
+population (with the `-99` missing-value codes recoded to `NA` and dropped),
+and a radio button lets you choose the stratification variable: the `acres82`
+quantile groups (cut at the 25th, 75th and 95th percentiles and labelled
+Q1 to Q4), or the four `region` categories (NC, NE, S, W).
+
+The two panels sit side by side. The left panel shows the population split into
+its strata along the x-axis, each drawn as a column of jittered points on a
+broken `acres92` axis; the radio buttons choose which of the three samples is
+highlighted in red, and each stratum is labelled with its $N_h$ and the $n_h$
+that the chosen allocation assigns to it. A horizontal bar marks the sample
+mean of the highlighted design: one bar per stratum for the two stratified
+designs, or a single bar spanning the whole population for SRS, which has no
+stratum-level breakdown.
+
+The right panel accumulates the sample means of all three designs on a common
+`acres92` axis, one column per design (SRS, Proportional, Neyman), drawn as a
+violin once enough draws have accumulated. The bar beside each
+column is the current confidence interval for that design, green when it covers
+$\mu$ and red when it does not, and replaced at every draw. The running CI
+coverage rate and the variance reduction relative to SRS are shown as legends,
+the latter alongside its theoretical counterpart (in brackets), computed from
+the true population $N_h$ and $S_h$ at the current allocation.
+
+Play advances the simulation one draw at a time; Pause stops it; Skip jumps
+straight to the final violin plots by drawing every remaining replication up to
+the cap in a single step.
+
+::: {.appsource}
+This app accompanies [Interactive Demonstration: Stratification by `acres82` or `region`](strata.html#sec-app-stratification){target="_blank"}
+in *Elements of Sampling Survey*.
+:::

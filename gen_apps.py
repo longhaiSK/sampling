@@ -45,112 +45,51 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-QUARTO_YML = ROOT / "_quarto.yml"
 INDEX = ROOT / "shinyliveapps_sampling.qmd"
 CSS = ROOT / "shinyliveapps.css"
 
-# slug (page name) and short navigation label for each known app
-APP_META = {
-    "fig-app-srs":       ("srs",        "SRS"),
-    "fig-strat-app":     ("stratified", "Stratified"),
-    "fig-ratio-app":     ("ratio",      "Ratio &amp; regression"),
-    "fig-poststrat-app": ("poststrat",  "Post-stratification"),
-    "fig-cluster-app":   ("cluster",    "Cluster"),
-    "fig-ups-app":       ("ups",        "UPS"),
-}
+# The app pages ARE the source: each app-<slug>.qmd holds one shinylive app and
+# its documentation. This script only keeps the shared furniture in sync -- the
+# top navigation on every page, the index page, and the stylesheet -- so adding
+# an app means writing app-<slug>.qmd and adding a row to ORDER below.
+ORDER = [
+    ("srs",        "SRS"),
+    ("stratified", "Stratified"),
+    ("ratio",      "Ratio &amp; regression"),
+    ("poststrat",  "Post-stratification"),
+    ("cluster",    "Cluster"),
+    ("ups",        "UPS"),
+]
 
-APP_DIV_RE = re.compile(r'^::: \{#(fig-[\w-]+)\}[ \t]*\n(.*?)^:::[ \t]*$', re.S | re.M)
-CODE_RE    = re.compile(r'^```\{shinylive-r\}[ \t]*\n(.*?)^```[ \t]*$', re.S | re.M)
-CAPTION_RE = re.compile(r'^\*\*(.+?)\*\*[ \t]*$', re.M)
-TITLE_RE   = re.compile(r'^#\s+(.+)$', re.M)
-
-
-def chapter_order():
-    text = QUARTO_YML.read_text(encoding="utf-8")
-    out, in_list = [], False
-    for line in text.splitlines():
-        if re.match(r'^\s*(chapters|appendices):\s*$', line):
-            in_list = True
-            continue
-        if in_list:
-            m = re.match(r'^\s*-\s*(\S+\.qmd)\s*$', line)
-            if m:
-                out.append(m.group(1))
-                continue
-            if line.strip() and not line.startswith((' ', '-', '\t')):
-                in_list = False
-    return out
+FM_RE  = re.compile(r'^---\n(.*?)\n---\n', re.S)
+NAV_RE = re.compile(r'<!-- nav:start -->.*?<!-- nav:end -->', re.S)
 
 
-def chapter_title(path):
-    m = TITLE_RE.search(path.read_text(encoding="utf-8"))
-    return m.group(1).strip() if m else path.stem
+def front_matter(text, key):
+    m = FM_RE.match(text)
+    if not m:
+        return ""
+    v = re.search(rf'^{key}:\s*"?(.*?)"?\s*$', m.group(1), re.M)
+    return v.group(1).strip() if v else ""
 
 
-def find_apps(path):
-    """Every fig- div in `path` that contains a shinylive-r block."""
-    text = path.read_text(encoding="utf-8")
-    found = []
-    for m in APP_DIV_RE.finditer(text):
-        div_id, body = m.group(1), m.group(2)
-        code = CODE_RE.search(body)
-        if not code:
-            continue
-        caps = CAPTION_RE.findall(body)
-        caption = caps[-1].strip() if caps else div_id
-        found.append({"id": div_id, "code": code.group(1).rstrip("\n"),
-                      "caption": caption, "chapter": path.name,
-                      "chapter_title": chapter_title(path)})
-    return found
-
-
-def nav_html(apps, active_slug):
+def nav_html(apps, active):
     items = ['<a href="shinyliveapps_sampling.html"%s>All apps</a>'
-             % (' class="active"' if active_slug is None else "")]
-    for a in apps:
-        cls = ' class="active"' if a["slug"] == active_slug else ""
-        items.append('<a href="app-%s.html"%s>%s</a>' % (a["slug"], cls, a["nav"]))
+             % (' class="active"' if active is None else "")]
+    for slug, label in apps:
+        items.append('<a href="app-%s.html"%s>%s</a>'
+                     % (slug, ' class="active"' if slug == active else "", label))
     items.append('<a class="book" href="index.html">&#8592; back to the book</a>')
-    return ('```{=html}\n<nav class="appnav">\n  '
-            + "\n  ".join(items) + "\n</nav>\n```\n")
+    return ("<!-- nav:start -->\n```{=html}\n<nav class=\"appnav\">\n  "
+            + "\n  ".join(items) + "\n</nav>\n```\n<!-- nav:end -->")
 
 
-def app_page(app, apps):
-    return f"""---
-title: "{app['caption']}"
-format:
-  html:
-    theme: flatly
-    page-layout: full
-    toc: false
-    css: shinyliveapps.css
-engine: knitr
-filters:
-  - shinylive
----
-
-{nav_html(apps, app['slug'])}
-::: {{.appsource}}
-From [{app['chapter_title']}]({Path(app['chapter']).with_suffix('.html')}#{app['id']})
-in *Elements of Sampling Survey*.
-:::
-
-```{{shinylive-r}}
-{app['code']}
-```
-"""
-
-
-def index_page(apps):
-    cards = []
-    for a in apps:
-        cards.append(
-            f'<a class="appcard" href="app-{a["slug"]}.html">\n'
-            f'  <span class="appcard-name">{a["nav"]}</span>\n'
-            f'  <span class="appcard-desc">{a["caption"]}</span>\n'
-            f'  <span class="appcard-from">{a["chapter_title"]}</span>\n'
-            f'</a>'
-        )
+def index_page(apps, meta):
+    cards = "\n".join(
+        f'<a class="appcard" href="app-{slug}.html">\n'
+        f'  <span class="appcard-name">{label}</span>\n'
+        f'  <span class="appcard-desc">{meta[slug]["desc"]}</span>\n'
+        f'</a>' for slug, label in apps)
     return f"""---
 title: "Shinylive Apps for Sampling Survey"
 format:
@@ -163,18 +102,19 @@ engine: markdown
 ---
 
 {nav_html(apps, None)}
+
 The simulation apps from [Elements of Sampling Survey](index.html), each on its
 own page so that only one webR runtime has to start. They run entirely in the
 browser --- nothing is sent to a server, and the first load of a page takes a
-few seconds while R itself is fetched.
+few seconds while R itself is fetched. Every page carries the app's
+documentation underneath it.
 
 ```{{=html}}
 <div class="appgrid">
-{chr(10).join(cards)}
+{cards}
 </div>
 ```
 """
-
 
 CSS_TEXT = """/* Shinylive app archive --- deliberately not the book's look.
    Wide layout so an app never has to squeeze itself into a text column. */
@@ -240,30 +180,36 @@ a.appcard:hover { border-color: #18bc9c; box-shadow: 0 2px 8px rgba(0,0,0,.07); 
 
 
 def main():
-    apps = []
-    for name in chapter_order():
-        path = ROOT / name
-        if not path.exists():
+    apps, meta, missing = [], {}, []
+    for slug, label in ORDER:
+        page = ROOT / f"app-{slug}.qmd"
+        if not page.exists():
+            missing.append(page.name)
             continue
-        for app in find_apps(path):
-            slug, nav = APP_META.get(
-                app["id"], (app["id"].replace("fig-", "").replace("-app", ""),
-                            app["id"].replace("fig-", "").replace("-app", "")))
-            app["slug"], app["nav"] = slug, nav
-            apps.append(app)
+        text = page.read_text(encoding="utf-8")
+        meta[slug] = {"desc": front_matter(text, "description") or
+                              front_matter(text, "title") or slug}
+        apps.append((slug, label))
 
+    if missing:
+        print("gen_apps: missing pages: " + ", ".join(missing), file=sys.stderr)
     if not apps:
-        print("gen_apps: no shinylive apps found", file=sys.stderr)
         return 1
 
-    for a in apps:
-        (ROOT / f"app-{a['slug']}.qmd").write_text(app_page(a, apps), encoding="utf-8")
-    INDEX.write_text(index_page(apps), encoding="utf-8")
-    CSS.write_text(CSS_TEXT, encoding="utf-8")
+    for slug, _ in apps:
+        page = ROOT / f"app-{slug}.qmd"
+        text = page.read_text(encoding="utf-8")
+        nav = nav_html(apps, slug)
+        if NAV_RE.search(text):
+            text = NAV_RE.sub(lambda _: nav, text, count=1)
+        else:
+            text = FM_RE.sub(lambda m: m.group(0) + "\n" + nav + "\n", text, count=1)
+        page.write_text(text, encoding="utf-8")
 
-    print(f"gen_apps: wrote {INDEX.name}, {len(apps)} app pages and {CSS.name}")
-    for a in apps:
-        print(f"   app-{a['slug']}.qmd  <-  {a['chapter']} #{a['id']}")
+    INDEX.write_text(index_page(apps, meta), encoding="utf-8")
+    CSS.write_text(CSS_TEXT, encoding="utf-8")
+    print(f"gen_apps: refreshed navigation on {len(apps)} app pages, "
+          f"plus {INDEX.name} and {CSS.name}")
     return 0
 
 

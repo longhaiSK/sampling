@@ -1,5 +1,6 @@
 ---
 title: "Shinylive App Demonstrating Post-stratification of a Simple Random Sample"
+description: "Post-stratification of a Simple Random Sample"
 format:
   html:
     theme: flatly
@@ -11,6 +12,7 @@ filters:
   - shinylive
 ---
 
+<!-- nav:start -->
 ```{=html}
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
@@ -23,11 +25,7 @@ filters:
   <a class="book" href="index.html">&#8592; back to the book</a>
 </nav>
 ```
-
-::: {.appsource}
-From [Ratio and Regression Estimation](ratio.html#fig-poststrat-app)
-in *Elements of Sampling Survey*.
-:::
+<!-- nav:end -->
 
 ```{shinylive-r}
 #| standalone: true
@@ -440,3 +438,80 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 ```
+
+## About this app
+
+This app draws one **simple random sample** of $n$ counties from the full
+`agpop.csv` population and estimates the mean of `acres92` from it three ways ---
+the three rows of the table in the [chapter's formula
+section](ratio.html#sec-ratio-formulas){target="_blank"}, all fitted to the *same* sample:
+
+*   **Average** --- the plain $\overline{y}$. In regression terms this is the
+    intercept-only fit: one fitted value for every county, $p = 1$.
+*   **Post-strat (pps)** --- $\overline{y}_{post} = \sum_h \pi_h \overline{y}_h$,
+    with the variance pooled using the known **population** weights,
+    $\hat{V} = \left(1-\frac{n}{N}\right)\frac{1}{n}\sum_h \pi_h s_h^2$.
+*   **Regression** --- the same estimator written as a regression on the group
+    indicators, with the variance pooled using the **sample** weights, that is the
+    ANOVA residual mean square $s_e^2 = \frac{1}{n-H}\sum_h (n_h-1)s_h^2$.
+
+The last two are the same estimator, so their point estimates coincide exactly and
+their violins are identical; they differ only in how $s_e^2$ is pooled, which is
+visible in the "mean SE" printed under each column and in the coverage rates. That
+is the identity of the previous subsection, drawn.
+
+A drop-down selects the post-stratification variable: the four real regions, the
+quantile groups of `acres82`, `acres87` or `farms92`, or random labels carrying no
+signal at all. The quantile groups are cut at the 25th, 75th and 95th percentiles,
+as in the [stratified-sampling app](app-stratified.html), so the runaway top 5% of counties forms a group of
+its own --- that uneven split lifts the between-group $R^2$ of `acres82` from 46%
+to 74%, and the variance reduction follows it. The remaining controls set $n$, the confidence level, and the
+simulation speed.
+
+The left panel shows the population split into post-strata, the current sample in
+red, and the fitted values of the chosen estimator --- one flat line for the
+average, one line per group for the other two. Under each group it prints $N_h$,
+the observed $n_h$, and the $n\pi_h$ that a stratified design would have fixed in
+advance: post-stratification exists precisely because those two differ.
+
+The right panel accumulates the three estimators over repeated samples, with the
+current confidence interval beside each violin (green when it covers $\mu$), the
+running coverage, and the variance reduction relative to the plain average.
+
+Try `acres82Quantiles` against `random labels`: the reduction tracks the
+between-group $R^2$ almost exactly, and a variable that explains nothing buys
+nothing.
+
+### The biased-SRS option {-}
+
+The **Biased SRS** slider turns the simple random sample into a deliberately
+unrepresentative one. Every county keeps selection weight 1 except those in the
+top 5% of `acres82`, which get weight $B$; the $n$ units are then drawn *without
+replacement* with those weights, so the sample size stays exactly $n$ while that
+group is over-represented. This is the standard picture of a survey that reaches
+the largest units too easily. Two details make it work:
+
+*   the over-sampling is applied to whole groups, and every county *within* the
+    group keeps the same weight, so the units observed in a group are still a
+    simple random sample of it --- which is precisely the condition under which
+    post-stratification repairs the damage;
+*   the mechanism is always tied to `acres82`, whichever variable you choose to
+    post-stratify on.
+
+At $B = 3$ and $n = 300$ the plain average is biased upward by roughly 113,000
+acres and its 95% intervals cover $\mu$ about 4% of the time, while
+post-stratifying on `acres82Quantiles` removes the bias almost exactly and
+restores coverage to 96%. The average is no longer estimating $\mu$ at all, so the
+app says so in red and drops the "theory" figures, which assume an SRS.
+
+Now change the post-stratification variable with the bias left on. `acres87Quantiles`
+also repairs it (that variable is nearly a copy of `acres82`); `region` repairs
+about two-thirds of it; `farms92Quantiles` and `random labels` repair none of it and
+leave coverage at 4%. **Post-stratification only removes the bias it can see** ---
+it corrects a distorted sample along the variable you post-stratify on, and is
+blind to any distortion orthogonal to it.
+
+::: {.appsource}
+This app accompanies [Interactive Demonstration: Post-stratifying a Simple Random Sample](ratio.html#sec-poststrat-app){target="_blank"}
+in *Elements of Sampling Survey*.
+:::

@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="SRS (average and ratio) with UPSWR (Hansen–Hurwitz)">
 
 <title>Shinylive App Comparing SRS (average and ratio) with UPSWR (Hansen–Hurwitz)</title>
 <style>
@@ -43,6 +44,35 @@ ul.task-list li input[type="checkbox"] {
 <link href="app-ups_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/shinylive.css" rel="stylesheet">
 <link href="app-ups_files/libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="shinyliveapps.css">
 </head>
@@ -58,6 +88,11 @@ ul.task-list li input[type="checkbox"] {
 <h1 class="title">Shinylive App Comparing SRS (average and ratio) with UPSWR (Hansen–Hurwitz)</h1>
 </div>
 
+<div>
+  <div class="description">
+    SRS (average and ratio) with UPSWR (Hansen–Hurwitz)
+  </div>
+</div>
 
 
 <div class="quarto-title-meta column-page">
@@ -72,6 +107,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<!-- nav:start -->
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
   <a href="app-srs.html">SRS</a>
@@ -82,9 +118,7 @@ ul.task-list li input[type="checkbox"] {
   <a href="app-ups.html" class="active">UPS</a>
   <a class="book" href="index.html">← back to the book</a>
 </nav>
-<div class="appsource">
-<p>From <a href="ups.html#fig-ups-app">Unequal Probability Sampling</a> in <em>Elements of Sampling Survey</em>.</p>
-</div>
+<!-- nav:end -->
 <pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
@@ -599,6 +633,29 @@ server &lt;- function(input, output, session) {
 }
 
 shinyApp(ui, server)</code></pre>
+<section id="about-this-app" class="level2">
+<h2 class="anchored" data-anchor-id="about-this-app">About this app</h2>
+<p>The app compares two ways of using a size variable <span class="math inline">\(x_i\)</span> to estimate the mean per unit <span class="math inline">\(\bar{t}_U = t/N\)</span> (here <span class="math inline">\(t_i\)</span> is <code>acres92</code> for county <span class="math inline">\(i\)</span>): at the <strong>estimation</strong> stage (SRS + ratio) or at the <strong>design</strong> stage (UPSWR with <span class="math inline">\(\psi_i = x_i/t_x\)</span>). Choosing the same variable for <span class="math inline">\(M_i\)</span> and <span class="math inline">\(x_i\)</span> in the app gives exactly this comparison. The plain SRS average is included as a baseline. Throughout, write <span class="math display">\[
+B = \frac{t}{t_x}, \qquad r_i = \frac{t_i}{x_i}, \qquad e_i = t_i - B x_i ,
+\]</span> so <span class="math inline">\(e_i\)</span> is unit <span class="math inline">\(i\)</span>’s residual from the line through the origin with the population slope. Note that <span class="math inline">\(\sum_{i=1}^N e_i = t - B t_x = 0\)</span>.</p>
+<p><strong>SRS + ratio.</strong> Use <span class="math inline">\(x_i\)</span> only at the estimation stage: <span class="math display">\[
+\hat{\bar{t}}_{r} = \hat{B}\,\bar{x}_U, \quad \hat{B} = \frac{\sum_{i=1}^n t_i}{\sum_{i=1}^n x_i}, \qquad
+\widehat{\mathrm{SE}}(\hat{\bar{t}}_{r}) = \frac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\frac{n}{N}\right)\frac{s_e^2}{n}}, \qquad
+s_e^2 = \frac{1}{n-1}\sum_{i=1}^n \left(t_i - \hat{B}x_i\right)^2 .
+\]</span></p>
+<p><strong>UPSWR + ratio.</strong> Use <span class="math inline">\(x_i\)</span> at the design stage, with <span class="math inline">\(\psi_i = x_i/t_x\)</span>. Every draw then has <span class="math inline">\(x_i/\psi_i = t_x\)</span>. So the HH ratio estimator, scaled by <span class="math inline">\(\bar{x}_U\)</span>, is exactly the HH estimator of the mean, <span class="math inline">\(\hat{t}_{\mathrm{HH}}/N\)</span>, and it reduces to <span class="math inline">\(\bar{x}_U\)</span> times the average of the sampled ratios <span class="math inline">\(r_i\)</span>: <span class="math display">\[
+\hat{\bar{t}}_{\mathrm{HH}} = \bar{x}_U\,\hat{\bar{y}}_{\mathrm{HH},r}
+= \bar{x}_U\,\frac{\sum_{i=1}^n t_i/\psi_i}{\sum_{i=1}^n x_i/\psi_i}
+= \frac{\hat{t}_{\mathrm{HH}}}{N}
+= \bar{x}_U\,\frac{1}{n}\sum_{i=1}^n r_i ,
+\]</span> <span class="math display">\[
+\widehat{\mathrm{SE}}(\hat{\bar{t}}_{\mathrm{HH}}) = \bar{x}_U\,\frac{s_r}{\sqrt{n}}, \qquad
+s_r^2 = \frac{1}{n-1}\sum_{i=1}^n \left(r_i - \frac{1}{n}\sum_{j=1}^n r_j\right)^2 .
+\]</span></p>
+<div class="appsource">
+<p>This app accompanies <a href="ups.html#sec-ups-app" target="_blank">Shinylive App Comparing SRS and UPSWR</a> in <em>Elements of Sampling Survey</em>.</p>
+</div>
+</section>
 
 </main>
 <!-- /main column -->

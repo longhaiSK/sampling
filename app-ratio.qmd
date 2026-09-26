@@ -1,5 +1,6 @@
 ---
 title: "Shinylive App Illustrating Ratio Estimation and Regression Estimation"
+description: "Ratio Estimation and Regression Estimation"
 format:
   html:
     theme: flatly
@@ -11,6 +12,7 @@ filters:
   - shinylive
 ---
 
+<!-- nav:start -->
 ```{=html}
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
@@ -23,11 +25,7 @@ filters:
   <a class="book" href="index.html">&#8592; back to the book</a>
 </nav>
 ```
-
-::: {.appsource}
-From [Ratio and Regression Estimation](ratio.html#fig-ratio-app)
-in *Elements of Sampling Survey*.
-:::
+<!-- nav:end -->
 
 ```{shinylive-r}
 #| standalone: true
@@ -503,3 +501,24 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 ```
+
+## About this app
+
+The **Biased SRS** slider uses the same mechanism as the post-stratification app
+[on its own page](app-poststrat.html): counties in the top 5% of `acres82` are given
+selection weight $B$ instead of 1, and the $n$ units are drawn without
+replacement with those weights, so the sample size stays exactly $n$ while large
+counties are over-represented. It is tied to `acres82` whatever auxiliary you
+select, which is the point --- calibrating on a known total repairs the bias
+*along that variable only*. At $B = 3$ and $n = 100$ the plain average is biased
+upward by about 126,000 acres; with $x =$ `acres82` the ratio and regression
+estimators cut that to roughly 2,000 and 500, and with $x =$ `acres87`, nearly a
+copy of it, they do the same. Switch to `farms92` or `smallf92` and all three
+estimators stay biased by the full amount: the auxiliary cannot see the
+distortion, so calibrating on it cannot undo it. This is the continuous
+counterpart of what post-stratification does with groups.
+
+::: {.appsource}
+This app accompanies [Shinylive App Illustrating Ratio Estimation and Regression Estimation](ratio.html){target="_blank"}
+in *Elements of Sampling Survey*.
+:::

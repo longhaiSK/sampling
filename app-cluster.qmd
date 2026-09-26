@@ -1,5 +1,6 @@
 ---
 title: "Shinylive App Comparing Two-Stage Cluster Sampling (ratio estimator) with SRS"
+description: "Two-Stage Cluster Sampling (ratio estimator) with SRS"
 format:
   html:
     theme: flatly
@@ -11,6 +12,7 @@ filters:
   - shinylive
 ---
 
+<!-- nav:start -->
 ```{=html}
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
@@ -23,11 +25,7 @@ filters:
   <a class="book" href="index.html">&#8592; back to the book</a>
 </nav>
 ```
-
-::: {.appsource}
-From [Cluster Sampling](cluster.html#fig-cluster-app)
-in *Elements of Sampling Survey*.
-:::
+<!-- nav:end -->
 
 ```{shinylive-r}
 #| standalone: true
@@ -443,3 +441,45 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 ```
+
+## About this app
+
+This app repeats the chapter's worked example many times over. At every step it draws a
+**two-stage cluster sample** --- an SRS of $n$ clusters, then an SRS of
+$m_i = p \, M_i$ counties inside each --- together with an ordinary **SRS of
+counties** of the same size, from the full `agpop.csv` population (with the
+`-99` codes dropped). It estimates the mean of `acres92` from each: the ratio
+estimator $\overline{y}_r = \sum \hat{t}_i / \sum M_i$ for the cluster sample,
+and the plain sample average for the SRS.
+
+A radio button chooses the clustering variable:
+
+*   **state** --- the 50 real states, the natural clusters of `agpop.csv`.
+*   **Random** --- the state labels randomly permuted, which keeps the cluster
+    sizes $M_i$ exactly as they are but scrambles which counties belong
+    together.
+
+Two sliders set the design: $n$, the number of clusters drawn, and
+$p = m_i/M_i$, the percentage of counties subsampled from each selected cluster
+($p = 100\%$ gives a one-stage sample). Play advances the simulation one draw at
+a time, Pause stops it, Skip jumps straight to the end, and changing any setting
+clears the accumulated history.
+
+The left panel shows the population split into its clusters, with the
+highlighted sample in red. For the cluster design the selected clusters are
+shaded and labelled $m_i/M_i$, a bar marks each subsample mean
+$\overline{y}_i$, and the ratio estimate $\overline{y}_r$ runs across the
+panel; for the SRS a single bar marks the sample mean.
+
+The right panel accumulates the estimates of both designs, one column each,
+drawn as a violin once enough draws have accumulated. The bar beside each
+column is the current confidence interval, green when it covers
+$\mu$ and red when it does not. The legends report the running CI coverage and
+the design effect --- the variance of the ratio estimator relative to the SRS
+average, simulated and theoretical --- and the subtitle gives the
+between-cluster $R^2$ of `acres92`.
+
+::: {.appsource}
+This app accompanies [Interactive Demonstration: Clustering by State or at Random](cluster.html#sec-app-cluster){target="_blank"}
+in *Elements of Sampling Survey*.
+:::

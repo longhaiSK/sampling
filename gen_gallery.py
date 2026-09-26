@@ -301,14 +301,16 @@ def render_gallery(chapters_data):
     lines = []
     lines.append("# List of Figures, Tables, and Apps")
     lines.append("")
-    lines.append("A consolidated index of every numbered figure and table in the book, plus "
-                  "the interactive Shiny apps. Click any entry to jump to it in context.")
+    lines.append("A consolidated index of every numbered figure and table in the book. "
+                  "Click any entry to jump to it in context.")
     lines.append("")
-    lines.append("## List of Shinylive Apps")
+    # The apps no longer live in the book: they are standalone pages, indexed on
+    # their own page, so the gallery just points there.
+    lines.append("## Shinylive Apps")
     lines.append("")
-    for title, figs, tbls, apps in chapters_data:
-        for sec_id, desc in apps:
-            lines.append(f"* @{sec_id} — {desc}")
+    lines.append("The simulation apps have their own archive: "
+                 "[Shinylive Apps for Sampling Survey]"
+                 "(shinyliveapps_sampling.html){target=\"_blank\"}.")
     lines.append("")
 
     lines.append("## List of Figures")

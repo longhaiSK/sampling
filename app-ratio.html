@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Ratio Estimation and Regression Estimation">
 
 <title>Shinylive App Illustrating Ratio Estimation and Regression Estimation</title>
 <style>
@@ -43,6 +44,35 @@ ul.task-list li input[type="checkbox"] {
 <link href="app-ratio_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/shinylive.css" rel="stylesheet">
 <link href="app-ratio_files/libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="shinyliveapps.css">
 </head>
@@ -58,6 +88,11 @@ ul.task-list li input[type="checkbox"] {
 <h1 class="title">Shinylive App Illustrating Ratio Estimation and Regression Estimation</h1>
 </div>
 
+<div>
+  <div class="description">
+    Ratio Estimation and Regression Estimation
+  </div>
+</div>
 
 
 <div class="quarto-title-meta column-page">
@@ -72,6 +107,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<!-- nav:start -->
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
   <a href="app-srs.html">SRS</a>
@@ -82,9 +118,7 @@ ul.task-list li input[type="checkbox"] {
   <a href="app-ups.html">UPS</a>
   <a class="book" href="index.html">← back to the book</a>
 </nav>
-<div class="appsource">
-<p>From <a href="ratio.html#fig-ratio-app">Ratio and Regression Estimation</a> in <em>Elements of Sampling Survey</em>.</p>
-</div>
+<!-- nav:end -->
 <pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
@@ -560,6 +594,13 @@ server &lt;- function(input, output, session) {
 }
 
 shinyApp(ui, server)</code></pre>
+<section id="about-this-app" class="level2">
+<h2 class="anchored" data-anchor-id="about-this-app">About this app</h2>
+<p>The <strong>Biased SRS</strong> slider uses the same mechanism as the post-stratification app <a href="app-poststrat.html">on its own page</a>: counties in the top 5% of <code>acres82</code> are given selection weight <span class="math inline">\(B\)</span> instead of 1, and the <span class="math inline">\(n\)</span> units are drawn without replacement with those weights, so the sample size stays exactly <span class="math inline">\(n\)</span> while large counties are over-represented. It is tied to <code>acres82</code> whatever auxiliary you select, which is the point — calibrating on a known total repairs the bias <em>along that variable only</em>. At <span class="math inline">\(B = 3\)</span> and <span class="math inline">\(n = 100\)</span> the plain average is biased upward by about 126,000 acres; with <span class="math inline">\(x =\)</span> <code>acres82</code> the ratio and regression estimators cut that to roughly 2,000 and 500, and with <span class="math inline">\(x =\)</span> <code>acres87</code>, nearly a copy of it, they do the same. Switch to <code>farms92</code> or <code>smallf92</code> and all three estimators stay biased by the full amount: the auxiliary cannot see the distortion, so calibrating on it cannot undo it. This is the continuous counterpart of what post-stratification does with groups.</p>
+<div class="appsource">
+<p>This app accompanies <a href="ratio.html" target="_blank">Shinylive App Illustrating Ratio Estimation and Regression Estimation</a> in <em>Elements of Sampling Survey</em>.</p>
+</div>
+</section>
 
 </main>
 <!-- /main column -->

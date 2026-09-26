@@ -1,5 +1,6 @@
 ---
-title: "fig-app-srs"
+title: "Shinylive app for simple random sampling"
+description: "Simple random sampling"
 format:
   html:
     theme: flatly
@@ -11,6 +12,7 @@ filters:
   - shinylive
 ---
 
+<!-- nav:start -->
 ```{=html}
 <nav class="appnav">
   <a href="shinyliveapps_sampling.html">All apps</a>
@@ -23,11 +25,7 @@ filters:
   <a class="book" href="index.html">&#8592; back to the book</a>
 </nav>
 ```
-
-::: {.appsource}
-From [true total (thousands of acres)](srs.html#fig-app-srs)
-in *Elements of Sampling Survey*.
-:::
+<!-- nav:end -->
 
 ```{shinylive-r}
 #| standalone: true
@@ -312,4 +310,43 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
 ```
+
+## About this app
+
+This app
+draws SRS samples one at a time, or continuously with play (▶) until pause (❚❚) or
+until the requested number of samples has been reached. The skip button (▶▶❘)
+draws all remaining samples at once, leaving the full histogram and the last
+sample on display.
+
+The two panels sit side by side and share `acres92` on the y-axis, so the two
+dashed lines at $\mu$ line up horizontally across both. The left panel shows
+the population: the grey curve is a sideways kernel density estimate and the
+grey points to its left are the raw values, jittered horizontally. The axis is
+broken at twice the population mean; counties above the cut are compressed, in
+rank order, into the narrow lane at the top, so that a tail unit drawn into the
+sample is still visible. Points selected into the current sample turn blue,
+matching the sample mean and CI bar drawn beside them, and the sample means
+and density accumulated in the right panel.
+
+The right panel accumulates the sample means as a blue density histogram
+(bars now run horizontally, density on the x-axis), with a blue curve tracing
+their empirical density once enough draws have accumulated, and a red curve
+for the theoretical sampling distribution $N(\mu, \mathrm{SE}(\bar y))$ at the
+current sample size. Its window is fixed at five theoretical standard errors
+for $n = 100$ on either side of $\mu$, so the spread is comparable across
+sample sizes; for $n < 100$ some means fall outside the window and are counted
+in the legend. The interval to the right belongs to the current sample, drawn
+green when it covers $\mu$ and red when it does not, and replaced at every
+draw; the red dashed bar at the base of the histogram, close to the y-axis, is
+the theoretical margin of deviation
+$\pm z_{\alpha/2}\,\mathrm{SE}(\bar y)$ from the normal approximation, centred
+on $\mu$ and fixed for the current $n$ and confidence
+level.
+
+::: {.appsource}
+This app accompanies [Shinylive App for Illustrating SRS Theory](srs.html#sec-app-srs){target="_blank"}
+in *Elements of Sampling Survey*.
+:::
