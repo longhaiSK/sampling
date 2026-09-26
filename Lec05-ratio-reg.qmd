@@ -64,7 +64,7 @@ variable $x$ in advance.
 #| fig-width: 6.5
 #| fig-height: 5
 #| out-width: "95%"
-set.seed(200)
+set.seed(2046)
 N <- 40
 B_true <- 0.55
 x <- runif(N, 0.5, 10)
@@ -74,7 +74,7 @@ xbar_U <- mean(x)
 ybar_U <- mean(y)
 
 n <- 8
-sel <- order(x)[1:n]              # biased sample: units with the smallest x
+sel <- sample(N, n)               # an ordinary SRS, spread across x
 Bhat <- sum(y[sel]) / sum(x[sel]) # ratio estimate, computed from the sample only
 
 yhat <- Bhat * x                  # fitted value for every unit in the population
@@ -86,7 +86,7 @@ plot(x, y, pch = 19, col = "grey50", xlab = "x", ylab = "y",
      xlim = c(0, 10.5), ylim = c(0, 7))
 
 abline(0, Bhat, col = "firebrick", lwd = 2)
-text(9.3, Bhat * 9.3 + 0.4, expression(y == hat(B) * x), col = "firebrick")
+text(7.0, Bhat * 7.0 + 0.55, expression(y == hat(B) * x), col = "firebrick")
 
 points(x[sel], y[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
 points(x, yhat, pch = 19, col = "firebrick", cex = 0.9)
@@ -108,7 +108,7 @@ text(0.2, ybar_srs, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), fon
 
 ::: {.column width="40%"}
 
-* Grey: population ($x_i$ known). Green: **biased sample** (small $x$ only).
+* Grey: population ($x_i$ known). Green: an ordinary SRS.
 
 * Red line, fit from the sample: $\hat y_i=\hat Bx_i$ for every unit.
 
@@ -116,8 +116,11 @@ $$
 \hat{\bar y}_r = \frac1N\sum_{i=1}^N \hat y_i = \hat{B}\overline{x}_{U}
 $$
 
-* $\hat{\bar y}_r$ (red) $\approx \bar y_{U}$ (black), while the naive
-$\bar y$ (green) is badly biased.
+* This sample happens to have $\bar x > \bar x_U$, so the naive $\bar y$
+(green) lands well above $\bar y_U$; the ratio estimator corrects for that
+through the known $\bar x_U$, and $\hat{\bar y}_r$ (red) $\approx \bar
+y_{U}$ (black). Averaged over samples both are (essentially) unbiased, but
+$\hat{\bar y}_r$ varies far less.
 
 :::
 
@@ -459,31 +462,30 @@ right stratum mean, weighted by the correct $N_h$.
 #| fig-width: 6.5
 #| fig-height: 5
 #| out-width: "95%"
-set.seed(12)
+set.seed(3268)
 Nh <- c(50, 20, 30, 40)      # population sizes per post-stratum
 mu_h <- c(1, 4, 7, 10)       # true stratum means, exaggerated and ascending
 labs <- c("A", "B", "C", "D")
 N <- sum(Nh)
 H <- length(Nh)
-nh <- c(20, 2, 2, 1)         # biased sample: A is 80% of the sample but only 36% of the population
+n <- 25
 sdy <- 0.9
-
-pop_y <- lapply(1:H, function(h) mu_h[h] + rnorm(Nh[h], 0, sdy))
-ybar_U <- mean(unlist(pop_y))            # true population mean
-
-sel_idx <- lapply(1:H, function(h) sample(Nh[h], nh[h])) # SRS within each stratum
-ybar_h <- sapply(1:H, function(h) mean(pop_y[[h]][sel_idx[[h]]])) # per-stratum sample means
-
-ybar_naive <- mean(unlist(lapply(1:H, function(h) pop_y[[h]][sel_idx[[h]]]))) # pooled, ignoring strata
-ybar_post <- sum(ybar_h * Nh / N)        # post-stratified estimate
 
 # index plot: sequential index across the population, grouped contiguously by
 # stratum -- so each stratum's width on the x-axis is exactly its Nh
+y_pop <- unlist(lapply(1:H, function(h) mu_h[h] + rnorm(Nh[h], 0, sdy)))
+strat_id <- rep(1:H, Nh)
 boundaries <- cumsum(Nh)
 starts <- c(0, boundaries[-H])
 x_pop <- unlist(lapply(1:H, function(h) starts[h] + seq_len(Nh[h])))
-y_pop <- unlist(pop_y)
-strat_id <- rep(1:H, Nh)
+ybar_U <- mean(y_pop)                    # true population mean
+
+sel <- sample(N, n)                      # an ordinary SRS from the whole population
+nh <- tabulate(strat_id[sel], H)         # post-stratum sample sizes: random, not proportional
+ybar_h <- sapply(1:H, function(h) mean(y_pop[sel][strat_id[sel] == h]))
+
+ybar_naive <- mean(y_pop[sel])           # pooled sample mean, ignoring strata
+ybar_post <- sum(ybar_h * Nh / N)        # post-stratified estimate
 
 par(mar = c(3, 4, 0.5, 0.5))
 plot(x_pop, y_pop, pch = 19, col = "grey50", xlab = "", ylab = "y",
@@ -493,12 +495,10 @@ abline(v = boundaries[-H], col = "grey70")           # separate the groups
 mid <- (starts + boundaries) / 2
 axis(1, at = mid, labels = labs, tick = FALSE)
 
-for (h in 1:H) {
-  idx <- which(strat_id == h)
-  sel <- idx[sel_idx[[h]]]
-  points(x_pop[sel], y_pop[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
+points(x_pop[sel], y_pop[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
+
+for (h in 1:H)                                       # sample mean of each post-stratum
   segments(starts[h], ybar_h[h], boundaries[h], ybar_h[h], col = "firebrick", lwd = 3)
-}
 
 abline(h = ybar_U, col = "black", lty = 3)
 abline(h = ybar_post, col = "firebrick", lty = 3)
@@ -517,16 +517,19 @@ text(-10, ybar_naive, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), f
 
 ::: {.column width="40%"}
 
-* Grey: population, post-strata A–D (block width = $N_h$). Green: **biased
-  sample** — 80% from A, though A is only 36% of the population.
+* Grey: population, post-strata A–D (block width = $N_h$). Green: an ordinary
+  SRS of $n=25$; the realized $n_h=(5,5,6,9)$ do *not* match the population
+  shares $\pi_h=(.36,.14,.21,.29)$ — they never do, since $n_h$ is random.
 
 * Red segments: predictions $\hat y_i=\bar y_h$ per stratum, giving
 $$
 \hat{\bar y}_{\text{post}} = \sum_{h=1}^H \pi_h\,\bar y_h .
 $$
 
-* $\hat{\bar y}_{\text{post}}$ (red) $\approx \bar y_{U}$ (black); the
-  naive $\bar y$ (green) is pulled toward A.
+* This sample is light on A and heavy on D, so the naive $\bar y$ (green) is
+  pulled up; reweighting by the known $\pi_h$ undoes it and
+  $\hat{\bar y}_{\text{post}}$ (red) $\approx \bar y_{U}$ (black). It is
+  this reweighting, repeated over samples, that cuts the variance.
 
 :::
 
@@ -748,7 +751,7 @@ $\hat t_{y,\text{reg}} = N\hat{\bar y}_{\text{reg}} = N\hat B_0 + \hat B_1 t_x$.
 #| fig-width: 6.5
 #| fig-height: 5
 #| out-width: "95%"
-set.seed(200)
+set.seed(498)
 N <- 40
 B0 <- 1.5
 B1 <- 0.35
@@ -759,7 +762,7 @@ xbar_U <- mean(x)
 ybar_U <- mean(y)
 
 n <- 8
-sel <- order(x)[1:n]              # biased sample: units with the smallest x
+sel <- sample(N, n)               # an ordinary SRS, spread across x
 xs <- x[sel]
 ys <- y[sel]
 B1hat <- sum((xs - mean(xs)) * (ys - mean(ys))) / sum((xs - mean(xs))^2)
@@ -774,7 +777,8 @@ plot(x, y, pch = 19, col = "grey50", xlab = "x", ylab = "y",
      xlim = c(0, 10.5), ylim = c(0, 6.5))
 
 abline(B0hat, B1hat, col = "firebrick", lwd = 2)
-text(8.2, B0hat + B1hat * 8.2 + 0.4, expression(y == hat(B)[0] + hat(B)[1] * x), col = "firebrick")
+text(10.4, B0hat + B1hat * 10.4 - 1.25, expression(y == hat(B)[0] + hat(B)[1] * x),
+     col = "firebrick", adj = c(1, 0))
 
 points(x[sel], y[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
 points(x, yhat, pch = 19, col = "firebrick", cex = 0.9)
@@ -796,7 +800,7 @@ text(0.2, ybar_srs, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), fon
 
 ::: {.column width="40%"}
 
-* Grey: population ($x_i$ known). Green: **biased sample** (small $x$ only).
+* Grey: population ($x_i$ known). Green: an ordinary SRS.
 
 * Red line, fit from the sample: $\hat y_i=\hat B_0+\hat B_1x_i$ for every unit.
 
@@ -805,8 +809,11 @@ $$
  = \hat B_0 + \hat B_1 \bar x_{U}
 $$
 
-* $\hat{\bar y}_{\text{reg}}$ (red) $\approx \bar y_{U}$ (black), while
-the naive $\bar y$ (green) is badly biased.
+* Here the sampled $x$'s average above $\bar x_U$, so the naive $\bar y$
+(green) sits above $\bar y_U$; the regression estimator shifts the fit back to
+$\bar x_U$ and lands on target, $\hat{\bar y}_{\text{reg}}$ (red) $\approx
+\bar y_{U}$ (black). Both are essentially unbiased over repeated samples, but
+$\hat{\bar y}_{\text{reg}}$ is much less variable.
 
 :::
 

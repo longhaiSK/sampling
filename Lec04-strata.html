@@ -6,13 +6,13 @@
 <script src="Lec04-strata_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="Lec04-strata_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="Lec04-strata_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="Lec04-strata_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="Lec04-strata_files/libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <meta name="shinylive:serviceworker_dir" content=".">
 <script src="Lec04-strata_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/load-shinylive-sw.js" type="module"></script>
 <script src="Lec04-strata_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/run-python-blocks.js" type="module"></script>
 <link href="Lec04-strata_files/libs/quarto-contrib/shinylive-0.10.12/shinylive/shinylive.css" rel="stylesheet">
 <link href="Lec04-strata_files/libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.37">
+  <meta name="generator" content="quarto-1.10.18">
 
   <title>STAT 348 Sampling Techniques</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,10 +24,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -1147,273 +1150,273 @@ Figure&nbsp;5
 </section>
 <section id="the-app" class="slide level2">
 <h2>The App</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-engine="r"><pre class="sourceCode numberSource shinylive-r number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href=""></a>#| '!! shinylive warning !!': |</span>
-<span id="cb3-2"><a href=""></a>#|   shinylive does not work in self-contained HTML documents.</span>
-<span id="cb3-3"><a href=""></a>#|   Please set `embed-resources: false` in your metadata.</span>
-<span id="cb3-4"><a href=""></a>#| standalone: true</span>
-<span id="cb3-5"><a href=""></a>#| viewerHeight: 830</span>
-<span id="cb3-6"><a href=""></a></span>
-<span id="cb3-7"><a href=""></a>## file: app.R</span>
-<span id="cb3-8"><a href=""></a>library(shiny)</span>
-<span id="cb3-9"><a href=""></a></span>
-<span id="cb3-10"><a href=""></a>data_url &lt;- "https://raw.githubusercontent.com/longhaiSK/sampling/main/acres92_stratum.csv"</span>
-<span id="cb3-11"><a href=""></a>download.file(data_url, "acres92_stratum.csv")</span>
-<span id="cb3-12"><a href=""></a>dat &lt;- read.csv("acres92_stratum.csv")</span>
-<span id="cb3-13"><a href=""></a>dat &lt;- dat[order(dat$stratum), ]</span>
-<span id="cb3-14"><a href=""></a></span>
-<span id="cb3-15"><a href=""></a>pop     &lt;- dat$acres92</span>
-<span id="cb3-16"><a href=""></a>stratum &lt;- factor(dat$stratum)</span>
-<span id="cb3-17"><a href=""></a>lev     &lt;- sub("^acres82", "", levels(stratum))   # acres82Q1 -&gt; Q1</span>
-<span id="cb3-18"><a href=""></a>H       &lt;- length(lev)</span>
-<span id="cb3-19"><a href=""></a>N       &lt;- length(pop)</span>
-<span id="cb3-20"><a href=""></a>ybarU   &lt;- mean(pop)</span>
-<span id="cb3-21"><a href=""></a>S       &lt;- sd(pop)</span>
-<span id="cb3-22"><a href=""></a></span>
-<span id="cb3-23"><a href=""></a>idx_h &lt;- split(seq_len(N), stratum)      # population indices by stratum</span>
-<span id="cb3-24"><a href=""></a>Nh    &lt;- sapply(idx_h, length)</span>
-<span id="cb3-25"><a href=""></a>Sh    &lt;- sapply(idx_h, function(i) sd(pop[i]))</span>
-<span id="cb3-26"><a href=""></a>W     &lt;- Nh / N</span>
-<span id="cb3-27"><a href=""></a></span>
-<span id="cb3-28"><a href=""></a>## ---- broken x-axis, shared by both panels ----------------------------------</span>
-<span id="cb3-29"><a href=""></a>## Drawn region [0, 2 * ybarU]: visible scale [0, cut] plus a compressed lane</span>
-<span id="cb3-30"><a href=""></a>## for the right tail, so the population mean sits at the midpoint of the panel.</span>
-<span id="cb3-31"><a href=""></a>lane_frac &lt;- 0.10</span>
-<span id="cb3-32"><a href=""></a>cut       &lt;- 2 * ybarU / (1 + lane_frac)</span>
-<span id="cb3-33"><a href=""></a>lane_w    &lt;- lane_frac * cut</span>
-<span id="cb3-34"><a href=""></a>xmax_top  &lt;- cut + lane_w</span>
-<span id="cb3-35"><a href=""></a></span>
-<span id="cb3-36"><a href=""></a>px      &lt;- pop</span>
-<span id="cb3-37"><a href=""></a>tail_id &lt;- which(pop &gt; cut)</span>
-<span id="cb3-38"><a href=""></a>n_tail  &lt;- length(tail_id)</span>
-<span id="cb3-39"><a href=""></a>if (n_tail &gt; 0) {</span>
-<span id="cb3-40"><a href=""></a>  r &lt;- rank(pop[tail_id], ties.method = "first") / (n_tail + 1)</span>
-<span id="cb3-41"><a href=""></a>  px[tail_id] &lt;- cut + lane_w * (0.10 + 0.80 * r)</span>
-<span id="cb3-42"><a href=""></a>}</span>
-<span id="cb3-43"><a href=""></a></span>
-<span id="cb3-44"><a href=""></a>set.seed(42)</span>
-<span id="cb3-45"><a href=""></a>band  &lt;- as.integer(stratum)</span>
-<span id="cb3-46"><a href=""></a>y_pop &lt;- (H + 1 - band) + runif(N, -0.30, 0.30)   # Q1 in the top band</span>
-<span id="cb3-47"><a href=""></a></span>
-<span id="cb3-48"><a href=""></a>## ---- fixed window for the sampling distributions ---------------------------</span>
-<span id="cb3-49"><a href=""></a>se100  &lt;- sqrt(1 - 100 / N) * S / sqrt(100)</span>
-<span id="cb3-50"><a href=""></a>xlim_b &lt;- ybarU + c(-1, 1) * 5 * se100</span>
-<span id="cb3-51"><a href=""></a></span>
-<span id="cb3-52"><a href=""></a>METHOD &lt;- c("SRS", "Proportional", "Neyman")</span>
-<span id="cb3-53"><a href=""></a>MCOL   &lt;- c("grey35", "steelblue", "darkorange")</span>
-<span id="cb3-54"><a href=""></a>MAR    &lt;- c(4.5, 7, 3, 1.5)   # identical in both panels, so the scales align</span>
-<span id="cb3-55"><a href=""></a></span>
-<span id="cb3-56"><a href=""></a>## allocation with at least 2 units per stratum, summing to n</span>
-<span id="cb3-57"><a href=""></a>alloc &lt;- function(w, n) {</span>
-<span id="cb3-58"><a href=""></a>  nh &lt;- pmin(pmax(2, round(w / sum(w) * n)), Nh)</span>
-<span id="cb3-59"><a href=""></a>  while (sum(nh) &gt; n &amp;&amp; any(nh &gt; 2)) {</span>
-<span id="cb3-60"><a href=""></a>    i &lt;- which.max(nh - 2); nh[i] &lt;- nh[i] - 1</span>
-<span id="cb3-61"><a href=""></a>  }</span>
-<span id="cb3-62"><a href=""></a>  while (sum(nh) &lt; n &amp;&amp; any(nh &lt; Nh)) {</span>
-<span id="cb3-63"><a href=""></a>    i &lt;- which.max(Nh - nh); nh[i] &lt;- nh[i] + 1</span>
-<span id="cb3-64"><a href=""></a>  }</span>
-<span id="cb3-65"><a href=""></a>  nh</span>
-<span id="cb3-66"><a href=""></a>}</span>
-<span id="cb3-67"><a href=""></a></span>
-<span id="cb3-68"><a href=""></a>## symmetric density polygon, drawn horizontally about y = at</span>
-<span id="cb3-69"><a href=""></a>violin &lt;- function(x, at, col, w = 0.32) {</span>
-<span id="cb3-70"><a href=""></a>  if (length(x) &lt; 10 || diff(range(x)) &lt;= 0) return(invisible())</span>
-<span id="cb3-71"><a href=""></a>  d  &lt;- density(x)</span>
-<span id="cb3-72"><a href=""></a>  hw &lt;- w * d$y / max(d$y)</span>
-<span id="cb3-73"><a href=""></a>  polygon(c(d$x, rev(d$x)), c(at + hw, rev(at - hw)),</span>
-<span id="cb3-74"><a href=""></a>          col = adjustcolor(col, 0.35), border = col)</span>
-<span id="cb3-75"><a href=""></a>  m &lt;- median(x)</span>
-<span id="cb3-76"><a href=""></a>  segments(m, at - w * 0.6, m, at + w * 0.6, col = col, lwd = 2)</span>
-<span id="cb3-77"><a href=""></a>}</span>
-<span id="cb3-78"><a href=""></a></span>
-<span id="cb3-79"><a href=""></a>ui &lt;- fluidPage(</span>
-<span id="cb3-80"><a href=""></a>  titlePanel("Stratified sampling by acres82 quartiles, against simple random sampling"),</span>
-<span id="cb3-81"><a href=""></a>  sidebarLayout(</span>
-<span id="cb3-82"><a href=""></a>    sidebarPanel(</span>
-<span id="cb3-83"><a href=""></a>      width = 3,</span>
-<span id="cb3-84"><a href=""></a>      sliderInput("n", "Total sample size (n)", min = 40, max = 1000, value = 300, step = 10),</span>
-<span id="cb3-85"><a href=""></a>      sliderInput("conf", "Confidence level", min = 0.80, max = 0.99, value = 0.95, step = 0.01),</span>
-<span id="cb3-86"><a href=""></a>      radioButtons("show", "Highlight sample from", choiceNames = METHOD,</span>
-<span id="cb3-87"><a href=""></a>                   choiceValues = as.character(1:3), selected = "3"),</span>
-<span id="cb3-88"><a href=""></a>      actionButton("draw", "Draw new samples", class = "btn-primary", width = "100%"),</span>
-<span id="cb3-89"><a href=""></a>      br(), br(),</span>
-<span id="cb3-90"><a href=""></a>      fluidRow(</span>
-<span id="cb3-91"><a href=""></a>        column(6, actionButton("play", "Play", class = "btn-success", width = "100%")),</span>
-<span id="cb3-92"><a href=""></a>        column(6, actionButton("stop", "Stop", class = "btn-danger",  width = "100%"))</span>
-<span id="cb3-93"><a href=""></a>      ),</span>
-<span id="cb3-94"><a href=""></a>      br(),</span>
-<span id="cb3-95"><a href=""></a>      sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),</span>
-<span id="cb3-96"><a href=""></a>      numericInput("nrep", "Stop after this many samples",</span>
-<span id="cb3-97"><a href=""></a>                   value = 500, min = 10, max = 20000, step = 50),</span>
-<span id="cb3-98"><a href=""></a>      actionButton("reset", "Reset", width = "100%")</span>
-<span id="cb3-99"><a href=""></a>    ),</span>
-<span id="cb3-100"><a href=""></a>    mainPanel(</span>
-<span id="cb3-101"><a href=""></a>      width = 9,</span>
-<span id="cb3-102"><a href=""></a>      plotOutput("popPlot",  height = "380px"),</span>
-<span id="cb3-103"><a href=""></a>      plotOutput("distPlot", height = "380px")</span>
-<span id="cb3-104"><a href=""></a>    )</span>
-<span id="cb3-105"><a href=""></a>  )</span>
-<span id="cb3-106"><a href=""></a>)</span>
-<span id="cb3-107"><a href=""></a></span>
-<span id="cb3-108"><a href=""></a>server &lt;- function(input, output, session) {</span>
-<span id="cb3-109"><a href=""></a></span>
-<span id="cb3-110"><a href=""></a>  rv &lt;- reactiveValues(</span>
-<span id="cb3-111"><a href=""></a>    idx = NULL,      # list of sampled indices, one element per design</span>
-<span id="cb3-112"><a href=""></a>    est = NULL,      # matrix 3 x 3: mean, lower, upper</span>
-<span id="cb3-113"><a href=""></a>    M   = NULL,      # accumulated means, one column per design</span>
-<span id="cb3-114"><a href=""></a>    HIT = NULL,      # accumulated coverage indicators</span>
-<span id="cb3-115"><a href=""></a>    jit = numeric(0)</span>
-<span id="cb3-116"><a href=""></a>  )</span>
-<span id="cb3-117"><a href=""></a>  running &lt;- reactiveVal(FALSE)</span>
-<span id="cb3-118"><a href=""></a></span>
-<span id="cb3-119"><a href=""></a>  nrep &lt;- reactive({</span>
-<span id="cb3-120"><a href=""></a>    v &lt;- input$nrep</span>
-<span id="cb3-121"><a href=""></a>    if (is.null(v) || is.na(v) || v &lt; 1) 1L else min(as.integer(v), 20000L)</span>
-<span id="cb3-122"><a href=""></a>  })</span>
-<span id="cb3-123"><a href=""></a></span>
-<span id="cb3-124"><a href=""></a>  nh_prop   &lt;- reactive(alloc(Nh,      input$n))</span>
-<span id="cb3-125"><a href=""></a>  nh_neyman &lt;- reactive(alloc(Nh * Sh, input$n))</span>
-<span id="cb3-126"><a href=""></a></span>
-<span id="cb3-127"><a href=""></a>  draw_one &lt;- function() {</span>
-<span id="cb3-128"><a href=""></a>    n    &lt;- isolate(input$n)</span>
-<span id="cb3-129"><a href=""></a>    conf &lt;- isolate(input$conf)</span>
-<span id="cb3-130"><a href=""></a>    a    &lt;- 1 - (1 - conf) / 2</span>
-<span id="cb3-131"><a href=""></a></span>
-<span id="cb3-132"><a href=""></a>    # simple random sample</span>
-<span id="cb3-133"><a href=""></a>    i_srs &lt;- sample(N, n)</span>
-<span id="cb3-134"><a href=""></a>    y     &lt;- pop[i_srs]</span>
-<span id="cb3-135"><a href=""></a>    m_srs &lt;- mean(y)</span>
-<span id="cb3-136"><a href=""></a>    se    &lt;- sqrt(1 - n / N) * sd(y) / sqrt(n)</span>
-<span id="cb3-137"><a href=""></a>    d_srs &lt;- qt(a, df = n - 1) * se</span>
-<span id="cb3-138"><a href=""></a></span>
-<span id="cb3-139"><a href=""></a>    # stratified: ybar_str = sum W_h ybar_h, V = sum W_h^2 (1 - n_h/N_h) s_h^2 / n_h</span>
-<span id="cb3-140"><a href=""></a>    str_draw &lt;- function(nh) {</span>
-<span id="cb3-141"><a href=""></a>      ii &lt;- unlist(lapply(seq_len(H), function(h) sample(idx_h[[h]], nh[h])))</span>
-<span id="cb3-142"><a href=""></a>      yh &lt;- split(pop[ii], rep(seq_len(H), nh))</span>
-<span id="cb3-143"><a href=""></a>      mh &lt;- sapply(yh, mean)</span>
-<span id="cb3-144"><a href=""></a>      sh &lt;- sapply(yh, sd)</span>
-<span id="cb3-145"><a href=""></a>      m  &lt;- sum(W * mh)</span>
-<span id="cb3-146"><a href=""></a>      v  &lt;- sum(W^2 * (1 - nh / Nh) * sh^2 / nh)</span>
-<span id="cb3-147"><a href=""></a>      c(m, qt(a, df = sum(nh) - H) * sqrt(v))</span>
-<span id="cb3-148"><a href=""></a>    }</span>
-<span id="cb3-149"><a href=""></a>    p &lt;- str_draw(isolate(nh_prop()))</span>
-<span id="cb3-150"><a href=""></a>    q &lt;- str_draw(isolate(nh_neyman()))</span>
-<span id="cb3-151"><a href=""></a></span>
-<span id="cb3-152"><a href=""></a>    take &lt;- function(nh) unlist(lapply(seq_len(H), function(h) sample(idx_h[[h]], nh[h])))</span>
-<span id="cb3-153"><a href=""></a></span>
-<span id="cb3-154"><a href=""></a>    est &lt;- rbind(c(m_srs, m_srs - d_srs, m_srs + d_srs),</span>
-<span id="cb3-155"><a href=""></a>                 c(p[1],  p[1]  - p[2],  p[1]  + p[2]),</span>
-<span id="cb3-156"><a href=""></a>                 c(q[1],  q[1]  - q[2],  q[1]  + q[2]))</span>
-<span id="cb3-157"><a href=""></a></span>
-<span id="cb3-158"><a href=""></a>    rv$idx &lt;- list(i_srs, take(isolate(nh_prop())), take(isolate(nh_neyman())))</span>
-<span id="cb3-159"><a href=""></a>    rv$est &lt;- est</span>
-<span id="cb3-160"><a href=""></a>    rv$M   &lt;- rbind(rv$M,   est[, 1])</span>
-<span id="cb3-161"><a href=""></a>    rv$HIT &lt;- rbind(rv$HIT, est[, 2] &lt;= ybarU &amp; ybarU &lt;= est[, 3])</span>
-<span id="cb3-162"><a href=""></a>    rv$jit &lt;- c(rv$jit, runif(1, -0.1, 0.1))</span>
-<span id="cb3-163"><a href=""></a>  }</span>
-<span id="cb3-164"><a href=""></a></span>
-<span id="cb3-165"><a href=""></a>  observeEvent(input$draw, { running(FALSE); draw_one() })</span>
-<span id="cb3-166"><a href=""></a>  observeEvent(input$play, running(TRUE))</span>
-<span id="cb3-167"><a href=""></a>  observeEvent(input$stop, running(FALSE))</span>
-<span id="cb3-168"><a href=""></a></span>
-<span id="cb3-169"><a href=""></a>  observe({</span>
-<span id="cb3-170"><a href=""></a>    if (!isTRUE(running())) return()</span>
-<span id="cb3-171"><a href=""></a>    if (NROW(isolate(rv$M)) &gt;= isolate(nrep())) { running(FALSE); return() }</span>
-<span id="cb3-172"><a href=""></a>    invalidateLater(1000 / isolate(input$speed), session)</span>
-<span id="cb3-173"><a href=""></a>    isolate(draw_one())</span>
-<span id="cb3-174"><a href=""></a>  })</span>
-<span id="cb3-175"><a href=""></a></span>
-<span id="cb3-176"><a href=""></a>  reset_history &lt;- function() {</span>
-<span id="cb3-177"><a href=""></a>    running(FALSE)</span>
-<span id="cb3-178"><a href=""></a>    rv$idx &lt;- NULL; rv$est &lt;- NULL; rv$M &lt;- NULL; rv$HIT &lt;- NULL</span>
-<span id="cb3-179"><a href=""></a>    rv$jit &lt;- numeric(0)</span>
-<span id="cb3-180"><a href=""></a>  }</span>
-<span id="cb3-181"><a href=""></a>  observeEvent(input$reset, reset_history())</span>
-<span id="cb3-182"><a href=""></a>  observeEvent(input$n,     reset_history())</span>
-<span id="cb3-183"><a href=""></a>  observeEvent(input$conf,  reset_history())</span>
-<span id="cb3-184"><a href=""></a></span>
-<span id="cb3-185"><a href=""></a>  fmt &lt;- function(x) format(round(x), big.mark = ",")</span>
-<span id="cb3-186"><a href=""></a></span>
-<span id="cb3-187"><a href=""></a>  output$popPlot &lt;- renderPlot({</span>
-<span id="cb3-188"><a href=""></a>    j  &lt;- as.integer(input$show)</span>
-<span id="cb3-189"><a href=""></a>    nh &lt;- switch(j, rep(NA_integer_, H), nh_prop(), nh_neyman())</span>
-<span id="cb3-190"><a href=""></a></span>
-<span id="cb3-191"><a href=""></a>    par(mar = MAR, xaxs = "i")</span>
-<span id="cb3-192"><a href=""></a>    plot(NA, xlim = c(0, xmax_top), ylim = c(0.3, H + 0.9),</span>
-<span id="cb3-193"><a href=""></a>         xlab = "acres92", ylab = "", xaxt = "n", yaxt = "n", bty = "n",</span>
-<span id="cb3-194"><a href=""></a>         main = sprintf("Population by acres82 stratum, with the %s sample", METHOD[j]))</span>
-<span id="cb3-195"><a href=""></a></span>
-<span id="cb3-196"><a href=""></a>    for (h in seq_len(H)) {</span>
-<span id="cb3-197"><a href=""></a>      yc &lt;- H + 1 - h</span>
-<span id="cb3-198"><a href=""></a>      rect(0, yc - 0.36, xmax_top, yc + 0.36,</span>
-<span id="cb3-199"><a href=""></a>           col = adjustcolor("grey92", 0.6), border = NA)</span>
-<span id="cb3-200"><a href=""></a>    }</span>
-<span id="cb3-201"><a href=""></a>    points(px, y_pop, pch = 16, cex = 0.5, col = adjustcolor("grey55", 0.5))</span>
-<span id="cb3-202"><a href=""></a>    if (!is.null(rv$idx))</span>
-<span id="cb3-203"><a href=""></a>      points(px[rv$idx[[j]]], y_pop[rv$idx[[j]]], pch = 16, cex = 0.6,</span>
-<span id="cb3-204"><a href=""></a>             col = adjustcolor("red", 0.85))</span>
-<span id="cb3-205"><a href=""></a></span>
-<span id="cb3-206"><a href=""></a>    axis(2, at = H:1, labels = lev, las = 1, tick = FALSE, line = -0.5)</span>
-<span id="cb3-207"><a href=""></a>    for (h in seq_len(H)) {</span>
-<span id="cb3-208"><a href=""></a>      lab &lt;- if (j == 1) sprintf("N = %d", Nh[h])</span>
-<span id="cb3-209"><a href=""></a>             else        sprintf("N = %d,  n = %d", Nh[h], nh[h])</span>
-<span id="cb3-210"><a href=""></a>      mtext(lab, side = 2, at = H + 1 - h, line = 1.8, las = 1, cex = 0.72, col = "grey30")</span>
-<span id="cb3-211"><a href=""></a>    }</span>
-<span id="cb3-212"><a href=""></a></span>
-<span id="cb3-213"><a href=""></a>    at &lt;- pretty(c(0, cut), 6); at &lt;- at[at &lt;= cut]</span>
-<span id="cb3-214"><a href=""></a>    axis(1, at = at, labels = format(at, big.mark = ",", trim = TRUE))</span>
-<span id="cb3-215"><a href=""></a>    segments(cut, 0.3, cut, H + 0.6, col = "grey60", lty = 3)</span>
-<span id="cb3-216"><a href=""></a>    text(cut, 0.14, "//", col = "grey40", cex = 1.3, xpd = NA)</span>
-<span id="cb3-217"><a href=""></a>    text(cut + lane_w / 2, 0.14, sprintf("&gt; %s", fmt(cut)),</span>
-<span id="cb3-218"><a href=""></a>         col = "grey40", cex = 0.75, xpd = NA)</span>
-<span id="cb3-219"><a href=""></a>    abline(v = ybarU, col = "black", lwd = 2, lty = 2)</span>
-<span id="cb3-220"><a href=""></a>  })</span>
-<span id="cb3-221"><a href=""></a></span>
-<span id="cb3-222"><a href=""></a>  output$distPlot &lt;- renderPlot({</span>
-<span id="cb3-223"><a href=""></a>    par(mar = MAR, xaxs = "i")</span>
-<span id="cb3-224"><a href=""></a>    plot(NA, xlim = xlim_b, ylim = c(0.4, 3.9), yaxt = "n", bty = "n",</span>
-<span id="cb3-225"><a href=""></a>         xlab = "Sample mean of acres92", ylab = "",</span>
-<span id="cb3-226"><a href=""></a>         main = "Sampling distributions of the three estimators")</span>
-<span id="cb3-227"><a href=""></a>    abline(v = ybarU, col = "black", lwd = 2, lty = 2)</span>
-<span id="cb3-228"><a href=""></a>    axis(2, at = 3:1, labels = METHOD, las = 1, tick = FALSE, line = -0.5)</span>
-<span id="cb3-229"><a href=""></a></span>
-<span id="cb3-230"><a href=""></a>    if (is.null(rv$M)) {</span>
-<span id="cb3-231"><a href=""></a>      text(ybarU, 2, "Click 'Draw new samples' or 'Play' to begin", col = "grey50")</span>
-<span id="cb3-232"><a href=""></a>      return(invisible())</span>
-<span id="cb3-233"><a href=""></a>    }</span>
-<span id="cb3-234"><a href=""></a></span>
-<span id="cb3-235"><a href=""></a>    k     &lt;- NROW(rv$M)</span>
-<span id="cb3-236"><a href=""></a>    v_srs &lt;- if (k &gt; 1) var(rv$M[, 1]) else NA_real_</span>
-<span id="cb3-237"><a href=""></a></span>
-<span id="cb3-238"><a href=""></a>    for (j in 1:3) {</span>
-<span id="cb3-239"><a href=""></a>      yc &lt;- 4 - j</span>
-<span id="cb3-240"><a href=""></a>      points(rv$M[, j], yc + rv$jit, pch = 16, cex = 0.45,</span>
-<span id="cb3-241"><a href=""></a>             col = adjustcolor(MCOL[j], 0.30))</span>
-<span id="cb3-242"><a href=""></a>      violin(rv$M[, j], at = yc, col = MCOL[j])</span>
-<span id="cb3-243"><a href=""></a></span>
-<span id="cb3-244"><a href=""></a>      # transient interval for the current draw</span>
-<span id="cb3-245"><a href=""></a>      ci_col &lt;- if (rv$HIT[k, j]) "forestgreen" else "red"</span>
-<span id="cb3-246"><a href=""></a>      yb     &lt;- yc + 0.42</span>
-<span id="cb3-247"><a href=""></a>      segments(rv$est[j, 2], yb, rv$est[j, 3], yb, col = ci_col, lwd = 3)</span>
-<span id="cb3-248"><a href=""></a>      segments(rv$est[j, 2:3], yb - 0.06, rv$est[j, 2:3], yb + 0.06, col = ci_col, lwd = 3)</span>
-<span id="cb3-249"><a href=""></a>      points(rv$est[j, 1], yb, pch = 19, cex = 1.1, col = ci_col)</span>
-<span id="cb3-250"><a href=""></a></span>
-<span id="cb3-251"><a href=""></a>      lab &lt;- if (k &gt; 1)</span>
-<span id="cb3-252"><a href=""></a>        sprintf("sd = %s   rel.var = %.3f   coverage = %.1f%%",</span>
-<span id="cb3-253"><a href=""></a>                fmt(sd(rv$M[, j])), var(rv$M[, j]) / v_srs, 100 * mean(rv$HIT[, j]))</span>
-<span id="cb3-254"><a href=""></a>      else</span>
-<span id="cb3-255"><a href=""></a>        sprintf("coverage = %.0f%%", 100 * mean(rv$HIT[, j]))</span>
-<span id="cb3-256"><a href=""></a>      text(xlim_b[2], yc - 0.34, lab, adj = c(1, 0), cex = 0.8, col = "grey25")</span>
-<span id="cb3-257"><a href=""></a>    }</span>
-<span id="cb3-258"><a href=""></a></span>
-<span id="cb3-259"><a href=""></a>    outside &lt;- sum(rv$M &lt; xlim_b[1] | rv$M &gt; xlim_b[2])</span>
-<span id="cb3-260"><a href=""></a>    sub &lt;- sprintf("n = %d per design   |   samples drawn = %d of %d   |   nominal %.0f%%",</span>
-<span id="cb3-261"><a href=""></a>                   input$n, k, nrep(), 100 * input$conf)</span>
-<span id="cb3-262"><a href=""></a>    if (outside &gt; 0) sub &lt;- paste0(sub, sprintf("   |   %d mean(s) beyond the axis", outside))</span>
-<span id="cb3-263"><a href=""></a>    mtext(sub, side = 3, line = -0.2, cex = 0.8, col = "grey30")</span>
-<span id="cb3-264"><a href=""></a>  })</span>
-<span id="cb3-265"><a href=""></a>}</span>
-<span id="cb3-266"><a href=""></a></span>
-<span id="cb3-267"><a href=""></a>shinyApp(ui, server)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-engine="r"><pre class="sourceCode numberSource shinylive-r number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="" aria-label="1"></a>#| '!! shinylive warning !!': |</span>
+<span id="cb3-2"><a href="" aria-label="2"></a>#|   shinylive does not work in self-contained HTML documents.</span>
+<span id="cb3-3"><a href="" aria-label="3"></a>#|   Please set `embed-resources: false` in your metadata.</span>
+<span id="cb3-4"><a href="" aria-label="4"></a>#| standalone: true</span>
+<span id="cb3-5"><a href="" aria-label="5"></a>#| viewerHeight: 830</span>
+<span id="cb3-6"><a href="" aria-label="6"></a></span>
+<span id="cb3-7"><a href="" aria-label="7"></a>## file: app.R</span>
+<span id="cb3-8"><a href="" aria-label="8"></a>library(shiny)</span>
+<span id="cb3-9"><a href="" aria-label="9"></a></span>
+<span id="cb3-10"><a href="" aria-label="10"></a>data_url &lt;- "https://raw.githubusercontent.com/longhaiSK/sampling/main/acres92_stratum.csv"</span>
+<span id="cb3-11"><a href="" aria-label="11"></a>download.file(data_url, "acres92_stratum.csv")</span>
+<span id="cb3-12"><a href="" aria-label="12"></a>dat &lt;- read.csv("acres92_stratum.csv")</span>
+<span id="cb3-13"><a href="" aria-label="13"></a>dat &lt;- dat[order(dat$stratum), ]</span>
+<span id="cb3-14"><a href="" aria-label="14"></a></span>
+<span id="cb3-15"><a href="" aria-label="15"></a>pop     &lt;- dat$acres92</span>
+<span id="cb3-16"><a href="" aria-label="16"></a>stratum &lt;- factor(dat$stratum)</span>
+<span id="cb3-17"><a href="" aria-label="17"></a>lev     &lt;- sub("^acres82", "", levels(stratum))   # acres82Q1 -&gt; Q1</span>
+<span id="cb3-18"><a href="" aria-label="18"></a>H       &lt;- length(lev)</span>
+<span id="cb3-19"><a href="" aria-label="19"></a>N       &lt;- length(pop)</span>
+<span id="cb3-20"><a href="" aria-label="20"></a>ybarU   &lt;- mean(pop)</span>
+<span id="cb3-21"><a href="" aria-label="21"></a>S       &lt;- sd(pop)</span>
+<span id="cb3-22"><a href="" aria-label="22"></a></span>
+<span id="cb3-23"><a href="" aria-label="23"></a>idx_h &lt;- split(seq_len(N), stratum)      # population indices by stratum</span>
+<span id="cb3-24"><a href="" aria-label="24"></a>Nh    &lt;- sapply(idx_h, length)</span>
+<span id="cb3-25"><a href="" aria-label="25"></a>Sh    &lt;- sapply(idx_h, function(i) sd(pop[i]))</span>
+<span id="cb3-26"><a href="" aria-label="26"></a>W     &lt;- Nh / N</span>
+<span id="cb3-27"><a href="" aria-label="27"></a></span>
+<span id="cb3-28"><a href="" aria-label="28"></a>## ---- broken x-axis, shared by both panels ----------------------------------</span>
+<span id="cb3-29"><a href="" aria-label="29"></a>## Drawn region [0, 2 * ybarU]: visible scale [0, cut] plus a compressed lane</span>
+<span id="cb3-30"><a href="" aria-label="30"></a>## for the right tail, so the population mean sits at the midpoint of the panel.</span>
+<span id="cb3-31"><a href="" aria-label="31"></a>lane_frac &lt;- 0.10</span>
+<span id="cb3-32"><a href="" aria-label="32"></a>cut       &lt;- 2 * ybarU / (1 + lane_frac)</span>
+<span id="cb3-33"><a href="" aria-label="33"></a>lane_w    &lt;- lane_frac * cut</span>
+<span id="cb3-34"><a href="" aria-label="34"></a>xmax_top  &lt;- cut + lane_w</span>
+<span id="cb3-35"><a href="" aria-label="35"></a></span>
+<span id="cb3-36"><a href="" aria-label="36"></a>px      &lt;- pop</span>
+<span id="cb3-37"><a href="" aria-label="37"></a>tail_id &lt;- which(pop &gt; cut)</span>
+<span id="cb3-38"><a href="" aria-label="38"></a>n_tail  &lt;- length(tail_id)</span>
+<span id="cb3-39"><a href="" aria-label="39"></a>if (n_tail &gt; 0) {</span>
+<span id="cb3-40"><a href="" aria-label="40"></a>  r &lt;- rank(pop[tail_id], ties.method = "first") / (n_tail + 1)</span>
+<span id="cb3-41"><a href="" aria-label="41"></a>  px[tail_id] &lt;- cut + lane_w * (0.10 + 0.80 * r)</span>
+<span id="cb3-42"><a href="" aria-label="42"></a>}</span>
+<span id="cb3-43"><a href="" aria-label="43"></a></span>
+<span id="cb3-44"><a href="" aria-label="44"></a>set.seed(42)</span>
+<span id="cb3-45"><a href="" aria-label="45"></a>band  &lt;- as.integer(stratum)</span>
+<span id="cb3-46"><a href="" aria-label="46"></a>y_pop &lt;- (H + 1 - band) + runif(N, -0.30, 0.30)   # Q1 in the top band</span>
+<span id="cb3-47"><a href="" aria-label="47"></a></span>
+<span id="cb3-48"><a href="" aria-label="48"></a>## ---- fixed window for the sampling distributions ---------------------------</span>
+<span id="cb3-49"><a href="" aria-label="49"></a>se100  &lt;- sqrt(1 - 100 / N) * S / sqrt(100)</span>
+<span id="cb3-50"><a href="" aria-label="50"></a>xlim_b &lt;- ybarU + c(-1, 1) * 5 * se100</span>
+<span id="cb3-51"><a href="" aria-label="51"></a></span>
+<span id="cb3-52"><a href="" aria-label="52"></a>METHOD &lt;- c("SRS", "Proportional", "Neyman")</span>
+<span id="cb3-53"><a href="" aria-label="53"></a>MCOL   &lt;- c("grey35", "steelblue", "darkorange")</span>
+<span id="cb3-54"><a href="" aria-label="54"></a>MAR    &lt;- c(4.5, 7, 3, 1.5)   # identical in both panels, so the scales align</span>
+<span id="cb3-55"><a href="" aria-label="55"></a></span>
+<span id="cb3-56"><a href="" aria-label="56"></a>## allocation with at least 2 units per stratum, summing to n</span>
+<span id="cb3-57"><a href="" aria-label="57"></a>alloc &lt;- function(w, n) {</span>
+<span id="cb3-58"><a href="" aria-label="58"></a>  nh &lt;- pmin(pmax(2, round(w / sum(w) * n)), Nh)</span>
+<span id="cb3-59"><a href="" aria-label="59"></a>  while (sum(nh) &gt; n &amp;&amp; any(nh &gt; 2)) {</span>
+<span id="cb3-60"><a href="" aria-label="60"></a>    i &lt;- which.max(nh - 2); nh[i] &lt;- nh[i] - 1</span>
+<span id="cb3-61"><a href="" aria-label="61"></a>  }</span>
+<span id="cb3-62"><a href="" aria-label="62"></a>  while (sum(nh) &lt; n &amp;&amp; any(nh &lt; Nh)) {</span>
+<span id="cb3-63"><a href="" aria-label="63"></a>    i &lt;- which.max(Nh - nh); nh[i] &lt;- nh[i] + 1</span>
+<span id="cb3-64"><a href="" aria-label="64"></a>  }</span>
+<span id="cb3-65"><a href="" aria-label="65"></a>  nh</span>
+<span id="cb3-66"><a href="" aria-label="66"></a>}</span>
+<span id="cb3-67"><a href="" aria-label="67"></a></span>
+<span id="cb3-68"><a href="" aria-label="68"></a>## symmetric density polygon, drawn horizontally about y = at</span>
+<span id="cb3-69"><a href="" aria-label="69"></a>violin &lt;- function(x, at, col, w = 0.32) {</span>
+<span id="cb3-70"><a href="" aria-label="70"></a>  if (length(x) &lt; 10 || diff(range(x)) &lt;= 0) return(invisible())</span>
+<span id="cb3-71"><a href="" aria-label="71"></a>  d  &lt;- density(x)</span>
+<span id="cb3-72"><a href="" aria-label="72"></a>  hw &lt;- w * d$y / max(d$y)</span>
+<span id="cb3-73"><a href="" aria-label="73"></a>  polygon(c(d$x, rev(d$x)), c(at + hw, rev(at - hw)),</span>
+<span id="cb3-74"><a href="" aria-label="74"></a>          col = adjustcolor(col, 0.35), border = col)</span>
+<span id="cb3-75"><a href="" aria-label="75"></a>  m &lt;- median(x)</span>
+<span id="cb3-76"><a href="" aria-label="76"></a>  segments(m, at - w * 0.6, m, at + w * 0.6, col = col, lwd = 2)</span>
+<span id="cb3-77"><a href="" aria-label="77"></a>}</span>
+<span id="cb3-78"><a href="" aria-label="78"></a></span>
+<span id="cb3-79"><a href="" aria-label="79"></a>ui &lt;- fluidPage(</span>
+<span id="cb3-80"><a href="" aria-label="80"></a>  titlePanel("Stratified sampling by acres82 quartiles, against simple random sampling"),</span>
+<span id="cb3-81"><a href="" aria-label="81"></a>  sidebarLayout(</span>
+<span id="cb3-82"><a href="" aria-label="82"></a>    sidebarPanel(</span>
+<span id="cb3-83"><a href="" aria-label="83"></a>      width = 3,</span>
+<span id="cb3-84"><a href="" aria-label="84"></a>      sliderInput("n", "Total sample size (n)", min = 40, max = 1000, value = 300, step = 10),</span>
+<span id="cb3-85"><a href="" aria-label="85"></a>      sliderInput("conf", "Confidence level", min = 0.80, max = 0.99, value = 0.95, step = 0.01),</span>
+<span id="cb3-86"><a href="" aria-label="86"></a>      radioButtons("show", "Highlight sample from", choiceNames = METHOD,</span>
+<span id="cb3-87"><a href="" aria-label="87"></a>                   choiceValues = as.character(1:3), selected = "3"),</span>
+<span id="cb3-88"><a href="" aria-label="88"></a>      actionButton("draw", "Draw new samples", class = "btn-primary", width = "100%"),</span>
+<span id="cb3-89"><a href="" aria-label="89"></a>      br(), br(),</span>
+<span id="cb3-90"><a href="" aria-label="90"></a>      fluidRow(</span>
+<span id="cb3-91"><a href="" aria-label="91"></a>        column(6, actionButton("play", "Play", class = "btn-success", width = "100%")),</span>
+<span id="cb3-92"><a href="" aria-label="92"></a>        column(6, actionButton("stop", "Stop", class = "btn-danger",  width = "100%"))</span>
+<span id="cb3-93"><a href="" aria-label="93"></a>      ),</span>
+<span id="cb3-94"><a href="" aria-label="94"></a>      br(),</span>
+<span id="cb3-95"><a href="" aria-label="95"></a>      sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),</span>
+<span id="cb3-96"><a href="" aria-label="96"></a>      numericInput("nrep", "Stop after this many samples",</span>
+<span id="cb3-97"><a href="" aria-label="97"></a>                   value = 500, min = 10, max = 20000, step = 50),</span>
+<span id="cb3-98"><a href="" aria-label="98"></a>      actionButton("reset", "Reset", width = "100%")</span>
+<span id="cb3-99"><a href="" aria-label="99"></a>    ),</span>
+<span id="cb3-100"><a href="" aria-label="100"></a>    mainPanel(</span>
+<span id="cb3-101"><a href="" aria-label="101"></a>      width = 9,</span>
+<span id="cb3-102"><a href="" aria-label="102"></a>      plotOutput("popPlot",  height = "380px"),</span>
+<span id="cb3-103"><a href="" aria-label="103"></a>      plotOutput("distPlot", height = "380px")</span>
+<span id="cb3-104"><a href="" aria-label="104"></a>    )</span>
+<span id="cb3-105"><a href="" aria-label="105"></a>  )</span>
+<span id="cb3-106"><a href="" aria-label="106"></a>)</span>
+<span id="cb3-107"><a href="" aria-label="107"></a></span>
+<span id="cb3-108"><a href="" aria-label="108"></a>server &lt;- function(input, output, session) {</span>
+<span id="cb3-109"><a href="" aria-label="109"></a></span>
+<span id="cb3-110"><a href="" aria-label="110"></a>  rv &lt;- reactiveValues(</span>
+<span id="cb3-111"><a href="" aria-label="111"></a>    idx = NULL,      # list of sampled indices, one element per design</span>
+<span id="cb3-112"><a href="" aria-label="112"></a>    est = NULL,      # matrix 3 x 3: mean, lower, upper</span>
+<span id="cb3-113"><a href="" aria-label="113"></a>    M   = NULL,      # accumulated means, one column per design</span>
+<span id="cb3-114"><a href="" aria-label="114"></a>    HIT = NULL,      # accumulated coverage indicators</span>
+<span id="cb3-115"><a href="" aria-label="115"></a>    jit = numeric(0)</span>
+<span id="cb3-116"><a href="" aria-label="116"></a>  )</span>
+<span id="cb3-117"><a href="" aria-label="117"></a>  running &lt;- reactiveVal(FALSE)</span>
+<span id="cb3-118"><a href="" aria-label="118"></a></span>
+<span id="cb3-119"><a href="" aria-label="119"></a>  nrep &lt;- reactive({</span>
+<span id="cb3-120"><a href="" aria-label="120"></a>    v &lt;- input$nrep</span>
+<span id="cb3-121"><a href="" aria-label="121"></a>    if (is.null(v) || is.na(v) || v &lt; 1) 1L else min(as.integer(v), 20000L)</span>
+<span id="cb3-122"><a href="" aria-label="122"></a>  })</span>
+<span id="cb3-123"><a href="" aria-label="123"></a></span>
+<span id="cb3-124"><a href="" aria-label="124"></a>  nh_prop   &lt;- reactive(alloc(Nh,      input$n))</span>
+<span id="cb3-125"><a href="" aria-label="125"></a>  nh_neyman &lt;- reactive(alloc(Nh * Sh, input$n))</span>
+<span id="cb3-126"><a href="" aria-label="126"></a></span>
+<span id="cb3-127"><a href="" aria-label="127"></a>  draw_one &lt;- function() {</span>
+<span id="cb3-128"><a href="" aria-label="128"></a>    n    &lt;- isolate(input$n)</span>
+<span id="cb3-129"><a href="" aria-label="129"></a>    conf &lt;- isolate(input$conf)</span>
+<span id="cb3-130"><a href="" aria-label="130"></a>    a    &lt;- 1 - (1 - conf) / 2</span>
+<span id="cb3-131"><a href="" aria-label="131"></a></span>
+<span id="cb3-132"><a href="" aria-label="132"></a>    # simple random sample</span>
+<span id="cb3-133"><a href="" aria-label="133"></a>    i_srs &lt;- sample(N, n)</span>
+<span id="cb3-134"><a href="" aria-label="134"></a>    y     &lt;- pop[i_srs]</span>
+<span id="cb3-135"><a href="" aria-label="135"></a>    m_srs &lt;- mean(y)</span>
+<span id="cb3-136"><a href="" aria-label="136"></a>    se    &lt;- sqrt(1 - n / N) * sd(y) / sqrt(n)</span>
+<span id="cb3-137"><a href="" aria-label="137"></a>    d_srs &lt;- qt(a, df = n - 1) * se</span>
+<span id="cb3-138"><a href="" aria-label="138"></a></span>
+<span id="cb3-139"><a href="" aria-label="139"></a>    # stratified: ybar_str = sum W_h ybar_h, V = sum W_h^2 (1 - n_h/N_h) s_h^2 / n_h</span>
+<span id="cb3-140"><a href="" aria-label="140"></a>    str_draw &lt;- function(nh) {</span>
+<span id="cb3-141"><a href="" aria-label="141"></a>      ii &lt;- unlist(lapply(seq_len(H), function(h) sample(idx_h[[h]], nh[h])))</span>
+<span id="cb3-142"><a href="" aria-label="142"></a>      yh &lt;- split(pop[ii], rep(seq_len(H), nh))</span>
+<span id="cb3-143"><a href="" aria-label="143"></a>      mh &lt;- sapply(yh, mean)</span>
+<span id="cb3-144"><a href="" aria-label="144"></a>      sh &lt;- sapply(yh, sd)</span>
+<span id="cb3-145"><a href="" aria-label="145"></a>      m  &lt;- sum(W * mh)</span>
+<span id="cb3-146"><a href="" aria-label="146"></a>      v  &lt;- sum(W^2 * (1 - nh / Nh) * sh^2 / nh)</span>
+<span id="cb3-147"><a href="" aria-label="147"></a>      c(m, qt(a, df = sum(nh) - H) * sqrt(v))</span>
+<span id="cb3-148"><a href="" aria-label="148"></a>    }</span>
+<span id="cb3-149"><a href="" aria-label="149"></a>    p &lt;- str_draw(isolate(nh_prop()))</span>
+<span id="cb3-150"><a href="" aria-label="150"></a>    q &lt;- str_draw(isolate(nh_neyman()))</span>
+<span id="cb3-151"><a href="" aria-label="151"></a></span>
+<span id="cb3-152"><a href="" aria-label="152"></a>    take &lt;- function(nh) unlist(lapply(seq_len(H), function(h) sample(idx_h[[h]], nh[h])))</span>
+<span id="cb3-153"><a href="" aria-label="153"></a></span>
+<span id="cb3-154"><a href="" aria-label="154"></a>    est &lt;- rbind(c(m_srs, m_srs - d_srs, m_srs + d_srs),</span>
+<span id="cb3-155"><a href="" aria-label="155"></a>                 c(p[1],  p[1]  - p[2],  p[1]  + p[2]),</span>
+<span id="cb3-156"><a href="" aria-label="156"></a>                 c(q[1],  q[1]  - q[2],  q[1]  + q[2]))</span>
+<span id="cb3-157"><a href="" aria-label="157"></a></span>
+<span id="cb3-158"><a href="" aria-label="158"></a>    rv$idx &lt;- list(i_srs, take(isolate(nh_prop())), take(isolate(nh_neyman())))</span>
+<span id="cb3-159"><a href="" aria-label="159"></a>    rv$est &lt;- est</span>
+<span id="cb3-160"><a href="" aria-label="160"></a>    rv$M   &lt;- rbind(rv$M,   est[, 1])</span>
+<span id="cb3-161"><a href="" aria-label="161"></a>    rv$HIT &lt;- rbind(rv$HIT, est[, 2] &lt;= ybarU &amp; ybarU &lt;= est[, 3])</span>
+<span id="cb3-162"><a href="" aria-label="162"></a>    rv$jit &lt;- c(rv$jit, runif(1, -0.1, 0.1))</span>
+<span id="cb3-163"><a href="" aria-label="163"></a>  }</span>
+<span id="cb3-164"><a href="" aria-label="164"></a></span>
+<span id="cb3-165"><a href="" aria-label="165"></a>  observeEvent(input$draw, { running(FALSE); draw_one() })</span>
+<span id="cb3-166"><a href="" aria-label="166"></a>  observeEvent(input$play, running(TRUE))</span>
+<span id="cb3-167"><a href="" aria-label="167"></a>  observeEvent(input$stop, running(FALSE))</span>
+<span id="cb3-168"><a href="" aria-label="168"></a></span>
+<span id="cb3-169"><a href="" aria-label="169"></a>  observe({</span>
+<span id="cb3-170"><a href="" aria-label="170"></a>    if (!isTRUE(running())) return()</span>
+<span id="cb3-171"><a href="" aria-label="171"></a>    if (NROW(isolate(rv$M)) &gt;= isolate(nrep())) { running(FALSE); return() }</span>
+<span id="cb3-172"><a href="" aria-label="172"></a>    invalidateLater(1000 / isolate(input$speed), session)</span>
+<span id="cb3-173"><a href="" aria-label="173"></a>    isolate(draw_one())</span>
+<span id="cb3-174"><a href="" aria-label="174"></a>  })</span>
+<span id="cb3-175"><a href="" aria-label="175"></a></span>
+<span id="cb3-176"><a href="" aria-label="176"></a>  reset_history &lt;- function() {</span>
+<span id="cb3-177"><a href="" aria-label="177"></a>    running(FALSE)</span>
+<span id="cb3-178"><a href="" aria-label="178"></a>    rv$idx &lt;- NULL; rv$est &lt;- NULL; rv$M &lt;- NULL; rv$HIT &lt;- NULL</span>
+<span id="cb3-179"><a href="" aria-label="179"></a>    rv$jit &lt;- numeric(0)</span>
+<span id="cb3-180"><a href="" aria-label="180"></a>  }</span>
+<span id="cb3-181"><a href="" aria-label="181"></a>  observeEvent(input$reset, reset_history())</span>
+<span id="cb3-182"><a href="" aria-label="182"></a>  observeEvent(input$n,     reset_history())</span>
+<span id="cb3-183"><a href="" aria-label="183"></a>  observeEvent(input$conf,  reset_history())</span>
+<span id="cb3-184"><a href="" aria-label="184"></a></span>
+<span id="cb3-185"><a href="" aria-label="185"></a>  fmt &lt;- function(x) format(round(x), big.mark = ",")</span>
+<span id="cb3-186"><a href="" aria-label="186"></a></span>
+<span id="cb3-187"><a href="" aria-label="187"></a>  output$popPlot &lt;- renderPlot({</span>
+<span id="cb3-188"><a href="" aria-label="188"></a>    j  &lt;- as.integer(input$show)</span>
+<span id="cb3-189"><a href="" aria-label="189"></a>    nh &lt;- switch(j, rep(NA_integer_, H), nh_prop(), nh_neyman())</span>
+<span id="cb3-190"><a href="" aria-label="190"></a></span>
+<span id="cb3-191"><a href="" aria-label="191"></a>    par(mar = MAR, xaxs = "i")</span>
+<span id="cb3-192"><a href="" aria-label="192"></a>    plot(NA, xlim = c(0, xmax_top), ylim = c(0.3, H + 0.9),</span>
+<span id="cb3-193"><a href="" aria-label="193"></a>         xlab = "acres92", ylab = "", xaxt = "n", yaxt = "n", bty = "n",</span>
+<span id="cb3-194"><a href="" aria-label="194"></a>         main = sprintf("Population by acres82 stratum, with the %s sample", METHOD[j]))</span>
+<span id="cb3-195"><a href="" aria-label="195"></a></span>
+<span id="cb3-196"><a href="" aria-label="196"></a>    for (h in seq_len(H)) {</span>
+<span id="cb3-197"><a href="" aria-label="197"></a>      yc &lt;- H + 1 - h</span>
+<span id="cb3-198"><a href="" aria-label="198"></a>      rect(0, yc - 0.36, xmax_top, yc + 0.36,</span>
+<span id="cb3-199"><a href="" aria-label="199"></a>           col = adjustcolor("grey92", 0.6), border = NA)</span>
+<span id="cb3-200"><a href="" aria-label="200"></a>    }</span>
+<span id="cb3-201"><a href="" aria-label="201"></a>    points(px, y_pop, pch = 16, cex = 0.5, col = adjustcolor("grey55", 0.5))</span>
+<span id="cb3-202"><a href="" aria-label="202"></a>    if (!is.null(rv$idx))</span>
+<span id="cb3-203"><a href="" aria-label="203"></a>      points(px[rv$idx[[j]]], y_pop[rv$idx[[j]]], pch = 16, cex = 0.6,</span>
+<span id="cb3-204"><a href="" aria-label="204"></a>             col = adjustcolor("red", 0.85))</span>
+<span id="cb3-205"><a href="" aria-label="205"></a></span>
+<span id="cb3-206"><a href="" aria-label="206"></a>    axis(2, at = H:1, labels = lev, las = 1, tick = FALSE, line = -0.5)</span>
+<span id="cb3-207"><a href="" aria-label="207"></a>    for (h in seq_len(H)) {</span>
+<span id="cb3-208"><a href="" aria-label="208"></a>      lab &lt;- if (j == 1) sprintf("N = %d", Nh[h])</span>
+<span id="cb3-209"><a href="" aria-label="209"></a>             else        sprintf("N = %d,  n = %d", Nh[h], nh[h])</span>
+<span id="cb3-210"><a href="" aria-label="210"></a>      mtext(lab, side = 2, at = H + 1 - h, line = 1.8, las = 1, cex = 0.72, col = "grey30")</span>
+<span id="cb3-211"><a href="" aria-label="211"></a>    }</span>
+<span id="cb3-212"><a href="" aria-label="212"></a></span>
+<span id="cb3-213"><a href="" aria-label="213"></a>    at &lt;- pretty(c(0, cut), 6); at &lt;- at[at &lt;= cut]</span>
+<span id="cb3-214"><a href="" aria-label="214"></a>    axis(1, at = at, labels = format(at, big.mark = ",", trim = TRUE))</span>
+<span id="cb3-215"><a href="" aria-label="215"></a>    segments(cut, 0.3, cut, H + 0.6, col = "grey60", lty = 3)</span>
+<span id="cb3-216"><a href="" aria-label="216"></a>    text(cut, 0.14, "//", col = "grey40", cex = 1.3, xpd = NA)</span>
+<span id="cb3-217"><a href="" aria-label="217"></a>    text(cut + lane_w / 2, 0.14, sprintf("&gt; %s", fmt(cut)),</span>
+<span id="cb3-218"><a href="" aria-label="218"></a>         col = "grey40", cex = 0.75, xpd = NA)</span>
+<span id="cb3-219"><a href="" aria-label="219"></a>    abline(v = ybarU, col = "black", lwd = 2, lty = 2)</span>
+<span id="cb3-220"><a href="" aria-label="220"></a>  })</span>
+<span id="cb3-221"><a href="" aria-label="221"></a></span>
+<span id="cb3-222"><a href="" aria-label="222"></a>  output$distPlot &lt;- renderPlot({</span>
+<span id="cb3-223"><a href="" aria-label="223"></a>    par(mar = MAR, xaxs = "i")</span>
+<span id="cb3-224"><a href="" aria-label="224"></a>    plot(NA, xlim = xlim_b, ylim = c(0.4, 3.9), yaxt = "n", bty = "n",</span>
+<span id="cb3-225"><a href="" aria-label="225"></a>         xlab = "Sample mean of acres92", ylab = "",</span>
+<span id="cb3-226"><a href="" aria-label="226"></a>         main = "Sampling distributions of the three estimators")</span>
+<span id="cb3-227"><a href="" aria-label="227"></a>    abline(v = ybarU, col = "black", lwd = 2, lty = 2)</span>
+<span id="cb3-228"><a href="" aria-label="228"></a>    axis(2, at = 3:1, labels = METHOD, las = 1, tick = FALSE, line = -0.5)</span>
+<span id="cb3-229"><a href="" aria-label="229"></a></span>
+<span id="cb3-230"><a href="" aria-label="230"></a>    if (is.null(rv$M)) {</span>
+<span id="cb3-231"><a href="" aria-label="231"></a>      text(ybarU, 2, "Click 'Draw new samples' or 'Play' to begin", col = "grey50")</span>
+<span id="cb3-232"><a href="" aria-label="232"></a>      return(invisible())</span>
+<span id="cb3-233"><a href="" aria-label="233"></a>    }</span>
+<span id="cb3-234"><a href="" aria-label="234"></a></span>
+<span id="cb3-235"><a href="" aria-label="235"></a>    k     &lt;- NROW(rv$M)</span>
+<span id="cb3-236"><a href="" aria-label="236"></a>    v_srs &lt;- if (k &gt; 1) var(rv$M[, 1]) else NA_real_</span>
+<span id="cb3-237"><a href="" aria-label="237"></a></span>
+<span id="cb3-238"><a href="" aria-label="238"></a>    for (j in 1:3) {</span>
+<span id="cb3-239"><a href="" aria-label="239"></a>      yc &lt;- 4 - j</span>
+<span id="cb3-240"><a href="" aria-label="240"></a>      points(rv$M[, j], yc + rv$jit, pch = 16, cex = 0.45,</span>
+<span id="cb3-241"><a href="" aria-label="241"></a>             col = adjustcolor(MCOL[j], 0.30))</span>
+<span id="cb3-242"><a href="" aria-label="242"></a>      violin(rv$M[, j], at = yc, col = MCOL[j])</span>
+<span id="cb3-243"><a href="" aria-label="243"></a></span>
+<span id="cb3-244"><a href="" aria-label="244"></a>      # transient interval for the current draw</span>
+<span id="cb3-245"><a href="" aria-label="245"></a>      ci_col &lt;- if (rv$HIT[k, j]) "forestgreen" else "red"</span>
+<span id="cb3-246"><a href="" aria-label="246"></a>      yb     &lt;- yc + 0.42</span>
+<span id="cb3-247"><a href="" aria-label="247"></a>      segments(rv$est[j, 2], yb, rv$est[j, 3], yb, col = ci_col, lwd = 3)</span>
+<span id="cb3-248"><a href="" aria-label="248"></a>      segments(rv$est[j, 2:3], yb - 0.06, rv$est[j, 2:3], yb + 0.06, col = ci_col, lwd = 3)</span>
+<span id="cb3-249"><a href="" aria-label="249"></a>      points(rv$est[j, 1], yb, pch = 19, cex = 1.1, col = ci_col)</span>
+<span id="cb3-250"><a href="" aria-label="250"></a></span>
+<span id="cb3-251"><a href="" aria-label="251"></a>      lab &lt;- if (k &gt; 1)</span>
+<span id="cb3-252"><a href="" aria-label="252"></a>        sprintf("sd = %s   rel.var = %.3f   coverage = %.1f%%",</span>
+<span id="cb3-253"><a href="" aria-label="253"></a>                fmt(sd(rv$M[, j])), var(rv$M[, j]) / v_srs, 100 * mean(rv$HIT[, j]))</span>
+<span id="cb3-254"><a href="" aria-label="254"></a>      else</span>
+<span id="cb3-255"><a href="" aria-label="255"></a>        sprintf("coverage = %.0f%%", 100 * mean(rv$HIT[, j]))</span>
+<span id="cb3-256"><a href="" aria-label="256"></a>      text(xlim_b[2], yc - 0.34, lab, adj = c(1, 0), cex = 0.8, col = "grey25")</span>
+<span id="cb3-257"><a href="" aria-label="257"></a>    }</span>
+<span id="cb3-258"><a href="" aria-label="258"></a></span>
+<span id="cb3-259"><a href="" aria-label="259"></a>    outside &lt;- sum(rv$M &lt; xlim_b[1] | rv$M &gt; xlim_b[2])</span>
+<span id="cb3-260"><a href="" aria-label="260"></a>    sub &lt;- sprintf("n = %d per design   |   samples drawn = %d of %d   |   nominal %.0f%%",</span>
+<span id="cb3-261"><a href="" aria-label="261"></a>                   input$n, k, nrep(), 100 * input$conf)</span>
+<span id="cb3-262"><a href="" aria-label="262"></a>    if (outside &gt; 0) sub &lt;- paste0(sub, sprintf("   |   %d mean(s) beyond the axis", outside))</span>
+<span id="cb3-263"><a href="" aria-label="263"></a>    mtext(sub, side = 3, line = -0.2, cex = 0.8, col = "grey30")</span>
+<span id="cb3-264"><a href="" aria-label="264"></a>  })</span>
+<span id="cb3-265"><a href="" aria-label="265"></a>}</span>
+<span id="cb3-266"><a href="" aria-label="266"></a></span>
+<span id="cb3-267"><a href="" aria-label="267"></a>shinyApp(ui, server)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 </section></section>
 
