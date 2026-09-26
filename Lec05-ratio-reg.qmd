@@ -56,7 +56,7 @@ variable $x$ in advance.
 
 :::: {.columns}
 
-::: {.column width="60%"}
+::: {.column width="50%"}
 
 ```{r}
 #| label: fig-ratio-concept
@@ -106,7 +106,7 @@ text(0.2, ybar_srs, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), fon
 
 :::
 
-::: {.column width="40%"}
+::: {.column width="50%"}
 
 * Grey: population ($x_i$ known). Green: an ordinary SRS.
 
@@ -116,15 +116,17 @@ $$
 \hat{\bar y}_r = \frac1N\sum_{i=1}^N \hat y_i = \hat{B}\overline{x}_{U}
 $$
 
-* This sample happens to have $\bar x > \bar x_U$, so the naive $\bar y$
-(green) lands well above $\bar y_U$; the ratio estimator corrects for that
-through the known $\bar x_U$, and $\hat{\bar y}_r$ (red) $\approx \bar
-y_{U}$ (black). Averaged over samples both are (essentially) unbiased, but
-$\hat{\bar y}_r$ varies far less.
+
 
 :::
 
 ::::
+
+This sample happens to have $\bar x > \bar x_U$, so the naive $\bar y$
+(green) lands well above $\bar y_U$; the ratio estimator corrects for that
+through the known $\bar x_U$, and $\hat{\bar y}_r$ (red) $\approx \bar
+y_{U}$ (black). Averaged over samples both are (essentially) unbiased, but
+$\hat{\bar y}_r$ varies far less.
 
 ## Deriving the Ratio Estimator from Fitted Values
 
@@ -454,7 +456,7 @@ right stratum mean, weighted by the correct $N_h$.
 
 :::: {.columns}
 
-::: {.column width="60%"}
+::: {.column width="50%"}
 
 ```{r}
 #| label: fig-poststrat-concept
@@ -515,7 +517,7 @@ text(-10, ybar_naive, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), f
 
 :::
 
-::: {.column width="40%"}
+::: {.column width="50%"}
 
 * Grey: population, post-strata A–D (block width = $N_h$). Green: an ordinary
   SRS of $n=25$; the realized $n_h=(5,5,6,9)$ do *not* match the population
@@ -526,14 +528,15 @@ $$
 \hat{\bar y}_{\text{post}} = \sum_{h=1}^H \pi_h\,\bar y_h .
 $$
 
-* This sample is light on A and heavy on D, so the naive $\bar y$ (green) is
-  pulled up; reweighting by the known $\pi_h$ undoes it and
-  $\hat{\bar y}_{\text{post}}$ (red) $\approx \bar y_{U}$ (black). It is
-  this reweighting, repeated over samples, that cuts the variance.
 
 :::
 
 ::::
+
+This sample is light on A and heavy on D, so the naive $\bar y$ (green) is
+  pulled up; reweighting by the known $\pi_h$ undoes it and
+  $\hat{\bar y}_{\text{post}}$ (red) $\approx \bar y_{U}$ (black). It is
+  this reweighting, repeated over samples, that cuts the variance.
 
 ## Example: Post-Stratification Spreadsheet
 
@@ -743,7 +746,7 @@ $\hat t_{y,\text{reg}} = N\hat{\bar y}_{\text{reg}} = N\hat B_0 + \hat B_1 t_x$.
 
 :::: {.columns}
 
-::: {.column width="60%"}
+::: {.column width="50%"}
 
 ```{r}
 #| label: fig-reg-concept
@@ -798,7 +801,7 @@ text(0.2, ybar_srs, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), fon
 
 :::
 
-::: {.column width="40%"}
+::: {.column width="50%"}
 
 * Grey: population ($x_i$ known). Green: an ordinary SRS.
 
@@ -809,15 +812,17 @@ $$
  = \hat B_0 + \hat B_1 \bar x_{U}
 $$
 
-* Here the sampled $x$'s average above $\bar x_U$, so the naive $\bar y$
+
+:::
+
+::::
+
+The sampled $x$'s average above $\bar x_U$, so the naive $\bar y$
 (green) sits above $\bar y_U$; the regression estimator shifts the fit back to
 $\bar x_U$ and lands on target, $\hat{\bar y}_{\text{reg}}$ (red) $\approx
 \bar y_{U}$ (black). Both are essentially unbiased over repeated samples, but
 $\hat{\bar y}_{\text{reg}}$ is much less variable.
 
-:::
-
-::::
 
 ## Estimating the Standard Error
 
@@ -871,7 +876,7 @@ $\hat t_{yr} = \hat B\, t_x$, for the systematic undercounting bias.
 
 :::: {.columns}
 
-::: {.column width="60%"}
+::: {.column width="50%"}
 
 ```{r}
 #| label: fig-ml-concept
@@ -930,7 +935,7 @@ text(0.2, ybar_srs, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), fon
 
 :::
 
-::: {.column width="40%"}
+::: {.column width="50%"}
 
 Grey: population ($x_i$ known). Green: an ordinary SRS.
 

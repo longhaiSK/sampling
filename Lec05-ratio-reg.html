@@ -6,8 +6,8 @@
 <script src="Lec05-ratio-reg_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="Lec05-ratio-reg_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="Lec05-ratio-reg_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="Lec05-ratio-reg_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.37">
+<link href="Lec05-ratio-reg_files/libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.18">
 
   <title>STAT 348 Sampling Techniques</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,10 +19,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -187,7 +190,7 @@ B = \frac{t_y}{t_x} = \frac{\bar y_U}{\bar x_U}, \qquad \text{so that} \qquad \b
 <section id="illustration-of-ratio-estimation" class="slide level2">
 <h2>Illustration of Ratio Estimation</h2>
 <div class="columns">
-<div class="column" style="width:60%;">
+<div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-ratio-concept" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
@@ -202,7 +205,7 @@ Figure&nbsp;1: Illustration of Benefits of Ratio Estimation
 </div>
 </div>
 </div>
-</div><div class="column" style="width:40%;">
+</div><div class="column" style="width:50%;">
 <ul>
 <li><p>Grey: population (<span class="math inline">x_i</span> known). Green: an ordinary SRS.</p></li>
 <li><p>Red line, fit from the sample: <span class="math inline">\hat y_i=\hat Bx_i</span> for every unit.</p></li>
@@ -210,11 +213,9 @@ Figure&nbsp;1: Illustration of Benefits of Ratio Estimation
 <p><span class="math display">
 \hat{\bar y}_r = \frac1N\sum_{i=1}^N \hat y_i = \hat{B}\overline{x}_{U}
 </span></p>
-<ul>
-<li>This sample happens to have <span class="math inline">\bar x &gt; \bar x_U</span>, so the naive <span class="math inline">\bar y</span> (green) lands well above <span class="math inline">\bar y_U</span>; the ratio estimator corrects for that through the known <span class="math inline">\bar x_U</span>, and <span class="math inline">\hat{\bar y}_r</span> (red) <span class="math inline">\approx \bar
-y_{U}</span> (black). Averaged over samples both are (essentially) unbiased, but <span class="math inline">\hat{\bar y}_r</span> varies far less.</li>
-</ul>
 </div></div>
+<p>This sample happens to have <span class="math inline">\bar x &gt; \bar x_U</span>, so the naive <span class="math inline">\bar y</span> (green) lands well above <span class="math inline">\bar y_U</span>; the ratio estimator corrects for that through the known <span class="math inline">\bar x_U</span>, and <span class="math inline">\hat{\bar y}_r</span> (red) <span class="math inline">\approx \bar
+y_{U}</span> (black). Averaged over samples both are (essentially) unbiased, but <span class="math inline">\hat{\bar y}_r</span> varies far less.</p>
 </section>
 <section id="deriving-the-ratio-estimator-from-fitted-values" class="slide level2">
 <h2>Deriving the Ratio Estimator from Fitted Values</h2>
@@ -403,7 +404,7 @@ x_i = \text{total farm acreage of county } i \text{ in 1987}.
 </div><div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-france-toy" class="quarto-float quarto-figure quarto-figure-center" width="100%" data-fig-align="center">
+<div id="fig-france-toy" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" width="100%">
 <figure class="quarto-float quarto-float-fig">
 <div aria-describedby="fig-france-toy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-france-toy-1.png" id="fig-france-toy" class="quarto-figure quarto-figure-center" style="width:100.0%">
@@ -531,7 +532,7 @@ n_h^{\text{post-strat}} := n\pi_h,
 <section id="illustration-of-post-stratification" class="slide level2">
 <h2>Illustration of Post-Stratification</h2>
 <div class="columns">
-<div class="column" style="width:60%;">
+<div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-poststrat-concept" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
@@ -546,15 +547,15 @@ Figure&nbsp;3: Illustration of Benefits of Post-Stratification
 </div>
 </div>
 </div>
-</div><div class="column" style="width:40%;">
+</div><div class="column" style="width:50%;">
 <ul>
 <li><p>Grey: population, post-strata A–D (block width = <span class="math inline">N_h</span>). Green: an ordinary SRS of <span class="math inline">n=25</span>; the realized <span class="math inline">n_h=(5,5,6,9)</span> do <em>not</em> match the population shares <span class="math inline">\pi_h=(.36,.14,.21,.29)</span> — they never do, since <span class="math inline">n_h</span> is random.</p></li>
 <li><p>Red segments: predictions <span class="math inline">\hat y_i=\bar y_h</span> per stratum, giving <span class="math display">
 \hat{\bar y}_{\text{post}} = \sum_{h=1}^H \pi_h\,\bar y_h .
 </span></p></li>
-<li><p>This sample is light on A and heavy on D, so the naive <span class="math inline">\bar y</span> (green) is pulled up; reweighting by the known <span class="math inline">\pi_h</span> undoes it and <span class="math inline">\hat{\bar y}_{\text{post}}</span> (red) <span class="math inline">\approx \bar y_{U}</span> (black). It is this reweighting, repeated over samples, that cuts the variance.</p></li>
 </ul>
 </div></div>
+<p>This sample is light on A and heavy on D, so the naive <span class="math inline">\bar y</span> (green) is pulled up; reweighting by the known <span class="math inline">\pi_h</span> undoes it and <span class="math inline">\hat{\bar y}_{\text{post}}</span> (red) <span class="math inline">\approx \bar y_{U}</span> (black). It is this reweighting, repeated over samples, that cuts the variance.</p>
 </section>
 <section id="example-post-stratification-spreadsheet" class="slide level2">
 <h2>Example: Post-Stratification Spreadsheet</h2>
@@ -1225,7 +1226,7 @@ y}_r = \frac1N\sum_{i=1}^N \hat B x_i</span>. The corresponding total is <span c
 <section id="illustration-of-regression-estimation" class="slide level2">
 <h2>Illustration of Regression Estimation</h2>
 <div class="columns">
-<div class="column" style="width:60%;">
+<div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-reg-concept" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
@@ -1240,7 +1241,7 @@ Figure&nbsp;5: Illustration of Benefits of Regression Estimation
 </div>
 </div>
 </div>
-</div><div class="column" style="width:40%;">
+</div><div class="column" style="width:50%;">
 <ul>
 <li><p>Grey: population (<span class="math inline">x_i</span> known). Green: an ordinary SRS.</p></li>
 <li><p>Red line, fit from the sample: <span class="math inline">\hat y_i=\hat B_0+\hat B_1x_i</span> for every unit.</p></li>
@@ -1249,11 +1250,9 @@ Figure&nbsp;5: Illustration of Benefits of Regression Estimation
 \hat{\bar y}_{\text{reg}} = \frac1N\sum_{i=1}^N \hat y_i
 = \hat B_0 + \hat B_1 \bar x_{U}
 </span></p>
-<ul>
-<li>Here the sampled <span class="math inline">x</span>’s average above <span class="math inline">\bar x_U</span>, so the naive <span class="math inline">\bar y</span> (green) sits above <span class="math inline">\bar y_U</span>; the regression estimator shifts the fit back to <span class="math inline">\bar x_U</span> and lands on target, <span class="math inline">\hat{\bar y}_{\text{reg}}</span> (red) <span class="math inline">\approx
-\bar y_{U}</span> (black). Both are essentially unbiased over repeated samples, but <span class="math inline">\hat{\bar y}_{\text{reg}}</span> is much less variable.</li>
-</ul>
 </div></div>
+<p>The sampled <span class="math inline">x</span>’s average above <span class="math inline">\bar x_U</span>, so the naive <span class="math inline">\bar y</span> (green) sits above <span class="math inline">\bar y_U</span>; the regression estimator shifts the fit back to <span class="math inline">\bar x_U</span> and lands on target, <span class="math inline">\hat{\bar y}_{\text{reg}}</span> (red) <span class="math inline">\approx
+\bar y_{U}</span> (black). Both are essentially unbiased over repeated samples, but <span class="math inline">\hat{\bar y}_{\text{reg}}</span> is much less variable.</p>
 </section>
 <section id="estimating-the-standard-error" class="slide level2">
 <h2>Estimating the Standard Error</h2>
@@ -1282,7 +1281,7 @@ Figure&nbsp;6
 <section id="illustration-a-flexible-curve-instead-of-a-line" class="slide level2">
 <h2>Illustration: A Flexible Curve Instead of a Line</h2>
 <div class="columns">
-<div class="column" style="width:60%;">
+<div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-ml-concept" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
@@ -1297,7 +1296,7 @@ Figure&nbsp;7: Illustration of Benefits of a Machine-Learning Prediction Model
 </div>
 </div>
 </div>
-</div><div class="column" style="width:40%;">
+</div><div class="column" style="width:50%;">
 <p>Grey: population (<span class="math inline">x_i</span> known). Green: an ordinary SRS.</p>
 <p>The true relationship is <strong>curved</strong>; a straight line (blue, dashed) underfits it, but a flexible model (red curve) tracks it closely.</p>
 <p><span class="math display">
