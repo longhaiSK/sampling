@@ -31,7 +31,7 @@ $$
     --- the variance of a **ratio** estimate computed over the $n$ sampled
     clusters, plus the cluster sampling fraction $n/N$ times the variance of a
     **stratified** sample in which those same clusters are the strata:
-    $$
+$$
 \hat{V}(\overline{y}_r) =
 \underbrace{\left(1 - \frac{n}{N}\right) \frac{1}{n\overline{M}^2}
   \frac{\sum_{i=1}^n (\hat{t}_i - \overline{y}_r M_i)^2}{n-1}}_{\textstyle \hat{V}_{\mathrm{ratio}}}
@@ -39,6 +39,8 @@ $$
 \frac{n}{N}
 \underbrace{\sum_{i=1}^n \left(\frac{M_i}{M}\right)^{2}
   \left(1 - \frac{m_i}{M_i}\right)\frac{s_i^2}{m_i}}_{\textstyle \hat{V}_{\mathrm{str}}},
+$$
+$$
 \qquad M = \sum_{i=1}^n M_i = n\overline{M} .
 $$
     Here $s_i^2$ is the sample variance of the $m_i$ elements measured in
@@ -144,13 +146,7 @@ In two-stage cluster sampling, we sample clusters, and then subsample elements w
 #| tbl-cap: "Raw data: coot egg clutches (sample)"
 coots <- read.csv("data/coots.csv")
 
-coots |>
-  gt() |>
-  tab_header(title = "Raw Data: Coots") |>
-  tab_options(
-    container.height = px(400), # Adjust height as needed
-    container.overflow.y = TRUE # Forces the vertical scroll bar
-  )
+coots
 ```
 
 
@@ -172,7 +168,7 @@ coots_res$estimate |> format_est_gt("ratio_mean")
 ```
 **Output Note:** The estimated overall average egg volume is `r round(coots_res$estimate["Est."], 3)` units. Because the total number of clutches in the population ($N$) is not explicitly provided (set to `Inf` by default), the finite population correction factor is safely omitted from the standard error calculation.
 
-## Two-stage cluster sampling with a finite $N$ for Estimating Agriculture Acreages for Farming
+## Two-stage cluster sampling for Estimating Agriculture Acreages for Farming
 
 Neither example above actually exercises the within-cluster term --- `algebra`
 is one-stage, and `coots` has an unknown $N$. To see it at work we need a
