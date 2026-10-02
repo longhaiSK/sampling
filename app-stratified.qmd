@@ -39,11 +39,15 @@ download.file(data_url, "agpop.csv")
 dat <- read.csv("agpop.csv")
 
 ## -99 is the missing-value code in agpop.csv; recode to NA and drop
-## counties missing either the response (acres92) or the acres82 stratifier,
-## so that the same population underlies both stratification choices below.
-dat$acres92[dat$acres92 == -99] <- NA
-dat$acres82[dat$acres82 == -99] <- NA
-dat <- dat[!is.na(dat$acres92) & !is.na(dat$acres82), ]
+## counties missing the response (acres92) or any other numeric variable, so
+## that the same population underlies every stratification choice below.
+num_vars <- names(dat)[sapply(dat, is.numeric)]
+for (v in num_vars) dat[[v]][dat[[v]] == -99] <- NA
+dat <- dat[complete.cases(dat[, num_vars]), ]
+
+## every numeric variable other than the response defines a stratification
+## variable through its quantiles; region is the one categorical alternative
+strat_vars <- setdiff(num_vars, "acres92")
 
 pop   <- dat$acres92
 N     <- length(pop)
@@ -51,13 +55,14 @@ ybarU <- mean(pop)
 S     <- sd(pop)
 
 ## build the stratum factor, population index list, and per-stratum summaries
-## for either stratification variable ("acres82" quantiles or "region"); x_pos
+## for any stratification variable (quantile groups of a numeric variable, or
+## "region"); x_pos
 ## jitters each unit about its stratum's integer position, 1 (left) to H (right)
 make_strata <- function(method) {
-  if (method == "acres82") {
-    stratum <- cut(dat$acres82,
-                    breaks = quantile(dat$acres82, probs = c(0, 0.25, 0.75, 0.95, 1)),
-                    include.lowest = TRUE)
+  if (method %in% strat_vars) {
+    ## unique() guards against tied quantiles (e.g. many zeros in largef*)
+    brk <- unique(quantile(dat[[method]], probs = c(0, 0.25, 0.75, 0.95, 1)))
+    stratum <- cut(dat[[method]], breaks = brk, include.lowest = TRUE)
     levels(stratum) <- paste0("Q", seq_along(levels(stratum)))
   } else {
     stratum <- factor(dat$region)
@@ -75,7 +80,8 @@ make_strata <- function(method) {
        Nh = Nh, Sh = Sh, W = W, x_pos = x_pos)
 }
 
-STRAT_CHOICES <- c("acres82Quantiles" = "acres82", "region" = "region")
+STRAT_CHOICES <- c(setNames(strat_vars, paste(strat_vars, "quantiles")),
+                   "region" = "region")
 
 ## ---- broken y-axis, shared by the left panel --------------------------------
 ## Drawn region [0, 2 * ybarU]: visible scale [0, cut] plus a compressed lane
@@ -147,10 +153,10 @@ ui <- fluidPage(
     fluidRow(
       column(
         3,
-        radioButtons("stratvar", "Stratification variable", choices = STRAT_CHOICES,
-                     selected = "acres82"),
-        radioButtons("show", "Highlight sample from", choiceNames = METHOD,
-                     choiceValues = as.character(1:3), selected = "3")
+        selectInput("stratvar", "Stratification variable", choices = STRAT_CHOICES,
+                    selected = "acres82"),
+        selectInput("show", "Highlight sample from",
+                    choices = setNames(as.character(1:3), METHOD), selected = "3")
       ),
       column(
         3,
@@ -418,14 +424,16 @@ shinyApp(ui, server)
 This app draws three samples of the same total size $n$ at every step: a
 simple random sample, a stratified sample with proportional allocation, and a
 stratified sample with Neyman allocation. It uses the full `agpop.csv`
-population (with the `-99` missing-value codes recoded to `NA` and dropped),
-and a radio button lets you choose the stratification variable: the `acres82`
-quantile groups (cut at the 25th, 75th and 95th percentiles and labelled
-Q1 to Q4), or the four `region` categories (NC, NE, S, W).
+population (with the `-99` missing-value codes recoded to `NA` and counties
+with any missing value dropped), and a dropdown lets you choose the
+stratification variable: the quantile groups of any numeric variable other than
+the response `acres92` (`acres87`, `acres82`, `farms*`, `largef*`, `smallf*`;
+cut at the 25th, 75th and 95th percentiles and labelled Q1 to Q4, with tied
+cut points merged), or the four `region` categories (NC, NE, S, W).
 
 The two panels sit side by side. The left panel shows the population split into
 its strata along the x-axis, each drawn as a column of jittered points on a
-broken `acres92` axis; the radio buttons choose which of the three samples is
+broken `acres92` axis; the second dropdown chooses which of the three samples is
 highlighted in red, and each stratum is labelled with its $N_h$ and the $n_h$
 that the chosen allocation assigns to it. A horizontal bar marks the sample
 mean of the highlighted design: one bar per stratum for the two stratified
