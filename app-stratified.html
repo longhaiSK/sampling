@@ -133,11 +133,15 @@ download.file(data_url, "agpop.csv")
 dat &lt;- read.csv("agpop.csv")
 
 ## -99 is the missing-value code in agpop.csv; recode to NA and drop
-## counties missing either the response (acres92) or the acres82 stratifier,
-## so that the same population underlies both stratification choices below.
-dat$acres92[dat$acres92 == -99] &lt;- NA
-dat$acres82[dat$acres82 == -99] &lt;- NA
-dat &lt;- dat[!is.na(dat$acres92) &amp; !is.na(dat$acres82), ]
+## counties missing the response (acres92) or any other numeric variable, so
+## that the same population underlies every stratification choice below.
+num_vars &lt;- names(dat)[sapply(dat, is.numeric)]
+for (v in num_vars) dat[[v]][dat[[v]] == -99] &lt;- NA
+dat &lt;- dat[complete.cases(dat[, num_vars]), ]
+
+## every numeric variable other than the response defines a stratification
+## variable through its quantiles; region is the one categorical alternative
+strat_vars &lt;- setdiff(num_vars, "acres92")
 
 pop   &lt;- dat$acres92
 N     &lt;- length(pop)
@@ -145,13 +149,14 @@ ybarU &lt;- mean(pop)
 S     &lt;- sd(pop)
 
 ## build the stratum factor, population index list, and per-stratum summaries
-## for either stratification variable ("acres82" quantiles or "region"); x_pos
+## for any stratification variable (quantile groups of a numeric variable, or
+## "region"); x_pos
 ## jitters each unit about its stratum's integer position, 1 (left) to H (right)
 make_strata &lt;- function(method) {
-  if (method == "acres82") {
-    stratum &lt;- cut(dat$acres82,
-                    breaks = quantile(dat$acres82, probs = c(0, 0.25, 0.75, 0.95, 1)),
-                    include.lowest = TRUE)
+  if (method %in% strat_vars) {
+    ## unique() guards against tied quantiles (e.g. many zeros in largef*)
+    brk &lt;- unique(quantile(dat[[method]], probs = c(0, 0.25, 0.75, 0.95, 1)))
+    stratum &lt;- cut(dat[[method]], breaks = brk, include.lowest = TRUE)
     levels(stratum) &lt;- paste0("Q", seq_along(levels(stratum)))
   } else {
     stratum &lt;- factor(dat$region)
@@ -169,7 +174,8 @@ make_strata &lt;- function(method) {
        Nh = Nh, Sh = Sh, W = W, x_pos = x_pos)
 }
 
-STRAT_CHOICES &lt;- c("acres82Quantiles" = "acres82", "region" = "region")
+STRAT_CHOICES &lt;- c(setNames(strat_vars, paste(strat_vars, "quantiles")),
+                   "region" = "region")
 
 ## ---- broken y-axis, shared by the left panel --------------------------------
 ## Drawn region [0, 2 * ybarU]: visible scale [0, cut] plus a compressed lane
@@ -241,10 +247,10 @@ ui &lt;- fluidPage(
     fluidRow(
       column(
         3,
-        radioButtons("stratvar", "Stratification variable", choices = STRAT_CHOICES,
-                     selected = "acres82"),
-        radioButtons("show", "Highlight sample from", choiceNames = METHOD,
-                     choiceValues = as.character(1:3), selected = "3")
+        selectInput("stratvar", "Stratification variable", choices = STRAT_CHOICES,
+                    selected = "acres82"),
+        selectInput("show", "Highlight sample from",
+                    choices = setNames(as.character(1:3), METHOD), selected = "3")
       ),
       column(
         3,
@@ -507,8 +513,8 @@ shinyApp(ui, server)
 </code></pre>
 <section id="about-this-app" class="level2">
 <h2 class="anchored" data-anchor-id="about-this-app">About this app</h2>
-<p>This app draws three samples of the same total size <span class="math inline">\(n\)</span> at every step: a simple random sample, a stratified sample with proportional allocation, and a stratified sample with Neyman allocation. It uses the full <code>agpop.csv</code> population (with the <code>-99</code> missing-value codes recoded to <code>NA</code> and dropped), and a radio button lets you choose the stratification variable: the <code>acres82</code> quantile groups (cut at the 25th, 75th and 95th percentiles and labelled Q1 to Q4), or the four <code>region</code> categories (NC, NE, S, W).</p>
-<p>The two panels sit side by side. The left panel shows the population split into its strata along the x-axis, each drawn as a column of jittered points on a broken <code>acres92</code> axis; the radio buttons choose which of the three samples is highlighted in red, and each stratum is labelled with its <span class="math inline">\(N_h\)</span> and the <span class="math inline">\(n_h\)</span> that the chosen allocation assigns to it. A horizontal bar marks the sample mean of the highlighted design: one bar per stratum for the two stratified designs, or a single bar spanning the whole population for SRS, which has no stratum-level breakdown.</p>
+<p>This app draws three samples of the same total size <span class="math inline">\(n\)</span> at every step: a simple random sample, a stratified sample with proportional allocation, and a stratified sample with Neyman allocation. It uses the full <code>agpop.csv</code> population (with the <code>-99</code> missing-value codes recoded to <code>NA</code> and counties with any missing value dropped), and a dropdown lets you choose the stratification variable: the quantile groups of any numeric variable other than the response <code>acres92</code> (<code>acres87</code>, <code>acres82</code>, <code>farms*</code>, <code>largef*</code>, <code>smallf*</code>; cut at the 25th, 75th and 95th percentiles and labelled Q1 to Q4, with tied cut points merged), or the four <code>region</code> categories (NC, NE, S, W).</p>
+<p>The two panels sit side by side. The left panel shows the population split into its strata along the x-axis, each drawn as a column of jittered points on a broken <code>acres92</code> axis; the second dropdown chooses which of the three samples is highlighted in red, and each stratum is labelled with its <span class="math inline">\(N_h\)</span> and the <span class="math inline">\(n_h\)</span> that the chosen allocation assigns to it. A horizontal bar marks the sample mean of the highlighted design: one bar per stratum for the two stratified designs, or a single bar spanning the whole population for SRS, which has no stratum-level breakdown.</p>
 <p>The right panel accumulates the sample means of all three designs on a common <code>acres92</code> axis, one column per design (SRS, Proportional, Neyman), drawn as a violin once enough draws have accumulated. The bar beside each column is the current confidence interval for that design, green when it covers <span class="math inline">\(\mu\)</span> and red when it does not, and replaced at every draw. The running CI coverage rate and the variance reduction relative to SRS are shown as legends, the latter alongside its theoretical counterpart (in brackets), computed from the true population <span class="math inline">\(N_h\)</span> and <span class="math inline">\(S_h\)</span> at the current allocation.</p>
 <p>Play advances the simulation one draw at a time; Pause stops it; Skip jumps straight to the final violin plots by drawing every remaining replication up to the cap in a single step.</p>
 <div class="appsource">
