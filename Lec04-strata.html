@@ -6,8 +6,8 @@
 <script src="Lec04-strata_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="Lec04-strata_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="Lec04-strata_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="Lec04-strata_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.37">
+<link href="Lec04-strata_files/libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.18">
 
   <title>STAT 348 Sampling Techniques</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,10 +19,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -876,9 +879,9 @@ w_{hj} = \frac{1}{\pi_{hj}} = \frac{N_h}{n_h}.
 <section id="illustration-of-ssb-and-ssw" class="slide level2">
 <h2>Illustration of SSB and SSW</h2>
 
-<img data-src="Lec04-strata_files/figure-revealjs/fig-ssb-ssw-1.png" id="fig-ssb-ssw" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"><p class="caption">
+<img data-src="Lec04-strata_files/figure-revealjs/fig-ssb-ssw-1.png" id="fig-ssb-ssw" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p class="caption">
 Figure&nbsp;3
-</p><p>Red segments show stratum means and the green dashed line is the overall mean. Grey lines are the within-stratum errors (observation to its stratum mean), whose squares sum to SSW; green lines are the between-stratum errors (stratum mean to overall mean, one per observation), whose squares sum to SSB.</p>
+</p><p>Left: predicting every observation by the overall mean (green dashed line); the squared errors (grey) sum to SSTO. Right: predicting each observation by its stratum mean (red segments); the squared errors (grey) sum to SSW. The difference SSTO <span class="math inline">-</span> SSW is SSB, the sum of squared distances from each observation’s stratum mean to the overall mean.</p>
 </section>
 <section id="comparing-variances-proportional-allocation-vs.-srs" class="slide level2">
 <h2>Comparing Variances: Proportional Allocation vs.&nbsp;SRS</h2>

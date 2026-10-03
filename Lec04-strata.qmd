@@ -510,23 +510,37 @@ $$
 
 ```{r}
 #| label: fig-ssb-ssw
-#| fig-width: 7
+#| fig-width: 10
 #| fig-height: 4.2
-#| out-width: "75%"
+#| out-width: "100%"
 set.seed(21)
-means <- c(2.2, 4.6, 7.0)
+means <- c(2.2, 5, 9.0)
 n_each <- 12
 x <- rep(1:3, each = n_each) + runif(3 * n_each, -0.34, 0.34)
-y <- rep(means, each = n_each) + rnorm(3 * n_each, 0, 1.2)
+y <- rep(means, each = n_each) + rnorm(3 * n_each, 0, 0.5)
 grand_mean <- mean(y)
-
-par(mar = c(3.5, 4, 0.5, 0.5))
-plot(x, y, pch = 19, col = "blue4", xlim = c(0.5, 3.8), ylim = c(0, 10),
-     xaxt = "n", xlab = "Stratum", ylab = "y", cex.lab = 1.2)
-axis(1, at = 1:3, labels = c("1", "2", "3"))
 grp <- rep(1:3, each = n_each)
-## SSB: stratum mean to overall mean (green); SSW: observation to stratum mean (grey)
-segments(x, grand_mean, x, means[grp], col = "forestgreen", lwd = 1.5)
+means <- tapply(y, grp, mean)
+
+base_plot <- function(main) {
+  plot(x, y, type = "n", xlim = c(0.5, 3.8), ylim = c(0, 12),
+       xaxt = "n", xlab = "Stratum", ylab = "y", cex.lab = 1.2, main = main)
+  axis(1, at = 1:3, labels = c("1", "2", "3"))
+}
+
+par(mfrow = c(1, 2), mar = c(4, 4, 2, 0.5), mgp = c(2.5, 1, 0))
+
+## Left: predict every observation by the overall mean (errors give SSTO)
+base_plot("Prediction with overall mean")
+segments(x, grand_mean, x, y, col = "grey55", lwd = 1.5)
+points(x, y, pch = 19, col = "blue4")
+abline(h = grand_mean, col = "darkgreen", lwd = 2, lty = 2)
+text(3.7, grand_mean - 0.4, expression(bar(y)[U]), col = "darkgreen")
+legend("topleft", bty = "n", lwd = 2, col = "grey55",
+       legend = "SSTO: observation vs. overall mean")
+
+## Right: predict each observation by its stratum mean (errors give SSW)
+base_plot("Prediction with stratum means")
 segments(x, means[grp], x, y, col = "grey55", lwd = 1.5)
 points(x, y, pch = 19, col = "blue4")
 for (h in 1:3) {
@@ -535,14 +549,15 @@ for (h in 1:3) {
 abline(h = grand_mean, col = "darkgreen", lwd = 2, lty = 2)
 text(3.7, grand_mean - 0.4, expression(bar(y)[U]), col = "darkgreen")
 text(3.7, means[3], expression(bar(y)[HU]), col = "firebrick")
-legend("topleft", bty = "n", lwd = 2, col = c("forestgreen", "grey55"),
-       legend = c("SSB: stratum mean vs. overall mean", "SSW: observation vs. stratum mean"))
+legend("topleft", bty = "n", lwd = 2, col = "grey55",
+       legend = "SSW: observation vs. stratum mean")
 ```
 
-Red segments show stratum means and the green dashed line is the overall mean.
-Grey lines are the within-stratum errors (observation to its stratum mean),
-whose squares sum to SSW; green lines are the between-stratum errors (stratum
-mean to overall mean, one per observation), whose squares sum to SSB.
+Left: predicting every observation by the overall mean (green dashed line);
+the squared errors (grey) sum to SSTO. Right: predicting each observation by
+its stratum mean (red segments); the squared errors (grey) sum to SSW. The
+difference SSTO $-$ SSW is SSB, the sum of squared distances from each
+observation's stratum mean to the overall mean.
 
 ## Comparing Variances: Proportional Allocation vs. SRS
 
