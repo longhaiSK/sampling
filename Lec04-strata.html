@@ -761,18 +761,19 @@ P(\mathcal S) = P(\mathcal S_1)\times P(\mathcal S_2)\times\cdots\times P(\mathc
 w_{hj} = \frac{1}{\pi_{hj}} = \frac{N_h}{n_h}.
 </span></p>
 <p>Stratified sampling is an example of <strong>unequal-probability sampling</strong>.</p>
-<p>The population total can then be written as a weighted sum over <em>all</em> sampled units, regardless of stratum: <span class="math display">
-\hat t_{\text{str}} = \sum_{h=1}^H N_h \overline y_h = \sum_{h=1}^H \sum_{j\in\mathcal S_h} w_{hj}\, y_{hj}.
+<p>The sampling weight can be thought of as the number of population units represented by the sampled unit. Within stratum <span class="math inline">h</span>, all <span class="math inline">n_h</span> sampled units have the same weight <span class="math inline">N_h/n_h</span>, so <span class="math display">
+\sum_{j\in\mathcal S_h} w_{hj} = n_h\cdot\frac{N_h}{n_h} = N_h,
+\qquad
+\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj} = \sum_{h=1}^H N_h = N.
 </span></p>
 </section>
-<section id="sampling-weights-contd" class="slide level2">
-<h2>Sampling Weights (cont’d)</h2>
-<p>The sampling weight can be thought of as the number of population units represented by the sampled unit.</p>
-<p>The weights sum to the population size: <span class="math display">
-\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj} = N_1+N_2+\cdots+N_H = N,
+<section id="estimators-in-terms-of-sampling-weights" class="slide level2">
+<h2>Estimators in Terms of Sampling Weights</h2>
+<p>Since <span class="math inline">N_h\overline y_h = \dfrac{N_h}{n_h}\displaystyle\sum_{j\in\mathcal S_h} y_{hj} = \sum_{j\in\mathcal S_h} w_{hj}\,y_{hj}</span>, the population total can be written as a weighted sum over <em>all</em> sampled units, regardless of stratum: <span class="math display">
+\hat t_{\text{str}} = \sum_{h=1}^H N_h \overline y_h = \sum_{h=1}^H \sum_{j\in\mathcal S_h} w_{hj}\, y_{hj}.
 </span></p>
-<p>so the population mean can also be written <span class="math display">
-\overline y_{\text{str}} = \frac{\displaystyle\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}y_{hj}}{\displaystyle\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}}.
+<p>Since the weights sum to <span class="math inline">N</span>, the population mean can also be written <span class="math display">
+\overline y_{\text{str}} = \frac{\hat t_{\text{str}}}{N} = \frac{\displaystyle\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}y_{hj}}{\displaystyle\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}}.
 </span></p>
 </section>
 <section id="example-weights-for-the-caribou-survey" class="slide level2">
@@ -843,9 +844,9 @@ w_{hj} = \frac{1}{\pi_{hj}} = \frac{N_h}{n_h}.
 <h2>Decomposition of Population Variance</h2>
 <table class="caption-top">
 <colgroup>
-<col style="width: 30%">
-<col style="width: 38%">
-<col style="width: 30%">
+<col style="width: 25%">
+<col style="width: 31%">
+<col style="width: 43%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -876,12 +877,44 @@ w_{hj} = \frac{1}{\pi_{hj}} = \frac{N_h}{n_h}.
 \text{SSTO} = \text{SSB} + \text{SSW}.
 </span></p>
 </section>
+<section id="sum-squares-of-prediction-errors" class="slide level2">
+<h2>Sum Squares of Prediction Errors</h2>
+<p>Define two prediction vectors for <span class="math inline">y</span> as follows: <span class="math display">
+\begin{array}{c|ccc|c|ccc}
+&amp; &amp; \text{stratum } 1 &amp; &amp; \cdots &amp; &amp; \text{stratum } H &amp; \\ \hline
+\boldsymbol y^\top &amp; y_{11} &amp; \cdots &amp; y_{1N_1} &amp; \cdots &amp; y_{H1} &amp; \cdots &amp; y_{HN_H}\\
+\hat{\boldsymbol y}_0^\top &amp; \overline y_U &amp; \cdots &amp; \overline y_U &amp; \cdots &amp; \overline y_U &amp; \cdots &amp; \overline y_U\\
+\hat{\boldsymbol y}_1^\top &amp; \overline y_{1U} &amp; \cdots &amp; \overline y_{1U} &amp; \cdots &amp; \overline y_{HU} &amp; \cdots &amp; \overline y_{HU}
+\end{array}
+</span></p>
+<p><span class="math inline">\hat{\boldsymbol y}_0</span> ignores the strata; <span class="math inline">\hat{\boldsymbol y}_1</span> predicts each unit by its stratum mean. Then <span class="math display">
+\text{SSTO} = \|\boldsymbol y-\hat{\boldsymbol y}_0\|^2,\qquad
+\text{SSW} = \|\boldsymbol y-\hat{\boldsymbol y}_1\|^2,
+</span> <span class="math display">
+\text{SSB} = \|\hat{\boldsymbol y}_1-\hat{\boldsymbol y}_0\|^2 = \sum_{h=1}^H N_h(\overline y_{hU}-\overline y_U)^2.
+</span></p>
+<p>Since <span class="math inline">\boldsymbol y-\hat{\boldsymbol y}_0 = (\boldsymbol y-\hat{\boldsymbol y}_1) + (\hat{\boldsymbol y}_1-\hat{\boldsymbol y}_0)</span> and the two pieces are orthogonal, <span class="math inline">\text{SSTO} = \text{SSW} + \text{SSB}</span>.</p>
+</section>
 <section id="illustration-of-ssb-and-ssw" class="slide level2">
 <h2>Illustration of SSB and SSW</h2>
 
 <img data-src="Lec04-strata_files/figure-revealjs/fig-ssb-ssw-1.png" id="fig-ssb-ssw" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p class="caption">
 Figure&nbsp;3
 </p><p>Left: predicting every observation by the overall mean (green dashed line); the squared errors (grey) sum to SSTO. Right: predicting each observation by its stratum mean (red segments); the squared errors (grey) sum to SSW. The difference SSTO <span class="math inline">-</span> SSW is SSB, the sum of squared distances from each observation’s stratum mean to the overall mean.</p>
+</section>
+<section id="coefficient-of-determination-r2" class="slide level2">
+<h2>Coefficient of Determination <span class="math inline">R^2</span></h2>
+<p><span class="math display">
+R^2 = 1-\frac{\text{SSW}}{\text{SST}} = \frac{\text{SSB}}{\text{SST}}
+</span></p>
+<p><span class="math inline">R^2</span> generalizes the squared Pearson correlation coefficient: it measures the correlation between a response <span class="math inline">y</span> and one or more predictors <span class="math inline">x_1,\ldots,x_p</span> — here, “stratum membership” plays the role of the predictor. <span class="math inline">R^2</span> is the proportion of the variance in <span class="math inline">y</span> explained by the predictors.</p>
+</section>
+<section id="r2-large-vs.-r2-small" class="slide level2">
+<h2><span class="math inline">R^2</span> Large vs.&nbsp;<span class="math inline">R^2</span> Small</h2>
+
+<img data-src="Lec04-strata_files/figure-revealjs/fig-r2-compare-1.png" id="fig-r2-compare" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
+Figure&nbsp;4
+</p><p>When the strata means differ widely relative to the within-stratum spread (left), stratification explains a large share of the variance in <span class="math inline">y</span>.</p>
 </section>
 <section id="comparing-variances-proportional-allocation-vs.-srs" class="slide level2">
 <h2>Comparing Variances: Proportional Allocation vs.&nbsp;SRS</h2>
@@ -911,20 +944,6 @@ V_{\text{SRS}}(\hat t) = \Big(1-\frac nN\Big)\frac{N^2 S^2}{n}
 = R^2_{y\mid\text{strata}},
 </span></p>
 <p>the proportion of variance in <span class="math inline">y</span> that can be explained by strata membership.</p>
-</section>
-<section id="coefficient-of-determination-r2" class="slide level2">
-<h2>Coefficient of Determination <span class="math inline">R^2</span></h2>
-<p><span class="math display">
-R^2 = 1-\frac{\text{SSW}}{\text{SST}} = \frac{\text{SSB}}{\text{SST}}
-</span></p>
-<p><span class="math inline">R^2</span> generalizes the squared Pearson correlation coefficient: it measures the correlation between a response <span class="math inline">y</span> and one or more predictors <span class="math inline">x_1,\ldots,x_p</span> — here, “stratum membership” plays the role of the predictor. <span class="math inline">R^2</span> is the proportion of the variance in <span class="math inline">y</span> explained by the predictors.</p>
-</section>
-<section id="r2-large-vs.-r2-small" class="slide level2">
-<h2><span class="math inline">R^2</span> Large vs.&nbsp;<span class="math inline">R^2</span> Small</h2>
-
-<img data-src="Lec04-strata_files/figure-revealjs/fig-r2-compare-1.png" id="fig-r2-compare" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
-Figure&nbsp;4
-</p><p>When the strata means differ widely relative to the within-stratum spread (left), stratification explains a large share of the variance in <span class="math inline">y</span>.</p>
 </section></section>
 <section>
 <section id="optimal-allocation" class="title-slide slide level1 center" data-number="7">
@@ -937,6 +956,22 @@ Figure&nbsp;4
 C = c_0 + \sum_{h=1}^H c_h n_h, \qquad n = n_1+\cdots+n_H.
 </span></p>
 <p>We want to allocate <span class="math inline">n_1,\ldots,n_H</span> to minimize <span class="math inline">V(\overline y_{\text{str}})</span> for a fixed total cost <span class="math inline">C</span> (or equivalently minimize <span class="math inline">C</span> for fixed <span class="math inline">V</span>).</p>
+</section>
+<section id="deriving-the-optimal-allocation" class="slide level2 smaller">
+<h2>Deriving the Optimal Allocation</h2>
+<p>Write the variance as <span class="math display">
+V(\overline y_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\frac{N_h^2}{N^2}\frac{S_h^2}{n_h}
+= \sum_{h=1}^H \frac{N_h^2S_h^2}{N^2}\cdot\frac1{n_h} \;-\; \underbrace{\sum_{h=1}^H \frac{N_hS_h^2}{N^2}}_{\text{free of } n_h}.
+</span></p>
+<p>Minimize it subject to <span class="math inline">c_0+\sum_h c_hn_h = C</span> using the Lagrangian <span class="math display">
+L(n_1,\ldots,n_H,\lambda) = \sum_{h=1}^H \frac{N_h^2S_h^2}{N^2 n_h} + \lambda\Big(c_0+\sum_{h=1}^H c_hn_h - C\Big).
+</span></p>
+<p>Setting <span class="math inline">\partial L/\partial n_h = 0</span>: <span class="math display">
+-\frac{N_h^2S_h^2}{N^2n_h^2} + \lambda c_h = 0
+\quad\Longrightarrow\quad
+n_h = \frac{1}{N\sqrt\lambda}\cdot\frac{N_hS_h}{\sqrt{c_h}} \;\propto\; \frac{N_hS_h}{\sqrt{c_h}}.
+</span></p>
+<p>Summing over <span class="math inline">h</span> gives <span class="math inline">n = \frac{1}{N\sqrt\lambda}\sum_{l} N_lS_l/\sqrt{c_l}</span>; dividing <span class="math inline">n_h</span> by <span class="math inline">n</span> eliminates <span class="math inline">\lambda</span> and yields the formula on the next slide.</p>
 </section>
 <section id="optimal-allocation-formula" class="slide level2">
 <h2>Optimal Allocation Formula</h2>
@@ -952,10 +987,10 @@ n_h = \left(\frac{N_hS_h/\sqrt{c_h}}{\sum_{l=1}^H N_lS_l/\sqrt{c_l}}\right)n
 <p>The investigators used rough estimates of caribou counts as a proxy for <span class="math inline">S_h</span>, with total sample size <span class="math inline">n=225</span>:</p>
 <table class="caption-top">
 <colgroup>
+<col style="width: 16%">
+<col style="width: 10%">
 <col style="width: 20%">
-<col style="width: 16%">
-<col style="width: 16%">
-<col style="width: 16%">
+<col style="width: 20%">
 <col style="width: 16%">
 <col style="width: 16%">
 </colgroup>
@@ -1033,7 +1068,10 @@ n_h = \left(\frac{N_hS_h/\sqrt{c_h}}{\sum_{l=1}^H N_lS_l/\sqrt{c_l}}\right)n
 <section id="example-optimal-allocation-for-polls" class="slide level2">
 <h2>Example: Optimal Allocation for Polls</h2>
 <p>For estimating a proportion, <span class="math inline">S_h^2 = p_h(1-p_h)</span>. As a function of <span class="math inline">p</span>, <span class="math inline">S^2(p)=p(1-p)</span> is a quadratic maximized at <span class="math inline">p=1/2</span>. So election regions (swing states) with <span class="math inline">p</span> near 0.5 should be assigned relatively larger sample sizes, since they contribute the most variance per unit sampled.</p>
-</section>
+
+<img data-src="Lec04-strata_files/figure-revealjs/fig-p1mp-1.png" id="fig-p1mp" class="quarto-figure quarto-figure-center r-stretch" style="width:60.0%"><p class="caption">
+Figure&nbsp;5
+</p></section>
 <section id="example-dollar-stratification" class="slide level2">
 <h2>Example: Dollar Stratification</h2>
 <p><strong>Dollar stratification</strong> is common in accounting audits. Recorded book amounts stratify the population: stratum 1 might be all loans over $1 million, stratum 2 loans between $500,000 and $999,999, and so on down to loans under $10,000.</p>
@@ -1049,7 +1087,7 @@ n_h = \left(\frac{N_hS_h/\sqrt{c_h}}{\sum_{l=1}^H N_lS_l/\sqrt{c_l}}\right)n
 <p>Stratification is most efficient when the stratum means differ widely, since then SSB is large and within-stratum variability is small. Ideally we would stratify directly by the values of <span class="math inline">y</span>; since <span class="math inline">y</span> is unknown before sampling, we instead look for an auxiliary variable <span class="math inline">x</span> that is highly correlated with (or predictive of) <span class="math inline">y</span>.</p>
 
 <img data-src="Lec04-strata_files/figure-revealjs/fig-auxiliary-1.png" id="fig-auxiliary" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
-Figure&nbsp;5
+Figure&nbsp;6
 </p><p>Cutting on <span class="math inline">x</span> (left) produces strata with visibly different distributions of <span class="math inline">y</span> (right) — exactly the goal of stratification.</p>
 </section>
 <section id="example-choosing-an-auxiliary-variable" class="slide level2">

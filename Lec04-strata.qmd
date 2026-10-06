@@ -445,26 +445,27 @@ $$
 
 Stratified sampling is an example of **unequal-probability sampling**.
 
-The population total can then be written as a weighted sum over *all* sampled
+The sampling weight can be thought of as the number of population units
+represented by the sampled unit. Within stratum $h$, all $n_h$ sampled units
+have the same weight $N_h/n_h$, so
+$$
+\sum_{j\in\mathcal S_h} w_{hj} = n_h\cdot\frac{N_h}{n_h} = N_h,
+\qquad
+\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj} = \sum_{h=1}^H N_h = N.
+$$
+
+## Estimators in Terms of Sampling Weights
+
+Since $N_h\overline y_h = \dfrac{N_h}{n_h}\displaystyle\sum_{j\in\mathcal S_h} y_{hj} = \sum_{j\in\mathcal S_h} w_{hj}\,y_{hj}$,
+the population total can be written as a weighted sum over *all* sampled
 units, regardless of stratum:
 $$
 \hat t_{\text{str}} = \sum_{h=1}^H N_h \overline y_h = \sum_{h=1}^H \sum_{j\in\mathcal S_h} w_{hj}\, y_{hj}.
 $$
 
-
-## Sampling Weights (cont'd)
-
-The sampling weight can be thought of as the number of population units
-represented by the sampled unit. 
-
-The weights sum to the population size:
+Since the weights sum to $N$, the population mean can also be written
 $$
-\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj} = N_1+N_2+\cdots+N_H = N,
-$$
-
-so the population mean can also be written
-$$
-\overline y_{\text{str}} = \frac{\displaystyle\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}y_{hj}}{\displaystyle\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}}.
+\overline y_{\text{str}} = \frac{\hat t_{\text{str}}}{N} = \frac{\displaystyle\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}y_{hj}}{\displaystyle\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}}.
 $$
 
 ## Example: Weights for the Caribou Survey
@@ -498,13 +499,36 @@ benchmark.
 ## Decomposition of Population Variance
 
 | Source | df | Sum of Squares |
-|:---|:---:|:---|
+|:---|:---:|:------|
 | Between strata | $H-1$ | $\text{SSB} = \sum_{h=1}^H N_h(\overline y_{hU}-\overline y_U)^2$ |
 | Within strata | $N-H$ | $\text{SSW} = \sum_{h=1}^H (N_h-1)S_h^2$ |
 | Total, about $\overline y_U$ | $N-1$ | $\text{SSTO} = (N-1)S^2$ |
 $$
 \text{SSTO} = \text{SSB} + \text{SSW}.
 $$
+
+## Sum Squares of Prediction Errors
+
+Define two prediction vectors for $y$ as follows:
+$$
+\begin{array}{c|ccc|c|ccc}
+ & & \text{stratum } 1 & & \cdots & & \text{stratum } H & \\ \hline
+\boldsymbol y^\top & y_{11} & \cdots & y_{1N_1} & \cdots & y_{H1} & \cdots & y_{HN_H}\\
+\hat{\boldsymbol y}_0^\top & \overline y_U & \cdots & \overline y_U & \cdots & \overline y_U & \cdots & \overline y_U\\
+\hat{\boldsymbol y}_1^\top & \overline y_{1U} & \cdots & \overline y_{1U} & \cdots & \overline y_{HU} & \cdots & \overline y_{HU}
+\end{array}
+$$
+
+$\hat{\boldsymbol y}_0$ ignores the strata; $\hat{\boldsymbol y}_1$ predicts each unit by its stratum mean. Then
+$$
+\text{SSTO} = \|\boldsymbol y-\hat{\boldsymbol y}_0\|^2,\qquad
+\text{SSW} = \|\boldsymbol y-\hat{\boldsymbol y}_1\|^2,
+$$
+$$
+\text{SSB} = \|\hat{\boldsymbol y}_1-\hat{\boldsymbol y}_0\|^2 = \sum_{h=1}^H N_h(\overline y_{hU}-\overline y_U)^2.
+$$
+
+Since $\boldsymbol y-\hat{\boldsymbol y}_0 = (\boldsymbol y-\hat{\boldsymbol y}_1) + (\hat{\boldsymbol y}_1-\hat{\boldsymbol y}_0)$ and the two pieces are orthogonal, $\text{SSTO} = \text{SSW} + \text{SSB}$.
 
 ## Illustration of SSB and SSW
 
@@ -559,43 +583,6 @@ its stratum mean (red segments); the squared errors (grey) sum to SSW. The
 difference SSTO $-$ SSW is SSB, the sum of squared distances from each
 observation's stratum mean to the overall mean.
 
-## Comparing Variances: Proportional Allocation vs. SRS
-
-For a stratified sample of size $n$ with proportional allocation,
-$$
-V_{\text{prop}}(\hat t_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac nN\Big)\frac Nn\, N_h S_h^2
- = \Big(1-\frac nN\Big)\frac Nn\left(\text{SSW} + \sum_{h=1}^H S_h^2\right).
-$$
-
-Since $\text{SSTO}=\text{SSW}+\text{SSB}$, the variance of the total from an SRS
-of size $n$ is.
-$$
-V_{\text{SRS}}(\hat t) = \Big(1-\frac nN\Big)\frac{N^2 S^2}{n}
- = \Big(1-\frac nN\Big)\frac{N^2}{n(N-1)}(\text{SSW}+\text{SSB}).
-$$
-
-## When Does Stratification Help?
-
-Comparing the two expressions, proportional allocation gives smaller variance
-than SRS whenever
-$$
-\text{SSB} > \sum_{h=1}^H \Big(1-\frac{N_h}{N}\Big)S_h^2.
-$$
-
-This typically holds because SSB is a sum of $N$ squared deviations, while
-$\sum_h S_h^2$ is a sum of only $H$ (typically much fewer) terms.
-
-## The Variance Ratio and $R^2$
-$$
-\frac{V_{\text{prop}}(\hat t_{\text{str}})}{V(\hat t_{\text{SRS}})}
- \approx \frac{\text{SSW}+\sum_h S_h^2}{\text{SSW}+\text{SSB}} \approx \frac{\text{SSW}}{\text{SSW}+\text{SSB}}
-$$
-$$
-\text{percentage of variance reduction} = \frac{\text{SSB}}{\text{SSW}+\text{SSB}}
- = R^2_{y\mid\text{strata}},
-$$
-
-the proportion of variance in $y$ that can be explained by strata membership.
 
 ## Coefficient of Determination $R^2$
 $$
@@ -639,6 +626,45 @@ for (h in 1:3) segments(h - 0.25, means_lo[h], h + 0.25, means_lo[h], col = "fir
 When the strata means differ widely relative to the within-stratum spread
 (left), stratification explains a large share of the variance in $y$.
 
+## Comparing Variances: Proportional Allocation vs. SRS
+
+For a stratified sample of size $n$ with proportional allocation,
+$$
+V_{\text{prop}}(\hat t_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac nN\Big)\frac Nn\, N_h S_h^2
+ = \Big(1-\frac nN\Big)\frac Nn\left(\text{SSW} + \sum_{h=1}^H S_h^2\right).
+$$
+
+Since $\text{SSTO}=\text{SSW}+\text{SSB}$, the variance of the total from an SRS
+of size $n$ is.
+$$
+V_{\text{SRS}}(\hat t) = \Big(1-\frac nN\Big)\frac{N^2 S^2}{n}
+ = \Big(1-\frac nN\Big)\frac{N^2}{n(N-1)}(\text{SSW}+\text{SSB}).
+$$
+
+## When Does Stratification Help?
+
+Comparing the two expressions, proportional allocation gives smaller variance
+than SRS whenever
+$$
+\text{SSB} > \sum_{h=1}^H \Big(1-\frac{N_h}{N}\Big)S_h^2.
+$$
+
+This typically holds because SSB is a sum of $N$ squared deviations, while
+$\sum_h S_h^2$ is a sum of only $H$ (typically much fewer) terms.
+
+## The Variance Ratio and $R^2$
+$$
+\frac{V_{\text{prop}}(\hat t_{\text{str}})}{V(\hat t_{\text{SRS}})}
+ \approx \frac{\text{SSW}+\sum_h S_h^2}{\text{SSW}+\text{SSB}} \approx \frac{\text{SSW}}{\text{SSW}+\text{SSB}}
+$$
+$$
+\text{percentage of variance reduction} = \frac{\text{SSB}}{\text{SSW}+\text{SSB}}
+ = R^2_{y\mid\text{strata}},
+$$
+
+the proportion of variance in $y$ that can be explained by strata membership.
+
+
 # Optimal Allocation
 
 ## Setting Up the Cost Function
@@ -652,6 +678,29 @@ $$
 
 We want to allocate $n_1,\ldots,n_H$ to minimize $V(\overline y_{\text{str}})$ for a
 fixed total cost $C$ (or equivalently minimize $C$ for fixed $V$).
+
+## Deriving the Optimal Allocation {.smaller}
+
+Write the variance as
+$$
+V(\overline y_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\frac{N_h^2}{N^2}\frac{S_h^2}{n_h}
+ = \sum_{h=1}^H \frac{N_h^2S_h^2}{N^2}\cdot\frac1{n_h} \;-\; \underbrace{\sum_{h=1}^H \frac{N_hS_h^2}{N^2}}_{\text{free of } n_h}.
+$$
+
+Minimize it subject to $c_0+\sum_h c_hn_h = C$ using the Lagrangian
+$$
+L(n_1,\ldots,n_H,\lambda) = \sum_{h=1}^H \frac{N_h^2S_h^2}{N^2 n_h} + \lambda\Big(c_0+\sum_{h=1}^H c_hn_h - C\Big).
+$$
+
+Setting $\partial L/\partial n_h = 0$:
+$$
+-\frac{N_h^2S_h^2}{N^2n_h^2} + \lambda c_h = 0
+\quad\Longrightarrow\quad
+n_h = \frac{1}{N\sqrt\lambda}\cdot\frac{N_hS_h}{\sqrt{c_h}} \;\propto\; \frac{N_hS_h}{\sqrt{c_h}}.
+$$
+
+Summing over $h$ gives $n = \frac{1}{N\sqrt\lambda}\sum_{l} N_lS_l/\sqrt{c_l}$;
+dividing $n_h$ by $n$ eliminates $\lambda$ and yields the formula on the next slide.
 
 ## Optimal Allocation Formula
 
@@ -676,7 +725,7 @@ The investigators used rough estimates of caribou counts as a proxy for $S_h$,
 with total sample size $n=225$:
 
 | Stratum | $N_h$ | $s_h$ | $N_hs_h$ | $n_h$ (Neyman) | Sample size used |
-|:---:|---:|---:|---:|---:|---:|
+|:---:|--:|-----:|-----:|----:|----:|
 | A | 400 | 3,000 | 1,200,000 | 96.26 | 98 |
 | B | 30 | 2,000 | 60,000 | 4.81 | 10 |
 | C | 61 | 9,000 | 549,000 | 44.04 | 37 |
@@ -694,6 +743,19 @@ For estimating a proportion, $S_h^2 = p_h(1-p_h)$. As a function of $p$,
 $S^2(p)=p(1-p)$ is a quadratic maximized at $p=1/2$. So election regions (swing
 states) with $p$ near 0.5 should be assigned relatively larger sample sizes,
 since they contribute the most variance per unit sampled.
+
+```{r}
+#| label: fig-p1mp
+#| fig-width: 6
+#| fig-height: 3
+#| out-width: "60%"
+par(mar = c(4, 4.5, 0.5, 0.5))
+curve(x * (1 - x), from = 0, to = 1, lwd = 2.5, col = "blue4",
+      xlab = "p", ylab = "p(1 - p)", ylim = c(0, 0.3), las = 1, cex.lab = 1.2)
+segments(0.5, 0, 0.5, 0.25, lty = 2, col = "firebrick")
+points(0.5, 0.25, pch = 19, col = "firebrick")
+text(0.5, 0.25, "max 0.25 at p = 0.5", pos = 3, col = "firebrick")
+```
 
 ## Example: Dollar Stratification
 
