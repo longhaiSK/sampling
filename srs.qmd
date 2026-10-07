@@ -338,65 +338,77 @@ It opens in a new tab, together with its documentation and the full
 
 
 
-## Prediction-Based Theory for Simple Random Sampling (Optional) {#sec-pred-srs}
+## Prediction-Based Theory for Sampling (Optional) {#sec-pred-srs}
+
+Sampling is a prediction problem. The sample $S$ plays the role of a training set, the non-sampled units $R=U\setminus S$ play the role of test cases, and a population total or mean is a sum of predictions for the test cases plus the observed training values. This section states the framework in general, with a model for every unit and a generic estimator of the model parameters, and then specializes it to simple random sampling, where the mean of every unit is the same and is estimated by $\bar y_S$.
 
 ### Setup {#sec-pred-setup}
 
 Let $U=\{1,\dots,N\}$ index a finite population with study variable $Y_i$, let $S\subset U$ with $|S|=n$ denote the observed sample, and let $R=U\setminus S$ denote the $N-n$ non-sampled units. The quantities of interest are
 $$
-T=\sum_{i\in U}Y_i,\qquad \bar Y_U=T/N .
+T=\sum_{i\in U}Y_i=\sum_{i\in S}Y_i+\sum_{i\in R}Y_i,\qquad \bar Y_U=T/N .
 $$
+Only the second sum is unknown, so the task is to predict $Y_i$ for each $i\in R$.
 
-The prediction approach treats $Y_1,\dots,Y_N$ as random variables and $S$ as fixed. All expectations are taken with respect to the model $\xi$ rather than the randomization distribution. Simple random sampling enters only through the requirement that selection be uninformative, so that $\xi$ governs the units in $R$ as well as those in $S$. The working model is
+The prediction approach treats $Y_1,\dots,Y_N$ as random variables and $S$ as fixed. All expectations are taken with respect to the model $\xi$ rather than the randomization distribution. The sampling design enters only through the requirement that selection be uninformative, so that $\xi$ governs the units in $R$ as well as those in $S$. The general working model is
 $$
-\xi:\quad E(Y_i)=\mu,\quad \operatorname{Var}(Y_i)=\sigma^2,\quad
+\xi:\quad E(Y_i)=\mu_i(\theta),\quad \operatorname{Var}(Y_i)=\sigma_i^2,\quad
 \operatorname{Cov}(Y_i,Y_j)=0\ (i\neq j),
 $$ {#eq-model}
-with model errors
+where $\theta$ is an unknown parameter and $\mu_i(\theta)$ is the mean function, for example $\mu_i(\theta)=x_i^{\top}\beta$ in regression. The model errors are
 $$
-e_i=Y_i-\mu,\qquad E(e_i)=0,\quad E(e_i^2)=\sigma^2,\quad E(e_ie_j)=0\ (i\neq j),
+e_i=Y_i-\mu_i(\theta),\qquad E(e_i)=0,\quad E(e_i^2)=\sigma_i^2,\quad E(e_ie_j)=0\ (i\neq j).
 $$ {#eq-errors}
-and $\bar e_A=|A|^{-1}\sum_{i\in A}e_i$ for an index set $A$.
 
-A predictor of $T$ has the form $\hat T=\sum_{i\in U}\hat Y_i$ and is assessed by its mean squared prediction error
+A prediction rule estimates $\theta$ from the sample by $\hat\theta=\hat\theta(Y_S)$ and predicts
 $$
-\operatorname{MSPE}(\hat T)=E\left[(\hat T-T)^2\right]
-=E\left[\left(\sum_{i\in U}(\hat Y_i-Y_i)\right)^{2}\right].
-$$ {#eq-mspe}
-
-Because $T$ is a random quantity to be predicted rather than a fixed parameter to be estimated, @eq-mspe measures prediction error. Each derivation below subtracts and adds $\mu$ within every term, expressing the prediction error in the $e_i$, whose moments are given by @eq-errors.
-
-### Known $\mu$ and $\sigma^2$ {#sec-pred-known-mu}
-
-Let $\mu$ and $\sigma^2$ be known and set $\hat Y_i=\mu$ for all $i\in U$, ignoring the data. Then $\hat T=N\mu$ and
-$$
-\hat T-T=\sum_{i\in U}(\mu-Y_i)=-\sum_{i\in U}(Y_i-\mu)=-\sum_{i\in U}e_i ,
-$$
-so that $E(\hat T-T)=0$ and, by @eq-errors,
-$$
-\operatorname{MSPE}(\hat T)
-=\sum_{i\in U}E(e_i^2)+\sum_{i\neq j}E(e_ie_j)=N\sigma^2 ,
+\hat Y_i=
+\begin{cases}
+Y_i, & i\in S,\\
+\mu_i(\hat\theta), & i\in R,
+\end{cases}
 \qquad
-\operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2}{N}.
-$$ {#eq-mspe-blind}
+\hat T=\sum_{i\in U}\hat Y_i=\sum_{i\in S}Y_i+\sum_{i\in R}\mu_i(\hat\theta).
+$$ {#eq-predictor}
+Observed values are kept as they are, and the fitted mean function is used only for the unobserved units. Because $\hat\theta$ is a function of $Y_S$ alone and the errors are uncorrelated, $\hat\theta$ is uncorrelated with $e_i$ for every $i\in R$. This is the only property of the estimator used below.
 
-The prediction error is non-zero although the model is known exactly: $T$ is a realized sum of random variables and cannot be recovered from $\mu$ alone. This is the distinction between predicting a finite-population quantity and estimating a superpopulation parameter. The magnitude $\sigma^2/N$ is negligible for large $N$, which is why the distinction is invisible in treatments that condition on the population.
+### Two sources of error {#sec-pred-two-sources}
 
-The predictor $N\mu$ is inefficient, since it predicts values already observed. Setting $\hat Y_i=Y_i$ for $i\in S$ gives
+**Individual prediction.** In machine learning a predictor is judged by its mean squared error on a test case. For $i\in R$ add and subtract $\mu_i(\theta)$:
 $$
-\hat T=\sum_{i\in S}Y_i+(N-n)\mu,\qquad
-\hat T-T=\sum_{i\in R}(\mu-Y_i)=-\sum_{i\in R}e_i ,
+\hat Y_i-Y_i=\underbrace{\mu_i(\hat\theta)-\mu_i(\theta)}_{\delta_i}-\underbrace{\big(Y_i-\mu_i(\theta)\big)}_{e_i}.
+$$ {#eq-error-individual}
+The first part, $\delta_i$, is the error in the fitted mean caused by the uncertainty in $\hat\theta$, and the second part, $e_i$, is the gap between the unobserved $Y_i$ and its true mean. The cross term $E(\delta_ie_i)$ vanishes, so
 $$
-whence
+E\big(\hat Y_i-Y_i\big)^2=\underbrace{\sigma_i^2}_{\text{irreducible}}+\underbrace{E\big[\mu_i(\hat\theta)-\mu_i(\theta)\big]^2}_{\text{estimation error}} .
+$$ {#eq-mse-individual}
+The irreducible term is present even when $\theta$ is known, because no predictor removes the scatter of $Y_i$ about its mean. The estimation term is the mean squared error of $\mu_i(\hat\theta)$ as an estimator of $\mu_i(\theta)$ and decreases as the training sample grows. This is the usual decomposition of test error into noise and estimation variance, plus squared bias if the estimator is biased.
+
+**The total.** The observed units contribute no error, so
 $$
-\operatorname{MSPE}(\hat T)=(N-n)\sigma^2 .
-$$ {#eq-mspe-oracle}
+\hat T-T=\sum_{i\in R}(\hat Y_i-Y_i)=\sum_{i\in R}\delta_i-\sum_{i\in R}e_i .
+$$ {#eq-error-decomp}
+The two sources of error appear again, now summed over the test cases. Squaring, the cross term between $\sum_R\delta_i$ and $\sum_R e_i$ vanishes by the same argument as before, and the $e_i$ are uncorrelated, so
+$$
+\operatorname{MSPE}(\hat T)=E\big[(\hat T-T)^2\big]
+=\underbrace{\sum_{i\in R}\sigma_i^2}_{\text{scatter of the unobserved }Y_i}
++\underbrace{E\Big[\Big(\sum_{i\in R}\delta_i\Big)^{2}\Big]}_{\text{uncertainty in }\hat\theta} .
+$$ {#eq-mspe}
+Dividing by $N^2$ gives $\operatorname{MSPE}(\hat{\bar y}_U)$.
 
-The $n$ observed terms drop out. Expression @eq-mspe-oracle is irreducible: the unobserved units vary about their mean, and no predictor removes that variation.
+Comparing @eq-mse-individual and @eq-mspe shows what changes when the target moves from a single case to the total. The irreducible parts simply add, $\sum_{i\in R}\sigma_i^2$. The estimation parts do not add, because the errors $\delta_i$ all come from the same $\hat\theta$ and are strongly correlated. Expanding the square gives
+$$
+E\Big[\Big(\sum_{i\in R}\delta_i\Big)^{2}\Big]=\sum_{i\in R}E(\delta_i^2)+\sum_{i\neq j\in R}E(\delta_i\delta_j),
+$$
+and the double sum is typically of larger order than the first. A total is a more aggregated target than an individual prediction, and its error is dominated by the shared error in $\hat\theta$, which does not average out across units.
 
-### Unknown $\mu$: prediction by the sample mean {#sec-pred-sample-mean}
+### Specialization to simple random sampling {#sec-pred-sample-mean}
 
-Let $\mu$ be unknown and estimated by $\bar y_S=n^{-1}\sum_{i\in S}Y_i$. Taking
+For simple random sampling there are no auxiliary variables, so every unit has the same mean,
+$$
+\mu_i(\theta)=\mu,\quad \sigma_i^2=\sigma^2,\qquad e_i=Y_i-\mu,\quad \bar e_A=|A|^{-1}\sum_{i\in A}e_i,
+$$
+and $\theta=\mu$ is estimated by the sample mean $\bar y_S=n^{-1}\sum_{i\in S}Y_i$. The predictor @eq-predictor is
 $$
 \hat Y_i=
 \begin{cases}
@@ -406,21 +418,18 @@ Y_i, & i\in S,\\
 \qquad
 \hat T=\sum_{i\in S}Y_i+(N-n)\bar y_S=N\bar y_S ,
 $$ {#eq-expansion}
-identifies the expansion estimator as a predictor. Its error involves only the non-sampled units, and subtracting and adding $\mu$ separates the two sources of error:
+so the expansion estimator is a prediction rule that fills in every unobserved unit with the sample mean. Here the estimation error is common to all units, $\delta_i=\bar y_S-\mu=\bar e_S$, and @eq-error-decomp becomes
 $$
-\hat T-T=\sum_{i\in R}(\bar y_S-Y_i)
-=\sum_{i\in R}\Big\{\underbrace{(\bar y_S-\mu)}_{\bar e_S}-\underbrace{(Y_i-\mu)}_{e_i}\Big\}
-=(N-n)\,\bar e_S-\sum_{i\in R}e_i .
-$$ {#eq-error-decomp}
+\hat T-T=(N-n)\,\bar e_S-\sum_{i\in R}e_i .
+$$ {#eq-error-srs}
+Both terms have mean zero, so $\hat T$ is model-unbiased.
 
-The first term is the error in locating $\mu$ from the sample; the second is the scatter of the unobserved units about $\mu$. Both have mean zero, so $\hat T$ is model-unbiased. Squaring and taking expectations,
+**Individual units.** From @eq-mse-individual, with $E(\bar e_S^{\,2})=\sigma^2/n$,
 $$
-\operatorname{MSPE}(\hat T)=(N-n)^2E(\bar e_S^{\,2})
--2(N-n)E\left(\bar e_S\sum_{i\in R}e_i\right)
-+E\left[\left(\sum_{i\in R}e_i\right)^{2}\right].
-$$
+E\big(\hat Y_i-Y_i\big)^2=\sigma^2+\frac{\sigma^2}{n}=\sigma^2\Big(1+\frac1n\Big),\qquad i\in R .
+$$ {#eq-mse-srs-individual}
 
-Here $E(\bar e_S^{\,2})=\sigma^2/n$; the cross term vanishes because $S$ and $R$ are disjoint, so every product $e_ie_j$ arising in it has $i\neq j$; and the last term equals $(N-n)\sigma^2$. Therefore
+**The total.** Since $\delta_i=\bar e_S$ for all $i\in R$, the double sum in @eq-mspe is as large as it can be: $E[(\sum_R\delta_i)^2]=(N-n)^2E(\bar e_S^{\,2})=(N-n)^2\sigma^2/n$, whereas independent errors would give $(N-n)\sigma^2/n$. The scatter term is $(N-n)\sigma^2$, and therefore
 $$
 \operatorname{MSPE}(\hat T)=\frac{(N-n)^2}{n}\sigma^2+(N-n)\sigma^2
 =\frac{N(N-n)}{n}\,\sigma^2 ,
@@ -429,15 +438,18 @@ $$
 \operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2}{n}\left(1-\frac{n}{N}\right).
 $$ {#eq-mspe-mean}
 
-Expression @eq-mspe-mean is the classical simple-random-sampling variance with $\sigma^2$ in place of the population variance $S^2$, obtained without appeal to randomization. Three consequences follow.
+Expression @eq-mspe-mean is the classical simple-random-sampling variance with $\sigma^2$ in place of the population variance $S^2$, obtained without appeal to randomization. Four consequences follow.
 
-1. The two terms of @eq-mspe-total have distinct meanings. The term $(N-n)\sigma^2$ is the irreducible variation of @eq-mspe-oracle; the term $(N-n)^2\sigma^2/n$ is the cost of estimating $\mu$ from $n$ observations and alone decreases with $n$.
-2. The finite-population correction is not an artifact of sampling without replacement. The $n$ observed units contribute exactly zero to @eq-error-decomp, leaving $N-n$ terms to predict; at $n=N$ the MSPE is zero.
-3. The cost of not knowing $\mu$ is the factor $N/n$ applied to @eq-mspe-oracle. For the population mean the MSPE rises from $\sigma^2/N$ to approximately $\sigma^2/n$, so precision is governed by the sample size rather than the population size.
+1. The two terms of @eq-mspe-total are the two sources of error. The term $(N-n)\sigma^2$ is the irreducible scatter of the unobserved units; the term $(N-n)^2\sigma^2/n$ is the cost of estimating $\mu$ from $n$ observations and alone decreases with $n$.
+2. The per-unit error $\sigma^2(1+1/n)$ is barely above $\sigma^2$ for moderate $n$, so the estimation error looks negligible for individual prediction. For the total it is not: the estimation error is shared by all $N-n$ unobserved units and accumulates to a factor $(N-n)^2$, whereas the scatter accumulates only to $N-n$. The ratio of the two terms is $(N-n)/n$.
+3. The finite-population correction is not an artifact of sampling without replacement. The $n$ observed units contribute exactly zero to @eq-error-srs, leaving $N-n$ terms to predict; at $n=N$ the MSPE is zero.
+4. If $\mu$ is known, $\delta_i=0$ and the predictor $\hat Y_i=\mu$ for $i\in R$ has $\operatorname{MSPE}(\hat T)=(N-n)\sigma^2$. This is the irreducible error, and the cost of not knowing $\mu$ is the factor $N/n$ applied to it. For the population mean the MSPE rises from $\sigma^2(N-n)/N^2$ to approximately $\sigma^2/n$, so precision is governed by the sample size rather than the population size.
+
+Other sampling problems fit the same framework by changing $\mu_i(\theta)$: a ratio or regression estimator uses $\mu_i(\theta)=\beta x_i$ or $\beta_0+\beta_1x_i$, and a stratified estimator uses a separate mean $\mu_h$ in each stratum. Only $\hat\theta$ and the shared estimation error $\sum_R\delta_i$ change.
 
 ### Illustration {#sec-pred-demo}
 
-@fig-srs-index displays one realization of a population under @eq-model. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.
+@fig-srs-index displays one realization of a population under @eq-model with $\mu_i=\mu$. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.
 
 ```{r}
 #| echo: false
@@ -473,7 +485,7 @@ legend("bottomright", bty = "n", cex = 0.85, lwd = 2,
 box()
 ```
 
-The three lines correspond to the three quantities of the theory. The gap between the orange and red lines is the finite-population variation of @eq-mspe-oracle, present even when $\mu$ is known; its root mean square is $\sigma/\sqrt{N}$. The gap between the orange and blue lines is the error in estimating $\mu$ from $n$ units, with root mean square $\sigma/\sqrt{n}$. The realized prediction error is the gap between the blue and red lines, scaled by $N$; @eq-mspe-total states that its root mean square is $\sigma\sqrt{N(N-n)/n}$.
+The scatter of the open points about the orange line is the irreducible error $\sigma_i^2$ in @eq-mse-individual: it is the error of predicting an individual unit even with $\mu$ known. The gap between the orange and blue lines is the estimation error $\delta_i=\bar e_S$, with root mean square $\sigma/\sqrt{n}$, which is the same for every unit in $R$. The gap between the blue and red lines, scaled by $N$, is the realized prediction error of the total; @eq-mspe-total states that its root mean square is $\sigma\sqrt{N(N-n)/n}$.
 
 ```{r}
 c(mu = mu, Ybar_U = ybar_U, ybar_S = ybar_S,

@@ -276,11 +276,11 @@ window.Quarto = {
   <li><a href="#empirical-coverage-rate-of-cis" id="toc-empirical-coverage-rate-of-cis" class="nav-link" data-scroll-target="#empirical-coverage-rate-of-cis"><span class="header-section-number">2.3.4</span> Empirical Coverage Rate of CIs</a></li>
   </ul></li>
   <li><a href="#sec-app-srs" id="toc-sec-app-srs" class="nav-link" data-scroll-target="#sec-app-srs"><span class="header-section-number">2.4</span> Shinylive App for Illustrating SRS Theory</a></li>
-  <li><a href="#sec-pred-srs" id="toc-sec-pred-srs" class="nav-link" data-scroll-target="#sec-pred-srs"><span class="header-section-number">2.5</span> Prediction-Based Theory for Simple Random Sampling (Optional)</a>
+  <li><a href="#sec-pred-srs" id="toc-sec-pred-srs" class="nav-link" data-scroll-target="#sec-pred-srs"><span class="header-section-number">2.5</span> Prediction-Based Theory for Sampling (Optional)</a>
   <ul>
   <li><a href="#sec-pred-setup" id="toc-sec-pred-setup" class="nav-link" data-scroll-target="#sec-pred-setup"><span class="header-section-number">2.5.1</span> Setup</a></li>
-  <li><a href="#sec-pred-known-mu" id="toc-sec-pred-known-mu" class="nav-link" data-scroll-target="#sec-pred-known-mu"><span class="header-section-number">2.5.2</span> Known <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span></a></li>
-  <li><a href="#sec-pred-sample-mean" id="toc-sec-pred-sample-mean" class="nav-link" data-scroll-target="#sec-pred-sample-mean"><span class="header-section-number">2.5.3</span> Unknown <span class="math inline">\(\mu\)</span>: prediction by the sample mean</a></li>
+  <li><a href="#sec-pred-two-sources" id="toc-sec-pred-two-sources" class="nav-link" data-scroll-target="#sec-pred-two-sources"><span class="header-section-number">2.5.2</span> Two sources of error</a></li>
+  <li><a href="#sec-pred-sample-mean" id="toc-sec-pred-sample-mean" class="nav-link" data-scroll-target="#sec-pred-sample-mean"><span class="header-section-number">2.5.3</span> Specialization to simple random sampling</a></li>
   <li><a href="#sec-pred-demo" id="toc-sec-pred-demo" class="nav-link" data-scroll-target="#sec-pred-demo"><span class="header-section-number">2.5.4</span> Illustration</a></li>
   </ul></li>
   </ul>
@@ -1405,23 +1405,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>res_mean<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="gtzfbguwzv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#gtzfbguwzv table {
+<div id="tguvpcfemw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tguvpcfemw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#gtzfbguwzv thead, #gtzfbguwzv tbody, #gtzfbguwzv tfoot, #gtzfbguwzv tr, #gtzfbguwzv td, #gtzfbguwzv th {
+#tguvpcfemw thead, #tguvpcfemw tbody, #tguvpcfemw tfoot, #tguvpcfemw tr, #tguvpcfemw td, #tguvpcfemw th {
   border-style: none;
 }
 
-#gtzfbguwzv p {
+#tguvpcfemw p {
   margin: 0;
   padding: 0;
 }
 
-#gtzfbguwzv .gt_table {
+#tguvpcfemw .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1447,12 +1447,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#gtzfbguwzv .gt_caption {
+#tguvpcfemw .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#gtzfbguwzv .gt_title {
+#tguvpcfemw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1464,7 +1464,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#gtzfbguwzv .gt_subtitle {
+#tguvpcfemw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1476,7 +1476,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#gtzfbguwzv .gt_heading {
+#tguvpcfemw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1488,13 +1488,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#gtzfbguwzv .gt_bottom_border {
+#tguvpcfemw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#gtzfbguwzv .gt_col_headings {
+#tguvpcfemw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1509,7 +1509,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#gtzfbguwzv .gt_col_heading {
+#tguvpcfemw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1529,7 +1529,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#gtzfbguwzv .gt_column_spanner_outer {
+#tguvpcfemw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1541,15 +1541,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#gtzfbguwzv .gt_column_spanner_outer:first-child {
+#tguvpcfemw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#gtzfbguwzv .gt_column_spanner_outer:last-child {
+#tguvpcfemw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#gtzfbguwzv .gt_column_spanner {
+#tguvpcfemw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1561,11 +1561,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#gtzfbguwzv .gt_spanner_row {
+#tguvpcfemw .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#gtzfbguwzv .gt_group_heading {
+#tguvpcfemw .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1591,7 +1591,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#gtzfbguwzv .gt_empty_group_heading {
+#tguvpcfemw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1606,15 +1606,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#gtzfbguwzv .gt_from_md > :first-child {
+#tguvpcfemw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#gtzfbguwzv .gt_from_md > :last-child {
+#tguvpcfemw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#gtzfbguwzv .gt_row {
+#tguvpcfemw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1633,7 +1633,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#gtzfbguwzv .gt_stub {
+#tguvpcfemw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1646,7 +1646,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#gtzfbguwzv .gt_stub_row_group {
+#tguvpcfemw .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1660,15 +1660,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#gtzfbguwzv .gt_row_group_first td {
+#tguvpcfemw .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#gtzfbguwzv .gt_row_group_first th {
+#tguvpcfemw .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#gtzfbguwzv .gt_summary_row {
+#tguvpcfemw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1678,16 +1678,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#gtzfbguwzv .gt_first_summary_row {
+#tguvpcfemw .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#gtzfbguwzv .gt_first_summary_row.thick {
+#tguvpcfemw .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#gtzfbguwzv .gt_last_summary_row {
+#tguvpcfemw .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1697,7 +1697,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#gtzfbguwzv .gt_grand_summary_row {
+#tguvpcfemw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1707,7 +1707,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#gtzfbguwzv .gt_first_grand_summary_row {
+#tguvpcfemw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1717,7 +1717,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#gtzfbguwzv .gt_last_grand_summary_row_top {
+#tguvpcfemw .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1727,11 +1727,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#gtzfbguwzv .gt_striped {
+#tguvpcfemw .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#gtzfbguwzv .gt_table_body {
+#tguvpcfemw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1740,7 +1740,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#gtzfbguwzv .gt_footnotes {
+#tguvpcfemw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1754,7 +1754,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#gtzfbguwzv .gt_footnote {
+#tguvpcfemw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1763,7 +1763,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#gtzfbguwzv .gt_sourcenotes {
+#tguvpcfemw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1777,7 +1777,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#gtzfbguwzv .gt_sourcenote {
+#tguvpcfemw .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1785,72 +1785,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#gtzfbguwzv .gt_left {
+#tguvpcfemw .gt_left {
   text-align: left;
 }
 
-#gtzfbguwzv .gt_center {
+#tguvpcfemw .gt_center {
   text-align: center;
 }
 
-#gtzfbguwzv .gt_right {
+#tguvpcfemw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#gtzfbguwzv .gt_font_normal {
+#tguvpcfemw .gt_font_normal {
   font-weight: normal;
 }
 
-#gtzfbguwzv .gt_font_bold {
+#tguvpcfemw .gt_font_bold {
   font-weight: bold;
 }
 
-#gtzfbguwzv .gt_font_italic {
+#tguvpcfemw .gt_font_italic {
   font-style: italic;
 }
 
-#gtzfbguwzv .gt_super {
+#tguvpcfemw .gt_super {
   font-size: 65%;
 }
 
-#gtzfbguwzv .gt_footnote_marks {
+#tguvpcfemw .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#gtzfbguwzv .gt_asterisk {
+#tguvpcfemw .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#gtzfbguwzv .gt_indent_1 {
+#tguvpcfemw .gt_indent_1 {
   text-indent: 5px;
 }
 
-#gtzfbguwzv .gt_indent_2 {
+#tguvpcfemw .gt_indent_2 {
   text-indent: 10px;
 }
 
-#gtzfbguwzv .gt_indent_3 {
+#tguvpcfemw .gt_indent_3 {
   text-indent: 15px;
 }
 
-#gtzfbguwzv .gt_indent_4 {
+#tguvpcfemw .gt_indent_4 {
   text-indent: 20px;
 }
 
-#gtzfbguwzv .gt_indent_5 {
+#tguvpcfemw .gt_indent_5 {
   text-indent: 25px;
 }
 
-#gtzfbguwzv .katex-display {
+#tguvpcfemw .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#gtzfbguwzv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#tguvpcfemw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1949,23 +1949,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res_mean<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="svaidnkftu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#svaidnkftu table {
+<div id="gksdwbvibw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gksdwbvibw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#svaidnkftu thead, #svaidnkftu tbody, #svaidnkftu tfoot, #svaidnkftu tr, #svaidnkftu td, #svaidnkftu th {
+#gksdwbvibw thead, #gksdwbvibw tbody, #gksdwbvibw tfoot, #gksdwbvibw tr, #gksdwbvibw td, #gksdwbvibw th {
   border-style: none;
 }
 
-#svaidnkftu p {
+#gksdwbvibw p {
   margin: 0;
   padding: 0;
 }
 
-#svaidnkftu .gt_table {
+#gksdwbvibw .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1991,12 +1991,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#svaidnkftu .gt_caption {
+#gksdwbvibw .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#svaidnkftu .gt_title {
+#gksdwbvibw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2008,7 +2008,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#svaidnkftu .gt_subtitle {
+#gksdwbvibw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2020,7 +2020,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#svaidnkftu .gt_heading {
+#gksdwbvibw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2032,13 +2032,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#svaidnkftu .gt_bottom_border {
+#gksdwbvibw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#svaidnkftu .gt_col_headings {
+#gksdwbvibw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2053,7 +2053,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#svaidnkftu .gt_col_heading {
+#gksdwbvibw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2073,7 +2073,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#svaidnkftu .gt_column_spanner_outer {
+#gksdwbvibw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2085,15 +2085,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#svaidnkftu .gt_column_spanner_outer:first-child {
+#gksdwbvibw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#svaidnkftu .gt_column_spanner_outer:last-child {
+#gksdwbvibw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#svaidnkftu .gt_column_spanner {
+#gksdwbvibw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2105,11 +2105,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#svaidnkftu .gt_spanner_row {
+#gksdwbvibw .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#svaidnkftu .gt_group_heading {
+#gksdwbvibw .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2135,7 +2135,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#svaidnkftu .gt_empty_group_heading {
+#gksdwbvibw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2150,15 +2150,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#svaidnkftu .gt_from_md > :first-child {
+#gksdwbvibw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#svaidnkftu .gt_from_md > :last-child {
+#gksdwbvibw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#svaidnkftu .gt_row {
+#gksdwbvibw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2177,7 +2177,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#svaidnkftu .gt_stub {
+#gksdwbvibw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2190,7 +2190,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#svaidnkftu .gt_stub_row_group {
+#gksdwbvibw .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2204,15 +2204,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#svaidnkftu .gt_row_group_first td {
+#gksdwbvibw .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#svaidnkftu .gt_row_group_first th {
+#gksdwbvibw .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#svaidnkftu .gt_summary_row {
+#gksdwbvibw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2222,16 +2222,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#svaidnkftu .gt_first_summary_row {
+#gksdwbvibw .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#svaidnkftu .gt_first_summary_row.thick {
+#gksdwbvibw .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#svaidnkftu .gt_last_summary_row {
+#gksdwbvibw .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2241,7 +2241,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#svaidnkftu .gt_grand_summary_row {
+#gksdwbvibw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2251,7 +2251,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#svaidnkftu .gt_first_grand_summary_row {
+#gksdwbvibw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2261,7 +2261,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#svaidnkftu .gt_last_grand_summary_row_top {
+#gksdwbvibw .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2271,11 +2271,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#svaidnkftu .gt_striped {
+#gksdwbvibw .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#svaidnkftu .gt_table_body {
+#gksdwbvibw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2284,7 +2284,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#svaidnkftu .gt_footnotes {
+#gksdwbvibw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2298,7 +2298,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#svaidnkftu .gt_footnote {
+#gksdwbvibw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2307,7 +2307,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#svaidnkftu .gt_sourcenotes {
+#gksdwbvibw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2321,7 +2321,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#svaidnkftu .gt_sourcenote {
+#gksdwbvibw .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2329,72 +2329,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#svaidnkftu .gt_left {
+#gksdwbvibw .gt_left {
   text-align: left;
 }
 
-#svaidnkftu .gt_center {
+#gksdwbvibw .gt_center {
   text-align: center;
 }
 
-#svaidnkftu .gt_right {
+#gksdwbvibw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#svaidnkftu .gt_font_normal {
+#gksdwbvibw .gt_font_normal {
   font-weight: normal;
 }
 
-#svaidnkftu .gt_font_bold {
+#gksdwbvibw .gt_font_bold {
   font-weight: bold;
 }
 
-#svaidnkftu .gt_font_italic {
+#gksdwbvibw .gt_font_italic {
   font-style: italic;
 }
 
-#svaidnkftu .gt_super {
+#gksdwbvibw .gt_super {
   font-size: 65%;
 }
 
-#svaidnkftu .gt_footnote_marks {
+#gksdwbvibw .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#svaidnkftu .gt_asterisk {
+#gksdwbvibw .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#svaidnkftu .gt_indent_1 {
+#gksdwbvibw .gt_indent_1 {
   text-indent: 5px;
 }
 
-#svaidnkftu .gt_indent_2 {
+#gksdwbvibw .gt_indent_2 {
   text-indent: 10px;
 }
 
-#svaidnkftu .gt_indent_3 {
+#gksdwbvibw .gt_indent_3 {
   text-indent: 15px;
 }
 
-#svaidnkftu .gt_indent_4 {
+#gksdwbvibw .gt_indent_4 {
   text-indent: 20px;
 }
 
-#svaidnkftu .gt_indent_5 {
+#gksdwbvibw .gt_indent_5 {
   text-indent: 25px;
 }
 
-#svaidnkftu .katex-display {
+#gksdwbvibw .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#svaidnkftu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#gksdwbvibw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2430,23 +2430,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>res_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="ohqfprgjea" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ohqfprgjea table {
+<div id="wgpvbesglz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#wgpvbesglz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ohqfprgjea thead, #ohqfprgjea tbody, #ohqfprgjea tfoot, #ohqfprgjea tr, #ohqfprgjea td, #ohqfprgjea th {
+#wgpvbesglz thead, #wgpvbesglz tbody, #wgpvbesglz tfoot, #wgpvbesglz tr, #wgpvbesglz td, #wgpvbesglz th {
   border-style: none;
 }
 
-#ohqfprgjea p {
+#wgpvbesglz p {
   margin: 0;
   padding: 0;
 }
 
-#ohqfprgjea .gt_table {
+#wgpvbesglz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2472,12 +2472,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#ohqfprgjea .gt_caption {
+#wgpvbesglz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ohqfprgjea .gt_title {
+#wgpvbesglz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2489,7 +2489,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#ohqfprgjea .gt_subtitle {
+#wgpvbesglz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2501,7 +2501,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#ohqfprgjea .gt_heading {
+#wgpvbesglz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2513,13 +2513,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ohqfprgjea .gt_bottom_border {
+#wgpvbesglz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ohqfprgjea .gt_col_headings {
+#wgpvbesglz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2534,7 +2534,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ohqfprgjea .gt_col_heading {
+#wgpvbesglz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2554,7 +2554,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#ohqfprgjea .gt_column_spanner_outer {
+#wgpvbesglz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2566,15 +2566,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#ohqfprgjea .gt_column_spanner_outer:first-child {
+#wgpvbesglz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ohqfprgjea .gt_column_spanner_outer:last-child {
+#wgpvbesglz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ohqfprgjea .gt_column_spanner {
+#wgpvbesglz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2586,11 +2586,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#ohqfprgjea .gt_spanner_row {
+#wgpvbesglz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ohqfprgjea .gt_group_heading {
+#wgpvbesglz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2616,7 +2616,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#ohqfprgjea .gt_empty_group_heading {
+#wgpvbesglz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2631,15 +2631,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#ohqfprgjea .gt_from_md > :first-child {
+#wgpvbesglz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ohqfprgjea .gt_from_md > :last-child {
+#wgpvbesglz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ohqfprgjea .gt_row {
+#wgpvbesglz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2658,7 +2658,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#ohqfprgjea .gt_stub {
+#wgpvbesglz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2671,7 +2671,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ohqfprgjea .gt_stub_row_group {
+#wgpvbesglz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2685,15 +2685,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#ohqfprgjea .gt_row_group_first td {
+#wgpvbesglz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ohqfprgjea .gt_row_group_first th {
+#wgpvbesglz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ohqfprgjea .gt_summary_row {
+#wgpvbesglz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2703,16 +2703,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ohqfprgjea .gt_first_summary_row {
+#wgpvbesglz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ohqfprgjea .gt_first_summary_row.thick {
+#wgpvbesglz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ohqfprgjea .gt_last_summary_row {
+#wgpvbesglz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2722,7 +2722,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#ohqfprgjea .gt_grand_summary_row {
+#wgpvbesglz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2732,7 +2732,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ohqfprgjea .gt_first_grand_summary_row {
+#wgpvbesglz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2742,7 +2742,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#ohqfprgjea .gt_last_grand_summary_row_top {
+#wgpvbesglz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2752,11 +2752,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#ohqfprgjea .gt_striped {
+#wgpvbesglz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ohqfprgjea .gt_table_body {
+#wgpvbesglz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2765,7 +2765,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#ohqfprgjea .gt_footnotes {
+#wgpvbesglz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2779,7 +2779,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ohqfprgjea .gt_footnote {
+#wgpvbesglz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2788,7 +2788,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ohqfprgjea .gt_sourcenotes {
+#wgpvbesglz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2802,7 +2802,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#ohqfprgjea .gt_sourcenote {
+#wgpvbesglz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2810,72 +2810,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#ohqfprgjea .gt_left {
+#wgpvbesglz .gt_left {
   text-align: left;
 }
 
-#ohqfprgjea .gt_center {
+#wgpvbesglz .gt_center {
   text-align: center;
 }
 
-#ohqfprgjea .gt_right {
+#wgpvbesglz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ohqfprgjea .gt_font_normal {
+#wgpvbesglz .gt_font_normal {
   font-weight: normal;
 }
 
-#ohqfprgjea .gt_font_bold {
+#wgpvbesglz .gt_font_bold {
   font-weight: bold;
 }
 
-#ohqfprgjea .gt_font_italic {
+#wgpvbesglz .gt_font_italic {
   font-style: italic;
 }
 
-#ohqfprgjea .gt_super {
+#wgpvbesglz .gt_super {
   font-size: 65%;
 }
 
-#ohqfprgjea .gt_footnote_marks {
+#wgpvbesglz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ohqfprgjea .gt_asterisk {
+#wgpvbesglz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ohqfprgjea .gt_indent_1 {
+#wgpvbesglz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ohqfprgjea .gt_indent_2 {
+#wgpvbesglz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ohqfprgjea .gt_indent_3 {
+#wgpvbesglz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ohqfprgjea .gt_indent_4 {
+#wgpvbesglz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ohqfprgjea .gt_indent_5 {
+#wgpvbesglz .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ohqfprgjea .katex-display {
+#wgpvbesglz .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ohqfprgjea div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#wgpvbesglz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2919,23 +2919,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>res_prop<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="fglaldjdtl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#fglaldjdtl table {
+<div id="oeurywpzti" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#oeurywpzti table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#fglaldjdtl thead, #fglaldjdtl tbody, #fglaldjdtl tfoot, #fglaldjdtl tr, #fglaldjdtl td, #fglaldjdtl th {
+#oeurywpzti thead, #oeurywpzti tbody, #oeurywpzti tfoot, #oeurywpzti tr, #oeurywpzti td, #oeurywpzti th {
   border-style: none;
 }
 
-#fglaldjdtl p {
+#oeurywpzti p {
   margin: 0;
   padding: 0;
 }
 
-#fglaldjdtl .gt_table {
+#oeurywpzti .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2961,12 +2961,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#fglaldjdtl .gt_caption {
+#oeurywpzti .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#fglaldjdtl .gt_title {
+#oeurywpzti .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2978,7 +2978,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#fglaldjdtl .gt_subtitle {
+#oeurywpzti .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2990,7 +2990,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#fglaldjdtl .gt_heading {
+#oeurywpzti .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3002,13 +3002,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#fglaldjdtl .gt_bottom_border {
+#oeurywpzti .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fglaldjdtl .gt_col_headings {
+#oeurywpzti .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3023,7 +3023,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#fglaldjdtl .gt_col_heading {
+#oeurywpzti .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3043,7 +3043,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#fglaldjdtl .gt_column_spanner_outer {
+#oeurywpzti .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3055,15 +3055,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#fglaldjdtl .gt_column_spanner_outer:first-child {
+#oeurywpzti .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fglaldjdtl .gt_column_spanner_outer:last-child {
+#oeurywpzti .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fglaldjdtl .gt_column_spanner {
+#oeurywpzti .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3075,11 +3075,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#fglaldjdtl .gt_spanner_row {
+#oeurywpzti .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#fglaldjdtl .gt_group_heading {
+#oeurywpzti .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3105,7 +3105,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#fglaldjdtl .gt_empty_group_heading {
+#oeurywpzti .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3120,15 +3120,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#fglaldjdtl .gt_from_md > :first-child {
+#oeurywpzti .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fglaldjdtl .gt_from_md > :last-child {
+#oeurywpzti .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fglaldjdtl .gt_row {
+#oeurywpzti .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3147,7 +3147,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#fglaldjdtl .gt_stub {
+#oeurywpzti .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3160,7 +3160,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#fglaldjdtl .gt_stub_row_group {
+#oeurywpzti .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3174,15 +3174,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#fglaldjdtl .gt_row_group_first td {
+#oeurywpzti .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#fglaldjdtl .gt_row_group_first th {
+#oeurywpzti .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#fglaldjdtl .gt_summary_row {
+#oeurywpzti .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3192,16 +3192,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#fglaldjdtl .gt_first_summary_row {
+#oeurywpzti .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#fglaldjdtl .gt_first_summary_row.thick {
+#oeurywpzti .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#fglaldjdtl .gt_last_summary_row {
+#oeurywpzti .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3211,7 +3211,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#fglaldjdtl .gt_grand_summary_row {
+#oeurywpzti .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3221,7 +3221,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#fglaldjdtl .gt_first_grand_summary_row {
+#oeurywpzti .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3231,7 +3231,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#fglaldjdtl .gt_last_grand_summary_row_top {
+#oeurywpzti .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3241,11 +3241,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#fglaldjdtl .gt_striped {
+#oeurywpzti .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fglaldjdtl .gt_table_body {
+#oeurywpzti .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3254,7 +3254,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#fglaldjdtl .gt_footnotes {
+#oeurywpzti .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3268,7 +3268,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#fglaldjdtl .gt_footnote {
+#oeurywpzti .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3277,7 +3277,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#fglaldjdtl .gt_sourcenotes {
+#oeurywpzti .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3291,7 +3291,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#fglaldjdtl .gt_sourcenote {
+#oeurywpzti .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3299,72 +3299,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#fglaldjdtl .gt_left {
+#oeurywpzti .gt_left {
   text-align: left;
 }
 
-#fglaldjdtl .gt_center {
+#oeurywpzti .gt_center {
   text-align: center;
 }
 
-#fglaldjdtl .gt_right {
+#oeurywpzti .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fglaldjdtl .gt_font_normal {
+#oeurywpzti .gt_font_normal {
   font-weight: normal;
 }
 
-#fglaldjdtl .gt_font_bold {
+#oeurywpzti .gt_font_bold {
   font-weight: bold;
 }
 
-#fglaldjdtl .gt_font_italic {
+#oeurywpzti .gt_font_italic {
   font-style: italic;
 }
 
-#fglaldjdtl .gt_super {
+#oeurywpzti .gt_super {
   font-size: 65%;
 }
 
-#fglaldjdtl .gt_footnote_marks {
+#oeurywpzti .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#fglaldjdtl .gt_asterisk {
+#oeurywpzti .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#fglaldjdtl .gt_indent_1 {
+#oeurywpzti .gt_indent_1 {
   text-indent: 5px;
 }
 
-#fglaldjdtl .gt_indent_2 {
+#oeurywpzti .gt_indent_2 {
   text-indent: 10px;
 }
 
-#fglaldjdtl .gt_indent_3 {
+#oeurywpzti .gt_indent_3 {
   text-indent: 15px;
 }
 
-#fglaldjdtl .gt_indent_4 {
+#oeurywpzti .gt_indent_4 {
   text-indent: 20px;
 }
 
-#fglaldjdtl .gt_indent_5 {
+#oeurywpzti .gt_indent_5 {
   text-indent: 25px;
 }
 
-#fglaldjdtl .katex-display {
+#oeurywpzti .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#fglaldjdtl div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#oeurywpzti div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3400,23 +3400,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>res_prop_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="dgomctuhte" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#dgomctuhte table {
+<div id="iahojubvav" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#iahojubvav table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#dgomctuhte thead, #dgomctuhte tbody, #dgomctuhte tfoot, #dgomctuhte tr, #dgomctuhte td, #dgomctuhte th {
+#iahojubvav thead, #iahojubvav tbody, #iahojubvav tfoot, #iahojubvav tr, #iahojubvav td, #iahojubvav th {
   border-style: none;
 }
 
-#dgomctuhte p {
+#iahojubvav p {
   margin: 0;
   padding: 0;
 }
 
-#dgomctuhte .gt_table {
+#iahojubvav .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3442,12 +3442,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#dgomctuhte .gt_caption {
+#iahojubvav .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#dgomctuhte .gt_title {
+#iahojubvav .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3459,7 +3459,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#dgomctuhte .gt_subtitle {
+#iahojubvav .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3471,7 +3471,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#dgomctuhte .gt_heading {
+#iahojubvav .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3483,13 +3483,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#dgomctuhte .gt_bottom_border {
+#iahojubvav .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#dgomctuhte .gt_col_headings {
+#iahojubvav .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3504,7 +3504,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#dgomctuhte .gt_col_heading {
+#iahojubvav .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3524,7 +3524,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#dgomctuhte .gt_column_spanner_outer {
+#iahojubvav .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3536,15 +3536,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#dgomctuhte .gt_column_spanner_outer:first-child {
+#iahojubvav .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#dgomctuhte .gt_column_spanner_outer:last-child {
+#iahojubvav .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#dgomctuhte .gt_column_spanner {
+#iahojubvav .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3556,11 +3556,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#dgomctuhte .gt_spanner_row {
+#iahojubvav .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#dgomctuhte .gt_group_heading {
+#iahojubvav .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3586,7 +3586,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#dgomctuhte .gt_empty_group_heading {
+#iahojubvav .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3601,15 +3601,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#dgomctuhte .gt_from_md > :first-child {
+#iahojubvav .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#dgomctuhte .gt_from_md > :last-child {
+#iahojubvav .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#dgomctuhte .gt_row {
+#iahojubvav .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3628,7 +3628,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#dgomctuhte .gt_stub {
+#iahojubvav .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3641,7 +3641,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#dgomctuhte .gt_stub_row_group {
+#iahojubvav .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3655,15 +3655,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#dgomctuhte .gt_row_group_first td {
+#iahojubvav .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#dgomctuhte .gt_row_group_first th {
+#iahojubvav .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#dgomctuhte .gt_summary_row {
+#iahojubvav .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3673,16 +3673,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#dgomctuhte .gt_first_summary_row {
+#iahojubvav .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#dgomctuhte .gt_first_summary_row.thick {
+#iahojubvav .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#dgomctuhte .gt_last_summary_row {
+#iahojubvav .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3692,7 +3692,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#dgomctuhte .gt_grand_summary_row {
+#iahojubvav .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3702,7 +3702,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#dgomctuhte .gt_first_grand_summary_row {
+#iahojubvav .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3712,7 +3712,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#dgomctuhte .gt_last_grand_summary_row_top {
+#iahojubvav .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3722,11 +3722,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#dgomctuhte .gt_striped {
+#iahojubvav .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#dgomctuhte .gt_table_body {
+#iahojubvav .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3735,7 +3735,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#dgomctuhte .gt_footnotes {
+#iahojubvav .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3749,7 +3749,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#dgomctuhte .gt_footnote {
+#iahojubvav .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3758,7 +3758,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#dgomctuhte .gt_sourcenotes {
+#iahojubvav .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3772,7 +3772,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#dgomctuhte .gt_sourcenote {
+#iahojubvav .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3780,72 +3780,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#dgomctuhte .gt_left {
+#iahojubvav .gt_left {
   text-align: left;
 }
 
-#dgomctuhte .gt_center {
+#iahojubvav .gt_center {
   text-align: center;
 }
 
-#dgomctuhte .gt_right {
+#iahojubvav .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#dgomctuhte .gt_font_normal {
+#iahojubvav .gt_font_normal {
   font-weight: normal;
 }
 
-#dgomctuhte .gt_font_bold {
+#iahojubvav .gt_font_bold {
   font-weight: bold;
 }
 
-#dgomctuhte .gt_font_italic {
+#iahojubvav .gt_font_italic {
   font-style: italic;
 }
 
-#dgomctuhte .gt_super {
+#iahojubvav .gt_super {
   font-size: 65%;
 }
 
-#dgomctuhte .gt_footnote_marks {
+#iahojubvav .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#dgomctuhte .gt_asterisk {
+#iahojubvav .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#dgomctuhte .gt_indent_1 {
+#iahojubvav .gt_indent_1 {
   text-indent: 5px;
 }
 
-#dgomctuhte .gt_indent_2 {
+#iahojubvav .gt_indent_2 {
   text-indent: 10px;
 }
 
-#dgomctuhte .gt_indent_3 {
+#iahojubvav .gt_indent_3 {
   text-indent: 15px;
 }
 
-#dgomctuhte .gt_indent_4 {
+#iahojubvav .gt_indent_4 {
   text-indent: 20px;
 }
 
-#dgomctuhte .gt_indent_5 {
+#iahojubvav .gt_indent_5 {
   text-indent: 25px;
 }
 
-#dgomctuhte .katex-display {
+#iahojubvav .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#dgomctuhte div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#iahojubvav div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3974,7 +3974,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["county"],"name":[1],"type":["chr"],"align":["left"]},{"label":["state"],"name":[2],"type":["chr"],"align":["left"]},{"label":["acres92"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["acres87"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["acres82"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["farms92"],"name":[6],"type":["int"],"align":["right"]},{"label":["farms87"],"name":[7],"type":["int"],"align":["right"]},{"label":["farms82"],"name":[8],"type":["int"],"align":["right"]},{"label":["largef92"],"name":[9],"type":["int"],"align":["right"]},{"label":["largef87"],"name":[10],"type":["int"],"align":["right"]},{"label":["largef82"],"name":[11],"type":["int"],"align":["right"]},{"label":["smallf92"],"name":[12],"type":["int"],"align":["right"]},{"label":["smallf87"],"name":[13],"type":["int"],"align":["right"]},{"label":["smallf82"],"name":[14],"type":["int"],"align":["right"]},{"label":["region"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"CUSTER COUNTY","2":"CO","3":"156.801","4":"150.334","5":"223.851","6":"131","7":"130","8":"130","9":"40","10":"39","11":"42","12":"7","13":"9","14":"7","15":"W","_rn_":"234"},{"1":"SULLIVAN COUNTY","2":"NY","3":"56.002","4":"62.976","5":"75.663","6":"306","7":"373","8":"460","9":"5","10":"4","11":"2","12":"24","13":"26","14":"26","15":"NE","_rn_":"2005"},{"1":"HENRY COUNTY","2":"KY","3":"159.966","4":"166.376","5":"155.947","6":"1071","7":"1093","8":"1108","9":"8","10":"3","11":"1","12":"127","13":"142","14":"173","15":"S","_rn_":"1018"},{"1":"CARTER COUNTY","2":"KY","3":"112.831","4":"118.340","5":"118.009","6":"986","7":"1025","8":"1088","9":"3","10":"4","11":"4","12":"108","13":"136","14":"135","15":"S","_rn_":"988"},{"1":"HARDEE COUNTY","2":"FL","3":"327.611","4":"303.892","5":"318.990","6":"1169","7":"1130","8":"954","9":"59","10":"59","11":"53","12":"146","13":"110","14":"82","15":"S","_rn_":"319"},{"1":"OZAUKEE COUNTY","2":"WI","3":"78.772","4":"85.201","5":"89.331","6":"448","7":"483","8":"527","9":"6","10":"5","11":"5","12":"56","13":"49","14":"48","15":"NC","_rn_":"2974"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["county"],"name":[1],"type":["chr"],"align":["left"]},{"label":["state"],"name":[2],"type":["chr"],"align":["left"]},{"label":["acres92"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["acres87"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["acres82"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["farms92"],"name":[6],"type":["int"],"align":["right"]},{"label":["farms87"],"name":[7],"type":["int"],"align":["right"]},{"label":["farms82"],"name":[8],"type":["int"],"align":["right"]},{"label":["largef92"],"name":[9],"type":["int"],"align":["right"]},{"label":["largef87"],"name":[10],"type":["int"],"align":["right"]},{"label":["largef82"],"name":[11],"type":["int"],"align":["right"]},{"label":["smallf92"],"name":[12],"type":["int"],"align":["right"]},{"label":["smallf87"],"name":[13],"type":["int"],"align":["right"]},{"label":["smallf82"],"name":[14],"type":["int"],"align":["right"]},{"label":["region"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"CHEBOYGAN COUNTY","2":"MI","3":"40.871","4":"42.363","5":"46.088","6":"170","7":"171","8":"197","9":"3","10":"6","11":"4","12":"5","13":"3","14":"3","15":"NC","_rn_":"1219"},{"1":"LINCOLN COUNTY","2":"CO","3":"1660.146","4":"1615.140","5":"1492.271","6":"447","7":"489","8":"466","9":"294","10":"302","11":"287","12":"9","13":"14","14":"25","15":"W","_rn_":"257"},{"1":"WASHINGTON COUNTY","2":"OH","3":"139.655","4":"146.000","5":"159.389","6":"864","7":"955","8":"1088","9":"4","10":"5","11":"1","12":"27","13":"38","14":"35","15":"NC","_rn_":"2098"},{"1":"NEW MADRID COUNTY","2":"MO","3":"368.849","4":"369.068","5":"366.597","6":"442","7":"532","8":"609","9":"134","10":"119","11":"119","12":"15","13":"13","14":"10","15":"NC","_rn_":"1445"},{"1":"JEFFERSON COUNTY","2":"MS","3":"66.257","4":"81.073","5":"115.048","6":"182","7":"234","8":"288","9":"15","10":"19","11":"24","12":"6","13":"7","14":"8","15":"S","_rn_":"1519"},{"1":"OSAGE COUNTY","2":"KS","3":"349.293","4":"357.199","5":"379.966","6":"848","7":"885","8":"989","9":"84","10":"82","11":"84","12":"27","13":"33","14":"43","15":"NC","_rn_":"931"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -3987,23 +3987,23 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>res_one<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="cciaddjayf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#cciaddjayf table {
+<div id="mmhmvwfmch" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mmhmvwfmch table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cciaddjayf thead, #cciaddjayf tbody, #cciaddjayf tfoot, #cciaddjayf tr, #cciaddjayf td, #cciaddjayf th {
+#mmhmvwfmch thead, #mmhmvwfmch tbody, #mmhmvwfmch tfoot, #mmhmvwfmch tr, #mmhmvwfmch td, #mmhmvwfmch th {
   border-style: none;
 }
 
-#cciaddjayf p {
+#mmhmvwfmch p {
   margin: 0;
   padding: 0;
 }
 
-#cciaddjayf .gt_table {
+#mmhmvwfmch .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -4029,12 +4029,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-left-color: #D3D3D3;
 }
 
-#cciaddjayf .gt_caption {
+#mmhmvwfmch .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cciaddjayf .gt_title {
+#mmhmvwfmch .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -4046,7 +4046,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-width: 0;
 }
 
-#cciaddjayf .gt_subtitle {
+#mmhmvwfmch .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -4058,7 +4058,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-width: 0;
 }
 
-#cciaddjayf .gt_heading {
+#mmhmvwfmch .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -4070,13 +4070,13 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#cciaddjayf .gt_bottom_border {
+#mmhmvwfmch .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cciaddjayf .gt_col_headings {
+#mmhmvwfmch .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4091,7 +4091,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#cciaddjayf .gt_col_heading {
+#mmhmvwfmch .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4111,7 +4111,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#cciaddjayf .gt_column_spanner_outer {
+#mmhmvwfmch .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4123,15 +4123,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 4px;
 }
 
-#cciaddjayf .gt_column_spanner_outer:first-child {
+#mmhmvwfmch .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cciaddjayf .gt_column_spanner_outer:last-child {
+#mmhmvwfmch .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cciaddjayf .gt_column_spanner {
+#mmhmvwfmch .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -4143,11 +4143,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   width: 100%;
 }
 
-#cciaddjayf .gt_spanner_row {
+#mmhmvwfmch .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cciaddjayf .gt_group_heading {
+#mmhmvwfmch .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4173,7 +4173,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   text-align: left;
 }
 
-#cciaddjayf .gt_empty_group_heading {
+#mmhmvwfmch .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4188,15 +4188,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: middle;
 }
 
-#cciaddjayf .gt_from_md > :first-child {
+#mmhmvwfmch .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cciaddjayf .gt_from_md > :last-child {
+#mmhmvwfmch .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cciaddjayf .gt_row {
+#mmhmvwfmch .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4215,7 +4215,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   overflow-x: hidden;
 }
 
-#cciaddjayf .gt_stub {
+#mmhmvwfmch .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4228,7 +4228,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#cciaddjayf .gt_stub_row_group {
+#mmhmvwfmch .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4242,15 +4242,15 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   vertical-align: top;
 }
 
-#cciaddjayf .gt_row_group_first td {
+#mmhmvwfmch .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cciaddjayf .gt_row_group_first th {
+#mmhmvwfmch .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cciaddjayf .gt_summary_row {
+#mmhmvwfmch .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4260,16 +4260,16 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#cciaddjayf .gt_first_summary_row {
+#mmhmvwfmch .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cciaddjayf .gt_first_summary_row.thick {
+#mmhmvwfmch .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cciaddjayf .gt_last_summary_row {
+#mmhmvwfmch .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4279,7 +4279,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#cciaddjayf .gt_grand_summary_row {
+#mmhmvwfmch .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4289,7 +4289,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#cciaddjayf .gt_first_grand_summary_row {
+#mmhmvwfmch .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4299,7 +4299,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-top-color: #D3D3D3;
 }
 
-#cciaddjayf .gt_last_grand_summary_row_top {
+#mmhmvwfmch .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4309,11 +4309,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#cciaddjayf .gt_striped {
+#mmhmvwfmch .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cciaddjayf .gt_table_body {
+#mmhmvwfmch .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4322,7 +4322,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-bottom-color: #D3D3D3;
 }
 
-#cciaddjayf .gt_footnotes {
+#mmhmvwfmch .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4336,7 +4336,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#cciaddjayf .gt_footnote {
+#mmhmvwfmch .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -4345,7 +4345,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#cciaddjayf .gt_sourcenotes {
+#mmhmvwfmch .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4359,7 +4359,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   border-right-color: #D3D3D3;
 }
 
-#cciaddjayf .gt_sourcenote {
+#mmhmvwfmch .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -4367,72 +4367,72 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
   padding-right: 5px;
 }
 
-#cciaddjayf .gt_left {
+#mmhmvwfmch .gt_left {
   text-align: left;
 }
 
-#cciaddjayf .gt_center {
+#mmhmvwfmch .gt_center {
   text-align: center;
 }
 
-#cciaddjayf .gt_right {
+#mmhmvwfmch .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cciaddjayf .gt_font_normal {
+#mmhmvwfmch .gt_font_normal {
   font-weight: normal;
 }
 
-#cciaddjayf .gt_font_bold {
+#mmhmvwfmch .gt_font_bold {
   font-weight: bold;
 }
 
-#cciaddjayf .gt_font_italic {
+#mmhmvwfmch .gt_font_italic {
   font-style: italic;
 }
 
-#cciaddjayf .gt_super {
+#mmhmvwfmch .gt_super {
   font-size: 65%;
 }
 
-#cciaddjayf .gt_footnote_marks {
+#mmhmvwfmch .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cciaddjayf .gt_asterisk {
+#mmhmvwfmch .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cciaddjayf .gt_indent_1 {
+#mmhmvwfmch .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cciaddjayf .gt_indent_2 {
+#mmhmvwfmch .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cciaddjayf .gt_indent_3 {
+#mmhmvwfmch .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cciaddjayf .gt_indent_4 {
+#mmhmvwfmch .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cciaddjayf .gt_indent_5 {
+#mmhmvwfmch .gt_indent_5 {
   text-indent: 25px;
 }
 
-#cciaddjayf .katex-display {
+#mmhmvwfmch .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#cciaddjayf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#mmhmvwfmch div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -4448,10 +4448,10 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
-<td class="gt_row gt_right" headers="Est.">303.42</td>
-<td class="gt_row gt_right" headers="S.E.">22.01</td>
-<td class="gt_row gt_right" headers="ci.low">260.11</td>
-<td class="gt_row gt_right" headers="ci.upp">346.73</td>
+<td class="gt_row gt_right" headers="Est.">313.20</td>
+<td class="gt_row gt_right" headers="S.E.">22.15</td>
+<td class="gt_row gt_right" headers="ci.low">269.62</td>
+<td class="gt_row gt_right" headers="ci.upp">356.78</td>
 </tr>
 </tbody>
 </table>
@@ -4482,12 +4482,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>         Est.     S.E.   ci.low   ci.upp
-[1,] 316.1666 19.98747 276.8327 355.5006
-[2,] 332.1489 29.50389 274.0873 390.2104
-[3,] 338.1878 32.69625 273.8438 402.5317
-[4,] 287.5100 18.36776 251.3636 323.6565
-[5,] 343.0009 25.75395 292.3190 393.6829
-[6,] 322.5822 27.14738 269.1581 376.0063</code></pre>
+[1,] 290.7471 21.78580 247.8741 333.6200
+[2,] 300.6398 21.54840 258.2341 343.0456
+[3,] 286.4379 17.31731 252.3586 320.5172
+[4,] 333.7544 22.35838 289.7547 377.7541
+[5,] 304.5797 18.34546 268.4771 340.6822
+[6,] 328.4969 25.07866 279.1439 377.8499</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -4503,7 +4503,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span> (simulation.results[,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 308.3832</code></pre>
+<pre><code>[1] 309.1513</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -4517,7 +4517,7 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span> (simulation.results [,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 23.55399</code></pre>
+<pre><code>[1] 23.5814</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -4560,7 +4560,7 @@ Figure&nbsp;2.1: Population distribution and sampling distribution of the SRS sa
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Est."],"name":[1],"type":["dbl"],"align":["right"]},{"label":["S.E."],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ci.low"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["ci.upp"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Covered?"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"316.1666","2":"19.98747","3":"276.8327","4":"355.5006","5":"1","_rn_":"1"},{"1":"332.1489","2":"29.50389","3":"274.0873","4":"390.2104","5":"1","_rn_":"2"},{"1":"338.1878","2":"32.69625","3":"273.8438","4":"402.5317","5":"1","_rn_":"3"},{"1":"287.5100","2":"18.36776","3":"251.3636","4":"323.6565","5":"1","_rn_":"4"},{"1":"343.0009","2":"25.75395","3":"292.3190","4":"393.6829","5":"1","_rn_":"5"},{"1":"322.5822","2":"27.14738","3":"269.1581","4":"376.0063","5":"1","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Est."],"name":[1],"type":["dbl"],"align":["right"]},{"label":["S.E."],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ci.low"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["ci.upp"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Covered?"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"290.7471","2":"21.78580","3":"247.8741","4":"333.6200","5":"1","_rn_":"1"},{"1":"300.6398","2":"21.54840","3":"258.2341","4":"343.0456","5":"1","_rn_":"2"},{"1":"286.4379","2":"17.31731","3":"252.3586","4":"320.5172","5":"1","_rn_":"3"},{"1":"333.7544","2":"22.35838","3":"289.7547","4":"377.7541","5":"1","_rn_":"4"},{"1":"304.5797","2":"18.34546","3":"268.4771","4":"340.6822","5":"1","_rn_":"5"},{"1":"328.4969","2":"25.07866","3":"279.1439","4":"377.8499","5":"1","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -4582,7 +4582,7 @@ Figure&nbsp;2.1: Population distribution and sampling distribution of the SRS sa
 <span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(simulation.results<span class="sc">$</span><span class="st">`</span><span class="at">Covered?</span><span class="st">`</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.931</code></pre>
+<pre><code>[1] 0.9312</code></pre>
 </div>
 <div class="cell-output-display">
 <div id="fig-srs-coverage-intervals" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -4604,46 +4604,52 @@ Figure&nbsp;2.2: First 100 simulated 95% confidence intervals for the SRS sample
 <p>The simulation for this section runs as a standalone app: <a href="app-srs.html" target="_blank">Simple random sampling</a>. It opens in a new tab, together with its documentation and the full <a href="shinyliveapps_sampling.html" target="_blank">list of apps</a>.</p>
 </section>
 <section id="sec-pred-srs" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="sec-pred-srs"><span class="header-section-number">2.5</span> Prediction-Based Theory for Simple Random Sampling (Optional)</h2>
+<h2 data-number="2.5" class="anchored" data-anchor-id="sec-pred-srs"><span class="header-section-number">2.5</span> Prediction-Based Theory for Sampling (Optional)</h2>
+<p>Sampling is a prediction problem. The sample <span class="math inline">\(S\)</span> plays the role of a training set, the non-sampled units <span class="math inline">\(R=U\setminus S\)</span> play the role of test cases, and a population total or mean is a sum of predictions for the test cases plus the observed training values. This section states the framework in general, with a model for every unit and a generic estimator of the model parameters, and then specializes it to simple random sampling, where the mean of every unit is the same and is estimated by <span class="math inline">\(\bar y_S\)</span>.</p>
 <section id="sec-pred-setup" class="level3" data-number="2.5.1">
 <h3 data-number="2.5.1" class="anchored" data-anchor-id="sec-pred-setup"><span class="header-section-number">2.5.1</span> Setup</h3>
 <p>Let <span class="math inline">\(U=\{1,\dots,N\}\)</span> index a finite population with study variable <span class="math inline">\(Y_i\)</span>, let <span class="math inline">\(S\subset U\)</span> with <span class="math inline">\(|S|=n\)</span> denote the observed sample, and let <span class="math inline">\(R=U\setminus S\)</span> denote the <span class="math inline">\(N-n\)</span> non-sampled units. The quantities of interest are <span class="math display">\[
-T=\sum_{i\in U}Y_i,\qquad \bar Y_U=T/N .
-\]</span></p>
-<p>The prediction approach treats <span class="math inline">\(Y_1,\dots,Y_N\)</span> as random variables and <span class="math inline">\(S\)</span> as fixed. All expectations are taken with respect to the model <span class="math inline">\(\xi\)</span> rather than the randomization distribution. Simple random sampling enters only through the requirement that selection be uninformative, so that <span class="math inline">\(\xi\)</span> governs the units in <span class="math inline">\(R\)</span> as well as those in <span class="math inline">\(S\)</span>. The working model is <span id="eq-model"><span class="math display">\[
-\xi:\quad E(Y_i)=\mu,\quad \operatorname{Var}(Y_i)=\sigma^2,\quad
+T=\sum_{i\in U}Y_i=\sum_{i\in S}Y_i+\sum_{i\in R}Y_i,\qquad \bar Y_U=T/N .
+\]</span> Only the second sum is unknown, so the task is to predict <span class="math inline">\(Y_i\)</span> for each <span class="math inline">\(i\in R\)</span>.</p>
+<p>The prediction approach treats <span class="math inline">\(Y_1,\dots,Y_N\)</span> as random variables and <span class="math inline">\(S\)</span> as fixed. All expectations are taken with respect to the model <span class="math inline">\(\xi\)</span> rather than the randomization distribution. The sampling design enters only through the requirement that selection be uninformative, so that <span class="math inline">\(\xi\)</span> governs the units in <span class="math inline">\(R\)</span> as well as those in <span class="math inline">\(S\)</span>. The general working model is <span id="eq-model"><span class="math display">\[
+\xi:\quad E(Y_i)=\mu_i(\theta),\quad \operatorname{Var}(Y_i)=\sigma_i^2,\quad
 \operatorname{Cov}(Y_i,Y_j)=0\ (i\neq j),
-\tag{2.1}\]</span></span> with model errors <span id="eq-errors"><span class="math display">\[
-e_i=Y_i-\mu,\qquad E(e_i)=0,\quad E(e_i^2)=\sigma^2,\quad E(e_ie_j)=0\ (i\neq j),
-\tag{2.2}\]</span></span> and <span class="math inline">\(\bar e_A=|A|^{-1}\sum_{i\in A}e_i\)</span> for an index set <span class="math inline">\(A\)</span>.</p>
-<p>A predictor of <span class="math inline">\(T\)</span> has the form <span class="math inline">\(\hat T=\sum_{i\in U}\hat Y_i\)</span> and is assessed by its mean squared prediction error <span id="eq-mspe"><span class="math display">\[
-\operatorname{MSPE}(\hat T)=E\left[(\hat T-T)^2\right]
-=E\left[\left(\sum_{i\in U}(\hat Y_i-Y_i)\right)^{2}\right].
-\tag{2.3}\]</span></span></p>
-<p>Because <span class="math inline">\(T\)</span> is a random quantity to be predicted rather than a fixed parameter to be estimated, <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> measures prediction error. Each derivation below subtracts and adds <span class="math inline">\(\mu\)</span> within every term, expressing the prediction error in the <span class="math inline">\(e_i\)</span>, whose moments are given by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>.</p>
-</section>
-<section id="sec-pred-known-mu" class="level3" data-number="2.5.2">
-<h3 data-number="2.5.2" class="anchored" data-anchor-id="sec-pred-known-mu"><span class="header-section-number">2.5.2</span> Known <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span></h3>
-<p>Let <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> be known and set <span class="math inline">\(\hat Y_i=\mu\)</span> for all <span class="math inline">\(i\in U\)</span>, ignoring the data. Then <span class="math inline">\(\hat T=N\mu\)</span> and <span class="math display">\[
-\hat T-T=\sum_{i\in U}(\mu-Y_i)=-\sum_{i\in U}(Y_i-\mu)=-\sum_{i\in U}e_i ,
-\]</span> so that <span class="math inline">\(E(\hat T-T)=0\)</span> and, by <a href="#eq-errors" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>, <span id="eq-mspe-blind"><span class="math display">\[
-\operatorname{MSPE}(\hat T)
-=\sum_{i\in U}E(e_i^2)+\sum_{i\neq j}E(e_ie_j)=N\sigma^2 ,
+\tag{2.1}\]</span></span> where <span class="math inline">\(\theta\)</span> is an unknown parameter and <span class="math inline">\(\mu_i(\theta)\)</span> is the mean function, for example <span class="math inline">\(\mu_i(\theta)=x_i^{\top}\beta\)</span> in regression. The model errors are <span id="eq-errors"><span class="math display">\[
+e_i=Y_i-\mu_i(\theta),\qquad E(e_i)=0,\quad E(e_i^2)=\sigma_i^2,\quad E(e_ie_j)=0\ (i\neq j).
+\tag{2.2}\]</span></span></p>
+<p>A prediction rule estimates <span class="math inline">\(\theta\)</span> from the sample by <span class="math inline">\(\hat\theta=\hat\theta(Y_S)\)</span> and predicts <span id="eq-predictor"><span class="math display">\[
+\hat Y_i=
+\begin{cases}
+Y_i, &amp; i\in S,\\
+\mu_i(\hat\theta), &amp; i\in R,
+\end{cases}
 \qquad
-\operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2}{N}.
-\tag{2.4}\]</span></span></p>
-<p>The prediction error is non-zero although the model is known exactly: <span class="math inline">\(T\)</span> is a realized sum of random variables and cannot be recovered from <span class="math inline">\(\mu\)</span> alone. This is the distinction between predicting a finite-population quantity and estimating a superpopulation parameter. The magnitude <span class="math inline">\(\sigma^2/N\)</span> is negligible for large <span class="math inline">\(N\)</span>, which is why the distinction is invisible in treatments that condition on the population.</p>
-<p>The predictor <span class="math inline">\(N\mu\)</span> is inefficient, since it predicts values already observed. Setting <span class="math inline">\(\hat Y_i=Y_i\)</span> for <span class="math inline">\(i\in S\)</span> gives <span class="math display">\[
-\hat T=\sum_{i\in S}Y_i+(N-n)\mu,\qquad
-\hat T-T=\sum_{i\in R}(\mu-Y_i)=-\sum_{i\in R}e_i ,
-\]</span> whence <span id="eq-mspe-oracle"><span class="math display">\[
-\operatorname{MSPE}(\hat T)=(N-n)\sigma^2 .
-\tag{2.5}\]</span></span></p>
-<p>The <span class="math inline">\(n\)</span> observed terms drop out. Expression <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a> is irreducible: the unobserved units vary about their mean, and no predictor removes that variation.</p>
+\hat T=\sum_{i\in U}\hat Y_i=\sum_{i\in S}Y_i+\sum_{i\in R}\mu_i(\hat\theta).
+\tag{2.3}\]</span></span> Observed values are kept as they are, and the fitted mean function is used only for the unobserved units. Because <span class="math inline">\(\hat\theta\)</span> is a function of <span class="math inline">\(Y_S\)</span> alone and the errors are uncorrelated, <span class="math inline">\(\hat\theta\)</span> is uncorrelated with <span class="math inline">\(e_i\)</span> for every <span class="math inline">\(i\in R\)</span>. This is the only property of the estimator used below.</p>
+</section>
+<section id="sec-pred-two-sources" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="sec-pred-two-sources"><span class="header-section-number">2.5.2</span> Two sources of error</h3>
+<p><strong>Individual prediction.</strong> In machine learning a predictor is judged by its mean squared error on a test case. For <span class="math inline">\(i\in R\)</span> add and subtract <span class="math inline">\(\mu_i(\theta)\)</span>: <span id="eq-error-individual"><span class="math display">\[
+\hat Y_i-Y_i=\underbrace{\mu_i(\hat\theta)-\mu_i(\theta)}_{\delta_i}-\underbrace{\big(Y_i-\mu_i(\theta)\big)}_{e_i}.
+\tag{2.4}\]</span></span> The first part, <span class="math inline">\(\delta_i\)</span>, is the error in the fitted mean caused by the uncertainty in <span class="math inline">\(\hat\theta\)</span>, and the second part, <span class="math inline">\(e_i\)</span>, is the gap between the unobserved <span class="math inline">\(Y_i\)</span> and its true mean. The cross term <span class="math inline">\(E(\delta_ie_i)\)</span> vanishes, so <span id="eq-mse-individual"><span class="math display">\[
+E\big(\hat Y_i-Y_i\big)^2=\underbrace{\sigma_i^2}_{\text{irreducible}}+\underbrace{E\big[\mu_i(\hat\theta)-\mu_i(\theta)\big]^2}_{\text{estimation error}} .
+\tag{2.5}\]</span></span> The irreducible term is present even when <span class="math inline">\(\theta\)</span> is known, because no predictor removes the scatter of <span class="math inline">\(Y_i\)</span> about its mean. The estimation term is the mean squared error of <span class="math inline">\(\mu_i(\hat\theta)\)</span> as an estimator of <span class="math inline">\(\mu_i(\theta)\)</span> and decreases as the training sample grows. This is the usual decomposition of test error into noise and estimation variance, plus squared bias if the estimator is biased.</p>
+<p><strong>The total.</strong> The observed units contribute no error, so <span id="eq-error-decomp"><span class="math display">\[
+\hat T-T=\sum_{i\in R}(\hat Y_i-Y_i)=\sum_{i\in R}\delta_i-\sum_{i\in R}e_i .
+\tag{2.6}\]</span></span> The two sources of error appear again, now summed over the test cases. Squaring, the cross term between <span class="math inline">\(\sum_R\delta_i\)</span> and <span class="math inline">\(\sum_R e_i\)</span> vanishes by the same argument as before, and the <span class="math inline">\(e_i\)</span> are uncorrelated, so <span id="eq-mspe"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=E\big[(\hat T-T)^2\big]
+=\underbrace{\sum_{i\in R}\sigma_i^2}_{\text{scatter of the unobserved }Y_i}
++\underbrace{E\Big[\Big(\sum_{i\in R}\delta_i\Big)^{2}\Big]}_{\text{uncertainty in }\hat\theta} .
+\tag{2.7}\]</span></span> Dividing by <span class="math inline">\(N^2\)</span> gives <span class="math inline">\(\operatorname{MSPE}(\hat{\bar y}_U)\)</span>.</p>
+<p>Comparing <a href="#eq-mse-individual" class="quarto-xref">Equation&nbsp;<span>2.5</span></a> and <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;<span>2.7</span></a> shows what changes when the target moves from a single case to the total. The irreducible parts simply add, <span class="math inline">\(\sum_{i\in R}\sigma_i^2\)</span>. The estimation parts do not add, because the errors <span class="math inline">\(\delta_i\)</span> all come from the same <span class="math inline">\(\hat\theta\)</span> and are strongly correlated. Expanding the square gives <span class="math display">\[
+E\Big[\Big(\sum_{i\in R}\delta_i\Big)^{2}\Big]=\sum_{i\in R}E(\delta_i^2)+\sum_{i\neq j\in R}E(\delta_i\delta_j),
+\]</span> and the double sum is typically of larger order than the first. A total is a more aggregated target than an individual prediction, and its error is dominated by the shared error in <span class="math inline">\(\hat\theta\)</span>, which does not average out across units.</p>
 </section>
 <section id="sec-pred-sample-mean" class="level3" data-number="2.5.3">
-<h3 data-number="2.5.3" class="anchored" data-anchor-id="sec-pred-sample-mean"><span class="header-section-number">2.5.3</span> Unknown <span class="math inline">\(\mu\)</span>: prediction by the sample mean</h3>
-<p>Let <span class="math inline">\(\mu\)</span> be unknown and estimated by <span class="math inline">\(\bar y_S=n^{-1}\sum_{i\in S}Y_i\)</span>. Taking <span id="eq-expansion"><span class="math display">\[
+<h3 data-number="2.5.3" class="anchored" data-anchor-id="sec-pred-sample-mean"><span class="header-section-number">2.5.3</span> Specialization to simple random sampling</h3>
+<p>For simple random sampling there are no auxiliary variables, so every unit has the same mean, <span class="math display">\[
+\mu_i(\theta)=\mu,\quad \sigma_i^2=\sigma^2,\qquad e_i=Y_i-\mu,\quad \bar e_A=|A|^{-1}\sum_{i\in A}e_i,
+\]</span> and <span class="math inline">\(\theta=\mu\)</span> is estimated by the sample mean <span class="math inline">\(\bar y_S=n^{-1}\sum_{i\in S}Y_i\)</span>. The predictor <a href="#eq-predictor" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> is <span id="eq-expansion"><span class="math display">\[
 \hat Y_i=
 \begin{cases}
 Y_i, &amp; i\in S,\\
@@ -4651,32 +4657,30 @@ Y_i, &amp; i\in S,\\
 \end{cases}
 \qquad
 \hat T=\sum_{i\in S}Y_i+(N-n)\bar y_S=N\bar y_S ,
-\tag{2.6}\]</span></span> identifies the expansion estimator as a predictor. Its error involves only the non-sampled units, and subtracting and adding <span class="math inline">\(\mu\)</span> separates the two sources of error: <span id="eq-error-decomp"><span class="math display">\[
-\hat T-T=\sum_{i\in R}(\bar y_S-Y_i)
-=\sum_{i\in R}\Big\{\underbrace{(\bar y_S-\mu)}_{\bar e_S}-\underbrace{(Y_i-\mu)}_{e_i}\Big\}
-=(N-n)\,\bar e_S-\sum_{i\in R}e_i .
-\tag{2.7}\]</span></span></p>
-<p>The first term is the error in locating <span class="math inline">\(\mu\)</span> from the sample; the second is the scatter of the unobserved units about <span class="math inline">\(\mu\)</span>. Both have mean zero, so <span class="math inline">\(\hat T\)</span> is model-unbiased. Squaring and taking expectations, <span class="math display">\[
-\operatorname{MSPE}(\hat T)=(N-n)^2E(\bar e_S^{\,2})
--2(N-n)E\left(\bar e_S\sum_{i\in R}e_i\right)
-+E\left[\left(\sum_{i\in R}e_i\right)^{2}\right].
-\]</span></p>
-<p>Here <span class="math inline">\(E(\bar e_S^{\,2})=\sigma^2/n\)</span>; the cross term vanishes because <span class="math inline">\(S\)</span> and <span class="math inline">\(R\)</span> are disjoint, so every product <span class="math inline">\(e_ie_j\)</span> arising in it has <span class="math inline">\(i\neq j\)</span>; and the last term equals <span class="math inline">\((N-n)\sigma^2\)</span>. Therefore <span id="eq-mspe-total"><span class="math display">\[
+\tag{2.8}\]</span></span> so the expansion estimator is a prediction rule that fills in every unobserved unit with the sample mean. Here the estimation error is common to all units, <span class="math inline">\(\delta_i=\bar y_S-\mu=\bar e_S\)</span>, and <a href="#eq-error-decomp" class="quarto-xref">Equation&nbsp;<span>2.6</span></a> becomes <span id="eq-error-srs"><span class="math display">\[
+\hat T-T=(N-n)\,\bar e_S-\sum_{i\in R}e_i .
+\tag{2.9}\]</span></span> Both terms have mean zero, so <span class="math inline">\(\hat T\)</span> is model-unbiased.</p>
+<p><strong>Individual units.</strong> From <a href="#eq-mse-individual" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>, with <span class="math inline">\(E(\bar e_S^{\,2})=\sigma^2/n\)</span>, <span id="eq-mse-srs-individual"><span class="math display">\[
+E\big(\hat Y_i-Y_i\big)^2=\sigma^2+\frac{\sigma^2}{n}=\sigma^2\Big(1+\frac1n\Big),\qquad i\in R .
+\tag{2.10}\]</span></span></p>
+<p><strong>The total.</strong> Since <span class="math inline">\(\delta_i=\bar e_S\)</span> for all <span class="math inline">\(i\in R\)</span>, the double sum in <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;<span>2.7</span></a> is as large as it can be: <span class="math inline">\(E[(\sum_R\delta_i)^2]=(N-n)^2E(\bar e_S^{\,2})=(N-n)^2\sigma^2/n\)</span>, whereas independent errors would give <span class="math inline">\((N-n)\sigma^2/n\)</span>. The scatter term is <span class="math inline">\((N-n)\sigma^2\)</span>, and therefore <span id="eq-mspe-total"><span class="math display">\[
 \operatorname{MSPE}(\hat T)=\frac{(N-n)^2}{n}\sigma^2+(N-n)\sigma^2
 =\frac{N(N-n)}{n}\,\sigma^2 ,
-\tag{2.8}\]</span></span> <span id="eq-mspe-mean"><span class="math display">\[
+\tag{2.11}\]</span></span> <span id="eq-mspe-mean"><span class="math display">\[
 \operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2}{n}\left(1-\frac{n}{N}\right).
-\tag{2.9}\]</span></span></p>
-<p>Expression <a href="#eq-mspe-mean" class="quarto-xref">Equation&nbsp;<span>2.9</span></a> is the classical simple-random-sampling variance with <span class="math inline">\(\sigma^2\)</span> in place of the population variance <span class="math inline">\(S^2\)</span>, obtained without appeal to randomization. Three consequences follow.</p>
+\tag{2.12}\]</span></span></p>
+<p>Expression <a href="#eq-mspe-mean" class="quarto-xref">Equation&nbsp;<span>2.12</span></a> is the classical simple-random-sampling variance with <span class="math inline">\(\sigma^2\)</span> in place of the population variance <span class="math inline">\(S^2\)</span>, obtained without appeal to randomization. Four consequences follow.</p>
 <ol type="1">
-<li>The two terms of <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.8</span></a> have distinct meanings. The term <span class="math inline">\((N-n)\sigma^2\)</span> is the irreducible variation of <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>; the term <span class="math inline">\((N-n)^2\sigma^2/n\)</span> is the cost of estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> observations and alone decreases with <span class="math inline">\(n\)</span>.</li>
-<li>The finite-population correction is not an artifact of sampling without replacement. The <span class="math inline">\(n\)</span> observed units contribute exactly zero to <a href="#eq-error-decomp" class="quarto-xref">Equation&nbsp;<span>2.7</span></a>, leaving <span class="math inline">\(N-n\)</span> terms to predict; at <span class="math inline">\(n=N\)</span> the MSPE is zero.</li>
-<li>The cost of not knowing <span class="math inline">\(\mu\)</span> is the factor <span class="math inline">\(N/n\)</span> applied to <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>. For the population mean the MSPE rises from <span class="math inline">\(\sigma^2/N\)</span> to approximately <span class="math inline">\(\sigma^2/n\)</span>, so precision is governed by the sample size rather than the population size.</li>
+<li>The two terms of <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.11</span></a> are the two sources of error. The term <span class="math inline">\((N-n)\sigma^2\)</span> is the irreducible scatter of the unobserved units; the term <span class="math inline">\((N-n)^2\sigma^2/n\)</span> is the cost of estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> observations and alone decreases with <span class="math inline">\(n\)</span>.</li>
+<li>The per-unit error <span class="math inline">\(\sigma^2(1+1/n)\)</span> is barely above <span class="math inline">\(\sigma^2\)</span> for moderate <span class="math inline">\(n\)</span>, so the estimation error looks negligible for individual prediction. For the total it is not: the estimation error is shared by all <span class="math inline">\(N-n\)</span> unobserved units and accumulates to a factor <span class="math inline">\((N-n)^2\)</span>, whereas the scatter accumulates only to <span class="math inline">\(N-n\)</span>. The ratio of the two terms is <span class="math inline">\((N-n)/n\)</span>.</li>
+<li>The finite-population correction is not an artifact of sampling without replacement. The <span class="math inline">\(n\)</span> observed units contribute exactly zero to <a href="#eq-error-srs" class="quarto-xref">Equation&nbsp;<span>2.9</span></a>, leaving <span class="math inline">\(N-n\)</span> terms to predict; at <span class="math inline">\(n=N\)</span> the MSPE is zero.</li>
+<li>If <span class="math inline">\(\mu\)</span> is known, <span class="math inline">\(\delta_i=0\)</span> and the predictor <span class="math inline">\(\hat Y_i=\mu\)</span> for <span class="math inline">\(i\in R\)</span> has <span class="math inline">\(\operatorname{MSPE}(\hat T)=(N-n)\sigma^2\)</span>. This is the irreducible error, and the cost of not knowing <span class="math inline">\(\mu\)</span> is the factor <span class="math inline">\(N/n\)</span> applied to it. For the population mean the MSPE rises from <span class="math inline">\(\sigma^2(N-n)/N^2\)</span> to approximately <span class="math inline">\(\sigma^2/n\)</span>, so precision is governed by the sample size rather than the population size.</li>
 </ol>
+<p>Other sampling problems fit the same framework by changing <span class="math inline">\(\mu_i(\theta)\)</span>: a ratio or regression estimator uses <span class="math inline">\(\mu_i(\theta)=\beta x_i\)</span> or <span class="math inline">\(\beta_0+\beta_1x_i\)</span>, and a stratified estimator uses a separate mean <span class="math inline">\(\mu_h\)</span> in each stratum. Only <span class="math inline">\(\hat\theta\)</span> and the shared estimation error <span class="math inline">\(\sum_R\delta_i\)</span> change.</p>
 </section>
 <section id="sec-pred-demo" class="level3" data-number="2.5.4">
 <h3 data-number="2.5.4" class="anchored" data-anchor-id="sec-pred-demo"><span class="header-section-number">2.5.4</span> Illustration</h3>
-<p><a href="#fig-srs-index" class="quarto-xref">Figure&nbsp;<span>2.3</span></a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
+<p><a href="#fig-srs-index" class="quarto-xref">Figure&nbsp;<span>2.3</span></a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span>2.1</span></a> with <span class="math inline">\(\mu_i=\mu\)</span>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-srs-index" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -4691,7 +4695,7 @@ Figure&nbsp;2.3: One realized population under the model. The sample occupies th
 </div>
 </div>
 </div>
-<p>The three lines correspond to the three quantities of the theory. The gap between the orange and red lines is the finite-population variation of <a href="#eq-mspe-oracle" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>, present even when <span class="math inline">\(\mu\)</span> is known; its root mean square is <span class="math inline">\(\sigma/\sqrt{N}\)</span>. The gap between the orange and blue lines is the error in estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> units, with root mean square <span class="math inline">\(\sigma/\sqrt{n}\)</span>. The realized prediction error is the gap between the blue and red lines, scaled by <span class="math inline">\(N\)</span>; <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.8</span></a> states that its root mean square is <span class="math inline">\(\sigma\sqrt{N(N-n)/n}\)</span>.</p>
+<p>The scatter of the open points about the orange line is the irreducible error <span class="math inline">\(\sigma_i^2\)</span> in <a href="#eq-mse-individual" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>: it is the error of predicting an individual unit even with <span class="math inline">\(\mu\)</span> known. The gap between the orange and blue lines is the estimation error <span class="math inline">\(\delta_i=\bar e_S\)</span>, with root mean square <span class="math inline">\(\sigma/\sqrt{n}\)</span>, which is the same for every unit in <span class="math inline">\(R\)</span>. The gap between the blue and red lines, scaled by <span class="math inline">\(N\)</span>, is the realized prediction error of the total; <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.11</span></a> states that its root mean square is <span class="math inline">\(\sigma\sqrt{N(N-n)/n}\)</span>.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
