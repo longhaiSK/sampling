@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="Lec04-strata_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Lec04-strata_files/libs/quarto-html/tabby.min.js"></script>
+<script src="Lec04-strata_files/libs/quarto-html/popper.min.js"></script>
+<script src="Lec04-strata_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="Lec04-strata_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Lec04-strata_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="Lec04-strata_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
+
+  <meta name="author" content="Longhai Li">
+  <meta name="dcterms.date" content="2026-10-08">
+  <title>Stratified-Slides</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Lec04-strata_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="Lec04-strata_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="Lec04-strata_files/libs/revealjs/dist/theme/quarto-2abc1c5b7b5c7eecd6137558e106e4c3.css">
+  <link rel="stylesheet" href="_extensions/banner_slides/slides.css">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <link href="Lec04-strata_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="Lec04-strata_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="Lec04-strata_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="Lec04-strata_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="Lec04-strata_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="Lec04-strata_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">STAT 348 Sampling Techniques</h1>
+  <p class="subtitle">Stratified Random Sampling</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Longhai Li 
+</div>
+</div>
+</div>
+
+  <p class="date">2026-10-08</p>
+</section>
+<section>
+<section id="what-is-stratified-sampling" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> What Is Stratified Sampling?</h1>
+<p>Textbook sections:</p>
+<ul>
+<li><p>3.1–3.5 in Lohr</p></li>
+<li><p>5.1–5.9 in Scheaffer et al.</p></li>
+</ul>
+</section>
+<section id="what-is-stratified-sampling-1" class="slide level2">
+<h2>What Is Stratified Sampling?</h2>
+<p>If the variable we are interested in takes on different mean values in different subpopulations, we may be able to obtain more precise estimates of population quantities by taking a stratified random sample. The word <em>stratify</em> comes from Latin words meaning “to make layers”; we divide the population into <span class="math inline">H</span> subpopulations, called <strong>strata</strong>. The strata do not overlap, and they constitute the whole population, so that each sampling unit belongs to exactly one stratum.</p>
+<p>We draw an independent probability sample from each stratum, then pool the information to obtain overall population estimates.</p>
+</section>
+<section id="a-population-divided-into-strata" class="slide level2">
+<h2>A Population Divided into Strata</h2>
+
+<img data-src="Lec04-strata_files/figure-revealjs/fig-strata-pop-1.png" id="fig-strata-pop" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"><p class="caption">
+Figure&nbsp;1
+</p><p>Each stratum <span class="math inline">h</span> has <span class="math inline">N_h</span> units in the population; we sample <span class="math inline">n_h</span> of them (circled). <span class="math inline">H</span> is the number of strata.</p>
+</section>
+<section id="example-stratifying-by-census-region" class="slide level2">
+<h2>Example: Stratifying by Census Region</h2>
+<p>We use the four U.S. census regions as strata. The SRS in an earlier example sampled about 10% of all 3078 counties; to compare stratified sampling with SRS directly, we also sample about 10% of the counties in <em>each</em> stratum:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Stratum</th>
+<th style="text-align: right;">Counties in Stratum</th>
+<th style="text-align: right;">Counties in Sample</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Northeast</td>
+<td style="text-align: right;">220</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">North Central</td>
+<td style="text-align: right;">1054</td>
+<td style="text-align: right;">103</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">South</td>
+<td style="text-align: right;">1382</td>
+<td style="text-align: right;">135</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">West</td>
+<td style="text-align: right;">422</td>
+<td style="text-align: right;">41</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Total</strong></td>
+<td style="text-align: right;"><strong>3078</strong></td>
+<td style="text-align: right;"><strong>300</strong></td>
+</tr>
+</tbody>
+</table>
+<p>We select four separate, independent SRSs, one per stratum. Knowing which counties are in the sample from the Northeast tells us nothing about which counties are in the sample from the South.</p>
+</section>
+<section id="example-data-summary-from-stratified-sampling" class="slide level2">
+<h2>Example: Data Summary from Stratified Sampling</h2>
+<p>Summary statistics for <code>acres92</code> in each stratum (data file <code>agstrat.dat</code>):</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Region (<span class="math inline">h</span>)</th>
+<th style="text-align: right;">Sample Size (<span class="math inline">n_h</span>)</th>
+<th style="text-align: right;">Average (<span class="math inline">\overline y_h</span>)</th>
+<th style="text-align: right;">Variance (<span class="math inline">s_h^2</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Northeast</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">97,629.8</td>
+<td style="text-align: right;">7,647,472,708</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">North Central</td>
+<td style="text-align: right;">103</td>
+<td style="text-align: right;">300,504.2</td>
+<td style="text-align: right;">29,618,183,543</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">South</td>
+<td style="text-align: right;">135</td>
+<td style="text-align: right;">211,315.0</td>
+<td style="text-align: right;">53,587,487,856</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">West</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">662,295.5</td>
+<td style="text-align: right;">396,185,950,266</td>
+</tr>
+</tbody>
+</table>
+</section></section>
+<section>
+<section id="estimation-with-stratified-samples" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Estimation with Stratified Samples</h1>
+
+</section>
+<section id="population-quantities" class="slide level2">
+<h2>Population Quantities</h2>
+<p>For unit <span class="math inline">j</span> in stratum <span class="math inline">h</span>, let <span class="math inline">y_{hj}</span> denote its value, and let <span class="math display">
+\pi_h = \frac{N_h}{N},
+</span> denote the proportion of population units belonging to stratum <span class="math inline">h</span> (so <span class="math inline">\sum_{h=1}^H \pi_h = 1</span>). Then, <span class="math display">
+t_h = \sum_{j=1}^{N_h} y_{hj} \quad(\text{stratum total}) \qquad
+t = \sum_{h=1}^H t_h \quad(\text{population total})
+</span> <span class="math display">
+\overline y_{hU} = \frac{\sum_{j=1}^{N_h} y_{hj}}{N_h} \quad(\text{stratum mean}) \qquad
+\overline y_U = \frac tN = \sum_{h=1}^H \pi_h\, \overline y_{hU} \quad(\text{overall mean})
+</span> <span class="math display">
+S_h^2 = \frac{1}{N_h-1}\sum_{j=1}^{N_h}(y_{hj}-\overline y_{hU})^2 \quad(\text{stratum variance}).
+</span></p>
+</section>
+<section id="srs-estimators-within-each-stratum" class="slide level2">
+<h2>SRS Estimators Within Each Stratum</h2>
+<p>Since an SRS is taken within each stratum, we estimate the stratum quantities using ordinary SRS formulas, applied separately to each stratum: <span class="math display">
+\overline y_h = \frac{1}{n_h}\sum_{j\in\mathcal S_h} y_{hj}
+\qquad
+\hat t_h = \frac{N_h}{n_h}\sum_{j\in\mathcal S_h} y_{hj} = N_h \overline y_h
+</span> <span class="math display">
+s_h^2 = \sum_{j\in\mathcal S_h} \frac{(y_{hj}-\overline y_h)^2}{n_h - 1}.
+</span></p>
+</section>
+<section id="estimators-for-the-population-total-and-mean" class="slide level2">
+<h2>Estimators for the Population Total and Mean</h2>
+<p><span class="math display">
+\hat t_{\text{str}} = \sum_{h=1}^H \hat t_h = \sum_{h=1}^H N_h \overline y_h
+</span> <span class="math display">
+\overline y_{\text{str}} = \frac{\hat t_{\text{str}}}{N} = \sum_{h=1}^H \pi_h\overline y_h
+</span></p>
+<p><span class="math inline">\overline y_{\text{str}}</span> is a weighted average of the sample stratum averages, with <span class="math inline">\overline y_h</span> weighted by <span class="math inline">\pi_h = N_h/N</span>, the fraction of population units in stratum <span class="math inline">h</span>. To use stratified sampling, the population sizes of the strata must be known.</p>
+</section>
+<section id="standard-errors-for-stratified-samples" class="slide level2">
+<h2>Standard Errors for Stratified Samples</h2>
+<p>Since we sample independently across strata, variances add: <span class="math display">
+V(\hat t_{\text{str}}) = \sum_{h=1}^H V(\hat t_h) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)N_h^2\frac{S_h^2}{n_h}.
+</span></p>
+<p>Substituting sample variances <span class="math inline">s_h^2</span> for <span class="math inline">S_h^2</span> gives unbiased estimators: <span class="math display">
+\hat V(\hat t_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)N_h^2\frac{s_h^2}{n_h}
+</span> <span class="math display">
+\hat V(\overline y_{\text{str}}) = \frac{1}{N^2}\hat V(\hat t_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\pi_h^2\frac{s_h^2}{n_h}.
+</span></p>
+<p>Note we need at least two sampled units per stratum to estimate the variances.</p>
+</section>
+<section id="unbiasedness-of-overline-y_textstr" class="slide level2">
+<h2>Unbiasedness of <span class="math inline">\overline y_{\text{str}}</span></h2>
+<p><span class="math display">
+E\left[\sum_{h=1}^H \frac{N_h}{N}\overline y_h\right]
+= \sum_{h=1}^H \frac{N_h}{N}E[\overline y_h]
+= \sum_{h=1}^H \frac{N_h}{N}\overline y_{hU}
+= \sum_{h=1}^H \frac{N_h}{N}\cdot \frac{\sum_{j=1}^{N_h} y_{hj}}{N_h}
+</span> <span class="math display">
+= \sum_{h=1}^H \frac{\sum_{j=1}^{N_h}y_{hj}}{N} = \overline y_U.
+</span></p>
+<p>Since an SRS is taken in each stratum, <span class="math inline">E[\overline y_h]=\overline y_{hU}</span>; averaging these unbiased stratum estimates with weights <span class="math inline">N_h/N</span> keeps the overall estimate unbiased.</p>
+</section>
+<section id="confidence-intervals-for-stratified-samples" class="slide level2">
+<h2>Confidence Intervals for Stratified Samples</h2>
+<p>If either (1) the sample sizes within each stratum are large, or (2) the sampling design has a large number of strata, an approximate <span class="math inline">100(1-\alpha)\%</span> CI for <span class="math inline">\overline y_U</span> is <span class="math display">
+\overline y_{\text{str}} \pm z_{\alpha/2}\,\text{SE}(\overline y_{\text{str}}).
+</span></p>
+<p>When <span class="math inline">n</span> is not large, it is common to use the quantile of a <span class="math inline">t</span> distribution with <span class="math inline">n-H</span> degrees of freedom instead of the normal quantile: <span class="math display">
+\hat t_{\text{str}} \pm t_{\alpha/2,\,n-H}\cdot \text{SE}(\hat t_{\text{str}}).
+</span></p>
+</section>
+<section id="example-1-the-nelchina-caribou-herd" class="slide level2">
+<h2>Example 1: The Nelchina Caribou Herd</h2>
+<p>Siniff and Skoog (1964) used stratified random sampling to estimate the size of the Nelchina herd of Alaska caribou in February 1962. Preliminary caribou density estimates were used to divide the area of interest into six strata; each stratum was divided into a grid of 4-mi<span class="math inline">^2</span> sampling units. Stratum A, for example, contained <span class="math inline">N_1=400</span> sampling units, of which <span class="math inline">n_1=98</span> were randomly selected for the survey.</p>
+</section>
+<section id="example-1-strata-layout" class="slide level2">
+<h2>Example 1: Strata Layout</h2>
+
+<img data-src="Lec04-strata_files/figure-revealjs/fig-caribou-strata-1.png" id="fig-caribou-strata" class="quarto-figure quarto-figure-center r-stretch" style="width:95.0%"><p class="caption">
+Figure&nbsp;2
+</p><p>Each grid represents one stratum’s <span class="math inline">N_h</span> sampling units; the highlighted (red) cells are the <span class="math inline">n_h</span> units randomly selected in that stratum.</p>
+</section>
+<section id="example-1-spreadsheet-for-calculations" class="slide level2">
+<h2>Example 1: Spreadsheet for Calculations</h2>
+<p>Here <span class="math inline">\pi_h = N_h/N</span> with <span class="math inline">N=699</span>, and the last two columns give each stratum’s contribution to <span class="math inline">\overline y_{\text{str}}=\sum_h \pi_h\overline y_h</span> and to <span class="math inline">\hat V(\overline y_{\text{str}}) = \sum_h\big(1-\tfrac{n_h}{N_h}\big)\pi_h^2\tfrac{s_h^2}{n_h}</span>:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 21%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Stratum</th>
+<th style="text-align: right;"><span class="math inline">N_h</span></th>
+<th style="text-align: right;"><span class="math inline">n_h</span></th>
+<th style="text-align: right;"><span class="math inline">\pi_h=N_h/N</span></th>
+<th style="text-align: right;"><span class="math inline">\overline y_h</span></th>
+<th style="text-align: right;"><span class="math inline">s_h^2</span></th>
+<th style="text-align: right;"><span class="math inline">\pi_h\overline y_h</span></th>
+<th style="text-align: right;"><span class="math inline">\hat v_h</span><sup>1</sup></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">A</td>
+<td style="text-align: right;">400</td>
+<td style="text-align: right;">98</td>
+<td style="text-align: right;">0.5722</td>
+<td style="text-align: right;">24.1</td>
+<td style="text-align: right;">5,575</td>
+<td style="text-align: right;">13.7911</td>
+<td style="text-align: right;">14.0648</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">B</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.0429</td>
+<td style="text-align: right;">25.6</td>
+<td style="text-align: right;">4,064</td>
+<td style="text-align: right;">1.0987</td>
+<td style="text-align: right;">0.4991</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">C</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">0.0873</td>
+<td style="text-align: right;">267.6</td>
+<td style="text-align: right;">347,556</td>
+<td style="text-align: right;">23.3528</td>
+<td style="text-align: right;">28.1455</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">D</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.0258</td>
+<td style="text-align: right;">179.0</td>
+<td style="text-align: right;">22,798</td>
+<td style="text-align: right;">4.6094</td>
+<td style="text-align: right;">1.6798</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">E</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">0.1001</td>
+<td style="text-align: right;">293.7</td>
+<td style="text-align: right;">123,578</td>
+<td style="text-align: right;">29.4120</td>
+<td style="text-align: right;">14.0728</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">F</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">0.1717</td>
+<td style="text-align: right;">33.2</td>
+<td style="text-align: right;">9,795</td>
+<td style="text-align: right;">5.6996</td>
+<td style="text-align: right;">11.3409</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>Total</strong></td>
+<td style="text-align: right;"><strong>699</strong></td>
+<td style="text-align: right;"><strong>211</strong></td>
+<td style="text-align: right;"><strong>1.0000</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>77.9636</strong></td>
+<td style="text-align: right;"><strong>69.8029</strong></td>
+</tr>
+</tbody>
+</table>
+<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="math inline">\hat v_h = \big(1-\tfrac{n_h}{N_h}\big)\pi_h^2\tfrac{s_h^2}{n_h}</span>, the stratum-<span class="math inline">h</span> contribution to <span class="math inline">\hat V(\overline y_{\text{str}}) = \sum_{h=1}^H \hat v_h</span>.</p></li></ol></aside></section>
+<section id="example-1-results" class="slide level2">
+<h2>Example 1: Results</h2>
+<p>The estimated mean number of caribou per sampling unit is <span class="math display">
+\overline y_{\text{str}} = 77.96,
+</span> <span class="math display">
+\text{SE}(\overline y_{\text{str}}) = \sqrt{69.8029} = 8.35.
+</span></p>
+<p>The estimated total number of caribou: <span class="math display">
+\hat t_{\text{str}} = N\overline y_{\text{str}} = 699(77.96) = 54{,}497,
+</span> <span class="math display">
+\text{SE}(\hat t_{\text{str}}) = N\cdot\text{SE}(\overline y_{\text{str}}) = 699(8.35) = 5{,}840.
+</span></p>
+<p>An approximate 95% CI for the total number of caribou: <span class="math display">
+54{,}497 \pm 1.96(5840) = [43{,}051,\ 65{,}943].
+</span></p>
+<p>This CI reflects only sampling error; if the field procedure for counting caribou tends to miss animals, the entire CI will be biased low.</p>
+</section>
+<section id="example-2-estimated-farm-acreage-by-region" class="slide level2">
+<h2>Example 2: Estimated Farm Acreage by Region</h2>
+<p>Using the same census-region strata for <code>acres92</code>:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Stratum</th>
+<th style="text-align: right;">Estimated Total of Farm Acres</th>
+<th style="text-align: right;">Estimated Variance of Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Northeast</td>
+<td style="text-align: right;">21,478,558.2</td>
+<td style="text-align: right;"><span class="math inline">1.5943\times10^{13}</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">North Central</td>
+<td style="text-align: right;">316,731,379.4</td>
+<td style="text-align: right;"><span class="math inline">2.8823\times10^{14}</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">South</td>
+<td style="text-align: right;">292,037,390.8</td>
+<td style="text-align: right;"><span class="math inline">6.8408\times10^{14}</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">West</td>
+<td style="text-align: right;">279,488,706.1</td>
+<td style="text-align: right;"><span class="math inline">1.5537\times10^{15}</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Total</strong></td>
+<td style="text-align: right;"><strong>909,736,034.4</strong></td>
+<td style="text-align: right;"><span class="math inline">2.5419\times10^{15}</span></td>
+</tr>
+</tbody>
+</table>
+<p>Since sampling was independent across strata, the variance of the U.S. total is the sum of the four stratum variances.</p>
+</section>
+<section id="example-2-results" class="slide level2">
+<h2>Example 2: Results</h2>
+<p><span class="math display">
+\hat t_{\text{str}} = 909{,}736{,}034, \qquad
+\text{SE}(\hat t_{\text{str}}) = \sqrt{2.5419\times10^{15}} = 50{,}417{,}248.
+</span></p>
+<p>The average number of acres devoted to farming per county: <span class="math display">
+\overline y_{\text{str}} = \frac{909{,}736{,}034}{3078} = 295{,}560.76, \qquad
+\text{SE}(\overline y_{\text{str}}) = \frac{50{,}417{,}248}{3078} = 16{,}379.87.
+</span></p>
+</section>
+<section id="comparison-of-stratified-sampling-and-srs" class="slide level2">
+<h2>Comparison of Stratified Sampling and SRS</h2>
+<p>Only the West had sample variance larger than the overall SRS sample variance; the sample variance in the Northeast was much smaller than the population as a whole. Observations within many strata tend to be more homogeneous than observations in the population overall.</p>
+<p>The relative gain from stratification can be estimated by the ratio <span class="math display">
+\frac{\text{estimated variance from stratified sample},\ n=300}{\text{estimated variance from SRS},\ n=300}
+= \frac{2.5419\times10^{15}}{3.3837\times10^{15}} = 0.75.
+</span></p>
+<p>Percentage of variance reduction <span class="math inline">= 1-0.75 = 0.25</span>. If these were the population variances, we would need only <span class="math inline">(300)(0.75)=225</span> observations with a stratified sample to match the precision of an SRS of 300.</p>
+</section></section>
+<section>
+<section id="stratified-sampling-for-proportions" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Stratified Sampling for Proportions</h1>
+
+</section>
+<section id="estimators-for-a-population-proportion-p" class="slide level2">
+<h2>Estimators for a Population Proportion <span class="math inline">p</span></h2>
+<p>A proportion is the mean of a 0/1 variable, so we apply the same formulas with <span class="math inline">\overline y_h = \hat p_h</span> and <span class="math inline">s_h^2 = \frac{n_h}{n_h-1}\hat p_h(1-\hat p_h)</span>: <span class="math display">
+\hat p_{\text{str}} = \sum_{h=1}^H \frac{N_h}{N}\hat p_h
+</span> <span class="math display">
+\hat V(\hat p_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\Big(\frac{N_h}{N}\Big)^2\frac{\hat p_h(1-\hat p_h)}{n_h-1}.
+</span></p>
+</section>
+<section id="example-acls-survey-of-scholars" class="slide level2">
+<h2>Example: ACLS Survey of Scholars</h2>
+<p>The American Council of Learned Societies (ACLS) used a stratified random sample of member societies in seven disciplines to study publication patterns and computer/library use (Morton and Price, 1989).</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Discipline</th>
+<th style="text-align: right;">Membership (<span class="math inline">N_h</span>)</th>
+<th style="text-align: right;">Valid Returns (<span class="math inline">n_h</span>)</th>
+<th style="text-align: right;">Female Members (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Literature</td>
+<td style="text-align: right;">9,100</td>
+<td style="text-align: right;">636</td>
+<td style="text-align: right;">38</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Classics</td>
+<td style="text-align: right;">1,950</td>
+<td style="text-align: right;">451</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Philosophy</td>
+<td style="text-align: right;">5,500</td>
+<td style="text-align: right;">481</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">History</td>
+<td style="text-align: right;">10,850</td>
+<td style="text-align: right;">611</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Linguistics</td>
+<td style="text-align: right;">2,100</td>
+<td style="text-align: right;">493</td>
+<td style="text-align: right;">36</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Political Science</td>
+<td style="text-align: right;">5,500</td>
+<td style="text-align: right;">575</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sociology</td>
+<td style="text-align: right;">9,000</td>
+<td style="text-align: right;">588</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Totals</strong></td>
+<td style="text-align: right;"><strong>44,000</strong></td>
+<td style="text-align: right;"><strong>3,835</strong></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="example-acls-spreadsheet-calculation" class="slide level2">
+<h2>Example: ACLS Spreadsheet Calculation</h2>
+<p>Here <span class="math inline">\pi_h = N_h/N</span> with <span class="math inline">N=44{,}000</span>, and the last two columns give each stratum’s contribution to <span class="math inline">\hat p_{\text{str}}=\sum_h \pi_h\hat p_h</span> and to <span class="math inline">\hat V(\hat p_{\text{str}})=\sum_h\big(1-\tfrac{n_h}{N_h}\big)\pi_h^2\tfrac{\hat p_h(1-\hat p_h)}{n_h-1}</span>:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 21%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Discipline</th>
+<th style="text-align: right;"><span class="math inline">N_h</span></th>
+<th style="text-align: right;"><span class="math inline">n_h</span></th>
+<th style="text-align: right;"><span class="math inline">\pi_h=N_h/N</span></th>
+<th style="text-align: right;"><span class="math inline">\hat p_h</span></th>
+<th style="text-align: right;"><span class="math inline">\pi_h\hat p_h</span></th>
+<th style="text-align: right;"><span class="math inline">\hat v_h</span> (<span class="math inline">\times10^{-5}</span>)<sup>1</sup></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Literature</td>
+<td style="text-align: right;">9,100</td>
+<td style="text-align: right;">636</td>
+<td style="text-align: right;">0.2068</td>
+<td style="text-align: right;">0.38</td>
+<td style="text-align: right;">0.0786</td>
+<td style="text-align: right;">1.476</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Classics</td>
+<td style="text-align: right;">1,950</td>
+<td style="text-align: right;">451</td>
+<td style="text-align: right;">0.0443</td>
+<td style="text-align: right;">0.27</td>
+<td style="text-align: right;">0.0120</td>
+<td style="text-align: right;">0.066</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Philosophy</td>
+<td style="text-align: right;">5,500</td>
+<td style="text-align: right;">481</td>
+<td style="text-align: right;">0.1250</td>
+<td style="text-align: right;">0.18</td>
+<td style="text-align: right;">0.0225</td>
+<td style="text-align: right;">0.439</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">History</td>
+<td style="text-align: right;">10,850</td>
+<td style="text-align: right;">611</td>
+<td style="text-align: right;">0.2466</td>
+<td style="text-align: right;">0.19</td>
+<td style="text-align: right;">0.0469</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Linguistics</td>
+<td style="text-align: right;">2,100</td>
+<td style="text-align: right;">493</td>
+<td style="text-align: right;">0.0477</td>
+<td style="text-align: right;">0.36</td>
+<td style="text-align: right;">0.0172</td>
+<td style="text-align: right;">0.082</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Political Science</td>
+<td style="text-align: right;">5,500</td>
+<td style="text-align: right;">575</td>
+<td style="text-align: right;">0.1250</td>
+<td style="text-align: right;">0.13</td>
+<td style="text-align: right;">0.0163</td>
+<td style="text-align: right;">0.276</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sociology</td>
+<td style="text-align: right;">9,000</td>
+<td style="text-align: right;">588</td>
+<td style="text-align: right;">0.2045</td>
+<td style="text-align: right;">0.26</td>
+<td style="text-align: right;">0.0532</td>
+<td style="text-align: right;">1.282</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Total</strong></td>
+<td style="text-align: right;"><strong>44,000</strong></td>
+<td style="text-align: right;"><strong>3,835</strong></td>
+<td style="text-align: right;"><strong>1.0000</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>0.2465</strong></td>
+<td style="text-align: right;"><strong>5.068</strong></td>
+</tr>
+</tbody>
+</table>
+<aside><ol class="aside-footnotes"><li id="fn2"><p><span class="math inline">\hat v_h = \big(1-\tfrac{n_h}{N_h}\big)\pi_h^2\tfrac{\hat p_h(1-\hat p_h)}{n_h-1}</span>, the stratum-<span class="math inline">h</span> contribution to <span class="math inline">\hat V(\hat p_{\text{str}}) = \sum_{h=1}^7 \hat v_h</span>.</p></li></ol></aside></section>
+<section id="example-acls-estimates" class="slide level2">
+<h2>Example: ACLS Estimates</h2>
+<p>Let <span class="math inline">N_h</span> be the membership figures and <span class="math inline">n_h</span> the number of valid surveys. Ignoring nonresponse for now, and estimating the proportion of these scholars who are female: <span class="math display">
+\hat p_{\text{str}} = \sum_{h=1}^7 \frac{N_h}{N}\hat p_h
+= \frac{9100}{44{,}000}(0.38) + \cdots + \frac{9000}{44{,}000}(0.26) = 0.2465
+</span> <span class="math display">
+\text{SE}(\hat p_{\text{str}}) = \sqrt{\sum_{h=1}^7 \Big(1-\frac{n_h}{N_h}\Big)\Big(\frac{N_h}{N}\Big)^2\frac{\hat p_h(1-\hat p_h)}{n_h-1}} = 0.0071.
+</span></p>
+<p>To estimate the total number of female scholars, multiply <span class="math inline">N=44{,}000</span> by these two numbers.</p>
+</section></section>
+<section>
+<section id="comparison-with-srs-formulas" class="title-slide slide level1 center" data-number="4">
+<h1><span class="header-section-number">4</span> Comparison with SRS Formulas</h1>
+<p>In contrast, if we had taken an SRS of size <span class="math inline">n=n_1+\cdots+n_H</span> from the whole population, the sample mean would be <span class="math display">
+\overline y_{\text{SRS}} = \frac{\sum_{(h,j)\in\mathcal S} y_{hj}}{n}
+= \frac{\overline y_1 n_1 + \cdots + \overline y_H n_H}{n}
+= \overline y_1\frac{n_1}{n} + \cdots + \overline y_H\frac{n_H}{n},
+</span></p>
+<p>compared with the stratified estimator <span class="math display">
+\overline y_{\text{str}} = \overline y_1\frac{N_1}{N} + \cdots + \overline y_H\frac{N_H}{N}.
+</span></p>
+</section>
+<section id="comparison-with-srs-formulas-contd" class="slide level2">
+<h2>Comparison with SRS Formulas (cont’d)</h2>
+<p>Similarly, for proportions: <span class="math display">
+\hat p_{\text{SRS}} = \sum_{h=1}^H \frac{n_h}{n}\hat p_h = \sum_{h=1}^H \frac{n_h \hat p_h}{n}.
+</span></p>
+<p>The key difference: <span class="math inline">\overline y_{\text{SRS}}</span> weights each stratum’s sample mean by its <em>realized sample fraction</em> <span class="math inline">n_h/n</span>, which may be influenced by sampling variation and by non-response rates. <span class="math inline">\overline y_{\text{str}}</span> instead uses the <em>known, fixed</em> population fraction <span class="math inline">N_h/N</span> for each stratum, which is what guarantees unbiasedness for <span class="math inline">\overline y_U</span>.</p>
+</section></section>
+<section>
+<section id="sampling-weights-for-stratified-sampling" class="title-slide slide level1 center" data-number="5">
+<h1><span class="header-section-number">5</span> Sampling Weights for Stratified Sampling</h1>
+
+</section>
+<section id="sampling-probabilities-for-each-sample" class="slide level2">
+<h2>Sampling Probabilities for Each Sample</h2>
+<p>Write the overall stratified sample as <span class="math inline">\mathcal S = (\mathcal S_1,\ldots,\mathcal S_H)</span>, where <span class="math inline">\mathcal S_h</span> is the SRS drawn from stratum <span class="math inline">h</span>. Since the strata are sampled independently, <span class="math display">
+P(\mathcal S) = P(\mathcal S_1)\times P(\mathcal S_2)\times\cdots\times P(\mathcal S_H)
+= \frac{1}{\binom{N_1}{n_1}}\cdot\frac{1}{\binom{N_2}{n_2}}\cdots\frac{1}{\binom{N_H}{n_H}}.
+</span></p>
+</section>
+<section id="sampling-weights" class="slide level2">
+<h2>Sampling Weights</h2>
+<p>We introduced the sampling weight <span class="math inline">w_i = 1/\pi_i</span> for SRS. For unit <span class="math inline">j</span> in stratum <span class="math inline">h</span>, the inclusion probability is <span class="math inline">\pi_{hj} = n_h/N_h</span> (the sampling fraction in stratum <span class="math inline">h</span>), so the sampling weight is, <span class="math display">
+w_{hj} = \frac{1}{\pi_{hj}} = \frac{N_h}{n_h}.
+</span></p>
+<p>Stratified sampling is an example of <strong>unequal-probability sampling</strong>.</p>
+<p>The sampling weight can be thought of as the number of population units represented by the sampled unit. Within stratum <span class="math inline">h</span>, all <span class="math inline">n_h</span> sampled units have the same weight <span class="math inline">N_h/n_h</span>, so <span class="math display">
+\sum_{j\in\mathcal S_h} w_{hj} = n_h\cdot\frac{N_h}{n_h} = N_h,
+\qquad
+\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj} = \sum_{h=1}^H N_h = N.
+</span></p>
+</section>
+<section id="estimators-in-terms-of-sampling-weights" class="slide level2">
+<h2>Estimators in Terms of Sampling Weights</h2>
+<p>Since <span class="math inline">N_h\overline y_h = \dfrac{N_h}{n_h}\displaystyle\sum_{j\in\mathcal S_h} y_{hj} = \sum_{j\in\mathcal S_h} w_{hj}\,y_{hj}</span>, the population total can be written as a weighted sum over <em>all</em> sampled units, regardless of stratum: <span class="math display">
+\hat t_{\text{str}} = \sum_{h=1}^H N_h \overline y_h = \sum_{h=1}^H \sum_{j\in\mathcal S_h} w_{hj}\, y_{hj}.
+</span></p>
+<p>Since the weights sum to <span class="math inline">N</span>, the population mean can also be written <span class="math display">
+\overline y_{\text{str}} = \frac{\hat t_{\text{str}}}{N} = \frac{\displaystyle\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}y_{hj}}{\displaystyle\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}}.
+</span></p>
+</section>
+<section id="example-weights-for-the-caribou-survey" class="slide level2">
+<h2>Example: Weights for the Caribou Survey</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Stratum</th>
+<th style="text-align: right;"><span class="math inline">N_h</span></th>
+<th style="text-align: right;"><span class="math inline">n_h</span></th>
+<th style="text-align: right;"><span class="math inline">w_{hj} = N_h/n_h</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">A</td>
+<td style="text-align: right;">400</td>
+<td style="text-align: right;">98</td>
+<td style="text-align: right;">4.08</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">B</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">3.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">C</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">1.65</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">D</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">E</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">1.79</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">F</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">5.71</td>
+</tr>
+</tbody>
+</table>
+<p>Note that using only the weights <span class="math inline">w_{hj}</span> and sample sizes <span class="math inline">n_h</span> is not enough to estimate variances — that requires computing <span class="math inline">s_h^2</span> separately within each stratum, since the weights alone don’t identify stratum membership.</p>
+</section></section>
+<section>
+<section id="efficiency-of-proportional-allocation" class="title-slide slide level1 center" data-number="6">
+<h1><span class="header-section-number">6</span> Efficiency of Proportional Allocation</h1>
+
+</section>
+<section id="proportional-allocation" class="slide level2">
+<h2>Proportional Allocation</h2>
+<p>A special case, useful for comparing with SRS: <strong>proportional allocation</strong> takes the same sampling fraction in every stratum, <span class="math display">
+\frac{n_h}{N_h} = \frac nN \quad \text{for all } h.
+</span></p>
+<p>This is not an <em>optimal</em> allocation in general, but it is a convenient benchmark.</p>
+</section>
+<section id="decomposition-of-population-variance" class="slide level2">
+<h2>Decomposition of Population Variance</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 31%">
+<col style="width: 43%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Source</th>
+<th style="text-align: center;">df</th>
+<th style="text-align: left;">Sum of Squares</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Between strata</td>
+<td style="text-align: center;"><span class="math inline">H-1</span></td>
+<td style="text-align: left;"><span class="math inline">\text{SSB} = \sum_{h=1}^H N_h(\overline y_{hU}-\overline y_U)^2</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Within strata</td>
+<td style="text-align: center;"><span class="math inline">N-H</span></td>
+<td style="text-align: left;"><span class="math inline">\text{SSW} = \sum_{h=1}^H (N_h-1)S_h^2</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total, about <span class="math inline">\overline y_U</span></td>
+<td style="text-align: center;"><span class="math inline">N-1</span></td>
+<td style="text-align: left;"><span class="math inline">\text{SSTO} = (N-1)S^2</span></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">
+\text{SSTO} = \text{SSB} + \text{SSW}.
+</span></p>
+</section>
+<section id="sum-squares-of-prediction-errors" class="slide level2">
+<h2>Sum Squares of Prediction Errors</h2>
+<p>Define two prediction vectors for <span class="math inline">y</span> as follows: <span class="math display">
+\begin{array}{c|ccc|c|ccc}
+&amp; &amp; \text{stratum } 1 &amp; &amp; \cdots &amp; &amp; \text{stratum } H &amp; \\ \hline
+\boldsymbol y^\top &amp; y_{11} &amp; \cdots &amp; y_{1N_1} &amp; \cdots &amp; y_{H1} &amp; \cdots &amp; y_{HN_H}\\
+\hat{\boldsymbol y}_0^\top &amp; \overline y_U &amp; \cdots &amp; \overline y_U &amp; \cdots &amp; \overline y_U &amp; \cdots &amp; \overline y_U\\
+\hat{\boldsymbol y}_1^\top &amp; \overline y_{1U} &amp; \cdots &amp; \overline y_{1U} &amp; \cdots &amp; \overline y_{HU} &amp; \cdots &amp; \overline y_{HU}
+\end{array}
+</span></p>
+<p><span class="math inline">\hat{\boldsymbol y}_0</span> ignores the strata; <span class="math inline">\hat{\boldsymbol y}_1</span> predicts each unit by its stratum mean. Then <span class="math display">
+\text{SSTO} = \|\boldsymbol y-\hat{\boldsymbol y}_0\|^2,\qquad
+\text{SSW} = \|\boldsymbol y-\hat{\boldsymbol y}_1\|^2,
+</span> <span class="math display">
+\text{SSB} = \|\hat{\boldsymbol y}_1-\hat{\boldsymbol y}_0\|^2 = \sum_{h=1}^H N_h(\overline y_{hU}-\overline y_U)^2.
+</span></p>
+<p>Since <span class="math inline">\boldsymbol y-\hat{\boldsymbol y}_0 = (\boldsymbol y-\hat{\boldsymbol y}_1) + (\hat{\boldsymbol y}_1-\hat{\boldsymbol y}_0)</span> and the two pieces are orthogonal, <span class="math inline">\text{SSTO} = \text{SSW} + \text{SSB}</span>.</p>
+</section>
+<section id="illustration-of-ssb-and-ssw" class="slide level2">
+<h2>Illustration of SSB and SSW</h2>
+
+<img data-src="Lec04-strata_files/figure-revealjs/fig-ssb-ssw-1.png" id="fig-ssb-ssw" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p class="caption">
+Figure&nbsp;3
+</p><p>Left: predicting every observation by the overall mean (green dashed line); the squared errors (grey) sum to SSTO. Right: predicting each observation by its stratum mean (red segments); the squared errors (grey) sum to SSW. The difference SSTO <span class="math inline">-</span> SSW is SSB, the sum of squared distances from each observation’s stratum mean to the overall mean.</p>
+</section>
+<section id="coefficient-of-determination-r2" class="slide level2">
+<h2>Coefficient of Determination <span class="math inline">R^2</span></h2>
+<p><span class="math display">
+R^2 = 1-\frac{\text{SSW}}{\text{SST}} = \frac{\text{SSB}}{\text{SST}}
+</span></p>
+<p><span class="math inline">R^2</span> generalizes the squared Pearson correlation coefficient: it measures the correlation between a response <span class="math inline">y</span> and one or more predictors <span class="math inline">x_1,\ldots,x_p</span> — here, “stratum membership” plays the role of the predictor. <span class="math inline">R^2</span> is the proportion of the variance in <span class="math inline">y</span> explained by the predictors.</p>
+</section>
+<section id="r2-large-vs.-r2-small" class="slide level2">
+<h2><span class="math inline">R^2</span> Large vs.&nbsp;<span class="math inline">R^2</span> Small</h2>
+
+<img data-src="Lec04-strata_files/figure-revealjs/fig-r2-compare-1.png" id="fig-r2-compare" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
+Figure&nbsp;4
+</p><p>When the strata means differ widely relative to the within-stratum spread (left), stratification explains a large share of the variance in <span class="math inline">y</span>.</p>
+</section>
+<section id="comparing-variances-proportional-allocation-vs.-srs" class="slide level2">
+<h2>Comparing Variances: Proportional Allocation vs.&nbsp;SRS</h2>
+<p>For a stratified sample of size <span class="math inline">n</span> with proportional allocation, <span class="math display">
+V_{\text{prop}}(\hat t_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac nN\Big)\frac Nn\, N_h S_h^2
+= \Big(1-\frac nN\Big)\frac Nn\left(\text{SSW} + \sum_{h=1}^H S_h^2\right).
+</span></p>
+<p>Since <span class="math inline">\text{SSTO}=\text{SSW}+\text{SSB}</span>, the variance of the total from an SRS of size <span class="math inline">n</span> is. <span class="math display">
+V_{\text{SRS}}(\hat t) = \Big(1-\frac nN\Big)\frac{N^2 S^2}{n}
+= \Big(1-\frac nN\Big)\frac{N^2}{n(N-1)}(\text{SSW}+\text{SSB}).
+</span></p>
+</section>
+<section id="when-does-stratification-help" class="slide level2">
+<h2>When Does Stratification Help?</h2>
+<p>Comparing the two expressions, proportional allocation gives smaller variance than SRS whenever <span class="math display">
+\text{SSB} &gt; \sum_{h=1}^H \Big(1-\frac{N_h}{N}\Big)S_h^2.
+</span></p>
+<p>This typically holds because SSB is a sum of <span class="math inline">N</span> squared deviations, while <span class="math inline">\sum_h S_h^2</span> is a sum of only <span class="math inline">H</span> (typically much fewer) terms.</p>
+</section>
+<section id="the-variance-ratio-and-r2" class="slide level2">
+<h2>The Variance Ratio and <span class="math inline">R^2</span></h2>
+<p><span class="math display">
+\frac{V_{\text{prop}}(\hat t_{\text{str}})}{V(\hat t_{\text{SRS}})}
+\approx \frac{\text{SSW}+\sum_h S_h^2}{\text{SSW}+\text{SSB}} \approx \frac{\text{SSW}}{\text{SSW}+\text{SSB}}
+</span> <span class="math display">
+\text{percentage of variance reduction} = \frac{\text{SSB}}{\text{SSW}+\text{SSB}}
+= R^2_{y\mid\text{strata}},
+</span></p>
+<p>the proportion of variance in <span class="math inline">y</span> that can be explained by strata membership.</p>
+</section></section>
+<section>
+<section id="optimal-allocation" class="title-slide slide level1 center" data-number="7">
+<h1><span class="header-section-number">7</span> Optimal Allocation</h1>
+
+</section>
+<section id="setting-up-the-cost-function" class="slide level2">
+<h2>Setting Up the Cost Function</h2>
+<p>The objective in optimal allocation is to gain the most information for the least cost. Let <span class="math inline">C</span> be total cost, <span class="math inline">c_0</span> overhead cost, and <span class="math inline">c_h</span> the cost of sampling one unit in stratum <span class="math inline">h</span>: <span class="math display">
+C = c_0 + \sum_{h=1}^H c_h n_h, \qquad n = n_1+\cdots+n_H.
+</span></p>
+<p>We want to allocate <span class="math inline">n_1,\ldots,n_H</span> to minimize <span class="math inline">V(\overline y_{\text{str}})</span> for a fixed total cost <span class="math inline">C</span> (or equivalently minimize <span class="math inline">C</span> for fixed <span class="math inline">V</span>).</p>
+</section>
+<section id="deriving-the-optimal-allocation" class="slide level2 smaller">
+<h2>Deriving the Optimal Allocation</h2>
+<p>Write the variance as <span class="math display">
+V(\overline y_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\frac{N_h^2}{N^2}\frac{S_h^2}{n_h}
+= \sum_{h=1}^H \frac{N_h^2S_h^2}{N^2}\cdot\frac1{n_h} \;-\; \underbrace{\sum_{h=1}^H \frac{N_hS_h^2}{N^2}}_{\text{free of } n_h}.
+</span></p>
+<p>Minimize it subject to <span class="math inline">c_0+\sum_h c_hn_h = C</span> using the Lagrangian <span class="math display">
+L(n_1,\ldots,n_H,\lambda) = \sum_{h=1}^H \frac{N_h^2S_h^2}{N^2 n_h} + \lambda\Big(c_0+\sum_{h=1}^H c_hn_h - C\Big).
+</span></p>
+<p>Setting <span class="math inline">\partial L/\partial n_h = 0</span>: <span class="math display">
+-\frac{N_h^2S_h^2}{N^2n_h^2} + \lambda c_h = 0
+\quad\Longrightarrow\quad
+n_h = \frac{1}{N\sqrt\lambda}\cdot\frac{N_hS_h}{\sqrt{c_h}} \;\propto\; \frac{N_hS_h}{\sqrt{c_h}}.
+</span></p>
+<p>Summing over <span class="math inline">h</span> gives <span class="math inline">n = \frac{1}{N\sqrt\lambda}\sum_{l} N_lS_l/\sqrt{c_l}</span>; dividing <span class="math inline">n_h</span> by <span class="math inline">n</span> eliminates <span class="math inline">\lambda</span> and yields the formula on the next slide.</p>
+</section>
+<section id="optimal-allocation-formula" class="slide level2">
+<h2>Optimal Allocation Formula</h2>
+<p>Using the method of Lagrange multipliers, the optimal <span class="math inline">n_h</span> is proportional to <span class="math inline">N_hS_h/\sqrt{c_h}</span>: <span class="math display">
+n_h = \left(\frac{N_hS_h/\sqrt{c_h}}{\sum_{l=1}^H N_lS_l/\sqrt{c_l}}\right)n
+\qquad\text{i.e.}\qquad n_h \propto \frac{N_hS_h}{\sqrt{c_h}}.
+</span></p>
+<p>We sample more heavily within a stratum if: the stratum is a large part of the population (<span class="math inline">N_h</span> large); the stratum is more variable (<span class="math inline">S_h</span> large); or sampling in the stratum is cheap (<span class="math inline">c_h</span> small).</p>
+<p><strong>Special cases:</strong> if <span class="math inline">c_1=\cdots=c_H</span>, then <span class="math inline">n_h\propto N_hS_h</span> (<strong>Neyman allocation</strong>); if additionally <span class="math inline">S_1=\cdots=S_H</span>, then <span class="math inline">n_h\propto N_h</span> (<strong>proportional allocation</strong>).</p>
+</section>
+<section id="example-neyman-allocation-for-the-caribou-survey" class="slide level2">
+<h2>Example: Neyman Allocation for the Caribou Survey</h2>
+<p>The investigators used rough estimates of caribou counts as a proxy for <span class="math inline">S_h</span>, with total sample size <span class="math inline">n=225</span>:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 10%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Stratum</th>
+<th style="text-align: right;"><span class="math inline">N_h</span></th>
+<th style="text-align: right;"><span class="math inline">s_h</span></th>
+<th style="text-align: right;"><span class="math inline">N_hs_h</span></th>
+<th style="text-align: right;"><span class="math inline">n_h</span> (Neyman)</th>
+<th style="text-align: right;">Sample size used</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">A</td>
+<td style="text-align: right;">400</td>
+<td style="text-align: right;">3,000</td>
+<td style="text-align: right;">1,200,000</td>
+<td style="text-align: right;">96.26</td>
+<td style="text-align: right;">98</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">B</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">2,000</td>
+<td style="text-align: right;">60,000</td>
+<td style="text-align: right;">4.81</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">C</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">9,000</td>
+<td style="text-align: right;">549,000</td>
+<td style="text-align: right;">44.04</td>
+<td style="text-align: right;">37</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">D</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">2,000</td>
+<td style="text-align: right;">36,000</td>
+<td style="text-align: right;">2.89</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">E</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">12,000</td>
+<td style="text-align: right;">840,000</td>
+<td style="text-align: right;">67.38</td>
+<td style="text-align: right;">39</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">F</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">1,000</td>
+<td style="text-align: right;">120,000</td>
+<td style="text-align: right;">9.63</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>Total</strong></td>
+<td style="text-align: right;"><strong>699</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>2,805,000</strong></td>
+<td style="text-align: right;"><strong>225</strong></td>
+<td style="text-align: right;"><strong>211</strong></td>
+</tr>
+</tbody>
+</table>
+<p>They wanted the sampling fraction to be at least <span class="math inline">1/3</span> in the smaller strata, so the Neyman values (column <span class="math inline">n_h</span>) were used only as a guideline.</p>
+</section>
+<section id="example-optimal-allocation-for-polls" class="slide level2">
+<h2>Example: Optimal Allocation for Polls</h2>
+<p>For estimating a proportion, <span class="math inline">S_h^2 = p_h(1-p_h)</span>. As a function of <span class="math inline">p</span>, <span class="math inline">S^2(p)=p(1-p)</span> is a quadratic maximized at <span class="math inline">p=1/2</span>. So election regions (swing states) with <span class="math inline">p</span> near 0.5 should be assigned relatively larger sample sizes, since they contribute the most variance per unit sampled.</p>
+
+<img data-src="Lec04-strata_files/figure-revealjs/fig-p1mp-1.png" id="fig-p1mp" class="quarto-figure quarto-figure-center r-stretch" style="width:60.0%"><p class="caption">
+Figure&nbsp;5
+</p></section>
+<section id="example-dollar-stratification" class="slide level2">
+<h2>Example: Dollar Stratification</h2>
+<p><strong>Dollar stratification</strong> is common in accounting audits. Recorded book amounts stratify the population: stratum 1 might be all loans over $1 million, stratum 2 loans between $500,000 and $999,999, and so on down to loans under $10,000.</p>
+<p>Optimal allocation is efficient here: <span class="math inline">S_h</span> is much larger in strata with large loan amounts, so optimal allocation prescribes a higher sampling fraction for those strata. An error in a $3,000,000 loan is likely to contribute far more to the total audited discrepancy than an error in a $3,000 loan.</p>
+</section></section>
+<section>
+<section id="choice-of-stratifying-variables" class="title-slide slide level1 center" data-number="8">
+<h1><span class="header-section-number">8</span> Choice of Stratifying Variables</h1>
+
+</section>
+<section id="using-an-auxiliary-variable" class="slide level2">
+<h2>Using an Auxiliary Variable</h2>
+<p>Stratification is most efficient when the stratum means differ widely, since then SSB is large and within-stratum variability is small. Ideally we would stratify directly by the values of <span class="math inline">y</span>; since <span class="math inline">y</span> is unknown before sampling, we instead look for an auxiliary variable <span class="math inline">x</span> that is highly correlated with (or predictive of) <span class="math inline">y</span>.</p>
+
+<img data-src="Lec04-strata_files/figure-revealjs/fig-auxiliary-1.png" id="fig-auxiliary" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
+Figure&nbsp;6
+</p><p>Cutting on <span class="math inline">x</span> (left) produces strata with visibly different distributions of <span class="math inline">y</span> (right) — exactly the goal of stratification.</p>
+</section>
+<section id="example-choosing-an-auxiliary-variable" class="slide level2">
+<h2>Example: Choosing an Auxiliary Variable</h2>
+<ul>
+<li><p>To estimate total business expenditures on advertising, we would like businesses that spend the most on advertising in stratum 1, the next highest spenders in stratum 2, and so on. We might stratify by number of employees or size of business, and by type of product or service.</p></li>
+<li><p>For farm income, we might use farm size as the stratifying variable, since we expect larger farms to have higher incomes.</p></li>
+</ul>
+</section>
+<section id="limitations-of-stratified-sampling" class="slide level2">
+<h2>Limitations of Stratified Sampling</h2>
+<ul>
+<li><p><strong>Difficulty in implementation.</strong> We need to know the stratum sizes <span class="math inline">N_h</span> (and, for optimal allocation, rough estimates of <span class="math inline">S_h</span>) <em>before</em> sampling.</p></li>
+<li><p><strong>Multiple variables of interest.</strong> A single stratifying variable that works well for one <span class="math inline">y</span> may not work well for another <span class="math inline">y</span> measured in the same survey — a variable highly correlated with one outcome may be nearly uncorrelated with a different outcome of interest.</p></li>
+</ul>
+
+</section></section>
+
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="Lec04-strata_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="Lec04-strata_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="Lec04-strata_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="Lec04-strata_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="Lec04-strata_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="Lec04-strata_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="Lec04-strata_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="Lec04-strata_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="Lec04-strata_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="Lec04-strata_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"},{"title":"Display","icon":"<i class=\"fa fa-desktop\"></i>","content":"<div style=\"display: block;\">\n  <h1 class=\"slide-menu-title\">Display Ratio</h1>\n  <ul class=\"slide-menu-items\">\n    <li class=\"slide-menu-item\"><a onclick=\"Reveal.configure({ width: 1600, height: 900 });\">Widescreen (16:9)</a></li>\n    <li class=\"slide-menu-item\"><a onclick=\"Reveal.configure({ width: 1200, height: 900 });\">Standard (4:3)</a></li>\n    <li class=\"slide-menu-item\"><a onclick=\"Reveal.configure({ width: 1440, height: 900 });\">Tall (16:10)</a></li>\n  </ul>\n  <h1 class=\"slide-menu-title\" style=\"margin-top: 25px;\">Continuous Font Size (px)</h1>\n  <div style=\"padding: 10px 20px; font-family: sans-serif;\">\n    <input type=\"range\" class=\"reveal-font-slider\" min=\"16\" max=\"72\" step=\"2\" value=\"32\"\n           oninput=\"document.querySelector('.reveal').style.fontSize = this.value + 'px'; Reveal.layout();\"\n           style=\"width: 100%; cursor: pointer;\">\n    <div style=\"display: flex; justify-content: space-between; align-items: center; font-size: 14px; margin-top: 10px; color: #ccc;\">\n      <span>Smaller</span>\n      <span onclick=\"document.querySelector('.reveal').style.fontSize = ''; document.querySelector('.reveal-font-slider').value = 32; Reveal.layout();\"\n            style=\"cursor: pointer; color: #fff; font-weight: bold; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;\">\n        Reset\n      </span>\n      <span>Larger</span>\n    </div>\n  </div>\n  <h1 class=\"slide-menu-title\" style=\"margin-top: 25px;\">Debug Tools</h1>\n  <div style=\"padding: 10px 20px; font-family: sans-serif;\">\n    <label style=\"display: flex; justify-content: space-between; align-items: center; font-size: 16px; color: #ccc; cursor: pointer;\">\n      <span>Show Section Frames</span>\n      <input type=\"checkbox\" checked onchange=\"document.body.classList.toggle('hide-debug');\" style=\"width: 18px; height: 18px; cursor: pointer;\">\n    </label>\n  </div>\n</div>\n"}],"openButton":true,"width":"wide","numbers":true},
+'chalkboard': {"buttons":false},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 1000,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <!-- --- STRUCTURE (HTML) --- -->
+    <!-- Styling for these elements (.custom-slide-button, #custom-refresh-btn,
+         .slide-menu-button repositioning) lives in slides.css, section 4. -->
+
+    <!-- Chalkboard Button -->
+    <div id="custom-chalkboard-btn" class="custom-slide-button" title="Chalkboard" style="top: 75px; left: 10px;">
+      <svg viewbox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="4" width="16" height="12" rx="2" ry="2"></rect>
+        <line x1="12" y1="16" x2="12" y2="20"></line>
+        <line x1="8" y1="20" x2="16" y2="20"></line>
+      </svg>
+    </div>
+
+    <!-- Notes Canvas Button -->
+    <div id="custom-notes-btn" class="custom-slide-button" title="Notes Canvas" style="top: 120px; left: 10px;">
+      <svg viewbox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+      </svg>
+    </div>
+
+    <!-- Refresh Button -->
+    <div id="custom-refresh-btn" class="custom-slide-button" title="Refresh Page">
+      <svg viewbox="0 0 24 24" width="25" height="25" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+      </svg>
+    </div>
+
+    <!-- --- BEHAVIOR (JavaScript) --- -->
+    <script>
+      // Wait for the full page to load before manipulating the DOM
+      window.addEventListener('load', () => {
+        // --- Attach Event Listeners to Buttons ---
+        const chalkboardBtn = document.getElementById('custom-chalkboard-btn');
+        if (chalkboardBtn) {
+          chalkboardBtn.addEventListener('click', () => {
+            if (window.RevealChalkboard) {
+              RevealChalkboard.toggleChalkboard();
+            } else if (Reveal.getPlugin('chalkboard')) {
+              Reveal.getPlugin('chalkboard').toggleChalkboard();
+            }
+          });
+        }
+
+        const notesBtn = document.getElementById('custom-notes-btn');
+        if (notesBtn) {
+          notesBtn.addEventListener('click', () => {
+            if (window.RevealChalkboard) {
+              RevealChalkboard.toggleNotesCanvas();
+            } else if (Reveal.getPlugin('chalkboard')) {
+              Reveal.getPlugin('chalkboard').toggleNotesCanvas();
+            }
+          });
+        }
+
+        const refreshBtn = document.getElementById('custom-refresh-btn');
+        if (refreshBtn) {
+          refreshBtn.addEventListener('click', () => window.location.reload());
+        }
+
+        // --- Layout Fix Script ---
+        // A short delay ensures Reveal.js has initialized its layout first
+        setTimeout(function() {
+          if(window.Reveal) Reveal.layout();
+        }, 200);
+
+        // --- Menu Table-of-Contents Total Fix ---
+        // The bundled reveal-menu plugin builds its "current/total" row labels
+        // once, calling Reveal.getTotalSlides() before Reveal finishes settling
+        // its slide count for documents with nested (#-grouped) sections. That
+        // bakes in an inflated total (e.g. 51 instead of the correct 47 - one
+        // extra count per # section that has ## children) which never gets
+        // refreshed. Each row's own current number is already correct; only the
+        // shared "/total" suffix is stale, so just correct that suffix in place.
+        function fixMenuTotal() {
+          if (!window.Reveal || typeof Reveal.getTotalSlides !== 'function') return;
+          var total = Reveal.getTotalSlides();
+          var items = document.querySelectorAll(
+            '.slide-menu-item[data-slide-h], .slide-menu-item-vertical[data-slide-h]'
+          );
+          items.forEach(function (li) {
+            var numSpan = li.querySelector('.slide-menu-item-number');
+            if (!numSpan) return;
+            var m = numSpan.textContent.match(/^(\d+)\s*\/\s*\d+(.*)$/);
+            if (m) numSpan.textContent = m[1] + '/' + total + m[2];
+          });
+        }
+
+        // Run once things settle, and again whenever the menu is opened (Reveal
+        // toggles this class on <body>, whatever the trigger: click, the "m"
+        // keyboard shortcut, or the API) so the fix is idempotent and robust.
+        setTimeout(fixMenuTotal, 300);
+        var menuObserver = new MutationObserver(function () {
+          if (document.body.classList.contains('slide-menu-active')) {
+            fixMenuTotal();
+          }
+        });
+        menuObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

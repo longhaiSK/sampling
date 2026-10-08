@@ -1,0 +1,4070 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="Lec06-cluster_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Lec06-cluster_files/libs/quarto-html/tabby.min.js"></script>
+<script src="Lec06-cluster_files/libs/quarto-html/popper.min.js"></script>
+<script src="Lec06-cluster_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="Lec06-cluster_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Lec06-cluster_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="Lec06-cluster_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
+
+  <meta name="author" content="Longhai Li">
+  <meta name="dcterms.date" content="2026-10-08">
+  <title>Cluster-Slides</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Lec06-cluster_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="Lec06-cluster_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="Lec06-cluster_files/libs/revealjs/dist/theme/quarto-2abc1c5b7b5c7eecd6137558e106e4c3.css">
+  <link rel="stylesheet" href="_extensions/banner_slides/slides.css">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <link href="Lec06-cluster_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="Lec06-cluster_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="Lec06-cluster_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="Lec06-cluster_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="Lec06-cluster_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="Lec06-cluster_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">STAT 348 Sampling Techniques</h1>
+  <p class="subtitle">Cluster Sampling</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Longhai Li 
+</div>
+</div>
+</div>
+
+  <p class="date">2026-10-08</p>
+</section>
+<section>
+<section id="general-terms-for-cluster-sampling" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> General Terms for Cluster Sampling</h1>
+<p>Textbook sections:</p>
+<ul>
+<li>5.1–5.3 in Lohr</li>
+<li>Ch 8 and 9 in Scheaffer et al.</li>
+</ul>
+</section>
+<section id="an-example-of-clusters" class="slide level2">
+<h2>An Example of Clusters</h2>
+<p>Suppose we want to find out how many bicycles are owned by residents in a community of 10,000 households. We could take an SRS of 400 households, or we could divide the community into blocks of about 20 households each and sample every household (or subsample some households) in each of 20 blocks selected at random from the 500 blocks in the community.</p>
+<p>The latter plan is an example of <strong>cluster sampling</strong>. The blocks are the <strong>primary sampling units (psus)</strong>, or <strong>clusters</strong>. The households are the <strong>secondary sampling units (ssus)</strong>; often the ssus are the elements of the population.</p>
+</section>
+<section id="why-do-we-use-cluster-sampling" class="slide level2">
+<h2>Why Do We Use Cluster Sampling?</h2>
+<ul>
+<li><strong>Constructing a sampling frame of observation units may be difficult, expensive, or impossible.</strong> We cannot list all honeybees in a region or all customers of a store; we may be able to construct a list of individuals in a city only via a list of housing units, but that list is time-consuming and expensive to build.</li>
+<li><strong>The population may be widely spread out geographically, or occur in natural clusters</strong> such as households or schools, and it is cheaper to sample clusters than to take an SRS of individuals. To survey nursing-home residents, it is much cheaper to sample nursing homes and interview every resident there than to take an SRS of residents (which might require traveling to a home to interview just one person).</li>
+</ul>
+</section>
+<section id="cluster-sampling-vs.-stratified-sampling" class="slide level2">
+<h2>Cluster Sampling vs.&nbsp;Stratified Sampling</h2>
+
+<img data-src="figures/cluster-vs-stratified.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p>In stratified sampling, every stratum is sampled and precision depends on <strong>within-stratum</strong> homogeneity. In cluster sampling, only <em>some</em> clusters are sampled and precision depends primarily on the variability <strong>between cluster means</strong>.</p>
+</section>
+<section id="notation-for-cluster-sampling" class="slide level2">
+<h2>Notation for Cluster Sampling</h2>
+<p>The universe <span class="math inline">\mathcal U</span> is the population of <span class="math inline">N</span> psus; <span class="math inline">\mathcal S</span> is the sample of psus, and <span class="math inline">\mathcal S_i</span> is the sample of ssus chosen from psu <span class="math inline">i</span>. The measured quantity is <span class="math display">
+y_{ij} = \text{measurement for the } j\text{th element (ssu) in the } i\text{th psu.}
+</span></p>
+<p>In cluster sampling, <span class="math inline">N</span> is the number of psus, <strong>not</strong> the number of observation units — a departure from earlier chapters where <span class="math inline">N</span> was the population size in elements.</p>
+</section>
+<section id="psu-level-population-quantities" class="slide level2">
+<h2>psu-Level Population Quantities</h2>
+<p><span class="math display">
+N = \text{number of psus}, \qquad M_i = \text{number of ssus in psu } i, \qquad
+M_0 = \sum_{i=1}^N M_i
+</span> <span class="math display">
+t_i = \sum_{j=1}^{M_i} y_{ij} \quad(\text{psu total}) \qquad
+t = \sum_{i=1}^N t_i \quad(\text{population total})
+</span> <span class="math display">
+S_t^2 = \frac{1}{N-1}\sum_{i=1}^N \Big(t_i - \frac tN\Big)^2 \quad(\text{population variance of psu totals})
+</span></p>
+</section>
+<section id="ssu-level-population-quantities" class="slide level2">
+<h2>ssu-Level Population Quantities</h2>
+<p><span class="math display">
+\bar y_U = \frac{\sum_{i=1}^N\sum_{j=1}^{M_i} y_{ij}}{M_0} = \frac{t}{M_0} \quad(\text{population mean})
+</span> <span class="math display">
+\bar y_{iU} = \frac{\sum_{j=1}^{M_i} y_{ij}}{M_i} = \frac{t_i}{M_i} \quad(\text{population mean in psu } i)
+</span> <span class="math display">
+S^2 = \frac{\sum_{i=1}^N\sum_{j=1}^{M_i}(y_{ij}-\bar y_U)^2}{M_0-1} \quad(\text{population variance})
+</span> <span class="math display">
+S_i^2 = \frac{\sum_{j=1}^{M_i}(y_{ij}-\bar y_{iU})^2}{M_i-1} \quad(\text{population variance within psu } i)
+</span></p>
+</section>
+<section id="sample-quantities" class="slide level2">
+<h2>Sample Quantities</h2>
+<p>Let <span class="math inline">n</span> = number of psus sampled, <span class="math inline">m_i</span> = number of ssus sampled from psu <span class="math inline">i</span>: <span class="math display">
+\bar y_i = \frac{\sum_{j\in\mathcal S_i} y_{ij}}{m_i} \quad\qquad
+\hat t_i = \sum_{j\in\mathcal S_i} \frac{M_i}{m_i}y_{ij} = M_i\bar y_i
+</span> <span class="math display">
+\hat t_{\text{unb}} = \sum_{i\in\mathcal S} \frac{N}{n}\hat t_i \quad(\text{unbiased estimator of } t)
+</span> <span class="math display">
+\bar t = \frac{\sum_{i\in\mathcal S} \hat t_i}{n}, \qquad
+s_t^2 = \frac{1}{n-1}\sum_{i\in\mathcal S} \big(\hat t_i - \bar t\big)^2
+</span></p>
+</section>
+<section id="sampling-weights" class="slide level2">
+<h2>Sampling Weights</h2>
+<p>The probability that ssu <span class="math inline">j</span> in psu <span class="math inline">i</span> is selected: <span class="math display">
+\begin{aligned}
+P(j\text{th ssu of }i\text{th psu selected}) &amp;= P(i\text{th psu selected})\times P(j\text{th ssu}\mid i\text{th psu}) \\[4pt]
+&amp;= \frac nN \cdot \frac{m_i}{M_i}
+\end{aligned}
+</span></p>
+<p>So the sampling weight (reciprocal of the selection probability) is <span class="math display">
+w_{ij} = \frac{N}{n}\cdot\frac{M_i}{m_i}, \qquad \hat t_{\text{unb}} = \sum_{i\in\mathcal S}\sum_{j\in\mathcal S_i} w_{ij}y_{ij}
+</span></p>
+<p>If psus are blocks and ssus are households, household <span class="math inline">j</span> in psu <span class="math inline">i</span> represents <span class="math inline">(NM_i)/(nm_i)</span> households in the population.</p>
+</section></section>
+<section>
+<section id="one-stage-cluster-sampling" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> One-Stage Cluster Sampling</h1>
+
+</section>
+<section id="clusters-of-equal-sizes" class="slide level2">
+<h2>Clusters of Equal Sizes</h2>
+<p>Consider the simplest case, where every psu has the same number of ssus, <span class="math inline">M_i=m_i=M</span> (all ssus sampled, all clusters same size). This is uncommon in household surveys but does occur in agricultural and industrial sampling.</p>
+<p>Since we observe <em>every</em> ssu in each sampled psu, estimating population means or totals is simple: we treat the psu totals <span class="math inline">t_i</span> as the observations and ignore the individual elements — we effectively have an SRS of <span class="math inline">n</span> data points <span class="math inline">\{t_i, i\in\mathcal S\}</span>.</p>
+</section>
+<section id="estimators-for-clusters-of-equal-sizes" class="slide level2">
+<h2>Estimators for Clusters of Equal Sizes</h2>
+<p>Apply ordinary SRS results to the psu totals <span class="math inline">\{t_i\}</span>: <span class="math display">
+\bar t = \frac{\sum_{i\in\mathcal S} t_i}{n}, \qquad
+\hat t = N\bar t, \qquad
+s_t^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}\Big(t_i-\frac{\hat t}{N}\Big)^2
+</span> <span class="math display">
+\text{SE}(\hat t) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}}
+</span></p>
+<p>To estimate <span class="math inline">\bar y_U</span>, divide the estimated total by the number of elements <span class="math inline">NM</span>: <span class="math display">
+\hat{\bar y} = \frac{\hat t}{NM}, \qquad
+\text{SE}(\hat{\bar y}) = \frac{1}{M}\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}} = \frac{\text{SE}(\bar t)}{M}
+</span></p>
+</section>
+<section id="example-gpa-in-a-dormitory" class="slide level2">
+<h2>Example: GPA in a Dormitory</h2>
+<p>A student wants to estimate the average GPA in his dormitory. Instead of listing all students and taking an SRS, he notices the dorm consists of 100 suites of 4 students each; he selects 5 suites at random and asks every person in those suites for their GPA:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Suite</th>
+<th style="text-align: right;">Person 1</th>
+<th style="text-align: right;">Person 2</th>
+<th style="text-align: right;">Person 3</th>
+<th style="text-align: right;">Person 4</th>
+<th style="text-align: right;"><strong>Total</strong> (<span class="math inline">t_i</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: right;">3.08</td>
+<td style="text-align: right;">2.60</td>
+<td style="text-align: right;">3.44</td>
+<td style="text-align: right;">3.04</td>
+<td style="text-align: right;"><strong>12.16</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: right;">2.36</td>
+<td style="text-align: right;">3.04</td>
+<td style="text-align: right;">3.28</td>
+<td style="text-align: right;">2.68</td>
+<td style="text-align: right;"><strong>11.36</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">2.56</td>
+<td style="text-align: right;">2.52</td>
+<td style="text-align: right;">1.88</td>
+<td style="text-align: right;"><strong>8.96</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">2.88</td>
+<td style="text-align: right;">3.44</td>
+<td style="text-align: right;">3.64</td>
+<td style="text-align: right;"><strong>12.96</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: right;">2.68</td>
+<td style="text-align: right;">1.92</td>
+<td style="text-align: right;">3.28</td>
+<td style="text-align: right;">3.20</td>
+<td style="text-align: right;"><strong>11.08</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The psus are the suites: <span class="math inline">N=100</span>, <span class="math inline">n=5</span>, <span class="math inline">M=4</span>.</p>
+</section>
+<section id="example-gpa-calculations" class="slide level2">
+<h2>Example: GPA Calculations</h2>
+<p><span class="math display">
+\begin{aligned}
+\hat t &amp;= \frac{100}{5}(12.16+11.36+8.96+12.96+11.08) = 1130.4 \\[4pt]
+\bar t &amp;= \frac{1130.4}{100} = 11.304 \\[4pt]
+s_t^2 &amp;= \frac{1}{4}\Big[(12.16-11.304)^2+\cdots+(11.08-11.304)^2\Big] = 2.256 \\[4pt]
+\hat{\bar y} &amp;= \frac{1130.4}{400} = 2.826 \\[4pt]
+\text{SE}(\hat{\bar y}) &amp;= \sqrt{\Big(1-\frac{5}{100}\Big)\frac{2.256}{(5)(4)^2}} = 0.164
+\end{aligned}
+</span></p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="math inline">V(\hat{\bar y}) \ne \big(1-\tfrac{n}{N}\big)\dfrac{s_y^2}{n}</span>! We <em>cannot</em> apply the ordinary one-stage SRS variance formula treating all <span class="math inline">nM=20</span> students as an SRS from the dorm — the 20 students are not an SRS of individuals, since whole suites are selected together (an ICC/correlation effect).</p>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="comparing-cluster-sampling-with-srs" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Comparing Cluster Sampling with SRS</h1>
+
+</section>
+<section id="population-anova-table-cluster-sampling-equal-sizes" class="slide level2">
+<h2>Population ANOVA Table (Cluster Sampling, Equal Sizes)</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 38%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Source</th>
+<th style="text-align: center;">df</th>
+<th style="text-align: left;">Sum of Squares</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Between psus</td>
+<td style="text-align: center;"><span class="math inline">N-1</span></td>
+<td style="text-align: left;"><span class="math inline">\text{SSB} = \sum_{i=1}^N\sum_{j=1}^M (\bar y_{iU}-\bar y_U)^2</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Within psus</td>
+<td style="text-align: center;"><span class="math inline">N(M-1)</span></td>
+<td style="text-align: left;"><span class="math inline">\text{SSW} = \sum_{i=1}^N\sum_{j=1}^M (y_{ij}-\bar y_{iU})^2</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total, about <span class="math inline">\bar y_U</span></td>
+<td style="text-align: center;"><span class="math inline">NM-1</span></td>
+<td style="text-align: left;"><span class="math inline">\text{SSTO} = \sum_{i=1}^N\sum_{j=1}^M (y_{ij}-\bar y_U)^2 = (NM-1)S^2</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="cluster-sampling-variance-depends-on-between-psu-variability" class="slide level2">
+<h2>Cluster Sampling Variance Depends on Between-psu Variability</h2>
+<p>Since each psu has the same size <span class="math inline">M</span>, <span class="math display">
+S_t^2 = \sum_{i=1}^N \frac{(t_i-\bar t_U)^2}{N-1} = \sum_{i=1}^N \frac{M^2(\bar y_{iU}-\bar y_U)^2}{N-1} = M(\text{MSB})
+</span> so for one-stage cluster sampling with equal-size clusters, <span class="math display">
+V(\hat t_{\text{cluster}}) = N^2\Big(1-\frac nN\Big)\frac{M(\text{MSB})}{n}
+</span></p>
+<p>If instead we took an SRS with <span class="math inline">nM</span> observations, the variance of the estimated total would have been <span class="math display">
+V(\hat t_{\text{SRS}}) = (NM)^2\Big(1-\frac{nM}{NM}\Big)\frac{S^2}{nM} = N^2\Big(1-\frac nN\Big)\frac{MS^2}{n}
+</span></p>
+<p>Comparing the two: if <span class="math inline">\text{MSB} &gt; S^2</span>, cluster sampling is <strong>less</strong> efficient (has larger variance) than an SRS of the same number of elements.</p>
+</section>
+<section id="intraclass-correlation-and-adjusted-r2" class="slide level2">
+<h2>Intraclass Correlation and Adjusted <span class="math inline">R^2</span></h2>
+<p>The <strong>intraclass correlation coefficient (ICC)</strong> measures how similar elements within the same cluster are: <span class="math display">
+\text{ICC} = 1 - \frac{M}{M-1}\cdot\frac{\text{SSW}}{\text{SSTO}}
+</span></p>
+<p>An alternative measure, valid for unequal cluster sizes too, is the <strong>adjusted <span class="math inline">R^2</span></strong>: <span class="math display">
+R_a^2 = 1 - \frac{\text{MSW}}{S^2}
+</span></p>
+<p>For equal-sized clusters, the increase in variance from using cluster sampling (instead of an SRS of the same number of elements) is <span class="math display">
+\frac{V(\hat t_{\text{cluster}})}{V(\hat t_{\text{SRS}})} = \frac{\text{MSB}}{S^2} = 1 + \frac{N(M-1)}{N-1}R_a^2
+</span></p>
+<p>So <span class="math inline">(M-1)R_a^2</span> is (approximately) the <strong>percentage increase</strong> in variance from switching from SRS to cluster sampling.</p>
+</section>
+<section id="illustration-r_a2-large-vs.-small" class="slide level2">
+<h2>Illustration: <span class="math inline">R_a^2</span> Large vs.&nbsp;Small</h2>
+
+<img data-src="Lec06-cluster_files/figure-revealjs/fig-cluster-r2-1.png" id="fig-cluster-r2" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
+Figure&nbsp;1
+</p><p>When cluster means differ a lot relative to within-cluster spread (left), sampling only a few clusters misses most of the population’s variability — cluster sampling loses more information relative to an SRS of the same size.</p>
+</section></section>
+<section>
+<section id="clusters-of-unequal-sizes" class="title-slide slide level1 center" data-number="4">
+<h1><span class="header-section-number">4</span> Clusters of Unequal Sizes</h1>
+
+</section>
+<section id="unbiased-estimation-for-unequal-size-clusters" class="slide level2">
+<h2>Unbiased Estimation for Unequal-Size Clusters</h2>
+<p>The unbiased estimator of the total is calculated exactly as before: <span class="math display">
+\hat t_{\text{unb}} = \frac Nn \sum_{i\in\mathcal S} t_i, \qquad
+\text{SE}(\hat t_{\text{unb}}) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}}
+</span></p>
+<p>The key difference from equal-size clusters: the variation among the individual cluster totals <span class="math inline">t_i</span> is likely to be <strong>large</strong> when the clusters have very different sizes <span class="math inline">M_i</span> — a psu with many ssus tends to have a large total just because it has more elements, inflating <span class="math inline">s_t^2</span> and hence the variance of <span class="math inline">\hat t_{\text{unb}}</span>, even before accounting for genuine differences in the <span class="math inline">y</span> values.</p>
+</section>
+<section id="ratio-estimation-for-the-ssu-level-mean" class="slide level2">
+<h2>Ratio Estimation for the ssu-Level Mean</h2>
+<p>Since <span class="math inline">\bar y_U = t/M_0</span>, and <span class="math inline">t_i</span> is usually roughly proportional to <span class="math inline">M_i</span> (bigger clusters tend to have bigger totals), estimating <span class="math inline">\bar y_U</span> is a form of <strong>ratio estimation</strong> with <span class="math inline">y_i=t_i</span> and <span class="math inline">x_i=M_i</span>: <span class="math display">
+\hat{\bar y}_r = \frac{\hat t_{\text{unb}}}{\hat M_0} = \frac{\sum_{i\in\mathcal S} t_i}{\sum_{i\in\mathcal S} M_i} = \frac{\sum_{i\in\mathcal S} M_i\bar y_i}{\sum_{i\in\mathcal S} M_i}
+</span></p>
+<p>This can be far more efficient than <span class="math inline">\hat t_{\text{unb}}/M_0</span>, since it uses the <em>ratio</em> of totals to sizes rather than the totals alone — removing the size-driven variability in <span class="math inline">t_i</span> that inflates <span class="math inline">s_t^2</span>.</p>
+</section>
+<section id="standard-error-of-the-ratio-estimator" class="slide level2">
+<h2>Standard Error of the Ratio Estimator</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-cluster-ratio" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" width="100%">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-cluster-ratio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="Lec06-cluster_files/figure-revealjs/fig-cluster-ratio-1.png" id="fig-cluster-ratio" class="quarto-figure quarto-figure-center" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-cluster-ratio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p>From formula (4.10) applied with <span class="math inline">x_i=M_i</span>, <span class="math inline">y_i=t_i</span>, and writing <span class="math inline">\hat t_{ri}=\hat{\bar y}_r M_i</span> for the fitted value: <span class="math display">
+s_r^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}(t_i-\hat t_{ri})^2
+</span> <span class="math display">
+\text{SE}(\hat{\bar y}_r) = \sqrt{\Big(1-\frac nN\Big)\frac{s_r^2}{n\bar M^2}}
+</span> where <span class="math inline">\bar M=\sum_{i\in\mathcal S}M_i/n</span>. The residuals <span class="math inline">t_i - \hat t_{ri}</span> (dotted vertical segments) are typically far less variable than <span class="math inline">t_i</span> itself.</p>
+</div></div>
+</section>
+<section id="example-algebra-class-test-scores" class="slide level2">
+<h2>Example: Algebra Class Test Scores</h2>
+<p>One-stage cluster samples are common in educational studies, since students are naturally clustered into classrooms or schools. From a population of 187 high-school algebra classes, an investigator takes an SRS of <span class="math inline">n=12</span> classes and tests every student in them for function knowledge. As with ordinary ratio estimation, <span class="math inline">\hat t_{ri}=\hat{\bar y}_r M_i</span> is the fitted cluster total and <span class="math inline">e_i=t_i-\hat t_{ri}</span> the residual from the line <span class="math inline">t=\hat{\bar y}_r M</span>:</p>
+</section>
+<section id="example-algebra-class-test-scores-calculation" class="slide level2 smaller">
+<h2>Example: Algebra Class Test Scores (Calculation)</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell" data-layout-align="center">
+<div id="tbl-algebra-spreadsheet" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-algebra-spreadsheet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1
+</figcaption>
+<div aria-describedby="tbl-algebra-spreadsheet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="mchvmqefqz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mchvmqefqz table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#mchvmqefqz thead, #mchvmqefqz tbody, #mchvmqefqz tfoot, #mchvmqefqz tr, #mchvmqefqz td, #mchvmqefqz th {
+  border-style: none;
+}
+
+#mchvmqefqz p {
+  margin: 0;
+  padding: 0;
+}
+
+#mchvmqefqz .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 28px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mchvmqefqz .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#mchvmqefqz .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mchvmqefqz .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mchvmqefqz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mchvmqefqz .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mchvmqefqz .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mchvmqefqz .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mchvmqefqz .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mchvmqefqz .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mchvmqefqz .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mchvmqefqz .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mchvmqefqz .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#mchvmqefqz .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#mchvmqefqz .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mchvmqefqz .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mchvmqefqz .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mchvmqefqz .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mchvmqefqz .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mchvmqefqz .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#mchvmqefqz .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#mchvmqefqz .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#mchvmqefqz .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mchvmqefqz .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#mchvmqefqz .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#mchvmqefqz .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mchvmqefqz .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mchvmqefqz .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mchvmqefqz .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mchvmqefqz .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mchvmqefqz .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mchvmqefqz .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mchvmqefqz .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mchvmqefqz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mchvmqefqz .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mchvmqefqz .gt_left {
+  text-align: left;
+}
+
+#mchvmqefqz .gt_center {
+  text-align: center;
+}
+
+#mchvmqefqz .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mchvmqefqz .gt_font_normal {
+  font-weight: normal;
+}
+
+#mchvmqefqz .gt_font_bold {
+  font-weight: bold;
+}
+
+#mchvmqefqz .gt_font_italic {
+  font-style: italic;
+}
+
+#mchvmqefqz .gt_super {
+  font-size: 65%;
+}
+
+#mchvmqefqz .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#mchvmqefqz .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#mchvmqefqz .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#mchvmqefqz .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#mchvmqefqz .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mchvmqefqz .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mchvmqefqz .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#mchvmqefqz .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#mchvmqefqz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="a::stub" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="Class" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Class</th>
+<th id="Mi" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">M_i</span></th>
+<th id="ybari" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\bar y_i</span></th>
+<th id="ti" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">t_i</span></th>
+<th id="yhat" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\hat t_{ri}</span></th>
+<th id="ei" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">e_i</span></th>
+<th id="ei2" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">e_i^2</span></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<th id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_1 Class">23</td>
+<td class="gt_row gt_right" headers="stub_1_1 Mi">20</td>
+<td class="gt_row gt_right" headers="stub_1_1 ybari">61.5</td>
+<td class="gt_row gt_right" headers="stub_1_1 ti">1,230.0</td>
+<td class="gt_row gt_right" headers="stub_1_1 yhat">1,251.4</td>
+<td class="gt_row gt_right" headers="stub_1_1 ei">−21.4</td>
+<td class="gt_row gt_right" headers="stub_1_1 ei2">456.7</td>
+</tr>
+<tr class="even">
+<th id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_2 Class">37</td>
+<td class="gt_row gt_right" headers="stub_1_2 Mi">26</td>
+<td class="gt_row gt_right" headers="stub_1_2 ybari">64.2</td>
+<td class="gt_row gt_right" headers="stub_1_2 ti">1,670.0</td>
+<td class="gt_row gt_right" headers="stub_1_2 yhat">1,626.8</td>
+<td class="gt_row gt_right" headers="stub_1_2 ei">43.2</td>
+<td class="gt_row gt_right" headers="stub_1_2 ei2">1,867.7</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_3 Class">38</td>
+<td class="gt_row gt_right" headers="stub_1_3 Mi">24</td>
+<td class="gt_row gt_right" headers="stub_1_3 ybari">58.4</td>
+<td class="gt_row gt_right" headers="stub_1_3 ti">1,402.0</td>
+<td class="gt_row gt_right" headers="stub_1_3 yhat">1,501.6</td>
+<td class="gt_row gt_right" headers="stub_1_3 ei">−99.6</td>
+<td class="gt_row gt_right" headers="stub_1_3 ei2">9,929.2</td>
+</tr>
+<tr class="even">
+<th id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_4 Class">39</td>
+<td class="gt_row gt_right" headers="stub_1_4 Mi">34</td>
+<td class="gt_row gt_right" headers="stub_1_4 ybari">58.0</td>
+<td class="gt_row gt_right" headers="stub_1_4 ti">1,972.0</td>
+<td class="gt_row gt_right" headers="stub_1_4 yhat">2,127.3</td>
+<td class="gt_row gt_right" headers="stub_1_4 ei">−155.3</td>
+<td class="gt_row gt_right" headers="stub_1_4 ei2">24,127.8</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_5" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_5 Class">41</td>
+<td class="gt_row gt_right" headers="stub_1_5 Mi">26</td>
+<td class="gt_row gt_right" headers="stub_1_5 ybari">58.0</td>
+<td class="gt_row gt_right" headers="stub_1_5 ti">1,508.0</td>
+<td class="gt_row gt_right" headers="stub_1_5 yhat">1,626.8</td>
+<td class="gt_row gt_right" headers="stub_1_5 ei">−118.8</td>
+<td class="gt_row gt_right" headers="stub_1_5 ei2">14,109.3</td>
+</tr>
+<tr class="even">
+<th id="stub_1_6" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_6 Class">44</td>
+<td class="gt_row gt_right" headers="stub_1_6 Mi">28</td>
+<td class="gt_row gt_right" headers="stub_1_6 ybari">64.9</td>
+<td class="gt_row gt_right" headers="stub_1_6 ti">1,816.0</td>
+<td class="gt_row gt_right" headers="stub_1_6 yhat">1,751.9</td>
+<td class="gt_row gt_right" headers="stub_1_6 ei">64.1</td>
+<td class="gt_row gt_right" headers="stub_1_6 ei2">4,106.3</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_7" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_7 Class">46</td>
+<td class="gt_row gt_right" headers="stub_1_7 Mi">19</td>
+<td class="gt_row gt_right" headers="stub_1_7 ybari">55.2</td>
+<td class="gt_row gt_right" headers="stub_1_7 ti">1,048.0</td>
+<td class="gt_row gt_right" headers="stub_1_7 yhat">1,188.8</td>
+<td class="gt_row gt_right" headers="stub_1_7 ei">−140.8</td>
+<td class="gt_row gt_right" headers="stub_1_7 ei2">19,825.4</td>
+</tr>
+<tr class="even">
+<th id="stub_1_8" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_8 Class">51</td>
+<td class="gt_row gt_right" headers="stub_1_8 Mi">32</td>
+<td class="gt_row gt_right" headers="stub_1_8 ybari">72.1</td>
+<td class="gt_row gt_right" headers="stub_1_8 ti">2,308.0</td>
+<td class="gt_row gt_right" headers="stub_1_8 yhat">2,002.2</td>
+<td class="gt_row gt_right" headers="stub_1_8 ei">305.8</td>
+<td class="gt_row gt_right" headers="stub_1_8 ei2">93,517.3</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_9" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_9 Class">58</td>
+<td class="gt_row gt_right" headers="stub_1_9 Mi">17</td>
+<td class="gt_row gt_right" headers="stub_1_9 ybari">58.2</td>
+<td class="gt_row gt_right" headers="stub_1_9 ti">989.0</td>
+<td class="gt_row gt_right" headers="stub_1_9 yhat">1,063.7</td>
+<td class="gt_row gt_right" headers="stub_1_9 ei">−74.7</td>
+<td class="gt_row gt_right" headers="stub_1_9 ei2">5,574.9</td>
+</tr>
+<tr class="even">
+<th id="stub_1_10" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_10 Class">62</td>
+<td class="gt_row gt_right" headers="stub_1_10 Mi">21</td>
+<td class="gt_row gt_right" headers="stub_1_10 ybari">66.6</td>
+<td class="gt_row gt_right" headers="stub_1_10 ti">1,398.0</td>
+<td class="gt_row gt_right" headers="stub_1_10 yhat">1,313.9</td>
+<td class="gt_row gt_right" headers="stub_1_10 ei">84.1</td>
+<td class="gt_row gt_right" headers="stub_1_10 ei2">7,066.1</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_11" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_11 Class">106</td>
+<td class="gt_row gt_right" headers="stub_1_11 Mi">26</td>
+<td class="gt_row gt_right" headers="stub_1_11 ybari">62.3</td>
+<td class="gt_row gt_right" headers="stub_1_11 ti">1,621.0</td>
+<td class="gt_row gt_right" headers="stub_1_11 yhat">1,626.8</td>
+<td class="gt_row gt_right" headers="stub_1_11 ei">−5.8</td>
+<td class="gt_row gt_right" headers="stub_1_11 ei2">33.4</td>
+</tr>
+<tr class="even">
+<th id="stub_1_12" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_12 Class">108</td>
+<td class="gt_row gt_right" headers="stub_1_12 Mi">26</td>
+<td class="gt_row gt_right" headers="stub_1_12 ybari">67.2</td>
+<td class="gt_row gt_right" headers="stub_1_12 ti">1,746.0</td>
+<td class="gt_row gt_right" headers="stub_1_12 yhat">1,626.8</td>
+<td class="gt_row gt_right" headers="stub_1_12 ei">119.2</td>
+<td class="gt_row gt_right" headers="stub_1_12 ei2">14,212.8</td>
+</tr>
+<tr class="odd">
+<th id="grand_summary_stub_1" class="gt_row gt_left gt_stub gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" data-quarto-table-cell-role="th" scope="row">Sum</th>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 Class">—</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 Mi">299.00</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 ybari">—</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 ti">18,708.00</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 yhat">—</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 ei">0.00</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 ei2">194,827.04</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div><div class="column" style="width:40%; font-size: 32px;">
+<p><br>
+</p>
+<p>The <strong>Sum</strong> row gives <span class="math inline">\sum M_i</span>, <span class="math inline">\sum t_i</span>, and <span class="math inline">\sum e_i^2</span> directly: <span class="math display">
+\begin{aligned}
+\hat{\bar y}_r &amp;= \frac{\sum t_i}{\sum M_i} = \frac{18{,}708}{299} = 62.57 \\[4pt]
+s_e^2 &amp;= \frac{\sum e_i^2}{n-1} = \frac{194{,}827}{11} = 17{,}711.5 \\[4pt]
+\bar M &amp;= \frac{299}{12} = 24.92 \\[4pt]
+\text{SE}(\hat{\bar y}_r) &amp;= \sqrt{\Big(1-\frac{12}{187}\Big)\frac{s_e^2}{n\bar M^2}} = 1.49
+\end{aligned}
+</span></p>
+</div></div>
+</section></section>
+<section>
+<section id="a-toy-example-why-unbiased-estimation-can-be-bad" class="title-slide slide level1 center" data-number="5">
+<h1><span class="header-section-number">5</span> A Toy Example: Why Unbiased Estimation Can Be Bad</h1>
+
+</section>
+<section id="setup-estimating-legs-per-dog" class="slide level2">
+<h2>Setup: Estimating Legs per Dog</h2>
+<p>Consider a whimsical population of just <span class="math inline">N=2</span> “clusters” (kennels) of dogs — kennel <span class="math inline">A</span> with <span class="math inline">M_A=30</span> dogs, and kennel <span class="math inline">B</span> with <span class="math inline">M_B=10</span> dogs. Every dog has exactly 4 legs, so the true population mean is trivially <span class="math inline">\bar y_U = 4</span> legs/dog. We take a one-stage cluster sample of <span class="math inline">n=1</span> kennel (each chosen with probability <span class="math inline">1/2</span>), observing all dogs in it.</p>
+</section>
+<section id="unbiased-estimation" class="slide level2">
+<h2>Unbiased Estimation</h2>
+<p><strong>Data Set 1: Kennel <span class="math inline">A</span> Selected</strong></p>
+<p><span class="math display">
+t_1 = 30\times 4 = 120, \qquad
+\hat t_{\text{unb}} = \frac{2}{1}(120) = 240, \qquad
+\hat{\bar y}_{\text{unb}} = \frac{240}{30+10} = 6
+</span></p>
+<p><strong>Data Set 2: Kennel <span class="math inline">B</span> Selected</strong></p>
+<p><span class="math display">
+t_2 = 10\times 4 = 40, \qquad
+\hat t_{\text{unb}} = \frac{2}{1}(40) = 80, \qquad
+\hat{\bar y}_{\text{unb}} = \frac{80}{30+10} = 2
+</span></p>
+</section>
+<section id="hatbar-y_textunb-is-unbiased-but-highly-variable" class="slide level2">
+<h2><span class="math inline">\hat{\bar y}_{\text{unb}}</span> Is Unbiased but Highly Variable</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\hat{\bar y}_{\text{unb}}</span></th>
+<th style="text-align: center;">6</th>
+<th style="text-align: center;">2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Probability</td>
+<td style="text-align: center;"><span class="math inline">1/2</span></td>
+<td style="text-align: center;"><span class="math inline">1/2</span></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">
+E[\hat{\bar y}_{\text{unb}}] = 6\times\tfrac12 + 2\times\tfrac12 = 4 = \bar y_U \quad\text{(unbiased!)}
+</span></p>
+<p>But <span class="math inline">\hat{\bar y}_{\text{unb}}</span> is <em>never</em> actually equal to 4 — it is always off by <span class="math inline">\pm 2</span>, because <span class="math inline">V(t_i)</span> is huge (kennel sizes 30 vs.&nbsp;10 are very different), even though every single dog has exactly 4 legs.</p>
+</section>
+<section id="the-ratio-estimator-fixes-this" class="slide level2">
+<h2>The Ratio Estimator Fixes This</h2>
+<p>For kennel <span class="math inline">A</span>: <span class="math inline">\hat{\bar y}_r = \dfrac{30\times4}{30}=4</span>. For kennel <span class="math inline">B</span>: <span class="math inline">\hat{\bar y}_r = \dfrac{10\times4}{10}=4</span>.</p>
+<p>Both possible samples give <strong>exactly</strong> <span class="math inline">\hat{\bar y}_r=4=\bar y_U</span>, so <span class="math display">
+V(\hat{\bar y}_r) = 0
+</span></p>
+<p>The ratio estimator completely cancels out the cluster-size variability that made <span class="math inline">\hat{\bar y}_{\text{unb}}</span> so unreliable — this is why ratio estimation (not unbiased estimation) is the standard approach for unequal-size clusters.</p>
+</section></section>
+<section>
+<section id="two-stage-cluster-sampling" class="title-slide slide level1 center" data-number="6">
+<h1><span class="header-section-number">6</span> Two-Stage Cluster Sampling</h1>
+
+</section>
+<section id="what-is-two-stage-cluster-sampling" class="slide level2">
+<h2>What Is Two-Stage Cluster Sampling?</h2>
+<p>When sampling every ssu in a selected psu is too costly, we can subsample:</p>
+<ol type="1">
+<li>Select an SRS <span class="math inline">\mathcal S</span> of <span class="math inline">n</span> psus from the population of <span class="math inline">N</span> psus.</li>
+<li>Select an SRS of <span class="math inline">m_i</span> ssus from each selected psu <span class="math inline">i</span> (this sample is <span class="math inline">\mathcal S_i</span>).</li>
+</ol>
+<p>Since we no longer observe every ssu in a sampled psu, we must <strong>estimate</strong> each psu total: <span class="math display">
+\hat t_i = \sum_{j\in\mathcal S_i} \frac{M_i}{m_i}y_{ij} = M_i\bar y_i
+</span></p>
+</section>
+<section id="unbiased-estimator-of-the-total" class="slide level2">
+<h2>Unbiased Estimator of the Total</h2>
+<p><span class="math display">
+\hat t_{\text{unb}} = \frac Nn \sum_{i\in\mathcal S} \hat t_i = \sum_{i\in\mathcal S}\sum_{j\in\mathcal S_i} w_{ij}y_{ij}, \qquad w_{ij} = \frac{NM_i}{nm_i}
+</span></p>
+<p>The variance now has <strong>two</strong> sources: variability <em>between</em> psus, and variability from subsampling <em>within</em> each sampled psu: <span class="math display">
+V(\hat t_{\text{unb}}) = N^2\Big(1-\frac nN\Big)\frac{S_t^2}{n}
++ \frac Nn \sum_{i=1}^N \Big(1-\frac{m_i}{M_i}\Big)M_i^2\frac{S_i^2}{m_i}
+</span></p>
+<p>The first term is exactly the one-stage cluster variance; the second term is the extra cost of not observing every ssu in each sampled psu.</p>
+</section>
+<section id="ratio-estimation-for-two-stage-sampling" class="slide level2">
+<h2>Ratio Estimation for Two-Stage Sampling</h2>
+<p>As before, estimating <span class="math inline">\bar y_U</span> is a ratio estimation problem with <span class="math inline">y_i=\hat t_i=M_i\bar y_i</span> and <span class="math inline">x_i=M_i</span>: <span class="math display">
+\hat{\bar y}_r = \frac{\sum_{i\in\mathcal S}\hat t_i}{\sum_{i\in\mathcal S}M_i} = \frac{\sum_{i\in\mathcal S}M_i\bar y_i}{\sum_{i\in\mathcal S}M_i}
+</span> <span class="math display">
+\hat V(\hat{\bar y}_r) = \frac{1}{\bar M^2}\Big(1-\frac nN\Big)\frac{s_r^2}{n}
++ \frac{1}{nN\bar M^2}\sum_{i\in\mathcal S}M_i^2\Big(1-\frac{m_i}{M_i}\Big)\frac{s_i^2}{m_i}
+</span> where <span class="math inline">s_r^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}(M_i\bar y_i - M_i\hat{\bar y}_r)^2</span>. The second term is often negligible compared with the first.</p>
+</section>
+<section id="example-american-coot-egg-volumes" class="slide level2">
+<h2>Example: American Coot Egg Volumes</h2>
+<p>Data from Arnold’s (1991) study of egg size and volume of American Coot eggs in Minnedosa, Manitoba. We look at the volumes of a subsample of eggs within clutches (nests) having at least two eggs measured — the clutches are the psus, and eggs within a clutch are the ssus.</p>
+</section>
+<section id="figure-egg-volume-by-clutch" class="slide level2">
+<h2>Figure: Egg Volume by Clutch</h2>
+
+<img data-src="figures/coots-egg-volume.png" class="quarto-figure quarto-figure-center r-stretch" style="width:95.0%"><p>The right panel orders clutches by their mean volume, connecting the two measured eggs in each clutch — there is wide variation between clutches (clutch means climb steadily left to right), but the two eggs <em>within</em> a clutch usually agree closely. This indicates eggs within the same clutch are much more similar than two randomly chosen eggs from different clutches.</p>
+</section>
+<section id="example-coots-spreadsheet-calculation" class="slide level2">
+<h2>Example: Coots — Spreadsheet Calculation</h2>
+<p>As in the algebra example, <span class="math inline">\hat t_{ri}=\hat{\bar y}_r M_i</span> and <span class="math inline">e_i=\hat t_i-\hat t_{ri}</span> come from the ratio line fit to <span class="math inline">(\hat t_i, M_i)</span> across all <span class="math inline">n=184</span> clutches (scroll for more rows):</p>
+<div class="cell" data-layout-align="center">
+<div id="tbl-coots-spreadsheet" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-coots-spreadsheet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2
+</figcaption>
+<div aria-describedby="tbl-coots-spreadsheet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="vpvnlcueor" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:600px;">
+<style>#vpvnlcueor table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#vpvnlcueor thead, #vpvnlcueor tbody, #vpvnlcueor tfoot, #vpvnlcueor tr, #vpvnlcueor td, #vpvnlcueor th {
+  border-style: none;
+}
+
+#vpvnlcueor p {
+  margin: 0;
+  padding: 0;
+}
+
+#vpvnlcueor .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 28px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vpvnlcueor .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#vpvnlcueor .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vpvnlcueor .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vpvnlcueor .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vpvnlcueor .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vpvnlcueor .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vpvnlcueor .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vpvnlcueor .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vpvnlcueor .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vpvnlcueor .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vpvnlcueor .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vpvnlcueor .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#vpvnlcueor .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#vpvnlcueor .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vpvnlcueor .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vpvnlcueor .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vpvnlcueor .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vpvnlcueor .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vpvnlcueor .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vpvnlcueor .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vpvnlcueor .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#vpvnlcueor .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vpvnlcueor .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vpvnlcueor .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vpvnlcueor .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vpvnlcueor .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vpvnlcueor .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vpvnlcueor .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vpvnlcueor .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vpvnlcueor .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vpvnlcueor .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vpvnlcueor .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vpvnlcueor .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vpvnlcueor .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vpvnlcueor .gt_left {
+  text-align: left;
+}
+
+#vpvnlcueor .gt_center {
+  text-align: center;
+}
+
+#vpvnlcueor .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vpvnlcueor .gt_font_normal {
+  font-weight: normal;
+}
+
+#vpvnlcueor .gt_font_bold {
+  font-weight: bold;
+}
+
+#vpvnlcueor .gt_font_italic {
+  font-style: italic;
+}
+
+#vpvnlcueor .gt_super {
+  font-size: 65%;
+}
+
+#vpvnlcueor .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#vpvnlcueor .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vpvnlcueor .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#vpvnlcueor .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#vpvnlcueor .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#vpvnlcueor .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#vpvnlcueor .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#vpvnlcueor .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#vpvnlcueor div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="a::stub" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="Clutch" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Clutch</th>
+<th id="Mi" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">M_i</span></th>
+<th id="ybari" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\bar y_i</span></th>
+<th id="ti" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\hat t_i</span></th>
+<th id="yhat" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\hat t_{ri}</span></th>
+<th id="ei" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">e_i</span></th>
+<th id="ei2" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">e_i^2</span></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<th id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_1 Clutch">1</td>
+<td class="gt_row gt_right" headers="stub_1_1 Mi">13</td>
+<td class="gt_row gt_right" headers="stub_1_1 ybari">3.86</td>
+<td class="gt_row gt_right" headers="stub_1_1 ti">50.24</td>
+<td class="gt_row gt_right" headers="stub_1_1 yhat">32.38</td>
+<td class="gt_row gt_right" headers="stub_1_1 ei">17.86</td>
+<td class="gt_row gt_right" headers="stub_1_1 ei2">318.92</td>
+</tr>
+<tr class="even">
+<th id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_2 Clutch">2</td>
+<td class="gt_row gt_right" headers="stub_1_2 Mi">13</td>
+<td class="gt_row gt_right" headers="stub_1_2 ybari">4.19</td>
+<td class="gt_row gt_right" headers="stub_1_2 ti">54.52</td>
+<td class="gt_row gt_right" headers="stub_1_2 yhat">32.38</td>
+<td class="gt_row gt_right" headers="stub_1_2 ei">22.15</td>
+<td class="gt_row gt_right" headers="stub_1_2 ei2">490.48</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_3 Clutch">3</td>
+<td class="gt_row gt_right" headers="stub_1_3 Mi">6</td>
+<td class="gt_row gt_right" headers="stub_1_3 ybari">0.92</td>
+<td class="gt_row gt_right" headers="stub_1_3 ti">5.50</td>
+<td class="gt_row gt_right" headers="stub_1_3 yhat">14.94</td>
+<td class="gt_row gt_right" headers="stub_1_3 ei">−9.45</td>
+<td class="gt_row gt_right" headers="stub_1_3 ei2">89.23</td>
+</tr>
+<tr class="even">
+<th id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_4 Clutch">4</td>
+<td class="gt_row gt_right" headers="stub_1_4 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_4 ybari">3.00</td>
+<td class="gt_row gt_right" headers="stub_1_4 ti">32.98</td>
+<td class="gt_row gt_right" headers="stub_1_4 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_4 ei">5.59</td>
+<td class="gt_row gt_right" headers="stub_1_4 ei2">31.20</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_5" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_5 Clutch">5</td>
+<td class="gt_row gt_right" headers="stub_1_5 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_5 ybari">2.50</td>
+<td class="gt_row gt_right" headers="stub_1_5 ti">24.96</td>
+<td class="gt_row gt_right" headers="stub_1_5 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_5 ei">0.05</td>
+<td class="gt_row gt_right" headers="stub_1_5 ei2">0.00</td>
+</tr>
+<tr class="even">
+<th id="stub_1_6" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_6 Clutch">6</td>
+<td class="gt_row gt_right" headers="stub_1_6 Mi">13</td>
+<td class="gt_row gt_right" headers="stub_1_6 ybari">3.98</td>
+<td class="gt_row gt_right" headers="stub_1_6 ti">51.80</td>
+<td class="gt_row gt_right" headers="stub_1_6 yhat">32.38</td>
+<td class="gt_row gt_right" headers="stub_1_6 ei">19.42</td>
+<td class="gt_row gt_right" headers="stub_1_6 ei2">377.05</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_7" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_7 Clutch">7</td>
+<td class="gt_row gt_right" headers="stub_1_7 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_7 ybari">1.93</td>
+<td class="gt_row gt_right" headers="stub_1_7 ti">17.34</td>
+<td class="gt_row gt_right" headers="stub_1_7 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_7 ei">−5.07</td>
+<td class="gt_row gt_right" headers="stub_1_7 ei2">25.72</td>
+</tr>
+<tr class="even">
+<th id="stub_1_8" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_8 Clutch">8</td>
+<td class="gt_row gt_right" headers="stub_1_8 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_8 ybari">2.96</td>
+<td class="gt_row gt_right" headers="stub_1_8 ti">32.58</td>
+<td class="gt_row gt_right" headers="stub_1_8 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_8 ei">5.18</td>
+<td class="gt_row gt_right" headers="stub_1_8 ei2">26.84</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_9" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_9 Clutch">9</td>
+<td class="gt_row gt_right" headers="stub_1_9 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_9 ybari">3.46</td>
+<td class="gt_row gt_right" headers="stub_1_9 ti">41.53</td>
+<td class="gt_row gt_right" headers="stub_1_9 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_9 ei">11.64</td>
+<td class="gt_row gt_right" headers="stub_1_9 ei2">135.49</td>
+</tr>
+<tr class="even">
+<th id="stub_1_10" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_10 Clutch">10</td>
+<td class="gt_row gt_right" headers="stub_1_10 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_10 ybari">2.96</td>
+<td class="gt_row gt_right" headers="stub_1_10 ti">32.58</td>
+<td class="gt_row gt_right" headers="stub_1_10 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_10 ei">5.18</td>
+<td class="gt_row gt_right" headers="stub_1_10 ei2">26.84</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_11" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_11 Clutch">11</td>
+<td class="gt_row gt_right" headers="stub_1_11 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_11 ybari">3.50</td>
+<td class="gt_row gt_right" headers="stub_1_11 ti">41.99</td>
+<td class="gt_row gt_right" headers="stub_1_11 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_11 ei">12.10</td>
+<td class="gt_row gt_right" headers="stub_1_11 ei2">146.41</td>
+</tr>
+<tr class="even">
+<th id="stub_1_12" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_12 Clutch">12</td>
+<td class="gt_row gt_right" headers="stub_1_12 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_12 ybari">3.00</td>
+<td class="gt_row gt_right" headers="stub_1_12 ti">33.00</td>
+<td class="gt_row gt_right" headers="stub_1_12 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_12 ei">5.60</td>
+<td class="gt_row gt_right" headers="stub_1_12 ei2">31.38</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_13" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_13 Clutch">13</td>
+<td class="gt_row gt_right" headers="stub_1_13 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_13 ybari">3.57</td>
+<td class="gt_row gt_right" headers="stub_1_13 ti">42.80</td>
+<td class="gt_row gt_right" headers="stub_1_13 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_13 ei">12.91</td>
+<td class="gt_row gt_right" headers="stub_1_13 ei2">166.68</td>
+</tr>
+<tr class="even">
+<th id="stub_1_14" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_14 Clutch">14</td>
+<td class="gt_row gt_right" headers="stub_1_14 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_14 ybari">2.99</td>
+<td class="gt_row gt_right" headers="stub_1_14 ti">32.85</td>
+<td class="gt_row gt_right" headers="stub_1_14 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_14 ei">5.45</td>
+<td class="gt_row gt_right" headers="stub_1_14 ei2">29.71</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_15" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_15 Clutch">15</td>
+<td class="gt_row gt_right" headers="stub_1_15 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_15 ybari">2.98</td>
+<td class="gt_row gt_right" headers="stub_1_15 ti">32.81</td>
+<td class="gt_row gt_right" headers="stub_1_15 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_15 ei">5.42</td>
+<td class="gt_row gt_right" headers="stub_1_15 ei2">29.34</td>
+</tr>
+<tr class="even">
+<th id="stub_1_16" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_16 Clutch">16</td>
+<td class="gt_row gt_right" headers="stub_1_16 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_16 ybari">2.41</td>
+<td class="gt_row gt_right" headers="stub_1_16 ti">24.07</td>
+<td class="gt_row gt_right" headers="stub_1_16 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_16 ei">−0.84</td>
+<td class="gt_row gt_right" headers="stub_1_16 ei2">0.70</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_17" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_17 Clutch">17</td>
+<td class="gt_row gt_right" headers="stub_1_17 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_17 ybari">2.01</td>
+<td class="gt_row gt_right" headers="stub_1_17 ti">18.09</td>
+<td class="gt_row gt_right" headers="stub_1_17 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_17 ei">−4.32</td>
+<td class="gt_row gt_right" headers="stub_1_17 ei2">18.69</td>
+</tr>
+<tr class="even">
+<th id="stub_1_18" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_18 Clutch">18</td>
+<td class="gt_row gt_right" headers="stub_1_18 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_18 ybari">2.44</td>
+<td class="gt_row gt_right" headers="stub_1_18 ti">24.37</td>
+<td class="gt_row gt_right" headers="stub_1_18 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_18 ei">−0.53</td>
+<td class="gt_row gt_right" headers="stub_1_18 ei2">0.28</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_19" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_19 Clutch">19</td>
+<td class="gt_row gt_right" headers="stub_1_19 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_19 ybari">2.93</td>
+<td class="gt_row gt_right" headers="stub_1_19 ti">32.19</td>
+<td class="gt_row gt_right" headers="stub_1_19 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_19 ei">4.79</td>
+<td class="gt_row gt_right" headers="stub_1_19 ei2">22.97</td>
+</tr>
+<tr class="even">
+<th id="stub_1_20" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_20 Clutch">20</td>
+<td class="gt_row gt_right" headers="stub_1_20 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_20 ybari">2.95</td>
+<td class="gt_row gt_right" headers="stub_1_20 ti">32.42</td>
+<td class="gt_row gt_right" headers="stub_1_20 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_20 ei">5.03</td>
+<td class="gt_row gt_right" headers="stub_1_20 ei2">25.29</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_21" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_21 Clutch">21</td>
+<td class="gt_row gt_right" headers="stub_1_21 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_21 ybari">2.54</td>
+<td class="gt_row gt_right" headers="stub_1_21 ti">25.38</td>
+<td class="gt_row gt_right" headers="stub_1_21 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_21 ei">0.47</td>
+<td class="gt_row gt_right" headers="stub_1_21 ei2">0.22</td>
+</tr>
+<tr class="even">
+<th id="stub_1_22" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_22 Clutch">22</td>
+<td class="gt_row gt_right" headers="stub_1_22 Mi">13</td>
+<td class="gt_row gt_right" headers="stub_1_22 ybari">4.27</td>
+<td class="gt_row gt_right" headers="stub_1_22 ti">55.50</td>
+<td class="gt_row gt_right" headers="stub_1_22 yhat">32.38</td>
+<td class="gt_row gt_right" headers="stub_1_22 ei">23.12</td>
+<td class="gt_row gt_right" headers="stub_1_22 ei2">534.60</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_23" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_23 Clutch">23</td>
+<td class="gt_row gt_right" headers="stub_1_23 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_23 ybari">3.77</td>
+<td class="gt_row gt_right" headers="stub_1_23 ti">45.18</td>
+<td class="gt_row gt_right" headers="stub_1_23 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_23 ei">15.30</td>
+<td class="gt_row gt_right" headers="stub_1_23 ei2">234.02</td>
+</tr>
+<tr class="even">
+<th id="stub_1_24" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_24 Clutch">24</td>
+<td class="gt_row gt_right" headers="stub_1_24 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_24 ybari">2.56</td>
+<td class="gt_row gt_right" headers="stub_1_24 ti">25.64</td>
+<td class="gt_row gt_right" headers="stub_1_24 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_24 ei">0.74</td>
+<td class="gt_row gt_right" headers="stub_1_24 ei2">0.54</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_25" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_25 Clutch">25</td>
+<td class="gt_row gt_right" headers="stub_1_25 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_25 ybari">1.96</td>
+<td class="gt_row gt_right" headers="stub_1_25 ti">17.66</td>
+<td class="gt_row gt_right" headers="stub_1_25 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_25 ei">−4.76</td>
+<td class="gt_row gt_right" headers="stub_1_25 ei2">22.63</td>
+</tr>
+<tr class="even">
+<th id="stub_1_26" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_26 Clutch">26</td>
+<td class="gt_row gt_right" headers="stub_1_26 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_26 ybari">3.48</td>
+<td class="gt_row gt_right" headers="stub_1_26 ti">41.79</td>
+<td class="gt_row gt_right" headers="stub_1_26 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_26 ei">11.90</td>
+<td class="gt_row gt_right" headers="stub_1_26 ei2">141.68</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_27" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_27 Clutch">27</td>
+<td class="gt_row gt_right" headers="stub_1_27 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_27 ybari">2.57</td>
+<td class="gt_row gt_right" headers="stub_1_27 ti">25.74</td>
+<td class="gt_row gt_right" headers="stub_1_27 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_27 ei">0.84</td>
+<td class="gt_row gt_right" headers="stub_1_27 ei2">0.70</td>
+</tr>
+<tr class="even">
+<th id="stub_1_28" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_28 Clutch">28</td>
+<td class="gt_row gt_right" headers="stub_1_28 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_28 ybari">1.96</td>
+<td class="gt_row gt_right" headers="stub_1_28 ti">17.60</td>
+<td class="gt_row gt_right" headers="stub_1_28 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_28 ei">−4.81</td>
+<td class="gt_row gt_right" headers="stub_1_28 ei2">23.16</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_29" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_29 Clutch">29</td>
+<td class="gt_row gt_right" headers="stub_1_29 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_29 ybari">3.41</td>
+<td class="gt_row gt_right" headers="stub_1_29 ti">40.89</td>
+<td class="gt_row gt_right" headers="stub_1_29 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_29 ei">11.00</td>
+<td class="gt_row gt_right" headers="stub_1_29 ei2">121.11</td>
+</tr>
+<tr class="even">
+<th id="stub_1_30" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_30 Clutch">30</td>
+<td class="gt_row gt_right" headers="stub_1_30 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_30 ybari">2.96</td>
+<td class="gt_row gt_right" headers="stub_1_30 ti">32.51</td>
+<td class="gt_row gt_right" headers="stub_1_30 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_30 ei">5.11</td>
+<td class="gt_row gt_right" headers="stub_1_30 ei2">26.14</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_31" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_31 Clutch">31</td>
+<td class="gt_row gt_right" headers="stub_1_31 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_31 ybari">2.50</td>
+<td class="gt_row gt_right" headers="stub_1_31 ti">25.05</td>
+<td class="gt_row gt_right" headers="stub_1_31 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_31 ei">0.14</td>
+<td class="gt_row gt_right" headers="stub_1_31 ei2">0.02</td>
+</tr>
+<tr class="even">
+<th id="stub_1_32" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_32 Clutch">32</td>
+<td class="gt_row gt_right" headers="stub_1_32 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_32 ybari">1.56</td>
+<td class="gt_row gt_right" headers="stub_1_32 ti">12.48</td>
+<td class="gt_row gt_right" headers="stub_1_32 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_32 ei">−7.45</td>
+<td class="gt_row gt_right" headers="stub_1_32 ei2">55.43</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_33" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_33 Clutch">33</td>
+<td class="gt_row gt_right" headers="stub_1_33 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_33 ybari">2.49</td>
+<td class="gt_row gt_right" headers="stub_1_33 ti">24.92</td>
+<td class="gt_row gt_right" headers="stub_1_33 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_33 ei">0.01</td>
+<td class="gt_row gt_right" headers="stub_1_33 ei2">0.00</td>
+</tr>
+<tr class="even">
+<th id="stub_1_34" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_34 Clutch">34</td>
+<td class="gt_row gt_right" headers="stub_1_34 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_34 ybari">2.49</td>
+<td class="gt_row gt_right" headers="stub_1_34 ti">24.87</td>
+<td class="gt_row gt_right" headers="stub_1_34 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_34 ei">−0.04</td>
+<td class="gt_row gt_right" headers="stub_1_34 ei2">0.00</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_35" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_35 Clutch">35</td>
+<td class="gt_row gt_right" headers="stub_1_35 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_35 ybari">1.99</td>
+<td class="gt_row gt_right" headers="stub_1_35 ti">17.88</td>
+<td class="gt_row gt_right" headers="stub_1_35 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_35 ei">−4.54</td>
+<td class="gt_row gt_right" headers="stub_1_35 ei2">20.57</td>
+</tr>
+<tr class="even">
+<th id="stub_1_36" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_36 Clutch">36</td>
+<td class="gt_row gt_right" headers="stub_1_36 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_36 ybari">1.93</td>
+<td class="gt_row gt_right" headers="stub_1_36 ti">17.33</td>
+<td class="gt_row gt_right" headers="stub_1_36 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_36 ei">−5.09</td>
+<td class="gt_row gt_right" headers="stub_1_36 ei2">25.91</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_37" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_37 Clutch">37</td>
+<td class="gt_row gt_right" headers="stub_1_37 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_37 ybari">1.50</td>
+<td class="gt_row gt_right" headers="stub_1_37 ti">11.98</td>
+<td class="gt_row gt_right" headers="stub_1_37 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_37 ei">−7.94</td>
+<td class="gt_row gt_right" headers="stub_1_37 ei2">63.12</td>
+</tr>
+<tr class="even">
+<th id="stub_1_38" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_38 Clutch">38</td>
+<td class="gt_row gt_right" headers="stub_1_38 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_38 ybari">1.93</td>
+<td class="gt_row gt_right" headers="stub_1_38 ti">17.41</td>
+<td class="gt_row gt_right" headers="stub_1_38 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_38 ei">−5.01</td>
+<td class="gt_row gt_right" headers="stub_1_38 ei2">25.07</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_39" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_39 Clutch">39</td>
+<td class="gt_row gt_right" headers="stub_1_39 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_39 ybari">1.56</td>
+<td class="gt_row gt_right" headers="stub_1_39 ti">12.52</td>
+<td class="gt_row gt_right" headers="stub_1_39 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_39 ei">−7.41</td>
+<td class="gt_row gt_right" headers="stub_1_39 ei2">54.85</td>
+</tr>
+<tr class="even">
+<th id="stub_1_40" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_40 Clutch">40</td>
+<td class="gt_row gt_right" headers="stub_1_40 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_40 ybari">2.41</td>
+<td class="gt_row gt_right" headers="stub_1_40 ti">24.13</td>
+<td class="gt_row gt_right" headers="stub_1_40 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_40 ei">−0.77</td>
+<td class="gt_row gt_right" headers="stub_1_40 ei2">0.60</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_41" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_41 Clutch">41</td>
+<td class="gt_row gt_right" headers="stub_1_41 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_41 ybari">2.82</td>
+<td class="gt_row gt_right" headers="stub_1_41 ti">31.01</td>
+<td class="gt_row gt_right" headers="stub_1_41 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_41 ei">3.61</td>
+<td class="gt_row gt_right" headers="stub_1_41 ei2">13.04</td>
+</tr>
+<tr class="even">
+<th id="stub_1_42" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_42 Clutch">42</td>
+<td class="gt_row gt_right" headers="stub_1_42 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_42 ybari">1.23</td>
+<td class="gt_row gt_right" headers="stub_1_42 ti">8.64</td>
+<td class="gt_row gt_right" headers="stub_1_42 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_42 ei">−8.80</td>
+<td class="gt_row gt_right" headers="stub_1_42 ei2">77.36</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_43" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_43 Clutch">43</td>
+<td class="gt_row gt_right" headers="stub_1_43 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_43 ybari">1.26</td>
+<td class="gt_row gt_right" headers="stub_1_43 ti">8.83</td>
+<td class="gt_row gt_right" headers="stub_1_43 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_43 ei">−8.61</td>
+<td class="gt_row gt_right" headers="stub_1_43 ei2">74.11</td>
+</tr>
+<tr class="even">
+<th id="stub_1_44" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_44 Clutch">44</td>
+<td class="gt_row gt_right" headers="stub_1_44 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_44 ybari">3.03</td>
+<td class="gt_row gt_right" headers="stub_1_44 ti">33.34</td>
+<td class="gt_row gt_right" headers="stub_1_44 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_44 ei">5.94</td>
+<td class="gt_row gt_right" headers="stub_1_44 ei2">35.28</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_45" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_45 Clutch">45</td>
+<td class="gt_row gt_right" headers="stub_1_45 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_45 ybari">2.47</td>
+<td class="gt_row gt_right" headers="stub_1_45 ti">24.72</td>
+<td class="gt_row gt_right" headers="stub_1_45 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_45 ei">−0.19</td>
+<td class="gt_row gt_right" headers="stub_1_45 ei2">0.04</td>
+</tr>
+<tr class="even">
+<th id="stub_1_46" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_46 Clutch">46</td>
+<td class="gt_row gt_right" headers="stub_1_46 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_46 ybari">2.08</td>
+<td class="gt_row gt_right" headers="stub_1_46 ti">18.68</td>
+<td class="gt_row gt_right" headers="stub_1_46 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_46 ei">−3.73</td>
+<td class="gt_row gt_right" headers="stub_1_46 ei2">13.93</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_47" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_47 Clutch">47</td>
+<td class="gt_row gt_right" headers="stub_1_47 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_47 ybari">3.16</td>
+<td class="gt_row gt_right" headers="stub_1_47 ti">34.75</td>
+<td class="gt_row gt_right" headers="stub_1_47 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_47 ei">7.36</td>
+<td class="gt_row gt_right" headers="stub_1_47 ei2">54.12</td>
+</tr>
+<tr class="even">
+<th id="stub_1_48" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_48 Clutch">48</td>
+<td class="gt_row gt_right" headers="stub_1_48 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_48 ybari">1.93</td>
+<td class="gt_row gt_right" headers="stub_1_48 ti">17.41</td>
+<td class="gt_row gt_right" headers="stub_1_48 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_48 ei">−5.01</td>
+<td class="gt_row gt_right" headers="stub_1_48 ei2">25.07</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_49" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_49 Clutch">49</td>
+<td class="gt_row gt_right" headers="stub_1_49 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_49 ybari">1.91</td>
+<td class="gt_row gt_right" headers="stub_1_49 ti">17.23</td>
+<td class="gt_row gt_right" headers="stub_1_49 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_49 ei">−5.18</td>
+<td class="gt_row gt_right" headers="stub_1_49 ei2">26.86</td>
+</tr>
+<tr class="even">
+<th id="stub_1_50" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_50 Clutch">50</td>
+<td class="gt_row gt_right" headers="stub_1_50 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_50 ybari">1.59</td>
+<td class="gt_row gt_right" headers="stub_1_50 ti">12.74</td>
+<td class="gt_row gt_right" headers="stub_1_50 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_50 ei">−7.19</td>
+<td class="gt_row gt_right" headers="stub_1_50 ei2">51.63</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_51" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_51 Clutch">51</td>
+<td class="gt_row gt_right" headers="stub_1_51 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_51 ybari">2.47</td>
+<td class="gt_row gt_right" headers="stub_1_51 ti">24.70</td>
+<td class="gt_row gt_right" headers="stub_1_51 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_51 ei">−0.20</td>
+<td class="gt_row gt_right" headers="stub_1_51 ei2">0.04</td>
+</tr>
+<tr class="even">
+<th id="stub_1_52" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_52 Clutch">52</td>
+<td class="gt_row gt_right" headers="stub_1_52 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_52 ybari">3.04</td>
+<td class="gt_row gt_right" headers="stub_1_52 ti">33.47</td>
+<td class="gt_row gt_right" headers="stub_1_52 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_52 ei">6.07</td>
+<td class="gt_row gt_right" headers="stub_1_52 ei2">36.90</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_53" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_53 Clutch">53</td>
+<td class="gt_row gt_right" headers="stub_1_53 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_53 ybari">2.06</td>
+<td class="gt_row gt_right" headers="stub_1_53 ti">18.55</td>
+<td class="gt_row gt_right" headers="stub_1_53 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_53 ei">−3.86</td>
+<td class="gt_row gt_right" headers="stub_1_53 ei2">14.91</td>
+</tr>
+<tr class="even">
+<th id="stub_1_54" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_54 Clutch">54</td>
+<td class="gt_row gt_right" headers="stub_1_54 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_54 ybari">2.43</td>
+<td class="gt_row gt_right" headers="stub_1_54 ti">24.26</td>
+<td class="gt_row gt_right" headers="stub_1_54 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_54 ei">−0.65</td>
+<td class="gt_row gt_right" headers="stub_1_54 ei2">0.42</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_55" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_55 Clutch">55</td>
+<td class="gt_row gt_right" headers="stub_1_55 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_55 ybari">1.58</td>
+<td class="gt_row gt_right" headers="stub_1_55 ti">12.62</td>
+<td class="gt_row gt_right" headers="stub_1_55 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_55 ei">−7.31</td>
+<td class="gt_row gt_right" headers="stub_1_55 ei2">53.42</td>
+</tr>
+<tr class="even">
+<th id="stub_1_56" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_56 Clutch">56</td>
+<td class="gt_row gt_right" headers="stub_1_56 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_56 ybari">1.90</td>
+<td class="gt_row gt_right" headers="stub_1_56 ti">17.11</td>
+<td class="gt_row gt_right" headers="stub_1_56 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_56 ei">−5.30</td>
+<td class="gt_row gt_right" headers="stub_1_56 ei2">28.12</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_57" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_57 Clutch">57</td>
+<td class="gt_row gt_right" headers="stub_1_57 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_57 ybari">2.64</td>
+<td class="gt_row gt_right" headers="stub_1_57 ti">26.36</td>
+<td class="gt_row gt_right" headers="stub_1_57 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_57 ei">1.46</td>
+<td class="gt_row gt_right" headers="stub_1_57 ei2">2.13</td>
+</tr>
+<tr class="even">
+<th id="stub_1_58" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_58 Clutch">58</td>
+<td class="gt_row gt_right" headers="stub_1_58 Mi">6</td>
+<td class="gt_row gt_right" headers="stub_1_58 ybari">0.88</td>
+<td class="gt_row gt_right" headers="stub_1_58 ti">5.27</td>
+<td class="gt_row gt_right" headers="stub_1_58 yhat">14.94</td>
+<td class="gt_row gt_right" headers="stub_1_58 ei">−9.68</td>
+<td class="gt_row gt_right" headers="stub_1_58 ei2">93.62</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_59" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_59 Clutch">59</td>
+<td class="gt_row gt_right" headers="stub_1_59 Mi">6</td>
+<td class="gt_row gt_right" headers="stub_1_59 ybari">0.88</td>
+<td class="gt_row gt_right" headers="stub_1_59 ti">5.27</td>
+<td class="gt_row gt_right" headers="stub_1_59 yhat">14.94</td>
+<td class="gt_row gt_right" headers="stub_1_59 ei">−9.67</td>
+<td class="gt_row gt_right" headers="stub_1_59 ei2">93.57</td>
+</tr>
+<tr class="even">
+<th id="stub_1_60" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_60 Clutch">60</td>
+<td class="gt_row gt_right" headers="stub_1_60 Mi">6</td>
+<td class="gt_row gt_right" headers="stub_1_60 ybari">0.90</td>
+<td class="gt_row gt_right" headers="stub_1_60 ti">5.42</td>
+<td class="gt_row gt_right" headers="stub_1_60 yhat">14.94</td>
+<td class="gt_row gt_right" headers="stub_1_60 ei">−9.53</td>
+<td class="gt_row gt_right" headers="stub_1_60 ei2">90.78</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_61" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_61 Clutch">61</td>
+<td class="gt_row gt_right" headers="stub_1_61 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_61 ybari">1.49</td>
+<td class="gt_row gt_right" headers="stub_1_61 ti">11.95</td>
+<td class="gt_row gt_right" headers="stub_1_61 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_61 ei">−7.97</td>
+<td class="gt_row gt_right" headers="stub_1_61 ei2">63.53</td>
+</tr>
+<tr class="even">
+<th id="stub_1_62" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_62 Clutch">62</td>
+<td class="gt_row gt_right" headers="stub_1_62 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_62 ybari">1.60</td>
+<td class="gt_row gt_right" headers="stub_1_62 ti">12.78</td>
+<td class="gt_row gt_right" headers="stub_1_62 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_62 ei">−7.15</td>
+<td class="gt_row gt_right" headers="stub_1_62 ei2">51.07</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_63" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_63 Clutch">63</td>
+<td class="gt_row gt_right" headers="stub_1_63 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_63 ybari">1.50</td>
+<td class="gt_row gt_right" headers="stub_1_63 ti">11.98</td>
+<td class="gt_row gt_right" headers="stub_1_63 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_63 ei">−7.94</td>
+<td class="gt_row gt_right" headers="stub_1_63 ei2">63.12</td>
+</tr>
+<tr class="even">
+<th id="stub_1_64" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_64 Clutch">64</td>
+<td class="gt_row gt_right" headers="stub_1_64 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_64 ybari">2.04</td>
+<td class="gt_row gt_right" headers="stub_1_64 ti">18.38</td>
+<td class="gt_row gt_right" headers="stub_1_64 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_64 ei">−4.04</td>
+<td class="gt_row gt_right" headers="stub_1_64 ei2">16.29</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_65" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_65 Clutch">65</td>
+<td class="gt_row gt_right" headers="stub_1_65 Mi">6</td>
+<td class="gt_row gt_right" headers="stub_1_65 ybari">0.81</td>
+<td class="gt_row gt_right" headers="stub_1_65 ti">4.88</td>
+<td class="gt_row gt_right" headers="stub_1_65 yhat">14.94</td>
+<td class="gt_row gt_right" headers="stub_1_65 ei">−10.06</td>
+<td class="gt_row gt_right" headers="stub_1_65 ei2">101.24</td>
+</tr>
+<tr class="even">
+<th id="stub_1_66" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_66 Clutch">66</td>
+<td class="gt_row gt_right" headers="stub_1_66 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_66 ybari">1.20</td>
+<td class="gt_row gt_right" headers="stub_1_66 ti">8.43</td>
+<td class="gt_row gt_right" headers="stub_1_66 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_66 ei">−9.00</td>
+<td class="gt_row gt_right" headers="stub_1_66 ei2">81.08</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_67" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_67 Clutch">67</td>
+<td class="gt_row gt_right" headers="stub_1_67 Mi">5</td>
+<td class="gt_row gt_right" headers="stub_1_67 ybari">0.66</td>
+<td class="gt_row gt_right" headers="stub_1_67 ti">3.30</td>
+<td class="gt_row gt_right" headers="stub_1_67 yhat">12.45</td>
+<td class="gt_row gt_right" headers="stub_1_67 ei">−9.15</td>
+<td class="gt_row gt_right" headers="stub_1_67 ei2">83.77</td>
+</tr>
+<tr class="even">
+<th id="stub_1_68" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_68 Clutch">68</td>
+<td class="gt_row gt_right" headers="stub_1_68 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_68 ybari">2.06</td>
+<td class="gt_row gt_right" headers="stub_1_68 ti">18.58</td>
+<td class="gt_row gt_right" headers="stub_1_68 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_68 ei">−3.83</td>
+<td class="gt_row gt_right" headers="stub_1_68 ei2">14.70</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_69" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_69 Clutch">69</td>
+<td class="gt_row gt_right" headers="stub_1_69 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_69 ybari">1.55</td>
+<td class="gt_row gt_right" headers="stub_1_69 ti">12.38</td>
+<td class="gt_row gt_right" headers="stub_1_69 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_69 ei">−7.54</td>
+<td class="gt_row gt_right" headers="stub_1_69 ei2">56.89</td>
+</tr>
+<tr class="even">
+<th id="stub_1_70" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_70 Clutch">70</td>
+<td class="gt_row gt_right" headers="stub_1_70 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_70 ybari">3.51</td>
+<td class="gt_row gt_right" headers="stub_1_70 ti">42.16</td>
+<td class="gt_row gt_right" headers="stub_1_70 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_70 ei">12.28</td>
+<td class="gt_row gt_right" headers="stub_1_70 ei2">150.68</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_71" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_71 Clutch">71</td>
+<td class="gt_row gt_right" headers="stub_1_71 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_71 ybari">2.52</td>
+<td class="gt_row gt_right" headers="stub_1_71 ti">25.24</td>
+<td class="gt_row gt_right" headers="stub_1_71 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_71 ei">0.33</td>
+<td class="gt_row gt_right" headers="stub_1_71 ei2">0.11</td>
+</tr>
+<tr class="even">
+<th id="stub_1_72" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_72 Clutch">72</td>
+<td class="gt_row gt_right" headers="stub_1_72 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_72 ybari">1.98</td>
+<td class="gt_row gt_right" headers="stub_1_72 ti">17.81</td>
+<td class="gt_row gt_right" headers="stub_1_72 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_72 ei">−4.61</td>
+<td class="gt_row gt_right" headers="stub_1_72 ei2">21.25</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_73" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_73 Clutch">73</td>
+<td class="gt_row gt_right" headers="stub_1_73 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_73 ybari">2.10</td>
+<td class="gt_row gt_right" headers="stub_1_73 ti">18.88</td>
+<td class="gt_row gt_right" headers="stub_1_73 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_73 ei">−3.54</td>
+<td class="gt_row gt_right" headers="stub_1_73 ei2">12.52</td>
+</tr>
+<tr class="even">
+<th id="stub_1_74" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_74 Clutch">74</td>
+<td class="gt_row gt_right" headers="stub_1_74 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_74 ybari">1.51</td>
+<td class="gt_row gt_right" headers="stub_1_74 ti">12.08</td>
+<td class="gt_row gt_right" headers="stub_1_74 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_74 ei">−7.85</td>
+<td class="gt_row gt_right" headers="stub_1_74 ei2">61.58</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_75" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_75 Clutch">75</td>
+<td class="gt_row gt_right" headers="stub_1_75 Mi">13</td>
+<td class="gt_row gt_right" headers="stub_1_75 ybari">3.92</td>
+<td class="gt_row gt_right" headers="stub_1_75 ti">50.92</td>
+<td class="gt_row gt_right" headers="stub_1_75 yhat">32.38</td>
+<td class="gt_row gt_right" headers="stub_1_75 ei">18.54</td>
+<td class="gt_row gt_right" headers="stub_1_75 ei2">343.86</td>
+</tr>
+<tr class="even">
+<th id="stub_1_76" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_76 Clutch">76</td>
+<td class="gt_row gt_right" headers="stub_1_76 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_76 ybari">2.09</td>
+<td class="gt_row gt_right" headers="stub_1_76 ti">18.80</td>
+<td class="gt_row gt_right" headers="stub_1_76 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_76 ei">−3.61</td>
+<td class="gt_row gt_right" headers="stub_1_76 ei2">13.04</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_77" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_77 Clutch">77</td>
+<td class="gt_row gt_right" headers="stub_1_77 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_77 ybari">2.48</td>
+<td class="gt_row gt_right" headers="stub_1_77 ti">24.79</td>
+<td class="gt_row gt_right" headers="stub_1_77 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_77 ei">−0.11</td>
+<td class="gt_row gt_right" headers="stub_1_77 ei2">0.01</td>
+</tr>
+<tr class="even">
+<th id="stub_1_78" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_78 Clutch">78</td>
+<td class="gt_row gt_right" headers="stub_1_78 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_78 ybari">1.59</td>
+<td class="gt_row gt_right" headers="stub_1_78 ti">12.69</td>
+<td class="gt_row gt_right" headers="stub_1_78 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_78 ei">−7.24</td>
+<td class="gt_row gt_right" headers="stub_1_78 ei2">52.38</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_79" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_79 Clutch">79</td>
+<td class="gt_row gt_right" headers="stub_1_79 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_79 ybari">3.04</td>
+<td class="gt_row gt_right" headers="stub_1_79 ti">33.39</td>
+<td class="gt_row gt_right" headers="stub_1_79 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_79 ei">6.00</td>
+<td class="gt_row gt_right" headers="stub_1_79 ei2">35.96</td>
+</tr>
+<tr class="even">
+<th id="stub_1_80" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_80 Clutch">80</td>
+<td class="gt_row gt_right" headers="stub_1_80 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_80 ybari">1.58</td>
+<td class="gt_row gt_right" headers="stub_1_80 ti">12.63</td>
+<td class="gt_row gt_right" headers="stub_1_80 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_80 ei">−7.30</td>
+<td class="gt_row gt_right" headers="stub_1_80 ei2">53.23</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_81" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_81 Clutch">81</td>
+<td class="gt_row gt_right" headers="stub_1_81 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_81 ybari">1.22</td>
+<td class="gt_row gt_right" headers="stub_1_81 ti">8.52</td>
+<td class="gt_row gt_right" headers="stub_1_81 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_81 ei">−8.91</td>
+<td class="gt_row gt_right" headers="stub_1_81 ei2">79.44</td>
+</tr>
+<tr class="even">
+<th id="stub_1_82" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_82 Clutch">82</td>
+<td class="gt_row gt_right" headers="stub_1_82 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_82 ybari">1.19</td>
+<td class="gt_row gt_right" headers="stub_1_82 ti">8.32</td>
+<td class="gt_row gt_right" headers="stub_1_82 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_82 ei">−9.11</td>
+<td class="gt_row gt_right" headers="stub_1_82 ei2">83.04</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_83" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_83 Clutch">83</td>
+<td class="gt_row gt_right" headers="stub_1_83 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_83 ybari">1.15</td>
+<td class="gt_row gt_right" headers="stub_1_83 ti">8.08</td>
+<td class="gt_row gt_right" headers="stub_1_83 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_83 ei">−9.36</td>
+<td class="gt_row gt_right" headers="stub_1_83 ei2">87.54</td>
+</tr>
+<tr class="even">
+<th id="stub_1_84" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_84 Clutch">84</td>
+<td class="gt_row gt_right" headers="stub_1_84 Mi">5</td>
+<td class="gt_row gt_right" headers="stub_1_84 ybari">0.58</td>
+<td class="gt_row gt_right" headers="stub_1_84 ti">2.89</td>
+<td class="gt_row gt_right" headers="stub_1_84 yhat">12.45</td>
+<td class="gt_row gt_right" headers="stub_1_84 ei">−9.57</td>
+<td class="gt_row gt_right" headers="stub_1_84 ei2">91.50</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_85" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_85 Clutch">85</td>
+<td class="gt_row gt_right" headers="stub_1_85 Mi">5</td>
+<td class="gt_row gt_right" headers="stub_1_85 ybari">0.65</td>
+<td class="gt_row gt_right" headers="stub_1_85 ti">3.25</td>
+<td class="gt_row gt_right" headers="stub_1_85 yhat">12.45</td>
+<td class="gt_row gt_right" headers="stub_1_85 ei">−9.21</td>
+<td class="gt_row gt_right" headers="stub_1_85 ei2">84.76</td>
+</tr>
+<tr class="even">
+<th id="stub_1_86" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_86 Clutch">86</td>
+<td class="gt_row gt_right" headers="stub_1_86 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_86 ybari">2.12</td>
+<td class="gt_row gt_right" headers="stub_1_86 ti">19.05</td>
+<td class="gt_row gt_right" headers="stub_1_86 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_86 ei">−3.36</td>
+<td class="gt_row gt_right" headers="stub_1_86 ei2">11.32</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_87" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_87 Clutch">87</td>
+<td class="gt_row gt_right" headers="stub_1_87 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_87 ybari">2.48</td>
+<td class="gt_row gt_right" headers="stub_1_87 ti">24.78</td>
+<td class="gt_row gt_right" headers="stub_1_87 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_87 ei">−0.13</td>
+<td class="gt_row gt_right" headers="stub_1_87 ei2">0.02</td>
+</tr>
+<tr class="even">
+<th id="stub_1_88" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_88 Clutch">88</td>
+<td class="gt_row gt_right" headers="stub_1_88 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_88 ybari">2.35</td>
+<td class="gt_row gt_right" headers="stub_1_88 ti">21.13</td>
+<td class="gt_row gt_right" headers="stub_1_88 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_88 ei">−1.28</td>
+<td class="gt_row gt_right" headers="stub_1_88 ei2">1.64</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_89" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_89 Clutch">89</td>
+<td class="gt_row gt_right" headers="stub_1_89 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_89 ybari">3.02</td>
+<td class="gt_row gt_right" headers="stub_1_89 ti">33.17</td>
+<td class="gt_row gt_right" headers="stub_1_89 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_89 ei">5.77</td>
+<td class="gt_row gt_right" headers="stub_1_89 ei2">33.30</td>
+</tr>
+<tr class="even">
+<th id="stub_1_90" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_90 Clutch">90</td>
+<td class="gt_row gt_right" headers="stub_1_90 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_90 ybari">1.98</td>
+<td class="gt_row gt_right" headers="stub_1_90 ti">17.86</td>
+<td class="gt_row gt_right" headers="stub_1_90 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_90 ei">−4.56</td>
+<td class="gt_row gt_right" headers="stub_1_90 ei2">20.76</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_91" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_91 Clutch">91</td>
+<td class="gt_row gt_right" headers="stub_1_91 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_91 ybari">2.03</td>
+<td class="gt_row gt_right" headers="stub_1_91 ti">18.31</td>
+<td class="gt_row gt_right" headers="stub_1_91 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_91 ei">−4.11</td>
+<td class="gt_row gt_right" headers="stub_1_91 ei2">16.88</td>
+</tr>
+<tr class="even">
+<th id="stub_1_92" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_92 Clutch">92</td>
+<td class="gt_row gt_right" headers="stub_1_92 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_92 ybari">2.41</td>
+<td class="gt_row gt_right" headers="stub_1_92 ti">24.14</td>
+<td class="gt_row gt_right" headers="stub_1_92 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_92 ei">−0.76</td>
+<td class="gt_row gt_right" headers="stub_1_92 ei2">0.59</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_93" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_93 Clutch">93</td>
+<td class="gt_row gt_right" headers="stub_1_93 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_93 ybari">1.18</td>
+<td class="gt_row gt_right" headers="stub_1_93 ti">8.28</td>
+<td class="gt_row gt_right" headers="stub_1_93 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_93 ei">−9.15</td>
+<td class="gt_row gt_right" headers="stub_1_93 ei2">83.71</td>
+</tr>
+<tr class="even">
+<th id="stub_1_94" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_94 Clutch">94</td>
+<td class="gt_row gt_right" headers="stub_1_94 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_94 ybari">2.55</td>
+<td class="gt_row gt_right" headers="stub_1_94 ti">25.46</td>
+<td class="gt_row gt_right" headers="stub_1_94 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_94 ei">0.55</td>
+<td class="gt_row gt_right" headers="stub_1_94 ei2">0.30</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_95" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_95 Clutch">95</td>
+<td class="gt_row gt_right" headers="stub_1_95 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_95 ybari">1.23</td>
+<td class="gt_row gt_right" headers="stub_1_95 ti">8.59</td>
+<td class="gt_row gt_right" headers="stub_1_95 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_95 ei">−8.85</td>
+<td class="gt_row gt_right" headers="stub_1_95 ei2">78.28</td>
+</tr>
+<tr class="even">
+<th id="stub_1_96" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_96 Clutch">96</td>
+<td class="gt_row gt_right" headers="stub_1_96 Mi">6</td>
+<td class="gt_row gt_right" headers="stub_1_96 ybari">0.88</td>
+<td class="gt_row gt_right" headers="stub_1_96 ti">5.28</td>
+<td class="gt_row gt_right" headers="stub_1_96 yhat">14.94</td>
+<td class="gt_row gt_right" headers="stub_1_96 ei">−9.66</td>
+<td class="gt_row gt_right" headers="stub_1_96 ei2">93.34</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_97" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_97 Clutch">97</td>
+<td class="gt_row gt_right" headers="stub_1_97 Mi">5</td>
+<td class="gt_row gt_right" headers="stub_1_97 ybari">0.59</td>
+<td class="gt_row gt_right" headers="stub_1_97 ti">2.97</td>
+<td class="gt_row gt_right" headers="stub_1_97 yhat">12.45</td>
+<td class="gt_row gt_right" headers="stub_1_97 ei">−9.48</td>
+<td class="gt_row gt_right" headers="stub_1_97 ei2">89.91</td>
+</tr>
+<tr class="even">
+<th id="stub_1_98" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_98 Clutch">98</td>
+<td class="gt_row gt_right" headers="stub_1_98 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_98 ybari">1.98</td>
+<td class="gt_row gt_right" headers="stub_1_98 ti">17.81</td>
+<td class="gt_row gt_right" headers="stub_1_98 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_98 ei">−4.61</td>
+<td class="gt_row gt_right" headers="stub_1_98 ei2">21.23</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_99" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_99 Clutch">99</td>
+<td class="gt_row gt_right" headers="stub_1_99 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_99 ybari">2.99</td>
+<td class="gt_row gt_right" headers="stub_1_99 ti">32.87</td>
+<td class="gt_row gt_right" headers="stub_1_99 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_99 ei">5.47</td>
+<td class="gt_row gt_right" headers="stub_1_99 ei2">29.93</td>
+</tr>
+<tr class="even">
+<th id="stub_1_100" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_100 Clutch">100</td>
+<td class="gt_row gt_right" headers="stub_1_100 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_100 ybari">2.37</td>
+<td class="gt_row gt_right" headers="stub_1_100 ti">23.67</td>
+<td class="gt_row gt_right" headers="stub_1_100 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_100 ei">−1.24</td>
+<td class="gt_row gt_right" headers="stub_1_100 ei2">1.53</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_101" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_101 Clutch">101</td>
+<td class="gt_row gt_right" headers="stub_1_101 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_101 ybari">3.43</td>
+<td class="gt_row gt_right" headers="stub_1_101 ti">41.16</td>
+<td class="gt_row gt_right" headers="stub_1_101 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_101 ei">11.28</td>
+<td class="gt_row gt_right" headers="stub_1_101 ei2">127.16</td>
+</tr>
+<tr class="even">
+<th id="stub_1_102" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_102 Clutch">102</td>
+<td class="gt_row gt_right" headers="stub_1_102 Mi">5</td>
+<td class="gt_row gt_right" headers="stub_1_102 ybari">0.62</td>
+<td class="gt_row gt_right" headers="stub_1_102 ti">3.08</td>
+<td class="gt_row gt_right" headers="stub_1_102 yhat">12.45</td>
+<td class="gt_row gt_right" headers="stub_1_102 ei">−9.37</td>
+<td class="gt_row gt_right" headers="stub_1_102 ei2">87.78</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_103" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_103 Clutch">103</td>
+<td class="gt_row gt_right" headers="stub_1_103 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_103 ybari">1.13</td>
+<td class="gt_row gt_right" headers="stub_1_103 ti">7.94</td>
+<td class="gt_row gt_right" headers="stub_1_103 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_103 ei">−9.49</td>
+<td class="gt_row gt_right" headers="stub_1_103 ei2">90.06</td>
+</tr>
+<tr class="even">
+<th id="stub_1_104" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_104 Clutch">104</td>
+<td class="gt_row gt_right" headers="stub_1_104 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_104 ybari">1.12</td>
+<td class="gt_row gt_right" headers="stub_1_104 ti">7.84</td>
+<td class="gt_row gt_right" headers="stub_1_104 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_104 ei">−9.59</td>
+<td class="gt_row gt_right" headers="stub_1_104 ei2">92.04</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_105" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_105 Clutch">105</td>
+<td class="gt_row gt_right" headers="stub_1_105 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_105 ybari">1.99</td>
+<td class="gt_row gt_right" headers="stub_1_105 ti">17.89</td>
+<td class="gt_row gt_right" headers="stub_1_105 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_105 ei">−4.53</td>
+<td class="gt_row gt_right" headers="stub_1_105 ei2">20.51</td>
+</tr>
+<tr class="even">
+<th id="stub_1_106" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_106 Clutch">106</td>
+<td class="gt_row gt_right" headers="stub_1_106 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_106 ybari">3.01</td>
+<td class="gt_row gt_right" headers="stub_1_106 ti">33.13</td>
+<td class="gt_row gt_right" headers="stub_1_106 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_106 ei">5.73</td>
+<td class="gt_row gt_right" headers="stub_1_106 ei2">32.88</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_107" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_107 Clutch">107</td>
+<td class="gt_row gt_right" headers="stub_1_107 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_107 ybari">2.09</td>
+<td class="gt_row gt_right" headers="stub_1_107 ti">18.83</td>
+<td class="gt_row gt_right" headers="stub_1_107 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_107 ei">−3.58</td>
+<td class="gt_row gt_right" headers="stub_1_107 ei2">12.82</td>
+</tr>
+<tr class="even">
+<th id="stub_1_108" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_108 Clutch">108</td>
+<td class="gt_row gt_right" headers="stub_1_108 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_108 ybari">1.96</td>
+<td class="gt_row gt_right" headers="stub_1_108 ti">17.64</td>
+<td class="gt_row gt_right" headers="stub_1_108 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_108 ei">−4.78</td>
+<td class="gt_row gt_right" headers="stub_1_108 ei2">22.83</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_109" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_109 Clutch">109</td>
+<td class="gt_row gt_right" headers="stub_1_109 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_109 ybari">2.41</td>
+<td class="gt_row gt_right" headers="stub_1_109 ti">24.11</td>
+<td class="gt_row gt_right" headers="stub_1_109 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_109 ei">−0.80</td>
+<td class="gt_row gt_right" headers="stub_1_109 ei2">0.63</td>
+</tr>
+<tr class="even">
+<th id="stub_1_110" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_110 Clutch">110</td>
+<td class="gt_row gt_right" headers="stub_1_110 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_110 ybari">1.93</td>
+<td class="gt_row gt_right" headers="stub_1_110 ti">17.39</td>
+<td class="gt_row gt_right" headers="stub_1_110 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_110 ei">−5.03</td>
+<td class="gt_row gt_right" headers="stub_1_110 ei2">25.27</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_111" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_111 Clutch">111</td>
+<td class="gt_row gt_right" headers="stub_1_111 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_111 ybari">2.60</td>
+<td class="gt_row gt_right" headers="stub_1_111 ti">26.00</td>
+<td class="gt_row gt_right" headers="stub_1_111 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_111 ei">1.10</td>
+<td class="gt_row gt_right" headers="stub_1_111 ei2">1.21</td>
+</tr>
+<tr class="even">
+<th id="stub_1_112" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_112 Clutch">112</td>
+<td class="gt_row gt_right" headers="stub_1_112 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_112 ybari">3.63</td>
+<td class="gt_row gt_right" headers="stub_1_112 ti">43.54</td>
+<td class="gt_row gt_right" headers="stub_1_112 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_112 ei">13.66</td>
+<td class="gt_row gt_right" headers="stub_1_112 ei2">186.46</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_113" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_113 Clutch">113</td>
+<td class="gt_row gt_right" headers="stub_1_113 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_113 ybari">1.65</td>
+<td class="gt_row gt_right" headers="stub_1_113 ti">13.19</td>
+<td class="gt_row gt_right" headers="stub_1_113 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_113 ei">−6.74</td>
+<td class="gt_row gt_right" headers="stub_1_113 ei2">45.36</td>
+</tr>
+<tr class="even">
+<th id="stub_1_114" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_114 Clutch">114</td>
+<td class="gt_row gt_right" headers="stub_1_114 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_114 ybari">1.65</td>
+<td class="gt_row gt_right" headers="stub_1_114 ti">13.18</td>
+<td class="gt_row gt_right" headers="stub_1_114 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_114 ei">−6.74</td>
+<td class="gt_row gt_right" headers="stub_1_114 ei2">45.47</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_115" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_115 Clutch">115</td>
+<td class="gt_row gt_right" headers="stub_1_115 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_115 ybari">2.87</td>
+<td class="gt_row gt_right" headers="stub_1_115 ti">31.57</td>
+<td class="gt_row gt_right" headers="stub_1_115 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_115 ei">4.17</td>
+<td class="gt_row gt_right" headers="stub_1_115 ei2">17.43</td>
+</tr>
+<tr class="even">
+<th id="stub_1_116" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_116 Clutch">116</td>
+<td class="gt_row gt_right" headers="stub_1_116 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_116 ybari">2.12</td>
+<td class="gt_row gt_right" headers="stub_1_116 ti">19.06</td>
+<td class="gt_row gt_right" headers="stub_1_116 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_116 ei">−3.35</td>
+<td class="gt_row gt_right" headers="stub_1_116 ei2">11.23</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_117" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_117 Clutch">117</td>
+<td class="gt_row gt_right" headers="stub_1_117 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_117 ybari">2.58</td>
+<td class="gt_row gt_right" headers="stub_1_117 ti">25.82</td>
+<td class="gt_row gt_right" headers="stub_1_117 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_117 ei">0.91</td>
+<td class="gt_row gt_right" headers="stub_1_117 ei2">0.83</td>
+</tr>
+<tr class="even">
+<th id="stub_1_118" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_118 Clutch">118</td>
+<td class="gt_row gt_right" headers="stub_1_118 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_118 ybari">1.61</td>
+<td class="gt_row gt_right" headers="stub_1_118 ti">12.85</td>
+<td class="gt_row gt_right" headers="stub_1_118 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_118 ei">−7.08</td>
+<td class="gt_row gt_right" headers="stub_1_118 ei2">50.11</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_119" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_119 Clutch">119</td>
+<td class="gt_row gt_right" headers="stub_1_119 Mi">13</td>
+<td class="gt_row gt_right" headers="stub_1_119 ybari">3.96</td>
+<td class="gt_row gt_right" headers="stub_1_119 ti">51.48</td>
+<td class="gt_row gt_right" headers="stub_1_119 yhat">32.38</td>
+<td class="gt_row gt_right" headers="stub_1_119 ei">19.11</td>
+<td class="gt_row gt_right" headers="stub_1_119 ei2">365.04</td>
+</tr>
+<tr class="even">
+<th id="stub_1_120" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_120 Clutch">120</td>
+<td class="gt_row gt_right" headers="stub_1_120 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_120 ybari">3.16</td>
+<td class="gt_row gt_right" headers="stub_1_120 ti">34.71</td>
+<td class="gt_row gt_right" headers="stub_1_120 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_120 ei">7.31</td>
+<td class="gt_row gt_right" headers="stub_1_120 ei2">53.43</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_121" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_121 Clutch">121</td>
+<td class="gt_row gt_right" headers="stub_1_121 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_121 ybari">2.06</td>
+<td class="gt_row gt_right" headers="stub_1_121 ti">18.58</td>
+<td class="gt_row gt_right" headers="stub_1_121 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_121 ei">−3.84</td>
+<td class="gt_row gt_right" headers="stub_1_121 ei2">14.72</td>
+</tr>
+<tr class="even">
+<th id="stub_1_122" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_122 Clutch">122</td>
+<td class="gt_row gt_right" headers="stub_1_122 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_122 ybari">3.65</td>
+<td class="gt_row gt_right" headers="stub_1_122 ti">43.83</td>
+<td class="gt_row gt_right" headers="stub_1_122 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_122 ei">13.94</td>
+<td class="gt_row gt_right" headers="stub_1_122 ei2">194.44</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_123" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_123 Clutch">123</td>
+<td class="gt_row gt_right" headers="stub_1_123 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_123 ybari">2.60</td>
+<td class="gt_row gt_right" headers="stub_1_123 ti">26.00</td>
+<td class="gt_row gt_right" headers="stub_1_123 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_123 ei">1.09</td>
+<td class="gt_row gt_right" headers="stub_1_123 ei2">1.20</td>
+</tr>
+<tr class="even">
+<th id="stub_1_124" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_124 Clutch">124</td>
+<td class="gt_row gt_right" headers="stub_1_124 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_124 ybari">2.93</td>
+<td class="gt_row gt_right" headers="stub_1_124 ti">32.23</td>
+<td class="gt_row gt_right" headers="stub_1_124 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_124 ei">4.83</td>
+<td class="gt_row gt_right" headers="stub_1_124 ei2">23.36</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_125" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_125 Clutch">125</td>
+<td class="gt_row gt_right" headers="stub_1_125 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_125 ybari">3.06</td>
+<td class="gt_row gt_right" headers="stub_1_125 ti">33.63</td>
+<td class="gt_row gt_right" headers="stub_1_125 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_125 ei">6.23</td>
+<td class="gt_row gt_right" headers="stub_1_125 ei2">38.85</td>
+</tr>
+<tr class="even">
+<th id="stub_1_126" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_126 Clutch">126</td>
+<td class="gt_row gt_right" headers="stub_1_126 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_126 ybari">2.52</td>
+<td class="gt_row gt_right" headers="stub_1_126 ti">25.21</td>
+<td class="gt_row gt_right" headers="stub_1_126 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_126 ei">0.31</td>
+<td class="gt_row gt_right" headers="stub_1_126 ei2">0.09</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_127" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_127 Clutch">127</td>
+<td class="gt_row gt_right" headers="stub_1_127 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_127 ybari">3.50</td>
+<td class="gt_row gt_right" headers="stub_1_127 ti">41.96</td>
+<td class="gt_row gt_right" headers="stub_1_127 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_127 ei">12.08</td>
+<td class="gt_row gt_right" headers="stub_1_127 ei2">145.88</td>
+</tr>
+<tr class="even">
+<th id="stub_1_128" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_128 Clutch">128</td>
+<td class="gt_row gt_right" headers="stub_1_128 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_128 ybari">2.99</td>
+<td class="gt_row gt_right" headers="stub_1_128 ti">32.84</td>
+<td class="gt_row gt_right" headers="stub_1_128 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_128 ei">5.44</td>
+<td class="gt_row gt_right" headers="stub_1_128 ei2">29.60</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_129" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_129 Clutch">129</td>
+<td class="gt_row gt_right" headers="stub_1_129 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_129 ybari">1.93</td>
+<td class="gt_row gt_right" headers="stub_1_129 ti">17.39</td>
+<td class="gt_row gt_right" headers="stub_1_129 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_129 ei">−5.02</td>
+<td class="gt_row gt_right" headers="stub_1_129 ei2">25.24</td>
+</tr>
+<tr class="even">
+<th id="stub_1_130" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_130 Clutch">130</td>
+<td class="gt_row gt_right" headers="stub_1_130 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_130 ybari">2.15</td>
+<td class="gt_row gt_right" headers="stub_1_130 ti">19.38</td>
+<td class="gt_row gt_right" headers="stub_1_130 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_130 ei">−3.03</td>
+<td class="gt_row gt_right" headers="stub_1_130 ei2">9.20</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_131" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_131 Clutch">131</td>
+<td class="gt_row gt_right" headers="stub_1_131 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_131 ybari">3.54</td>
+<td class="gt_row gt_right" headers="stub_1_131 ti">42.50</td>
+<td class="gt_row gt_right" headers="stub_1_131 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_131 ei">12.61</td>
+<td class="gt_row gt_right" headers="stub_1_131 ei2">159.07</td>
+</tr>
+<tr class="even">
+<th id="stub_1_132" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_132 Clutch">132</td>
+<td class="gt_row gt_right" headers="stub_1_132 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_132 ybari">2.65</td>
+<td class="gt_row gt_right" headers="stub_1_132 ti">26.53</td>
+<td class="gt_row gt_right" headers="stub_1_132 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_132 ei">1.62</td>
+<td class="gt_row gt_right" headers="stub_1_132 ei2">2.63</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_133" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_133 Clutch">133</td>
+<td class="gt_row gt_right" headers="stub_1_133 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_133 ybari">2.91</td>
+<td class="gt_row gt_right" headers="stub_1_133 ti">32.02</td>
+<td class="gt_row gt_right" headers="stub_1_133 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_133 ei">4.62</td>
+<td class="gt_row gt_right" headers="stub_1_133 ei2">21.35</td>
+</tr>
+<tr class="even">
+<th id="stub_1_134" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_134 Clutch">134</td>
+<td class="gt_row gt_right" headers="stub_1_134 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_134 ybari">1.59</td>
+<td class="gt_row gt_right" headers="stub_1_134 ti">12.69</td>
+<td class="gt_row gt_right" headers="stub_1_134 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_134 ei">−7.23</td>
+<td class="gt_row gt_right" headers="stub_1_134 ei2">52.31</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_135" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_135 Clutch">135</td>
+<td class="gt_row gt_right" headers="stub_1_135 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_135 ybari">2.88</td>
+<td class="gt_row gt_right" headers="stub_1_135 ti">31.63</td>
+<td class="gt_row gt_right" headers="stub_1_135 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_135 ei">4.23</td>
+<td class="gt_row gt_right" headers="stub_1_135 ei2">17.91</td>
+</tr>
+<tr class="even">
+<th id="stub_1_136" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_136 Clutch">136</td>
+<td class="gt_row gt_right" headers="stub_1_136 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_136 ybari">2.10</td>
+<td class="gt_row gt_right" headers="stub_1_136 ti">18.88</td>
+<td class="gt_row gt_right" headers="stub_1_136 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_136 ei">−3.54</td>
+<td class="gt_row gt_right" headers="stub_1_136 ei2">12.50</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_137" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_137 Clutch">137</td>
+<td class="gt_row gt_right" headers="stub_1_137 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_137 ybari">2.36</td>
+<td class="gt_row gt_right" headers="stub_1_137 ti">23.62</td>
+<td class="gt_row gt_right" headers="stub_1_137 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_137 ei">−1.29</td>
+<td class="gt_row gt_right" headers="stub_1_137 ei2">1.66</td>
+</tr>
+<tr class="even">
+<th id="stub_1_138" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_138 Clutch">138</td>
+<td class="gt_row gt_right" headers="stub_1_138 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_138 ybari">2.62</td>
+<td class="gt_row gt_right" headers="stub_1_138 ti">26.24</td>
+<td class="gt_row gt_right" headers="stub_1_138 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_138 ei">1.33</td>
+<td class="gt_row gt_right" headers="stub_1_138 ei2">1.77</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_139" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_139 Clutch">139</td>
+<td class="gt_row gt_right" headers="stub_1_139 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_139 ybari">1.57</td>
+<td class="gt_row gt_right" headers="stub_1_139 ti">12.57</td>
+<td class="gt_row gt_right" headers="stub_1_139 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_139 ei">−7.36</td>
+<td class="gt_row gt_right" headers="stub_1_139 ei2">54.10</td>
+</tr>
+<tr class="even">
+<th id="stub_1_140" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_140 Clutch">140</td>
+<td class="gt_row gt_right" headers="stub_1_140 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_140 ybari">2.05</td>
+<td class="gt_row gt_right" headers="stub_1_140 ti">18.42</td>
+<td class="gt_row gt_right" headers="stub_1_140 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_140 ei">−3.99</td>
+<td class="gt_row gt_right" headers="stub_1_140 ei2">15.95</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_141" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_141 Clutch">141</td>
+<td class="gt_row gt_right" headers="stub_1_141 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_141 ybari">2.87</td>
+<td class="gt_row gt_right" headers="stub_1_141 ti">31.60</td>
+<td class="gt_row gt_right" headers="stub_1_141 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_141 ei">4.20</td>
+<td class="gt_row gt_right" headers="stub_1_141 ei2">17.66</td>
+</tr>
+<tr class="even">
+<th id="stub_1_142" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_142 Clutch">142</td>
+<td class="gt_row gt_right" headers="stub_1_142 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_142 ybari">2.88</td>
+<td class="gt_row gt_right" headers="stub_1_142 ti">31.73</td>
+<td class="gt_row gt_right" headers="stub_1_142 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_142 ei">4.33</td>
+<td class="gt_row gt_right" headers="stub_1_142 ei2">18.78</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_143" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_143 Clutch">143</td>
+<td class="gt_row gt_right" headers="stub_1_143 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_143 ybari">2.94</td>
+<td class="gt_row gt_right" headers="stub_1_143 ti">32.32</td>
+<td class="gt_row gt_right" headers="stub_1_143 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_143 ei">4.93</td>
+<td class="gt_row gt_right" headers="stub_1_143 ei2">24.28</td>
+</tr>
+<tr class="even">
+<th id="stub_1_144" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_144 Clutch">144</td>
+<td class="gt_row gt_right" headers="stub_1_144 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_144 ybari">3.73</td>
+<td class="gt_row gt_right" headers="stub_1_144 ti">44.78</td>
+<td class="gt_row gt_right" headers="stub_1_144 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_144 ei">14.89</td>
+<td class="gt_row gt_right" headers="stub_1_144 ei2">221.85</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_145" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_145 Clutch">145</td>
+<td class="gt_row gt_right" headers="stub_1_145 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_145 ybari">2.58</td>
+<td class="gt_row gt_right" headers="stub_1_145 ti">25.79</td>
+<td class="gt_row gt_right" headers="stub_1_145 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_145 ei">0.89</td>
+<td class="gt_row gt_right" headers="stub_1_145 ei2">0.79</td>
+</tr>
+<tr class="even">
+<th id="stub_1_146" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_146 Clutch">146</td>
+<td class="gt_row gt_right" headers="stub_1_146 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_146 ybari">2.61</td>
+<td class="gt_row gt_right" headers="stub_1_146 ti">26.10</td>
+<td class="gt_row gt_right" headers="stub_1_146 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_146 ei">1.20</td>
+<td class="gt_row gt_right" headers="stub_1_146 ei2">1.43</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_147" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_147 Clutch">147</td>
+<td class="gt_row gt_right" headers="stub_1_147 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_147 ybari">2.04</td>
+<td class="gt_row gt_right" headers="stub_1_147 ti">18.34</td>
+<td class="gt_row gt_right" headers="stub_1_147 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_147 ei">−4.07</td>
+<td class="gt_row gt_right" headers="stub_1_147 ei2">16.58</td>
+</tr>
+<tr class="even">
+<th id="stub_1_148" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_148 Clutch">148</td>
+<td class="gt_row gt_right" headers="stub_1_148 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_148 ybari">2.61</td>
+<td class="gt_row gt_right" headers="stub_1_148 ti">26.08</td>
+<td class="gt_row gt_right" headers="stub_1_148 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_148 ei">1.17</td>
+<td class="gt_row gt_right" headers="stub_1_148 ei2">1.38</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_149" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_149 Clutch">149</td>
+<td class="gt_row gt_right" headers="stub_1_149 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_149 ybari">3.10</td>
+<td class="gt_row gt_right" headers="stub_1_149 ti">34.15</td>
+<td class="gt_row gt_right" headers="stub_1_149 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_149 ei">6.76</td>
+<td class="gt_row gt_right" headers="stub_1_149 ei2">45.65</td>
+</tr>
+<tr class="even">
+<th id="stub_1_150" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_150 Clutch">150</td>
+<td class="gt_row gt_right" headers="stub_1_150 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_150 ybari">2.93</td>
+<td class="gt_row gt_right" headers="stub_1_150 ti">32.19</td>
+<td class="gt_row gt_right" headers="stub_1_150 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_150 ei">4.79</td>
+<td class="gt_row gt_right" headers="stub_1_150 ei2">22.93</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_151" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_151 Clutch">151</td>
+<td class="gt_row gt_right" headers="stub_1_151 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_151 ybari">1.17</td>
+<td class="gt_row gt_right" headers="stub_1_151 ti">8.22</td>
+<td class="gt_row gt_right" headers="stub_1_151 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_151 ei">−9.22</td>
+<td class="gt_row gt_right" headers="stub_1_151 ei2">84.96</td>
+</tr>
+<tr class="even">
+<th id="stub_1_152" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_152 Clutch">152</td>
+<td class="gt_row gt_right" headers="stub_1_152 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_152 ybari">1.57</td>
+<td class="gt_row gt_right" headers="stub_1_152 ti">12.57</td>
+<td class="gt_row gt_right" headers="stub_1_152 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_152 ei">−7.35</td>
+<td class="gt_row gt_right" headers="stub_1_152 ei2">54.03</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_153" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_153 Clutch">153</td>
+<td class="gt_row gt_right" headers="stub_1_153 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_153 ybari">1.97</td>
+<td class="gt_row gt_right" headers="stub_1_153 ti">17.74</td>
+<td class="gt_row gt_right" headers="stub_1_153 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_153 ei">−4.67</td>
+<td class="gt_row gt_right" headers="stub_1_153 ei2">21.83</td>
+</tr>
+<tr class="even">
+<th id="stub_1_154" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_154 Clutch">154</td>
+<td class="gt_row gt_right" headers="stub_1_154 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_154 ybari">2.43</td>
+<td class="gt_row gt_right" headers="stub_1_154 ti">24.26</td>
+<td class="gt_row gt_right" headers="stub_1_154 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_154 ei">−0.64</td>
+<td class="gt_row gt_right" headers="stub_1_154 ei2">0.41</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_155" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_155 Clutch">155</td>
+<td class="gt_row gt_right" headers="stub_1_155 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_155 ybari">1.82</td>
+<td class="gt_row gt_right" headers="stub_1_155 ti">16.42</td>
+<td class="gt_row gt_right" headers="stub_1_155 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_155 ei">−5.99</td>
+<td class="gt_row gt_right" headers="stub_1_155 ei2">35.90</td>
+</tr>
+<tr class="even">
+<th id="stub_1_156" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_156 Clutch">156</td>
+<td class="gt_row gt_right" headers="stub_1_156 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_156 ybari">2.56</td>
+<td class="gt_row gt_right" headers="stub_1_156 ti">25.63</td>
+<td class="gt_row gt_right" headers="stub_1_156 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_156 ei">0.73</td>
+<td class="gt_row gt_right" headers="stub_1_156 ei2">0.53</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_157" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_157 Clutch">157</td>
+<td class="gt_row gt_right" headers="stub_1_157 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_157 ybari">2.34</td>
+<td class="gt_row gt_right" headers="stub_1_157 ti">23.40</td>
+<td class="gt_row gt_right" headers="stub_1_157 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_157 ei">−1.51</td>
+<td class="gt_row gt_right" headers="stub_1_157 ei2">2.27</td>
+</tr>
+<tr class="even">
+<th id="stub_1_158" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_158 Clutch">158</td>
+<td class="gt_row gt_right" headers="stub_1_158 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_158 ybari">2.00</td>
+<td class="gt_row gt_right" headers="stub_1_158 ti">17.99</td>
+<td class="gt_row gt_right" headers="stub_1_158 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_158 ei">−4.42</td>
+<td class="gt_row gt_right" headers="stub_1_158 ei2">19.56</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_159" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_159 Clutch">159</td>
+<td class="gt_row gt_right" headers="stub_1_159 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_159 ybari">1.75</td>
+<td class="gt_row gt_right" headers="stub_1_159 ti">15.77</td>
+<td class="gt_row gt_right" headers="stub_1_159 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_159 ei">−6.64</td>
+<td class="gt_row gt_right" headers="stub_1_159 ei2">44.10</td>
+</tr>
+<tr class="even">
+<th id="stub_1_160" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_160 Clutch">160</td>
+<td class="gt_row gt_right" headers="stub_1_160 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_160 ybari">2.99</td>
+<td class="gt_row gt_right" headers="stub_1_160 ti">32.89</td>
+<td class="gt_row gt_right" headers="stub_1_160 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_160 ei">5.50</td>
+<td class="gt_row gt_right" headers="stub_1_160 ei2">30.22</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_161" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_161 Clutch">161</td>
+<td class="gt_row gt_right" headers="stub_1_161 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_161 ybari">1.94</td>
+<td class="gt_row gt_right" headers="stub_1_161 ti">17.48</td>
+<td class="gt_row gt_right" headers="stub_1_161 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_161 ei">−4.93</td>
+<td class="gt_row gt_right" headers="stub_1_161 ei2">24.33</td>
+</tr>
+<tr class="even">
+<th id="stub_1_162" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_162 Clutch">162</td>
+<td class="gt_row gt_right" headers="stub_1_162 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_162 ybari">1.56</td>
+<td class="gt_row gt_right" headers="stub_1_162 ti">12.46</td>
+<td class="gt_row gt_right" headers="stub_1_162 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_162 ei">−7.46</td>
+<td class="gt_row gt_right" headers="stub_1_162 ei2">55.68</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_163" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_163 Clutch">163</td>
+<td class="gt_row gt_right" headers="stub_1_163 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_163 ybari">1.60</td>
+<td class="gt_row gt_right" headers="stub_1_163 ti">12.78</td>
+<td class="gt_row gt_right" headers="stub_1_163 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_163 ei">−7.15</td>
+<td class="gt_row gt_right" headers="stub_1_163 ei2">51.09</td>
+</tr>
+<tr class="even">
+<th id="stub_1_164" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_164 Clutch">164</td>
+<td class="gt_row gt_right" headers="stub_1_164 Mi">7</td>
+<td class="gt_row gt_right" headers="stub_1_164 ybari">1.18</td>
+<td class="gt_row gt_right" headers="stub_1_164 ti">8.27</td>
+<td class="gt_row gt_right" headers="stub_1_164 yhat">17.43</td>
+<td class="gt_row gt_right" headers="stub_1_164 ei">−9.16</td>
+<td class="gt_row gt_right" headers="stub_1_164 ei2">83.98</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_165" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_165 Clutch">165</td>
+<td class="gt_row gt_right" headers="stub_1_165 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_165 ybari">2.44</td>
+<td class="gt_row gt_right" headers="stub_1_165 ti">24.37</td>
+<td class="gt_row gt_right" headers="stub_1_165 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_165 ei">−0.54</td>
+<td class="gt_row gt_right" headers="stub_1_165 ei2">0.29</td>
+</tr>
+<tr class="even">
+<th id="stub_1_166" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_166 Clutch">166</td>
+<td class="gt_row gt_right" headers="stub_1_166 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_166 ybari">1.65</td>
+<td class="gt_row gt_right" headers="stub_1_166 ti">13.22</td>
+<td class="gt_row gt_right" headers="stub_1_166 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_166 ei">−6.71</td>
+<td class="gt_row gt_right" headers="stub_1_166 ei2">45.01</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_167" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_167 Clutch">167</td>
+<td class="gt_row gt_right" headers="stub_1_167 Mi">8</td>
+<td class="gt_row gt_right" headers="stub_1_167 ybari">1.61</td>
+<td class="gt_row gt_right" headers="stub_1_167 ti">12.84</td>
+<td class="gt_row gt_right" headers="stub_1_167 yhat">19.92</td>
+<td class="gt_row gt_right" headers="stub_1_167 ei">−7.08</td>
+<td class="gt_row gt_right" headers="stub_1_167 ei2">50.19</td>
+</tr>
+<tr class="even">
+<th id="stub_1_168" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_168 Clutch">168</td>
+<td class="gt_row gt_right" headers="stub_1_168 Mi">6</td>
+<td class="gt_row gt_right" headers="stub_1_168 ybari">0.88</td>
+<td class="gt_row gt_right" headers="stub_1_168 ti">5.29</td>
+<td class="gt_row gt_right" headers="stub_1_168 yhat">14.94</td>
+<td class="gt_row gt_right" headers="stub_1_168 ei">−9.65</td>
+<td class="gt_row gt_right" headers="stub_1_168 ei2">93.09</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_169" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_169 Clutch">169</td>
+<td class="gt_row gt_right" headers="stub_1_169 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_169 ybari">2.39</td>
+<td class="gt_row gt_right" headers="stub_1_169 ti">23.85</td>
+<td class="gt_row gt_right" headers="stub_1_169 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_169 ei">−1.05</td>
+<td class="gt_row gt_right" headers="stub_1_169 ei2">1.11</td>
+</tr>
+<tr class="even">
+<th id="stub_1_170" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_170 Clutch">170</td>
+<td class="gt_row gt_right" headers="stub_1_170 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_170 ybari">2.48</td>
+<td class="gt_row gt_right" headers="stub_1_170 ti">24.83</td>
+<td class="gt_row gt_right" headers="stub_1_170 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_170 ei">−0.08</td>
+<td class="gt_row gt_right" headers="stub_1_170 ei2">0.01</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_171" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_171 Clutch">171</td>
+<td class="gt_row gt_right" headers="stub_1_171 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_171 ybari">2.51</td>
+<td class="gt_row gt_right" headers="stub_1_171 ti">25.15</td>
+<td class="gt_row gt_right" headers="stub_1_171 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_171 ei">0.24</td>
+<td class="gt_row gt_right" headers="stub_1_171 ei2">0.06</td>
+</tr>
+<tr class="even">
+<th id="stub_1_172" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_172 Clutch">172</td>
+<td class="gt_row gt_right" headers="stub_1_172 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_172 ybari">2.98</td>
+<td class="gt_row gt_right" headers="stub_1_172 ti">32.80</td>
+<td class="gt_row gt_right" headers="stub_1_172 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_172 ei">5.40</td>
+<td class="gt_row gt_right" headers="stub_1_172 ei2">29.16</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_173" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_173 Clutch">173</td>
+<td class="gt_row gt_right" headers="stub_1_173 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_173 ybari">2.35</td>
+<td class="gt_row gt_right" headers="stub_1_173 ti">23.46</td>
+<td class="gt_row gt_right" headers="stub_1_173 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_173 ei">−1.44</td>
+<td class="gt_row gt_right" headers="stub_1_173 ei2">2.09</td>
+</tr>
+<tr class="even">
+<th id="stub_1_174" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_174 Clutch">174</td>
+<td class="gt_row gt_right" headers="stub_1_174 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_174 ybari">3.62</td>
+<td class="gt_row gt_right" headers="stub_1_174 ti">43.43</td>
+<td class="gt_row gt_right" headers="stub_1_174 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_174 ei">13.55</td>
+<td class="gt_row gt_right" headers="stub_1_174 ei2">183.48</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_175" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_175 Clutch">175</td>
+<td class="gt_row gt_right" headers="stub_1_175 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_175 ybari">2.43</td>
+<td class="gt_row gt_right" headers="stub_1_175 ti">24.34</td>
+<td class="gt_row gt_right" headers="stub_1_175 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_175 ei">−0.57</td>
+<td class="gt_row gt_right" headers="stub_1_175 ei2">0.32</td>
+</tr>
+<tr class="even">
+<th id="stub_1_176" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_176 Clutch">176</td>
+<td class="gt_row gt_right" headers="stub_1_176 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_176 ybari">3.75</td>
+<td class="gt_row gt_right" headers="stub_1_176 ti">45.03</td>
+<td class="gt_row gt_right" headers="stub_1_176 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_176 ei">15.14</td>
+<td class="gt_row gt_right" headers="stub_1_176 ei2">229.35</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_177" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_177 Clutch">177</td>
+<td class="gt_row gt_right" headers="stub_1_177 Mi">10</td>
+<td class="gt_row gt_right" headers="stub_1_177 ybari">2.53</td>
+<td class="gt_row gt_right" headers="stub_1_177 ti">25.27</td>
+<td class="gt_row gt_right" headers="stub_1_177 yhat">24.91</td>
+<td class="gt_row gt_right" headers="stub_1_177 ei">0.37</td>
+<td class="gt_row gt_right" headers="stub_1_177 ei2">0.14</td>
+</tr>
+<tr class="even">
+<th id="stub_1_178" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_178 Clutch">178</td>
+<td class="gt_row gt_right" headers="stub_1_178 Mi">11</td>
+<td class="gt_row gt_right" headers="stub_1_178 ybari">3.10</td>
+<td class="gt_row gt_right" headers="stub_1_178 ti">34.11</td>
+<td class="gt_row gt_right" headers="stub_1_178 yhat">27.40</td>
+<td class="gt_row gt_right" headers="stub_1_178 ei">6.72</td>
+<td class="gt_row gt_right" headers="stub_1_178 ei2">45.10</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_179" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_179 Clutch">179</td>
+<td class="gt_row gt_right" headers="stub_1_179 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_179 ybari">1.94</td>
+<td class="gt_row gt_right" headers="stub_1_179 ti">17.46</td>
+<td class="gt_row gt_right" headers="stub_1_179 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_179 ei">−4.95</td>
+<td class="gt_row gt_right" headers="stub_1_179 ei2">24.52</td>
+</tr>
+<tr class="even">
+<th id="stub_1_180" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_180 Clutch">180</td>
+<td class="gt_row gt_right" headers="stub_1_180 Mi">9</td>
+<td class="gt_row gt_right" headers="stub_1_180 ybari">1.95</td>
+<td class="gt_row gt_right" headers="stub_1_180 ti">17.52</td>
+<td class="gt_row gt_right" headers="stub_1_180 yhat">22.42</td>
+<td class="gt_row gt_right" headers="stub_1_180 ei">−4.90</td>
+<td class="gt_row gt_right" headers="stub_1_180 ei2">23.97</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_181" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_181 Clutch">181</td>
+<td class="gt_row gt_right" headers="stub_1_181 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_181 ybari">3.45</td>
+<td class="gt_row gt_right" headers="stub_1_181 ti">41.44</td>
+<td class="gt_row gt_right" headers="stub_1_181 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_181 ei">11.55</td>
+<td class="gt_row gt_right" headers="stub_1_181 ei2">133.46</td>
+</tr>
+<tr class="even">
+<th id="stub_1_182" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_182 Clutch">182</td>
+<td class="gt_row gt_right" headers="stub_1_182 Mi">13</td>
+<td class="gt_row gt_right" headers="stub_1_182 ybari">4.22</td>
+<td class="gt_row gt_right" headers="stub_1_182 ti">54.86</td>
+<td class="gt_row gt_right" headers="stub_1_182 yhat">32.38</td>
+<td class="gt_row gt_right" headers="stub_1_182 ei">22.48</td>
+<td class="gt_row gt_right" headers="stub_1_182 ei2">505.40</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_183" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_183 Clutch">183</td>
+<td class="gt_row gt_right" headers="stub_1_183 Mi">13</td>
+<td class="gt_row gt_right" headers="stub_1_183 ybari">4.41</td>
+<td class="gt_row gt_right" headers="stub_1_183 ti">57.39</td>
+<td class="gt_row gt_right" headers="stub_1_183 yhat">32.38</td>
+<td class="gt_row gt_right" headers="stub_1_183 ei">25.02</td>
+<td class="gt_row gt_right" headers="stub_1_183 ei2">625.75</td>
+</tr>
+<tr class="even">
+<th id="stub_1_184" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row"></th>
+<td class="gt_row gt_right" headers="stub_1_184 Clutch">184</td>
+<td class="gt_row gt_right" headers="stub_1_184 Mi">12</td>
+<td class="gt_row gt_right" headers="stub_1_184 ybari">3.48</td>
+<td class="gt_row gt_right" headers="stub_1_184 ti">41.81</td>
+<td class="gt_row gt_right" headers="stub_1_184 yhat">29.89</td>
+<td class="gt_row gt_right" headers="stub_1_184 ei">11.92</td>
+<td class="gt_row gt_right" headers="stub_1_184 ei2">142.20</td>
+</tr>
+<tr class="odd">
+<th id="grand_summary_stub_1" class="gt_row gt_left gt_stub gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" data-quarto-table-cell-role="th" scope="row">Sum</th>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 Clutch">—</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 Mi">1,757.00</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 ybari">—</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 ti">4,375.95</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 yhat">—</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 ei">0.00</td>
+<td class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row gt_last_summary_row" headers="grand_summary_stub_1 ei2">11,439.58</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="example-coots-results" class="slide level2">
+<h2>Example: Coots — Results</h2>
+<p>The <strong>Sum</strong> row gives <span class="math inline">\sum M_i</span>, <span class="math inline">\sum \hat t_i</span>, and <span class="math inline">\sum e_i^2</span>: <span class="math display">
+\hat{\bar y}_r = \frac{\sum \hat t_i}{\sum M_i} = \frac{4375.95}{1757} = 2.49,
+\qquad
+s_r^2 = \frac{\sum e_i^2}{n-1} = \frac{11{,}439.58}{183} = 62.51,
+</span> <span class="math display">
+\qquad \bar M = \frac{1757}{184}=9.549
+</span></p>
+<p>Since the total number of clutches <span class="math inline">N</span> is unknown but presumably very large, the psu-level fpc <span class="math inline">(1-n/N)\approx 1</span>, and the second (within-clutch) variance term is negligible relative to the first: <span class="math display">
+\text{SE}(\hat{\bar y}_r) = \frac{1}{9.549}\sqrt{\frac{62.51}{184}} = 0.061,
+\qquad
+\widehat{\text{CV}}(\hat{\bar y}_r) = \frac{0.061}{2.49} = 0.0245
+</span></p>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="Lec06-cluster_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="Lec06-cluster_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="Lec06-cluster_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="Lec06-cluster_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="Lec06-cluster_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="Lec06-cluster_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="Lec06-cluster_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="Lec06-cluster_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="Lec06-cluster_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="Lec06-cluster_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"},{"title":"Display","icon":"<i class=\"fa fa-desktop\"></i>","content":"<div style=\"display: block;\">\n  <h1 class=\"slide-menu-title\">Display Ratio</h1>\n  <ul class=\"slide-menu-items\">\n    <li class=\"slide-menu-item\"><a onclick=\"Reveal.configure({ width: 1600, height: 900 });\">Widescreen (16:9)</a></li>\n    <li class=\"slide-menu-item\"><a onclick=\"Reveal.configure({ width: 1200, height: 900 });\">Standard (4:3)</a></li>\n    <li class=\"slide-menu-item\"><a onclick=\"Reveal.configure({ width: 1440, height: 900 });\">Tall (16:10)</a></li>\n  </ul>\n  <h1 class=\"slide-menu-title\" style=\"margin-top: 25px;\">Continuous Font Size (px)</h1>\n  <div style=\"padding: 10px 20px; font-family: sans-serif;\">\n    <input type=\"range\" class=\"reveal-font-slider\" min=\"16\" max=\"72\" step=\"2\" value=\"32\"\n           oninput=\"document.querySelector('.reveal').style.fontSize = this.value + 'px'; Reveal.layout();\"\n           style=\"width: 100%; cursor: pointer;\">\n    <div style=\"display: flex; justify-content: space-between; align-items: center; font-size: 14px; margin-top: 10px; color: #ccc;\">\n      <span>Smaller</span>\n      <span onclick=\"document.querySelector('.reveal').style.fontSize = ''; document.querySelector('.reveal-font-slider').value = 32; Reveal.layout();\"\n            style=\"cursor: pointer; color: #fff; font-weight: bold; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;\">\n        Reset\n      </span>\n      <span>Larger</span>\n    </div>\n  </div>\n  <h1 class=\"slide-menu-title\" style=\"margin-top: 25px;\">Debug Tools</h1>\n  <div style=\"padding: 10px 20px; font-family: sans-serif;\">\n    <label style=\"display: flex; justify-content: space-between; align-items: center; font-size: 16px; color: #ccc; cursor: pointer;\">\n      <span>Show Section Frames</span>\n      <input type=\"checkbox\" checked onchange=\"document.body.classList.toggle('hide-debug');\" style=\"width: 18px; height: 18px; cursor: pointer;\">\n    </label>\n  </div>\n</div>\n"}],"openButton":true,"width":"wide","numbers":true},
+'chalkboard': {"buttons":false},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 1000,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <!-- --- STRUCTURE (HTML) --- -->
+    <!-- Styling for these elements (.custom-slide-button, #custom-refresh-btn,
+         .slide-menu-button repositioning) lives in slides.css, section 4. -->
+
+    <!-- Chalkboard Button -->
+    <div id="custom-chalkboard-btn" class="custom-slide-button" title="Chalkboard" style="top: 75px; left: 10px;">
+      <svg viewbox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="4" width="16" height="12" rx="2" ry="2"></rect>
+        <line x1="12" y1="16" x2="12" y2="20"></line>
+        <line x1="8" y1="20" x2="16" y2="20"></line>
+      </svg>
+    </div>
+
+    <!-- Notes Canvas Button -->
+    <div id="custom-notes-btn" class="custom-slide-button" title="Notes Canvas" style="top: 120px; left: 10px;">
+      <svg viewbox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+      </svg>
+    </div>
+
+    <!-- Refresh Button -->
+    <div id="custom-refresh-btn" class="custom-slide-button" title="Refresh Page">
+      <svg viewbox="0 0 24 24" width="25" height="25" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+      </svg>
+    </div>
+
+    <!-- --- BEHAVIOR (JavaScript) --- -->
+    <script>
+      // Wait for the full page to load before manipulating the DOM
+      window.addEventListener('load', () => {
+        // --- Attach Event Listeners to Buttons ---
+        const chalkboardBtn = document.getElementById('custom-chalkboard-btn');
+        if (chalkboardBtn) {
+          chalkboardBtn.addEventListener('click', () => {
+            if (window.RevealChalkboard) {
+              RevealChalkboard.toggleChalkboard();
+            } else if (Reveal.getPlugin('chalkboard')) {
+              Reveal.getPlugin('chalkboard').toggleChalkboard();
+            }
+          });
+        }
+
+        const notesBtn = document.getElementById('custom-notes-btn');
+        if (notesBtn) {
+          notesBtn.addEventListener('click', () => {
+            if (window.RevealChalkboard) {
+              RevealChalkboard.toggleNotesCanvas();
+            } else if (Reveal.getPlugin('chalkboard')) {
+              Reveal.getPlugin('chalkboard').toggleNotesCanvas();
+            }
+          });
+        }
+
+        const refreshBtn = document.getElementById('custom-refresh-btn');
+        if (refreshBtn) {
+          refreshBtn.addEventListener('click', () => window.location.reload());
+        }
+
+        // --- Layout Fix Script ---
+        // A short delay ensures Reveal.js has initialized its layout first
+        setTimeout(function() {
+          if(window.Reveal) Reveal.layout();
+        }, 200);
+
+        // --- Menu Table-of-Contents Total Fix ---
+        // The bundled reveal-menu plugin builds its "current/total" row labels
+        // once, calling Reveal.getTotalSlides() before Reveal finishes settling
+        // its slide count for documents with nested (#-grouped) sections. That
+        // bakes in an inflated total (e.g. 51 instead of the correct 47 - one
+        // extra count per # section that has ## children) which never gets
+        // refreshed. Each row's own current number is already correct; only the
+        // shared "/total" suffix is stale, so just correct that suffix in place.
+        function fixMenuTotal() {
+          if (!window.Reveal || typeof Reveal.getTotalSlides !== 'function') return;
+          var total = Reveal.getTotalSlides();
+          var items = document.querySelectorAll(
+            '.slide-menu-item[data-slide-h], .slide-menu-item-vertical[data-slide-h]'
+          );
+          items.forEach(function (li) {
+            var numSpan = li.querySelector('.slide-menu-item-number');
+            if (!numSpan) return;
+            var m = numSpan.textContent.match(/^(\d+)\s*\/\s*\d+(.*)$/);
+            if (m) numSpan.textContent = m[1] + '/' + total + m[2];
+          });
+        }
+
+        // Run once things settle, and again whenever the menu is opened (Reveal
+        // toggles this class on <body>, whatever the trigger: click, the "m"
+        // keyboard shortcut, or the API) so the fix is idempotent and robust.
+        setTimeout(fixMenuTotal, 300);
+        var menuObserver = new MutationObserver(function () {
+          if (document.body.classList.contains('slide-menu-active')) {
+            fixMenuTotal();
+          }
+        });
+        menuObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
