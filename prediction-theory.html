@@ -203,16 +203,16 @@ E\Big[\Big(\sum_{i\in R}\delta_i\Big)^{2}\Big]=\sum_{i\in R}E(\delta_i^2)+\sum_{
 <section id="sec-general" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="sec-general"><span class="header-section-number">3</span> The general result</h2>
 <p>Suppose <span class="math inline">\(\mu_i(\theta)=x_i^{\top}\theta\)</span> is linear in <span class="math inline">\(\theta\)</span>, which covers all the cases below. Then <span class="math display">\[
-\sum_{i\in R}\delta_i=\Big(\sum_{i\in R}x_i\Big)^{\top}(\hat\theta-\theta)=x_R^{\top}(\hat\theta-\theta),
-\qquad x_R=\sum_{i\in R}x_i=\sum_{i\in U}x_i-\sum_{i\in S}x_i ,
+\sum_{i\in R}\delta_i=\Big(\sum_{i\in R}x_i\Big)^{\top}(\hat\theta-\theta)=t_{x,R}^{\top}(\hat\theta-\theta),
+\qquad t_{x,R}=\sum_{i\in R}x_i=t_x-t_{x,S},\quad t_x=\sum_{i\in U}x_i,\ t_{x,S}=\sum_{i\in S}x_i ,
 \]</span> a single linear contrast of the estimation error, and <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;8</a> becomes <span id="eq-mspe-general"><span class="math display">\[
-\operatorname{MSPE}(\hat T)=\sum_{i\in R}\sigma_i^2+x_R^{\top}\operatorname{MSE}(\hat\theta)\,x_R .
-\tag{9}\]</span></span> For a nonlinear mean function the same holds approximately, with <span class="math inline">\(x_R\)</span> replaced by <span class="math inline">\(\sum_R\partial\mu_i/\partial\theta\)</span> (delta method).</p>
+\operatorname{MSPE}(\hat T)=\sum_{i\in R}\sigma_i^2+t_{x,R}^{\top}\operatorname{MSE}(\hat\theta)\,t_{x,R} .
+\tag{9}\]</span></span> For a nonlinear mean function the same holds approximately, with <span class="math inline">\(t_{x,R}\)</span> replaced by <span class="math inline">\(\sum_R\partial\mu_i/\partial\theta\)</span> (delta method).</p>
 <p>For the working model <span class="math inline">\(\sigma_i^2=\sigma^2v_i\)</span> with known weights <span class="math inline">\(v_i\)</span>, the weighted least squares estimator <span class="math display">\[
 \hat\theta=\big(X_S^{\top}V_S^{-1}X_S\big)^{-1}X_S^{\top}V_S^{-1}y_S,\qquad V_S=\operatorname{diag}(v_i)_{i\in S},
 \]</span> is unbiased with <span class="math inline">\(\operatorname{Var}(\hat\theta)=\sigma^2(X_S^{\top}V_S^{-1}X_S)^{-1}\)</span>, and <span id="eq-mspe-wls"><span class="math display">\[
-\boxed{\;\operatorname{MSPE}(\hat T)=\sigma^2\Big[\sum_{i\in R}v_i+x_R^{\top}\big(X_S^{\top}V_S^{-1}X_S\big)^{-1}x_R\Big]\;}
-\tag{10}\]</span></span> The first term is the scatter of the unobserved units, and the second is the cost of estimating <span class="math inline">\(\theta\)</span> from the sample. The cost is a quadratic form in <span class="math inline">\(x_R\)</span>, so it is small only when the sample supplies a precise estimate in the direction in which the unobserved units need it. A precise <span class="math inline">\(\hat\theta\)</span> is not enough: the sample must also resemble the population in the directions <span class="math inline">\(x_R\)</span> points to. Each estimator below corresponds to a choice of <span class="math inline">\(x_i\)</span> and <span class="math inline">\(v_i\)</span>.</p>
+\boxed{\;\operatorname{MSPE}(\hat T)=\sigma^2\Big[\sum_{i\in R}v_i+t_{x,R}^{\top}\big(X_S^{\top}V_S^{-1}X_S\big)^{-1}t_{x,R}\Big]\;}
+\tag{10}\]</span></span> The first term is the scatter of the unobserved units, and the second is the cost of estimating <span class="math inline">\(\theta\)</span> from the sample. The cost is a quadratic form in <span class="math inline">\(t_{x,R}\)</span>, so it is small only when the sample supplies a precise estimate in the direction in which the unobserved units need it. A precise <span class="math inline">\(\hat\theta\)</span> is not enough: the sample must also resemble the population in the directions <span class="math inline">\(t_{x,R}\)</span> points to. Each estimator below corresponds to a choice of <span class="math inline">\(x_i\)</span> and <span class="math inline">\(v_i\)</span>.</p>
 <p>In all of these cases <span class="math inline">\(\hat T=\sum_SY_i+\sum_Rx_i^{\top}\hat\theta\)</span>, and the estimate of <span class="math inline">\(\sigma^2\)</span> is the weighted residual mean square <span class="math inline">\(\hat\sigma^2=\sum_Sv_i^{-1}(Y_i-x_i^{\top}\hat\theta)^2/(n-p)\)</span> with <span class="math inline">\(p=\dim\theta\)</span>, which gives the variance estimator on substituting into <a href="#eq-mspe-wls" class="quarto-xref">Equation&nbsp;10</a>.</p>
 </section>
 <section id="sec-srs" class="level2" data-number="4">
@@ -229,7 +229,7 @@ Y_i, &amp; i\in S,\\
 \hat T=\sum_{i\in S}Y_i+(N-n)\bar y_S=N\bar y_S ,
 \tag{11}\]</span></span> so the expansion estimator is a prediction rule that fills in every unobserved unit with the sample mean. The estimation error is common to all units, <span class="math inline">\(\delta_i=\bar y_S-\mu=\bar e_S\)</span>, so the pairwise correlation of the <span class="math inline">\(\delta_i\)</span> is exactly one and <span id="eq-error-srs"><span class="math display">\[
 \hat T-T=(N-n)\,\bar e_S-\sum_{i\in R}e_i .
-\tag{12}\]</span></span> Both terms have mean zero, so <span class="math inline">\(\hat T\)</span> is model-unbiased. With <span class="math inline">\(x_R=N-n\)</span> and <span class="math inline">\(X_S^{\top}X_S=n\)</span>, <a href="#eq-mspe-wls" class="quarto-xref">Equation&nbsp;10</a> gives <span id="eq-mspe-total"><span class="math display">\[
+\tag{12}\]</span></span> Both terms have mean zero, so <span class="math inline">\(\hat T\)</span> is model-unbiased. With <span class="math inline">\(t_{x,R}=N-n\)</span> and <span class="math inline">\(X_S^{\top}X_S=n\)</span>, <a href="#eq-mspe-wls" class="quarto-xref">Equation&nbsp;10</a> gives <span id="eq-mspe-total"><span class="math display">\[
 \operatorname{MSPE}(\hat T)=\sigma^2\Big[(N-n)+\frac{(N-n)^2}{n}\Big]=\frac{N(N-n)}{n}\,\sigma^2 ,
 \tag{13}\]</span></span> <span id="eq-mspe-mean"><span class="math display">\[
 \operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2}{n}\left(1-\frac{n}{N}\right).
@@ -265,7 +265,7 @@ Figure&nbsp;1: One realized population under the model. The sample occupies the 
 \]</span> so <span class="math inline">\(x_i\)</span> is the vector of stratum indicators and <span class="math inline">\(\theta=(\mu_1,\dots,\mu_H)\)</span>. Then <span class="math inline">\(\hat\mu_h=\bar y_{S_h}\)</span>, and <span class="math display">\[
 \hat T=\sum_{h=1}^HN_h\bar y_{S_h},\qquad
 \hat{\bar y}_U=\sum_{h=1}^HW_h\bar y_{S_h},\quad W_h=N_h/N .
-\]</span> The vector <span class="math inline">\(x_R\)</span> has components <span class="math inline">\(N_h-n_h\)</span>, the matrix <span class="math inline">\(X_S^{\top}X_S\)</span> is diagonal with entries <span class="math inline">\(n_h\)</span>, and the <span class="math inline">\(\hat\mu_h\)</span> are independent across strata because they depend on disjoint, uncorrelated data. The correlated errors <span class="math inline">\(\delta_i\)</span> therefore occur only <em>within</em> a stratum, and the cross terms between strata vanish. Applying <a href="#eq-mspe-general" class="quarto-xref">Equation&nbsp;9</a> stratum by stratum, <span id="eq-mspe-strat"><span class="math display">\[
+\]</span> The vector <span class="math inline">\(t_{x,R}\)</span> has components <span class="math inline">\(N_h-n_h\)</span>, the matrix <span class="math inline">\(X_S^{\top}X_S\)</span> is diagonal with entries <span class="math inline">\(n_h\)</span>, and the <span class="math inline">\(\hat\mu_h\)</span> are independent across strata because they depend on disjoint, uncorrelated data. The correlated errors <span class="math inline">\(\delta_i\)</span> therefore occur only <em>within</em> a stratum, and the cross terms between strata vanish. Applying <a href="#eq-mspe-general" class="quarto-xref">Equation&nbsp;9</a> stratum by stratum, <span id="eq-mspe-strat"><span class="math display">\[
 \operatorname{MSPE}(\hat T)=\sum_{h=1}^H\sigma_h^2\Big[(N_h-n_h)+\frac{(N_h-n_h)^2}{n_h}\Big]=\sum_{h=1}^H\frac{N_h(N_h-n_h)}{n_h}\,\sigma_h^2 ,
 \tag{15}\]</span></span> <span id="eq-mspe-strat-mean"><span class="math display">\[
 \operatorname{MSPE}(\hat{\bar y}_U)=\sum_{h=1}^HW_h^2\Big(1-\frac{n_h}{N_h}\Big)\frac{\sigma_h^2}{n_h}.
@@ -282,7 +282,7 @@ Figure&nbsp;1: One realized population under the model. The sample occupies the 
 \hat\beta=\frac{\sum_{i\in S}Y_i}{\sum_{i\in S}x_i}=\frac{\bar y_S}{\bar x_S},
 \qquad
 \hat T=\sum_{i\in S}Y_i+\hat\beta\,t_{x,R}=\hat\beta\,t_x ,
-\]</span> because <span class="math inline">\(\sum_SY_i=\hat\beta\,t_{x,S}\)</span>. This is the ratio estimator of the total. The shared error is <span class="math inline">\(\delta_i=x_i(\hat\beta-\beta)\)</span>, so <span class="math inline">\(\sum_R\delta_i=t_{x,R}(\hat\beta-\beta)\)</span>, with <span class="math inline">\(x_R=t_{x,R}=t_x-t_{x,S}\)</span> and <span class="math inline">\(\sum_Rv_i=t_{x,R}\)</span>. <a href="#eq-mspe-wls" class="quarto-xref">Equation&nbsp;10</a> gives <span id="eq-mspe-ratio"><span class="math display">\[
+\]</span> because <span class="math inline">\(\sum_SY_i=\hat\beta\,t_{x,S}\)</span>. This is the ratio estimator of the total. The shared error is <span class="math inline">\(\delta_i=x_i(\hat\beta-\beta)\)</span>, so <span class="math inline">\(\sum_R\delta_i=t_{x,R}(\hat\beta-\beta)\)</span>, with <span class="math inline">\(t_{x,R}=t_x-t_{x,S}\)</span> and <span class="math inline">\(\sum_Rv_i=t_{x,R}\)</span>. <a href="#eq-mspe-wls" class="quarto-xref">Equation&nbsp;10</a> gives <span id="eq-mspe-ratio"><span class="math display">\[
 \operatorname{MSPE}(\hat T)=\sigma^2\Big[t_{x,R}+\frac{t_{x,R}^2}{t_{x,S}}\Big]
 =\sigma^2\,\frac{t_x\,(t_x-t_{x,S})}{t_{x,S}} .
 \tag{17}\]</span></span> Write <span class="math inline">\(t_{x,S}=n\bar x_S\)</span> and <span class="math inline">\(t_x=N\bar x_U\)</span>. Then <span id="eq-mspe-ratio-mean"><span class="math display">\[
@@ -295,7 +295,7 @@ Figure&nbsp;1: One realized population under the model. The sample occupies the 
 \mu_i(\theta)=\beta_0+\beta_1x_i,\qquad \sigma_i^2=\sigma^2,
 \]</span> so <span class="math inline">\(x_i=(1,x_i)^{\top}\)</span> and <span class="math inline">\(v_i=1\)</span>. The least squares fit gives <span class="math display">\[
 \hat T=\sum_{i\in S}Y_i+\sum_{i\in R}(\hat\beta_0+\hat\beta_1x_i)=N\big[\bar y_S+\hat\beta_1(\bar x_U-\bar x_S)\big],
-\]</span> the regression estimator, because the residuals in <span class="math inline">\(S\)</span> sum to zero. Here <span class="math inline">\(x_R=(N-n)(1,\bar x_R)^{\top}\)</span> and <span class="math inline">\(X_S^{\top}X_S\)</span> has the inverse that gives the standard leverage formula <span class="math display">\[
+\]</span> the regression estimator, because the residuals in <span class="math inline">\(S\)</span> sum to zero. Here <span class="math inline">\(t_{x,R}=(N-n)(1,\bar x_R)^{\top}\)</span> and <span class="math inline">\(X_S^{\top}X_S\)</span> has the inverse that gives the standard leverage formula <span class="math display">\[
 (1,\bar x_R)\,(X_S^{\top}X_S)^{-1}(1,\bar x_R)^{\top}=\frac1n+\frac{(\bar x_R-\bar x_S)^2}{S_{xx,S}},
 \qquad S_{xx,S}=\sum_{i\in S}(x_i-\bar x_S)^2 .
 \]</span> Moreover <span class="math inline">\((N-n)(\bar x_R-\bar x_S)=N(\bar x_U-\bar x_S)\)</span>, so <a href="#eq-mspe-wls" class="quarto-xref">Equation&nbsp;10</a> becomes <span id="eq-mspe-reg"><span class="math display">\[
@@ -326,7 +326,7 @@ Table&nbsp;1: Special cases of <a href="#eq-mspe-wls" class="quarto-xref">Equati
 <th style="text-align: left;">Estimator</th>
 <th style="text-align: left;"><span class="math inline">\(\mu_i(\theta)\)</span></th>
 <th style="text-align: left;"><span class="math inline">\(v_i\)</span></th>
-<th style="text-align: left;"><span class="math inline">\(x_R\)</span></th>
+<th style="text-align: left;"><span class="math inline">\(t_{x,R}\)</span></th>
 <th style="text-align: left;"><span class="math inline">\(\operatorname{MSPE}(\hat T)/\sigma^2\)</span></th>
 </tr>
 </thead>
@@ -364,7 +364,7 @@ Table&nbsp;1: Special cases of <a href="#eq-mspe-wls" class="quarto-xref">Equati
 </div>
 </figure>
 </div>
-<p>In every case the MSPE is the scatter of the unobserved units, <span class="math inline">\(\sum_R\sigma_i^2\)</span>, plus a cost of estimating <span class="math inline">\(\theta\)</span> that is a quadratic form in the total auxiliary information <span class="math inline">\(x_R\)</span> still to be predicted. The ratio and regression estimators do not remove the shared error; they change the model so that <span class="math inline">\(\sigma^2\)</span> is the residual variance rather than the marginal one, and they pay a penalty when the sample is unrepresentative in <span class="math inline">\(x\)</span>.</p>
+<p>In every case the MSPE is the scatter of the unobserved units, <span class="math inline">\(\sum_R\sigma_i^2\)</span>, plus a cost of estimating <span class="math inline">\(\theta\)</span> that is a quadratic form in the total auxiliary information <span class="math inline">\(t_{x,R}\)</span> still to be predicted. The ratio and regression estimators do not remove the shared error; they change the model so that <span class="math inline">\(\sigma^2\)</span> is the residual variance rather than the marginal one, and they pay a penalty when the sample is unrepresentative in <span class="math inline">\(x\)</span>.</p>
 </section>
 <section id="sec-check" class="level2" data-number="9">
 <h2 data-number="9" class="anchored" data-anchor-id="sec-check"><span class="header-section-number">9</span> Numerical check</h2>
