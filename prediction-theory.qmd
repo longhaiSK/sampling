@@ -317,43 +317,49 @@ The first term is the SRS result @eq-mspe-mean with $\sigma^2$ now the *residual
 
 ## Unequal probability sampling with replacement {#sec-ups}
 
-Suppose $n$ draws are made with replacement, unit $i$ being selected with probability $p_i$ on each draw, and let $m_i$ be the number of times unit $i$ is drawn, so $\sum_Um_i=n$. The sample $S=\{i:m_i>0\}$ is the set of *distinct* units, of size $\nu\le n$, and $R=U\setminus S$. The Hansen–Hurwitz estimator is
+Suppose $n$ draws are made with replacement, unit $i$ being selected with probability $p_i$ on each draw, and let $m_i$ be the number of times unit $i$ is drawn, so $\sum_Um_i=n$. The sample $S=\{i:m_i>0\}$ is the set of *distinct* units and $R=U\setminus S$. UPS is used when the study variable is roughly proportional to a known size measure $x_i>0$, so we take the ratio model of @sec-ratio,
 $$
-\hat T_{HH}=\frac1n\sum_{k=1}^n\frac{y_{(k)}}{p_{(k)}}=\sum_{i\in S}w_iY_i,\qquad w_i=\frac{m_i}{np_i},
+Y_i=\beta x_i+e_i,\qquad E(e_i)=0,\quad \operatorname{Var}(e_i)=\sigma_i^2=\sigma^2v_i ,
 $$
-where $(k)$ indexes the unit selected on draw $k$. It is not of the plug-in form of @sec-setup, but it can still be read as a predictor. Splitting off the observed values,
+with $p_i=x_i/t_x$. Nothing in the framework changes: the observed values are kept and each unobserved unit is predicted by $\hat Y_i=\mu_i(\hat\beta)=\hat\beta x_i$, so
 $$
-\hat T_{HH}=\sum_{i\in S}Y_i+\underbrace{\sum_{i\in S}(w_i-1)Y_i}_{\text{prediction of }\sum_RY_i},
+\hat T=\sum_{i\in S}Y_i+\hat\beta\,t_{x,R}.
 $$
-so the unobserved total is predicted in one piece by reweighting the sample, rather than unit by unit from a fitted mean.
 
-UPS is designed for the ratio model $\mu_i=\beta x_i$, $\sigma_i^2=\sigma^2v_i$, with $p_i=x_i/t_x$. Then $\sum_Sw_ix_i=(t_x/n)\sum_Sm_i=t_x$, so
+For any $\hat\beta=\sum_Sc_iY_i$ that is linear and model unbiased, $\sum_Sc_ix_i=1$, the estimation error is $\delta_i=x_i(\hat\beta-\beta)$, and
 $$
-E(\hat T_{HH}-T)=\beta\Big(\sum_{i\in S}w_ix_i-t_x\Big)=0,
+\hat T-T=t_{x,R}(\hat\beta-\beta)-\sum_{i\in R}e_i .
 $$
-and $\hat T_{HH}$ is model unbiased. This depends on $p_i\propto\mu_i$; for a mean function not proportional to the selection probabilities, $\hat T_{HH}$ has model bias $\sum_Sw_i\mu_i-\sum_U\mu_i$. Under the ratio model the error is
+Since $\hat\beta$ uses only units in $S$, the two parts are uncorrelated and
 $$
-\hat T_{HH}-T=\underbrace{\sum_{i\in S}(w_i-1)e_i}_{\delta_R}-\sum_{i\in R}e_i ,
-$$
-where $\delta_R$ plays the role of $\sum_R\delta_i$ in @eq-error-individual. The two sums involve disjoint units, so
-$$
-\operatorname{MSPE}(\hat T_{HH})=\sigma^2\Big[\sum_{i\in R}v_i+\sum_{i\in S}(w_i-1)^2v_i\Big].
-$$ {#eq-mspe-hh}
-The first term is the irreducible error, the same as for any predictor that keeps the observed values, and it depends on the draws only through which units end up in $R$. The second term is the estimation error.
+\operatorname{MSPE}(\hat T)=\sum_{i\in R}\sigma_i^2+t_{x,R}^2\sum_{i\in S}c_i^2\sigma_i^2 .
+$$ {#eq-mspe-ups}
+The selection probabilities can enter in two places: through which units are in $S$, which sets $t_{x,S}$, $t_{x,R}$ and the units contributing to $\sum_R\sigma_i^2$; and, optionally, through the coefficients $c_i$ of $\hat\beta$. The two cases below differ only in the second. Both use $v_i=x_i$.
 
-Compare this with the ratio predictor of @sec-ratio fitted to the same distinct units, for $v_i=x_i$. Since $\sum_S(w_i-1)x_i=t_x-t_{x,S}=t_{x,R}$, the Cauchy–Schwarz inequality gives
+**Case A: $\hat\beta$ weighted by the selection probabilities.** Weight each distinct unit by $a_i=m_i/(np_i)$, the inverse selection probability per draw times its multiplicity, in the estimating equation $\sum_Sa_ix_i(Y_i-\beta x_i)/v_i=0$. With $p_i=x_i/t_x$ and $v_i=x_i$ the solution is
 $$
-t_{x,R}^2=\Big(\sum_{i\in S}(w_i-1)x_i\Big)^2\le\sum_{i\in S}(w_i-1)^2x_i\cdot t_{x,S},
+\hat\beta_p=\frac{\sum_Sa_iY_i}{\sum_Sa_ix_i}=\frac1n\sum_{k=1}^n\frac{y_{(k)}}{x_{(k)}},
+$$
+the average ratio over the $n$ draws, where $(k)$ is the unit selected on draw $k$; a unit drawn twice counts twice. Here $c_i=m_i/(nx_i)$, and @eq-mspe-ups gives
+$$
+\operatorname{MSPE}(\hat T_p)=\sigma^2\Big[t_{x,R}+\frac{t_{x,R}^2}{n^2}\sum_{i\in S}\frac{m_i^2}{x_i}\Big].
+$$ {#eq-mspe-ups-a}
+The Hansen–Hurwitz estimator is $\frac1n\sum_ky_{(k)}/p_{(k)}=\hat\beta_p\,t_x$, which applies $\hat\beta_p$ to the sampled units as well; $\hat T_p$ keeps their observed values instead.
+
+**Case B: $\hat\beta$ without weights.** Fit the ratio model to the distinct units by weighted least squares, ignoring the $p_i$ and $m_i$. This is @sec-ratio with $S$ the distinct units: $\hat\beta=\sum_SY_i/t_{x,S}$, $c_i=1/t_{x,S}$, and
+$$
+\operatorname{MSPE}(\hat T)=\sigma^2\Big[t_{x,R}+\frac{t_{x,R}^2}{t_{x,S}}\Big].
+$$ {#eq-mspe-ups-b}
+
+**Comparison.** The irreducible terms are equal. For the estimation terms, the Cauchy–Schwarz inequality gives
+$$
+n^2=\Big(\sum_{i\in S}\frac{m_i}{\sqrt{x_i}}\sqrt{x_i}\Big)^2\le\sum_{i\in S}\frac{m_i^2}{x_i}\cdot t_{x,S},
 \qquad\text{so}\qquad
-\sum_{i\in S}(w_i-1)^2x_i\ \ge\ \frac{t_{x,R}^2}{t_{x,S}} ,
+\frac1{n^2}\sum_{i\in S}\frac{m_i^2}{x_i}\ \ge\ \frac1{t_{x,S}},
 $$
-with equality only when $w_i-1$ is the same for every $i\in S$, which makes $w_i=t_x/t_{x,S}$, the ratio estimator's weights. The irreducible terms are equal, so
-$$
-\operatorname{MSPE}(\hat T_{HH})\ \ge\ \sigma^2\,\frac{t_x\,(t_x-t_{x,S})}{t_{x,S}}=\operatorname{MSPE}(\hat\beta\,t_x),
-$$
-the right side being @eq-mspe-ratio with $S$ the distinct units. The Hansen–Hurwitz weights vary with the multiplicities $m_i$, which carry no information about $\beta$, so they add estimation error that the ratio fit avoids.
+with equality only when $m_i\propto x_i$. Case A is therefore never better than Case B. This is the Gauss–Markov theorem: among linear unbiased $\hat\beta$, the weighted least squares coefficients $c_i\propto x_i/\sigma_i^2$ minimize $\sum_Sc_i^2\sigma_i^2$, and the design weights move $c_i$ away from them because the multiplicities $m_i$ carry no information about $\beta$.
 
-The design therefore acts in two ways. Repeated draws reduce the number of distinct units, which leaves more units in $R$ and raises both terms of @eq-mspe-hh. And the weights $m_i/(np_i)$ are not the efficient way to use the units observed. From the prediction point of view, the selection probabilities are a device for choosing a good sample, one with large $t_{x,S}$, and once the sample is drawn the best predictor is the ratio predictor on the distinct units, in which the $p_i$ no longer appear. The classical design variance $\frac1n\sum_Up_i(y_i/p_i-T)^2$ answers a different question, averaging over repeated draws with $y$ fixed, whereas @eq-mspe-hh fixes the draws and averages over the model.
+The selection probabilities therefore matter through *which* units are observed. Each $\sigma_i$ is fixed, but the irreducible term $\sum_R\sigma_i^2=\sigma^2t_{x,R}$ is a sum over the units left unobserved, so drawing the large units lowers it; and a large $t_{x,S}$ also lowers the estimation term of @eq-mspe-ups-b. This is why $p_i\propto x_i$ is a good design under the ratio model. Using the $p_i$ a second time, as weights in $\hat\beta$, only adds estimation error when the model holds. Its value is protection against a wrong model: $\hat\beta_p$ estimates the population ratio $\sum_UY_i/t_x$ whether or not the model is true, which the unweighted fit does not guarantee.
 
 ## Summary {#sec-summary}
 
@@ -368,7 +374,7 @@ The design therefore acts in two ways. Repeated draws reduce the number of disti
 
 In every case the MSPE is the scatter of the unobserved units, $\sum_R\sigma_i^2$, plus a cost of estimating $\theta$ that is a quadratic form in the total auxiliary information $t_{x,R}$ still to be predicted. The ratio and regression estimators do not remove the shared error; they change the model so that $\sigma^2$ is the residual variance rather than the marginal one, and they pay a penalty when the sample is unrepresentative in $x$.
 
-The Hansen–Hurwitz estimator of @sec-ups falls outside the table because it does not predict unit by unit, but @eq-mspe-hh has the same two-part form, and its estimation term is never smaller than that of the ratio predictor on the same distinct units.
+The UPS predictors of @sec-ups are the ratio row with $S$ the distinct units drawn; weighting $\hat\beta$ by the selection probabilities replaces $1/t_{x,S}$ in the estimation term by the larger $\sum_Sm_i^2/x_i\,/\,n^2$ (@eq-mspe-ups-a).
 
 ## Numerical check {#sec-check}
 
@@ -410,21 +416,20 @@ reg_emp <- sim(function() rnorm(N, 3 + beta * x, sigma),
                function(y) { f <- lm(y[S] ~ x[S]); N * (mean(y[S]) + coef(f)[2] * (mean(x) - mean(x[S]))) })
 reg_th  <- sigma^2 * (N * (N - n) / n + N^2 * (mean(x) - mean(x[S]))^2 / sum((x[S] - mean(x[S]))^2))
 
-## UPS with replacement, p_i proportional to x: Hansen-Hurwitz vs ratio on distinct units
+## UPS with replacement, p_i proportional to x: ratio predictor, case A (p-weighted) and case B (unweighted)
 m   <- tabulate(sample(N, n, replace = TRUE, prob = x), N)   # one fixed set of draws
-Su  <- which(m > 0)
-w   <- m[Su] / (n * x[Su] / sum(x))
-hh_emp  <- sim(function() rnorm(N, beta * x, sigma * sqrt(x)),
-               function(y) sum(w * y[Su]))
-hh_th   <- sigma^2 * (sum(x[-Su]) + sum((w - 1)^2 * x[Su]))
-upr_emp <- sim(function() rnorm(N, beta * x, sigma * sqrt(x)),
-               function(y) sum(x) * sum(y[Su]) / sum(x[Su]))
-upr_th  <- sigma^2 * sum(x) * (sum(x) - sum(x[Su])) / sum(x[Su])
+Su  <- which(m > 0); txR <- sum(x[-Su]); txS <- sum(x[Su])
+upa_emp <- sim(function() rnorm(N, beta * x, sigma * sqrt(x)),
+               function(y) sum(y[Su]) + mean(rep(y[Su] / x[Su], m[Su])) * txR)
+upa_th  <- sigma^2 * (txR + txR^2 * sum(m[Su]^2 / x[Su]) / n^2)
+upb_emp <- sim(function() rnorm(N, beta * x, sigma * sqrt(x)),
+               function(y) sum(y[Su]) + sum(y[Su]) / txS * txR)
+upb_th  <- sigma^2 * (txR + txR^2 / txS)
 
 round(rbind(SRS = c(simulated = srs_emp, formula = srs_th),
             Stratified = c(str_emp, str_th),
             Ratio = c(rat_emp, rat_th),
             Regression = c(reg_emp, reg_th),
-            `UPS: Hansen-Hurwitz` = c(hh_emp, hh_th),
-            `UPS: ratio on distinct units` = c(upr_emp, upr_th)))
+            `UPS A: p-weighted` = c(upa_emp, upa_th),
+            `UPS B: unweighted` = c(upb_emp, upb_th)))
 ```

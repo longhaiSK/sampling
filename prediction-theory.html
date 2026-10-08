@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Longhai Li">
-<meta name="dcterms.date" content="2026-10-07">
+<meta name="dcterms.date" content="2026-10-08">
 
 <title>Prediction Theory for Sampling Survey</title>
 <style>
@@ -149,7 +149,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 7, 2026</p>
+      <p class="date">October 8, 2026</p>
     </div>
   </div>
   
@@ -330,26 +330,30 @@ Figure&nbsp;2: One realized population under the model. The sample occupies the 
 </section>
 <section id="sec-ups" class="level2" data-number="8">
 <h2 data-number="8" class="anchored" data-anchor-id="sec-ups"><span class="header-section-number">8</span> Unequal probability sampling with replacement</h2>
-<p>Suppose <span class="math inline">\(n\)</span> draws are made with replacement, unit <span class="math inline">\(i\)</span> being selected with probability <span class="math inline">\(p_i\)</span> on each draw, and let <span class="math inline">\(m_i\)</span> be the number of times unit <span class="math inline">\(i\)</span> is drawn, so <span class="math inline">\(\sum_Um_i=n\)</span>. The sample <span class="math inline">\(S=\{i:m_i&gt;0\}\)</span> is the set of <em>distinct</em> units, of size <span class="math inline">\(\nu\le n\)</span>, and <span class="math inline">\(R=U\setminus S\)</span>. The Hansen–Hurwitz estimator is <span class="math display">\[
-\hat T_{HH}=\frac1n\sum_{k=1}^n\frac{y_{(k)}}{p_{(k)}}=\sum_{i\in S}w_iY_i,\qquad w_i=\frac{m_i}{np_i},
-\]</span> where <span class="math inline">\((k)\)</span> indexes the unit selected on draw <span class="math inline">\(k\)</span>. It is not of the plug-in form of <a href="#sec-setup" class="quarto-xref">Section&nbsp;1</a>, but it can still be read as a predictor. Splitting off the observed values, <span class="math display">\[
-\hat T_{HH}=\sum_{i\in S}Y_i+\underbrace{\sum_{i\in S}(w_i-1)Y_i}_{\text{prediction of }\sum_RY_i},
-\]</span> so the unobserved total is predicted in one piece by reweighting the sample, rather than unit by unit from a fitted mean.</p>
-<p>UPS is designed for the ratio model <span class="math inline">\(\mu_i=\beta x_i\)</span>, <span class="math inline">\(\sigma_i^2=\sigma^2v_i\)</span>, with <span class="math inline">\(p_i=x_i/t_x\)</span>. Then <span class="math inline">\(\sum_Sw_ix_i=(t_x/n)\sum_Sm_i=t_x\)</span>, so <span class="math display">\[
-E(\hat T_{HH}-T)=\beta\Big(\sum_{i\in S}w_ix_i-t_x\Big)=0,
-\]</span> and <span class="math inline">\(\hat T_{HH}\)</span> is model unbiased. This depends on <span class="math inline">\(p_i\propto\mu_i\)</span>; for a mean function not proportional to the selection probabilities, <span class="math inline">\(\hat T_{HH}\)</span> has model bias <span class="math inline">\(\sum_Sw_i\mu_i-\sum_U\mu_i\)</span>. Under the ratio model the error is <span class="math display">\[
-\hat T_{HH}-T=\underbrace{\sum_{i\in S}(w_i-1)e_i}_{\delta_R}-\sum_{i\in R}e_i ,
-\]</span> where <span class="math inline">\(\delta_R\)</span> plays the role of <span class="math inline">\(\sum_R\delta_i\)</span> in <a href="#eq-error-individual" class="quarto-xref">Equation&nbsp;4</a>. The two sums involve disjoint units, so <span id="eq-mspe-hh"><span class="math display">\[
-\operatorname{MSPE}(\hat T_{HH})=\sigma^2\Big[\sum_{i\in R}v_i+\sum_{i\in S}(w_i-1)^2v_i\Big].
-\tag{21}\]</span></span> The first term is the irreducible error, the same as for any predictor that keeps the observed values, and it depends on the draws only through which units end up in <span class="math inline">\(R\)</span>. The second term is the estimation error.</p>
-<p>Compare this with the ratio predictor of <a href="#sec-ratio" class="quarto-xref">Section&nbsp;6</a> fitted to the same distinct units, for <span class="math inline">\(v_i=x_i\)</span>. Since <span class="math inline">\(\sum_S(w_i-1)x_i=t_x-t_{x,S}=t_{x,R}\)</span>, the Cauchy–Schwarz inequality gives <span class="math display">\[
-t_{x,R}^2=\Big(\sum_{i\in S}(w_i-1)x_i\Big)^2\le\sum_{i\in S}(w_i-1)^2x_i\cdot t_{x,S},
+<p>Suppose <span class="math inline">\(n\)</span> draws are made with replacement, unit <span class="math inline">\(i\)</span> being selected with probability <span class="math inline">\(p_i\)</span> on each draw, and let <span class="math inline">\(m_i\)</span> be the number of times unit <span class="math inline">\(i\)</span> is drawn, so <span class="math inline">\(\sum_Um_i=n\)</span>. The sample <span class="math inline">\(S=\{i:m_i&gt;0\}\)</span> is the set of <em>distinct</em> units and <span class="math inline">\(R=U\setminus S\)</span>. UPS is used when the study variable is roughly proportional to a known size measure <span class="math inline">\(x_i&gt;0\)</span>, so we take the ratio model of <a href="#sec-ratio" class="quarto-xref">Section&nbsp;6</a>, <span class="math display">\[
+Y_i=\beta x_i+e_i,\qquad E(e_i)=0,\quad \operatorname{Var}(e_i)=\sigma_i^2=\sigma^2v_i ,
+\]</span> with <span class="math inline">\(p_i=x_i/t_x\)</span>. Nothing in the framework changes: the observed values are kept and each unobserved unit is predicted by <span class="math inline">\(\hat Y_i=\mu_i(\hat\beta)=\hat\beta x_i\)</span>, so <span class="math display">\[
+\hat T=\sum_{i\in S}Y_i+\hat\beta\,t_{x,R}.
+\]</span></p>
+<p>For any <span class="math inline">\(\hat\beta=\sum_Sc_iY_i\)</span> that is linear and model unbiased, <span class="math inline">\(\sum_Sc_ix_i=1\)</span>, the estimation error is <span class="math inline">\(\delta_i=x_i(\hat\beta-\beta)\)</span>, and <span class="math display">\[
+\hat T-T=t_{x,R}(\hat\beta-\beta)-\sum_{i\in R}e_i .
+\]</span> Since <span class="math inline">\(\hat\beta\)</span> uses only units in <span class="math inline">\(S\)</span>, the two parts are uncorrelated and <span id="eq-mspe-ups"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=\sum_{i\in R}\sigma_i^2+t_{x,R}^2\sum_{i\in S}c_i^2\sigma_i^2 .
+\tag{21}\]</span></span> The selection probabilities can enter in two places: through which units are in <span class="math inline">\(S\)</span>, which sets <span class="math inline">\(t_{x,S}\)</span>, <span class="math inline">\(t_{x,R}\)</span> and the units contributing to <span class="math inline">\(\sum_R\sigma_i^2\)</span>; and, optionally, through the coefficients <span class="math inline">\(c_i\)</span> of <span class="math inline">\(\hat\beta\)</span>. The two cases below differ only in the second. Both use <span class="math inline">\(v_i=x_i\)</span>.</p>
+<p><strong>Case A: <span class="math inline">\(\hat\beta\)</span> weighted by the selection probabilities.</strong> Weight each distinct unit by <span class="math inline">\(a_i=m_i/(np_i)\)</span>, the inverse selection probability per draw times its multiplicity, in the estimating equation <span class="math inline">\(\sum_Sa_ix_i(Y_i-\beta x_i)/v_i=0\)</span>. With <span class="math inline">\(p_i=x_i/t_x\)</span> and <span class="math inline">\(v_i=x_i\)</span> the solution is <span class="math display">\[
+\hat\beta_p=\frac{\sum_Sa_iY_i}{\sum_Sa_ix_i}=\frac1n\sum_{k=1}^n\frac{y_{(k)}}{x_{(k)}},
+\]</span> the average ratio over the <span class="math inline">\(n\)</span> draws, where <span class="math inline">\((k)\)</span> is the unit selected on draw <span class="math inline">\(k\)</span>; a unit drawn twice counts twice. Here <span class="math inline">\(c_i=m_i/(nx_i)\)</span>, and <a href="#eq-mspe-ups" class="quarto-xref">Equation&nbsp;21</a> gives <span id="eq-mspe-ups-a"><span class="math display">\[
+\operatorname{MSPE}(\hat T_p)=\sigma^2\Big[t_{x,R}+\frac{t_{x,R}^2}{n^2}\sum_{i\in S}\frac{m_i^2}{x_i}\Big].
+\tag{22}\]</span></span> The Hansen–Hurwitz estimator is <span class="math inline">\(\frac1n\sum_ky_{(k)}/p_{(k)}=\hat\beta_p\,t_x\)</span>, which applies <span class="math inline">\(\hat\beta_p\)</span> to the sampled units as well; <span class="math inline">\(\hat T_p\)</span> keeps their observed values instead.</p>
+<p><strong>Case B: <span class="math inline">\(\hat\beta\)</span> without weights.</strong> Fit the ratio model to the distinct units by weighted least squares, ignoring the <span class="math inline">\(p_i\)</span> and <span class="math inline">\(m_i\)</span>. This is <a href="#sec-ratio" class="quarto-xref">Section&nbsp;6</a> with <span class="math inline">\(S\)</span> the distinct units: <span class="math inline">\(\hat\beta=\sum_SY_i/t_{x,S}\)</span>, <span class="math inline">\(c_i=1/t_{x,S}\)</span>, and <span id="eq-mspe-ups-b"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=\sigma^2\Big[t_{x,R}+\frac{t_{x,R}^2}{t_{x,S}}\Big].
+\tag{23}\]</span></span></p>
+<p><strong>Comparison.</strong> The irreducible terms are equal. For the estimation terms, the Cauchy–Schwarz inequality gives <span class="math display">\[
+n^2=\Big(\sum_{i\in S}\frac{m_i}{\sqrt{x_i}}\sqrt{x_i}\Big)^2\le\sum_{i\in S}\frac{m_i^2}{x_i}\cdot t_{x,S},
 \qquad\text{so}\qquad
-\sum_{i\in S}(w_i-1)^2x_i\ \ge\ \frac{t_{x,R}^2}{t_{x,S}} ,
-\]</span> with equality only when <span class="math inline">\(w_i-1\)</span> is the same for every <span class="math inline">\(i\in S\)</span>, which makes <span class="math inline">\(w_i=t_x/t_{x,S}\)</span>, the ratio estimator’s weights. The irreducible terms are equal, so <span class="math display">\[
-\operatorname{MSPE}(\hat T_{HH})\ \ge\ \sigma^2\,\frac{t_x\,(t_x-t_{x,S})}{t_{x,S}}=\operatorname{MSPE}(\hat\beta\,t_x),
-\]</span> the right side being <a href="#eq-mspe-ratio" class="quarto-xref">Equation&nbsp;17</a> with <span class="math inline">\(S\)</span> the distinct units. The Hansen–Hurwitz weights vary with the multiplicities <span class="math inline">\(m_i\)</span>, which carry no information about <span class="math inline">\(\beta\)</span>, so they add estimation error that the ratio fit avoids.</p>
-<p>The design therefore acts in two ways. Repeated draws reduce the number of distinct units, which leaves more units in <span class="math inline">\(R\)</span> and raises both terms of <a href="#eq-mspe-hh" class="quarto-xref">Equation&nbsp;21</a>. And the weights <span class="math inline">\(m_i/(np_i)\)</span> are not the efficient way to use the units observed. From the prediction point of view, the selection probabilities are a device for choosing a good sample, one with large <span class="math inline">\(t_{x,S}\)</span>, and once the sample is drawn the best predictor is the ratio predictor on the distinct units, in which the <span class="math inline">\(p_i\)</span> no longer appear. The classical design variance <span class="math inline">\(\frac1n\sum_Up_i(y_i/p_i-T)^2\)</span> answers a different question, averaging over repeated draws with <span class="math inline">\(y\)</span> fixed, whereas <a href="#eq-mspe-hh" class="quarto-xref">Equation&nbsp;21</a> fixes the draws and averages over the model.</p>
+\frac1{n^2}\sum_{i\in S}\frac{m_i^2}{x_i}\ \ge\ \frac1{t_{x,S}},
+\]</span> with equality only when <span class="math inline">\(m_i\propto x_i\)</span>. Case A is therefore never better than Case B. This is the Gauss–Markov theorem: among linear unbiased <span class="math inline">\(\hat\beta\)</span>, the weighted least squares coefficients <span class="math inline">\(c_i\propto x_i/\sigma_i^2\)</span> minimize <span class="math inline">\(\sum_Sc_i^2\sigma_i^2\)</span>, and the design weights move <span class="math inline">\(c_i\)</span> away from them because the multiplicities <span class="math inline">\(m_i\)</span> carry no information about <span class="math inline">\(\beta\)</span>.</p>
+<p>The selection probabilities therefore matter through <em>which</em> units are observed. Each <span class="math inline">\(\sigma_i\)</span> is fixed, but the irreducible term <span class="math inline">\(\sum_R\sigma_i^2=\sigma^2t_{x,R}\)</span> is a sum over the units left unobserved, so drawing the large units lowers it; and a large <span class="math inline">\(t_{x,S}\)</span> also lowers the estimation term of <a href="#eq-mspe-ups-b" class="quarto-xref">Equation&nbsp;23</a>. This is why <span class="math inline">\(p_i\propto x_i\)</span> is a good design under the ratio model. Using the <span class="math inline">\(p_i\)</span> a second time, as weights in <span class="math inline">\(\hat\beta\)</span>, only adds estimation error when the model holds. Its value is protection against a wrong model: <span class="math inline">\(\hat\beta_p\)</span> estimates the population ratio <span class="math inline">\(\sum_UY_i/t_x\)</span> whether or not the model is true, which the unweighted fit does not guarantee.</p>
 </section>
 <section id="sec-summary" class="level2" data-number="9">
 <h2 data-number="9" class="anchored" data-anchor-id="sec-summary"><span class="header-section-number">9</span> Summary</h2>
@@ -411,7 +415,7 @@ Table&nbsp;1: Special cases of <a href="#eq-mspe-wls" class="quarto-xref">Equati
 </figure>
 </div>
 <p>In every case the MSPE is the scatter of the unobserved units, <span class="math inline">\(\sum_R\sigma_i^2\)</span>, plus a cost of estimating <span class="math inline">\(\theta\)</span> that is a quadratic form in the total auxiliary information <span class="math inline">\(t_{x,R}\)</span> still to be predicted. The ratio and regression estimators do not remove the shared error; they change the model so that <span class="math inline">\(\sigma^2\)</span> is the residual variance rather than the marginal one, and they pay a penalty when the sample is unrepresentative in <span class="math inline">\(x\)</span>.</p>
-<p>The Hansen–Hurwitz estimator of <a href="#sec-ups" class="quarto-xref">Section&nbsp;8</a> falls outside the table because it does not predict unit by unit, but <a href="#eq-mspe-hh" class="quarto-xref">Equation&nbsp;21</a> has the same two-part form, and its estimation term is never smaller than that of the ratio predictor on the same distinct units.</p>
+<p>The UPS predictors of <a href="#sec-ups" class="quarto-xref">Section&nbsp;8</a> are the ratio row with <span class="math inline">\(S\)</span> the distinct units drawn; weighting <span class="math inline">\(\hat\beta\)</span> by the selection probabilities replaces <span class="math inline">\(1/t_{x,S}\)</span> in the estimation term by the larger <span class="math inline">\(\sum_Sm_i^2/x_i\,/\,n^2\)</span> (<a href="#eq-mspe-ups-a" class="quarto-xref">Equation&nbsp;22</a>).</p>
 </section>
 <section id="sec-check" class="level2" data-number="10">
 <h2 data-number="10" class="anchored" data-anchor-id="sec-check"><span class="header-section-number">10</span> Numerical check</h2>
@@ -454,32 +458,31 @@ Table&nbsp;1: Special cases of <a href="#eq-mspe-wls" class="quarto-xref">Equati
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>               <span class="cf">function</span>(y) { f <span class="ot">&lt;-</span> <span class="fu">lm</span>(y[S] <span class="sc">~</span> x[S]); N <span class="sc">*</span> (<span class="fu">mean</span>(y[S]) <span class="sc">+</span> <span class="fu">coef</span>(f)[<span class="dv">2</span>] <span class="sc">*</span> (<span class="fu">mean</span>(x) <span class="sc">-</span> <span class="fu">mean</span>(x[S]))) })</span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>reg_th  <span class="ot">&lt;-</span> sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (N <span class="sc">*</span> (N <span class="sc">-</span> n) <span class="sc">/</span> n <span class="sc">+</span> N<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (<span class="fu">mean</span>(x) <span class="sc">-</span> <span class="fu">mean</span>(x[S]))<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>((x[S] <span class="sc">-</span> <span class="fu">mean</span>(x[S]))<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="do">## UPS with replacement, p_i proportional to x: Hansen-Hurwitz vs ratio on distinct units</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="do">## UPS with replacement, p_i proportional to x: ratio predictor, case A (p-weighted) and case B (unweighted)</span></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>m   <span class="ot">&lt;-</span> <span class="fu">tabulate</span>(<span class="fu">sample</span>(N, n, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> x), N)   <span class="co"># one fixed set of draws</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>Su  <span class="ot">&lt;-</span> <span class="fu">which</span>(m <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>w   <span class="ot">&lt;-</span> m[Su] <span class="sc">/</span> (n <span class="sc">*</span> x[Su] <span class="sc">/</span> <span class="fu">sum</span>(x))</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>hh_emp  <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(N, beta <span class="sc">*</span> x, sigma <span class="sc">*</span> <span class="fu">sqrt</span>(x)),</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>               <span class="cf">function</span>(y) <span class="fu">sum</span>(w <span class="sc">*</span> y[Su]))</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>hh_th   <span class="ot">&lt;-</span> sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (<span class="fu">sum</span>(x[<span class="sc">-</span>Su]) <span class="sc">+</span> <span class="fu">sum</span>((w <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> x[Su]))</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>upr_emp <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(N, beta <span class="sc">*</span> x, sigma <span class="sc">*</span> <span class="fu">sqrt</span>(x)),</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>               <span class="cf">function</span>(y) <span class="fu">sum</span>(x) <span class="sc">*</span> <span class="fu">sum</span>(y[Su]) <span class="sc">/</span> <span class="fu">sum</span>(x[Su]))</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>upr_th  <span class="ot">&lt;-</span> sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(x) <span class="sc">*</span> (<span class="fu">sum</span>(x) <span class="sc">-</span> <span class="fu">sum</span>(x[Su])) <span class="sc">/</span> <span class="fu">sum</span>(x[Su])</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">SRS =</span> <span class="fu">c</span>(<span class="at">simulated =</span> srs_emp, <span class="at">formula =</span> srs_th),</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>            <span class="at">Stratified =</span> <span class="fu">c</span>(str_emp, str_th),</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>            <span class="at">Ratio =</span> <span class="fu">c</span>(rat_emp, rat_th),</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>            <span class="at">Regression =</span> <span class="fu">c</span>(reg_emp, reg_th),</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">UPS: Hansen-Hurwitz</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(hh_emp, hh_th),</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">UPS: ratio on distinct units</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(upr_emp, upr_th)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>Su  <span class="ot">&lt;-</span> <span class="fu">which</span>(m <span class="sc">&gt;</span> <span class="dv">0</span>); txR <span class="ot">&lt;-</span> <span class="fu">sum</span>(x[<span class="sc">-</span>Su]); txS <span class="ot">&lt;-</span> <span class="fu">sum</span>(x[Su])</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>upa_emp <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(N, beta <span class="sc">*</span> x, sigma <span class="sc">*</span> <span class="fu">sqrt</span>(x)),</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>               <span class="cf">function</span>(y) <span class="fu">sum</span>(y[Su]) <span class="sc">+</span> <span class="fu">mean</span>(<span class="fu">rep</span>(y[Su] <span class="sc">/</span> x[Su], m[Su])) <span class="sc">*</span> txR)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>upa_th  <span class="ot">&lt;-</span> sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (txR <span class="sc">+</span> txR<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(m[Su]<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> x[Su]) <span class="sc">/</span> n<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>upb_emp <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(N, beta <span class="sc">*</span> x, sigma <span class="sc">*</span> <span class="fu">sqrt</span>(x)),</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>               <span class="cf">function</span>(y) <span class="fu">sum</span>(y[Su]) <span class="sc">+</span> <span class="fu">sum</span>(y[Su]) <span class="sc">/</span> txS <span class="sc">*</span> txR)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>upb_th  <span class="ot">&lt;-</span> sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (txR <span class="sc">+</span> txR<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> txS)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">SRS =</span> <span class="fu">c</span>(<span class="at">simulated =</span> srs_emp, <span class="at">formula =</span> srs_th),</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>            <span class="at">Stratified =</span> <span class="fu">c</span>(str_emp, str_th),</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>            <span class="at">Ratio =</span> <span class="fu">c</span>(rat_emp, rat_th),</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>            <span class="at">Regression =</span> <span class="fu">c</span>(reg_emp, reg_th),</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">UPS A: p-weighted</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(upa_emp, upa_th),</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">UPS B: unweighted</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(upb_emp, upb_th)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>                             simulated formula
-SRS                               7246    7200
-Stratified                       10966   11083
-Ratio                            40628   40248
-Regression                        7239    7207
-UPS: Hansen-Hurwitz              42070   42274
-UPS: ratio on distinct units     35544   36050</code></pre>
+<pre><code>                  simulated formula
+SRS                    7246    7200
+Stratified            10966   11083
+Ratio                 40628   40248
+Regression             7239    7207
+UPS A: p-weighted     40757   40962
+UPS B: unweighted     35544   36050</code></pre>
 </div>
 </div>
 </section>
