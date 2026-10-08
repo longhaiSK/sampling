@@ -1,0 +1,67 @@
+/* Shinylive app pages: wide layout so an app never has to squeeze
+   itself into a text column. */
+
+main.content, #quarto-content {
+  max-width: none !important;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+.page-columns { display: block !important; }
+
+/* provenance line linking an app to its book section */
+.appsource {
+  margin: -0.4rem 0 1rem 0;
+  font-size: 0.9rem;
+  color: #7b8a8b;
+}
+
+/* index: grid of image cards, same layout as the sampling-slides index */
+table.toc {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 18px;
+  margin-left: -18px;
+}
+table.toc td {
+  border: none;
+  padding: 0;
+  vertical-align: top;
+}
+table.toc a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  transition: transform .15s, box-shadow .15s;
+}
+table.toc a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
+}
+table.toc img {
+  display: block;
+  width: 100%;
+  height: 170px;
+  object-fit: contain;
+  background: #fff;
+  padding: 8px;
+}
+table.toc .cap {
+  display: block;
+  padding: 8px 12px;
+  font-weight: bold;
+  border-top: 1px solid #dee2e6;
+  background: #f8f9fa;
+}
+@media (max-width: 600px) {
+  table.toc, table.toc tbody, table.toc tr, table.toc td {
+    display: block;
+    width: 100%;
+  }
+  table.toc { border-spacing: 0; margin-left: 0; }
+  table.toc td { margin-bottom: 18px; }
+}

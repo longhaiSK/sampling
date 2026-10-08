@@ -310,7 +310,7 @@ def render_gallery(chapters_data):
     lines.append("")
     lines.append("The simulation apps have their own archive: "
                  "[Shinylive Apps for Sampling Survey]"
-                 "(shinyliveapps_sampling.html){target=\"_blank\"}.")
+                 "(shinylives_sampling/index.html){target=\"_blank\"}.")
     lines.append("")
 
     lines.append("## List of Figures")
