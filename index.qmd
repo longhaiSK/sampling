@@ -40,6 +40,6 @@ Theory and applications of sampling from finite populations. Includes: simple ra
 
 ## Syllabi
 
-1. [2026 Fall](https://longhaisk.github.io/teaching/stat348/syllabi/syllabus2026.html){target="_blank"}
+1. [2026 Fall](syllabi/syllabus2026.html){target="_blank"}
 
 
