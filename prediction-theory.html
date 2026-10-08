@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Longhai Li">
+<meta name="dcterms.date" content="2026-10-07">
 
 <title>Prediction Theory for Sampling Survey</title>
 <style>
@@ -144,6 +145,12 @@ window.Quarto = {
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 7, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -180,6 +187,21 @@ Y_i, &amp; i\in S,\\
 <p>Add and subtract <span class="math inline">\(\mu_i(\theta)\)</span> in the error for an unobserved unit <span class="math inline">\(i\in R\)</span>: <span id="eq-error-individual"><span class="math display">\[
 \hat Y_i-Y_i=\underbrace{\mu_i(\hat\theta)-\mu_i(\theta)}_{\delta_i}-\underbrace{\big(Y_i-\mu_i(\theta)\big)}_{e_i}.
 \tag{4}\]</span></span> There are two sources of error. The term <span class="math inline">\(e_i\)</span> is the gap between the unobserved <span class="math inline">\(Y_i\)</span> and its true mean, which no predictor can remove. The term <span class="math inline">\(\delta_i\)</span> is the gap between the fitted mean and the true mean, caused by the uncertainty in <span class="math inline">\(\hat\theta\)</span>.</p>
+<p><a href="#fig-pred-decomp" class="quarto-xref">Figure&nbsp;1</a> illustrates <a href="#eq-error-individual" class="quarto-xref">Equation&nbsp;4</a> for a linear mean function <span class="math inline">\(\mu_i=\beta_0+\beta_1x_i\)</span>. The line fitted to the sample (red) differs from the true mean line, and for a non-sampled unit the prediction error splits into <span class="math inline">\(\delta_i\)</span> and <span class="math inline">\(e_i\)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-pred-decomp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pred-decomp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="prediction-theory_files/figure-html/fig-pred-decomp-1.png" class="img-fluid figure-img" width="720">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pred-decomp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Decomposition of the prediction error for one non-sampled unit under a linear model. Red points: the sample <span class="math inline">\(S\)</span>; open points: the units in <span class="math inline">\(R\)</span>. Orange line: the true mean <span class="math inline">\(\mu_i=\beta_0+\beta_1x_i\)</span>; blue dashed line: the fitted mean <span class="math inline">\(\hat\mu_i\)</span> from the sample. For the highlighted unit, <span class="math inline">\(\delta_i=\hat\mu_i-\mu_i\)</span> (purple) is the estimation error and <span class="math inline">\(e_i=Y_i-\mu_i\)</span> (green) is the irreducible error.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 <p><strong>Traditional machine learning.</strong> A predictive model is judged by the mean squared prediction error of a single case, <span class="math inline">\(E(\hat Y_i-Y_i)^2\)</span>, and by its sum or average over the test cases. Because <span class="math inline">\(\delta_i\)</span> is uncorrelated with <span class="math inline">\(e_i\)</span>, <span id="eq-mse-individual"><span class="math display">\[
 E(\hat Y_i-Y_i)^2=\sigma_i^2+E(\delta_i^2),
 \qquad
@@ -241,7 +263,7 @@ Y_i, &amp; i\in S,\\
 <li>The finite-population correction is not an artifact of sampling without replacement. The <span class="math inline">\(n\)</span> observed units contribute exactly zero to <a href="#eq-error-srs" class="quarto-xref">Equation&nbsp;12</a>, leaving <span class="math inline">\(N-n\)</span> terms to predict; at <span class="math inline">\(n=N\)</span> the MSPE is zero.</li>
 <li>If <span class="math inline">\(\mu\)</span> is known, <span class="math inline">\(\delta_i=0\)</span> and the predictor <span class="math inline">\(\hat Y_i=\mu\)</span> for <span class="math inline">\(i\in R\)</span> has <span class="math inline">\(\operatorname{MSPE}(\hat T)=(N-n)\sigma^2\)</span>, the irreducible error. The cost of not knowing <span class="math inline">\(\mu\)</span> is the factor <span class="math inline">\(N/n\)</span> applied to it.</li>
 </ol>
-<p><a href="#fig-pred-index" class="quarto-xref">Figure&nbsp;1</a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;1</a> with <span class="math inline">\(\mu_i=\mu\)</span>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
+<p><a href="#fig-pred-index" class="quarto-xref">Figure&nbsp;2</a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;1</a> with <span class="math inline">\(\mu_i=\mu\)</span>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-pred-index" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -250,7 +272,7 @@ Y_i, &amp; i\in S,\\
 <img src="prediction-theory_files/figure-html/fig-pred-index-1.png" class="img-fluid figure-img" width="720">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pred-index-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: One realized population under the model. The sample occupies the shaded region on the left; the remaining units are to be predicted. Horizontal lines: the model mean <span class="math inline">\(\mu\)</span> (orange), the estimand <span class="math inline">\(\bar Y_U\)</span> (red), and the predictor <span class="math inline">\(\bar y_S\)</span> (blue, dashed).
+Figure&nbsp;2: One realized population under the model. The sample occupies the shaded region on the left; the remaining units are to be predicted. Horizontal lines: the model mean <span class="math inline">\(\mu\)</span> (orange), the estimand <span class="math inline">\(\bar Y_U\)</span> (red), and the predictor <span class="math inline">\(\bar y_S\)</span> (blue, dashed).
 </figcaption>
 </figure>
 </div>

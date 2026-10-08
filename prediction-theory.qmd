@@ -1,6 +1,7 @@
 ---
 title: "Prediction Theory for Sampling Survey"
 author: "Longhai Li"
+date: last-modified
 format:
   html:
     theme: flatly
@@ -55,6 +56,61 @@ $$
 \hat Y_i-Y_i=\underbrace{\mu_i(\hat\theta)-\mu_i(\theta)}_{\delta_i}-\underbrace{\big(Y_i-\mu_i(\theta)\big)}_{e_i}.
 $$ {#eq-error-individual}
 There are two sources of error. The term $e_i$ is the gap between the unobserved $Y_i$ and its true mean, which no predictor can remove. The term $\delta_i$ is the gap between the fitted mean and the true mean, caused by the uncertainty in $\hat\theta$.
+
+@fig-pred-decomp illustrates @eq-error-individual for a linear mean function $\mu_i=\beta_0+\beta_1x_i$. The line fitted to the sample (red) differs from the true mean line, and for a non-sampled unit the prediction error splits into $\delta_i$ and $e_i$.
+
+```{r}
+#| echo: false
+#| label: fig-pred-decomp
+#| fig-cap: "Decomposition of the prediction error for one non-sampled unit under a linear model. Red points: the sample $S$; open points: the units in $R$. Orange line: the true mean $\\mu_i=\\beta_0+\\beta_1x_i$; blue dashed line: the fitted mean $\\hat\\mu_i$ from the sample. For the highlighted unit, $\\delta_i=\\hat\\mu_i-\\mu_i$ (purple) is the estimation error and $e_i=Y_i-\\mu_i$ (green) is the irreducible error."
+#| fig-width: 7.5
+#| fig-height: 4.8
+
+set.seed(348)
+N <- 40; n <- 8; beta0 <- 10; beta1 <- 2; sigma <- 6
+
+x <- runif(N, 5, 30)
+y <- beta0 + beta1 * x + rnorm(N, sd = sigma)
+S <- sample(N, n)
+R <- setdiff(seq_len(N), S)
+
+fit <- lm(y ~ x, subset = S)
+mu    <- beta0 + beta1 * x               # true means mu_i
+muhat <- predict(fit, data.frame(x = x))
+delta <- muhat - mu
+e     <- y - mu
+
+# highlighted unobserved unit: delta_i and e_i of opposite sign and both large
+cand <- R[sign(e[R]) != sign(delta[R])]
+i <- cand[which.max(abs(delta[cand]) + abs(e[cand]))]
+
+par(mar = c(4, 4, 1, 1))
+ylim <- range(y) + c(-1, 1) * 0.08 * diff(range(y))
+plot(x, y, type = "n", ylim = ylim, xlab = expression(x[i]), ylab = expression(y[i]))
+abline(beta0, beta1, col = "orange", lwd = 2)
+abline(fit, col = "blue", lwd = 2, lty = 2)
+points(x[R], y[R], pch = 1,  col = "grey45")
+points(x[S], y[S], pch = 16, col = "red", cex = 1.2)
+
+off <- 0.012 * diff(par("usr")[1:2])
+segments(x[i] - off, mu[i], x[i] - off, muhat[i], lwd = 3, col = "purple")
+segments(x[i] + off, mu[i], x[i] + off, y[i],     lwd = 3, col = "darkgreen")
+points(x[i], y[i], pch = 1, col = "black", cex = 1.6, lwd = 2)
+points(x[i], mu[i],    pch = 18, col = "orange", cex = 1.6)
+points(x[i], muhat[i], pch = 18, col = "blue",   cex = 1.6)
+text(x[i] - off, (mu[i] + muhat[i]) / 2, expression(delta[i]), pos = 2, col = "purple")
+text(x[i] + off, (mu[i] + y[i]) / 2,     expression(e[i]),     pos = 4, col = "darkgreen")
+text(x[i], muhat[i], expression(hat(mu)[i]), pos = if (delta[i] > 0) 3 else 1, col = "blue")
+text(x[i] + off, mu[i], expression(mu[i]), pos = 4, col = "orange", offset = 0.8)
+text(x[i], y[i], expression(Y[i]), pos = if (e[i] > 0) 3 else 1)
+
+legend("topleft", bty = "n", cex = 0.85,
+       pch = c(16, 1, NA, NA), lty = c(NA, NA, 1, 2), lwd = c(NA, NA, 2, 2),
+       col = c("red", "grey45", "orange", "blue"),
+       legend = c("sample (S)", "non-sampled (R)",
+                  expression(mu[i] == beta[0] + beta[1] * x[i]),
+                  expression(hat(mu)[i] == hat(beta)[0] + hat(beta)[1] * x[i])))
+```
 
 **Traditional machine learning.** A predictive model is judged by the mean squared prediction error of a single case, $E(\hat Y_i-Y_i)^2$, and by its sum or average over the test cases. Because $\delta_i$ is uncorrelated with $e_i$,
 $$
