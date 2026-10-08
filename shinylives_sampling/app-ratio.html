@@ -8,9 +8,9 @@
 
 <meta name="author" content="Longhai Li">
 <meta name="dcterms.date" content="2026-10-08">
-<meta name="description" content="Two-Stage Cluster Sampling (ratio estimator) with SRS">
+<meta name="description" content="Ratio Estimation and Regression Estimation">
 
-<title>Shinylive App Comparing Two-Stage Cluster Sampling (ratio estimator) with SRS – Shinylive Apps for Sampling Survey</title>
+<title>Shinylive App Illustrating Ratio Estimation and Regression Estimation – Shinylive Apps for Sampling Survey</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -162,7 +162,7 @@ window.Quarto = {
   </li>  
         <li><hr class="dropdown-divider"></li>
         <li>
-    <a class="dropdown-item" href="./../index.html">
+    <a class="dropdown-item" href="./../sampling_book/index.html">
  <span class="dropdown-text">Back to the book</span></a>
   </li>  
     </ul>
@@ -184,12 +184,12 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Shinylive App Comparing Two-Stage Cluster Sampling (ratio estimator) with SRS</h1>
+<h1 class="title">Shinylive App Illustrating Ratio Estimation and Regression Estimation</h1>
 </div>
 
 <div>
   <div class="description">
-    Two-Stage Cluster Sampling (ratio estimator) with SRS
+    Ratio Estimation and Regression Estimation
   </div>
 </div>
 
@@ -222,131 +222,166 @@ window.Quarto = {
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
 #| standalone: true
-#| viewerHeight: 820
+#| viewerHeight: 740
 
-## file: app.R
 library(shiny)
 
+## ---------------------------------------------------------------- population
 data_url &lt;- "https://raw.githubusercontent.com/longhaiSK/sampling/main/sampling_book/data/agpop.csv"
-download.file(data_url, "agpop.csv")
-dat &lt;- read.csv("agpop.csv")
 
-## -99 is the missing-value code in agpop.csv; recode to NA and drop the
-## counties with no acres92, so that a single population underlies both
-## clustering choices below.
-dat$acres92[dat$acres92 == -99] &lt;- NA
-dat &lt;- dat[!is.na(dat$acres92), ]
+raw &lt;- tryCatch({
+  download.file(data_url, "agpop.csv")
+  read.csv("agpop.csv")
+}, error = function(e) NULL)
 
-pop   &lt;- dat$acres92
-Nel   &lt;- length(pop)          # number of elements (counties) in the population
-ybarU &lt;- mean(pop)
-S     &lt;- sd(pop)
+if (is.null(raw)) {            # fallback so the app runs before the file is committed
+  set.seed(1)
+  Nf &lt;- 3000
+  x1 &lt;- rgamma(Nf, shape = 1.2, scale = 1.8e5)
+  raw &lt;- data.frame(
+    acres92 = pmax(0, 0.93 * x1 + rnorm(Nf, 0, 0.5 * x1^0.85)),
+    acres87 = x1,
+    farms92 = pmax(1, round(300 + x1 / 6000 + rnorm(Nf, 0, 250)))
+  )
+}
 
-## Build the clustering: "state" groups the counties as they really are,
-## "random" permutes the state labels, so the clusters keep exactly the same
-## sizes M_i but lose every trace of within-cluster homogeneity. Comparing the
-## two isolates the effect of homogeneity inside clusters, and nothing else.
-make_clusters &lt;- function(method) {
-  lab &lt;- factor(dat$state)
-  if (method == "random") {
-    set.seed(7)
-    lab &lt;- sample(lab)                       # same sizes, scrambled membership
-    levels(lab) &lt;- sprintf("C%02d", seq_len(nlevels(lab)))
+raw &lt;- raw[is.finite(raw$acres92) &amp; raw$acres92 != -99, ]
+yv  &lt;- raw$acres92
+N   &lt;- length(yv)
+
+## every numeric column other than y is a candidate auxiliary variable;
+## -99 marks a missing entry and is replaced by the mean of the rest
+num &lt;- vapply(raw, is.numeric, logical(1))
+X &lt;- raw[, num &amp; names(raw) != "acres92", drop = FALSE]
+X &lt;- as.data.frame(lapply(X, function(v) {
+  v[!is.finite(v) | v == -99] &lt;- NA
+  v[is.na(v)] &lt;- mean(v, na.rm = TRUE)
+  v
+}))
+keep &lt;- vapply(X, function(v) all(is.finite(v)) &amp;&amp; sum(v) &gt; 0 &amp;&amp; var(v) &gt; 0, logical(1))
+X &lt;- X[, keep, drop = FALSE]
+xvars &lt;- names(X)
+xdef  &lt;- if ("acres87" %in% xvars) "acres87" else xvars[1]
+
+## ---- the "biased SRS" option -----------------------------------------------
+## The same mechanism as the post-stratification app: counties in the top 5% of
+## acres82 carry selection weight B instead of 1, and n units are drawn WITHOUT
+## replacement with those weights, so the sample size stays exactly n while
+## large counties are over-represented. The mechanism is tied to acres82
+## whatever auxiliary x is selected, so one can ask whether the chosen x is able
+## to see -- and therefore repair -- the distortion.
+bias_var &lt;- if ("acres82" %in% xvars) "acres82" else xdef
+bias_top &lt;- which(X[[bias_var]] &gt;= quantile(X[[bias_var]], 0.95))
+
+draw_sample &lt;- function(n, B) {
+  if (B &lt;= 1) return(sample.int(N, n))
+  w &lt;- rep(1, N); w[bias_top] &lt;- B
+  sample.int(N, n, prob = w)
+}
+
+ybarU &lt;- mean(yv)
+Vy    &lt;- var(yv)                     # average (SRS) population variance
+ZCRIT &lt;- 1.96                        # nominal 95% intervals
+
+set.seed(11)                         # display-only vertical jitter, fixed once
+ypl &lt;- yv + rnorm(N, 0, 0.012 * diff(range(yv)))
+rgy &lt;- range(ypl)
+
+## ------------------------------------------------------------ estimator specs
+EST &lt;- c("srs", "ratio", "reg")      # the average leads: the baseline to beat
+LAB &lt;- c(ratio = "ratio", reg = "regression", srs = "average")
+COL &lt;- c(ratio = "#1f77b4", reg = "#2ca02c", srs = "#e07b39")
+PCH &lt;- c(ratio = 16, reg = 15, srs = 17)
+
+col_samp &lt;- "#d62728"
+col_pts  &lt;- "blue"                   # sampled observations
+col_true &lt;- "black"
+col_pop  &lt;- "#9aa0a640"
+col_band &lt;- "#eef3f8"
+
+## ------------------------------------------------------- broken-axis mapping
+## Linear from the minimum up to a cut, a single break near the top, then the
+## sparse upper tail compressed into a thin strip. The cut is placed so that the
+## population mean falls at mid-height, matching the centre of the right panel.
+BRK_TOP  &lt;- 0.12
+BRK_GAP  &lt;- 0.025
+BRK_MAIN &lt;- 1 - BRK_TOP - BRK_GAP
+
+cut_at_centre &lt;- function(rmin, rmax, m) {
+  cut &lt;- rmin + (m - rmin) * BRK_MAIN / 0.5
+  if (!is.finite(cut) || cut &gt;= rmax) rmin + 0.95 * (rmax - rmin) else cut
+}
+cuty &lt;- cut_at_centre(rgy[1], rgy[2], ybarU)
+
+mk_break &lt;- function(rmin, rmax, cut) {
+  eps &lt;- 1e-9 * (rmax - rmin)
+  cut &lt;- min(max(cut, rmin + eps), rmax - eps)
+  tf &lt;- function(v) {
+    v &lt;- pmin(pmax(v, rmin), rmax)
+    ifelse(v &lt;= cut, (v - rmin) / (cut - rmin) * BRK_MAIN,
+           BRK_MAIN + BRK_GAP + (v - cut) / (rmax - cut) * BRK_TOP)
   }
-  H     &lt;- nlevels(lab)                      # N, the number of clusters
-  idx   &lt;- split(seq_len(Nel), lab)
-  Mi    &lt;- sapply(idx, length)
-  ti    &lt;- sapply(idx, function(i) sum(pop[i]))
-  Si2   &lt;- sapply(idx, function(i) if (length(i) &gt; 1) var(pop[i]) else 0)
-
-  set.seed(42)
-  x_pos &lt;- as.integer(lab) + runif(Nel, -0.32, 0.32)
-
-  list(lev = levels(lab), H = H, idx = idx, Mi = Mi, ti = ti, Si2 = Si2,
-       M0 = sum(Mi), Mbar = mean(Mi), x_pos = x_pos,
-       R2 = 1 - sum(sapply(idx, function(i) sum((pop[i] - mean(pop[i]))^2))) /
-                sum((pop - ybarU)^2))
+  list(tf = tf, rmin = rmin, rmax = rmax, cut = cut,
+       gap = c(BRK_MAIN, BRK_MAIN + BRK_GAP))
 }
 
-CLUST_CHOICES &lt;- c("state (real clusters)" = "state",
-                   "Random (scrambled labels)" = "random")
-
-## subsample size in cluster i: m_i = p * M_i, at least 1 and at most M_i
-subsize &lt;- function(Mi, p) pmax(1, pmin(Mi, round(p * Mi)))
-
-## Anticipated variances from the FULL population, for the "theory" figures.
-## Two-stage ratio estimator (between-cluster term + within-cluster term):
-##   V = (1 - n/N) S_t^2 / (n Mbar^2)
-##       + sum_U M_i^2 (1 - m_i/M_i) S_i^2 / m_i / (n N Mbar^2),
-## with S_t^2 the population variance of the ratio residuals t_i - ybarU M_i.
-## SRS is compared at the sample size the cluster design delivers on average.
-theory &lt;- function(s, n, p) {
-  mi  &lt;- subsize(s$Mi, p)
-  St2 &lt;- sum((s$ti - ybarU * s$Mi)^2) / (s$H - 1)
-  Vc  &lt;- (1 - n / s$H) * St2 / (n * s$Mbar^2) +
-         sum(s$Mi^2 * (1 - mi / s$Mi) * s$Si2 / mi) / (n * s$H * s$Mbar^2)
-  nel &lt;- max(2, round(n * mean(mi)))
-  Vs  &lt;- (1 - nel / s$M0) * S^2 / nel
-  list(Vc = Vc, Vs = Vs, nel = nel)
+mk_plain &lt;- function(rmin, rmax) {
+  list(tf = function(v) (pmin(pmax(v, rmin), rmax) - rmin) / (rmax - rmin),
+       rmin = rmin, rmax = rmax, cut = NA, gap = NULL)
 }
 
-## One two-stage cluster sample: an SRS of n clusters, then an SRS of
-## m_i = p M_i counties inside each sampled cluster. The estimate is the ratio
-## estimator with M_i as the auxiliary variable, ybar_r = sum(t_i hat)/sum(M_i),
-## and its variance is estimated exactly as cluster_ratio() does: the ratio
-## variance over the sampled clusters, plus n/N times the stratified variance
-##   V_str = sum_i (M_i/M)^2 (1 - m_i/M_i) s_i^2/m_i,   M = sum_i M_i,
-## that treats the sampled clusters as strata of sizes M_i.
-clu_draw &lt;- function(s, n, p, a) {
-  ci  &lt;- sort(sample(s$H, n))
-  Mis &lt;- s$Mi[ci]
-  mi  &lt;- subsize(Mis, p)
-  ii  &lt;- unlist(lapply(seq_len(n), function(k) sample(s$idx[[ci[k]]], mi[k])))
-  yl    &lt;- split(pop[ii], rep(seq_len(n), mi))
-  ybari &lt;- sapply(yl, mean)
-  si2   &lt;- sapply(yl, function(v) if (length(v) &gt; 1) var(v) else 0)
-  that  &lt;- Mis * ybari                       # t_i hat = M_i ybar_i
-  Mbar  &lt;- mean(Mis)
-  m     &lt;- sum(that) / sum(Mis)
-  Mtot  &lt;- sum(Mis)
-  v1    &lt;- (1 - n / s$H) * sum((that - m * Mis)^2) / (n - 1) / (n * Mbar^2)
-  v2    &lt;- (n / s$H) * sum((Mis / Mtot)^2 * (1 - mi / Mis) * si2 / mi)
-  list(ci = ci, mi = mi, Mi = Mis, ii = ii, ybari = ybari,
-       est = c(m, qt(a, df = n - 1) * sqrt(v1 + v2)))
+## counts stay as counts, acreages are shown in thousands
+unit_div &lt;- function(rmax) if (rmax &gt;= 1e5) 1000 else 1
+unit_lab &lt;- function(div) if (div == 1000) " (thousands)" else ""
+
+axis_at &lt;- function(bk, side, div, rg, nt) {
+  v &lt;- pretty(rg, nt)
+  v &lt;- v[v &gt;= rg[1] &amp; v &lt;= rg[2]]
+  if (!length(v)) return(invisible())
+  d &lt;- if (diff(range(v)) / div &lt; 40) 1 else 0
+  axis(side, at = bk$tf(v), labels = formatC(v / div, format = "f", digits = d,
+                                             big.mark = ","), las = 1, cex.axis = 0.75)
 }
 
-## One simple random sample of counties, of the same size as the cluster
-## sample just drawn, estimated by the plain sample average.
-srs_draw &lt;- function(nel, a) {
-  ii  &lt;- sample(Nel, nel)
-  y   &lt;- pop[ii]
-  m   &lt;- mean(y)
-  se  &lt;- sqrt(1 - nel / Nel) * sd(y) / sqrt(nel)
-  list(ii = ii, est = c(m, qt(a, df = nel - 1) * se))
+draw_axis &lt;- function(bk, side, div) {
+  if (is.null(bk$gap)) {
+    axis_at(bk, side, div, c(bk$rmin, bk$rmax), 5)
+  } else {
+    axis_at(bk, side, div, c(bk$rmin, bk$cut), 5)
+    axis_at(bk, side, div, c(bk$cut + 1e-9, bk$rmax), 2)
+  }
 }
 
-## ---- broken y-axis, shared by the left panel --------------------------------
-## Drawn region [0, 2 * ybarU]: visible scale [0, cut] plus a compressed lane
-## for the right tail, so the population mean sits at the midpoint of the panel.
-lane_frac &lt;- 0.10
-cut       &lt;- 2 * ybarU / (1 + lane_frac)
-lane_w    &lt;- lane_frac * cut
-ymax_top  &lt;- cut + lane_w
-
-py      &lt;- pop
-tail_id &lt;- which(pop &gt; cut)
-n_tail  &lt;- length(tail_id)
-if (n_tail &gt; 0) {
-  r &lt;- rank(pop[tail_id], ties.method = "first") / (n_tail + 1)
-  py[tail_id] &lt;- cut + lane_w * (0.10 + 0.80 * r)
+mask_gap &lt;- function(bk, side) {
+  if (is.null(bk$gap)) return(invisible())
+  usr &lt;- par("usr")
+  g &lt;- bk$gap
+  m &lt;- mean(g)
+  if (side == 2) {
+    rect(usr[1], g[1], usr[2], g[2], col = "white", border = NA)
+    d &lt;- 0.010 * (usr[2] - usr[1])
+    segments(usr[1] - d, c(m - 0.012, m + 0.004), usr[1] + d,
+             c(m - 0.004, m + 0.012), xpd = NA, lwd = 1.2)
+  } else {
+    rect(g[1], usr[3], g[2], usr[4], col = "white", border = NA)
+    d &lt;- 0.010 * (usr[4] - usr[3])
+    segments(c(m - 0.012, m + 0.004), usr[3] - d, c(m - 0.004, m + 0.012),
+             usr[3] + d, xpd = NA, lwd = 1.2)
+  }
 }
 
-METHOD &lt;- c("SRS average", "Cluster ratio")
-MCOL   &lt;- c("grey35", "#2ca02c")
-MAR    &lt;- c(5.0, 4.5, 3.0, 1.0)
+## interval drawn as a capped vertical bar with the estimate marked on it;
+## the bar turns red when the interval misses the population mean
+ci_bar &lt;- function(x, est, ci, col, pch, covered, tf = identity, cap = 0.012) {
+  bcol &lt;- if (covered) col else col_samp
+  segments(x, tf(ci[1]), x, tf(ci[2]), col = bcol, lwd = 2)
+  segments(x - cap, tf(ci), x + cap, tf(ci), col = bcol, lwd = 2)
+  points(x, tf(est), pch = pch, col = col, cex = 1.7)
+}
 
-## symmetric density polygon, drawn vertically about x = at
-violin &lt;- function(x, at, col, w = 0.30) {
+## symmetric density polygon, drawn vertically about x = at, so the estimate
+## runs along the y axis and lines up with the scatterplot
+violin &lt;- function(x, at, col, w = 0.32) {
   if (length(x) &lt; 10 || diff(range(x)) &lt;= 0) return(invisible())
   d  &lt;- density(x)
   hw &lt;- w * d$y / max(d$y)
@@ -357,126 +392,6 @@ violin &lt;- function(x, at, col, w = 0.30) {
 }
 
 pct &lt;- function(v) if (is.na(v)) "--" else sprintf("%.1f%%", 100 * v)
-fmt &lt;- function(x) format(round(x), big.mark = ",")
-
-## ---- left panel: the population, cluster by cluster -------------------------
-## clu is the last cluster draw, srs the last SRS draw (either may be NULL);
-## j = 1 highlights the SRS sample, j = 2 the two-stage cluster sample.
-panel_pop &lt;- function(s, j, clu, srs, p, lab) {
-  H &lt;- s$H
-  par(mar = MAR, yaxs = "i")
-  plot(NA, xlim = c(0.3, H + 0.7), ylim = c(0, ymax_top),
-       xlab = "", ylab = "acres92 (thousands)", xaxt = "n", yaxt = "n", bty = "n",
-       main = sprintf("Population by %s, with the %s sample", lab, METHOD[j]))
-
-  ## one band per cluster; the clusters that made it into the two-stage
-  ## sample are shaded, which is the whole point of the design
-  inS &lt;- rep(FALSE, H)
-  if (j == 2 &amp;&amp; !is.null(clu)) inS[clu$ci] &lt;- TRUE
-  for (h in seq_len(H))
-    rect(h - 0.38, 0, h + 0.38, ymax_top,
-         col = if (inS[h]) "#fff0c2" else adjustcolor("grey92", 0.6), border = NA)
-
-  points(s$x_pos, py, pch = 16, cex = 0.42, col = adjustcolor("grey55", 0.5))
-  smp &lt;- if (j == 1) srs else clu
-  if (!is.null(smp))
-    points(s$x_pos[smp$ii], py[smp$ii], pch = 16, cex = 0.55,
-           col = adjustcolor("red", 0.85))
-
-  ## sample mean(s): one bar per sampled cluster for the two-stage design
-  ## (the ybar_i that build t_i hat), a single bar for SRS
-  if (!is.null(smp)) {
-    if (j == 1) {
-      segments(0.3, srs$est[1], H + 0.7, srs$est[1], col = MCOL[1], lwd = 3)
-    } else {
-      segments(clu$ci - 0.38, clu$ybari, clu$ci + 0.38, clu$ybari,
-               col = MCOL[2], lwd = 3)
-      abline(h = clu$est[1], col = MCOL[2], lwd = 1.5, lty = 4)
-    }
-    leg &lt;- if (j == 1)
-             list(txt = c("Population mean", "Sample mean"),
-                  col = c("black", MCOL[1]), lty = c(2, 1), lwd = c(2, 3))
-           else
-             list(txt = c("Population mean", "Cluster means (ybar_i)",
-                          "Ratio estimate (ybar_r)"),
-                  col = c("black", MCOL[2], MCOL[2]), lty = c(2, 1, 4),
-                  lwd = c(2, 3, 1.5))
-    legend("topleft", bty = "o", bg = "white", box.col = NA, cex = 0.75,
-           inset = c(0.005, 0.01), legend = leg$txt,
-           col = leg$col, lty = leg$lty, lwd = leg$lwd)
-  }
-
-  ## cluster labels: sampled clusters in red, with m_i / M_i when there is room
-  cx &lt;- if (H &gt; 40) 0.45 else 0.6
-  for (h in seq_len(H)) {
-    mtext(s$lev[h], side = 1, at = h, line = 0.2, las = 2, cex = cx,
-          col = if (inS[h]) "red" else "grey45", font = if (inS[h]) 2 else 1)
-  }
-  if (j == 2 &amp;&amp; !is.null(clu) &amp;&amp; length(clu$ci) &lt;= 20)
-    mtext(sprintf("%d/%d", clu$mi, clu$Mi), side = 1, at = clu$ci, line = 1.9,
-          las = 2, cex = 0.5, col = "red")
-  mtext(if (j == 2) sprintf("clusters (sampled ones shaded%s; p = %.0f%%)",
-                            if (length(clu$ci) &lt;= 20) ", labelled m_i/M_i" else "",
-                            100 * p)
-        else "clusters",
-        side = 1, line = 3.6, cex = 0.72, col = "grey30")
-
-  at &lt;- pretty(c(0, cut), 6); at &lt;- at[at &lt;= cut]
-  axis(2, at = at, labels = format(at / 1000, big.mark = ",", trim = TRUE), las = 1)
-  segments(0.3, cut, H + 0.7, cut, col = "grey60", lty = 3)
-  text(H + 0.6, cut + lane_w / 2, sprintf("compressed: &gt; %s", fmt(cut / 1000)),
-       adj = c(1, 0), col = "grey40", cex = 0.7)
-  abline(h = ybarU, col = "black", lwd = 2, lty = 2)
-}
-
-## ---- right panel: the two sampling distributions ----------------------------
-panel_dist &lt;- function(s, rv, est_range, th, n, p, conf, nrep) {
-  par(mar = MAR, yaxs = "i")
-  plot(NA, xlim = c(0.4, 2.6), ylim = est_range, xaxt = "n", yaxt = "n", bty = "n",
-       xlab = "", ylab = "Estimated mean of acres92 (thousands)",
-       main = "Sampling distributions of the two estimators")
-  abline(h = ybarU, col = "black", lwd = 2, lty = 2)
-  axis(1, at = 1:2, labels = METHOD, tick = FALSE, line = -0.5)
-  at_r &lt;- pretty(est_range, 6)
-  at_r &lt;- at_r[at_r &gt;= est_range[1] &amp; at_r &lt;= est_range[2]]
-  axis(2, at = at_r, labels = format(at_r / 1000, big.mark = ",", trim = TRUE), las = 1)
-
-  if (is.null(rv$M)) {
-    text(1.5, ybarU, "Click 'Draw new samples' or Play to begin", col = "grey50")
-    return(invisible())
-  }
-
-  k &lt;- NROW(rv$M)
-  for (jj in 1:2) {
-    violin(rv$M[, jj], at = jj, col = MCOL[jj])
-
-    ci_col &lt;- if (rv$HIT[k, jj]) "forestgreen" else "red"
-    xb     &lt;- jj + 0.40
-    segments(xb, rv$est[jj, 2], xb, rv$est[jj, 3], col = ci_col, lwd = 3)
-    segments(xb - 0.06, rv$est[jj, 2:3], xb + 0.06, rv$est[jj, 2:3], col = ci_col, lwd = 3)
-    points(xb, rv$est[jj, 1], pch = 19, cex = 1.1, col = ci_col)
-  }
-
-  legend("topleft", bty = "n", cex = 0.85, inset = c(0.02, 0.01),
-         title = sprintf("%.0f%% CI coverage", 100 * conf), fill = MCOL, border = NA,
-         legend = paste(METHOD, vapply(1:2, function(jj) pct(mean(rv$HIT[, jj])), "")))
-
-  ## design effect: variance of the cluster estimator relative to SRS at the
-  ## same sample size, simulated so far and anticipated from the population
-  if (k &gt; 1) {
-    deff &lt;- var(rv$M[, 2]) / var(rv$M[, 1])
-    legend("bottomleft", bty = "n", cex = 0.85, inset = c(0.02, 0.01),
-           title = "Variance of cluster ratio vs. SRS", fill = MCOL[2], border = NA,
-           text.col = if (deff &gt; 1) "red" else "black",
-           legend = sprintf("deff = %.2f  (theory %.2f)", deff, th$Vc / th$Vs))
-  }
-
-  outside &lt;- sum(rv$M &lt; est_range[1] | rv$M &gt; est_range[2])
-  sub &lt;- sprintf("n = %d clusters, %s counties  |  R2 between clusters = %s  |  %d of %d draws%s",
-                 n, fmt(rv$nel), pct(s$R2), k, nrep,
-                 if (outside &gt; 0) sprintf("  |  %d off axis", outside) else "")
-  mtext(sub, side = 3, line = -0.2, cex = 0.7, col = "grey30")
-}
 
 ## ---- inline SVG button icons (no font or icon-library dependency) ----------
 svg_icon &lt;- function(paths)
@@ -486,12 +401,12 @@ icon_play  &lt;- svg_icon('&lt;path d="M3 2v12l10-6z"/&gt;')
 icon_pause &lt;- svg_icon('&lt;rect x="3" y="2" width="4" height="12"/&gt;&lt;rect x="9" y="2" width="4" height="12"/&gt;')
 icon_skip  &lt;- svg_icon('&lt;path d="M1 2v12l7-6zM8 2v12l6-6z"/&gt;&lt;rect x="14" y="2" width="2" height="12"/&gt;')
 
+## ---------------------------------------------------------------------- ui
 ui &lt;- fluidPage(
-  titlePanel("Shinylive Simulation for Two-Stage Cluster Sampling"),
   tags$style(HTML(
     ".well {padding: 10px 12px; margin-bottom: 10px;}
      .form-group {margin-bottom: 6px;}
-     .radio {margin-top: 2px; margin-bottom: 2px;}
+     .checkbox {margin-top: 2px; margin-bottom: 2px;}
      .irs {margin-bottom: 0;}
      .btn {margin-bottom: 6px;}"
   )),
@@ -499,28 +414,25 @@ ui &lt;- fluidPage(
     fluidRow(
       column(
         3,
-        radioButtons("clustvar", "Cluster variable", choices = CLUST_CHOICES,
-                     selected = "state"),
-        radioButtons("show", "Highlight sample from", choiceNames = METHOD,
-                     choiceValues = as.character(1:2), selected = "2")
+        selectInput("xvar", "Auxiliary x", choices = xvars, selected = xdef),
+        checkboxInput("logx", "Use log(1 + x)", FALSE),
+        checkboxInput("brk", "Break the axes", TRUE)
       ),
       column(
         3,
-        sliderInput("n", "Number of clusters drawn (n)", min = 2, max = 50,
-                    value = 10, step = 1),
-        sliderInput("p", "Percentage sampled per cluster (p = m_i/M_i)",
-                    min = 0.05, max = 1, value = 0.30, step = 0.05)
+        selectInput("n", "Sample size n",
+                    choices = c(10, 25, 50, 100, 200, 300, 500), selected = 100),
+        selectInput("bias", "Biased SRS: over-sample acres82 top 5% by", choices = c("1 (none)" = 1, "1.5" = 1.5, "2" = 2,
+                                "3" = 3, "4" = 4, "5" = 5), selected = 1)
       ),
       column(
         3,
-        sliderInput("conf", "Confidence level", min = 0.80, max = 0.99,
-                    value = 0.95, step = 0.01),
-        sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1)
-      ),
-      column(
-        3,
+        sliderInput("speed", "Samples per second", min = 1, max = 10, value = 5, step = 1),
         numericInput("nrep", "Stop after this many samples",
-                     value = 500, min = 10, max = 20000, step = 50),
+                     value = 500, min = 10, max = 20000, step = 50)
+      ),
+      column(
+        3,
         actionButton("draw", "Draw new samples", class = "btn-primary", width = "100%"),
         br(), br(),
         fluidRow(
@@ -531,23 +443,18 @@ ui &lt;- fluidPage(
           column(4, actionButton("skip",  icon_skip,  class = "btn-info",    width = "100%",
                                  title = "Skip to the end"))
         ),
-        actionButton("reset", "Reset", width = "100%")
+        actionButton("reset", "Reset", width = "100%"),
+        div(style = "font-size: 90%;", textOutput("counter"))
       )
     )
   ),
-  plotOutput("mainplot", height = "530px")
+  plotOutput("mainplot", height = "520px")
 )
 
+## ------------------------------------------------------------------- server
 server &lt;- function(input, output, session) {
 
-  rv &lt;- reactiveValues(
-    clu = NULL,   # last two-stage cluster draw
-    srs = NULL,   # last simple random sample
-    est = NULL,   # matrix 2 x 3: estimate, lower, upper (last draw)
-    nel = NA,     # number of counties in the last sample
-    M   = NULL,   # accumulated estimates, one column per design
-    HIT = NULL    # accumulated coverage indicators
-  )
+  rv &lt;- reactiveValues(s = NULL, n = 100, ests = NULL)
   running &lt;- reactiveVal(FALSE)
 
   nrep &lt;- reactive({
@@ -555,97 +462,242 @@ server &lt;- function(input, output, session) {
     if (is.null(v) || is.na(v) || v &lt; 1) 1L else min(as.integer(v), 20000L)
   })
 
-  si     &lt;- reactive(make_clusters(input$clustvar))
-  clab   &lt;- reactive(names(CLUST_CHOICES)[CLUST_CHOICES == input$clustvar])
-  th     &lt;- reactive(theory(si(), input$n, input$p))
-
-  ## a window wide enough for whichever design is the more variable
-  est_range &lt;- reactive({
-    t0 &lt;- th()
-    ybarU + c(-1, 1) * 4 * sqrt(max(t0$Vc, t0$Vs))
+  ## everything that depends on the chosen auxiliary variable
+  aux &lt;- reactive({
+    xv &lt;- X[[input$xvar]]
+    lg &lt;- isTRUE(input$logx)
+    if (lg) xv &lt;- log1p(pmax(xv, 0))     # deliberately misspecified working model
+    B  &lt;- sum(yv) / sum(xv)
+    a1 &lt;- cov(xv, yv) / var(xv)          # population regression line
+    a0 &lt;- ybarU - a1 * mean(xv)
+    rgx &lt;- range(xv)
+    list(x = xv, B = B, a0 = a0, a1 = a1, xbar = mean(xv),
+         V = c(ratio = var(yv - B * xv), reg = var(yv - a0 - a1 * xv), srs = Vy),
+         rgx = rgx, cutx = cut_at_centre(rgx[1], rgx[2], mean(xv)),
+         name = if (lg) paste0("log(1 + ", input$xvar, ")") else input$xvar)
   })
 
-  ## draw k replications; each one draws a two-stage cluster sample and an SRS
-  ## of the same realised size. Only the last replication's sampled units are
-  ## kept, for the left panel; "Skip" calls this with the full remaining count.
+  ## one sample feeds all three estimators, so the histograms are paired
+  one_draw &lt;- function(a, n, B) {
+    s   &lt;- draw_sample(n, B)
+    ys  &lt;- yv[s]
+    xs  &lt;- a$x[s]
+    fpc &lt;- 1 - n / N
+
+    Bhat &lt;- if (sum(xs) &gt; 0) sum(ys) / sum(xs) else 0
+    b1   &lt;- if (var(xs) &gt; 0) cov(xs, ys) / var(xs) else 0
+    b0   &lt;- mean(ys) - b1 * mean(xs)
+
+    est &lt;- c(ratio = (sum(ys) + Bhat * sum(a$x[-s])) / N,
+             reg   = mean(ys) + b1 * (a$xbar - mean(xs)),
+             srs   = mean(ys))
+    se  &lt;- c(ratio = (a$xbar / mean(xs)) * sqrt(fpc * var(ys - Bhat * xs) / n),
+             reg   = sqrt(fpc * var(ys - b0 - b1 * xs) / n),
+             srs   = sqrt(fpc * var(ys) / n))
+
+    ## reorder by NAME before relabelling: est/se are built in a fixed order,
+    ## so a positional setNames() would mislabel them whenever EST is reordered
+    e &lt;- c(setNames(est[EST],                    paste0("est_", EST)),
+           setNames((est - ZCRIT * se)[EST],     paste0("lo_",  EST)),
+           setNames((est + ZCRIT * se)[EST],     paste0("hi_",  EST)),
+           setNames(as.numeric((abs(est - ybarU) &lt;= ZCRIT * se)[EST]),
+                    paste0("cov_", EST)),
+           Bhat = Bhat, b0 = b0, b1 = b1)
+    list(s = s, e = e)
+  }
+
+  ## draw k replications; only the last one's sample is kept for the left
+  ## panel. "Skip" calls this with the full remaining count.
   draw_many &lt;- function(k) {
-    n    &lt;- isolate(input$n)
-    p    &lt;- isolate(input$p)
-    conf &lt;- isolate(input$conf)
-    a    &lt;- 1 - (1 - conf) / 2
-    s    &lt;- isolate(si())
-
-    Mnew   &lt;- matrix(0, k, 2)
-    HITnew &lt;- matrix(FALSE, k, 2)
-
+    a &lt;- isolate(aux())
+    n &lt;- as.numeric(isolate(input$n))
+    B &lt;- as.numeric(isolate(input$bias))
+    E &lt;- vector("list", k)
     for (i in seq_len(k)) {
-      cl &lt;- clu_draw(s, n, p, a)
-      sr &lt;- srs_draw(length(cl$ii), a)
-
-      est &lt;- rbind(c(sr$est[1], sr$est[1] - sr$est[2], sr$est[1] + sr$est[2]),
-                   c(cl$est[1], cl$est[1] - cl$est[2], cl$est[1] + cl$est[2]))
-
-      Mnew[i, ]   &lt;- est[, 1]
-      HITnew[i, ] &lt;- est[, 2] &lt;= ybarU &amp; ybarU &lt;= est[, 3]
-
-      if (i == k) {
-        rv$clu &lt;- cl; rv$srs &lt;- sr; rv$est &lt;- est; rv$nel &lt;- length(cl$ii)
-      }
+      d &lt;- one_draw(a, n, B)
+      E[[i]] &lt;- d$e
     }
-    rv$M   &lt;- rbind(rv$M,   Mnew)
-    rv$HIT &lt;- rbind(rv$HIT, HITnew)
+    rv$s    &lt;- d$s
+    rv$n    &lt;- n
+    rv$ests &lt;- rbind(rv$ests, do.call(rbind, E))
   }
   draw_one &lt;- function() draw_many(1)
 
+  ## a fresh history always starts from one sample, so the plot is never empty
+  reset_history &lt;- function() {
+    running(FALSE)
+    rv$ests &lt;- NULL
+    draw_one()
+  }
+  observeEvent(list(input$n, input$xvar, input$logx, input$bias), reset_history(),
+               ignoreInit = FALSE)
+  observeEvent(input$reset, reset_history())
+
+  ## one sample per click; Play repeats until Pause or until the cap is reached
   observeEvent(input$draw,  { running(FALSE); draw_one() })
   observeEvent(input$play,  running(TRUE))
   observeEvent(input$pause, running(FALSE))
-
   observeEvent(input$skip, {
     running(FALSE)
-    k &lt;- nrep() - NROW(rv$M)
+    k &lt;- nrep() - NROW(rv$ests)
     if (k &gt; 0) draw_many(k)
   })
 
   observe({
     if (!isTRUE(running())) return()
-    if (NROW(isolate(rv$M)) &gt;= isolate(nrep())) { running(FALSE); return() }
+    if (NROW(isolate(rv$ests)) &gt;= isolate(nrep())) { running(FALSE); return() }
     invalidateLater(1000 / isolate(input$speed), session)
     isolate(draw_one())
   })
 
-  reset_history &lt;- function() {
-    running(FALSE)
-    rv$clu &lt;- NULL; rv$srs &lt;- NULL; rv$est &lt;- NULL; rv$nel &lt;- NA
-    rv$M &lt;- NULL; rv$HIT &lt;- NULL
-  }
-  observeEvent(input$reset,    reset_history())
-  observeEvent(input$n,        reset_history())
-  observeEvent(input$p,        reset_history())
-  observeEvent(input$conf,     reset_history())
-  observeEvent(input$clustvar, reset_history())
+  output$counter &lt;- renderText(
+    sprintf("%d of %d samples", NROW(rv$ests), nrep())
+  )
 
   output$mainplot &lt;- renderPlot({
-    layout(matrix(1:2, nrow = 1), widths = c(1.3, 1))
-    panel_pop(si(), as.integer(input$show), rv$clu, rv$srs, input$p, clab())
-    panel_dist(si(), rv, est_range(), th(), input$n, input$p, input$conf, nrep())
+    s &lt;- rv$s
+    req(s)
+    sel &lt;- EST                       # all three estimators, always
+
+    a    &lt;- aux()
+    n    &lt;- rv$n
+    M    &lt;- rv$ests
+    nrep &lt;- NROW(M)
+    cur  &lt;- M[nrep, ]
+    xpos &lt;- setNames(0.02 + 0.04 * (seq_along(sel) - 1), sel)   # CI bar positions
+
+    ## histogram window, wide enough for the least precise estimator shown
+    se_th &lt;- sqrt((1 - n / N) * a$V / n)
+    half  &lt;- 4 * max(se_th[sel])
+    lo &lt;- ybarU - half
+    hi &lt;- ybarU + half
+
+    if (isTRUE(input$brk)) {
+      bky &lt;- mk_break(rgy[1], rgy[2], cuty)
+      bkx &lt;- mk_break(a$rgx[1], a$rgx[2], a$cutx)
+    } else {
+      bky &lt;- mk_plain(rgy[1], rgy[2])
+      bkx &lt;- mk_plain(a$rgx[1], a$rgx[2])
+    }
+    tfy &lt;- bky$tf
+    tfx &lt;- bkx$tf
+    divy &lt;- unit_div(rgy[2])
+    divx &lt;- unit_div(a$rgx[2])
+
+    xg &lt;- seq(a$rgx[1], a$rgx[2], length.out = 1500)
+    draw_line &lt;- function(yl, ...) {          # stop the line at the frame
+      yl[yl &lt; rgy[1] | yl &gt; rgy[2]] &lt;- NA
+      lines(tfx(xg), tfy(yl), ...)
+    }
+
+    layout(matrix(1:2, nrow = 1), widths = c(1, 1))
+
+    ## ---- left: population, sample, fitted lines ----
+    par(mar = c(4.2, 4.8, 3.0, 1.0))
+    plot(NA, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE,
+         xlab = paste0("x: ", a$name, unit_lab(divx)),
+         ylab = paste0("y: acres92", unit_lab(divy)),
+         main = sprintf("Population, %s and fitted lines, n = %d",
+                        if (as.numeric(input$bias) &gt; 1) "biased sample" else "sample", n))
+    rect(0, tfy(lo), 1, tfy(hi), col = col_band, border = NA)
+    points(tfx(a$x), tfy(ypl), pch = 16, cex = 0.6, col = col_pop)
+
+    if ("ratio" %in% sel) {
+      draw_line(a$B * xg, col = col_true, lwd = 1.8)
+      draw_line(cur[["Bhat"]] * xg, col = COL["ratio"], lwd = 2, lty = 2)
+    }
+    if ("reg" %in% sel) {
+      draw_line(a$a0 + a$a1 * xg, col = col_true, lwd = 1.8, lty = 4)
+      draw_line(cur[["b0"]] + cur[["b1"]] * xg, col = COL["reg"], lwd = 2, lty = 2)
+    }
+    if ("srs" %in% sel) abline(h = tfy(cur[["est_srs"]]), col = COL["srs"], lwd = 2, lty = 2)
+    points(tfx(a$x[s]), tfy(ypl[s]), pch = 16, cex = 1.2, col = col_pts)
+
+    abline(h = tfy(ybarU), col = col_samp, lty = 3)
+    for (k in sel) ci_bar(xpos[[k]], cur[[paste0("est_", k)]],
+                          c(cur[[paste0("lo_", k)]], cur[[paste0("hi_", k)]]),
+                          COL[[k]], PCH[[k]], cur[[paste0("cov_", k)]] == 1, tfy)
+
+    mask_gap(bky, 2); mask_gap(bkx, 1)
+    box(); draw_axis(bky, 2, divy); draw_axis(bkx, 1, divx)
+
+    leg &lt;- data.frame(l = "sampled y", c = col_pts, lt = NA, p = 16, w = NA)
+    if ("ratio" %in% sel) leg &lt;- rbind(leg, data.frame(
+      l = c("true Bx", "ratio fit"), c = c(col_true, COL[["ratio"]]),
+      lt = c(1, 2), p = NA, w = c(1.8, 2)))
+    if ("reg" %in% sel) leg &lt;- rbind(leg, data.frame(
+      l = c("true a + bx", "regression fit"), c = c(col_true, COL[["reg"]]),
+      lt = c(4, 2), p = NA, w = c(1.8, 2)))
+    if ("srs" %in% sel) leg &lt;- rbind(leg, data.frame(
+      l = "average fit", c = COL[["srs"]], lt = 2, p = NA, w = 2))
+    leg &lt;- rbind(leg, data.frame(l = "population mean", c = col_samp, lt = 3, p = NA, w = 1))
+    legend("topleft", bty = "n", cex = 0.9, inset = c(0.15, 0.01),
+           legend = leg$l, col = leg$c, lty = leg$lt, pch = leg$p, lwd = leg$w)
+
+    ## ---- right: sampling distributions as vertical violins, with current CIs ----
+    ## ylim is symmetric about ybarU, so the population mean sits at mid-height,
+    ## level with its position in the scatterplot
+    par(mar = c(4.2, 4.8, 3.0, 1.0))
+    k_n &lt;- length(sel)
+    at  &lt;- setNames(seq_len(k_n), sel)
+    plot(NA, xlim = c(0.4, k_n + 0.6), ylim = c(lo, hi), axes = FALSE,
+         xlab = "", ylab = paste0("estimate", unit_lab(divy)),
+         main = "Sampling distributions of the estimates")
+    if (as.numeric(input$bias) &gt; 1)
+      mtext(sprintf("biased selection x%.1f: the average is not estimating mu",
+                    as.numeric(input$bias)),
+            side = 3, line = -0.3, cex = 0.8, col = col_samp)
+    usr &lt;- par("usr")
+    rect(usr[1], usr[3], usr[2], usr[4], col = col_band, border = NA)
+    abline(h = ybarU, col = col_samp, lty = 3)
+    for (k in sel) {
+      violin(M[, paste0("est_", k)], at[[k]], COL[[k]])
+      ci &lt;- c(cur[[paste0("lo_", k)]], cur[[paste0("hi_", k)]])
+      bc &lt;- if (cur[[paste0("cov_", k)]] == 1) COL[[k]] else col_samp
+      segments(at[[k]], ci[1], at[[k]], ci[2], col = bc, lwd = 2.5)
+      segments(at[[k]] - 0.08, ci, at[[k]] + 0.08, ci, col = bc, lwd = 2.5)
+      points(at[[k]], cur[[paste0("est_", k)]], pch = PCH[[k]], col = COL[[k]], cex = 1.7)
+    }
+    box()
+    vy &lt;- pretty(c(lo, hi), 5)
+    vy &lt;- vy[vy &gt;= lo &amp; vy &lt;= hi]
+    axis(2, at = vy, labels = formatC(vy / divy, format = "f",
+                                      digits = if ((hi - lo) / divy &lt; 40) 1 else 0,
+                                      big.mark = ","), las = 1, cex.axis = 0.75)
+    axis(1, at = at, labels = LAB[sel], tick = FALSE, cex.axis = 0.9)
+
+    cov_txt &lt;- function(k) if (nrep &gt;= 10) pct(mean(M[, paste0("cov_", k)])) else "--"
+    legend("topleft", bty = "n", cex = 0.9, inset = c(0.02, 0.01),
+           title = "95% CI coverage", fill = COL[sel], border = NA,
+           legend = paste(LAB[sel], vapply(sel, cov_txt, "")))
+
+    ## reductions are relative to the average, which is always simulated
+    cmp &lt;- setdiff(sel, "srs")
+    if (length(cmp)) {
+      biased &lt;- as.numeric(input$bias) &gt; 1
+      red &lt;- lapply(cmp, function(k) {
+        mc &lt;- if (nrep &gt; 5) 1 - var(M[, paste0("est_", k)]) / var(M[, "est_srs"]) else NA
+        th &lt;- 1 - a$V[[k]] / Vy
+        ## the theoretical figure assumes an SRS, so drop it when selection is biased
+        list(txt = if (biased) sprintf("%s %s", LAB[[k]], pct(mc))
+                   else sprintf("%s %s (theory %s)", LAB[[k]], pct(mc), pct(th)),
+             neg = if (is.na(mc)) th &lt; 0 else mc &lt; 0)
+      })
+      legend("bottomleft", bty = "n", cex = 0.9, inset = c(0.02, 0.01),
+             title = "Variance reduction vs. average", title.col = "black",
+             fill = COL[cmp], border = NA,
+             legend = vapply(red, `[[`, "", "txt"),
+             text.col = ifelse(vapply(red, `[[`, TRUE, "neg"), col_samp, "black"))
+    }
   })
 }
 
 shinyApp(ui, server)</code></pre>
 <section id="about-this-app" class="level2">
 <h2 class="anchored" data-anchor-id="about-this-app">About this app</h2>
-<p>This app repeats the chapter’s worked example many times over. At every step it draws a <strong>two-stage cluster sample</strong> — an SRS of <span class="math inline">\(n\)</span> clusters, then an SRS of <span class="math inline">\(m_i = p \, M_i\)</span> counties inside each — together with an ordinary <strong>SRS of counties</strong> of the same size, from the full <code>agpop.csv</code> population (with the <code>-99</code> codes dropped). It estimates the mean of <code>acres92</code> from each: the ratio estimator <span class="math inline">\(\overline{y}_r = \sum \hat{t}_i / \sum M_i\)</span> for the cluster sample, and the plain sample average for the SRS.</p>
-<p>A radio button chooses the clustering variable:</p>
-<ul>
-<li><strong>state</strong> — the 50 real states, the natural clusters of <code>agpop.csv</code>.</li>
-<li><strong>Random</strong> — the state labels randomly permuted, which keeps the cluster sizes <span class="math inline">\(M_i\)</span> exactly as they are but scrambles which counties belong together.</li>
-</ul>
-<p>Two sliders set the design: <span class="math inline">\(n\)</span>, the number of clusters drawn, and <span class="math inline">\(p = m_i/M_i\)</span>, the percentage of counties subsampled from each selected cluster (<span class="math inline">\(p = 100\%\)</span> gives a one-stage sample). Play advances the simulation one draw at a time, Pause stops it, Skip jumps straight to the end, and changing any setting clears the accumulated history.</p>
-<p>The left panel shows the population split into its clusters, with the highlighted sample in red. For the cluster design the selected clusters are shaded and labelled <span class="math inline">\(m_i/M_i\)</span>, a bar marks each subsample mean <span class="math inline">\(\overline{y}_i\)</span>, and the ratio estimate <span class="math inline">\(\overline{y}_r\)</span> runs across the panel; for the SRS a single bar marks the sample mean.</p>
-<p>The right panel accumulates the estimates of both designs, one column each, drawn as a violin once enough draws have accumulated. The bar beside each column is the current confidence interval, green when it covers <span class="math inline">\(\mu\)</span> and red when it does not. The legends report the running CI coverage and the design effect — the variance of the ratio estimator relative to the SRS average, simulated and theoretical — and the subtitle gives the between-cluster <span class="math inline">\(R^2\)</span> of <code>acres92</code>.</p>
+<p>The <strong>Biased SRS</strong> slider uses the same mechanism as the post-stratification app <a href="app-poststrat.html">on its own page</a>: counties in the top 5% of <code>acres82</code> are given selection weight <span class="math inline">\(B\)</span> instead of 1, and the <span class="math inline">\(n\)</span> units are drawn without replacement with those weights, so the sample size stays exactly <span class="math inline">\(n\)</span> while large counties are over-represented. It is tied to <code>acres82</code> whatever auxiliary you select, which is the point — calibrating on a known total repairs the bias <em>along that variable only</em>. At <span class="math inline">\(B = 3\)</span> and <span class="math inline">\(n = 100\)</span> the plain average is biased upward by about 126,000 acres; with <span class="math inline">\(x =\)</span> <code>acres82</code> the ratio and regression estimators cut that to roughly 2,000 and 500, and with <span class="math inline">\(x =\)</span> <code>acres87</code>, nearly a copy of it, they do the same. Switch to <code>farms92</code> or <code>smallf92</code> and all three estimators stay biased by the full amount: the auxiliary cannot see the distortion, so calibrating on it cannot undo it. This is the continuous counterpart of what post-stratification does with groups.</p>
 <div class="appsource">
-<p>This app accompanies <a href="../cluster.html#sec-app-cluster" target="_blank">Interactive Demonstration: Clustering by State or at Random</a> in <em>Elements of Sampling Survey</em>.</p>
+<p>This app accompanies <a href="../sampling_book/ratio.html" target="_blank">Shinylive App Illustrating Ratio Estimation and Regression Estimation</a> in <em>Elements of Sampling Survey</em>.</p>
 </div>
 
 
