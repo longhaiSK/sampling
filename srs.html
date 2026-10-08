@@ -276,13 +276,6 @@ window.Quarto = {
   <li><a href="#empirical-coverage-rate-of-cis" id="toc-empirical-coverage-rate-of-cis" class="nav-link" data-scroll-target="#empirical-coverage-rate-of-cis"><span class="header-section-number">2.3.4</span> Empirical Coverage Rate of CIs</a></li>
   </ul></li>
   <li><a href="#sec-app-srs" id="toc-sec-app-srs" class="nav-link" data-scroll-target="#sec-app-srs"><span class="header-section-number">2.4</span> Shinylive App for Illustrating SRS Theory</a></li>
-  <li><a href="#sec-pred-srs" id="toc-sec-pred-srs" class="nav-link" data-scroll-target="#sec-pred-srs"><span class="header-section-number">2.5</span> Prediction-Based Theory for Sampling (Optional)</a>
-  <ul>
-  <li><a href="#sec-pred-setup" id="toc-sec-pred-setup" class="nav-link" data-scroll-target="#sec-pred-setup"><span class="header-section-number">2.5.1</span> Setup</a></li>
-  <li><a href="#sec-pred-two-sources" id="toc-sec-pred-two-sources" class="nav-link" data-scroll-target="#sec-pred-two-sources"><span class="header-section-number">2.5.2</span> Two sources of error</a></li>
-  <li><a href="#sec-pred-sample-mean" id="toc-sec-pred-sample-mean" class="nav-link" data-scroll-target="#sec-pred-sample-mean"><span class="header-section-number">2.5.3</span> Specialization to simple random sampling</a></li>
-  <li><a href="#sec-pred-demo" id="toc-sec-pred-demo" class="nav-link" data-scroll-target="#sec-pred-demo"><span class="header-section-number">2.5.4</span> Illustration</a></li>
-  </ul></li>
   </ul>
 </nav>
 </nav>
@@ -4602,116 +4595,8 @@ Figure&nbsp;2.2: First 100 simulated 95% confidence intervals for the SRS sample
 <section id="sec-app-srs" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="sec-app-srs"><span class="header-section-number">2.4</span> Shinylive App for Illustrating SRS Theory</h2>
 <p>The simulation for this section runs as a standalone app: <a href="app-srs.html" target="_blank">Simple random sampling</a>. It opens in a new tab, together with its documentation and the full <a href="shinyliveapps_sampling.html" target="_blank">list of apps</a>.</p>
-</section>
-<section id="sec-pred-srs" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="sec-pred-srs"><span class="header-section-number">2.5</span> Prediction-Based Theory for Sampling (Optional)</h2>
-<p>Sampling is a prediction problem. The sample <span class="math inline">\(S\)</span> plays the role of a training set, the non-sampled units <span class="math inline">\(R=U\setminus S\)</span> play the role of test cases, and a population total or mean is a sum of predictions for the test cases plus the observed training values. This section states the framework in general, with a model for every unit and a generic estimator of the model parameters, and then specializes it to simple random sampling, where the mean of every unit is the same and is estimated by <span class="math inline">\(\bar y_S\)</span>.</p>
-<section id="sec-pred-setup" class="level3" data-number="2.5.1">
-<h3 data-number="2.5.1" class="anchored" data-anchor-id="sec-pred-setup"><span class="header-section-number">2.5.1</span> Setup</h3>
-<p>Let <span class="math inline">\(U=\{1,\dots,N\}\)</span> index a finite population with study variable <span class="math inline">\(Y_i\)</span>, let <span class="math inline">\(S\subset U\)</span> with <span class="math inline">\(|S|=n\)</span> denote the observed sample, and let <span class="math inline">\(R=U\setminus S\)</span> denote the <span class="math inline">\(N-n\)</span> non-sampled units. The quantities of interest are <span class="math display">\[
-T=\sum_{i\in U}Y_i=\sum_{i\in S}Y_i+\sum_{i\in R}Y_i,\qquad \bar Y_U=T/N .
-\]</span> Only the second sum is unknown, so the task is to predict <span class="math inline">\(Y_i\)</span> for each <span class="math inline">\(i\in R\)</span>.</p>
-<p>The prediction approach treats <span class="math inline">\(Y_1,\dots,Y_N\)</span> as random variables and <span class="math inline">\(S\)</span> as fixed. All expectations are taken with respect to the model <span class="math inline">\(\xi\)</span> rather than the randomization distribution. The sampling design enters only through the requirement that selection be uninformative, so that <span class="math inline">\(\xi\)</span> governs the units in <span class="math inline">\(R\)</span> as well as those in <span class="math inline">\(S\)</span>. The general working model is <span id="eq-model"><span class="math display">\[
-\xi:\quad E(Y_i)=\mu_i(\theta),\quad \operatorname{Var}(Y_i)=\sigma_i^2,\quad
-\operatorname{Cov}(Y_i,Y_j)=0\ (i\neq j),
-\tag{2.1}\]</span></span> where <span class="math inline">\(\theta\)</span> is an unknown parameter and <span class="math inline">\(\mu_i(\theta)\)</span> is the mean function, for example <span class="math inline">\(\mu_i(\theta)=x_i^{\top}\beta\)</span> in regression. The model errors are <span id="eq-errors"><span class="math display">\[
-e_i=Y_i-\mu_i(\theta),\qquad E(e_i)=0,\quad E(e_i^2)=\sigma_i^2,\quad E(e_ie_j)=0\ (i\neq j).
-\tag{2.2}\]</span></span></p>
-<p>A prediction rule estimates <span class="math inline">\(\theta\)</span> from the sample by <span class="math inline">\(\hat\theta=\hat\theta(Y_S)\)</span> and predicts <span id="eq-predictor"><span class="math display">\[
-\hat Y_i=
-\begin{cases}
-Y_i, &amp; i\in S,\\
-\mu_i(\hat\theta), &amp; i\in R,
-\end{cases}
-\qquad
-\hat T=\sum_{i\in U}\hat Y_i=\sum_{i\in S}Y_i+\sum_{i\in R}\mu_i(\hat\theta).
-\tag{2.3}\]</span></span> Observed values are kept as they are, and the fitted mean function is used only for the unobserved units. Because <span class="math inline">\(\hat\theta\)</span> is a function of <span class="math inline">\(Y_S\)</span> alone and the errors are uncorrelated, <span class="math inline">\(\hat\theta\)</span> is uncorrelated with <span class="math inline">\(e_i\)</span> for every <span class="math inline">\(i\in R\)</span>. This is the only property of the estimator used below.</p>
-</section>
-<section id="sec-pred-two-sources" class="level3" data-number="2.5.2">
-<h3 data-number="2.5.2" class="anchored" data-anchor-id="sec-pred-two-sources"><span class="header-section-number">2.5.2</span> Two sources of error</h3>
-<p><strong>Individual prediction.</strong> In machine learning a predictor is judged by its mean squared error on a test case. For <span class="math inline">\(i\in R\)</span> add and subtract <span class="math inline">\(\mu_i(\theta)\)</span>: <span id="eq-error-individual"><span class="math display">\[
-\hat Y_i-Y_i=\underbrace{\mu_i(\hat\theta)-\mu_i(\theta)}_{\delta_i}-\underbrace{\big(Y_i-\mu_i(\theta)\big)}_{e_i}.
-\tag{2.4}\]</span></span> The first part, <span class="math inline">\(\delta_i\)</span>, is the error in the fitted mean caused by the uncertainty in <span class="math inline">\(\hat\theta\)</span>, and the second part, <span class="math inline">\(e_i\)</span>, is the gap between the unobserved <span class="math inline">\(Y_i\)</span> and its true mean. The cross term <span class="math inline">\(E(\delta_ie_i)\)</span> vanishes, so <span id="eq-mse-individual"><span class="math display">\[
-E\big(\hat Y_i-Y_i\big)^2=\underbrace{\sigma_i^2}_{\text{irreducible}}+\underbrace{E\big[\mu_i(\hat\theta)-\mu_i(\theta)\big]^2}_{\text{estimation error}} .
-\tag{2.5}\]</span></span> The irreducible term is present even when <span class="math inline">\(\theta\)</span> is known, because no predictor removes the scatter of <span class="math inline">\(Y_i\)</span> about its mean. The estimation term is the mean squared error of <span class="math inline">\(\mu_i(\hat\theta)\)</span> as an estimator of <span class="math inline">\(\mu_i(\theta)\)</span> and decreases as the training sample grows. This is the usual decomposition of test error into noise and estimation variance, plus squared bias if the estimator is biased.</p>
-<p><strong>The total.</strong> The observed units contribute no error, so <span id="eq-error-decomp"><span class="math display">\[
-\hat T-T=\sum_{i\in R}(\hat Y_i-Y_i)=\sum_{i\in R}\delta_i-\sum_{i\in R}e_i .
-\tag{2.6}\]</span></span> The two sources of error appear again, now summed over the test cases. Squaring, the cross term between <span class="math inline">\(\sum_R\delta_i\)</span> and <span class="math inline">\(\sum_R e_i\)</span> vanishes by the same argument as before, and the <span class="math inline">\(e_i\)</span> are uncorrelated, so <span id="eq-mspe"><span class="math display">\[
-\operatorname{MSPE}(\hat T)=E\big[(\hat T-T)^2\big]
-=\underbrace{\sum_{i\in R}\sigma_i^2}_{\text{scatter of the unobserved }Y_i}
-+\underbrace{E\Big[\Big(\sum_{i\in R}\delta_i\Big)^{2}\Big]}_{\text{uncertainty in }\hat\theta} .
-\tag{2.7}\]</span></span> Dividing by <span class="math inline">\(N^2\)</span> gives <span class="math inline">\(\operatorname{MSPE}(\hat{\bar y}_U)\)</span>.</p>
-<p>Comparing <a href="#eq-mse-individual" class="quarto-xref">Equation&nbsp;<span>2.5</span></a> and <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;<span>2.7</span></a> shows what changes when the target moves from a single case to the total. The irreducible parts simply add, <span class="math inline">\(\sum_{i\in R}\sigma_i^2\)</span>. The estimation parts do not add, because the errors <span class="math inline">\(\delta_i\)</span> all come from the same <span class="math inline">\(\hat\theta\)</span> and are strongly correlated. Expanding the square gives <span class="math display">\[
-E\Big[\Big(\sum_{i\in R}\delta_i\Big)^{2}\Big]=\sum_{i\in R}E(\delta_i^2)+\sum_{i\neq j\in R}E(\delta_i\delta_j),
-\]</span> and the double sum is typically of larger order than the first. A total is a more aggregated target than an individual prediction, and its error is dominated by the shared error in <span class="math inline">\(\hat\theta\)</span>, which does not average out across units.</p>
-</section>
-<section id="sec-pred-sample-mean" class="level3" data-number="2.5.3">
-<h3 data-number="2.5.3" class="anchored" data-anchor-id="sec-pred-sample-mean"><span class="header-section-number">2.5.3</span> Specialization to simple random sampling</h3>
-<p>For simple random sampling there are no auxiliary variables, so every unit has the same mean, <span class="math display">\[
-\mu_i(\theta)=\mu,\quad \sigma_i^2=\sigma^2,\qquad e_i=Y_i-\mu,\quad \bar e_A=|A|^{-1}\sum_{i\in A}e_i,
-\]</span> and <span class="math inline">\(\theta=\mu\)</span> is estimated by the sample mean <span class="math inline">\(\bar y_S=n^{-1}\sum_{i\in S}Y_i\)</span>. The predictor <a href="#eq-predictor" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> is <span id="eq-expansion"><span class="math display">\[
-\hat Y_i=
-\begin{cases}
-Y_i, &amp; i\in S,\\
-\bar y_S, &amp; i\in R,
-\end{cases}
-\qquad
-\hat T=\sum_{i\in S}Y_i+(N-n)\bar y_S=N\bar y_S ,
-\tag{2.8}\]</span></span> so the expansion estimator is a prediction rule that fills in every unobserved unit with the sample mean. Here the estimation error is common to all units, <span class="math inline">\(\delta_i=\bar y_S-\mu=\bar e_S\)</span>, and <a href="#eq-error-decomp" class="quarto-xref">Equation&nbsp;<span>2.6</span></a> becomes <span id="eq-error-srs"><span class="math display">\[
-\hat T-T=(N-n)\,\bar e_S-\sum_{i\in R}e_i .
-\tag{2.9}\]</span></span> Both terms have mean zero, so <span class="math inline">\(\hat T\)</span> is model-unbiased.</p>
-<p><strong>Individual units.</strong> From <a href="#eq-mse-individual" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>, with <span class="math inline">\(E(\bar e_S^{\,2})=\sigma^2/n\)</span>, <span id="eq-mse-srs-individual"><span class="math display">\[
-E\big(\hat Y_i-Y_i\big)^2=\sigma^2+\frac{\sigma^2}{n}=\sigma^2\Big(1+\frac1n\Big),\qquad i\in R .
-\tag{2.10}\]</span></span></p>
-<p><strong>The total.</strong> Since <span class="math inline">\(\delta_i=\bar e_S\)</span> for all <span class="math inline">\(i\in R\)</span>, the double sum in <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;<span>2.7</span></a> is as large as it can be: <span class="math inline">\(E[(\sum_R\delta_i)^2]=(N-n)^2E(\bar e_S^{\,2})=(N-n)^2\sigma^2/n\)</span>, whereas independent errors would give <span class="math inline">\((N-n)\sigma^2/n\)</span>. The scatter term is <span class="math inline">\((N-n)\sigma^2\)</span>, and therefore <span id="eq-mspe-total"><span class="math display">\[
-\operatorname{MSPE}(\hat T)=\frac{(N-n)^2}{n}\sigma^2+(N-n)\sigma^2
-=\frac{N(N-n)}{n}\,\sigma^2 ,
-\tag{2.11}\]</span></span> <span id="eq-mspe-mean"><span class="math display">\[
-\operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2}{n}\left(1-\frac{n}{N}\right).
-\tag{2.12}\]</span></span></p>
-<p>Expression <a href="#eq-mspe-mean" class="quarto-xref">Equation&nbsp;<span>2.12</span></a> is the classical simple-random-sampling variance with <span class="math inline">\(\sigma^2\)</span> in place of the population variance <span class="math inline">\(S^2\)</span>, obtained without appeal to randomization. Four consequences follow.</p>
-<ol type="1">
-<li>The two terms of <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.11</span></a> are the two sources of error. The term <span class="math inline">\((N-n)\sigma^2\)</span> is the irreducible scatter of the unobserved units; the term <span class="math inline">\((N-n)^2\sigma^2/n\)</span> is the cost of estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> observations and alone decreases with <span class="math inline">\(n\)</span>.</li>
-<li>The per-unit error <span class="math inline">\(\sigma^2(1+1/n)\)</span> is barely above <span class="math inline">\(\sigma^2\)</span> for moderate <span class="math inline">\(n\)</span>, so the estimation error looks negligible for individual prediction. For the total it is not: the estimation error is shared by all <span class="math inline">\(N-n\)</span> unobserved units and accumulates to a factor <span class="math inline">\((N-n)^2\)</span>, whereas the scatter accumulates only to <span class="math inline">\(N-n\)</span>. The ratio of the two terms is <span class="math inline">\((N-n)/n\)</span>.</li>
-<li>The finite-population correction is not an artifact of sampling without replacement. The <span class="math inline">\(n\)</span> observed units contribute exactly zero to <a href="#eq-error-srs" class="quarto-xref">Equation&nbsp;<span>2.9</span></a>, leaving <span class="math inline">\(N-n\)</span> terms to predict; at <span class="math inline">\(n=N\)</span> the MSPE is zero.</li>
-<li>If <span class="math inline">\(\mu\)</span> is known, <span class="math inline">\(\delta_i=0\)</span> and the predictor <span class="math inline">\(\hat Y_i=\mu\)</span> for <span class="math inline">\(i\in R\)</span> has <span class="math inline">\(\operatorname{MSPE}(\hat T)=(N-n)\sigma^2\)</span>. This is the irreducible error, and the cost of not knowing <span class="math inline">\(\mu\)</span> is the factor <span class="math inline">\(N/n\)</span> applied to it. For the population mean the MSPE rises from <span class="math inline">\(\sigma^2(N-n)/N^2\)</span> to approximately <span class="math inline">\(\sigma^2/n\)</span>, so precision is governed by the sample size rather than the population size.</li>
-</ol>
-<p>Other sampling problems fit the same framework by changing <span class="math inline">\(\mu_i(\theta)\)</span>: a ratio or regression estimator uses <span class="math inline">\(\mu_i(\theta)=\beta x_i\)</span> or <span class="math inline">\(\beta_0+\beta_1x_i\)</span>, and a stratified estimator uses a separate mean <span class="math inline">\(\mu_h\)</span> in each stratum. Only <span class="math inline">\(\hat\theta\)</span> and the shared estimation error <span class="math inline">\(\sum_R\delta_i\)</span> change.</p>
-</section>
-<section id="sec-pred-demo" class="level3" data-number="2.5.4">
-<h3 data-number="2.5.4" class="anchored" data-anchor-id="sec-pred-demo"><span class="header-section-number">2.5.4</span> Illustration</h3>
-<p><a href="#fig-srs-index" class="quarto-xref">Figure&nbsp;<span>2.3</span></a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span>2.1</span></a> with <span class="math inline">\(\mu_i=\mu\)</span>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-srs-index" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-srs-index-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="srs_files/figure-html/fig-srs-index-1.png" class="img-fluid figure-img" width="720">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-srs-index-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.3: One realized population under the model. The sample occupies the shaded region on the left; the remaining units are to be predicted. Horizontal lines: the model mean <span class="math inline">\(\mu\)</span> (orange), the estimand <span class="math inline">\(\bar Y_U\)</span> (red), and the predictor <span class="math inline">\(\bar y_S\)</span> (blue, dashed).
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>The scatter of the open points about the orange line is the irreducible error <span class="math inline">\(\sigma_i^2\)</span> in <a href="#eq-mse-individual" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>: it is the error of predicting an individual unit even with <span class="math inline">\(\mu\)</span> known. The gap between the orange and blue lines is the estimation error <span class="math inline">\(\delta_i=\bar e_S\)</span>, with root mean square <span class="math inline">\(\sigma/\sqrt{n}\)</span>, which is the same for every unit in <span class="math inline">\(R\)</span>. The gap between the blue and red lines, scaled by <span class="math inline">\(N\)</span>, is the realized prediction error of the total; <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;<span>2.11</span></a> states that its root mean square is <span class="math inline">\(\sigma\sqrt{N(N-n)/n}\)</span>.</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">mu =</span> mu, <span class="at">Ybar_U =</span> ybar_U, <span class="at">ybar_S =</span> ybar_S,</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">error_total  =</span> N <span class="sc">*</span> (ybar_S <span class="sc">-</span> ybar_U),</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">rmspe_total  =</span> sigma <span class="sc">*</span> <span class="fu">sqrt</span>(N <span class="sc">*</span> (N <span class="sc">-</span> n) <span class="sc">/</span> n))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>         mu      Ybar_U      ybar_S error_total rmspe_total 
-   50.00000    48.11714    59.15883  1104.16893   600.00000 </code></pre>
-</div>
-</div>
-<p>Estimating <span class="math inline">\(\sigma^2\)</span> by the sample variance <span class="math inline">\(s_S^2\)</span>, which satisfies <span class="math inline">\(E(s_S^2)=\sigma^2\)</span> under <a href="#eq-model" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>, yields the usual variance estimator and recovers the design-based formulas.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

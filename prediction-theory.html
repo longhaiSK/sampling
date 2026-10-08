@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Longhai Li">
+
+<title>Prediction Theory for Sampling Survey</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="prediction-theory_files/libs/clipboard/clipboard.min.js"></script>
+<script src="prediction-theory_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="prediction-theory_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="prediction-theory_files/libs/quarto-html/popper.min.js"></script>
+<script src="prediction-theory_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="prediction-theory_files/libs/quarto-html/anchor.min.js"></script>
+<link href="prediction-theory_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="prediction-theory_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="prediction-theory_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="prediction-theory_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="prediction-theory_files/libs/bootstrap/bootstrap-1a9011c99ff3470dca5095ea45ed0705.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-setup" id="toc-sec-setup" class="nav-link active" data-scroll-target="#sec-setup"><span class="header-section-number">1</span> Sampling as prediction</a></li>
+  <li><a href="#sec-two-metrics" id="toc-sec-two-metrics" class="nav-link" data-scroll-target="#sec-two-metrics"><span class="header-section-number">2</span> Two ways to judge a prediction</a></li>
+  <li><a href="#sec-general" id="toc-sec-general" class="nav-link" data-scroll-target="#sec-general"><span class="header-section-number">3</span> The general result</a></li>
+  <li><a href="#sec-srs" id="toc-sec-srs" class="nav-link" data-scroll-target="#sec-srs"><span class="header-section-number">4</span> Simple random sampling</a></li>
+  <li><a href="#sec-strat" id="toc-sec-strat" class="nav-link" data-scroll-target="#sec-strat"><span class="header-section-number">5</span> Stratified sampling</a></li>
+  <li><a href="#sec-ratio" id="toc-sec-ratio" class="nav-link" data-scroll-target="#sec-ratio"><span class="header-section-number">6</span> Ratio estimation</a></li>
+  <li><a href="#sec-reg" id="toc-sec-reg" class="nav-link" data-scroll-target="#sec-reg"><span class="header-section-number">7</span> Regression estimation</a></li>
+  <li><a href="#sec-summary" id="toc-sec-summary" class="nav-link" data-scroll-target="#sec-summary"><span class="header-section-number">8</span> Summary</a></li>
+  <li><a href="#sec-check" id="toc-sec-check" class="nav-link" data-scroll-target="#sec-check"><span class="header-section-number">9</span> Numerical check</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Prediction Theory for Sampling Survey</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Longhai Li </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Sampling is a prediction problem. The sample plays the role of a training set, the non-sampled units play the role of test cases, and a population total is the sum of the observed values and the predictions for the test cases. This chapter states the framework once, in general, and then derives the mean squared prediction error of the estimator of a total for simple random, stratified, ratio and regression estimation as special cases of a single formula.</p>
+<section id="sec-setup" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="sec-setup"><span class="header-section-number">1</span> Sampling as prediction</h2>
+<p>Let <span class="math inline">\(U=\{1,\dots,N\}\)</span> index a finite population with study variable <span class="math inline">\(Y_i\)</span>, let <span class="math inline">\(S\subset U\)</span> with <span class="math inline">\(|S|=n\)</span> denote the observed sample, and let <span class="math inline">\(R=U\setminus S\)</span> denote the <span class="math inline">\(N-n\)</span> non-sampled units. The quantities of interest are <span class="math display">\[
+T=\sum_{i\in U}Y_i=\sum_{i\in S}Y_i+\sum_{i\in R}Y_i,\qquad \bar Y_U=T/N .
+\]</span> Only the second sum is unknown, so the task is to predict <span class="math inline">\(Y_i\)</span> for each <span class="math inline">\(i\in R\)</span>.</p>
+<p>The prediction approach treats <span class="math inline">\(Y_1,\dots,Y_N\)</span> as random variables and <span class="math inline">\(S\)</span> as fixed. All expectations are taken with respect to a model <span class="math inline">\(\xi\)</span> rather than the randomization distribution. The sampling design enters only through the requirement that selection be uninformative, so that <span class="math inline">\(\xi\)</span> governs the units in <span class="math inline">\(R\)</span> as well as those in <span class="math inline">\(S\)</span>. Any auxiliary variables <span class="math inline">\(x_i\)</span> are treated as known constants. The general working model is <span id="eq-model"><span class="math display">\[
+\xi:\quad E(Y_i)=\mu_i(\theta),\quad \operatorname{Var}(Y_i)=\sigma_i^2,\quad
+\operatorname{Cov}(Y_i,Y_j)=0\ (i\neq j),
+\tag{1}\]</span></span> where <span class="math inline">\(\theta\)</span> is an unknown parameter and <span class="math inline">\(\mu_i(\theta)\)</span> is the mean function, which may depend on <span class="math inline">\(x_i\)</span>. The model errors are <span id="eq-errors"><span class="math display">\[
+e_i=Y_i-\mu_i(\theta),\qquad E(e_i)=0,\quad E(e_i^2)=\sigma_i^2,\quad E(e_ie_j)=0\ (i\neq j).
+\tag{2}\]</span></span></p>
+<p>A prediction rule estimates <span class="math inline">\(\theta\)</span> from the sample by <span class="math inline">\(\hat\theta=\hat\theta(Y_S)\)</span> and predicts <span id="eq-predictor"><span class="math display">\[
+\hat Y_i=
+\begin{cases}
+Y_i, &amp; i\in S,\\
+\mu_i(\hat\theta), &amp; i\in R,
+\end{cases}
+\qquad
+\hat T=\sum_{i\in U}\hat Y_i=\sum_{i\in S}Y_i+\sum_{i\in R}\mu_i(\hat\theta).
+\tag{3}\]</span></span> Observed values are kept as they are, and the fitted mean function is used only for the unobserved units. We take <span class="math inline">\(\hat\theta\)</span> to be a linear function of <span class="math inline">\(Y_S\)</span> (given the <span class="math inline">\(x_i\)</span>), as it is for every estimator in this chapter, so that <span class="math inline">\(\hat\theta\)</span> is uncorrelated with <span class="math inline">\(e_i\)</span> for each <span class="math inline">\(i\in R\)</span>.</p>
+</section>
+<section id="sec-two-metrics" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="sec-two-metrics"><span class="header-section-number">2</span> Two ways to judge a prediction</h2>
+<p>Add and subtract <span class="math inline">\(\mu_i(\theta)\)</span> in the error for an unobserved unit <span class="math inline">\(i\in R\)</span>: <span id="eq-error-individual"><span class="math display">\[
+\hat Y_i-Y_i=\underbrace{\mu_i(\hat\theta)-\mu_i(\theta)}_{\delta_i}-\underbrace{\big(Y_i-\mu_i(\theta)\big)}_{e_i}.
+\tag{4}\]</span></span> There are two sources of error. The term <span class="math inline">\(e_i\)</span> is the gap between the unobserved <span class="math inline">\(Y_i\)</span> and its true mean, which no predictor can remove. The term <span class="math inline">\(\delta_i\)</span> is the gap between the fitted mean and the true mean, caused by the uncertainty in <span class="math inline">\(\hat\theta\)</span>.</p>
+<p><strong>Traditional machine learning.</strong> A predictive model is judged by the mean squared prediction error of a single case, <span class="math inline">\(E(\hat Y_i-Y_i)^2\)</span>, and by its sum or average over the test cases. Because <span class="math inline">\(\delta_i\)</span> is uncorrelated with <span class="math inline">\(e_i\)</span>, <span id="eq-mse-individual"><span class="math display">\[
+E(\hat Y_i-Y_i)^2=\sigma_i^2+E(\delta_i^2),
+\qquad
+\frac1{N-n}\sum_{i\in R}E(\hat Y_i-Y_i)^2=\frac1{N-n}\sum_{i\in R}\sigma_i^2+\frac1{N-n}\sum_{i\in R}E(\delta_i^2).
+\tag{5}\]</span></span> Only the diagonal terms <span class="math inline">\(E(\delta_i^2)\)</span> enter. This is the familiar split into irreducible noise and estimation error.</p>
+<p><strong>Sampling survey.</strong> The target is the total, and the quantity of interest is the mean squared prediction error of <span class="math inline">\(\hat T\)</span>, <span id="eq-mspe-def"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=E\big[(\hat T-T)^2\big]=E\Big[\Big(\sum_{i\in R}\hat Y_i-Y_i\Big)^{2}\Big],
+\qquad
+\operatorname{MSPE}(\hat{\bar y}_U)=\frac{\operatorname{MSPE}(\hat T)}{N^2}.
+\tag{6}\]</span></span> The observed units contribute no error, so by <a href="#eq-error-individual" class="quarto-xref">Equation&nbsp;4</a> <span id="eq-error-decomp"><span class="math display">\[
+\hat T-T=\sum_{i\in R}\delta_i-\sum_{i\in R}e_i .
+\tag{7}\]</span></span> The cross term between <span class="math inline">\(\sum_R\delta_i\)</span> and <span class="math inline">\(\sum_Re_i\)</span> vanishes, and the <span class="math inline">\(e_i\)</span> are uncorrelated, so <span id="eq-mspe"><span class="math display">\[
+\operatorname{MSPE}(\hat T)
+=\underbrace{\sum_{i\in R}\sigma_i^2}_{\text{scatter of the unobserved }Y_i}
++\underbrace{E\Big[\Big(\sum_{i\in R}\delta_i\Big)^{2}\Big]}_{\text{uncertainty in }\hat\theta} .
+\tag{8}\]</span></span></p>
+<p>The difference from <a href="#eq-mse-individual" class="quarto-xref">Equation&nbsp;5</a> is that the square is taken <em>after</em> summing. Expanding, <span class="math display">\[
+E\Big[\Big(\sum_{i\in R}\delta_i\Big)^{2}\Big]=\sum_{i\in R}E(\delta_i^2)+\sum_{i\neq j\in R}E(\delta_i\delta_j),
+\]</span> and the cross terms are the new ingredient. They are not negligible: all <span class="math inline">\(\delta_i\)</span> are functions of the same <span class="math inline">\(\hat\theta\)</span>, so they are correlated. If the average pairwise correlation is <span class="math inline">\(\bar\rho\)</span>, the cross terms are of order <span class="math inline">\((N-n)^2\bar\rho\,E(\delta^2)\)</span> against <span class="math inline">\((N-n)E(\delta^2)\)</span> for the diagonal, and <span class="math inline">\(\bar\rho\)</span> does not shrink with <span class="math inline">\(N\)</span> for a model with a fixed number of parameters. The estimation error of a total is therefore dominated by the shared error in <span class="math inline">\(\hat\theta\)</span>, which does not average out across units.</p>
+</section>
+<section id="sec-general" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="sec-general"><span class="header-section-number">3</span> The general result</h2>
+<p>Suppose <span class="math inline">\(\mu_i(\theta)=x_i^{\top}\theta\)</span> is linear in <span class="math inline">\(\theta\)</span>, which covers all the cases below. Then <span class="math display">\[
+\sum_{i\in R}\delta_i=\Big(\sum_{i\in R}x_i\Big)^{\top}(\hat\theta-\theta)=x_R^{\top}(\hat\theta-\theta),
+\qquad x_R=\sum_{i\in R}x_i=\sum_{i\in U}x_i-\sum_{i\in S}x_i ,
+\]</span> a single linear contrast of the estimation error, and <a href="#eq-mspe" class="quarto-xref">Equation&nbsp;8</a> becomes <span id="eq-mspe-general"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=\sum_{i\in R}\sigma_i^2+x_R^{\top}\operatorname{MSE}(\hat\theta)\,x_R .
+\tag{9}\]</span></span> For a nonlinear mean function the same holds approximately, with <span class="math inline">\(x_R\)</span> replaced by <span class="math inline">\(\sum_R\partial\mu_i/\partial\theta\)</span> (delta method).</p>
+<p>For the working model <span class="math inline">\(\sigma_i^2=\sigma^2v_i\)</span> with known weights <span class="math inline">\(v_i\)</span>, the weighted least squares estimator <span class="math display">\[
+\hat\theta=\big(X_S^{\top}V_S^{-1}X_S\big)^{-1}X_S^{\top}V_S^{-1}y_S,\qquad V_S=\operatorname{diag}(v_i)_{i\in S},
+\]</span> is unbiased with <span class="math inline">\(\operatorname{Var}(\hat\theta)=\sigma^2(X_S^{\top}V_S^{-1}X_S)^{-1}\)</span>, and <span id="eq-mspe-wls"><span class="math display">\[
+\boxed{\;\operatorname{MSPE}(\hat T)=\sigma^2\Big[\sum_{i\in R}v_i+x_R^{\top}\big(X_S^{\top}V_S^{-1}X_S\big)^{-1}x_R\Big]\;}
+\tag{10}\]</span></span> The first term is the scatter of the unobserved units, and the second is the cost of estimating <span class="math inline">\(\theta\)</span> from the sample. The cost is a quadratic form in <span class="math inline">\(x_R\)</span>, so it is small only when the sample supplies a precise estimate in the direction in which the unobserved units need it. A precise <span class="math inline">\(\hat\theta\)</span> is not enough: the sample must also resemble the population in the directions <span class="math inline">\(x_R\)</span> points to. Each estimator below corresponds to a choice of <span class="math inline">\(x_i\)</span> and <span class="math inline">\(v_i\)</span>.</p>
+<p>In all of these cases <span class="math inline">\(\hat T=\sum_SY_i+\sum_Rx_i^{\top}\hat\theta\)</span>, and the estimate of <span class="math inline">\(\sigma^2\)</span> is the weighted residual mean square <span class="math inline">\(\hat\sigma^2=\sum_Sv_i^{-1}(Y_i-x_i^{\top}\hat\theta)^2/(n-p)\)</span> with <span class="math inline">\(p=\dim\theta\)</span>, which gives the variance estimator on substituting into <a href="#eq-mspe-wls" class="quarto-xref">Equation&nbsp;10</a>.</p>
+</section>
+<section id="sec-srs" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="sec-srs"><span class="header-section-number">4</span> Simple random sampling</h2>
+<p>With no auxiliary variable every unit has the same mean, <span class="math display">\[
+\mu_i(\theta)=\mu,\quad x_i=1,\quad v_i=1,\qquad e_i=Y_i-\mu,\quad \bar e_A=|A|^{-1}\sum_{i\in A}e_i,
+\]</span> and <span class="math inline">\(\hat\mu=\bar y_S\)</span>. The predictor is <span id="eq-expansion"><span class="math display">\[
+\hat Y_i=
+\begin{cases}
+Y_i, &amp; i\in S,\\
+\bar y_S, &amp; i\in R,
+\end{cases}
+\qquad
+\hat T=\sum_{i\in S}Y_i+(N-n)\bar y_S=N\bar y_S ,
+\tag{11}\]</span></span> so the expansion estimator is a prediction rule that fills in every unobserved unit with the sample mean. The estimation error is common to all units, <span class="math inline">\(\delta_i=\bar y_S-\mu=\bar e_S\)</span>, so the pairwise correlation of the <span class="math inline">\(\delta_i\)</span> is exactly one and <span id="eq-error-srs"><span class="math display">\[
+\hat T-T=(N-n)\,\bar e_S-\sum_{i\in R}e_i .
+\tag{12}\]</span></span> Both terms have mean zero, so <span class="math inline">\(\hat T\)</span> is model-unbiased. With <span class="math inline">\(x_R=N-n\)</span> and <span class="math inline">\(X_S^{\top}X_S=n\)</span>, <a href="#eq-mspe-wls" class="quarto-xref">Equation&nbsp;10</a> gives <span id="eq-mspe-total"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=\sigma^2\Big[(N-n)+\frac{(N-n)^2}{n}\Big]=\frac{N(N-n)}{n}\,\sigma^2 ,
+\tag{13}\]</span></span> <span id="eq-mspe-mean"><span class="math display">\[
+\operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2}{n}\left(1-\frac{n}{N}\right).
+\tag{14}\]</span></span></p>
+<p>Expression <a href="#eq-mspe-mean" class="quarto-xref">Equation&nbsp;14</a> is the classical simple-random-sampling variance with <span class="math inline">\(\sigma^2\)</span> in place of the population variance <span class="math inline">\(S^2\)</span>, obtained without appeal to randomization. Several consequences follow.</p>
+<ol type="1">
+<li>The two terms of <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;13</a> are the two sources of error. The term <span class="math inline">\((N-n)\sigma^2\)</span> is the irreducible scatter of the unobserved units; the term <span class="math inline">\((N-n)^2\sigma^2/n\)</span> is the cost of estimating <span class="math inline">\(\mu\)</span> from <span class="math inline">\(n\)</span> observations and alone decreases with <span class="math inline">\(n\)</span>.</li>
+<li>The per-unit error of <a href="#eq-mse-individual" class="quarto-xref">Equation&nbsp;5</a> is <span class="math inline">\(\sigma^2(1+1/n)\)</span>, barely above <span class="math inline">\(\sigma^2\)</span> for moderate <span class="math inline">\(n\)</span>, so the estimation error looks negligible for individual prediction. For the total it is not: it is shared by all <span class="math inline">\(N-n\)</span> unobserved units and accumulates to a factor <span class="math inline">\((N-n)^2\)</span>, whereas the scatter accumulates only to <span class="math inline">\(N-n\)</span>. The ratio of the two terms is <span class="math inline">\((N-n)/n\)</span>.</li>
+<li>The finite-population correction is not an artifact of sampling without replacement. The <span class="math inline">\(n\)</span> observed units contribute exactly zero to <a href="#eq-error-srs" class="quarto-xref">Equation&nbsp;12</a>, leaving <span class="math inline">\(N-n\)</span> terms to predict; at <span class="math inline">\(n=N\)</span> the MSPE is zero.</li>
+<li>If <span class="math inline">\(\mu\)</span> is known, <span class="math inline">\(\delta_i=0\)</span> and the predictor <span class="math inline">\(\hat Y_i=\mu\)</span> for <span class="math inline">\(i\in R\)</span> has <span class="math inline">\(\operatorname{MSPE}(\hat T)=(N-n)\sigma^2\)</span>, the irreducible error. The cost of not knowing <span class="math inline">\(\mu\)</span> is the factor <span class="math inline">\(N/n\)</span> applied to it.</li>
+</ol>
+<p><a href="#fig-pred-index" class="quarto-xref">Figure&nbsp;1</a> displays one realization of a population under <a href="#eq-model" class="quarto-xref">Equation&nbsp;1</a> with <span class="math inline">\(\mu_i=\mu\)</span>. Since the labels are uninformative, the sample is placed on the left, shaded grey, and the units to be predicted on the right.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-pred-index" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pred-index-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="prediction-theory_files/figure-html/fig-pred-index-1.png" class="img-fluid figure-img" width="720">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pred-index-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: One realized population under the model. The sample occupies the shaded region on the left; the remaining units are to be predicted. Horizontal lines: the model mean <span class="math inline">\(\mu\)</span> (orange), the estimand <span class="math inline">\(\bar Y_U\)</span> (red), and the predictor <span class="math inline">\(\bar y_S\)</span> (blue, dashed).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The scatter of the open points about the orange line is the irreducible error. The gap between the orange and blue lines is the estimation error <span class="math inline">\(\delta_i=\bar e_S\)</span>, with root mean square <span class="math inline">\(\sigma/\sqrt{n}\)</span>, the same for every unit in <span class="math inline">\(R\)</span>. The gap between the blue and red lines, scaled by <span class="math inline">\(N\)</span>, is the realized prediction error of the total; <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;13</a> states that its root mean square is <span class="math inline">\(\sigma\sqrt{N(N-n)/n}\)</span>.</p>
+</section>
+<section id="sec-strat" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="sec-strat"><span class="header-section-number">5</span> Stratified sampling</h2>
+<p>Let the population be divided into strata <span class="math inline">\(h=1,\dots,H\)</span> of sizes <span class="math inline">\(N_h\)</span>, with <span class="math inline">\(n_h\)</span> units sampled from stratum <span class="math inline">\(h\)</span>, <span class="math inline">\(R_h\)</span> the non-sampled units and <span class="math inline">\(S_h\)</span> the sampled units. The model gives each stratum its own mean and variance, <span class="math display">\[
+\mu_i(\theta)=\mu_h,\quad \sigma_i^2=\sigma_h^2,\qquad i\in\text{stratum }h,
+\]</span> so <span class="math inline">\(x_i\)</span> is the vector of stratum indicators and <span class="math inline">\(\theta=(\mu_1,\dots,\mu_H)\)</span>. Then <span class="math inline">\(\hat\mu_h=\bar y_{S_h}\)</span>, and <span class="math display">\[
+\hat T=\sum_{h=1}^HN_h\bar y_{S_h},\qquad
+\hat{\bar y}_U=\sum_{h=1}^HW_h\bar y_{S_h},\quad W_h=N_h/N .
+\]</span> The vector <span class="math inline">\(x_R\)</span> has components <span class="math inline">\(N_h-n_h\)</span>, the matrix <span class="math inline">\(X_S^{\top}X_S\)</span> is diagonal with entries <span class="math inline">\(n_h\)</span>, and the <span class="math inline">\(\hat\mu_h\)</span> are independent across strata because they depend on disjoint, uncorrelated data. The correlated errors <span class="math inline">\(\delta_i\)</span> therefore occur only <em>within</em> a stratum, and the cross terms between strata vanish. Applying <a href="#eq-mspe-general" class="quarto-xref">Equation&nbsp;9</a> stratum by stratum, <span id="eq-mspe-strat"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=\sum_{h=1}^H\sigma_h^2\Big[(N_h-n_h)+\frac{(N_h-n_h)^2}{n_h}\Big]=\sum_{h=1}^H\frac{N_h(N_h-n_h)}{n_h}\,\sigma_h^2 ,
+\tag{15}\]</span></span> <span id="eq-mspe-strat-mean"><span class="math display">\[
+\operatorname{MSPE}(\hat{\bar y}_U)=\sum_{h=1}^HW_h^2\Big(1-\frac{n_h}{N_h}\Big)\frac{\sigma_h^2}{n_h}.
+\tag{16}\]</span></span> This is the classical stratified variance, with <span class="math inline">\(\sigma_h^2\)</span> playing the role of <span class="math inline">\(S_h^2\)</span>. It is the sum of the <span class="math inline">\(H\)</span> separate SRS results of <a href="#eq-mspe-total" class="quarto-xref">Equation&nbsp;13</a>, each with its own shared estimation error. Substituting <span class="math inline">\(\hat\sigma_h^2=s_h^2\)</span> gives the usual variance estimator.</p>
+<p>Two allocations follow immediately from <a href="#eq-mspe-strat-mean" class="quarto-xref">Equation&nbsp;16</a>. Under proportional allocation <span class="math inline">\(n_h=nW_h\)</span>, <span class="math display">\[
+\operatorname{MSPE}(\hat{\bar y}_U)=\Big(\frac1n-\frac1N\Big)\sum_{h=1}^HW_h\sigma_h^2 ,
+\]</span> the SRS result with <span class="math inline">\(\sigma^2\)</span> replaced by the average within-stratum variance, so that stratification helps whenever the strata means differ. Minimizing <a href="#eq-mspe-strat-mean" class="quarto-xref">Equation&nbsp;16</a> over <span class="math inline">\(n_h\)</span> subject to <span class="math inline">\(\sum n_h=n\)</span> gives Neyman allocation <span class="math inline">\(n_h\propto N_h\sigma_h\)</span>, with <span class="math inline">\(\operatorname{MSPE}(\hat{\bar y}_U)=\frac1n\big(\sum_hW_h\sigma_h\big)^2-\frac1N\sum_hW_h\sigma_h^2\)</span>.</p>
+</section>
+<section id="sec-ratio" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="sec-ratio"><span class="header-section-number">6</span> Ratio estimation</h2>
+<p>Let <span class="math inline">\(x_i&gt;0\)</span> be an auxiliary variable whose population total <span class="math inline">\(t_x=\sum_Ux_i\)</span> is known. The ratio model is <span class="math display">\[
+\mu_i(\beta)=\beta x_i,\qquad \sigma_i^2=\sigma^2x_i ,
+\]</span> that is <span class="math inline">\(x_i\)</span> in the mean and <span class="math inline">\(v_i=x_i\)</span> in the variance. Then <span class="math inline">\(X_S^{\top}V_S^{-1}X_S=\sum_Sx_i=t_{x,S}\)</span>, and <span class="math display">\[
+\hat\beta=\frac{\sum_{i\in S}Y_i}{\sum_{i\in S}x_i}=\frac{\bar y_S}{\bar x_S},
+\qquad
+\hat T=\sum_{i\in S}Y_i+\hat\beta\,t_{x,R}=\hat\beta\,t_x ,
+\]</span> because <span class="math inline">\(\sum_SY_i=\hat\beta\,t_{x,S}\)</span>. This is the ratio estimator of the total. The shared error is <span class="math inline">\(\delta_i=x_i(\hat\beta-\beta)\)</span>, so <span class="math inline">\(\sum_R\delta_i=t_{x,R}(\hat\beta-\beta)\)</span>, with <span class="math inline">\(x_R=t_{x,R}=t_x-t_{x,S}\)</span> and <span class="math inline">\(\sum_Rv_i=t_{x,R}\)</span>. <a href="#eq-mspe-wls" class="quarto-xref">Equation&nbsp;10</a> gives <span id="eq-mspe-ratio"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=\sigma^2\Big[t_{x,R}+\frac{t_{x,R}^2}{t_{x,S}}\Big]
+=\sigma^2\,\frac{t_x\,(t_x-t_{x,S})}{t_{x,S}} .
+\tag{17}\]</span></span> Write <span class="math inline">\(t_{x,S}=n\bar x_S\)</span> and <span class="math inline">\(t_x=N\bar x_U\)</span>. Then <span id="eq-mspe-ratio-mean"><span class="math display">\[
+\operatorname{MSPE}(\hat{\bar y}_U)=\frac{\sigma^2\,\bar x_U}{n\,\bar x_S}\Big(\bar x_U-\frac nN\bar x_S\Big).
+\tag{18}\]</span></span> In a balanced sample, <span class="math inline">\(\bar x_S=\bar x_U\)</span>, this reduces to <span class="math inline">\(\frac{\sigma^2\bar x_U}{n}(1-n/N)\)</span>: the SRS form with <span class="math inline">\(\sigma^2\bar x_U\)</span>, the variance of an average-size unit, in place of <span class="math inline">\(\sigma^2\)</span>. When <span class="math inline">\(\bar x_S\)</span> is below <span class="math inline">\(\bar x_U\)</span> the MSPE is inflated, because the estimate of <span class="math inline">\(\beta\)</span> is then extrapolated to the larger unobserved units. The variance estimator uses <span class="math inline">\(\hat\sigma^2=\sum_S(Y_i-\hat\beta x_i)^2/x_i\big/(n-1)\)</span>.</p>
+</section>
+<section id="sec-reg" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="sec-reg"><span class="header-section-number">7</span> Regression estimation</h2>
+<p>With the same auxiliary variable, the straight-line model with constant variance is <span class="math display">\[
+\mu_i(\theta)=\beta_0+\beta_1x_i,\qquad \sigma_i^2=\sigma^2,
+\]</span> so <span class="math inline">\(x_i=(1,x_i)^{\top}\)</span> and <span class="math inline">\(v_i=1\)</span>. The least squares fit gives <span class="math display">\[
+\hat T=\sum_{i\in S}Y_i+\sum_{i\in R}(\hat\beta_0+\hat\beta_1x_i)=N\big[\bar y_S+\hat\beta_1(\bar x_U-\bar x_S)\big],
+\]</span> the regression estimator, because the residuals in <span class="math inline">\(S\)</span> sum to zero. Here <span class="math inline">\(x_R=(N-n)(1,\bar x_R)^{\top}\)</span> and <span class="math inline">\(X_S^{\top}X_S\)</span> has the inverse that gives the standard leverage formula <span class="math display">\[
+(1,\bar x_R)\,(X_S^{\top}X_S)^{-1}(1,\bar x_R)^{\top}=\frac1n+\frac{(\bar x_R-\bar x_S)^2}{S_{xx,S}},
+\qquad S_{xx,S}=\sum_{i\in S}(x_i-\bar x_S)^2 .
+\]</span> Moreover <span class="math inline">\((N-n)(\bar x_R-\bar x_S)=N(\bar x_U-\bar x_S)\)</span>, so <a href="#eq-mspe-wls" class="quarto-xref">Equation&nbsp;10</a> becomes <span id="eq-mspe-reg"><span class="math display">\[
+\operatorname{MSPE}(\hat T)=\sigma^2\Big[(N-n)+\frac{(N-n)^2}{n}+\frac{N^2(\bar x_U-\bar x_S)^2}{S_{xx,S}}\Big]
+=\sigma^2\Big[\frac{N(N-n)}{n}+\frac{N^2(\bar x_U-\bar x_S)^2}{S_{xx,S}}\Big],
+\tag{19}\]</span></span> <span id="eq-mspe-reg-mean"><span class="math display">\[
+\operatorname{MSPE}(\hat{\bar y}_U)=\sigma^2\Big[\frac1n\Big(1-\frac nN\Big)+\frac{(\bar x_U-\bar x_S)^2}{S_{xx,S}}\Big].
+\tag{20}\]</span></span> The first term is the SRS result <a href="#eq-mspe-mean" class="quarto-xref">Equation&nbsp;14</a> with <span class="math inline">\(\sigma^2\)</span> now the <em>residual</em> variance about the line, which is smaller than the marginal variance of <span class="math inline">\(Y\)</span> when <span class="math inline">\(x\)</span> is informative. The second term is a penalty for an unbalanced sample, which vanishes when <span class="math inline">\(\bar x_S=\bar x_U\)</span>. The variance estimator uses <span class="math inline">\(\hat\sigma^2=\sum_S(Y_i-\hat\beta_0-\hat\beta_1x_i)^2/(n-2)\)</span>.</p>
+</section>
+<section id="sec-summary" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="sec-summary"><span class="header-section-number">8</span> Summary</h2>
+<div id="tbl-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Special cases of <a href="#eq-mspe-wls" class="quarto-xref">Equation&nbsp;10</a>.
+</figcaption>
+<div aria-describedby="tbl-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estimator</th>
+<th style="text-align: left;"><span class="math inline">\(\mu_i(\theta)\)</span></th>
+<th style="text-align: left;"><span class="math inline">\(v_i\)</span></th>
+<th style="text-align: left;"><span class="math inline">\(x_R\)</span></th>
+<th style="text-align: left;"><span class="math inline">\(\operatorname{MSPE}(\hat T)/\sigma^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SRS</td>
+<td style="text-align: left;"><span class="math inline">\(\mu\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(N-n\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\dfrac{N(N-n)}{n}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Stratified</td>
+<td style="text-align: left;"><span class="math inline">\(\mu_h\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(1\)</span> (per stratum <span class="math inline">\(\sigma_h^2\)</span>)</td>
+<td style="text-align: left;"><span class="math inline">\((N_h-n_h)_h\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\sum_h\dfrac{N_h(N_h-n_h)}{n_h}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ratio</td>
+<td style="text-align: left;"><span class="math inline">\(\beta x_i\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(x_i\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(t_{x,R}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\dfrac{t_x(t_x-t_{x,S})}{t_{x,S}}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Regression</td>
+<td style="text-align: left;"><span class="math inline">\(\beta_0+\beta_1x_i\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: left;"><span class="math inline">\((N-n)(1,\bar x_R)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\dfrac{N(N-n)}{n}+\dfrac{N^2(\bar x_U-\bar x_S)^2}{S_{xx,S}}\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>In every case the MSPE is the scatter of the unobserved units, <span class="math inline">\(\sum_R\sigma_i^2\)</span>, plus a cost of estimating <span class="math inline">\(\theta\)</span> that is a quadratic form in the total auxiliary information <span class="math inline">\(x_R\)</span> still to be predicted. The ratio and regression estimators do not remove the shared error; they change the model so that <span class="math inline">\(\sigma^2\)</span> is the residual variance rather than the marginal one, and they pay a penalty when the sample is unrepresentative in <span class="math inline">\(x\)</span>.</p>
+</section>
+<section id="sec-check" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="sec-check"><span class="header-section-number">9</span> Numerical check</h2>
+<p>The formulas can be checked by simulating many populations from the model, drawing a sample, and comparing the empirical mean squared error of <span class="math inline">\(\hat T-T\)</span> with the formula. The sample is fixed across replications, which is the conditioning of the prediction approach.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">200</span>; n <span class="ot">&lt;-</span> <span class="dv">20</span>; B <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>x   <span class="ot">&lt;-</span> <span class="fu">runif</span>(N, <span class="dv">1</span>, <span class="dv">10</span>)                 <span class="co"># known auxiliary variable</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>S   <span class="ot">&lt;-</span> <span class="fu">sample</span>(N, n)                    <span class="co"># one fixed sample</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>R   <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_len</span>(N), S)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>strat <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">each =</span> N <span class="sc">/</span> <span class="dv">2</span>)        <span class="co"># two strata of equal size</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>sg  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)                         <span class="co"># stratum sd's</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>nh  <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="fu">factor</span>(strat[S], <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)); Nh <span class="ot">&lt;-</span> <span class="fu">table</span>(strat)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="cf">function</span>(gen, est) {</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  err <span class="ot">&lt;-</span> <span class="fu">replicate</span>(B, { y <span class="ot">&lt;-</span> <span class="fu">gen</span>(); <span class="fu">est</span>(y) <span class="sc">-</span> <span class="fu">sum</span>(y) })</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(err<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="do">## SRS: Y ~ (mu, sigma^2)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>srs_emp <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(N, <span class="dv">10</span>, sigma), <span class="cf">function</span>(y) N <span class="sc">*</span> <span class="fu">mean</span>(y[S]))</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>srs_th  <span class="ot">&lt;-</span> sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> N <span class="sc">*</span> (N <span class="sc">-</span> n) <span class="sc">/</span> n</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Stratified: stratum means and sd's differ</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>str_emp <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(N, <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)[strat], sg[strat]),</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>               <span class="cf">function</span>(y) <span class="fu">sum</span>(Nh <span class="sc">*</span> <span class="fu">tapply</span>(y[S], <span class="fu">factor</span>(strat[S], <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>), mean)))</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>str_th  <span class="ot">&lt;-</span> <span class="fu">sum</span>(sg<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> Nh <span class="sc">*</span> (Nh <span class="sc">-</span> nh) <span class="sc">/</span> nh)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="do">## Ratio: mean beta * x, variance sigma^2 * x</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>rat_emp <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(N, beta <span class="sc">*</span> x, sigma <span class="sc">*</span> <span class="fu">sqrt</span>(x)),</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>               <span class="cf">function</span>(y) <span class="fu">sum</span>(x) <span class="sc">*</span> <span class="fu">sum</span>(y[S]) <span class="sc">/</span> <span class="fu">sum</span>(x[S]))</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>rat_th  <span class="ot">&lt;-</span> sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(x) <span class="sc">*</span> (<span class="fu">sum</span>(x) <span class="sc">-</span> <span class="fu">sum</span>(x[S])) <span class="sc">/</span> <span class="fu">sum</span>(x[S])</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="do">## Regression: straight line, constant variance</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>reg_emp <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="cf">function</span>() <span class="fu">rnorm</span>(N, <span class="dv">3</span> <span class="sc">+</span> beta <span class="sc">*</span> x, sigma),</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>               <span class="cf">function</span>(y) { f <span class="ot">&lt;-</span> <span class="fu">lm</span>(y[S] <span class="sc">~</span> x[S]); N <span class="sc">*</span> (<span class="fu">mean</span>(y[S]) <span class="sc">+</span> <span class="fu">coef</span>(f)[<span class="dv">2</span>] <span class="sc">*</span> (<span class="fu">mean</span>(x) <span class="sc">-</span> <span class="fu">mean</span>(x[S]))) })</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>reg_th  <span class="ot">&lt;-</span> sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (N <span class="sc">*</span> (N <span class="sc">-</span> n) <span class="sc">/</span> n <span class="sc">+</span> N<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (<span class="fu">mean</span>(x) <span class="sc">-</span> <span class="fu">mean</span>(x[S]))<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>((x[S] <span class="sc">-</span> <span class="fu">mean</span>(x[S]))<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">SRS =</span> <span class="fu">c</span>(<span class="at">simulated =</span> srs_emp, <span class="at">formula =</span> srs_th),</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>            <span class="at">Stratified =</span> <span class="fu">c</span>(str_emp, str_th),</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>            <span class="at">Ratio =</span> <span class="fu">c</span>(rat_emp, rat_th),</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>            <span class="at">Regression =</span> <span class="fu">c</span>(reg_emp, reg_th)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>           simulated formula
+SRS             7246    7200
+Stratified     10966   11083
+Ratio          40628   40248
+Regression      7239    7207</code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
