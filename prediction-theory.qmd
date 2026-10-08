@@ -315,6 +315,46 @@ $$
 $$ {#eq-mspe-reg-mean}
 The first term is the SRS result @eq-mspe-mean with $\sigma^2$ now the *residual* variance about the line, which is smaller than the marginal variance of $Y$ when $x$ is informative. The second term is a penalty for an unbalanced sample, which vanishes when $\bar x_S=\bar x_U$. The variance estimator uses $\hat\sigma^2=\sum_S(Y_i-\hat\beta_0-\hat\beta_1x_i)^2/(n-2)$.
 
+## Unequal probability sampling with replacement {#sec-ups}
+
+Suppose $n$ draws are made with replacement, unit $i$ being selected with probability $p_i$ on each draw, and let $m_i$ be the number of times unit $i$ is drawn, so $\sum_Um_i=n$. The sample $S=\{i:m_i>0\}$ is the set of *distinct* units, of size $\nu\le n$, and $R=U\setminus S$. The Hansen–Hurwitz estimator is
+$$
+\hat T_{HH}=\frac1n\sum_{k=1}^n\frac{y_{(k)}}{p_{(k)}}=\sum_{i\in S}w_iY_i,\qquad w_i=\frac{m_i}{np_i},
+$$
+where $(k)$ indexes the unit selected on draw $k$. It is not of the plug-in form of @sec-setup, but it can still be read as a predictor. Splitting off the observed values,
+$$
+\hat T_{HH}=\sum_{i\in S}Y_i+\underbrace{\sum_{i\in S}(w_i-1)Y_i}_{\text{prediction of }\sum_RY_i},
+$$
+so the unobserved total is predicted in one piece by reweighting the sample, rather than unit by unit from a fitted mean.
+
+UPS is designed for the ratio model $\mu_i=\beta x_i$, $\sigma_i^2=\sigma^2v_i$, with $p_i=x_i/t_x$. Then $\sum_Sw_ix_i=(t_x/n)\sum_Sm_i=t_x$, so
+$$
+E(\hat T_{HH}-T)=\beta\Big(\sum_{i\in S}w_ix_i-t_x\Big)=0,
+$$
+and $\hat T_{HH}$ is model unbiased. This depends on $p_i\propto\mu_i$; for a mean function not proportional to the selection probabilities, $\hat T_{HH}$ has model bias $\sum_Sw_i\mu_i-\sum_U\mu_i$. Under the ratio model the error is
+$$
+\hat T_{HH}-T=\underbrace{\sum_{i\in S}(w_i-1)e_i}_{\delta_R}-\sum_{i\in R}e_i ,
+$$
+where $\delta_R$ plays the role of $\sum_R\delta_i$ in @eq-error-individual. The two sums involve disjoint units, so
+$$
+\operatorname{MSPE}(\hat T_{HH})=\sigma^2\Big[\sum_{i\in R}v_i+\sum_{i\in S}(w_i-1)^2v_i\Big].
+$$ {#eq-mspe-hh}
+The first term is the irreducible error, the same as for any predictor that keeps the observed values, and it depends on the draws only through which units end up in $R$. The second term is the estimation error.
+
+Compare this with the ratio predictor of @sec-ratio fitted to the same distinct units, for $v_i=x_i$. Since $\sum_S(w_i-1)x_i=t_x-t_{x,S}=t_{x,R}$, the Cauchy–Schwarz inequality gives
+$$
+t_{x,R}^2=\Big(\sum_{i\in S}(w_i-1)x_i\Big)^2\le\sum_{i\in S}(w_i-1)^2x_i\cdot t_{x,S},
+\qquad\text{so}\qquad
+\sum_{i\in S}(w_i-1)^2x_i\ \ge\ \frac{t_{x,R}^2}{t_{x,S}} ,
+$$
+with equality only when $w_i-1$ is the same for every $i\in S$, which makes $w_i=t_x/t_{x,S}$, the ratio estimator's weights. The irreducible terms are equal, so
+$$
+\operatorname{MSPE}(\hat T_{HH})\ \ge\ \sigma^2\,\frac{t_x\,(t_x-t_{x,S})}{t_{x,S}}=\operatorname{MSPE}(\hat\beta\,t_x),
+$$
+the right side being @eq-mspe-ratio with $S$ the distinct units. The Hansen–Hurwitz weights vary with the multiplicities $m_i$, which carry no information about $\beta$, so they add estimation error that the ratio fit avoids.
+
+The design therefore acts in two ways. Repeated draws reduce the number of distinct units, which leaves more units in $R$ and raises both terms of @eq-mspe-hh. And the weights $m_i/(np_i)$ are not the efficient way to use the units observed. From the prediction point of view, the selection probabilities are a device for choosing a good sample, one with large $t_{x,S}$, and once the sample is drawn the best predictor is the ratio predictor on the distinct units, in which the $p_i$ no longer appear. The classical design variance $\frac1n\sum_Up_i(y_i/p_i-T)^2$ answers a different question, averaging over repeated draws with $y$ fixed, whereas @eq-mspe-hh fixes the draws and averages over the model.
+
 ## Summary {#sec-summary}
 
 | Estimator | $\mu_i(\theta)$ | $v_i$ | $t_{x,R}$ | $\operatorname{MSPE}(\hat T)/\sigma^2$ |
@@ -327,6 +367,8 @@ The first term is the SRS result @eq-mspe-mean with $\sigma^2$ now the *residual
 : Special cases of @eq-mspe-wls. {#tbl-summary}
 
 In every case the MSPE is the scatter of the unobserved units, $\sum_R\sigma_i^2$, plus a cost of estimating $\theta$ that is a quadratic form in the total auxiliary information $t_{x,R}$ still to be predicted. The ratio and regression estimators do not remove the shared error; they change the model so that $\sigma^2$ is the residual variance rather than the marginal one, and they pay a penalty when the sample is unrepresentative in $x$.
+
+The Hansen–Hurwitz estimator of @sec-ups falls outside the table because it does not predict unit by unit, but @eq-mspe-hh has the same two-part form, and its estimation term is never smaller than that of the ratio predictor on the same distinct units.
 
 ## Numerical check {#sec-check}
 
@@ -368,8 +410,21 @@ reg_emp <- sim(function() rnorm(N, 3 + beta * x, sigma),
                function(y) { f <- lm(y[S] ~ x[S]); N * (mean(y[S]) + coef(f)[2] * (mean(x) - mean(x[S]))) })
 reg_th  <- sigma^2 * (N * (N - n) / n + N^2 * (mean(x) - mean(x[S]))^2 / sum((x[S] - mean(x[S]))^2))
 
+## UPS with replacement, p_i proportional to x: Hansen-Hurwitz vs ratio on distinct units
+m   <- tabulate(sample(N, n, replace = TRUE, prob = x), N)   # one fixed set of draws
+Su  <- which(m > 0)
+w   <- m[Su] / (n * x[Su] / sum(x))
+hh_emp  <- sim(function() rnorm(N, beta * x, sigma * sqrt(x)),
+               function(y) sum(w * y[Su]))
+hh_th   <- sigma^2 * (sum(x[-Su]) + sum((w - 1)^2 * x[Su]))
+upr_emp <- sim(function() rnorm(N, beta * x, sigma * sqrt(x)),
+               function(y) sum(x) * sum(y[Su]) / sum(x[Su]))
+upr_th  <- sigma^2 * sum(x) * (sum(x) - sum(x[Su])) / sum(x[Su])
+
 round(rbind(SRS = c(simulated = srs_emp, formula = srs_th),
             Stratified = c(str_emp, str_th),
             Ratio = c(rat_emp, rat_th),
-            Regression = c(reg_emp, reg_th)))
+            Regression = c(reg_emp, reg_th),
+            `UPS: Hansen-Hurwitz` = c(hh_emp, hh_th),
+            `UPS: ratio on distinct units` = c(upr_emp, upr_th)))
 ```
