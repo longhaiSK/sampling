@@ -24,7 +24,7 @@ body {
   margin-top: 30px; 
   background: var(--background);
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  font-size: calc(16px * var(--reading-scale, 1));
   font-weight: normal;
   color: var(--textcolor);
   line-height: 1.5em;
@@ -58,18 +58,6 @@ a:hover { text-decoration: underline; }
 /* =========================================
    3. HEADINGS
    ========================================= */
-/* The body text is justified; headings never are --- a wrapped heading whose
-   words get stretched to the full measure reads as a mistake. This covers the
-   section headings, the chapter/document title block, and the callout titles. */
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6,
-.title, .subtitle, .chapter-title,
-#title-block-header, .quarto-title, .quarto-title-block,
-.callout-header, .callout-title-container, .callout-title,
-.theorem-title, .proof-title, .remark-title, .definition-title, .example-title {
-  text-align: left !important;
-}
-
 h1 { font-size: 2em; font-weight: bold; }
 
 h2 {
@@ -93,6 +81,19 @@ h2.anchored, h3.anchored, h4.anchored, h5.anchored, h6.anchored {
 }
 h2 .header-section-number, h3 .header-section-number { flex: 0 0 auto; }
 h2.anchored .anchorjs-link, h3.anchored .anchorjs-link { margin-left: auto; flex: 0 0 auto; }
+
+/* Header text is left-aligned everywhere.  Without this, headings inherit
+   the body's justified alignment, which stretches the word spacing of a
+   heading that wraps; the title block, callout and theorem headers, and
+   headings inside apps and panels are covered as well. */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.title, .subtitle, .chapter-title,
+#title-block-header, .quarto-title, .quarto-title-block,
+.callout-header, .callout-title-container, .callout-title,
+.theorem-title, .proof-title, .remark-title, .definition-title, .example-title {
+  text-align: left !important;
+}
 
 /* =========================================
    4. LISTS & NUMBERING (Scoped to Main Content)
@@ -138,7 +139,18 @@ main img:not(.logo),
   display: inline-block;
 }
 
-figcaption, caption { text-align: center; }
+/* Captions are left-aligned everywhere.  The bare selectors cover figure
+   captions and plain <caption> elements; the rest re-state Quarto's own
+   higher-specificity rules for table and sub-figure captions, which would
+   otherwise keep centring them. */
+figcaption,
+caption,
+.table-caption { text-align: left; }
+
+figure.quarto-float-tbl figcaption.quarto-float-caption-top,
+figure.quarto-float-tbl figcaption.quarto-float-caption-bottom,
+.quarto-layout-cell-subref figcaption,
+figure .quarto-layout-row figure figcaption { text-align: left; }
 
 /* =========================================
    6. BUTTONS
@@ -457,4 +469,464 @@ ul.injected-page-toc a.toc-active {
    ========================================= */
 .quarto-title-breadcrumbs {
   display: none !important;
+}
+
+
+/* =========================================
+   13. DRAGGABLE SIDEBAR WIDTH
+   A thin handle on the right edge of the sidebar; merge-toc.js
+   updates --quarto-sidebar-width while it is dragged.
+   ========================================= */
+#sidebar-resizer {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  #sidebar-resizer {
+    display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--quarto-sidebar-width) - 3px);
+    width: 7px;
+    cursor: col-resize;
+    z-index: 1150;
+    background: transparent;
+    transition: background-color 0.15s ease;
+    touch-action: none;
+  }
+  #sidebar-resizer:hover,
+  body.sidebar-resizing #sidebar-resizer {
+    background-color: rgba(0, 123, 255, 0.35);
+  }
+  /* the handle is not needed when the sidebar is collapsed to its mini width */
+  body.sidebar-closed #sidebar-resizer {
+    display: none;
+  }
+  /* follow the pointer without the 0.3s slide, and do not select text while dragging */
+  body.sidebar-resizing,
+  body.sidebar-resizing * {
+    user-select: none !important;
+    cursor: col-resize !important;
+  }
+  body.sidebar-resizing #quarto-sidebar,
+  body.sidebar-resizing #quarto-content {
+    transition: none !important;
+  }
+}
+
+
+/* =========================================
+   14. READING SETTINGS BAR (font size, font family, background)
+   The bar is added at the top of each chapter by merge-toc.js; the choices
+   set --reading-scale, --reading-font, --background and --textcolor.
+   ========================================= */
+#reading-settings {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin: 0 0 0.6rem 0;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.2;
+  text-align: left;
+  color: #555;
+}
+#reading-settings .rs-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  border: 1px solid #d5d8dc;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.75);
+}
+#reading-settings button,
+#reading-settings select {
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.2;
+  color: #333;
+  background: #fff;
+  border: 1px solid #c8ccd0;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+#reading-settings button:hover,
+#reading-settings select:hover { border-color: #007bff; color: #007bff; }
+#reading-settings .rs-size-value { min-width: 3.2em; text-align: center; }
+#reading-settings .rs-swatch {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid #c8ccd0;
+}
+#reading-settings .rs-swatch.selected { border-color: #007bff; box-shadow: 0 0 0 1px #007bff; }
+
+/* a non-default font family applies to the text of the chapter, not to code or math */
+html.has-reading-font main.content :is(h1, h2, h3, h4, h5, h6, p, li, td, th, caption,
+                                       figcaption, blockquote, dt, dd, .callout-body,
+                                       .header-section-number) {
+  font-family: var(--reading-font) !important;
+}
+
+@media print {
+  #reading-settings { display: none !important; }
+}
+
+
+/* =========================================
+   15. TOP BAR (chapters menu, contents toggle, settings)
+   ========================================= */
+:root {
+  --topbar-scale: 1.2;                       /* 1 = the compact bar; 2 doubles its size and fonts */
+  --topbar-height: calc(44px * var(--topbar-scale));
+}
+
+#topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--topbar-height);
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 10px;
+  background: #ffffff;
+  border-bottom: 1px solid #dbe2e8;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+#topbar .tb-btn,
+#topbar #custom-sidebar-toggle {
+  position: static !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto !important;
+  height: 34px !important;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  box-shadow: none;
+  color: #485663;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+#topbar .tb-btn:hover,
+#topbar #custom-sidebar-toggle:hover {
+  background: #eef2f6;
+  color: #007bff;
+  border-color: #dbe2e8;
+}
+#topbar .tb-glyph { font-size: 18px; line-height: 1; }
+#topbar .tb-label { font-size: 13px; }
+
+#tb-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+/* the page sits below the bar */
+body.has-topbar { margin-top: var(--topbar-height); }
+
+/* chapters drawer */
+#chapter-drawer {
+  display: none;
+  position: fixed;
+  top: var(--topbar-height);
+  left: 0;
+  width: 380px;
+  max-width: 92vw;
+  max-height: calc(100vh - var(--topbar-height));
+  overflow-y: auto;
+  z-index: 1310;
+  background: #ffffff;
+  border: 1px solid #dbe2e8;
+  border-left: 0;
+  border-radius: 0 0 8px 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+}
+body.chapters-open #chapter-drawer { display: block; }
+#chapter-drawer ul { list-style: none; margin: 0; padding: 0; }
+#chapter-drawer a {
+  display: flex;
+  gap: 10px;
+  padding: 7px 16px;
+  color: #34414d;
+  text-align: left;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 1.35;
+}
+#chapter-drawer a:hover { background: #eef2f6; color: #007bff; }
+#chapter-drawer a.current { color: #007bff; font-weight: 700; background: #f0f6ff; }
+#chapter-drawer .dr-num { flex: 0 0 2em; color: #7a8896; }
+
+/* settings panel */
+#reading-settings {
+  display: none;
+  position: fixed;
+  top: calc(var(--topbar-height) + 4px);
+  right: 10px;
+  z-index: 1310;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 14px;
+  background: #ffffff;
+  border: 1px solid #dbe2e8;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+body.settings-open #reading-settings { display: flex; }
+#reading-settings .rs-group { border: 0; padding: 0; background: transparent; justify-content: flex-start; }
+#reading-settings .rs-group::before {
+  content: attr(title);
+  flex: 0 0 8.5em;
+  color: #6c757d;
+  font-size: 12px;
+}
+
+/* the sidebar shows the contents of the current chapter only, below the bar */
+#quarto-sidebar .sidebar-menu-container > ul > li.not-current { display: none !important; }
+
+@media (min-width: 992px) {
+  #quarto-sidebar {
+    top: var(--topbar-height) !important;
+    height: calc(100vh - var(--topbar-height)) !important;
+    padding-top: 12px !important;
+  }
+  #sidebar-resizer { top: var(--topbar-height); }
+  body.has-topbar #custom-sidebar-toggle { top: auto; left: auto; }
+}
+
+/* below 992px Quarto's own header (with the sidebar button) sits under our bar */
+@media (max-width: 991.98px) {
+  body.has-topbar #quarto-header { top: var(--topbar-height) !important; }
+  #topbar .tb-label { display: none; }
+}
+
+@media print {
+  #topbar, #chapter-drawer { display: none !important; }
+  body.has-topbar { margin-top: 0; }
+}
+
+
+/* book title in the top bar; the sidebar header no longer repeats it */
+#tb-book {
+  flex: 0 0 auto;
+  margin: 0 6px 0 10px;
+  padding-left: 12px;
+  border-left: 1px solid #dbe2e8;
+  color: #2c3e50 !important;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+#tb-book:hover { color: #007bff !important; }
+#tb-title { margin-left: 6px; font-weight: 500; color: #485663; }
+#quarto-sidebar .sidebar-title > a { display: none !important; }
+@media (max-width: 991.98px) {
+  #tb-book { font-size: 13px; max-width: 35vw; overflow: hidden; text-overflow: ellipsis; }
+}
+
+#quarto-sidebar .sidebar-header { display: none !important; }
+#tb-github { padding: 0 8px; }
+#tb-github i { font-size: 18px; }
+
+
+/* =========================================
+   16. TOP BAR SIZE AND THE CHAPTER SELECTOR
+   ========================================= */
+#topbar { gap: calc(4px * var(--topbar-scale)); padding: 0 calc(10px * var(--topbar-scale)); }
+#topbar .tb-btn,
+#topbar #custom-sidebar-toggle {
+  height: calc(34px * var(--topbar-scale)) !important;
+  padding: 0 calc(10px * var(--topbar-scale));
+  gap: calc(6px * var(--topbar-scale));
+  font-size: calc(14px * var(--topbar-scale));
+  border-radius: calc(6px * var(--topbar-scale));
+}
+#topbar .tb-glyph { font-size: calc(18px * var(--topbar-scale)); }
+#topbar .tb-label { font-size: calc(13px * var(--topbar-scale)); }
+#tb-github i { font-size: calc(18px * var(--topbar-scale)); }
+#tb-book { font-size: calc(15px * var(--topbar-scale)); margin: 0 calc(8px * var(--topbar-scale)); padding-left: calc(12px * var(--topbar-scale)); }
+
+/* the chapter selector: the current chapter's name, with a drop-down arrow */
+#topbar #tb-chapters {
+  flex: 1 1 auto;
+  min-width: 0;
+  justify-content: space-between;
+  border-color: #dbe2e8;
+  background: #f7f9fb;
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: left;
+}
+#tb-chapters .tb-cur { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#tb-chapters .tb-caret { flex: 0 0 auto; color: #7a8896; }
+
+#chapter-drawer { width: calc(380px * var(--topbar-scale)); max-width: 96vw; padding: calc(8px * var(--topbar-scale)) 0; }
+#chapter-drawer a { padding: calc(7px * var(--topbar-scale)) calc(16px * var(--topbar-scale)); font-size: calc(14px * var(--topbar-scale)); gap: calc(10px * var(--topbar-scale)); }
+
+#reading-settings { top: calc(var(--topbar-height) + 4px); padding: calc(12px * var(--topbar-scale)) calc(14px * var(--topbar-scale)); gap: calc(10px * var(--topbar-scale)); }
+#reading-settings button,
+#reading-settings select { font-size: calc(13px * var(--topbar-scale)); padding: calc(2px * var(--topbar-scale)) calc(8px * var(--topbar-scale)); }
+#reading-settings .rs-group::before { font-size: calc(12px * var(--topbar-scale)); flex-basis: 8.5em; }
+#reading-settings .rs-swatch { width: calc(20px * var(--topbar-scale)); height: calc(20px * var(--topbar-scale)); padding: 0; }
+
+@media (max-width: 991.98px) {
+  :root { --topbar-scale: 1; }
+}
+
+/* the book title shrinks first, so that the chapter selector keeps room */
+#tb-book { flex: 0 1 auto; min-width: 0; max-width: 26%; overflow: hidden; text-overflow: ellipsis; }
+#chapter-drawer { border-left: 1px solid #dbe2e8; border-radius: 0 0 calc(8px * var(--topbar-scale)) calc(8px * var(--topbar-scale)); }
+
+/* the search box lives in the top bar */
+#quarto-sidebar .sidebar-search { display: none !important; }
+#tb-search { flex: 0 0 auto; margin: 0 calc(4px * var(--topbar-scale)); }
+#tb-search #quarto-search { margin: 0; }
+#tb-search .aa-DetachedSearchButton,
+#tb-search .aa-Autocomplete button {
+  height: calc(34px * var(--topbar-scale));
+  font-size: calc(13px * var(--topbar-scale));
+}
+
+
+/* icon-only buttons, a larger blue book title and a spacer before the right-hand tools */
+#tb-spacer { flex: 1 1 auto; }
+#topbar .tb-label { display: none !important; }
+#tb-book {
+  max-width: 45%;
+  color: #007bff !important;
+  font-size: calc(20px * var(--topbar-scale));
+  font-weight: 700;
+}
+#tb-book:hover { color: #0056b3 !important; }
+#topbar #tb-chapters {
+  flex: 0 0 auto;
+  background: transparent;
+  border-color: transparent;
+  justify-content: center;
+  padding: 0 calc(8px * var(--topbar-scale));
+}
+#topbar #tb-chapters:hover { background: #eef2f6; border-color: #dbe2e8; }
+#topbar #tb-settings .tb-glyph { font-size: calc(20px * var(--topbar-scale)); }
+
+#tb-book { line-height: 1.4; padding-bottom: 2px; }
+
+
+/* the sidebar's own hide/show button, at the top of the sidebar */
+#sidebar-collapse-row {
+  position: sticky;
+  top: -12px;                       /* the sidebar has 12px of top padding */
+  z-index: 5;
+  display: flex;
+  justify-content: flex-end;
+  margin: -12px -10px 6px -10px;    /* cancel the sidebar padding */
+  padding: 6px 10px;
+  background: #f0f4f8;
+}
+body.sidebar-closed #sidebar-collapse-row { justify-content: center; }
+#sidebar-collapse-row #custom-sidebar-toggle {
+  position: static !important;
+  display: inline-flex !important;
+  width: 36px !important;
+  height: 32px !important;
+  border-radius: 6px;
+  font-size: 18px;
+  color: #6c757d;
+  background: transparent;
+  border: 1px solid transparent;
+}
+#sidebar-collapse-row #custom-sidebar-toggle:hover {
+  color: #007bff;
+  background: #ffffff;
+  border-color: #cccfd2;
+  box-shadow: none;
+}
+#custom-sidebar-toggle .sb-icon-closed { display: none; }
+body.sidebar-closed #custom-sidebar-toggle .sb-icon-open { display: none; }
+body.sidebar-closed #custom-sidebar-toggle .sb-icon-closed { display: inline; }
+
+#sidebar-collapse-row #custom-sidebar-toggle { font-size: 24px; color: #485663; width: 44px !important; height: 38px !important; }
+
+
+/* hamburger: same visual size as the book title, centred on its line */
+#topbar #tb-chapters { height: calc(40px * var(--topbar-scale)) !important; padding: 0 calc(6px * var(--topbar-scale)); }
+#topbar #tb-chapters i {
+  display: block;
+  font-size: calc(30px * var(--topbar-scale));
+  line-height: 1;
+  color: #485663;
+}
+#tb-book {
+  display: flex;
+  align-items: center;
+  height: calc(40px * var(--topbar-scale));
+  line-height: 1;
+  padding-bottom: 0;
+}
+
+/* grey top bar */
+#topbar { background: #e9ecef; border-bottom-color: #ced4da; }
+#topbar .tb-btn:hover, #topbar #tb-chapters:hover { background: #dde2e6; }
+
+
+/* search: a magnifier button that opens the search box */
+#tb-search { position: relative; }
+#tb-search #quarto-search { display: none; }
+#tb-search.open #quarto-search {
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 360px;
+  max-width: 70vw;
+  z-index: 1320;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+#tb-search.open #tb-search-btn { visibility: hidden; }
+
+
+/* Quarto's own header (sidebar button, breadcrumb, search) is not used: the top bar replaces it */
+#quarto-header { display: none !important; }
+#tb-contents { display: none !important; }
+@media (max-width: 991.98px) {
+  #tb-contents { display: inline-flex !important; }
+  #tb-contents i { font-size: calc(22px * var(--topbar-scale)); line-height: 1; }
+  body.has-topbar #quarto-content,
+  body.has-topbar #quarto-sidebar { margin-top: 0 !important; }
+}
+
+/* narrow screens: the sidebar shows Quarto's own table of contents, not the merged copy */
+@media (max-width: 991.98px) {
+  ul.injected-page-toc,
+  #quarto-sidebar .sidebar-menu-container > ul > li.sidebar-item .sidebar-item-container { display: none !important; }
+  #sidebar-collapse-row { display: none !important; }
+  .toc-num { margin-right: 0.4em; }
 }

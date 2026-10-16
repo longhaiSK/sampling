@@ -22,6 +22,20 @@
 
 \usepackage[most]{tcolorbox}
 
+% --- Left-align all captions ---
+% singlelinecheck=false stops LaTeX from centring captions that happen to fit
+% on one line; justification=raggedright left-aligns the rest.
+\usepackage[justification=raggedright,singlelinecheck=false]{caption}
+
+% --- Left-align all section headings ---
+% The KOMA classes that Quarto books use set headings with \raggedsection;
+% make it explicitly ragged-right, so that a wrapped heading is never
+% justified or centred.
+\makeatletter
+\@ifundefined{raggedsection}{}{\renewcommand*{\raggedsection}{\raggedright}}
+\makeatother
+
+
 % --- Color Definitions ---
 % Theorem group (Theorem, Lemma, Corollary, Proposition)
 \definecolor{thm-bg}{HTML}{F0F7FF}
@@ -166,11 +180,3 @@
   top=5pt, bottom=5pt,
   breakable
 }
-
-% --- Left-align all section headings ---
-% The KOMA classes that Quarto books use set headings with \raggedsection;
-% make it explicitly ragged-right, so that a wrapped heading is never
-% justified or centred.
-\makeatletter
-\@ifundefined{raggedsection}{}{\renewcommand*{\raggedsection}{\raggedright}}
-\makeatother
