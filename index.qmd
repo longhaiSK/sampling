@@ -26,11 +26,11 @@ Theory and applications of sampling from finite populations. Includes: simple ra
 ## Course Materials
 
 
-1. [HTML Book for Detailed R Demonstration](sampling_book/)
+1. [HTML Book for Detailed R Demonstration](sampling_book/){target="_blank"}
 
-2. [HTML Slides](sampling_slides/)
+2. [HTML Slides](sampling_slides/){target="_blank"}
 
-3. [Shinylive Apps](shinylives_sampling/)
+3. [Shinylive Apps](shinylives_sampling/){target="_blank"}
 
 3. [Googlesheets Calculator for Sampling Survey](https://docs.google.com/spreadsheets/d/18EbvJqHDn1uNI4pyXmkF0nV1-hZNCmmEpUk8DmwFblg/edit?usp=sharing)
 
