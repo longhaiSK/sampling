@@ -1,10 +1,53 @@
-# Preface {.unnumbered}
+---
+format:
+  custombook-html: default
+freeze: false
+---
 
-Statistical inference in the real world almost always deals with bounded, finite populations—whether we are estimating agricultural yields, public health metrics, or economic indicators. This book explores the mathematical theory and practical mechanics of drawing reliable samples from those populations, examining how intelligent survey design directly dictates the precision and cost of our conclusions.
 
-The chapters cover a comprehensive suite of methodologies, including simple random sampling, stratified random sampling, cluster and systematic sampling, probability proportionate to size (PPS) sampling, and powerful auxiliary-variable strategies like difference, ratio, and regression estimation.
+## Table of Contents {.unnumbered}
 
-## Key Features
+```{r chapter-list}
+#| echo: false
+#| cache: false
+#| results: asis
+#| warning: false
+## the chapter list in _quarto.yml; each title is the file's front-matter title or its first "# " heading
+book <- yaml::read_yaml("_quarto.yml")$book
+title_of <- function(f) {
+  t <- rmarkdown::yaml_front_matter(f)$title
+  if (is.null(t)) t <- sub("\\s*\\{.*$", "", sub("^#\\s+", "", grep("^# ", readLines(f), value = TRUE)[1]))
+  t
+}
+entries <- function(fs, labels)
+  sprintf("%s.  [%s](%s)", labels, vapply(fs, title_of, ""), sub("\\.qmd$", ".html", fs))
+chs <- setdiff(unlist(book$chapters), "index.qmd")
+cat("::: {.chapter-list}", entries(chs, seq_along(chs)), sep = "\n")
+apps <- unlist(book$appendices)
+if (length(apps)) cat("", "**Appendices**", "", entries(apps, LETTERS[seq_along(apps)]), sep = "\n")
+cat("", ":::", sep = "\n")
+```
+
+```{=html}
+<style>
+/* no sidebar on the landing page: hide it (the top bar still reads its links) and give the text the full width */
+#quarto-sidebar, #sidebar-resizer, #tb-contents { display: none !important; }
+/* (html body ... .quarto-container outranks the book's body:not(.sidebar-closed) #quarto-content) */
+html body #quarto-content.quarto-container { margin-left: 0 !important; width: 100% !important; }
+/* the book numbers lists as (1), (2); the chapter list uses 1. 2. and A. B. */
+#quarto-content .chapter-list ol > li::marker { content: counter(list-item) ". "; }
+#quarto-content .chapter-list ol[type="A"] > li::marker { content: counter(list-item, upper-alpha) ". "; }
+</style>
+```
+
+
+## Preface {.unnumbered}
+
+Statistical inference in the real world almost always deals with bounded, finite populations—whether we are estimating agricultural yields, public health metrics, or economic indicators. This book explores the mathematical theory and practical mechanics of drawing reliable samples from those populations, examining how intelligent survey design directly dictates the precision and cost of our conclusions. The chapters cover a comprehensive suite of methodologies, including simple random sampling, stratified random sampling, cluster and systematic sampling, probability proportionate to size (PPS) sampling, and powerful auxiliary-variable strategies like difference, ratio, and regression estimation.
+
+This book is part of the course materials for [STAT 348 Sampling Techniques](../index.html), which also has the slides, the Shinylive apps and the syllabus.
+
+**Key Features**
 
 * **Custom R Functions:** Rather than relying exclusively on pre-built packages, this text emphasizes writing custom functions to analyze survey data, helping students learn how R works under the hood.
 * **Modern R Workflows:** Data manipulation and presentation leverage the modern R ecosystem, utilizing `dplyr` for clean wrangling, `ggplot2` for advanced visualization, and `gt` for publication-ready mathematical tables.
