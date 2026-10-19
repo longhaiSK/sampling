@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.9.37">
 
   <meta name="author" content="Longhai Li">
-  <meta name="dcterms.date" content="2026-10-08">
+  <meta name="dcterms.date" content="2026-10-19">
   <title>Ratio-Slides</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -161,7 +161,7 @@ Longhai Li
 </div>
 </div>
 
-  <p class="date">2026-10-08</p>
+  <p class="date">2026-10-19</p>
 </section>
 <section>
 <section id="ratio-estimation" class="title-slide slide level1 center" data-number="1">
@@ -409,7 +409,7 @@ x_i = \text{total farm acreage of county } i \text{ in 1987}.
 </div><div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-france-toy" class="quarto-float quarto-figure quarto-figure-center" width="100%" data-fig-align="center">
+<div id="fig-france-toy" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" width="100%">
 <figure class="quarto-float quarto-float-fig">
 <div aria-describedby="fig-france-toy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-france-toy-1.png" id="fig-france-toy" class="quarto-figure quarto-figure-center" style="width:100.0%">
@@ -472,8 +472,97 @@ R^2 = 1 - \frac{S_d^2}{S_y^2}
 </div>
 </section></section>
 <section>
-<section id="post-stratification" class="title-slide slide level1 center" data-number="5">
-<h1><span class="header-section-number">5</span> Post-Stratification</h1>
+<section id="regression-estimation" class="title-slide slide level1 center" data-number="5">
+<h1><span class="header-section-number">5</span> Regression Estimation</h1>
+
+</section>
+<section id="linear-model" class="slide level2">
+<h2>Linear Model</h2>
+<p>Ratio estimation works best if the data are well fit by a straight line <em>through the origin</em>. Sometimes data instead appear evenly scattered about a straight line that does <strong>not</strong> go through the origin — i.e., the data look as though the usual straight-line regression model applies: <span class="math display">
+y = B_0 + B_1 x
+</span></p>
+</section>
+<section id="ratio-vs.-regression-estimation" class="slide level2">
+<h2>Ratio vs.&nbsp;Regression Estimation</h2>
+
+<img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-ratio-vs-reg-1.png" id="fig-ratio-vs-reg" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
+Figure&nbsp;3
+</p><p>In ratio estimation, <span class="math inline">y_i = Bx_i + d_i</span> with residual spread growing with <span class="math inline">x</span>; in regression estimation, <span class="math inline">y_i = B_0+B_1x_i+d_i</span> with roughly constant spread.</p>
+</section>
+<section id="least-squares-estimation" class="slide level2">
+<h2>Least Squares Estimation</h2>
+<p>The ordinary least squares slope and intercept: <span class="math display">
+\hat B_1 = \frac{\displaystyle\sum_{i\in\mathcal S}(x_i-\bar x)(y_i-\bar y)}{\displaystyle\sum_{i\in\mathcal S}(x_i-\bar x)^2}
+= \frac{r s_y}{s_x}
+\qquad
+\hat B_0 = \bar y - \hat B_1 \bar x
+</span></p>
+<p>where <span class="math inline">r</span> is the sample Pearson correlation coefficient of <span class="math inline">x</span> and <span class="math inline">y</span>.</p>
+</section>
+<section id="the-regression-estimator" class="slide level2">
+<h2>The Regression Estimator</h2>
+<p>Assuming <span class="math inline">\bar x_U</span> (or <span class="math inline">t_x</span>) is known, <span class="math display">
+\hat{\bar y}_{\text{reg}} = \hat B_0 + \hat B_1 \bar x_U = \bar y + \hat B_1(\bar x_U - \bar x)
+</span></p>
+<p>Equivalently, averaging the fitted value <span class="math inline">\hat y_i = \hat B_0+\hat B_1 x_i</span> over <em>every</em> population unit gives the same estimator: <span class="math display">
+\hat{\bar y}_{\text{reg}} = \frac1N\sum_{i=1}^N (\hat B_0 + \hat B_1 x_i) = \hat B_0 + \hat B_1 \bar x_U
+</span></p>
+<p>This is a natural generalization of the ratio estimator’s <span class="math inline">\hat{\bar
+y}_r = \frac1N\sum_{i=1}^N \hat B x_i</span>. The corresponding total is <span class="math inline">\hat t_{y,\text{reg}} = N\hat{\bar y}_{\text{reg}} = N\hat B_0 + \hat B_1 t_x</span>.</p>
+</section>
+<section id="illustration-of-regression-estimation" class="slide level2">
+<h2>Illustration of Regression Estimation</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-reg-concept" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-reg-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-reg-concept-1.png" class="quarto-figure quarto-figure-center" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reg-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Illustration of Benefits of Regression Estimation
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><p>Grey: population (<span class="math inline">x_i</span> known). Green: an ordinary SRS.</p></li>
+<li><p>Red line, fit from the sample: <span class="math inline">\hat y_i=\hat B_0+\hat B_1x_i</span> for every unit.</p></li>
+</ul>
+<p><span class="math display">
+\hat{\bar y}_{\text{reg}} = \frac1N\sum_{i=1}^N \hat y_i
+= \hat B_0 + \hat B_1 \bar x_{U}
+</span></p>
+</div></div>
+<p>The sampled <span class="math inline">x</span>’s average above <span class="math inline">\bar x_U</span>, so the naive <span class="math inline">\bar y</span> (green) sits above <span class="math inline">\bar y_U</span>; the regression estimator shifts the fit back to <span class="math inline">\bar x_U</span> and lands on target, <span class="math inline">\hat{\bar y}_{\text{reg}}</span> (red) <span class="math inline">\approx
+\bar y_{U}</span> (black). Both are essentially unbiased over repeated samples, but <span class="math inline">\hat{\bar y}_{\text{reg}}</span> is much less variable.</p>
+</section>
+<section id="estimating-the-standard-error" class="slide level2">
+<h2>Estimating the Standard Error</h2>
+<p>Let <span class="math inline">e_i = y_i - (\hat B_0+\hat B_1 x_i)</span> be the regression residuals, and <span class="math display">
+s_e^2 = \frac{\sum_{i\in\mathcal S} e_i^2}{n-2}.
+</span></p>
+<p>Then <span class="math display">
+\text{SE}(\hat{\bar y}_{\text{reg}}) = \sqrt{\Big(1-\frac nN\Big)\frac{s_e^2}{n}}
+= \sqrt{\Big(1-\frac nN\Big)\frac1n\, s_y^2(1-r^2)}
+</span></p>
+<p>where <span class="math inline">r</span> is the Pearson correlation coefficient between <span class="math inline">x</span> and <span class="math inline">y</span> in the sample — the stronger the linear relationship, the smaller the SE.</p>
+</section>
+<section id="example-correcting-aerial-survey-counts" class="slide level2">
+<h2>Example: Correcting Aerial Survey Counts</h2>
+<p>Aerial photographs are a cheap way to survey a large area (e.g., for a caribou herd), but tend to <strong>undercount</strong> animals that are hidden from view overhead. A more expensive, intensive ground/field count on a subsample of plots gives accurate counts that can calibrate the photo counts.</p>
+
+<img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-photo-field-1.png" id="fig-photo-field" class="quarto-figure quarto-figure-center r-stretch" style="width:60.0%"><p class="caption">
+Figure&nbsp;5
+</p><p>Let <span class="math inline">x_i</span> = photo count and <span class="math inline">y_i</span> = field count on plot <span class="math inline">i</span>. Fitting <span class="math inline">\hat B = \bar y/\bar x</span> on the subsample of plots with both counts, we can correct the total photo count of the <em>entire</em> surveyed area, <span class="math inline">\hat t_{yr} = \hat B\, t_x</span>, for the systematic undercounting bias.</p>
+</section></section>
+<section>
+<section id="post-stratification" class="title-slide slide level1 center" data-number="6">
+<h1><span class="header-section-number">6</span> Post-Stratification</h1>
 
 </section>
 <section id="an-example" class="slide level2">
@@ -511,20 +600,6 @@ R^2 = 1 - \frac{S_d^2}{S_y^2}
 = (0.5)(0.5)+(0.1)(0.5) = 0.3 .
 </span></p>
 </section>
-<section id="post-stratified-mean-and-its-standard-error" class="slide level2">
-<h2>Post-Stratified Mean and Its Standard Error</h2>
-<p>With <span class="math inline">H</span> post-strata formed after an SRS of size <span class="math inline">n</span>, contrast two weightings of the same stratum means <span class="math inline">\bar y_h</span>, <span class="math inline">\pi_h=N_h/N</span>: <span class="math display">
-\hat{\bar y}_{\text{SRS}} = \sum_{h=1}^H \frac{n_h}{n}\,\bar y_h
-\qquad\text{vs.}\qquad
-\hat{\bar y}_{\text{post}} = \sum_{h=1}^H \pi_h\,\bar y_h .
-</span></p>
-<p>Since <span class="math inline">n_h</span> is random, the variance formula plugs in its expectation, <span class="math display">
-n_h^{\text{post-strat}} := n\pi_h,
-</span> <span class="math display">
-\hat V(\hat{\bar y}_{\text{post}}) = \sum_{h=1}^H \Big(1-\frac{n_h^{\text{post-strat}}}{N_h}\Big)\pi_h^2\frac{s_h^2}{n_h^{\text{post-strat}}}
-</span></p>
-<p>Total: <span class="math inline">\hat t_{\text{post}} = N\hat{\bar y}_{\text{post}}</span>, <span class="math inline">\text{SE}(\hat t_{\text{post}}) = N\cdot\text{SE}(\hat{\bar y}_{\text{post}})</span>.</p>
-</section>
 <section id="predictive-view-hat-t_textpost-sum_iinmathcal-uhat-y_i" class="slide level2">
 <h2>Predictive View: <span class="math inline">\hat t_{\text{post}} = \sum_{i\in\mathcal U}\hat y_i</span></h2>
 <p>Every total estimator can be read as <em>predicting</em> each population unit’s <span class="math inline">y_i</span> and summing. Post-stratification predicts every unit in stratum <span class="math inline">h</span> by that stratum’s sample mean, <span class="math inline">\hat y_i=\bar y_h</span> for <span class="math inline">i\in\mathcal U_h</span>: <span class="math display">
@@ -546,7 +621,7 @@ n_h^{\text{post-strat}} := n\pi_h,
 <img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-poststrat-concept-1.png" class="quarto-figure quarto-figure-center" style="width:95.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-poststrat-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Illustration of Benefits of Post-Stratification
+Figure&nbsp;6: Illustration of Benefits of Post-Stratification
 </figcaption>
 </figure>
 </div>
@@ -562,9 +637,56 @@ Figure&nbsp;3: Illustration of Benefits of Post-Stratification
 </div></div>
 <p>This sample is light on A and heavy on D, so the naive <span class="math inline">\bar y</span> (green) is pulled up; reweighting by the known <span class="math inline">\pi_h</span> undoes it and <span class="math inline">\hat{\bar y}_{\text{post}}</span> (red) <span class="math inline">\approx \bar y_{U}</span> (black). It is this reweighting, repeated over samples, that cuts the variance.</p>
 </section>
-<section id="example-post-stratification-spreadsheet" class="slide level2">
-<h2>Example: Post-Stratification Spreadsheet</h2>
-<p>Nurses example (<span class="math inline">N=10{,}000</span>, <span class="math inline">n=400</span>): <span class="math inline">\hat p_h</span> plays the role of <span class="math inline">\bar y_h</span>, <span class="math inline">s_h^2=\tfrac{n_h}{n_h-1}\hat p_h(1-\hat p_h)</span> from the realized counts, and we set <span class="math inline">n_h^{\text{post-strat}}=n\pi_h=200</span> in each stratum, so every fpc is <span class="math inline">1-n/N=0.96</span>:</p>
+<section id="post-stratified-mean" class="slide level2">
+<h2>Post-Stratified Mean</h2>
+<p>With <span class="math inline">H</span> post-strata formed after an SRS of size <span class="math inline">n</span>, contrast two weightings of the same stratum means <span class="math inline">\bar y_h</span>, <span class="math inline">\pi_h=N_h/N</span>: <span class="math display">
+\hat{\bar y}_{\text{SRS}} = \sum_{h=1}^H \frac{n_h}{n}\,\bar y_h
+\qquad\text{vs.}\qquad
+\hat{\bar y}_{\text{post}} = \sum_{h=1}^H \pi_h\,\bar y_h .
+</span></p>
+<p>The post-stratified estimate of the total is <span class="math inline">\hat t_{\text{post}} = N\hat{\bar y}_{\text{post}}</span>.</p>
+</section>
+<section id="standard-error-of-the-post-stratified-mean" class="slide level2">
+<h2>Standard Error of the Post-Stratified Mean</h2>
+<p>Since <span class="math inline">n_h</span> is random, the variance formula plugs in its expectation, <span class="math display">
+n_h^{\text{post-strat}} := n\pi_h,
+</span> <span class="math display">
+\hat V(\hat{\bar y}_{\text{post}}) = \sum_{h=1}^H \Big(1-\frac{n_h^{\text{post-strat}}}{N_h}\Big)\pi_h^2\frac{s_h^2}{n_h^{\text{post-strat}}}
+</span> Because <span class="math inline">n_h^{\text{post-strat}}/N_h = n\pi_h/N_h = n/N</span> for every <span class="math inline">h</span>, the finite population correction is the same in all post-strata, and the formula simplifies to <span class="math display">
+\hat V(\hat{\bar y}_{\text{post}}) = \Big(1-\frac{n}{N}\Big)\frac{1}{n}\sum_{h=1}^H \pi_h\, s_h^2 ,
+</span> the SRS variance with <span class="math inline">s^2</span> replaced by the weighted average of the within-stratum variances.</p>
+<p>For the total, <span class="math inline">\text{SE}(\hat t_{\text{post}}) = N\cdot\text{SE}(\hat{\bar y}_{\text{post}})</span>.</p>
+</section>
+<section id="post-stratification-as-a-regression-estimator" class="slide level2">
+<h2>Post-Stratification as a Regression Estimator</h2>
+<p>Take the <span class="math inline">H</span> group indicators as auxiliary variables and fit <strong>without an intercept</strong>, <span class="math display">
+y_i = \sum_{h=1}^H B_h\,x_{ih} + d_i, \qquad x_{ih}=\mathbf 1\{i\in\text{group }h\}.
+</span></p>
+<ul>
+<li>The least squares coefficients are the group means, <span class="math inline">\hat B_h=\bar y_h</span>.</li>
+<li>The population means of the indicators are the known shares, <span class="math inline">\bar x_{U,h}=N_h/N=\pi_h</span>.</li>
+</ul>
+<p>So the regression estimator is exactly the post-stratified mean, <span class="math display">
+\hat{\bar y}_{\text{reg}} = \sum_{h=1}^H \hat B_h\,\bar x_{U,h}
+= \sum_{h=1}^H \pi_h\,\bar y_h = \hat{\bar y}_{\text{post}} .
+</span></p>
+</section>
+<section id="se-post-stratification-is-a-special-case" class="slide level2">
+<h2>SE: Post-Stratification Is a Special Case</h2>
+<p>The residuals are <span class="math inline">e_i=y_i-\bar y_{h(i)}</span> and <span class="math inline">p=H</span>, so <span class="math inline">s_e^2=\sum_{h}\frac{n_h-1}{n-H}\,s_h^2</span>. Dropping the <span class="math inline">-1</span> and <span class="math inline">-H</span> (small relative to <span class="math inline">n_h</span> and <span class="math inline">n</span>), then using <span class="math inline">n_h/n\approx\pi_h</span>: <span class="math display">
+\begin{aligned}
+\hat V(\hat{\bar y}_{\text{reg}})
+&amp;= \Big(1-\frac nN\Big)\frac1n\sum_{h=1}^H \frac{n_h-1}{n-H}\,s_h^2 \\
+&amp;\approx \Big(1-\frac nN\Big)\frac1n\sum_{h=1}^H \frac{n_h}{n}\,s_h^2 \\
+&amp;\approx \Big(1-\frac nN\Big)\frac1n\sum_{h=1}^H \pi_h\,s_h^2
+= \hat V(\hat{\bar y}_{\text{post}}).
+\end{aligned}
+</span></p>
+<p>So the regression SE reduces to the post-stratified SE: both are weighted averages of the same <span class="math inline">s_h^2</span>, with the <em>sample</em> proportions in the first and the <em>known</em> population proportions <span class="math inline">\pi_h</span> in the second.</p>
+</section>
+<section id="example-post-stratification-spreadsheet-working-sample-sizes" class="slide level2">
+<h2>Example: Post-Stratification Spreadsheet (Working Sample Sizes)</h2>
+<p>Nurses example (<span class="math inline">N=10{,}000</span>, <span class="math inline">n=400</span>): <span class="math inline">\hat p_h</span> plays the role of <span class="math inline">\bar y_h</span>, <span class="math inline">s_h^2=\tfrac{n_h}{n_h-1}\hat p_h(1-\hat p_h)</span> from the realized counts, and we use the <strong>working sample sizes</strong> <span class="math inline">n_h^{\text{post-strat}}=n\pi_h=200</span> in each stratum (proportional to size allocation), so every fpc is <span class="math inline">1-n/N=0.96</span>:</p>
 <table class="caption-top">
 <colgroup>
 <col style="width: 12%">
@@ -585,7 +707,7 @@ Figure&nbsp;3: Illustration of Benefits of Post-Stratification
 <th style="text-align: right;"><span class="math inline">\hat p_h</span></th>
 <th style="text-align: right;"><span class="math inline">s_h^2</span></th>
 <th style="text-align: right;"><span class="math inline">\pi_h\hat p_h</span></th>
-<th style="text-align: right;"><span class="math inline">\hat v_h</span><sup>1</sup></th>
+<th style="text-align: right;"><span class="math inline">\hat v_h</span></th>
 </tr>
 </thead>
 <tbody>
@@ -621,7 +743,46 @@ Figure&nbsp;3: Illustration of Benefits of Post-Stratification
 </tr>
 </tbody>
 </table>
-<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="math inline">\hat v_h = \big(1-\tfrac{n_h^{\text{post-strat}}}{N_h}\big)\pi_h^2\tfrac{s_h^2}{n_h^{\text{post-strat}}}</span>. Using the realized <span class="math inline">n_h</span> (300, 100) instead gives <span class="math inline">\hat V=0.000419</span> — nearly identical.</p></li></ol></aside></section>
+</section>
+<section id="example-short-cut-formula-for-the-variance" class="slide level2">
+<h2>Example: Short-Cut Formula for the Variance</h2>
+<p>Since <span class="math inline">n_h^{\text{post-strat}}/N_h=n/N</span> in every stratum, skip the working sample sizes and compute <span class="math inline">\sum_h\pi_hs_h^2</span> directly:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Post-stratum</th>
+<th style="text-align: right;"><span class="math inline">\pi_h</span></th>
+<th style="text-align: right;"><span class="math inline">s_h^2</span></th>
+<th style="text-align: right;"><span class="math inline">\pi_h s_h^2</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Female</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.2508</td>
+<td style="text-align: right;">0.1254</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Male</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.0909</td>
+<td style="text-align: right;">0.0455</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Total</strong></td>
+<td style="text-align: right;"><strong>1.0</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>0.1709</strong></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">
+\hat V(\hat p_{\text{post}})
+=\Big(1-\frac nN\Big)\frac1n\sum_h\pi_hs_h^2
+=\frac{0.96}{400}\,(0.1709)=0.000410,
+</span> the same as the sum of the <span class="math inline">\hat v_h</span> in the previous spreadsheet.</p>
+</section>
 <section id="example-post-stratification-results" class="slide level2">
 <h2>Example: Post-Stratification Results</h2>
 <p>The post-stratified proportion matches the earlier calculation, now with a standard error: <span class="math display">
@@ -632,57 +793,17 @@ Figure&nbsp;3: Illustration of Benefits of Post-Stratification
 0.300 \pm 1.96(0.0203) = [0.260,\ 0.340].
 </span></p>
 <p>Naively as an unstratified SRS: <span class="math inline">\hat p_{\text{SRS}}=0.4</span>, <span class="math inline">\text{SE}(\hat p_{\text{SRS}}) = \sqrt{\big(1-\tfrac{400}{10000}\big)\tfrac{(0.4)(0.6)}{399}} \approx 0.0240</span>. Post-stratification is both unbiased and more precise, since it removes the between-sex variability from the standard error.</p>
-</section></section>
-<section>
-<section id="domain-analysis" class="title-slide slide level1 center" data-number="6">
-<h1><span class="header-section-number">6</span> Domain Analysis</h1>
-
 </section>
-<section id="domain-analysis-1" class="slide level2">
-<h2>Domain Analysis</h2>
-<p>Suppose there are <span class="math inline">D</span> <strong>domains</strong> (subpopulations of interest determined only <em>after</em> sampling — e.g., men and women). Let <span class="math inline">\mathcal U_d</span> be the population units in domain <span class="math inline">d</span>, and <span class="math inline">\mathcal S_d</span> the sampled units in domain <span class="math inline">d</span>, with <span class="math inline">N_d = |\mathcal U_d|</span> and <span class="math inline">n_d = |\mathcal S_d|</span>.</p>
-<p>We might want the mean salary for men and for women separately, but we don’t know a person’s gender before selecting them — we can’t stratify by domain in advance. Instead we estimate each domain’s mean/total after sampling, by splitting the sample by domain ID. <strong>Domain mean estimation is a special case of ratio estimation.</strong></p>
-</section>
-<section id="domain-means-are-ratio-estimates" class="slide level2">
-<h2>Domain Means Are Ratio Estimates</h2>
-<p>Define <span class="math display">
-x_i = \begin{cases}1 &amp; i\in\mathcal U_d\\0 &amp; i\notin\mathcal U_d\end{cases}
-\qquad
-u_i = y_ix_i = \begin{cases}y_i &amp; i\in\mathcal U_d\\0 &amp; i\notin\mathcal U_d\end{cases}
-</span></p>
-<p>Then <span class="math inline">t_x=N_d</span>, <span class="math inline">\bar x_U = N_d/N</span>, <span class="math inline">\bar y_{U_d} = t_u/t_x = B</span>, <span class="math inline">\bar x = n_d/n</span>, and <span class="math display">
-\bar y_d = \hat B = \frac{\bar u}{\bar x} = \frac{\hat t_u}{\hat t_x}
-= \frac{\sum_{i\in\mathcal S_d} y_i}{n_d}
-</span></p>
-<p>Although <span class="math inline">\bar y_d</span> <em>looks</em> like an ordinary sample mean, <span class="math inline">n_d</span> itself is random — a different SRS would very likely give a different <span class="math inline">n_d</span> — which is exactly why this is a ratio estimator, not a simple mean.</p>
-</section>
-<section id="standard-error-of-a-domain-mean" class="slide level2">
-<h2>Standard Error of a Domain Mean</h2>
-<p>Applying the formula for <span class="math inline">\hat V(\hat B)</span> with <span class="math inline">x_i,u_i</span> as defined above gives <span class="math display">
-\text{SE}(\bar y_d) = \sqrt{\Big(1-\frac nN\Big)\frac{n}{n_d^2}\cdot\frac{(n_d-1)s_{yd}^2}{n-1}}
-\approx \sqrt{\Big(1-\frac nN\Big)\frac{s_{yd}^2}{n_d}},
-</span> <span class="math inline">s_{yd}^2</span> being the sample variance of the <span class="math inline">y_i</span>’s within domain <span class="math inline">d</span>.</p>
-<p>This is <strong>not</strong> the same as naively applying SRS <em>within</em> domain <span class="math inline">d</span>, as if <span class="math inline">n_d</span> were fixed — that would use <span class="math inline">\big(1-\tfrac{n_d}{N_d}\big)</span> in place of <span class="math inline">\big(1-\tfrac nN\big)</span>. Only the fpc differs: <strong>overall</strong> rate (correct, since <span class="math inline">n_d</span> is random) vs.&nbsp;<strong>domain</strong> rate (wrong); they agree only when <span class="math inline">n_d/N_d\approx n/N</span>.</p>
-</section>
-<section id="estimating-a-domain-total" class="slide level2">
-<h2>Estimating a Domain Total</h2>
-<ul>
-<li>If <span class="math inline">N_d</span> is <strong>known</strong>: <span class="math inline">\hat t_{yd} = \bar y_d \times N_d</span>, with <span class="math inline">\text{SE}(\hat t_{yd}) = \text{SE}(\bar y_d)\times N_d</span>.</li>
-<li>If <span class="math inline">N_d</span> is <strong>unknown</strong>: estimate it first, <span class="math inline">\hat N_d = N\cdot n_d/n</span>, and use <span class="math inline">\hat t_{yd} = \bar y_d \times \hat N_d = N\bar u</span>, with <span class="math display">
-\text{SE}(\hat t_{yd}) = N\,\text{SE}(\bar u) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_u^2}{n}}
-</span></li>
-</ul>
-</section>
-<section id="example-domain-means-by-census-region" class="slide level2">
-<h2>Example: Domain Means by Census Region</h2>
-<p>Split the SRS of <span class="math inline">n=300</span> counties (<code>agsrs.csv</code>) by region; each <span class="math inline">N_d</span> is known from the full Census (<code>agpop.csv</code>). The <strong>naive</strong> column applies ordinary SRS estimation <em>within</em> each region, as if its <span class="math inline">n_d</span> had been fixed in advance:</p>
+<section id="example-post-stratifying-farm-acreage-by-region" class="slide level2">
+<h2>Example: Post-Stratifying Farm Acreage by Region</h2>
+<p>The SRS of <span class="math inline">n=300</span> counties (<code>agsrs.csv</code>, acres in thousands) is sorted afterward into the four census regions, whose sizes are known from the Census (<span class="math inline">N=3078</span>). The sample shares differ from the population shares:</p>
 <div class="cell" data-layout-align="center">
-<div id="tbl-domain-agsrs" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
+<div id="tbl-poststrat-acreage" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
 <figure class="quarto-float quarto-float-tbl">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-domain-agsrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-poststrat-acreage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;1
 </figcaption>
-<div aria-describedby="tbl-domain-agsrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="tbl-poststrat-acreage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <div id="rrknfcyhyy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rrknfcyhyy table {
@@ -707,7 +828,7 @@ Table&nbsp;1
   margin-left: auto;
   margin-right: auto;
   color: #333333;
-  font-size: 16px;
+  font-size: 70%;
   font-weight: normal;
   font-style: normal;
   background-color: #FFFFFF;
@@ -1138,6 +1259,582 @@ Table&nbsp;1
 <thead>
 <tr class="gt_col_headings header">
 <th id="a::stub" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="Nh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">N_h</span></th>
+<th id="pih" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\pi_h</span></th>
+<th id="nh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">n_h</span></th>
+<th id="nh_post" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">n\pi_h</span></th>
+<th id="ybarh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\bar y_h</span></th>
+<th id="s2h" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">s_h^2</span></th>
+<th id="pis2" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\pi_h s_h^2</span></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<th id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Northeast</th>
+<td class="gt_row gt_right" headers="stub_1_1 Nh">220</td>
+<td class="gt_row gt_right" headers="stub_1_1 pih">0.071</td>
+<td class="gt_row gt_right" headers="stub_1_1 nh">18</td>
+<td class="gt_row gt_right" headers="stub_1_1 nh_post">21.4</td>
+<td class="gt_row gt_right" headers="stub_1_1 ybarh">107</td>
+<td class="gt_row gt_right" headers="stub_1_1 s2h">16,724</td>
+<td class="gt_row gt_right" headers="stub_1_1 pis2">1,195</td>
+</tr>
+<tr class="even">
+<th id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">North Central</th>
+<td class="gt_row gt_right" headers="stub_1_2 Nh">1,054</td>
+<td class="gt_row gt_right" headers="stub_1_2 pih">0.342</td>
+<td class="gt_row gt_right" headers="stub_1_2 nh">78</td>
+<td class="gt_row gt_right" headers="stub_1_2 nh_post">102.7</td>
+<td class="gt_row gt_right" headers="stub_1_2 ybarh">323</td>
+<td class="gt_row gt_right" headers="stub_1_2 s2h">77,824</td>
+<td class="gt_row gt_right" headers="stub_1_2 pis2">26,649</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">South</th>
+<td class="gt_row gt_right" headers="stub_1_3 Nh">1,382</td>
+<td class="gt_row gt_right" headers="stub_1_3 pih">0.449</td>
+<td class="gt_row gt_right" headers="stub_1_3 nh">160</td>
+<td class="gt_row gt_right" headers="stub_1_3 nh_post">134.7</td>
+<td class="gt_row gt_right" headers="stub_1_3 ybarh">246</td>
+<td class="gt_row gt_right" headers="stub_1_3 s2h">97,932</td>
+<td class="gt_row gt_right" headers="stub_1_3 pis2">43,971</td>
+</tr>
+<tr class="even">
+<th id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">West</th>
+<td class="gt_row gt_right" headers="stub_1_4 Nh">422</td>
+<td class="gt_row gt_right" headers="stub_1_4 pih">0.137</td>
+<td class="gt_row gt_right" headers="stub_1_4 nh">44</td>
+<td class="gt_row gt_right" headers="stub_1_4 nh_post">41.1</td>
+<td class="gt_row gt_right" headers="stub_1_4 ybarh">519</td>
+<td class="gt_row gt_right" headers="stub_1_4 s2h">240,926</td>
+<td class="gt_row gt_right" headers="stub_1_4 pis2">33,031</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="example-post-stratified-acreage-results" class="slide level2">
+<h2>Example: Post-Stratified Acreage Results</h2>
+<p>Using the short-cut formula, with <span class="math inline">\sum_h\pi_hs_h^2=</span> 104,847: <span class="math display">
+\hat{\bar y}_{\text{post}}=\sum_h\pi_h\bar y_h=300.1,
+\qquad
+\hat V=\Big(1-\frac{300}{3078}\Big)\frac{1}{300}\,(1.04847\times 10^{5})
+=315.4 ,
+</span> so <span class="math inline">\text{SE}(\hat{\bar y}_{\text{post}})=17.76</span> thousand acres, and an approximate 95% CI is <span class="math inline">300.1 \pm 1.96(17.76)
+=[265.2,\ 334.9]</span>.</p>
+<p>Ignoring the regions, the SRS estimate is <span class="math inline">\bar y=297.9</span> with <span class="math inline">\text{SE}=18.9</span>. Post-stratifying by region lowers the SE because the regions differ strongly in mean acreage (107 to 519 thousand acres), which removes the between-region variability.</p>
+</section></section>
+<section>
+<section id="domain-analysis" class="title-slide slide level1 center" data-number="7">
+<h1><span class="header-section-number">7</span> Domain Analysis</h1>
+
+</section>
+<section id="domain-analysis-1" class="slide level2">
+<h2>Domain Analysis</h2>
+<p>Suppose there are <span class="math inline">D</span> <strong>domains</strong> (subpopulations of interest determined only <em>after</em> sampling — e.g., men and women). Let <span class="math inline">\mathcal U_d</span> be the population units in domain <span class="math inline">d</span>, and <span class="math inline">\mathcal S_d</span> the sampled units in domain <span class="math inline">d</span>, with <span class="math inline">N_d = |\mathcal U_d|</span> and <span class="math inline">n_d = |\mathcal S_d|</span>.</p>
+<p>We might want the mean salary for men and for women separately, but we don’t know a person’s gender before selecting them — we can’t stratify by domain in advance. Instead we estimate each domain’s mean/total after sampling, by splitting the sample by domain ID. <strong>Domain mean estimation is a special case of ratio estimation.</strong></p>
+</section>
+<section id="domain-means-are-ratio-estimates" class="slide level2">
+<h2>Domain Means Are Ratio Estimates</h2>
+<p>Define <span class="math display">
+x_i = \begin{cases}1 &amp; i\in\mathcal U_d\\0 &amp; i\notin\mathcal U_d\end{cases}
+\qquad
+u_i = y_ix_i = \begin{cases}y_i &amp; i\in\mathcal U_d\\0 &amp; i\notin\mathcal U_d\end{cases}
+</span></p>
+<p>Then <span class="math inline">t_x=N_d</span>, <span class="math inline">\bar x_U = N_d/N</span>, <span class="math inline">\bar y_{U_d} = t_u/t_x = B</span>, <span class="math inline">\bar x = n_d/n</span>, and <span class="math display">
+\bar y_d = \hat B = \frac{\bar u}{\bar x} = \frac{\hat t_u}{\hat t_x}
+= \frac{\sum_{i\in\mathcal S_d} y_i}{n_d}
+</span></p>
+<p>Although <span class="math inline">\bar y_d</span> <em>looks</em> like an ordinary sample mean, <span class="math inline">n_d</span> itself is random — a different SRS would very likely give a different <span class="math inline">n_d</span> — which is exactly why this is a ratio estimator, not a simple mean.</p>
+</section>
+<section id="standard-error-of-a-domain-mean" class="slide level2">
+<h2>Standard Error of a Domain Mean</h2>
+<p>Applying the formula for <span class="math inline">\hat V(\hat B)</span> with <span class="math inline">x_i,u_i</span> as defined above gives <span class="math display">
+\text{SE}(\bar y_d) = \sqrt{\Big(1-\frac nN\Big)\frac{n}{n_d^2}\cdot\frac{(n_d-1)s_{yd}^2}{n-1}}
+\approx \sqrt{\Big(1-\frac nN\Big)\frac{s_{yd}^2}{n_d}},
+</span> <span class="math inline">s_{yd}^2</span> being the sample variance of the <span class="math inline">y_i</span>’s within domain <span class="math inline">d</span>.</p>
+<p>This is <strong>not</strong> the same as naively applying SRS <em>within</em> domain <span class="math inline">d</span>, as if <span class="math inline">n_d</span> were fixed — that would use <span class="math inline">\big(1-\tfrac{n_d}{N_d}\big)</span> in place of <span class="math inline">\big(1-\tfrac nN\big)</span>. Only the fpc differs: <strong>overall</strong> rate (correct, since <span class="math inline">n_d</span> is random) vs.&nbsp;<strong>domain</strong> rate (wrong); they agree only when <span class="math inline">n_d/N_d\approx n/N</span>.</p>
+</section>
+<section id="estimating-a-domain-total" class="slide level2">
+<h2>Estimating a Domain Total</h2>
+<ul>
+<li>If <span class="math inline">N_d</span> is <strong>known</strong>: <span class="math inline">\hat t_{yd} = \bar y_d \times N_d</span>, with <span class="math inline">\text{SE}(\hat t_{yd}) = \text{SE}(\bar y_d)\times N_d</span>.</li>
+<li>If <span class="math inline">N_d</span> is <strong>unknown</strong>: estimate it first, <span class="math inline">\hat N_d = N\cdot n_d/n</span>, and use <span class="math inline">\hat t_{yd} = \bar y_d \times \hat N_d = N\bar u</span>, with <span class="math display">
+\text{SE}(\hat t_{yd}) = N\,\text{SE}(\bar u) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_u^2}{n}}
+</span></li>
+</ul>
+</section>
+<section id="example-domain-means-by-census-region" class="slide level2">
+<h2>Example: Domain Means by Census Region</h2>
+<p>Split the SRS of <span class="math inline">n=300</span> counties (<code>agsrs.csv</code>) by region; each <span class="math inline">N_d</span> is known from the full Census (<code>agpop.csv</code>). The <strong>naive</strong> column applies ordinary SRS estimation <em>within</em> each region, as if its <span class="math inline">n_d</span> had been fixed in advance:</p>
+<div class="cell" data-layout-align="center">
+<div id="tbl-domain-agsrs" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-domain-agsrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2
+</figcaption>
+<div aria-describedby="tbl-domain-agsrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="jwmqsrhbxd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jwmqsrhbxd table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#jwmqsrhbxd thead, #jwmqsrhbxd tbody, #jwmqsrhbxd tfoot, #jwmqsrhbxd tr, #jwmqsrhbxd td, #jwmqsrhbxd th {
+  border-style: none;
+}
+
+#jwmqsrhbxd p {
+  margin: 0;
+  padding: 0;
+}
+
+#jwmqsrhbxd .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#jwmqsrhbxd .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#jwmqsrhbxd .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#jwmqsrhbxd .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#jwmqsrhbxd .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jwmqsrhbxd .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jwmqsrhbxd .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jwmqsrhbxd .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#jwmqsrhbxd .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#jwmqsrhbxd .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#jwmqsrhbxd .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#jwmqsrhbxd .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#jwmqsrhbxd .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#jwmqsrhbxd .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#jwmqsrhbxd .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#jwmqsrhbxd .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#jwmqsrhbxd .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#jwmqsrhbxd .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#jwmqsrhbxd .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jwmqsrhbxd .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#jwmqsrhbxd .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#jwmqsrhbxd .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#jwmqsrhbxd .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jwmqsrhbxd .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#jwmqsrhbxd .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#jwmqsrhbxd .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jwmqsrhbxd .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jwmqsrhbxd .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#jwmqsrhbxd .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jwmqsrhbxd .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#jwmqsrhbxd .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jwmqsrhbxd .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jwmqsrhbxd .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jwmqsrhbxd .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jwmqsrhbxd .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jwmqsrhbxd .gt_left {
+  text-align: left;
+}
+
+#jwmqsrhbxd .gt_center {
+  text-align: center;
+}
+
+#jwmqsrhbxd .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#jwmqsrhbxd .gt_font_normal {
+  font-weight: normal;
+}
+
+#jwmqsrhbxd .gt_font_bold {
+  font-weight: bold;
+}
+
+#jwmqsrhbxd .gt_font_italic {
+  font-style: italic;
+}
+
+#jwmqsrhbxd .gt_super {
+  font-size: 65%;
+}
+
+#jwmqsrhbxd .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#jwmqsrhbxd .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#jwmqsrhbxd .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#jwmqsrhbxd .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#jwmqsrhbxd .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#jwmqsrhbxd .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#jwmqsrhbxd .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#jwmqsrhbxd .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#jwmqsrhbxd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="a::stub" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
 <th id="Nd" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">N_d</span></th>
 <th id="nd" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">n_d</span></th>
 <th id="ybar" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\bar y_d</span></th>
@@ -1188,95 +1885,6 @@ Table&nbsp;1
 </div>
 </div>
 <p>The two SEs differ only in the fpc: naive is bigger where <span class="math inline">d</span> happened to be <strong>under</strong>-sampled (<span class="math inline">n_d/N_d&lt;n/N</span>: NE, NC) and smaller where <strong>over</strong>-sampled (<span class="math inline">n_d/N_d&gt;n/N</span>: S, W). The correct formula ignores this sampling luck and always uses the overall rate <span class="math inline">n/N</span>.</p>
-</section></section>
-<section>
-<section id="regression-estimation" class="title-slide slide level1 center" data-number="7">
-<h1><span class="header-section-number">7</span> Regression Estimation</h1>
-
-</section>
-<section id="linear-model" class="slide level2">
-<h2>Linear Model</h2>
-<p>Ratio estimation works best if the data are well fit by a straight line <em>through the origin</em>. Sometimes data instead appear evenly scattered about a straight line that does <strong>not</strong> go through the origin — i.e., the data look as though the usual straight-line regression model applies: <span class="math display">
-y = B_0 + B_1 x
-</span></p>
-</section>
-<section id="ratio-vs.-regression-estimation" class="slide level2">
-<h2>Ratio vs.&nbsp;Regression Estimation</h2>
-
-<img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-ratio-vs-reg-1.png" id="fig-ratio-vs-reg" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
-Figure&nbsp;4
-</p><p>In ratio estimation, <span class="math inline">y_i = Bx_i + d_i</span> with residual spread growing with <span class="math inline">x</span>; in regression estimation, <span class="math inline">y_i = B_0+B_1x_i+d_i</span> with roughly constant spread.</p>
-</section>
-<section id="least-squares-estimation" class="slide level2">
-<h2>Least Squares Estimation</h2>
-<p>The ordinary least squares slope and intercept: <span class="math display">
-\hat B_1 = \frac{\displaystyle\sum_{i\in\mathcal S}(x_i-\bar x)(y_i-\bar y)}{\displaystyle\sum_{i\in\mathcal S}(x_i-\bar x)^2}
-= \frac{r s_y}{s_x}
-\qquad
-\hat B_0 = \bar y - \hat B_1 \bar x
-</span></p>
-<p>where <span class="math inline">r</span> is the sample Pearson correlation coefficient of <span class="math inline">x</span> and <span class="math inline">y</span>.</p>
-</section>
-<section id="the-regression-estimator" class="slide level2">
-<h2>The Regression Estimator</h2>
-<p>Assuming <span class="math inline">\bar x_U</span> (or <span class="math inline">t_x</span>) is known, <span class="math display">
-\hat{\bar y}_{\text{reg}} = \hat B_0 + \hat B_1 \bar x_U = \bar y + \hat B_1(\bar x_U - \bar x)
-</span></p>
-<p>Equivalently, averaging the fitted value <span class="math inline">\hat y_i = \hat B_0+\hat B_1 x_i</span> over <em>every</em> population unit gives the same estimator: <span class="math display">
-\hat{\bar y}_{\text{reg}} = \frac1N\sum_{i=1}^N (\hat B_0 + \hat B_1 x_i) = \hat B_0 + \hat B_1 \bar x_U
-</span></p>
-<p>This is a natural generalization of the ratio estimator’s <span class="math inline">\hat{\bar
-y}_r = \frac1N\sum_{i=1}^N \hat B x_i</span>. The corresponding total is <span class="math inline">\hat t_{y,\text{reg}} = N\hat{\bar y}_{\text{reg}} = N\hat B_0 + \hat B_1 t_x</span>.</p>
-</section>
-<section id="illustration-of-regression-estimation" class="slide level2">
-<h2>Illustration of Regression Estimation</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-reg-concept" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-reg-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-reg-concept-1.png" class="quarto-figure quarto-figure-center" style="width:95.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reg-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Illustration of Benefits of Regression Estimation
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<ul>
-<li><p>Grey: population (<span class="math inline">x_i</span> known). Green: an ordinary SRS.</p></li>
-<li><p>Red line, fit from the sample: <span class="math inline">\hat y_i=\hat B_0+\hat B_1x_i</span> for every unit.</p></li>
-</ul>
-<p><span class="math display">
-\hat{\bar y}_{\text{reg}} = \frac1N\sum_{i=1}^N \hat y_i
-= \hat B_0 + \hat B_1 \bar x_{U}
-</span></p>
-</div></div>
-<p>The sampled <span class="math inline">x</span>’s average above <span class="math inline">\bar x_U</span>, so the naive <span class="math inline">\bar y</span> (green) sits above <span class="math inline">\bar y_U</span>; the regression estimator shifts the fit back to <span class="math inline">\bar x_U</span> and lands on target, <span class="math inline">\hat{\bar y}_{\text{reg}}</span> (red) <span class="math inline">\approx
-\bar y_{U}</span> (black). Both are essentially unbiased over repeated samples, but <span class="math inline">\hat{\bar y}_{\text{reg}}</span> is much less variable.</p>
-</section>
-<section id="estimating-the-standard-error" class="slide level2">
-<h2>Estimating the Standard Error</h2>
-<p>Let <span class="math inline">e_i = y_i - (\hat B_0+\hat B_1 x_i)</span> be the regression residuals, and <span class="math display">
-s_e^2 = \frac{\sum_{i\in\mathcal S} e_i^2}{n-2}.
-</span></p>
-<p>Then <span class="math display">
-\text{SE}(\hat{\bar y}_{\text{reg}}) = \sqrt{\Big(1-\frac nN\Big)\frac{s_e^2}{n}}
-= \sqrt{\Big(1-\frac nN\Big)\frac1n\, s_y^2(1-r^2)}
-</span></p>
-<p>where <span class="math inline">r</span> is the Pearson correlation coefficient between <span class="math inline">x</span> and <span class="math inline">y</span> in the sample — the stronger the linear relationship, the smaller the SE.</p>
-</section>
-<section id="example-correcting-aerial-survey-counts" class="slide level2">
-<h2>Example: Correcting Aerial Survey Counts</h2>
-<p>Aerial photographs are a cheap way to survey a large area (e.g., for a caribou herd), but tend to <strong>undercount</strong> animals that are hidden from view overhead. A more expensive, intensive ground/field count on a subsample of plots gives accurate counts that can calibrate the photo counts.</p>
-
-<img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-photo-field-1.png" id="fig-photo-field" class="quarto-figure quarto-figure-center r-stretch" style="width:60.0%"><p class="caption">
-Figure&nbsp;6
-</p><p>Let <span class="math inline">x_i</span> = photo count and <span class="math inline">y_i</span> = field count on plot <span class="math inline">i</span>. Fitting <span class="math inline">\hat B = \bar y/\bar x</span> on the subsample of plots with both counts, we can correct the total photo count of the <em>entire</em> surveyed area, <span class="math inline">\hat t_{yr} = \hat B\, t_x</span>, for the systematic undercounting bias.</p>
 </section></section>
 <section>
 <section id="predictions-with-machine-learning-models" class="title-slide slide level1 center" data-number="8">
@@ -1338,7 +1946,6 @@ x_{U}</span> — and SE is usually estimated by the bootstrap.</p>
 </div>
 
 </section></section>
-
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">

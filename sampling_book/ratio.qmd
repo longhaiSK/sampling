@@ -1,6 +1,6 @@
 # Ratio and Regression Estimation
 
-## Ratio, Regression, and Domain Estimation {#sec-ratio-formulas}
+## Ratio, Regression, Post-stratification, and Domain Estimation {#sec-ratio-formulas}
 
 When auxiliary information (a variable $x$) is highly correlated with our target variable of interest ($y$), we can use **Ratio** or **Regression** estimation to improve precision without increasing the sample size. We can also use auxiliary population structures to adjust our estimates after the fact via **Post-stratification**, or estimate means for specific sub-populations (**Domains**).
 
@@ -56,20 +56,7 @@ whenever the relationship misses the origin, at the cost of one degree of freedo
 that the factor $(\overline{x}_U/\overline{x})^2$ is absent: the fitted line is evaluated at
 $\overline{x}_U$ directly, so no correction for $\overline{x} \neq \overline{x}_U$ is needed.
 
-### 3. Domain Estimation {-}
-To estimate the mean of a subgroup (domain $d$) when the domain sample size $n_d$ is a random variable, use the $n_d$ sampled units that fall in the domain:
-$$
-\overline{y}_d = \frac{1}{n_d} \sum_{i \in S_d} y_i, \qquad
-\hat{V}(\overline{y}_d) = \left(1 - \frac{n}{N}\right) \frac{s_d^2}{n_d}, \qquad
-s_d^2 = \frac{1}{n_d - 1}\sum_{i \in S_d}\left(y_i - \overline{y}_d\right)^2 ,
-$$
-where $S_d$ is the set of sampled units in domain $d$, $n$ is the overall sample size, and
-$N$ is the population size. $95\%$ intervals use $t_{0.975,\,n_d-1}$. The fpc uses the overall
-sampling fraction $n/N$, because the domain's population size $N_d$ is usually unknown.
-$\overline{y}_d$ is in fact a ratio estimator, $\sum_{i=1}^n u_i/\sum_{i=1}^n x_i$ with
-$x_i = 1$ if unit $i$ is in the domain and $u_i = x_i y_i$.
-
-### 4. Post-stratification {-}
+### 3. Post-stratification {-}
 If we know the true population sizes $N_h$ of $H$ groups (post-strata), but used a Simple Random Sample, we can post-stratify to reduce variance.
 We weight the group sample means by the known $\pi_h = N_h/N$, as in stratified sampling:
 $$
@@ -137,6 +124,20 @@ Domain estimation stands slightly apart: there the divisor is the random $n_d$ r
 full $n$, because only the units falling in the domain carry information about it.
 
 ---
+
+### 4. Domain Estimation {-}
+To estimate the mean of a subgroup (domain $d$) when the domain sample size $n_d$ is a random variable, use the $n_d$ sampled units that fall in the domain:
+$$
+\overline{y}_d = \frac{1}{n_d} \sum_{i \in S_d} y_i, \qquad
+\hat{V}(\overline{y}_d) = \left(1 - \frac{n}{N}\right) \frac{s_d^2}{n_d}, \qquad
+s_d^2 = \frac{1}{n_d - 1}\sum_{i \in S_d}\left(y_i - \overline{y}_d\right)^2 ,
+$$
+where $S_d$ is the set of sampled units in domain $d$, $n$ is the overall sample size, and
+$N$ is the population size. $95\%$ intervals use $t_{0.975,\,n_d-1}$. The fpc uses the overall
+sampling fraction $n/N$, because the domain's population size $N_d$ is usually unknown.
+$\overline{y}_d$ is in fact a ratio estimator, $\sum_{i=1}^n u_i/\sum_{i=1}^n x_i$ with
+$x_i = 1$ if unit $i$ is in the domain and $u_i = x_i y_i$.
+
 
 ## Functions and packages for Analyzing Data
 
@@ -361,224 +362,6 @@ data.frame(sim_var, ratio_sim_var, percentage_reduction) |>
 
 
 
-## Estimating Domain Means and Post-stratification with agsrs.csv example
-
-### Estimating Domain Means
-
-When estimating the mean for a specific subgroup (like a region), the sample size in that subgroup ($n_d$) is a random variable, which increases our uncertainty.
-
-```{r agsrs-domain-est}
-agsrs <- acres_in_thousands(read.csv("data/agsrs.csv"))
-n <- nrow(agsrs)
-
-## estimating domain means
-region_agsrs_domain <- data.frame(rbind(
-    NC = domain_est(agsrs$acres92[agsrs$region=="NC"], n=n, N = 3078),
-    NE = domain_est(agsrs$acres92[agsrs$region=="NE"], n=n, N = 3078),
-    S  = domain_est(agsrs$acres92[agsrs$region=="S"], n=n, N = 3078),
-    W  = domain_est(agsrs$acres92[agsrs$region=="W"], n=n, N = 3078)
-))
-
-region_agsrs_domain |> format_est_gt("domain_mean")
-```
-
-If we incorrectly used the standard SRS formula (pretending $n_d$ was fixed), our standard errors would be artificially low:
-
-```{r agsrs-domain-srs}
-## naively applying SRS estimation to each domain (incorrect analysis)
-region_agsrs_srs <- data.frame(rbind(
-    NC = srs_est(agsrs$acres92[agsrs$region=="NC"], N = 1054, estimate = "mean", show.details = FALSE)$estimate,
-    NE = srs_est(agsrs$acres92[agsrs$region=="NE"], N = 220,  estimate = "mean", show.details = FALSE)$estimate,
-    S  = srs_est(agsrs$acres92[agsrs$region=="S"],  N = 1382, estimate = "mean", show.details = FALSE)$estimate,
-    W  = srs_est(agsrs$acres92[agsrs$region=="W"],  N = 422,  estimate = "mean", show.details = FALSE)$estimate
-))
-
-region_agsrs_srs |> format_est_gt("mean")
-```
-**Output Note:** Comparing the two tables, you can see the correct `domain_mean` Standard Errors are larger, appropriately penalizing us for the uncertainty in how many counties from each region randomly fell into our sample.
-
-### Post-stratification Analysis
-
-If we know the true regional population sizes ($N_h$), we can post-stratify our SRS data.
-
-```{r agsrs-poststrat-setup}
-nh <- tapply(agsrs[, "acres92"], agsrs[,"region"], length)
-n <- sum(nh)
-sh <- tapply(agsrs[, "acres92"], agsrs[,"region"], sd)
-ybarh <- tapply(agsrs[, "acres92"], agsrs[,"region"], mean)
-# create a vector with external information
-Nh <- c(NC = 1054, NE = 220, S = 1382, W = 422)
-```
-
-**Create $n_h^{\text{post-strat}} = n \times \frac{N_h}{N}$**, instead of using the randomly observed $n_h$.
-
-```{r tbl-agsrs-poststrat-summary}
-#| tbl-cap: "Observed vs. population stratum proportions and post-stratified sample sizes"
-nh_post <- Nh / sum(Nh) * n
-
-## regional summary for stratified sampling estimation
-data.frame(
-  ybarh = ybarh, 
-  sh = sh, 
-  nh = nh, 
-  pi_obs = nh/n, 
-  Nh = Nh, 
-  pi_pop = Nh/sum(Nh),  
-  nh_post = nh_post
-) |> 
-  gt(rownames_to_stub = TRUE) |>
-  cols_label(
-    ybarh = md("$\\bar{y}_h$"),
-    sh = md("$s_h$"),
-    nh = md("$n_h^{\\text{obs}}$"),
-    pi_obs = md("$\\pi^{\\text{obs}}_h$"),
-    Nh = md("$N_h$"),
-    pi_pop = md("$\\pi^{\\text{pop}}_h$"),
-    nh_post = md("$n_h^{\\text{post}}$")
-  ) |> 
-  fmt_number(columns = c(ybarh, sh, pi_obs, pi_pop, nh_post), decimals = 3)
-```
-**Output Note:** The table above shows the difference between the sample proportion ($\pi^{obs}_h$) and the true population proportion ($\pi^{pop}_h$). Post-stratification forces the weights to reflect the true population structure.
-
-```{r agsrs-poststrat-est}
-## strata mean estimate
-res_post_strat <- str_est(ybarh, sh, nh_post, Nh, estimate = "mean")
-res_post_strat$table
-post_strat_est <- res_post_strat$estimate
-post_strat_est |> format_est_gt("mean")
-
-## compare with SRS estimate
-res_srs_est <- srs_est(agsrs$acres92, N = 3087, estimate = "mean", show.details = FALSE)
-srs_est_raw <- res_srs_est$estimate
-srs_est_raw |> format_est_gt("mean")
-
-## true mean check
-mean(agpop$acres92)
-```
-**Output Note:** The post-stratified estimate gives a Standard Error of `r round(post_strat_est["S.E."], 1)`, which is more precise than the unadjusted SRS standard error of `r round(srs_est_raw["S.E."], 1)`.
-
-## Estimating Domain Means and Post-stratification with teacher example
-
-### Importing Data and Calculating Contingency Table
-
-```{r teacher-load}
-teacher <- read.csv("data/college_teacher.csv")
-
-table(teacher[, 2:1])
-addmargins(table(teacher[, 2:1]), 2)
-# Proportions of students who want to become a teacher in two domains (female and male)
-prop.table(table(teacher[, 2:1]), margin = "gender")
-```
-
-### Domain Summary
-
-```{r tbl-teacher-domain-summary}
-#| tbl-cap: "Domain summary statistics for the teacher-aspiration dataset, by gender"
-n <- nrow(teacher)
-ybarh <- tapply(teacher$teacher, INDEX = teacher$gender, FUN = mean)
-sh <- tapply(teacher$teacher, INDEX = teacher$gender, FUN = sd)
-nh <- tapply(teacher$teacher, INDEX = teacher$gender, FUN = length)
-prop_h_obs <- nh / sum(nh)
-
-data.frame(
-  ybarh = ybarh, 
-  sh = sh, 
-  nh = nh, 
-  pi_obs = prop_h_obs
-) |> 
-  gt(rownames_to_stub = TRUE) |>
-  cols_label(
-    ybarh = md("$\\bar{y}_h$"),
-    sh = md("$s_h$"),
-    nh = md("$n^{\\text{obs}}_h$"),
-    pi_obs = md("$\\pi^{\\text{obs}}_h$")
-  ) |> 
-  fmt_number(columns = everything(), decimals = 3)
-```
-
-### Estimating Domain Means
-
-```{r teacher-domain-est}
-Nh <- c(3000, 1000)
-n <- nrow(teacher)
-domain_teacher_est <- data.frame(rbind(
-    female = domain_est(subset(teacher, gender==1)$teacher, n=n, N=4000),
-    male   = domain_est(subset(teacher, gender==2)$teacher, n=n, N=4000)
-))
-
-domain_teacher_est |> format_est_gt("domain_mean")
-```
-
-### Post-stratification Analysis
-
-```{r teacher-poststrat-prop}
-Nh <- c(3000, 1000)
-prop_h_pop <- Nh / sum(Nh)
-prop_h_pop
-```
-#### Create $n_h^{\text{post-strat}} = n \times \frac{N_h}{N}$ {-}
-```{r tbl-teacher-poststrat-summary}
-#| tbl-cap: "Observed vs. population gender proportions and post-stratified sample sizes"
-nh_post <- Nh / sum(Nh) * n
-
-## show the differences
-data.frame(
-  phat = ybarh, 
-  sh = sh, 
-  nh = nh, 
-  pi_obs = nh/n, 
-  Nh = Nh, 
-  pi_pop = Nh/sum(Nh),  
-  nh_post = nh_post
-) |> 
-  gt(rownames_to_stub = TRUE) |> 
-  cols_label(
-    phat = md("$\\hat{p}_h$"),
-    sh = md("$s_h$"),
-    nh = md("$n_h$"),
-    pi_obs = md("$\\pi^{\\text{obs}}_h$"),
-    Nh = md("$N_h$"),
-    pi_pop = md("$\\pi^{\\text{pop}}_h$"),
-    nh_post = md("$n_h^{\\text{post-strat}}$")
-  ) |> 
-  fmt_number(columns = c(phat, sh, pi_obs, pi_pop, nh_post), decimals = 3)
-```
-
-Calculate the post-stratification estimation of the mean:
-
-```{r teacher-poststrat-est}
-## poststratification estimation of mean
-res_teacher_post_strat <- str_est(ybarh, sh, nh_post, Nh, estimate = "mean")
-res_teacher_post_strat$table
-teacher_post_strat <- res_teacher_post_strat$estimate
-teacher_post_strat |> format_est_gt("mean")
-```
-
-This post-stratification estimate explicitly corrects for the sampling imbalance using the true strata sizes:
-
-```{r teacher-poststrat-check}
-# 0.35 * 0.75 + 0.25 * 0.25 
-(ybarh[1] * prop_h_pop[1]) + (ybarh[2] * prop_h_pop[2])
-```
-
-### Comparing to the Analysis with SRS
-
-If we didn't post-stratify, the simple mean is heavily weighted toward males because they were over-sampled by chance (40% in sample vs 25% in population).
-
-```{r teacher-srs-est}
-res_teacher_srs <- srs_est(teacher$teacher, N=sum(Nh), estimate = "mean", show.details = FALSE)
-res_teacher_srs$table
-teacher_srs <- res_teacher_srs$estimate
-teacher_srs |> format_est_gt("mean")
-```
-
-This equals the naive sample proportion:
-
-```{r teacher-srs-check}
-# 0.35 * 0.6 + 0.25 * 0.4
-mean(teacher$teacher == 1)
-```
-
 ## Regression Estimation for the cherry.csv dataset 
 
 When the relationship between $y$ and $x$ doesn't pass exactly through the origin, we use Regression Estimation.
@@ -702,6 +485,209 @@ dt_ratio_raw |> format_est_gt("ratio_mean")
 *   **Regression Mean:** SE = `r round(dt_reg_raw["S.E."], 3)`
 
 Because the intercept of the true line is non-zero, the **Regression estimator** provides the most precise estimate in this scenario.
+
+
+## Post-stratification with the agsrs.csv example
+
+Any variable known for **every** unit of the population can be used to post-stratify an SRS. We use the SRS of $n=300$ counties in `agsrs.csv` and compare two post-stratifiers: the census **region**, and **quantile groups of `acres87`** (the 1987 acreage, as in the post-stratification app).
+
+### By Region
+
+If we know the true regional population sizes ($N_h$), we can post-stratify our SRS data.
+
+```{r agsrs-load}
+agsrs <- acres_in_thousands(read.csv("data/agsrs.csv"))
+```
+
+```{r agsrs-poststrat-setup}
+nh <- tapply(agsrs[, "acres92"], agsrs[,"region"], length)
+n <- sum(nh)
+sh <- tapply(agsrs[, "acres92"], agsrs[,"region"], sd)
+ybarh <- tapply(agsrs[, "acres92"], agsrs[,"region"], mean)
+# create a vector with external information
+Nh <- c(NC = 1054, NE = 220, S = 1382, W = 422)
+```
+
+**Create $n_h^{\text{post-strat}} = n \times \frac{N_h}{N}$**, instead of using the randomly observed $n_h$.
+
+```{r tbl-agsrs-poststrat-summary}
+#| tbl-cap: "Observed vs. population stratum proportions and post-stratified sample sizes"
+nh_post <- Nh / sum(Nh) * n
+
+## regional summary for stratified sampling estimation
+data.frame(
+  ybarh = ybarh, 
+  sh = sh, 
+  nh = nh, 
+  pi_obs = nh/n, 
+  Nh = Nh, 
+  pi_pop = Nh/sum(Nh),  
+  nh_post = nh_post
+) |> 
+  gt(rownames_to_stub = TRUE) |>
+  cols_label(
+    ybarh = md("$\\bar{y}_h$"),
+    sh = md("$s_h$"),
+    nh = md("$n_h^{\\text{obs}}$"),
+    pi_obs = md("$\\pi^{\\text{obs}}_h$"),
+    Nh = md("$N_h$"),
+    pi_pop = md("$\\pi^{\\text{pop}}_h$"),
+    nh_post = md("$n_h^{\\text{post}}$")
+  ) |> 
+  fmt_number(columns = c(ybarh, sh, pi_obs, pi_pop, nh_post), decimals = 3)
+```
+**Output Note:** The table above shows the difference between the sample proportion ($\pi^{obs}_h$) and the true population proportion ($\pi^{pop}_h$). Post-stratification forces the weights to reflect the true population structure.
+
+```{r agsrs-poststrat-est}
+## strata mean estimate
+res_post_strat <- str_est(ybarh, sh, nh_post, Nh, estimate = "mean")
+res_post_strat$table
+post_strat_est <- res_post_strat$estimate
+post_strat_est |> format_est_gt("mean")
+
+## compare with SRS estimate
+res_srs_est <- srs_est(agsrs$acres92, N = 3078, estimate = "mean", show.details = FALSE)
+srs_est_raw <- res_srs_est$estimate
+srs_est_raw |> format_est_gt("mean")
+
+## true mean check
+mean(agpop$acres92)
+```
+**Output Note:** The post-stratified estimate gives a Standard Error of `r round(post_strat_est["S.E."], 1)`, which is more precise than the unadjusted SRS standard error of `r round(srs_est_raw["S.E."], 1)`.
+
+### By Quantile Groups of `acres87`
+
+The 1987 acreage is recorded for every county, so the population can be cut into groups by its quantiles. As in the app, the cut points are the 25th, 75th and 95th percentiles of the population `acres87`, giving four groups $Q_1,\ldots,Q_4$ of very different sizes; the 23 counties with `acres87` missing are left out of the population.
+
+```{r agsrs-quantile-setup}
+agpop_q <- acres_in_thousands(read.csv("data/agpop.csv"))
+agpop_q <- agpop_q[!is.na(agpop_q$acres87), ]
+
+## population cut points, and the group of any acres87 value
+brk <- quantile(agpop_q$acres87, probs = c(0, 0.25, 0.75, 0.95, 1))
+group_of <- function(x) cut(x, breaks = brk, include.lowest = TRUE, labels = paste0("Q", 1:4))
+round(brk, 1)
+
+## known population group sizes, and the sample summaries by group
+Nh_q <- tapply(agpop_q$acres87, group_of(agpop_q$acres87), length)
+g_q <- group_of(agsrs$acres87)
+nh_q <- tapply(agsrs$acres92, g_q, length)
+sh_q <- tapply(agsrs$acres92, g_q, sd)
+ybarh_q <- tapply(agsrs$acres92, g_q, mean)
+```
+
+```{r tbl-agsrs-quantile-summary}
+#| tbl-cap: "Observed vs. population quantile-group proportions and post-stratified sample sizes (acres87 groups)"
+n <- sum(nh_q)
+nh_post_q <- Nh_q / sum(Nh_q) * n
+
+data.frame(
+  ybarh = ybarh_q,
+  sh = sh_q,
+  nh = nh_q,
+  pi_obs = nh_q / n,
+  Nh = Nh_q,
+  pi_pop = Nh_q / sum(Nh_q),
+  nh_post = nh_post_q
+) |>
+  gt(rownames_to_stub = TRUE) |>
+  cols_label(
+    ybarh = md("$\\bar{y}_h$"),
+    sh = md("$s_h$"),
+    nh = md("$n_h^{\\text{obs}}$"),
+    pi_obs = md("$\\pi^{\\text{obs}}_h$"),
+    Nh = md("$N_h$"),
+    pi_pop = md("$\\pi^{\\text{pop}}_h$"),
+    nh_post = md("$n_h^{\\text{post}}$")
+  ) |>
+  fmt_number(columns = c(ybarh, sh, pi_obs, pi_pop, nh_post), decimals = 3)
+```
+
+```{r agsrs-quantile-est}
+res_quantile <- str_est(ybarh_q, sh_q, nh_post_q, Nh_q, estimate = "mean")
+quantile_est <- res_quantile$estimate
+quantile_est |> format_est_gt("mean")
+```
+
+### Comparing the Two Post-stratifications
+
+```{r tbl-agsrs-poststrat-compare}
+#| tbl-cap: "Estimates of the mean acres92 and their standard errors: SRS, post-stratified by region, and post-stratified by acres87 quantile groups"
+compare_est <- rbind(
+  "SRS (no post-stratification)" = srs_est_raw[c("Est.", "S.E.")],
+  "Post-stratified by region"    = post_strat_est[c("Est.", "S.E.")],
+  "Post-stratified by acres87"   = quantile_est[c("Est.", "S.E.")]
+)
+compare_est |>
+  as.data.frame() |>
+  gt(rownames_to_stub = TRUE) |>
+  cols_label(Est. = md("$\\bar{y}$"), S.E. = md("$\\mathrm{SE}$")) |>
+  fmt_number(columns = everything(), decimals = 2)
+```
+**Output Note:** Both post-stratifications reduce the standard error of the SRS estimate, because the groups differ in mean acreage. The `acres87` groups reduce it much more than the regions, since the 1987 acreage is strongly related to the 1992 acreage, so the groups are far more homogeneous in `acres92`. A good post-stratifier is a variable that is known for the whole population and strongly related to $y$.
+
+The population mean of `acres92` over these counties is `r round(mean(agpop_q$acres92, na.rm = TRUE), 1)`. The `acres87` estimate has the smallest SE but lies `r round((mean(agpop_q$acres92, na.rm = TRUE) - quantile_est["Est."]) / quantile_est["S.E."], 1)` SEs below it: the top group $Q_4$ has only `r nh_q[4]` sampled counties and is extremely skewed, so the normal-theory SE is optimistic there.
+
+## Estimating Domain Means with the agsrs.csv example
+
+### Estimating Domain Means
+
+When estimating the mean for a specific subgroup (like a region), the sample size in that subgroup ($n_d$) is a random variable, which increases our uncertainty.
+
+```{r agsrs-domain-est}
+n <- nrow(agsrs)
+
+## estimating domain means
+region_agsrs_domain <- data.frame(rbind(
+    NC = domain_est(agsrs$acres92[agsrs$region=="NC"], n=n, N = 3078),
+    NE = domain_est(agsrs$acres92[agsrs$region=="NE"], n=n, N = 3078),
+    S  = domain_est(agsrs$acres92[agsrs$region=="S"], n=n, N = 3078),
+    W  = domain_est(agsrs$acres92[agsrs$region=="W"], n=n, N = 3078)
+))
+
+region_agsrs_domain |> format_est_gt("domain_mean")
+```
+
+If we incorrectly used the standard SRS formula (pretending $n_d$ was fixed), our standard errors would be artificially low:
+
+```{r agsrs-domain-srs}
+## naively applying SRS estimation to each domain (incorrect analysis)
+region_agsrs_srs <- data.frame(rbind(
+    NC = srs_est(agsrs$acres92[agsrs$region=="NC"], N = 1054, estimate = "mean", show.details = FALSE)$estimate,
+    NE = srs_est(agsrs$acres92[agsrs$region=="NE"], N = 220,  estimate = "mean", show.details = FALSE)$estimate,
+    S  = srs_est(agsrs$acres92[agsrs$region=="S"],  N = 1382, estimate = "mean", show.details = FALSE)$estimate,
+    W  = srs_est(agsrs$acres92[agsrs$region=="W"],  N = 422,  estimate = "mean", show.details = FALSE)$estimate
+))
+
+region_agsrs_srs |> format_est_gt("mean")
+```
+**Output Note:** Comparing the two tables, you can see the correct `domain_mean` Standard Errors are larger, appropriately penalizing us for the uncertainty in how many counties from each region randomly fell into our sample.
+
+## Estimating Domain Means with the teacher example
+
+### Importing Data and Calculating Contingency Table
+
+```{r teacher-load}
+teacher <- read.csv("data/college_teacher.csv")
+
+table(teacher[, 2:1])
+addmargins(table(teacher[, 2:1]), 2)
+# Proportions of students who want to become a teacher in two domains (female and male)
+prop.table(table(teacher[, 2:1]), margin = "gender")
+```
+
+### Estimating Domain Means
+
+```{r teacher-domain-est}
+Nh <- c(3000, 1000)
+n <- nrow(teacher)
+domain_teacher_est <- data.frame(rbind(
+    female = domain_est(subset(teacher, gender==1)$teacher, n=n, N=4000),
+    male   = domain_est(subset(teacher, gender==2)$teacher, n=n, N=4000)
+))
+
+domain_teacher_est |> format_est_gt("domain_mean")
+```
 
 
 ## Shinylive App Illustrating Ratio Estimation and Regression Estimation

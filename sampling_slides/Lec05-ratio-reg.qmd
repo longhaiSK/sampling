@@ -393,283 +393,6 @@ because $\hat B$ is not a least-squares estimate of $B$; however, it carries
 similar information about how much variance ratio estimation removes.
 :::
 
-# Post-Stratification
-
-## An Example
-
-Sometimes a unit's stratum is unknown until *after* sampling (e.g., gender
-before interviewing). We can still **poststratify**: take an SRS, sort units
-into strata afterward, and weight each by its *known* population share $N_h/N$.
-
-| Stratum | $N_h$ | $n_h$ | Want nurse | $\hat p_h$ |
-|:---|---:|---:|---:|---:|
-| Female | 5000 | 300 | 150 | 0.50 |
-| Male | 5000 | 100 | 10 | 0.10 |
-
-The sample has three times as many women as men, though the population is
-50/50. Ignoring this pulls
-$\hat p_{\text{SRS}} = \frac{160}{400} = (0.5)(0.75)+(0.1)(0.25) = 0.4$ toward
-the female (higher) rate. Weighting by the *known* population shares instead
-gives
-$$
-\hat p_{\text{post}} = \hat p_f\frac{N_f}{N} + \hat p_m\frac{N_m}{N}
- = (0.5)(0.5)+(0.1)(0.5) = 0.3 .
-$$
-
-## Post-Stratified Mean and Its Standard Error 
-
-With $H$ post-strata formed after an SRS of size $n$, contrast two weightings
-of the same stratum means $\bar y_h$, $\pi_h=N_h/N$:
-$$
-\hat{\bar y}_{\text{SRS}} = \sum_{h=1}^H \frac{n_h}{n}\,\bar y_h
-\qquad\text{vs.}\qquad
-\hat{\bar y}_{\text{post}} = \sum_{h=1}^H \pi_h\,\bar y_h .
-$$
-
-Since $n_h$ is random, the variance formula plugs in its expectation,
-$$
-n_h^{\text{post-strat}} := n\pi_h,
-$$
-$$
-\hat V(\hat{\bar y}_{\text{post}}) = \sum_{h=1}^H \Big(1-\frac{n_h^{\text{post-strat}}}{N_h}\Big)\pi_h^2\frac{s_h^2}{n_h^{\text{post-strat}}}
-$$
-
-Total: $\hat t_{\text{post}} = N\hat{\bar y}_{\text{post}}$,
-$\text{SE}(\hat t_{\text{post}}) = N\cdot\text{SE}(\hat{\bar y}_{\text{post}})$.
-
-## Predictive View: $\hat t_{\text{post}} = \sum_{i\in\mathcal U}\hat y_i$
-
-Every total estimator can be read as *predicting* each population unit's $y_i$
-and summing. Post-stratification predicts every unit in stratum $h$ by that
-stratum's sample mean, $\hat y_i=\bar y_h$ for $i\in\mathcal U_h$:
-$$
-\hat t_{\text{post}} = \sum_{i\in\mathcal U}\hat y_i = \sum_{h=1}^H N_h\,\bar y_h,
-\qquad
-\hat{\bar y}_{\text{post}} = \sum_{h=1}^H \pi_h\,\bar y_h .
-$$
-
-The naive SRS estimator instead predicts *every* unit by the pooled $\bar y$
-($\hat t_{\text{SRS}}=N\bar y$), so an over-represented stratum drags $\bar y$
-toward its own mean; post-stratification fixes this by predicting with the
-right stratum mean, weighted by the correct $N_h$.
-
-## Illustration of Post-Stratification
-
-:::: {.columns}
-
-::: {.column width="50%"}
-
-```{r}
-#| label: fig-poststrat-concept
-#| fig-cap: "Illustration of Benefits of Post-Stratification"
-#| fig-width: 6.5
-#| fig-height: 5
-#| out-width: "95%"
-set.seed(3268)
-Nh <- c(50, 20, 30, 40)      # population sizes per post-stratum
-mu_h <- c(1, 4, 7, 10)       # true stratum means, exaggerated and ascending
-labs <- c("A", "B", "C", "D")
-N <- sum(Nh)
-H <- length(Nh)
-n <- 25
-sdy <- 0.9
-
-# index plot: sequential index across the population, grouped contiguously by
-# stratum -- so each stratum's width on the x-axis is exactly its Nh
-y_pop <- unlist(lapply(1:H, function(h) mu_h[h] + rnorm(Nh[h], 0, sdy)))
-strat_id <- rep(1:H, Nh)
-boundaries <- cumsum(Nh)
-starts <- c(0, boundaries[-H])
-x_pop <- unlist(lapply(1:H, function(h) starts[h] + seq_len(Nh[h])))
-ybar_U <- mean(y_pop)                    # true population mean
-
-sel <- sample(N, n)                      # an ordinary SRS from the whole population
-nh <- tabulate(strat_id[sel], H)         # post-stratum sample sizes: random, not proportional
-ybar_h <- sapply(1:H, function(h) mean(y_pop[sel][strat_id[sel] == h]))
-
-ybar_naive <- mean(y_pop[sel])           # pooled sample mean, ignoring strata
-ybar_post <- sum(ybar_h * Nh / N)        # post-stratified estimate
-
-par(mar = c(3, 4, 0.5, 0.5))
-plot(x_pop, y_pop, pch = 19, col = "grey50", xlab = "", ylab = "y",
-     xlim = c(-12, N), ylim = c(-2, 13), xaxt = "n")
-
-abline(v = boundaries[-H], col = "grey70")           # separate the groups
-mid <- (starts + boundaries) / 2
-axis(1, at = mid, labels = labs, tick = FALSE)
-
-points(x_pop[sel], y_pop[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
-
-for (h in 1:H)                                       # sample mean of each post-stratum
-  segments(starts[h], ybar_h[h], boundaries[h], ybar_h[h], col = "firebrick", lwd = 3)
-
-abline(h = ybar_U, col = "black", lty = 3)
-abline(h = ybar_post, col = "firebrick", lty = 3)
-abline(h = ybar_naive, col = "darkgreen", lty = 3)
-
-points(-11, ybar_U, pch = 19, col = "black", cex = 2, xpd = NA)
-points(-11, ybar_post, pch = 19, col = "firebrick", cex = 1.6, xpd = NA)
-points(-11, ybar_naive, pch = 19, col = "darkgreen", cex = 1.6, xpd = NA)
-
-text(-10, ybar_U, expression(bar(y)[U]), col = "black", adj = c(0, -0.7), font = 2)
-text(-10, ybar_post, expression(hat(bar(y))[post]), col = "firebrick", adj = c(0, 1.4), font = 2)
-text(-10, ybar_naive, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), font = 2)
-```
-
-:::
-
-::: {.column width="50%"}
-
-* Grey: population, post-strata A–D (block width = $N_h$). Green: an ordinary
-  SRS of $n=25$; the realized $n_h=(5,5,6,9)$ do *not* match the population
-  shares $\pi_h=(.36,.14,.21,.29)$ — they never do, since $n_h$ is random.
-
-* Red segments: predictions $\hat y_i=\bar y_h$ per stratum, giving
-$$
-\hat{\bar y}_{\text{post}} = \sum_{h=1}^H \pi_h\,\bar y_h .
-$$
-
-
-:::
-
-::::
-
-This sample is light on A and heavy on D, so the naive $\bar y$ (green) is
-  pulled up; reweighting by the known $\pi_h$ undoes it and
-  $\hat{\bar y}_{\text{post}}$ (red) $\approx \bar y_{U}$ (black). It is
-  this reweighting, repeated over samples, that cuts the variance.
-
-## Example: Post-Stratification Spreadsheet
-
-Nurses example ($N=10{,}000$, $n=400$): $\hat p_h$ plays the role of $\bar y_h$,
-$s_h^2=\tfrac{n_h}{n_h-1}\hat p_h(1-\hat p_h)$ from the realized counts, and we
-set $n_h^{\text{post-strat}}=n\pi_h=200$ in each stratum, so every fpc is $1-n/N=0.96$:
-
-| Post-stratum | $N_h$ | $\pi_h$ | $n_h^{\text{post-strat}}$ | $\hat p_h$ | $s_h^2$ | $\pi_h\hat p_h$ | $\hat v_h$[^vhpost] |
-|:---|---:|---:|---:|---:|---:|---:|---:|
-| Female | 5000 | 0.5 | 200 | 0.500 | 0.2508 | 0.2500 | 0.000301 |
-| Male | 5000 | 0.5 | 200 | 0.100 | 0.0909 | 0.0500 | 0.000109 |
-| **Total** | **10000** | **1.0** | **400** | | | **0.3000** | **0.000410** |
-
-[^vhpost]: $\hat v_h = \big(1-\tfrac{n_h^{\text{post-strat}}}{N_h}\big)\pi_h^2\tfrac{s_h^2}{n_h^{\text{post-strat}}}$.
-Using the realized $n_h$ (300, 100) instead gives $\hat V=0.000419$ — nearly identical.
-
-## Example: Post-Stratification Results
-
-The post-stratified proportion matches the earlier calculation, now with a
-standard error:
-$$
-\hat p_{\text{post}} = \sum_{h} \pi_h\hat p_h = 0.300,
-\qquad
-\text{SE}(\hat p_{\text{post}}) = \sqrt{0.000410} = 0.0203,
-$$
-and an approximate 95% CI is
-$$
-0.300 \pm 1.96(0.0203) = [0.260,\ 0.340].
-$$
-
-Naively as an unstratified SRS: $\hat p_{\text{SRS}}=0.4$,
-$\text{SE}(\hat p_{\text{SRS}}) = \sqrt{\big(1-\tfrac{400}{10000}\big)\tfrac{(0.4)(0.6)}{399}} \approx 0.0240$.
-Post-stratification is both unbiased and more precise, since it removes the
-between-sex variability from the standard error.
-
-
-# Domain Analysis
-
-## Domain Analysis
-
-Suppose there are $D$ **domains** (subpopulations of interest determined only
-*after* sampling — e.g., men and women). Let $\mathcal U_d$ be the population
-units in domain $d$, and $\mathcal S_d$ the sampled units in domain $d$, with
-$N_d = |\mathcal U_d|$ and $n_d = |\mathcal S_d|$.
-
-We might want the mean salary for men and for women separately, but we don't
-know a person's gender before selecting them — we can't stratify by domain in
-advance. Instead we estimate each domain's mean/total after sampling, by
-splitting the sample by domain ID. **Domain mean estimation is a special case
-of ratio estimation.**
-
-## Domain Means Are Ratio Estimates
-
-Define
-$$
-x_i = \begin{cases}1 & i\in\mathcal U_d\\0 & i\notin\mathcal U_d\end{cases}
-\qquad
-u_i = y_ix_i = \begin{cases}y_i & i\in\mathcal U_d\\0 & i\notin\mathcal U_d\end{cases}
-$$
-
-Then $t_x=N_d$, $\bar x_U = N_d/N$, $\bar y_{U_d} = t_u/t_x = B$, $\bar x = n_d/n$, and
-$$
-\bar y_d = \hat B = \frac{\bar u}{\bar x} = \frac{\hat t_u}{\hat t_x}
- = \frac{\sum_{i\in\mathcal S_d} y_i}{n_d}
-$$
-
-Although $\bar y_d$ *looks* like an ordinary sample mean, $n_d$ itself is
-random — a different SRS would very likely give a different $n_d$ — which is
-exactly why this is a ratio estimator, not a simple mean.
-
-## Standard Error of a Domain Mean
-
-Applying the formula for $\hat V(\hat B)$ with $x_i,u_i$ as defined above
-gives
-$$
-\text{SE}(\bar y_d) = \sqrt{\Big(1-\frac nN\Big)\frac{n}{n_d^2}\cdot\frac{(n_d-1)s_{yd}^2}{n-1}}
- \approx \sqrt{\Big(1-\frac nN\Big)\frac{s_{yd}^2}{n_d}},
-$$
-$s_{yd}^2$ being the sample variance of the $y_i$'s within domain $d$.
-
-This is **not** the same as naively applying SRS *within* domain $d$, as if
-$n_d$ were fixed — that would use $\big(1-\tfrac{n_d}{N_d}\big)$ in place of
-$\big(1-\tfrac nN\big)$. Only the fpc differs: **overall** rate (correct,
-since $n_d$ is random) vs. **domain** rate (wrong); they agree only when
-$n_d/N_d\approx n/N$.
-
-## Estimating a Domain Total
-
-- If $N_d$ is **known**: $\hat t_{yd} = \bar y_d \times N_d$, with
-  $\text{SE}(\hat t_{yd}) = \text{SE}(\bar y_d)\times N_d$.
-- If $N_d$ is **unknown**: estimate it first, $\hat N_d = N\cdot n_d/n$, and use
-  $\hat t_{yd} = \bar y_d \times \hat N_d = N\bar u$, with
-  $$
-  \text{SE}(\hat t_{yd}) = N\,\text{SE}(\bar u) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_u^2}{n}}
-  $$
-
-## Example: Domain Means by Census Region 
-
-Split the SRS of $n=300$ counties (`agsrs.csv`) by region; each $N_d$ is known
-from the full Census (`agpop.csv`). The **naive** column applies ordinary SRS
-estimation *within* each region, as if its $n_d$ had been fixed in advance:
-
-```{r}
-#| label: tbl-domain-agsrs
-#| message: false
-library(gt)
-agsrs <- read.csv("data/agsrs.csv")
-n <- nrow(agsrs); N <- 3078
-Nd <- c(NE = 220, NC = 1054, S = 1382, W = 422)
-region_names <- c(NE = "Northeast", NC = "North Central", S = "South", W = "West")
-
-domain_tab <- do.call(rbind, lapply(names(region_names), function(r) {
-  y <- agsrs$acres92[agsrs$region == r]
-  nd <- length(y); ybar <- mean(y); s <- sd(y)
-  se_domain <- sqrt((1 - n / N) * s^2 / nd)
-  se_naive  <- sqrt((1 - nd / Nd[[r]]) * s^2 / nd)
-  data.frame(Region = region_names[[r]], Nd = Nd[[r]], nd = nd,
-             ybar = ybar, SE_domain = se_domain, SE_naive = se_naive)
-}))
-
-gt(domain_tab, rowname_col = "Region") |>
-  fmt_number(columns = c(ybar, SE_domain, SE_naive), decimals = 1) |>
-  cols_label(Nd = md("$N_d$"), nd = md("$n_d$"), ybar = md("$\\bar y_d$"),
-             SE_domain = md("$\\text{SE}(\\bar y_d)$ correct"),
-             SE_naive  = md("SE naive SRS"))
-```
-
-The two SEs differ only in the fpc: naive is bigger where $d$ happened to be
-**under**-sampled ($n_d/N_d<n/N$: NE, NC) and smaller where **over**-sampled
-($n_d/N_d>n/N$: S, W). The correct formula ignores this sampling luck and
-always uses the overall rate $n/N$.
-
 # Regression Estimation
 
 ## Linear Model
@@ -870,6 +593,407 @@ Let $x_i$ = photo count and $y_i$ = field count on plot $i$. Fitting
 $\hat B = \bar y/\bar x$ on the subsample of plots with both counts, we can
 correct the total photo count of the *entire* surveyed area,
 $\hat t_{yr} = \hat B\, t_x$, for the systematic undercounting bias.
+
+# Post-Stratification
+
+## An Example
+
+Sometimes a unit's stratum is unknown until *after* sampling (e.g., gender
+before interviewing). We can still **poststratify**: take an SRS, sort units
+into strata afterward, and weight each by its *known* population share $N_h/N$.
+
+| Stratum | $N_h$ | $n_h$ | Want nurse | $\hat p_h$ |
+|:---|---:|---:|---:|---:|
+| Female | 5000 | 300 | 150 | 0.50 |
+| Male | 5000 | 100 | 10 | 0.10 |
+
+The sample has three times as many women as men, though the population is
+50/50. Ignoring this pulls
+$\hat p_{\text{SRS}} = \frac{160}{400} = (0.5)(0.75)+(0.1)(0.25) = 0.4$ toward
+the female (higher) rate. Weighting by the *known* population shares instead
+gives
+$$
+\hat p_{\text{post}} = \hat p_f\frac{N_f}{N} + \hat p_m\frac{N_m}{N}
+ = (0.5)(0.5)+(0.1)(0.5) = 0.3 .
+$$
+
+## Predictive View: $\hat t_{\text{post}} = \sum_{i\in\mathcal U}\hat y_i$
+
+Every total estimator can be read as *predicting* each population unit's $y_i$
+and summing. Post-stratification predicts every unit in stratum $h$ by that
+stratum's sample mean, $\hat y_i=\bar y_h$ for $i\in\mathcal U_h$:
+$$
+\hat t_{\text{post}} = \sum_{i\in\mathcal U}\hat y_i = \sum_{h=1}^H N_h\,\bar y_h,
+\qquad
+\hat{\bar y}_{\text{post}} = \sum_{h=1}^H \pi_h\,\bar y_h .
+$$
+
+The naive SRS estimator instead predicts *every* unit by the pooled $\bar y$
+($\hat t_{\text{SRS}}=N\bar y$), so an over-represented stratum drags $\bar y$
+toward its own mean; post-stratification fixes this by predicting with the
+right stratum mean, weighted by the correct $N_h$.
+
+## Illustration of Post-Stratification
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r}
+#| label: fig-poststrat-concept
+#| fig-cap: "Illustration of Benefits of Post-Stratification"
+#| fig-width: 6.5
+#| fig-height: 5
+#| out-width: "95%"
+set.seed(3268)
+Nh <- c(50, 20, 30, 40)      # population sizes per post-stratum
+mu_h <- c(1, 4, 7, 10)       # true stratum means, exaggerated and ascending
+labs <- c("A", "B", "C", "D")
+N <- sum(Nh)
+H <- length(Nh)
+n <- 25
+sdy <- 0.9
+
+# index plot: sequential index across the population, grouped contiguously by
+# stratum -- so each stratum's width on the x-axis is exactly its Nh
+y_pop <- unlist(lapply(1:H, function(h) mu_h[h] + rnorm(Nh[h], 0, sdy)))
+strat_id <- rep(1:H, Nh)
+boundaries <- cumsum(Nh)
+starts <- c(0, boundaries[-H])
+x_pop <- unlist(lapply(1:H, function(h) starts[h] + seq_len(Nh[h])))
+ybar_U <- mean(y_pop)                    # true population mean
+
+sel <- sample(N, n)                      # an ordinary SRS from the whole population
+nh <- tabulate(strat_id[sel], H)         # post-stratum sample sizes: random, not proportional
+ybar_h <- sapply(1:H, function(h) mean(y_pop[sel][strat_id[sel] == h]))
+
+ybar_naive <- mean(y_pop[sel])           # pooled sample mean, ignoring strata
+ybar_post <- sum(ybar_h * Nh / N)        # post-stratified estimate
+
+par(mar = c(3, 4, 0.5, 0.5))
+plot(x_pop, y_pop, pch = 19, col = "grey50", xlab = "", ylab = "y",
+     xlim = c(-12, N), ylim = c(-2, 13), xaxt = "n")
+
+abline(v = boundaries[-H], col = "grey70")           # separate the groups
+mid <- (starts + boundaries) / 2
+axis(1, at = mid, labels = labs, tick = FALSE)
+
+points(x_pop[sel], y_pop[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
+
+for (h in 1:H)                                       # sample mean of each post-stratum
+  segments(starts[h], ybar_h[h], boundaries[h], ybar_h[h], col = "firebrick", lwd = 3)
+
+abline(h = ybar_U, col = "black", lty = 3)
+abline(h = ybar_post, col = "firebrick", lty = 3)
+abline(h = ybar_naive, col = "darkgreen", lty = 3)
+
+points(-11, ybar_U, pch = 19, col = "black", cex = 2, xpd = NA)
+points(-11, ybar_post, pch = 19, col = "firebrick", cex = 1.6, xpd = NA)
+points(-11, ybar_naive, pch = 19, col = "darkgreen", cex = 1.6, xpd = NA)
+
+text(-10, ybar_U, expression(bar(y)[U]), col = "black", adj = c(0, -0.7), font = 2)
+text(-10, ybar_post, expression(hat(bar(y))[post]), col = "firebrick", adj = c(0, 1.4), font = 2)
+text(-10, ybar_naive, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), font = 2)
+```
+
+:::
+
+::: {.column width="50%"}
+
+* Grey: population, post-strata A–D (block width = $N_h$). Green: an ordinary
+  SRS of $n=25$; the realized $n_h=(5,5,6,9)$ do *not* match the population
+  shares $\pi_h=(.36,.14,.21,.29)$ — they never do, since $n_h$ is random.
+
+* Red segments: predictions $\hat y_i=\bar y_h$ per stratum, giving
+$$
+\hat{\bar y}_{\text{post}} = \sum_{h=1}^H \pi_h\,\bar y_h .
+$$
+
+
+:::
+
+::::
+
+This sample is light on A and heavy on D, so the naive $\bar y$ (green) is
+  pulled up; reweighting by the known $\pi_h$ undoes it and
+  $\hat{\bar y}_{\text{post}}$ (red) $\approx \bar y_{U}$ (black). It is
+  this reweighting, repeated over samples, that cuts the variance.
+
+## Post-Stratified Mean
+
+With $H$ post-strata formed after an SRS of size $n$, contrast two weightings
+of the same stratum means $\bar y_h$, $\pi_h=N_h/N$:
+$$
+\hat{\bar y}_{\text{SRS}} = \sum_{h=1}^H \frac{n_h}{n}\,\bar y_h
+\qquad\text{vs.}\qquad
+\hat{\bar y}_{\text{post}} = \sum_{h=1}^H \pi_h\,\bar y_h .
+$$
+
+The post-stratified estimate of the total is
+$\hat t_{\text{post}} = N\hat{\bar y}_{\text{post}}$.
+
+## Standard Error of the Post-Stratified Mean
+
+Since $n_h$ is random, the variance formula plugs in its expectation,
+$$
+n_h^{\text{post-strat}} := n\pi_h,
+$$
+$$
+\hat V(\hat{\bar y}_{\text{post}}) = \sum_{h=1}^H \Big(1-\frac{n_h^{\text{post-strat}}}{N_h}\Big)\pi_h^2\frac{s_h^2}{n_h^{\text{post-strat}}}
+$$
+Because $n_h^{\text{post-strat}}/N_h = n\pi_h/N_h = n/N$ for every $h$, the
+finite population correction is the same in all post-strata, and the formula
+simplifies to
+$$
+\hat V(\hat{\bar y}_{\text{post}}) = \Big(1-\frac{n}{N}\Big)\frac{1}{n}\sum_{h=1}^H \pi_h\, s_h^2 ,
+$$
+the SRS variance with $s^2$ replaced by the weighted average of the within-stratum variances.
+
+For the total, $\text{SE}(\hat t_{\text{post}}) = N\cdot\text{SE}(\hat{\bar y}_{\text{post}})$.
+
+## Post-Stratification as a Regression Estimator
+
+Take the $H$ group indicators as auxiliary variables and fit **without an
+intercept**,
+$$
+y_i = \sum_{h=1}^H B_h\,x_{ih} + d_i, \qquad x_{ih}=\mathbf 1\{i\in\text{group }h\}.
+$$
+
+- The least squares coefficients are the group means, $\hat B_h=\bar y_h$.
+- The population means of the indicators are the known shares,
+  $\bar x_{U,h}=N_h/N=\pi_h$.
+
+So the regression estimator is exactly the post-stratified mean,
+$$
+\hat{\bar y}_{\text{reg}} = \sum_{h=1}^H \hat B_h\,\bar x_{U,h}
+ = \sum_{h=1}^H \pi_h\,\bar y_h = \hat{\bar y}_{\text{post}} .
+$$
+
+## SE: Post-Stratification Is a Special Case
+
+The residuals are $e_i=y_i-\bar y_{h(i)}$ and $p=H$, so
+$s_e^2=\sum_{h}\frac{n_h-1}{n-H}\,s_h^2$. Dropping the $-1$ and $-H$ (small
+relative to $n_h$ and $n$), then using $n_h/n\approx\pi_h$:
+$$
+\begin{aligned}
+\hat V(\hat{\bar y}_{\text{reg}})
+&= \Big(1-\frac nN\Big)\frac1n\sum_{h=1}^H \frac{n_h-1}{n-H}\,s_h^2 \\
+&\approx \Big(1-\frac nN\Big)\frac1n\sum_{h=1}^H \frac{n_h}{n}\,s_h^2 \\
+&\approx \Big(1-\frac nN\Big)\frac1n\sum_{h=1}^H \pi_h\,s_h^2
+ = \hat V(\hat{\bar y}_{\text{post}}).
+\end{aligned}
+$$
+
+So the regression SE reduces to the post-stratified SE: both are weighted
+averages of the same $s_h^2$, with the *sample* proportions in the first and the
+*known* population proportions $\pi_h$ in the second.
+
+## Example: Post-Stratification Spreadsheet (Working Sample Sizes)
+
+Nurses example ($N=10{,}000$, $n=400$): $\hat p_h$ plays the role of $\bar y_h$,
+$s_h^2=\tfrac{n_h}{n_h-1}\hat p_h(1-\hat p_h)$ from the realized counts, and we
+use the **working sample sizes** $n_h^{\text{post-strat}}=n\pi_h=200$ in each stratum
+(proportional to size allocation), so every fpc is $1-n/N=0.96$:
+
+| Post-stratum | $N_h$ | $\pi_h$ | $n_h^{\text{post-strat}}$ | $\hat p_h$ | $s_h^2$ | $\pi_h\hat p_h$ | $\hat v_h$ |
+|:---|---:|---:|---:|---:|---:|---:|---:|
+| Female | 5000 | 0.5 | 200 | 0.500 | 0.2508 | 0.2500 | 0.000301 |
+| Male | 5000 | 0.5 | 200 | 0.100 | 0.0909 | 0.0500 | 0.000109 |
+| **Total** | **10000** | **1.0** | **400** | | | **0.3000** | **0.000410** |
+
+## Example: Short-Cut Formula for the Variance
+
+Since $n_h^{\text{post-strat}}/N_h=n/N$ in every stratum, skip the working
+sample sizes and compute $\sum_h\pi_hs_h^2$ directly:
+
+| Post-stratum | $\pi_h$ | $s_h^2$ | $\pi_h s_h^2$ |
+|:---|---:|---:|---:|
+| Female | 0.5 | 0.2508 | 0.1254 |
+| Male | 0.5 | 0.0909 | 0.0455 |
+| **Total** | **1.0** | | **0.1709** |
+
+$$
+\hat V(\hat p_{\text{post}})
+=\Big(1-\frac nN\Big)\frac1n\sum_h\pi_hs_h^2
+=\frac{0.96}{400}\,(0.1709)=0.000410,
+$$
+the same as the sum of the $\hat v_h$ in the previous spreadsheet.
+
+## Example: Post-Stratification Results
+
+The post-stratified proportion matches the earlier calculation, now with a
+standard error:
+$$
+\hat p_{\text{post}} = \sum_{h} \pi_h\hat p_h = 0.300,
+\qquad
+\text{SE}(\hat p_{\text{post}}) = \sqrt{0.000410} = 0.0203,
+$$
+and an approximate 95% CI is
+$$
+0.300 \pm 1.96(0.0203) = [0.260,\ 0.340].
+$$
+
+Naively as an unstratified SRS: $\hat p_{\text{SRS}}=0.4$,
+$\text{SE}(\hat p_{\text{SRS}}) = \sqrt{\big(1-\tfrac{400}{10000}\big)\tfrac{(0.4)(0.6)}{399}} \approx 0.0240$.
+Post-stratification is both unbiased and more precise, since it removes the
+between-sex variability from the standard error.
+
+## Example: Post-Stratifying Farm Acreage by Region
+
+The SRS of $n=300$ counties (`agsrs.csv`, acres in thousands) is sorted
+afterward into the four census regions, whose sizes are known from the Census
+($N=3078$). The sample shares differ from the population shares:
+
+```{r}
+#| label: tbl-poststrat-acreage
+#| message: false
+library(gt)
+agsrs <- read.csv("data/agsrs.csv")
+agsrs$y <- agsrs$acres92 / 1000
+Nh <- c(NE = 220, NC = 1054, S = 1382, W = 422)
+N <- sum(Nh); n <- nrow(agsrs); pih <- Nh / N
+nh    <- as.integer(table(agsrs$region)[names(Nh)])
+ybarh <- tapply(agsrs$y, agsrs$region, mean)[names(Nh)]
+s2h   <- tapply(agsrs$y, agsrs$region, var)[names(Nh)]
+
+ps_tab <- data.frame(Region = c("Northeast", "North Central", "South", "West"),
+                     Nh = Nh, pih = pih, nh = nh, nh_post = n * pih,
+                     ybarh = ybarh, s2h = s2h, pis2 = pih * s2h)
+gt(ps_tab, rowname_col = "Region") |>
+  fmt_number(columns = c(pih), decimals = 3) |>
+  fmt_number(columns = c(nh_post), decimals = 1) |>
+  fmt_number(columns = c(ybarh, s2h, pis2), decimals = 0, use_seps = TRUE) |>
+  fmt_number(columns = c(Nh, nh), decimals = 0) |>
+  cols_label(Nh = md("$N_h$"), pih = md("$\\pi_h$"), nh = md("$n_h$"),
+             nh_post = md("$n\\pi_h$"), ybarh = md("$\\bar y_h$"),
+             s2h = md("$s_h^2$"), pis2 = md("$\\pi_h s_h^2$")) |>
+  tab_options(table.font.size = "70%")
+```
+
+## Example: Post-Stratified Acreage Results
+
+```{r}
+ybar_post <- sum(pih * ybarh)
+sum_pis2  <- sum(pih * s2h)
+V_post    <- (1 - n / N) / n * sum_pis2
+se_post   <- sqrt(V_post)
+ybar_srs  <- mean(agsrs$y)
+se_srs    <- sqrt((1 - n / N) * var(agsrs$y) / n)
+```
+
+Using the short-cut formula, with $\sum_h\pi_hs_h^2=$ `r format(round(sum_pis2), big.mark = ",")`:
+$$
+\hat{\bar y}_{\text{post}}=\sum_h\pi_h\bar y_h=`r round(ybar_post, 1)`,
+\qquad
+\hat V=\Big(1-\frac{300}{3078}\Big)\frac{1}{300}\,(`r round(sum_pis2)`)
+=`r round(V_post, 1)` ,
+$$
+so $\text{SE}(\hat{\bar y}_{\text{post}})=`r round(se_post, 2)`$ thousand acres, and an
+approximate 95% CI is $`r round(ybar_post, 1)` \pm 1.96(`r round(se_post, 2)`)
+=[`r round(ybar_post - 1.96 * se_post, 1)`,\ `r round(ybar_post + 1.96 * se_post, 1)`]$.
+
+Ignoring the regions, the SRS estimate is $\bar y=`r round(ybar_srs, 1)`$ with
+$\text{SE}=`r round(se_srs, 2)`$. Post-stratifying by region lowers the SE
+because the regions differ strongly in mean acreage
+(`r round(min(ybarh))` to `r round(max(ybarh))` thousand acres), which removes the
+between-region variability.
+
+
+# Domain Analysis
+
+## Domain Analysis
+
+Suppose there are $D$ **domains** (subpopulations of interest determined only
+*after* sampling — e.g., men and women). Let $\mathcal U_d$ be the population
+units in domain $d$, and $\mathcal S_d$ the sampled units in domain $d$, with
+$N_d = |\mathcal U_d|$ and $n_d = |\mathcal S_d|$.
+
+We might want the mean salary for men and for women separately, but we don't
+know a person's gender before selecting them — we can't stratify by domain in
+advance. Instead we estimate each domain's mean/total after sampling, by
+splitting the sample by domain ID. **Domain mean estimation is a special case
+of ratio estimation.**
+
+## Domain Means Are Ratio Estimates
+
+Define
+$$
+x_i = \begin{cases}1 & i\in\mathcal U_d\\0 & i\notin\mathcal U_d\end{cases}
+\qquad
+u_i = y_ix_i = \begin{cases}y_i & i\in\mathcal U_d\\0 & i\notin\mathcal U_d\end{cases}
+$$
+
+Then $t_x=N_d$, $\bar x_U = N_d/N$, $\bar y_{U_d} = t_u/t_x = B$, $\bar x = n_d/n$, and
+$$
+\bar y_d = \hat B = \frac{\bar u}{\bar x} = \frac{\hat t_u}{\hat t_x}
+ = \frac{\sum_{i\in\mathcal S_d} y_i}{n_d}
+$$
+
+Although $\bar y_d$ *looks* like an ordinary sample mean, $n_d$ itself is
+random — a different SRS would very likely give a different $n_d$ — which is
+exactly why this is a ratio estimator, not a simple mean.
+
+## Standard Error of a Domain Mean
+
+Applying the formula for $\hat V(\hat B)$ with $x_i,u_i$ as defined above
+gives
+$$
+\text{SE}(\bar y_d) = \sqrt{\Big(1-\frac nN\Big)\frac{n}{n_d^2}\cdot\frac{(n_d-1)s_{yd}^2}{n-1}}
+ \approx \sqrt{\Big(1-\frac nN\Big)\frac{s_{yd}^2}{n_d}},
+$$
+$s_{yd}^2$ being the sample variance of the $y_i$'s within domain $d$.
+
+This is **not** the same as naively applying SRS *within* domain $d$, as if
+$n_d$ were fixed — that would use $\big(1-\tfrac{n_d}{N_d}\big)$ in place of
+$\big(1-\tfrac nN\big)$. Only the fpc differs: **overall** rate (correct,
+since $n_d$ is random) vs. **domain** rate (wrong); they agree only when
+$n_d/N_d\approx n/N$.
+
+## Estimating a Domain Total
+
+- If $N_d$ is **known**: $\hat t_{yd} = \bar y_d \times N_d$, with
+  $\text{SE}(\hat t_{yd}) = \text{SE}(\bar y_d)\times N_d$.
+- If $N_d$ is **unknown**: estimate it first, $\hat N_d = N\cdot n_d/n$, and use
+  $\hat t_{yd} = \bar y_d \times \hat N_d = N\bar u$, with
+  $$
+  \text{SE}(\hat t_{yd}) = N\,\text{SE}(\bar u) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_u^2}{n}}
+  $$
+
+## Example: Domain Means by Census Region 
+
+Split the SRS of $n=300$ counties (`agsrs.csv`) by region; each $N_d$ is known
+from the full Census (`agpop.csv`). The **naive** column applies ordinary SRS
+estimation *within* each region, as if its $n_d$ had been fixed in advance:
+
+```{r}
+#| label: tbl-domain-agsrs
+#| message: false
+library(gt)
+agsrs <- read.csv("data/agsrs.csv")
+n <- nrow(agsrs); N <- 3078
+Nd <- c(NE = 220, NC = 1054, S = 1382, W = 422)
+region_names <- c(NE = "Northeast", NC = "North Central", S = "South", W = "West")
+
+domain_tab <- do.call(rbind, lapply(names(region_names), function(r) {
+  y <- agsrs$acres92[agsrs$region == r]
+  nd <- length(y); ybar <- mean(y); s <- sd(y)
+  se_domain <- sqrt((1 - n / N) * s^2 / nd)
+  se_naive  <- sqrt((1 - nd / Nd[[r]]) * s^2 / nd)
+  data.frame(Region = region_names[[r]], Nd = Nd[[r]], nd = nd,
+             ybar = ybar, SE_domain = se_domain, SE_naive = se_naive)
+}))
+
+gt(domain_tab, rowname_col = "Region") |>
+  fmt_number(columns = c(ybar, SE_domain, SE_naive), decimals = 1) |>
+  cols_label(Nd = md("$N_d$"), nd = md("$n_d$"), ybar = md("$\\bar y_d$"),
+             SE_domain = md("$\\text{SE}(\\bar y_d)$ correct"),
+             SE_naive  = md("SE naive SRS"))
+```
+
+The two SEs differ only in the fpc: naive is bigger where $d$ happened to be
+**under**-sampled ($n_d/N_d<n/N$: NE, NC) and smaller where **over**-sampled
+($n_d/N_d>n/N$: S, W). The correct formula ignores this sampling luck and
+always uses the overall rate $n/N$.
 
 # Predictions with Machine Learning Models
 
