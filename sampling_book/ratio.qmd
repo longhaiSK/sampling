@@ -1,143 +1,18 @@
-# Ratio and Regression Estimation
-
-## Ratio, Regression, Post-stratification, and Domain Estimation {#sec-ratio-formulas}
-
-When auxiliary information (a variable $x$) is highly correlated with our target variable of interest ($y$), we can use **Ratio** or **Regression** estimation to improve precision without increasing the sample size. We can also use auxiliary population structures to adjust our estimates after the fact via **Post-stratification**, or estimate means for specific sub-populations (**Domains**).
-
-Throughout, $(x_i, y_i)$, $i = 1, \ldots, n$, is an SRS of size $n$ from a population of
-$N$ units, and $\overline{x}_U$ (equivalently $t_x = N\overline{x}_U$) is known.
-
-### 1. Ratio Estimation {-}
-If the relationship between $y$ and $x$ passes through the origin, we estimate the ratio $B = \overline{y}_U/\overline{x}_U$ and use it to adjust the mean:
-$$
-\hat{B} = \frac{\overline{y}}{\overline{x}} = \frac{\sum_{i=1}^n y_i}{\sum_{i=1}^n x_i}, \qquad
-\overline{y}_r = \hat{B}\,\overline{x}_U, \qquad
-\hat{t}_r = \hat{B}\,t_x = N\overline{y}_r .
-$$
-Its error is driven by the residuals $e_i = y_i - \hat{B}x_i$ from the line through the origin:
-$$
-\hat{V}(\hat{B}) = \frac{1}{\overline{x}^2}\left(1 - \frac{n}{N}\right)\frac{s_e^2}{n}, \qquad
-\hat{V}(\overline{y}_r) = \overline{x}_U^2\,\hat{V}(\hat{B}) = \left(\frac{\overline{x}_U}{\overline{x}}\right)^2 \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}, \qquad
-s_e^2 = \frac{1}{n-1}\sum_{i=1}^n \left(y_i - \hat{B}x_i\right)^2 ,
-$$
-with $\hat{V}(\hat{t}_r) = N^2\hat{V}(\overline{y}_r)$ and $95\%$ intervals using $t_{0.975,\,n-1}$.
-The ratio estimator is slightly biased, but the bias is negligible when $n$ is large.
-
-$e_i$ is the vertical distance from the point $(x_i, y_i)$ to the fitted line through the
-origin, $y = \hat{B}x$. No centring appears in $s_e^2$ because $\hat{B} = \overline{y}/\overline{x}$
-forces $\sum_i e_i = \sum_i y_i - \hat{B}\sum_i x_i = 0$ exactly, so the residuals already
-average to zero; the divisor is $n-1$ for the one parameter $\hat{B}$ estimated from the
-sample. Compare the variance with the SRS one, $\left(1-\frac{n}{N}\right)s_y^2/n$: ratio
-estimation replaces the scatter of $y$ about $\overline{y}$ by the scatter about the line.
-That is the whole source of the gain --- and the whole risk, since an $x$ that predicts $y$
-poorly gives $s_e^2 > s_y^2$ and a *less* precise estimate than the plain sample mean.
-
-### 2. Regression Estimation {-}
-If the relationship does not pass through the origin, a linear regression is more appropriate. With the OLS coefficients
-$$
-\hat{B}_1 = \frac{\sum_{i=1}^n (x_i - \overline{x})(y_i - \overline{y})}{\sum_{i=1}^n (x_i - \overline{x})^2}, \qquad
-\hat{B}_0 = \overline{y} - \hat{B}_1\overline{x},
-$$
-the regression estimator of the mean is the fitted line evaluated at $\overline{x}_U$:
-$$
-\overline{y}_{reg} = \hat{B}_0 + \hat{B}_1 \overline{x}_U = \overline{y} + \hat{B}_1\left(\overline{x}_U - \overline{x}\right), \qquad
-\hat{t}_{reg} = N\overline{y}_{reg} .
-$$
-Its estimated variance uses the residual mean square of the regression:
-$$
-\hat{V}(\overline{y}_{reg}) = \left(1 - \frac{n}{N}\right) \frac{s_e^2}{n}, \qquad
-s_e^2 = \frac{1}{n-2}\sum_{i=1}^n \left(y_i - \hat{B}_0 - \hat{B}_1 x_i\right)^2 ,
-$$
-with $\hat{V}(\hat{t}_{reg}) = N^2\hat{V}(\overline{y}_{reg})$ and $95\%$ intervals using $t_{0.975,\,n-2}$.
-The divisor is now $n-2$, since both $\hat{B}_0$ and $\hat{B}_1$ are estimated. For the same
-data $\sum_i e_i^2$ can only be smaller here than under the ratio fit --- the ratio line is
-the special case $\hat{B}_0 = 0$ --- so the regression estimator is the safer of the two
-whenever the relationship misses the origin, at the cost of one degree of freedom. Note also
-that the factor $(\overline{x}_U/\overline{x})^2$ is absent: the fitted line is evaluated at
-$\overline{x}_U$ directly, so no correction for $\overline{x} \neq \overline{x}_U$ is needed.
-
-### 3. Post-stratification {-}
-If we know the true population sizes $N_h$ of $H$ groups (post-strata), but used a Simple Random Sample, we can post-stratify to reduce variance.
-We weight the group sample means by the known $\pi_h = N_h/N$, as in stratified sampling:
-$$
-\overline{y}_{post} = \sum_{h=1}^H \pi_h\,\overline{y}_h .
-$$
-The observed group sizes $n_h$ are random, so for the variance we substitute their expected
-values under SRS, the proportional sample sizes
-$$
-n_h^{post} = n\,\frac{N_h}{N} = n\pi_h ,
-$$
-into the stratified variance formula. Every group then has sampling fraction $n/N$, and the variance becomes
-$$
-\hat{V}(\overline{y}_{post}) = \sum_{h=1}^H \pi_h^2\left(1 - \frac{n_h^{post}}{N_h}\right)\frac{s_h^2}{n_h^{post}}
-= \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h s_h^2 ,
-$$
-the variance of proportional stratified sampling. With $\hat{t}_{post} = N\overline{y}_{post}$,
-$\hat{V}(\hat{t}_{post}) = N^2\hat{V}(\overline{y}_{post})$.
-Here $n_h$, $\overline{y}_h$ and $s_h^2$ are the count, mean and variance of the units the
-sample happened to place in group $h$, so every group needs $n_h \geq 2$ for $s_h^2$ to exist.
-Substituting $n_h^{post}$ treats the $n_h$ as fixed at $n\pi_h$; carrying their randomness adds
-a second-order term $\frac{1}{n^2}\sum_h (1-\pi_h)s_h^2$, negligible unless some $n_h$ are small.
-
-### Post-stratification Viewed as a Special Regression Estimation {-}
-
-Post-stratification is not a separate technique: it is the regression estimator of Section 2
-with the **group indicators** as the auxiliary variables. Take the $H$ dummies
-$x_{ih} = \mathbf{1}\{i \in \text{group } h\}$ and fit without an intercept. Then
-
-*   the fitted coefficients are the group means, $\hat{B}_h = \overline{y}_h$;
-*   the population means of those dummies are the known weights, $\overline{x}_{U,h} = N_h/N = \pi_h$;
-
-so the regression estimator *is* the post-stratified one,
-$$
-\overline{y}_{reg} = \sum_h \hat{B}_h\,\overline{x}_{U,h} = \sum_h \pi_h \overline{y}_h = \overline{y}_{post} .
-$$
-
-Its residuals are each unit's deviation from its own group mean, $e_i = y_i - \overline{y}_{h(i)}$,
-and the general variance $\left(1-\frac{n}{N}\right)s_e^2/n$ applies with $p = H$ fitted parameters:
-$$
-s_e^2 = \frac{1}{n-H}\sum_h \sum_{i \in h} \left(y_i - \overline{y}_h\right)^2
-      = \frac{1}{n-H}\sum_h (n_h - 1)\,s_h^2 .
-$$
-
-This and the post-stratification variance are the *same* weighted average of the *same*
-$s_h^2$; only the weights differ,
-$$
-\underbrace{\frac{n_h-1}{n-H}}_{\text{sample proportions}}
-\qquad \text{versus} \qquad
-\underbrace{\pi_h = \frac{N_h}{N}}_{\text{population proportions}} ,
-$$
-so the substitution $n_h \to n\pi_h$ above is simply: *pool the residuals with the weights we
-know, not with the ones the sample happened to deliver.* It is the same reasoning that puts
-$\overline{x}_U$, rather than $\overline{x}$, in the ratio estimator.
-
-Seen this way, the estimators above are one estimator with different auxiliary variables, and
-$s_e^2 = \frac{1}{n-p}\sum_i e_i^2$ throughout, where $p$ is the number of fitted parameters:
-
-| Estimator | Auxiliary variables | Residual $e_i$ | $p$ |
-|:--|:--|:--|:-:|
-| Ratio | one $x$, line forced through the origin | $y_i - \hat{B}x_i$ | 1 |
-| Regression | intercept and $x$ | $y_i - \hat{B}_0 - \hat{B}_1 x_i$ | 2 |
-| Post-stratification | $H$ group indicators | $y_i - \overline{y}_h$ | $H$ |
-
-Domain estimation stands slightly apart: there the divisor is the random $n_d$ rather than the
-full $n$, because only the units falling in the domain carry information about it.
-
+---
+format:
+  custombook-html:
+    code-fold: true
 ---
 
-### 4. Domain Estimation {-}
-To estimate the mean of a subgroup (domain $d$) when the domain sample size $n_d$ is a random variable, use the $n_d$ sampled units that fall in the domain:
-$$
-\overline{y}_d = \frac{1}{n_d} \sum_{i \in S_d} y_i, \qquad
-\hat{V}(\overline{y}_d) = \left(1 - \frac{n}{N}\right) \frac{s_d^2}{n_d}, \qquad
-s_d^2 = \frac{1}{n_d - 1}\sum_{i \in S_d}\left(y_i - \overline{y}_d\right)^2 ,
-$$
-where $S_d$ is the set of sampled units in domain $d$, $n$ is the overall sample size, and
-$N$ is the population size. $95\%$ intervals use $t_{0.975,\,n_d-1}$. The fpc uses the overall
-sampling fraction $n/N$, because the domain's population size $N_d$ is usually unknown.
-$\overline{y}_d$ is in fact a ratio estimator, $\sum_{i=1}^n u_i/\sum_{i=1}^n x_i$ with
-$x_i = 1$ if unit $i$ is in the domain and $u_i = x_i y_i$.
+# Ratio and Regression Estimation
 
+## Introduction {#sec-ratio-formulas}
+
+When auxiliary information (a variable $x$) is highly correlated with our target variable of interest ($y$), we can use **ratio** or **regression** estimation to improve precision without increasing the sample size. We can also use auxiliary population structures to adjust our estimates after the fact via **post-stratification**, or estimate means for specific sub-populations (**domains**).
+
+Throughout, $(x_i, y_i)$, $i = 1, \ldots, n$, is an SRS of size $n$ from a population of $N$ units, and $\bar x_U$ (equivalently $t_x = N\bar x_U$) is known. Each topic below has the same layout: a *theory* part that states the estimator, explains where it comes from and gives its standard error, followed by worked examples with data.
+
+The topics are less separate than they look. The ratio, regression and post-stratified estimators each fill in a prediction $\hat y_i$ for every unit of the population and average them; they differ only in the auxiliary information used to form $\hat y_i$, and a domain mean is itself a ratio estimator. The regression and post-stratification sections make this explicit, and the post-stratification section ends with a table that puts the estimators side by side.
 
 ## Functions and packages for Analyzing Data
 
@@ -171,12 +46,194 @@ cat("\n```\n")
 
 :::
 
+## Ratio Estimation
 
-## Ratio Estimation for cherry.csv dataset 
+### Theory {#sec-ratio-theory}
+
+#### The ratio estimator
+
+For ratio estimation to apply, two quantities $y_i$ and $x_i$ must be measured on each sample unit; $x_i$ is often called an **auxiliary variable** or **subsidiary variable**. In the population of size $N$,
+$$
+t_y = \sum_{i=1}^N y_i, \qquad t_x = \sum_{i=1}^N x_i,
+$$
+and their ratio is
+$$
+B = \frac{t_y}{t_x} = \frac{\bar y_U}{\bar x_U}, \qquad \text{so that} \qquad \bar y_U = B\cdot\bar x_U .
+$$
+Ratio and regression estimation both take advantage of the correlation of $x$ and $y$ in the population; the higher the correlation, the better they work.
+
+If an SRS is taken, natural estimators for $B$, $t_y$ and $\bar y_U$ are
+$$
+\hat B = \frac{\bar y}{\bar x} = \frac{\sum_{i=1}^n y_i}{\sum_{i=1}^n x_i} = \frac{\hat t_y}{\hat t_x},
+\qquad
+\hat t_{yr} = \hat B\, t_x = N\,\hat{\bar y}_r,
+\qquad
+\hat{\bar y}_r = \hat B\, \bar x_U ,
+$$
+where $t_x$ and $\bar x_U$ are assumed **known**. This is the key requirement for ratio estimation: we need to know the population total or mean of the auxiliary variable $x$ in advance. The ratio estimator is slightly biased, but the bias is negligible when $n$ is large.
+
+There is a useful way to read these formulas. Once $\hat B$ is estimated, form the **fitted value** $\hat y_i = \hat B x_i$ for every unit in the population, using its known $x_i$. Summing or averaging these over the population recovers the ratio estimators:
+$$
+\hat t_{yr} = \sum_{i=1}^N \hat y_i = \hat B\, t_x ,
+\qquad
+\hat{\bar y}_r = \frac1N\sum_{i=1}^N \hat y_i = \hat B\, \bar x_U .
+$$
+
+@fig-ratio-concept shows this for a small population. The grey points are the population, whose $x_i$ are known, and the green circles are an ordinary SRS. The red line $\hat y = \hat B x$ is fitted from the sample, and the red points are the fitted values for every unit.
+
+```{r}
+#| label: fig-ratio-concept
+#| fig-cap: "Illustration of the benefits of ratio estimation. Grey: the population. Green circles: an SRS. Red: the line fitted from the sample and the fitted values for every unit."
+#| fig-width: 6.5
+#| fig-height: 5
+#| out-width: "70%"
+local({
+  set.seed(2046)
+  N <- 40
+  B_true <- 0.55
+  x <- runif(N, 0.5, 10)
+  y <- B_true * x + rnorm(N, 0, 0.20 * sqrt(x))
+
+  xbar_U <- mean(x)
+  ybar_U <- mean(y)
+
+  n <- 8
+  sel <- sample(N, n)               # an ordinary SRS, spread across x
+  Bhat <- sum(y[sel]) / sum(x[sel]) # ratio estimate, computed from the sample only
+
+  yhat <- Bhat * x                  # fitted value for every unit in the population
+  ybar_ratio <- mean(yhat)          # = Bhat * xbar_U (the ratio estimate)
+  ybar_srs <- mean(y[sel])          # naive sample mean, ignoring x
+
+  par(mar = c(4, 4, 0.5, 0.5))
+  plot(x, y, pch = 19, col = "grey50", xlab = "x", ylab = "y",
+       xlim = c(0, 10.5), ylim = c(0, 7))
+
+  abline(0, Bhat, col = "firebrick", lwd = 2)
+  text(7.0, Bhat * 7.0 + 0.55, expression(y == hat(B) * x), col = "firebrick")
+
+  points(x[sel], y[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
+  points(x, yhat, pch = 19, col = "firebrick", cex = 0.9)
+
+  abline(h = ybar_U, col = "black", lty = 3)
+  abline(h = ybar_ratio, col = "firebrick", lty = 3)
+  abline(h = ybar_srs, col = "darkgreen", lty = 3)
+
+  points(0, ybar_U, pch = 19, col = "black", cex = 2)
+  points(0, ybar_ratio, pch = 19, col = "firebrick", cex = 1.6)
+  points(0, ybar_srs, pch = 19, col = "darkgreen", cex = 1.6)
+
+  text(0.2, ybar_U, expression(bar(y)[U]), col = "black", adj = c(0, -0.7), font = 2)
+  text(0.2, ybar_ratio, expression(hat(bar(y))[r]), col = "firebrick", adj = c(0, 1.4), font = 2)
+  text(0.2, ybar_srs, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), font = 2)
+})
+```
+
+This sample happens to have $\bar x > \bar x_U$, so the naive $\bar y$ (green) lands well above $\bar y_U$. The ratio estimator corrects for that through the known $\bar x_U$: it is the height of the red line at $x = \bar x_U$, so $\hat{\bar y}_r$ (red) is close to $\bar y_U$ (black). Averaged over samples both are (essentially) unbiased, but $\hat{\bar y}_r$ varies far less.
+
+#### Where ratio estimation is used
+
+Ordinary SRS estimation of a mean or proportion is a special case of ratio estimation, obtained by setting $x_i = 1$ for every unit: then $\bar x_U = \bar x = 1$, $t_x = N$, $B = \bar y_U$ and $\hat B = \bar y$, so $\hat{\bar y}_r = \bar y$ (including $\hat p$) and $\hat t_{yr} = N\bar y$.
+
+Genuine ratio estimation needs an $x$ whose population total is known more easily than that of $y$. Three typical situations:
+
+* **Counting people.** Let $x_i$ be the number of registered births in commune $i$ of France and $y_i$ the number of residents. The total number of births is known from administrative records, so $\hat B = \hat t_y/\hat t_x$ estimates residents per birth, and $\hat t_{yr} = \hat B\,t_x$ estimates the population of France.
+* **Field yield.** Let $y_i$ be the bushels of grain harvested in field $i$ and $x_i$ its acreage. Then $B$ is the average yield in bushels per acre, $\bar y_U$ the average yield per field and $t_y$ the total yield. The total acreage $t_x$ is usually easy to obtain from other records, even when $t_y$ is not.
+* **The same quantity at an earlier time.** When the same quantity is measured at different times, an earlier measurement often makes an excellent auxiliary variable. If the 1987 acreage of every county is known but 1992 acreage is observed only for a sample of counties, let $y_i$ be the 1992 farm acreage and $x_i$ the 1987 farm acreage. This is the example used in the simulation study at the end of this chapter.
+
+#### Standard error of the ratio estimator
+
+In large samples the bias of $\hat{\bar y}_r$ is negligible relative to its variance, so $\text{MSE}(\hat{\bar y}_r) \approx V(\hat{\bar y}_r)$. To understand the variance, look at the estimation error,
+$$
+\hat{\bar y}_r - \bar y_U = \frac{\bar y}{\bar x}\bar x_U - B\bar x_U = \frac{\bar x_U}{\bar x}\left(\bar y - B\bar x\right),
+$$
+where the second form comes from factoring out $\bar x_U/\bar x$. Define the **population residual** of each element as its deviation from the true population line,
+$$
+d_i = y_i - B x_i \qquad (B = t_y/t_x).
+$$
+Then $\bar y - B\bar x$ is simply the sample mean $\bar d$ of these residuals, so the error of the estimator is the scaled sample mean of the residuals. Squaring and taking expectations,
+$$
+\text{MSE}(\hat{\bar y}_r) \approx \left(\frac{\bar x_U}{\bar x}\right)^2 V(\bar d),
+\qquad
+V(\bar d) = \left(1 - \frac nN\right)\frac{S_d^2}{n},
+$$
+because the $d_i$ are fixed population values, so $\bar d$ is an ordinary sample mean under SRS.
+
+In practice $B$ is unknown, so the $d_i$ cannot be computed. We replace $B$ by $\hat B$ and use the **sample residuals** from the fitted line,
+$$
+e_i = y_i - \hat B x_i, \qquad s_e^2 = \frac{1}{n-1}\sum_{i=1}^n e_i^2 .
+$$
+Substituting $s_e^2$ for the unknown $S_d^2$ gives the variance estimators
+$$
+\hat V(\hat B) = \frac{1}{\bar x^2}\left(1 - \frac nN\right)\frac{s_e^2}{n},
+\qquad
+\hat V(\hat{\bar y}_r) = \bar x_U^2\,\hat V(\hat B) = \left(\frac{\bar x_U}{\bar x}\right)^2\left(1 - \frac nN\right)\frac{s_e^2}{n},
+\qquad
+\hat V(\hat t_{yr}) = N^2\,\hat V(\hat{\bar y}_r) .
+$$
+For samples that are large enough (typically $n > 30$) the sampling distributions are approximately normal, and approximate 95% intervals are $\hat B \pm t_{0.975,\,n-1}\,\text{SE}(\hat B)$ for the ratio, and the same form for the mean and the total.
+
+The sample residual $e_i$ is the vertical distance from the point $(x_i, y_i)$ to the fitted line through the origin, $y = \hat B x$. No centring appears in $s_e^2$ because $\hat B = \bar y/\bar x$ forces $\sum_i e_i = \sum_i y_i - \hat B\sum_i x_i = 0$ exactly, so the residuals already average to zero; the divisor is $n-1$ for the one parameter $\hat B$ estimated from the sample. Compare the variance with the SRS one, $\left(1-\frac nN\right)s_y^2/n$: ratio estimation replaces the scatter of $y$ about $\bar y$ by the scatter about the line. That is the whole source of the gain, and the whole risk, since an $x$ that predicts $y$ poorly gives $s_e^2 > s_y^2$ and a *less* precise estimate than the plain sample mean.
+
+#### When does ratio estimation help?
+
+Let $R$ be the population Pearson correlation of $x$ and $y$,
+$$
+R = \frac{\sum_{i=1}^N (x_i - \bar x_U)(y_i - \bar y_U)}{(N-1)S_xS_y}.
+$$
+Comparing $\text{MSE}(\hat{\bar y}_r)$ with $\text{MSE}(\bar y) = \left(1 - \frac nN\right)S_y^2/n$ shows that
+$$
+\text{MSE}(\hat{\bar y}_r) \le \text{MSE}(\bar y)
+\quad\Longleftrightarrow\quad
+R \ge \frac{B S_x}{2 S_y} = \frac{\text{CV}(x)}{2\,\text{CV}(y)} .
+$$
+If the coefficients of variation of $x$ and $y$ are roughly equal, ratio estimation pays off whenever the correlation between $x$ and $y$ exceeds $1/2$.
+
+The gain can be summarized, analogously to $R^2$ for stratification, by
+$$
+\frac{\text{MSE}(\hat{\bar y}_r)}{\text{MSE}(\bar y)} \approx \frac{S_d^2}{S_y^2}
+\qquad\Longrightarrow\qquad
+1 - \frac{S_d^2}{S_y^2}\ \text{is the proportion of variance removed.}
+$$
+This is not exactly the $R^2$ of fitting the linear model $y = Bx$, because $\hat B$ is not a least-squares estimate of $B$, but it carries similar information about how much variance ratio estimation removes.
+
+### Example: Population of France (by hand)
+
+This toy version of the France population example demonstrates the mechanics of ratio estimation, using a sample of $n = 5$ out of $N = 8$ communes. We observe $x_i$ = registered births and $y_i$ = residents, both in thousands:
+
+| Commune $i$ | $x_i$ (000s) | $y_i$ (000s) | $\hat y_i = \hat B x_i$ | $e_i = y_i - \hat y_i$ | $e_i^2$ |
+|:--|--:|--:|--:|--:|--:|
+| 1 | 1 | 18 | 30 | −12 | 144 |
+| 2 | 2 | 78 | 60 | 18 | 324 |
+| 3 | 3 | 62 | 90 | −28 | 784 |
+| 4 | 4 | 132 | 120 | 12 | 144 |
+| 5 | 5 | 160 | 150 | 10 | 100 |
+| **Sum** | **15** | **450** | **450** | **0** | **1496** |
+
+The ratio estimate of the slope and the sample residual variance are
+$$
+\hat B = \frac{\sum y_i}{\sum x_i} = \frac{450}{15} = 30,
+\qquad
+s_e^2 = \frac{\sum e_i^2}{n-1} = \frac{1496}{4} = 374 .
+$$
+Assume the number of registered births is known from administrative records to be $t_x = 40$ (thousand) in all $N = 8$ communes. Then $\bar x_U = t_x/N = 5$ (thousand), while the sample mean is only $\bar x = 3$ (thousand): we sampled smaller-than-average communes. The estimates are
+$$
+\hat{\bar y}_r = \hat B\bar x_U = 30(5) = 150 \text{ (thousand residents)},
+\qquad
+\text{SE}(\hat{\bar y}_r) = \sqrt{\left(1 - \frac58\right)\left(\frac53\right)^2\frac{374}{5}} = 8.827,
+$$
+$$
+\hat t_{yr} = \hat B\,t_x = 30(40) = 1200 \text{ (thousand)},
+\qquad
+\text{SE}(\hat t_{yr}) = \sqrt{\left(1 - \frac58\right)\left(\frac{40}{3}\right)^2\frac{374}{5}} = 70.616 \text{ (thousand)},
+$$
+so a 95% confidence interval for the total population is $1200 \pm 1.96(70.616) = [1061.6,\ 1338.4]$ thousand, that is, **[1.062, 1.338] million** residents. For the slope, $\text{SE}(\hat B) = \sqrt{\left(1 - \frac58\right)\frac{374}{5\cdot 3^2}} = 1.765$.
+
+### Example: Cherry Trees (cherry.csv) 
 
 We want to estimate the volume of wood in cherry trees using their diameter as an auxiliary variable. 
 
-### Importing data
+#### Importing data
 
 First, let's load the data and verify that a strong linear relationship passing near the origin exists between volume and diameter.
 
@@ -186,17 +243,21 @@ cherry <- read.csv("data/cherry.csv", header = T)
 head(cherry) |> gt()
 ```
 
+A scatter plot of volume against diameter shows whether the points lie close to a line through the origin.
+
 ```{r fig-cherry-volume-diameter}
 #| fig-cap: "Cherry tree volume vs. diameter"
 plot(cherry$volume ~ cherry$diameter, main = "Volume vs Diameter")
 ```
+
+Fitting the linear model with the intercept forced to zero, $y = Bx$, summarizes how strongly volume is related to diameter.
 
 ```{r cherry-load-anova}
 anova(lm(cherry$volume ~ 0 + cherry$diameter))
 ```
 **Output Note:** The plot and the linear model output (which forces a 0 intercept) confirm a very strong relationship, making this a prime candidate for Ratio estimation.
 
-### SRS estimate 
+#### SRS estimate 
 
 To establish a baseline, we first estimate the mean and total volume using standard Simple Random Sampling (ignoring the auxiliary variable).
 
@@ -214,7 +275,7 @@ srs_total_vol_raw |> format_est_gt("total")
 ```
 **Output Note:** Under SRS, the standard error for the mean volume is `r round(srs_mean_vol_raw["S.E."], 2)`.
 
-### Ratio Estimation Using the Function
+#### Ratio Estimation Using the Function
 
 We calculate the ratio $\hat{B} = \overline{y}/\overline{x}$; the function's `$table` shows the row-level working values $x_i$, $y_i$, fitted $\hat{y}_i = \hat{B}x_i$, residuals $e_i = y_i - \hat{y}_i$, and $e_i^2$ (with a Sum row and a footnote giving $\hat B$ and $s_e^2$), so we no longer need to build this table by hand.
 
@@ -226,6 +287,8 @@ N <- 2967
 res_ratio_model <- ratio_est(ydata, xdata, N = N, estimate = "model")
 res_ratio_model$table
 ```
+
+We plot the data again, now with the fitted line $y = \hat B x$ through the origin.
 
 ```{r fig-cherry-ratio-fit}
 #| fig-cap: "Cherry tree volume vs. diameter with the fitted ratio line"
@@ -240,7 +303,7 @@ B_v2d |> format_est_gt("ratio")
 ```
 **Output Note:** The ratio $\hat{B}$ is estimated at `r round(B_v2d["Est."], 3)` with a standard error of `r round(B_v2d["S.E."], 4)`.
 
-#### Estimating the mean volume of wood
+##### Estimating the mean volume of wood
 
 If we know the true total of the population diameters is 41,835, we can derive the population mean diameter $\overline{x}_{\text{U}}$ and pass it as `xbarU` with `estimate = "mean"`.
 
@@ -252,7 +315,7 @@ ratio_mean_volume_raw <- res_ratio_mean$estimate
 ratio_mean_volume_raw |> format_est_gt("ratio_mean")
 ```
 
-#### Estimating the total volume of wood
+##### Estimating the total volume of wood
 
 Using `estimate = "total"` with the known population total diameter gives the estimated population total volume directly.
 
@@ -265,7 +328,7 @@ ratio_total_volume <- res_ratio_total$estimate
 ratio_total_volume |> format_est_gt("total")
 ```
 
-#### Percentage of Variance Reduction
+##### Percentage of Variance Reduction
 
 How much did ratio estimation help compared to ignoring the auxiliary variable?
 
@@ -275,11 +338,772 @@ unname(variance_reduction)
 ```
 **Output Note:** Using the diameter as an auxiliary variable reduced the variance of our estimate by `r round(unname(variance_reduction) * 100, 1)`% compared to simple random sampling. 
 
+## Regression Estimation
+
+### Theory {#sec-regression-theory}
+
+#### The linear model and the least-squares fit
+
+Ratio estimation works best if the data are well fit by a straight line *through the origin*, with spread growing with $x$. Sometimes data instead appear evenly scattered about a straight line that does **not** go through the origin, so that the usual straight-line regression model applies,
+$$
+y = B_0 + B_1 x .
+$$
+In ratio estimation $y_i = Bx_i + d_i$ with residual spread growing with $x$; in regression estimation $y_i = B_0 + B_1x_i + d_i$ with roughly constant spread.
+
+The ordinary least squares slope and intercept, from the sample, are
+$$
+\hat B_1 = \frac{\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)}{\sum_{i=1}^n (x_i - \bar x)^2} = \frac{r\,s_y}{s_x},
+\qquad
+\hat B_0 = \bar y - \hat B_1\bar x ,
+$$
+where $r$ is the sample Pearson correlation coefficient of $x$ and $y$.
+
+#### The regression estimator
+
+Assuming $\bar x_U$ (or $t_x$) is known, the regression estimator of the mean is the fitted line evaluated at $\bar x_U$:
+$$
+\hat{\bar y}_{reg} = \hat B_0 + \hat B_1\bar x_U = \bar y + \hat B_1\left(\bar x_U - \bar x\right),
+\qquad
+\hat t_{reg} = N\hat{\bar y}_{reg} = N\hat B_0 + \hat B_1 t_x .
+$$
+Equivalently, averaging the fitted value $\hat y_i = \hat B_0 + \hat B_1 x_i$ over *every* population unit gives the same estimator,
+$$
+\hat{\bar y}_{reg} = \frac1N\sum_{i=1}^N\left(\hat B_0 + \hat B_1 x_i\right) = \hat B_0 + \hat B_1\bar x_U .
+$$
+This is a natural generalization of the ratio estimator $\hat{\bar y}_r = \frac1N\sum_{i=1}^N\hat B x_i$.
+
+@fig-reg-concept illustrates it. The grey points are the population and the green circles an ordinary SRS. The red line is fitted from the sample, $\hat y_i = \hat B_0 + \hat B_1x_i$ for every unit, and the regression estimate is the average of the red points.
+
+```{r}
+#| label: fig-reg-concept
+#| fig-cap: "Illustration of the benefits of regression estimation. Grey: the population. Green circles: an SRS. Red: the line fitted from the sample and the fitted values for every unit."
+#| fig-width: 6.5
+#| fig-height: 5
+#| out-width: "70%"
+local({
+  set.seed(498)
+  N <- 40
+  B0 <- 1.5
+  B1 <- 0.35
+  x <- runif(N, 1, 10)
+  y <- B0 + B1 * x + rnorm(N, 0, 0.30)
+
+  xbar_U <- mean(x)
+  ybar_U <- mean(y)
+
+  n <- 8
+  sel <- sample(N, n)               # an ordinary SRS, spread across x
+  xs <- x[sel]
+  ys <- y[sel]
+  B1hat <- sum((xs - mean(xs)) * (ys - mean(ys))) / sum((xs - mean(xs))^2)
+  B0hat <- mean(ys) - B1hat * mean(xs)  # least squares fit, from the sample only
+
+  yhat <- B0hat + B1hat * x         # fitted value for every unit in the population
+  ybar_reg <- mean(yhat)            # = B0hat + B1hat * xbar_U (the regression estimate)
+  ybar_srs <- mean(ys)              # naive sample mean, ignoring x
+
+  par(mar = c(4, 4, 0.5, 0.5))
+  plot(x, y, pch = 19, col = "grey50", xlab = "x", ylab = "y",
+       xlim = c(0, 10.5), ylim = c(0, 6.5))
+
+  abline(B0hat, B1hat, col = "firebrick", lwd = 2)
+  text(10.4, B0hat + B1hat * 10.4 - 1.25, expression(y == hat(B)[0] + hat(B)[1] * x),
+       col = "firebrick", adj = c(1, 0))
+
+  points(x[sel], y[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
+  points(x, yhat, pch = 19, col = "firebrick", cex = 0.9)
+
+  abline(h = ybar_U, col = "black", lty = 3)
+  abline(h = ybar_reg, col = "firebrick", lty = 3)
+  abline(h = ybar_srs, col = "darkgreen", lty = 3)
+
+  points(0, ybar_U, pch = 19, col = "black", cex = 2)
+  points(0, ybar_reg, pch = 19, col = "firebrick", cex = 1.6)
+  points(0, ybar_srs, pch = 19, col = "darkgreen", cex = 1.6)
+
+  text(0.2, ybar_U, expression(bar(y)[U]), col = "black", adj = c(0, -0.7), font = 2)
+  text(0.2, ybar_reg, expression(hat(bar(y))[reg]), col = "firebrick", adj = c(0, 1.4), font = 2)
+  text(0.2, ybar_srs, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), font = 2)
+})
+```
+
+The sampled $x$'s average above $\bar x_U$, so the naive $\bar y$ (green) sits above $\bar y_U$; the regression estimator shifts the fit back to $\bar x_U$ and lands on target, $\hat{\bar y}_{reg}$ (red) $\approx \bar y_U$ (black). Both are essentially unbiased over repeated samples, but $\hat{\bar y}_{reg}$ is much less variable.
+
+#### Standard error of the regression estimator
+
+Let $e_i = y_i - (\hat B_0 + \hat B_1 x_i)$ be the regression residuals. The estimated variance uses the residual mean square of the regression,
+$$
+\hat V(\hat{\bar y}_{reg}) = \left(1 - \frac nN\right)\frac{s_e^2}{n},
+\qquad
+s_e^2 = \frac{1}{n-2}\sum_{i=1}^n\left(y_i - \hat B_0 - \hat B_1 x_i\right)^2 ,
+$$
+with $\hat V(\hat t_{reg}) = N^2\hat V(\hat{\bar y}_{reg})$ and 95% intervals using $t_{0.975,\,n-2}$. Since $s_e^2 = s_y^2(1 - r^2)(n-1)/(n-2)$, the standard error is approximately
+$$
+\text{SE}(\hat{\bar y}_{reg}) \approx \sqrt{\left(1 - \frac nN\right)\frac1n\, s_y^2\left(1 - r^2\right)},
+$$
+so the stronger the linear relationship, the smaller the SE.
+
+The divisor is now $n - 2$, since both $\hat B_0$ and $\hat B_1$ are estimated. For the same data $\sum_i e_i^2$ can only be smaller here than under the ratio fit (the ratio line is the special case $\hat B_0 = 0$), so the regression estimator is the safer of the two whenever the relationship misses the origin, at the cost of one degree of freedom. Note also that the factor $(\bar x_U/\bar x)^2$ is absent: the fitted line is evaluated at $\bar x_U$ directly, so no correction for $\bar x \neq \bar x_U$ is needed.
+
+### Example: Cherry Trees (cherry.csv) 
+
+When the relationship between $y$ and $x$ doesn't pass exactly through the origin, we use Regression Estimation.
+
+#### Importing data
+
+We read the cherry data again. The known population total diameter, $t_x = 41{,}835$, over the $N = 2967$ trees gives the population mean diameter $\bar x_U$ needed by the regression estimator.
+
+```{r cherry-reg-load}
+cherry <- read.csv("data/cherry.csv", header = T)
+ydata <- cherry$volume 
+xdata <- cherry$diameter
+t_diameters <- 41835
+xbarU <- t_diameters / 2967 
+N <- 2967
+```
+
+#### Regression Estimation Using the Function
+
+##### Fitting a linear regression model
+
+First fit the ordinary least squares line of volume on diameter. This gives $\hat B_0$ and $\hat B_1$, together with the usual fit summary, and shows how well a straight line describes the data.
+
+```{r cherry-reg-fit}
+n <- length(ydata)
+lmfit <- lm(ydata ~ xdata)
+lmfit_gt <- format_lm_gt(lmfit)
+lmfit_gt$coef
+lmfit_gt$fit
+```
+
+The fitted line, which is not forced through the origin, is drawn over the data.
+
+```{r fig-cherry-regression-fit}
+#| fig-cap: "Cherry tree volume vs. diameter with the fitted regression line"
+plot(xdata, ydata, main="Linear Regression: Volume vs Diameter")
+abline(lmfit, col="green", lwd=2)
+```
+
+The function's `$table` shows the row-level working values $x_i$, $y_i$, fitted $\hat{y}_i = \hat{B}_0 + \hat{B}_1 x_i$, residuals $e_i = y_i - \hat{y}_i$, and $e_i^2$ (with a Sum row and a footnote giving $\hat B_0$, $\hat B_1$, and $s_e^2$):
+
+```{r cherry-reg-model}
+res_reg_model <- reg_est(ydata, xdata, N = N, estimate = "model")
+res_reg_model$table
+```
+
+##### Estimate the mean
+
+We compute the regression estimate $\overline{y}_{reg}$ by passing `xbarU` with `estimate = "mean"`.
+
+```{r cherry-reg-mean}
+res_reg_mean <- reg_est(ydata, xdata, xbarU = xbarU, N = N, estimate = "mean")
+res_reg_mean$table
+
+output_reg <- res_reg_mean$estimate
+output_reg |> format_est_gt("reg_mean")
+```
+**Output Note:** The Regression estimate for the mean volume is `r round(output_reg["Est."], 3)` with a standard error of `r round(output_reg["S.E."], 4)`.
+
+##### Estimate the total
+
+The estimate of the total follows by passing `estimate = "total"`, which multiplies the estimated mean and its standard error by $N$.
+
+```{r cherry-reg-total}
+reg_total_volume_raw <- reg_est(ydata, xdata, xbarU = xbarU, N = N, estimate = "total")$estimate
+reg_total_volume_raw |> format_est_gt("reg_total")
+```
+
+##### Percentage of Variance Reduction
+
+As for the ratio estimator, we compare the standard error of the regression estimate with that of the SRS estimate:
+
+```{r cherry-reg-varred}
+reg_mean_volume_raw <- output_reg
+var_reduction_reg <- 1 - (reg_mean_volume_raw["S.E."] / srs_mean_vol_raw["S.E."])^2
+unname(var_reduction_reg)
+```
+**Output Note:** The variance reduction for the regression estimator is `r round(unname(var_reduction_reg) * 100, 1)`%, which is similar to the ratio estimator since the true intercept is very close to zero.
+
+### Example: Photo Counts of Dead Trees
+
+Aerial photographs are a cheap way to survey a large area (for example a caribou herd), but they tend to **undercount** animals that are hidden from view overhead. A more expensive, intensive ground count on a subsample of plots gives accurate counts that can calibrate the photo counts. Let $x_i$ be the photo count and $y_i$ the field count on plot $i$. Fitting a ratio or a regression line on the subsample of plots that have both counts lets us correct the total photo count of the *entire* surveyed area, for example $\hat t_{yr} = \hat B\,t_x$, for the systematic undercounting bias.
+
+To estimate the number of dead trees in an area, we divide the area into 100 square plots and count dead trees on photographs. We select an SRS of 25 plots for exact field counts. We know the true mean photo count is 11.3.
+
+The photo counts and the field counts of the 25 sampled plots are entered below, and a straight line of field counts on photo counts is fitted.
+
+```{r deadtrees-data}
+photocounts <- c(10, 12, 7, 13, 13, 6, 17, 16, 15, 10, 14, 12, 10, 5, 12, 10,
+                 10, 9, 6, 11, 7, 9, 11, 10, 10)
+
+fieldcounts <- c(15, 14, 9, 14, 8, 5, 18, 15, 13, 15, 11, 15, 12, 8, 13,
+                 9, 11, 12, 9, 12, 13, 11, 10, 9, 8)
+
+lmfit <- lm(fieldcounts ~ photocounts)
+lmfit_gt <- format_lm_gt(lmfit)
+lmfit_gt$coef
+lmfit_gt$fit
+```
+
+The scatter plot shows the relationship between the two counts, with the fitted regression line.
+
+```{r fig-deadtrees-regression-fit}
+#| fig-cap: "Field counts vs. photo counts of dead trees with the fitted regression line"
+plot(photocounts, fieldcounts, main="Field Counts vs Photo Counts")
+abline(lmfit, col="purple", lwd=2)
+```
+
+Let's compare the three different estimation methods to see which provides the lowest Standard Error for the population mean.
+
+```{r deadtrees-compare}
+# 1. Regression estimate for the mean
+res_dt_reg <- reg_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100, estimate = "mean")
+res_dt_reg$table
+dt_reg_raw <- res_dt_reg$estimate
+dt_reg_raw |> format_est_gt("reg_mean")
+
+# (And estimating the total)
+reg_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100, estimate = "total")$estimate |>
+  format_est_gt("reg_total")
+
+# 2. Simple random sampling estimate for the mean (Ignoring photo counts)
+res_dt_srs <- srs_est(sdata = fieldcounts, N = 100, estimate = "mean", show.details = FALSE)
+dt_srs_raw <- res_dt_srs$estimate
+dt_srs_raw |> format_est_gt("mean")
+
+# 3. Ratio estimate for the mean
+res_dt_ratio <- ratio_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100, estimate = "mean")
+res_dt_ratio$table
+dt_ratio_raw <- res_dt_ratio$estimate
+dt_ratio_raw |> format_est_gt("ratio_mean")
+```
+##### Output Note: {-}
+*   **SRS Mean:** SE = `r round(dt_srs_raw["S.E."], 3)`
+*   **Ratio Mean:** SE = `r round(dt_ratio_raw["S.E."], 3)`
+
+*   **Regression Mean:** SE = `r round(dt_reg_raw["S.E."], 3)`
+
+Because the intercept of the true line is non-zero, the **Regression estimator** provides the most precise estimate in this scenario.
+
+### Shinylive App Illustrating Ratio Estimation and Regression Estimation
+
+The simulation for this section runs as a standalone app:
+[Ratio Estimation and Regression Estimation](../shinylives_sampling/app-ratio.html){target="_blank"}.
+It opens in a new tab, together with its documentation and the full
+[list of apps](../shinylives_sampling/index.html){target="_blank"}.
+
+## Post-stratification
+
+### Theory {#sec-poststrat-theory}
+
+#### The post-stratified estimator
+
+Sometimes a unit's stratum is unknown until *after* sampling, for instance a person's gender before the interview. We cannot then stratify in advance, but if the true population sizes $N_h$ of the $H$ groups are known from another source, we can still take an SRS, sort the units into groups afterwards, and weight each group mean by its *known* population share $\pi_h = N_h/N$, as in stratified sampling:
+$$
+\bar y_{post} = \sum_{h=1}^H \pi_h\,\bar y_h,
+\qquad
+\hat t_{post} = N\bar y_{post} .
+$$
+Compare this with the unweighted mean $\bar y = \sum_h (n_h/n)\,\bar y_h$, which weights the groups by the shares the sample happened to deliver. When the sample over- or under-represents a group, post-stratification corrects for it.
+
+It also has a predictive reading, like the ratio and regression estimators. Every unit in group $h$ is predicted by that group's sample mean, $\hat y_i = \bar y_h$ for $i \in \mathcal U_h$, so
+$$
+\hat t_{post} = \sum_{i \in \mathcal U}\hat y_i = \sum_{h=1}^H N_h\,\bar y_h,
+\qquad
+\hat{\bar y}_{post} = \sum_{h=1}^H \pi_h\,\bar y_h .
+$$
+
+@fig-poststrat-concept illustrates the benefit. The grey points are the population, split into post-strata A to D (the width of each block is $N_h$). The green circles are an ordinary SRS of $n = 25$; the realized $n_h = (5, 5, 6, 9)$ do *not* match the population shares $\pi_h = (.36, .14, .21, .29)$, and they never do, since $n_h$ is random. The red segments are the predictions $\hat y_i = \bar y_h$ in each stratum, whose weighted average is $\hat{\bar y}_{post}$.
+
+```{r}
+#| label: fig-poststrat-concept
+#| fig-cap: "Illustration of the benefits of post-stratification."
+#| fig-width: 6.5
+#| fig-height: 5
+#| out-width: "70%"
+local({
+  set.seed(3268)
+  Nh <- c(50, 20, 30, 40)      # population sizes per post-stratum
+  mu_h <- c(1, 4, 7, 10)       # true stratum means, exaggerated and ascending
+  labs <- c("A", "B", "C", "D")
+  N <- sum(Nh)
+  H <- length(Nh)
+  n <- 25
+  sdy <- 0.9
+
+  # index plot: sequential index across the population, grouped contiguously by
+  # stratum -- so each stratum's width on the x-axis is exactly its Nh
+  y_pop <- unlist(lapply(1:H, function(h) mu_h[h] + rnorm(Nh[h], 0, sdy)))
+  strat_id <- rep(1:H, Nh)
+  boundaries <- cumsum(Nh)
+  starts <- c(0, boundaries[-H])
+  x_pop <- unlist(lapply(1:H, function(h) starts[h] + seq_len(Nh[h])))
+  ybar_U <- mean(y_pop)                    # true population mean
+
+  sel <- sample(N, n)                      # an ordinary SRS from the whole population
+  nh <- tabulate(strat_id[sel], H)         # post-stratum sample sizes: random, not proportional
+  ybar_h <- sapply(1:H, function(h) mean(y_pop[sel][strat_id[sel] == h]))
+
+  ybar_naive <- mean(y_pop[sel])           # pooled sample mean, ignoring strata
+  ybar_post <- sum(ybar_h * Nh / N)        # post-stratified estimate
+
+  par(mar = c(3, 4, 0.5, 0.5))
+  plot(x_pop, y_pop, pch = 19, col = "grey50", xlab = "", ylab = "y",
+       xlim = c(-12, N), ylim = c(-2, 13), xaxt = "n")
+
+  abline(v = boundaries[-H], col = "grey70")           # separate the groups
+  mid <- (starts + boundaries) / 2
+  axis(1, at = mid, labels = labs, tick = FALSE)
+
+  points(x_pop[sel], y_pop[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
+
+  for (h in 1:H)                                       # sample mean of each post-stratum
+    segments(starts[h], ybar_h[h], boundaries[h], ybar_h[h], col = "firebrick", lwd = 3)
+
+  abline(h = ybar_U, col = "black", lty = 3)
+  abline(h = ybar_post, col = "firebrick", lty = 3)
+  abline(h = ybar_naive, col = "darkgreen", lty = 3)
+
+  points(-11, ybar_U, pch = 19, col = "black", cex = 2, xpd = NA)
+  points(-11, ybar_post, pch = 19, col = "firebrick", cex = 1.6, xpd = NA)
+  points(-11, ybar_naive, pch = 19, col = "darkgreen", cex = 1.6, xpd = NA)
+
+  text(-10, ybar_U, expression(bar(y)[U]), col = "black", adj = c(0, -0.7), font = 2)
+  text(-10, ybar_post, expression(hat(bar(y))[post]), col = "firebrick", adj = c(0, 1.4), font = 2)
+  text(-10, ybar_naive, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), font = 2)
+})
+```
+
+This sample is light on A and heavy on D, so the naive $\bar y$ (green) is pulled up; reweighting by the known $\pi_h$ undoes it, and $\hat{\bar y}_{post}$ (red) is close to $\bar y_U$ (black). It is this reweighting, repeated over samples, that cuts the variance.
+
+#### Variance of the post-stratified mean
+
+The observed group sizes $n_h$ are random, so for the variance we substitute their expected values under SRS, the proportional sample sizes
+$$
+n_h^{post} = n\,\frac{N_h}{N} = n\pi_h ,
+$$
+into the stratified variance formula. Every group then has sampling fraction $n_h^{post}/N_h = n/N$, so the finite population correction is the same in all groups and the variance simplifies:
+$$
+\hat V(\bar y_{post}) = \sum_{h=1}^H \pi_h^2\left(1 - \frac{n_h^{post}}{N_h}\right)\frac{s_h^2}{n_h^{post}}
+= \left(1 - \frac nN\right)\frac1n\sum_{h=1}^H \pi_h s_h^2 ,
+$$
+the variance of proportional stratified sampling: the SRS variance with $s^2$ replaced by the weighted average of the within-group variances. Also $\hat V(\hat t_{post}) = N^2\hat V(\bar y_{post})$. Here $n_h$, $\bar y_h$ and $s_h^2$ are the count, mean and variance of the units the sample happened to place in group $h$, so every group needs $n_h \geq 2$ for $s_h^2$ to exist. Substituting $n_h^{post}$ treats the $n_h$ as fixed at $n\pi_h$; carrying their randomness adds a second-order term $\frac{1}{n^2}\sum_h(1 - \pi_h)s_h^2$, negligible unless some $n_h$ are small.
+
+#### Post-stratification as a regression estimator {#sec-poststrat-regression}
+
+Post-stratification is not a separate technique: it is the regression estimator of @sec-regression-theory with the **group indicators** as the auxiliary variables. Take the $H$ dummies $x_{ih} = \mathbf 1\{i \in \text{group } h\}$ and fit without an intercept. Then
+
+* the fitted coefficients are the group means, $\hat B_h = \bar y_h$;
+* the population means of those dummies are the known weights, $\bar x_{U,h} = N_h/N = \pi_h$;
+
+so the regression estimator *is* the post-stratified one,
+$$
+\hat{\bar y}_{reg} = \sum_h \hat B_h\,\bar x_{U,h} = \sum_h \pi_h\bar y_h = \hat{\bar y}_{post} .
+$$
+Its residuals are each unit's deviation from its own group mean, $e_i = y_i - \bar y_{h(i)}$, and the regression variance $\left(1 - \frac nN\right)s_e^2/n$ applies with $p = H$ fitted parameters:
+$$
+s_e^2 = \frac{1}{n-H}\sum_h\sum_{i \in h}\left(y_i - \bar y_h\right)^2 = \sum_h \frac{n_h - 1}{n-H}\,s_h^2 .
+$$
+Dropping the $-1$ and the $-H$ (small relative to $n_h$ and $n$), and then using $n_h/n \approx \pi_h$, the regression variance reduces to the post-stratified one:
+$$
+\begin{aligned}
+\hat V(\hat{\bar y}_{reg})
+&= \left(1 - \frac nN\right)\frac1n\sum_{h=1}^H \frac{n_h - 1}{n-H}\,s_h^2 \\
+&\approx \left(1 - \frac nN\right)\frac1n\sum_{h=1}^H \frac{n_h}{n}\,s_h^2 \\
+&\approx \left(1 - \frac nN\right)\frac1n\sum_{h=1}^H \pi_h\,s_h^2
+= \hat V(\hat{\bar y}_{post}) .
+\end{aligned}
+$$
+Both are weighted averages of the *same* $s_h^2$; only the weights differ,
+$$
+\underbrace{\frac{n_h - 1}{n - H}}_{\text{sample proportions}}
+\qquad\text{versus}\qquad
+\underbrace{\pi_h = \frac{N_h}{N}}_{\text{population proportions}} .
+$$
+So the substitution $n_h \to n\pi_h$ above is simply: *pool the residuals with the weights we know, not with the ones the sample happened to deliver.* It is the same reasoning that puts $\bar x_U$, rather than $\bar x$, in the ratio estimator.
+
+Seen this way, the estimators of this chapter are one estimator with different auxiliary variables, and $s_e^2 = \frac{1}{n-p}\sum_i e_i^2$ throughout, where $p$ is the number of fitted parameters:
+
+| Estimator | Auxiliary variables | Residual $e_i$ | $p$ |
+|:--|:--|:--|:-:|
+| Ratio | one $x$, line forced through the origin | $y_i - \hat B x_i$ | 1 |
+| Regression | intercept and $x$ | $y_i - \hat B_0 - \hat B_1 x_i$ | 2 |
+| Post-stratification | $H$ group indicators | $y_i - \bar y_h$ | $H$ |
+
+Domain estimation, treated next, stands slightly apart: there the divisor is the random $n_d$ rather than the full $n$, because only the units falling in the domain carry information about it.
+
+### Example: A Nurses Survey (by hand)
+
+A survey of $N = 10{,}000$ people, half women and half men, takes an SRS of $n = 400$ and asks whether they want to become a nurse. The sample has three times as many women as men, though the population is 50/50:
+
+| Stratum | $N_h$ | $n_h$ | Want nurse | $\hat p_h$ |
+|:--|--:|--:|--:|--:|
+| Female | 5000 | 300 | 150 | 0.50 |
+| Male | 5000 | 100 | 10 | 0.10 |
+
+Ignoring this pulls the estimate $\hat p_{SRS} = \frac{160}{400} = (0.5)(0.75) + (0.1)(0.25) = 0.4$ toward the female (higher) rate. Weighting by the *known* population shares instead gives
+$$
+\hat p_{post} = \hat p_f\frac{N_f}{N} + \hat p_m\frac{N_m}{N} = (0.5)(0.5) + (0.1)(0.5) = 0.3 .
+$$
+
+For the standard error, $\hat p_h$ plays the role of $\bar y_h$, and $s_h^2 = \frac{n_h}{n_h-1}\hat p_h(1 - \hat p_h)$ from the realized counts. With the working sample sizes $n_h^{post} = n\pi_h = 200$ in each stratum (proportional to size allocation), every finite population correction is $1 - n/N = 0.96$:
+
+| Post-stratum | $N_h$ | $\pi_h$ | $n_h^{post}$ | $\hat p_h$ | $s_h^2$ | $\pi_h\hat p_h$ | $\hat v_h$ |
+|:--|--:|--:|--:|--:|--:|--:|--:|
+| Female | 5000 | 0.5 | 200 | 0.500 | 0.2508 | 0.2500 | 0.000301 |
+| Male | 5000 | 0.5 | 200 | 0.100 | 0.0909 | 0.0500 | 0.000109 |
+| **Total** | **10000** | **1.0** | **400** | | | **0.3000** | **0.000410** |
+
+where $\hat v_h = \left(1 - n_h^{post}/N_h\right)\pi_h^2\,s_h^2/n_h^{post}$. The short-cut formula gives the same variance without the working sample sizes, using $\sum_h\pi_hs_h^2 = 0.5(0.2508) + 0.5(0.0909) = 0.1709$:
+$$
+\hat V(\hat p_{post}) = \left(1 - \frac nN\right)\frac1n\sum_h\pi_hs_h^2 = \frac{0.96}{400}(0.1709) = 0.000410 .
+$$
+So $\text{SE}(\hat p_{post}) = \sqrt{0.000410} = 0.0203$ and an approximate 95% interval is $0.300 \pm 1.96(0.0203) = [0.260,\ 0.340]$. Treating the data as an unstratified SRS gives $\hat p_{SRS} = 0.4$ with $\text{SE} = \sqrt{\left(1 - \frac{400}{10000}\right)\frac{(0.4)(0.6)}{399}} \approx 0.0240$. Post-stratification is both unbiased and more precise, since it removes the between-sex variability from the standard error.
+
+### Example: agsrs_syn.csv
+
+Any variable known for **every** unit of the population can be used to post-stratify an SRS. We use `agsrs_syn.csv`, a simple random sample of $n=300$ counties drawn without replacement from the population in `agpop.csv` (the script `data/make_agsrs_syn.R` shows how), and compare two post-stratifiers: the census **region**, and **quantile groups of `acres87`** (the 1987 acreage, as in the post-stratification app). The population is the $N=3041$ counties with no missing value in `acres92`, `acres87`, `acres82` or `farms92`.
+
+#### By Region
+
+If we know the true regional population sizes ($N_h$), we can post-stratify our SRS data.
+
+The population is read from `agpop.csv`, keeping the counties with no missing value, and the sample from `agsrs_syn.csv`; acreages are converted to thousands of acres.
+
+```{r agsrs-syn-load}
+## the population, and the sample drawn from it (acres in thousands)
+agpop_ps <- acres_in_thousands(read.csv("data/agpop.csv"))
+agpop_ps <- agpop_ps[complete.cases(agpop_ps[, c("acres92", "acres87", "acres82", "farms92")]), ]
+N <- nrow(agpop_ps)
+agsrs_syn <- acres_in_thousands(read.csv("data/agsrs_syn.csv"))
+```
+
+From the sample we need the observed group sizes $n_h$, the group means $\bar y_h$ and the group standard deviations $s_h$. The regional population sizes $N_h$ are the external information, taken from the population.
+
+```{r agsrs-poststrat-setup}
+nh <- tapply(agsrs_syn[, "acres92"], agsrs_syn[,"region"], length)
+n <- sum(nh)
+sh <- tapply(agsrs_syn[, "acres92"], agsrs_syn[,"region"], sd)
+ybarh <- tapply(agsrs_syn[, "acres92"], agsrs_syn[,"region"], mean)
+# external information: the regional population sizes
+Nh <- tapply(agpop_ps$acres92, agpop_ps$region, length)
+```
+
+**Create $n_h^{\text{post-strat}} = n \times \frac{N_h}{N}$**, instead of using the randomly observed $n_h$.
+
+```{r tbl-agsrs-poststrat-summary}
+#| tbl-cap: "Observed vs. population stratum proportions and post-stratified sample sizes"
+nh_post <- Nh / sum(Nh) * n
+
+## regional summary for stratified sampling estimation
+data.frame(
+  ybarh = ybarh, 
+  sh = sh, 
+  nh = nh, 
+  pi_obs = nh/n, 
+  Nh = Nh, 
+  pi_pop = Nh/sum(Nh),  
+  nh_post = nh_post
+) |> 
+  gt(rownames_to_stub = TRUE) |>
+  cols_label(
+    ybarh = md("$\\bar{y}_h$"),
+    sh = md("$s_h$"),
+    nh = md("$n_h^{\\text{obs}}$"),
+    pi_obs = md("$\\pi^{\\text{obs}}_h$"),
+    Nh = md("$N_h$"),
+    pi_pop = md("$\\pi^{\\text{pop}}_h$"),
+    nh_post = md("$n_h^{\\text{post}}$")
+  ) |> 
+  fmt_number(columns = c(ybarh, sh, pi_obs, pi_pop, nh_post), decimals = 3)
+```
+**Output Note:** The table above shows the difference between the sample proportion ($\pi^{obs}_h$) and the true population proportion ($\pi^{pop}_h$). Post-stratification forces the weights to reflect the true population structure.
+
+The post-stratified estimate comes from `str_est()`, applied with the working sample sizes $n_h^{\text{post}}$. For comparison we also compute the unadjusted SRS estimate, and the true mean of the population.
+
+```{r agsrs-poststrat-est}
+## strata mean estimate
+res_post_strat <- str_est(ybarh, sh, nh_post, Nh, estimate = "mean")
+res_post_strat$table
+post_strat_est <- res_post_strat$estimate
+post_strat_est |> format_est_gt("mean")
+
+## compare with SRS estimate
+res_srs_est <- srs_est(agsrs_syn$acres92, N = N, estimate = "mean", show.details = FALSE)
+srs_est_raw <- res_srs_est$estimate
+srs_est_raw |> format_est_gt("mean")
+
+## true mean check
+mean(agpop_ps$acres92)
+```
+**Output Note:** The post-stratified estimate gives a Standard Error of `r round(post_strat_est["S.E."], 1)`, which is more precise than the unadjusted SRS standard error of `r round(srs_est_raw["S.E."], 1)`.
+
+The same standard error follows from the short-cut formula $\hat V = \left(1-\frac nN\right)\frac1n\sum_h\pi_h s_h^2$ of @sec-poststrat-theory, which needs only the population shares $\pi_h$ and the group variances, not the working sample sizes. The working table lists $\bar y_h$, $s_h^2$ and $\pi_h$, and the two working columns $\pi_h\bar y_h$ and $\pi_h s_h^2$, whose totals are $\bar y_{post}$ and $\sum_h\pi_hs_h^2$:
+
+```{r tbl-agsrs-poststrat-shortcut}
+#| tbl-cap: "Short-cut formula working table: post-stratification by region"
+## working table for the short-cut formula, given the group sizes and the group means and sds
+shortcut_table <- function(Nh, ybarh, sh) {
+  work <- data.frame(Nh = as.vector(Nh), pi_h = as.vector(Nh) / sum(Nh),
+                     ybarh = as.vector(ybarh), s2h = as.vector(sh)^2,
+                     row.names = names(Nh))
+  work$pi_ybar <- work$pi_h * work$ybarh      # working column: pi_h * ybar_h
+  work$pi_s2   <- work$pi_h * work$s2h        # working column: pi_h * s_h^2
+  rbind(work, Total = c(sum(work$Nh), sum(work$pi_h), NA, NA,
+                        sum(work$pi_ybar), sum(work$pi_s2)))
+}
+
+work_reg <- shortcut_table(Nh, ybarh, sh)
+gt(work_reg, rownames_to_stub = TRUE) |>
+  cols_label(Nh = md("$N_h$"), pi_h = md("$\\pi_h$"), ybarh = md("$\\bar{y}_h$"),
+             s2h = md("$s_h^2$"), pi_ybar = md("$\\pi_h\\bar{y}_h$"),
+             pi_s2 = md("$\\pi_h s_h^2$")) |>
+  fmt_number(columns = c(pi_h, ybarh, pi_ybar), decimals = 3) |>
+  fmt_number(columns = c(Nh, s2h, pi_s2), decimals = 0) |>
+  sub_missing(missing_text = "") |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_body(rows = "Total"))
+```
+
+The variance, the standard error and the estimate then follow from the totals of the table, and we compare the standard error with the one from `str_est()`:
+
+```{r agsrs-poststrat-shortcut}
+sum_pi_s2 <- work_reg["Total", "pi_s2"]
+V_short <- (1 - n / sum(Nh)) / n * sum_pi_s2
+c(ybar_post = work_reg["Total", "pi_ybar"], SE_shortcut = sqrt(V_short), SE_str_est = post_strat_est[["S.E."]])
+```
+
+#### By Quantile Groups of `acres87`
+
+The 1987 acreage is recorded for every county, so the population can be cut into groups by its quantiles. As in the app, the cut points are the 25th, 75th and 95th percentiles of the population `acres87`, giving four groups $Q_1,\ldots,Q_4$ of very different sizes.
+
+```{r agsrs-quantile-setup}
+## population cut points at the 25%, 75% and 95% quantiles of acres87
+brk <- quantile(agpop_ps$acres87, probs = c(0, 0.25, 0.75, 0.95, 1))
+round(brk, 1)
+
+## attach the new grouping variable acres87Q to the population and to the sample
+group_of <- function(x) cut(x, breaks = brk, include.lowest = TRUE, labels = paste0("Q", 1:4))
+agpop_ps$acres87Q   <- group_of(agpop_ps$acres87)
+agsrs_syn$acres87Q  <- group_of(agsrs_syn$acres87)
+
+## known population group sizes, and the sample summaries by group
+Nh_q    <- tapply(agpop_ps$acres92,  agpop_ps$acres87Q,  length)
+nh_q    <- tapply(agsrs_syn$acres92, agsrs_syn$acres87Q, length)
+sh_q    <- tapply(agsrs_syn$acres92, agsrs_syn$acres87Q, sd)
+ybarh_q <- tapply(agsrs_syn$acres92, agsrs_syn$acres87Q, mean)
+```
+
+The table compares the observed group proportions with the population ones and gives the working sample sizes.
+
+```{r tbl-agsrs-quantile-summary}
+#| tbl-cap: "Observed vs. population quantile-group proportions and post-stratified sample sizes (acres87 groups)"
+n <- sum(nh_q)
+nh_post_q <- Nh_q / sum(Nh_q) * n
+
+data.frame(
+  ybarh = ybarh_q,
+  sh = sh_q,
+  nh = nh_q,
+  pi_obs = nh_q / n,
+  Nh = Nh_q,
+  pi_pop = Nh_q / sum(Nh_q),
+  nh_post = nh_post_q
+) |>
+  gt(rownames_to_stub = TRUE) |>
+  cols_label(
+    ybarh = md("$\\bar{y}_h$"),
+    sh = md("$s_h$"),
+    nh = md("$n_h^{\\text{obs}}$"),
+    pi_obs = md("$\\pi^{\\text{obs}}_h$"),
+    Nh = md("$N_h$"),
+    pi_pop = md("$\\pi^{\\text{pop}}_h$"),
+    nh_post = md("$n_h^{\\text{post}}$")
+  ) |>
+  fmt_number(columns = c(ybarh, sh, pi_obs, pi_pop, nh_post), decimals = 3)
+```
+
+Apply `str_est()` with the working sample sizes $n_h^{\text{post}}=n\,N_h/N$ in place of the observed $n_h$:
+
+```{r agsrs-quantile-est}
+res_quantile <- str_est(ybarh_q, sh_q, nh_post_q, Nh_q, estimate = "mean")
+quantile_est <- res_quantile$estimate
+quantile_est |> format_est_gt("mean")
+```
+
+The short-cut working table for the quantile groups, with the same layout:
+
+```{r tbl-agsrs-quantile-shortcut}
+#| tbl-cap: "Short-cut formula working table: post-stratification by acres87 quantile groups"
+work_q <- shortcut_table(Nh_q, ybarh_q, sh_q)
+gt(work_q, rownames_to_stub = TRUE) |>
+  cols_label(Nh = md("$N_h$"), pi_h = md("$\\pi_h$"), ybarh = md("$\\bar{y}_h$"),
+             s2h = md("$s_h^2$"), pi_ybar = md("$\\pi_h\\bar{y}_h$"),
+             pi_s2 = md("$\\pi_h s_h^2$")) |>
+  fmt_number(columns = c(pi_h, ybarh, pi_ybar), decimals = 3) |>
+  fmt_number(columns = c(Nh, s2h, pi_s2), decimals = 0) |>
+  sub_missing(missing_text = "") |>
+  tab_style(style = cell_text(weight = "bold"),
+            locations = cells_body(rows = "Total"))
+```
+
+The variance, the standard error and the estimate follow from the totals, as before, and agree with `str_est()`:
+
+```{r agsrs-quantile-shortcut}
+sum_pi_s2_q <- work_q["Total", "pi_s2"]
+V_short_q <- (1 - n / sum(Nh_q)) / n * sum_pi_s2_q
+c(ybar_post = work_q["Total", "pi_ybar"], SE_shortcut = sqrt(V_short_q), SE_str_est = quantile_est[["S.E."]])
+```
+
+### Comparing the Two Post-stratifications
+
+Finally we put the three estimates, the unadjusted SRS and the two post-stratified ones, side by side.
+
+```{r tbl-agsrs-poststrat-compare}
+#| tbl-cap: "Estimates of the mean acres92 and their standard errors: SRS, post-stratified by region, and post-stratified by acres87 quantile groups"
+compare_est <- rbind(
+  "SRS (no post-stratification)" = srs_est_raw[c("Est.", "S.E.")],
+  "Post-stratified by region"    = post_strat_est[c("Est.", "S.E.")],
+  "Post-stratified by acres87"   = quantile_est[c("Est.", "S.E.")]
+)
+compare_est |>
+  as.data.frame() |>
+  gt(rownames_to_stub = TRUE) |>
+  cols_label(Est. = md("$\\bar{y}$"), S.E. = md("$\\mathrm{SE}$")) |>
+  fmt_number(columns = everything(), decimals = 2)
+```
+**Output Note:** Both post-stratifications reduce the standard error of the SRS estimate, because the groups differ in mean acreage. The `acres87` groups reduce it much more than the regions, since the 1987 acreage is strongly related to the 1992 acreage, so the groups are far more homogeneous in `acres92`. A good post-stratifier is a variable that is known for the whole population and strongly related to $y$.
+
+All three estimates are close to the population mean of `acres92`, `r round(mean(agpop_ps$acres92), 1)`, and their 95% intervals cover it.
+
+### Interactive Demonstration: Post-stratifying a Simple Random Sample {#sec-poststrat-app}
+
+The simulation for this section runs as a standalone app:
+[Post-stratification of a Simple Random Sample](../shinylives_sampling/app-poststrat.html){target="_blank"}.
+It opens in a new tab, together with its documentation and the full
+[list of apps](../shinylives_sampling/index.html){target="_blank"}.
+
+## Domain Estimation
+
+### Theory {#sec-domain-theory}
+
+#### Domains
+
+Suppose there are $D$ **domains**, subpopulations of interest determined only *after* sampling, such as men and women. Let $\mathcal U_d$ be the population units in domain $d$ and $\mathcal S_d$ the sampled units in domain $d$, with $N_d = |\mathcal U_d|$ and $n_d = |\mathcal S_d|$. We might want the mean salary for men and for women separately, but we do not know a person's gender before selecting them, so we cannot stratify by domain in advance. Instead we estimate each domain's mean or total after sampling, by splitting the sample by domain ID.
+
+The domain sample size $n_d$ is a random variable: a different SRS would very likely give a different $n_d$. The domain mean is
+$$
+\bar y_d = \frac{1}{n_d}\sum_{i \in \mathcal S_d} y_i ,
+$$
+which *looks* like an ordinary sample mean, but the randomness of $n_d$ is the source of the extra uncertainty.
+
+#### Domain means are ratio estimates
+
+Define
+$$
+x_i = \begin{cases}1 & i \in \mathcal U_d\\ 0 & i \notin \mathcal U_d\end{cases}
+\qquad
+u_i = y_ix_i = \begin{cases}y_i & i \in \mathcal U_d\\ 0 & i \notin \mathcal U_d\end{cases}
+$$
+Then $t_x = N_d$, $\bar x_U = N_d/N$, $\bar y_{U_d} = t_u/t_x = B$, $\bar x = n_d/n$, and
+$$
+\bar y_d = \hat B = \frac{\bar u}{\bar x} = \frac{\hat t_u}{\hat t_x} = \frac{\sum_{i \in \mathcal S_d} y_i}{n_d} .
+$$
+Domain mean estimation is therefore a special case of ratio estimation, with $\sum_{i=1}^n u_i/\sum_{i=1}^n x_i$ as the ratio. This is exactly why it is a ratio estimator and not a simple mean.
+
+#### Standard error of a domain mean
+
+Applying the formula for $\hat V(\hat B)$ with $x_i$ and $u_i$ as defined above gives
+$$
+\hat V(\bar y_d) = \left(1 - \frac nN\right)\frac{s_d^2}{n_d},
+\qquad
+s_d^2 = \frac{1}{n_d - 1}\sum_{i \in \mathcal S_d}\left(y_i - \bar y_d\right)^2 ,
+$$
+where $S_d$ is the set of sampled units in domain $d$, $n$ is the overall sample size, $N$ is the population size, and $s_d^2$ is the sample variance of the $y_i$ within domain $d$. (Exactly, the variance is $\left(1 - \frac nN\right)\frac{n}{n_d^2}\frac{(n_d - 1)s_d^2}{n-1}$, which is approximately the expression above.) Ninety-five percent intervals use $t_{0.975,\,n_d - 1}$.
+
+This is **not** the same as naively applying SRS *within* domain $d$, as if $n_d$ were fixed, which would use $\left(1 - \frac{n_d}{N_d}\right)$ in place of $\left(1 - \frac nN\right)$. Only the finite population correction differs: the **overall** rate (correct, since $n_d$ is random) versus the **domain** rate (wrong). They agree only when $n_d/N_d \approx n/N$. The fpc uses the overall sampling fraction $n/N$ also because the domain's population size $N_d$ is usually unknown.
+
+#### Estimating a domain total
+
+* If $N_d$ is **known**: $\hat t_{yd} = \bar y_d \times N_d$, with $\text{SE}(\hat t_{yd}) = \text{SE}(\bar y_d) \times N_d$.
+* If $N_d$ is **unknown**: estimate it first, $\hat N_d = N\,n_d/n$, and use $\hat t_{yd} = \bar y_d \times \hat N_d = N\bar u$, with
+$$
+\text{SE}(\hat t_{yd}) = N\,\text{SE}(\bar u) = N\sqrt{\left(1 - \frac nN\right)\frac{s_u^2}{n}} .
+$$
+
+### Example: agsrs.csv
+
+#### Estimating Domain Means
+
+When estimating the mean for a specific subgroup (like a region), the sample size in that subgroup ($n_d$) is a random variable, which increases our uncertainty.
+
+```{r agsrs-domain-est}
+agsrs <- acres_in_thousands(read.csv("data/agsrs.csv"))
+n <- nrow(agsrs)
+
+## estimating domain means
+region_agsrs_domain <- data.frame(rbind(
+    NC = domain_est(agsrs$acres92[agsrs$region=="NC"], n=n, N = 3078),
+    NE = domain_est(agsrs$acres92[agsrs$region=="NE"], n=n, N = 3078),
+    S  = domain_est(agsrs$acres92[agsrs$region=="S"], n=n, N = 3078),
+    W  = domain_est(agsrs$acres92[agsrs$region=="W"], n=n, N = 3078)
+))
+
+region_agsrs_domain |> format_est_gt("domain_mean")
+```
+
+If we incorrectly used the standard SRS formula (pretending $n_d$ was fixed), our standard errors would be artificially low:
+
+```{r agsrs-domain-srs}
+## naively applying SRS estimation to each domain (incorrect analysis)
+region_agsrs_srs <- data.frame(rbind(
+    NC = srs_est(agsrs$acres92[agsrs$region=="NC"], N = 1054, estimate = "mean", show.details = FALSE)$estimate,
+    NE = srs_est(agsrs$acres92[agsrs$region=="NE"], N = 220,  estimate = "mean", show.details = FALSE)$estimate,
+    S  = srs_est(agsrs$acres92[agsrs$region=="S"],  N = 1382, estimate = "mean", show.details = FALSE)$estimate,
+    W  = srs_est(agsrs$acres92[agsrs$region=="W"],  N = 422,  estimate = "mean", show.details = FALSE)$estimate
+))
+
+region_agsrs_srs |> format_est_gt("mean")
+```
+**Output Note:** Comparing the two tables, you can see the correct `domain_mean` Standard Errors are larger, appropriately penalizing us for the uncertainty in how many counties from each region randomly fell into our sample.
+
+### Example: Teacher Aspirations (teacher data)
+
+#### Importing Data and Calculating Contingency Table
+
+The teacher data record, for each student, the gender and whether they want to become a teacher. We tabulate the two variables and compute the proportion within each gender, the two domains.
+
+```{r teacher-load}
+teacher <- read.csv("data/college_teacher.csv")
+
+table(teacher[, 2:1])
+addmargins(table(teacher[, 2:1]), 2)
+# Proportions of students who want to become a teacher in two domains (female and male)
+prop.table(table(teacher[, 2:1]), margin = "gender")
+```
+
+#### Estimating Domain Means
+
+Treating gender as a domain, with known sizes $N_d$ of 3000 and 1000 out of $N = 4000$, `domain_est()` estimates each domain mean using the overall sampling fraction $n/N$ in the variance.
+
+```{r teacher-domain-est}
+Nh <- c(3000, 1000)
+n <- nrow(teacher)
+domain_teacher_est <- data.frame(rbind(
+    female = domain_est(subset(teacher, gender==1)$teacher, n=n, N=4000),
+    male   = domain_est(subset(teacher, gender==2)$teacher, n=n, N=4000)
+))
+
+domain_teacher_est |> format_est_gt("domain_mean")
+```
+
 ## Simulation study with agpop.csv
 
 Let's test this practically by drawing 2000 random samples and seeing how SRS and Ratio estimators behave under repeated sampling.
 
 ### Information of population data 
+
+We read the population, drop the counties missing `acres92` or `acres87`, and compute the true total $t_y$ of 1992 acreage, the known total $t_x$ of 1987 acreage and the true ratio $B = t_y/t_x$ (acreages in thousands).
 
 ```{r agpop-load}
 agpop <- acres_in_thousands(read.csv("data/agpop.csv"))
@@ -298,11 +1122,15 @@ txU <- sum(agpop[, "acres87"])
 B <- tyU / txU
 ```
 
+The scatter plot of 1992 against 1987 acreage, with the line through the origin of slope $B$, shows how well the earlier acreage predicts the later one.
+
 ```{r fig-agpop-acres8792-ratio-line}
 #| fig-cap: "1992 vs. 1987 county acreage with the true ratio line"
 plot(agpop[, "acres87"], agpop[, "acres92"], main="Acres 1992 vs Acres 1987")
 abline(a = 0, b = B, col="red")
 ```
+
+We fit the population line and compute the expected variance reduction $1 - S_d^2/S_y^2$ from the population residuals $d_i = y_i - Bx_i$ of the theory section.
 
 ```{r agpop-load-lm}
 # linear model output
@@ -317,6 +1145,8 @@ exp_var_red
 **Output Note:** Past acreage (1987) strongly predicts current acreage (1992). The theoretically expected variance reduction is roughly `r round(exp_var_red * 100, 1)`%.
 
 ### Simulation Studies
+
+Each of the 2000 simulations draws an SRS of $n = 300$ counties and computes two estimates of the total 1992 acreage: the SRS estimate $N\bar y$ and the ratio estimate $\hat B\,t_x$. The boxplot compares their sampling distributions around the true total (red line).
 
 ```{r fig-agpop-ratio-simulation-boxplot, cache=TRUE}
 #| fig-cap: "Estimator variance under repeated sampling: SRS vs. ratio estimator (2000 simulations)"
@@ -359,349 +1189,3 @@ data.frame(sim_var, ratio_sim_var, percentage_reduction) |>
   fmt_number(columns = c(ratio_sim_var), decimals = 4)
 ```
 **Output Note:** The boxplot dramatically illustrates the precision gain. The variance of the ratio estimator is only `r round(ratio_sim_var["ratio"] * 100, 1)`% of the SRS variance, confirming our theoretical expectations.
-
-
-
-## Regression Estimation for the cherry.csv dataset 
-
-When the relationship between $y$ and $x$ doesn't pass exactly through the origin, we use Regression Estimation.
-
-### Importing data
-
-```{r cherry-reg-load}
-cherry <- read.csv("data/cherry.csv", header = T)
-ydata <- cherry$volume 
-xdata <- cherry$diameter
-t_diameters <- 41835
-xbarU <- t_diameters / 2967 
-N <- 2967
-```
-
-### Regression Estimation Using the Function
-
-#### Fitting a linear regression model
-
-```{r cherry-reg-fit}
-n <- length(ydata)
-lmfit <- lm(ydata ~ xdata)
-lmfit_gt <- format_lm_gt(lmfit)
-lmfit_gt$coef
-lmfit_gt$fit
-```
-
-```{r fig-cherry-regression-fit}
-#| fig-cap: "Cherry tree volume vs. diameter with the fitted regression line"
-plot(xdata, ydata, main="Linear Regression: Volume vs Diameter")
-abline(lmfit, col="green", lwd=2)
-```
-
-The function's `$table` shows the row-level working values $x_i$, $y_i$, fitted $\hat{y}_i = \hat{B}_0 + \hat{B}_1 x_i$, residuals $e_i = y_i - \hat{y}_i$, and $e_i^2$ (with a Sum row and a footnote giving $\hat B_0$, $\hat B_1$, and $s_e^2$):
-
-```{r cherry-reg-model}
-res_reg_model <- reg_est(ydata, xdata, N = N, estimate = "model")
-res_reg_model$table
-```
-
-#### Estimate the mean
-
-We compute the regression estimate $\overline{y}_{reg}$ by passing `xbarU` with `estimate = "mean"`.
-
-```{r cherry-reg-mean}
-res_reg_mean <- reg_est(ydata, xdata, xbarU = xbarU, N = N, estimate = "mean")
-res_reg_mean$table
-
-output_reg <- res_reg_mean$estimate
-output_reg |> format_est_gt("reg_mean")
-```
-**Output Note:** The Regression estimate for the mean volume is `r round(output_reg["Est."], 3)` with a standard error of `r round(output_reg["S.E."], 4)`.
-
-#### Estimate the total
-
-```{r cherry-reg-total}
-reg_total_volume_raw <- reg_est(ydata, xdata, xbarU = xbarU, N = N, estimate = "total")$estimate
-reg_total_volume_raw |> format_est_gt("reg_total")
-```
-
-#### Percentage of Variance Reduction
-
-```{r cherry-reg-varred}
-reg_mean_volume_raw <- output_reg
-var_reduction_reg <- 1 - (reg_mean_volume_raw["S.E."] / srs_mean_vol_raw["S.E."])^2
-unname(var_reduction_reg)
-```
-**Output Note:** The variance reduction for the regression estimator is `r round(unname(var_reduction_reg) * 100, 1)`%, which is similar to the ratio estimator since the true intercept is very close to zero.
-
-## Regression estimation for photo counts of dead trees
-
-To estimate the number of dead trees in an area, we divide the area into 100 square plots and count dead trees on photographs. We select an SRS of 25 plots for exact field counts. We know the true mean photo count is 11.3.
-
-```{r deadtrees-data}
-photocounts <- c(10, 12, 7, 13, 13, 6, 17, 16, 15, 10, 14, 12, 10, 5, 12, 10,
-                 10, 9, 6, 11, 7, 9, 11, 10, 10)
-
-fieldcounts <- c(15, 14, 9, 14, 8, 5, 18, 15, 13, 15, 11, 15, 12, 8, 13,
-                 9, 11, 12, 9, 12, 13, 11, 10, 9, 8)
-
-lmfit <- lm(fieldcounts ~ photocounts)
-lmfit_gt <- format_lm_gt(lmfit)
-lmfit_gt$coef
-lmfit_gt$fit
-```
-
-```{r fig-deadtrees-regression-fit}
-#| fig-cap: "Field counts vs. photo counts of dead trees with the fitted regression line"
-plot(photocounts, fieldcounts, main="Field Counts vs Photo Counts")
-abline(lmfit, col="purple", lwd=2)
-```
-
-Let's compare the three different estimation methods to see which provides the lowest Standard Error for the population mean.
-
-```{r deadtrees-compare}
-# 1. Regression estimate for the mean
-res_dt_reg <- reg_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100, estimate = "mean")
-res_dt_reg$table
-dt_reg_raw <- res_dt_reg$estimate
-dt_reg_raw |> format_est_gt("reg_mean")
-
-# (And estimating the total)
-reg_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100, estimate = "total")$estimate |>
-  format_est_gt("reg_total")
-
-# 2. Simple random sampling estimate for the mean (Ignoring photo counts)
-res_dt_srs <- srs_est(sdata = fieldcounts, N = 100, estimate = "mean", show.details = FALSE)
-dt_srs_raw <- res_dt_srs$estimate
-dt_srs_raw |> format_est_gt("mean")
-
-# 3. Ratio estimate for the mean
-res_dt_ratio <- ratio_est(ydata = fieldcounts, xdata = photocounts, xbarU = 11.3, N = 100, estimate = "mean")
-res_dt_ratio$table
-dt_ratio_raw <- res_dt_ratio$estimate
-dt_ratio_raw |> format_est_gt("ratio_mean")
-```
-#### Output Note: {-}
-*   **SRS Mean:** SE = `r round(dt_srs_raw["S.E."], 3)`
-*   **Ratio Mean:** SE = `r round(dt_ratio_raw["S.E."], 3)`
-
-*   **Regression Mean:** SE = `r round(dt_reg_raw["S.E."], 3)`
-
-Because the intercept of the true line is non-zero, the **Regression estimator** provides the most precise estimate in this scenario.
-
-
-## Post-stratification with the agsrs.csv example
-
-Any variable known for **every** unit of the population can be used to post-stratify an SRS. We use the SRS of $n=300$ counties in `agsrs.csv` and compare two post-stratifiers: the census **region**, and **quantile groups of `acres87`** (the 1987 acreage, as in the post-stratification app).
-
-### By Region
-
-If we know the true regional population sizes ($N_h$), we can post-stratify our SRS data.
-
-```{r agsrs-load}
-agsrs <- acres_in_thousands(read.csv("data/agsrs.csv"))
-```
-
-```{r agsrs-poststrat-setup}
-nh <- tapply(agsrs[, "acres92"], agsrs[,"region"], length)
-n <- sum(nh)
-sh <- tapply(agsrs[, "acres92"], agsrs[,"region"], sd)
-ybarh <- tapply(agsrs[, "acres92"], agsrs[,"region"], mean)
-# create a vector with external information
-Nh <- c(NC = 1054, NE = 220, S = 1382, W = 422)
-```
-
-**Create $n_h^{\text{post-strat}} = n \times \frac{N_h}{N}$**, instead of using the randomly observed $n_h$.
-
-```{r tbl-agsrs-poststrat-summary}
-#| tbl-cap: "Observed vs. population stratum proportions and post-stratified sample sizes"
-nh_post <- Nh / sum(Nh) * n
-
-## regional summary for stratified sampling estimation
-data.frame(
-  ybarh = ybarh, 
-  sh = sh, 
-  nh = nh, 
-  pi_obs = nh/n, 
-  Nh = Nh, 
-  pi_pop = Nh/sum(Nh),  
-  nh_post = nh_post
-) |> 
-  gt(rownames_to_stub = TRUE) |>
-  cols_label(
-    ybarh = md("$\\bar{y}_h$"),
-    sh = md("$s_h$"),
-    nh = md("$n_h^{\\text{obs}}$"),
-    pi_obs = md("$\\pi^{\\text{obs}}_h$"),
-    Nh = md("$N_h$"),
-    pi_pop = md("$\\pi^{\\text{pop}}_h$"),
-    nh_post = md("$n_h^{\\text{post}}$")
-  ) |> 
-  fmt_number(columns = c(ybarh, sh, pi_obs, pi_pop, nh_post), decimals = 3)
-```
-**Output Note:** The table above shows the difference between the sample proportion ($\pi^{obs}_h$) and the true population proportion ($\pi^{pop}_h$). Post-stratification forces the weights to reflect the true population structure.
-
-```{r agsrs-poststrat-est}
-## strata mean estimate
-res_post_strat <- str_est(ybarh, sh, nh_post, Nh, estimate = "mean")
-res_post_strat$table
-post_strat_est <- res_post_strat$estimate
-post_strat_est |> format_est_gt("mean")
-
-## compare with SRS estimate
-res_srs_est <- srs_est(agsrs$acres92, N = 3078, estimate = "mean", show.details = FALSE)
-srs_est_raw <- res_srs_est$estimate
-srs_est_raw |> format_est_gt("mean")
-
-## true mean check
-mean(agpop$acres92)
-```
-**Output Note:** The post-stratified estimate gives a Standard Error of `r round(post_strat_est["S.E."], 1)`, which is more precise than the unadjusted SRS standard error of `r round(srs_est_raw["S.E."], 1)`.
-
-### By Quantile Groups of `acres87`
-
-The 1987 acreage is recorded for every county, so the population can be cut into groups by its quantiles. As in the app, the cut points are the 25th, 75th and 95th percentiles of the population `acres87`, giving four groups $Q_1,\ldots,Q_4$ of very different sizes; the 23 counties with `acres87` missing are left out of the population.
-
-```{r agsrs-quantile-setup}
-agpop_q <- acres_in_thousands(read.csv("data/agpop.csv"))
-agpop_q <- agpop_q[!is.na(agpop_q$acres87), ]
-
-## population cut points, and the group of any acres87 value
-brk <- quantile(agpop_q$acres87, probs = c(0, 0.25, 0.75, 0.95, 1))
-group_of <- function(x) cut(x, breaks = brk, include.lowest = TRUE, labels = paste0("Q", 1:4))
-round(brk, 1)
-
-## known population group sizes, and the sample summaries by group
-Nh_q <- tapply(agpop_q$acres87, group_of(agpop_q$acres87), length)
-g_q <- group_of(agsrs$acres87)
-nh_q <- tapply(agsrs$acres92, g_q, length)
-sh_q <- tapply(agsrs$acres92, g_q, sd)
-ybarh_q <- tapply(agsrs$acres92, g_q, mean)
-```
-
-```{r tbl-agsrs-quantile-summary}
-#| tbl-cap: "Observed vs. population quantile-group proportions and post-stratified sample sizes (acres87 groups)"
-n <- sum(nh_q)
-nh_post_q <- Nh_q / sum(Nh_q) * n
-
-data.frame(
-  ybarh = ybarh_q,
-  sh = sh_q,
-  nh = nh_q,
-  pi_obs = nh_q / n,
-  Nh = Nh_q,
-  pi_pop = Nh_q / sum(Nh_q),
-  nh_post = nh_post_q
-) |>
-  gt(rownames_to_stub = TRUE) |>
-  cols_label(
-    ybarh = md("$\\bar{y}_h$"),
-    sh = md("$s_h$"),
-    nh = md("$n_h^{\\text{obs}}$"),
-    pi_obs = md("$\\pi^{\\text{obs}}_h$"),
-    Nh = md("$N_h$"),
-    pi_pop = md("$\\pi^{\\text{pop}}_h$"),
-    nh_post = md("$n_h^{\\text{post}}$")
-  ) |>
-  fmt_number(columns = c(ybarh, sh, pi_obs, pi_pop, nh_post), decimals = 3)
-```
-
-```{r agsrs-quantile-est}
-res_quantile <- str_est(ybarh_q, sh_q, nh_post_q, Nh_q, estimate = "mean")
-quantile_est <- res_quantile$estimate
-quantile_est |> format_est_gt("mean")
-```
-
-### Comparing the Two Post-stratifications
-
-```{r tbl-agsrs-poststrat-compare}
-#| tbl-cap: "Estimates of the mean acres92 and their standard errors: SRS, post-stratified by region, and post-stratified by acres87 quantile groups"
-compare_est <- rbind(
-  "SRS (no post-stratification)" = srs_est_raw[c("Est.", "S.E.")],
-  "Post-stratified by region"    = post_strat_est[c("Est.", "S.E.")],
-  "Post-stratified by acres87"   = quantile_est[c("Est.", "S.E.")]
-)
-compare_est |>
-  as.data.frame() |>
-  gt(rownames_to_stub = TRUE) |>
-  cols_label(Est. = md("$\\bar{y}$"), S.E. = md("$\\mathrm{SE}$")) |>
-  fmt_number(columns = everything(), decimals = 2)
-```
-**Output Note:** Both post-stratifications reduce the standard error of the SRS estimate, because the groups differ in mean acreage. The `acres87` groups reduce it much more than the regions, since the 1987 acreage is strongly related to the 1992 acreage, so the groups are far more homogeneous in `acres92`. A good post-stratifier is a variable that is known for the whole population and strongly related to $y$.
-
-The population mean of `acres92` over these counties is `r round(mean(agpop_q$acres92, na.rm = TRUE), 1)`. The `acres87` estimate has the smallest SE but lies `r round((mean(agpop_q$acres92, na.rm = TRUE) - quantile_est["Est."]) / quantile_est["S.E."], 1)` SEs below it: the top group $Q_4$ has only `r nh_q[4]` sampled counties and is extremely skewed, so the normal-theory SE is optimistic there.
-
-## Estimating Domain Means with the agsrs.csv example
-
-### Estimating Domain Means
-
-When estimating the mean for a specific subgroup (like a region), the sample size in that subgroup ($n_d$) is a random variable, which increases our uncertainty.
-
-```{r agsrs-domain-est}
-n <- nrow(agsrs)
-
-## estimating domain means
-region_agsrs_domain <- data.frame(rbind(
-    NC = domain_est(agsrs$acres92[agsrs$region=="NC"], n=n, N = 3078),
-    NE = domain_est(agsrs$acres92[agsrs$region=="NE"], n=n, N = 3078),
-    S  = domain_est(agsrs$acres92[agsrs$region=="S"], n=n, N = 3078),
-    W  = domain_est(agsrs$acres92[agsrs$region=="W"], n=n, N = 3078)
-))
-
-region_agsrs_domain |> format_est_gt("domain_mean")
-```
-
-If we incorrectly used the standard SRS formula (pretending $n_d$ was fixed), our standard errors would be artificially low:
-
-```{r agsrs-domain-srs}
-## naively applying SRS estimation to each domain (incorrect analysis)
-region_agsrs_srs <- data.frame(rbind(
-    NC = srs_est(agsrs$acres92[agsrs$region=="NC"], N = 1054, estimate = "mean", show.details = FALSE)$estimate,
-    NE = srs_est(agsrs$acres92[agsrs$region=="NE"], N = 220,  estimate = "mean", show.details = FALSE)$estimate,
-    S  = srs_est(agsrs$acres92[agsrs$region=="S"],  N = 1382, estimate = "mean", show.details = FALSE)$estimate,
-    W  = srs_est(agsrs$acres92[agsrs$region=="W"],  N = 422,  estimate = "mean", show.details = FALSE)$estimate
-))
-
-region_agsrs_srs |> format_est_gt("mean")
-```
-**Output Note:** Comparing the two tables, you can see the correct `domain_mean` Standard Errors are larger, appropriately penalizing us for the uncertainty in how many counties from each region randomly fell into our sample.
-
-## Estimating Domain Means with the teacher example
-
-### Importing Data and Calculating Contingency Table
-
-```{r teacher-load}
-teacher <- read.csv("data/college_teacher.csv")
-
-table(teacher[, 2:1])
-addmargins(table(teacher[, 2:1]), 2)
-# Proportions of students who want to become a teacher in two domains (female and male)
-prop.table(table(teacher[, 2:1]), margin = "gender")
-```
-
-### Estimating Domain Means
-
-```{r teacher-domain-est}
-Nh <- c(3000, 1000)
-n <- nrow(teacher)
-domain_teacher_est <- data.frame(rbind(
-    female = domain_est(subset(teacher, gender==1)$teacher, n=n, N=4000),
-    male   = domain_est(subset(teacher, gender==2)$teacher, n=n, N=4000)
-))
-
-domain_teacher_est |> format_est_gt("domain_mean")
-```
-
-
-## Shinylive App Illustrating Ratio Estimation and Regression Estimation
-
-The simulation for this section runs as a standalone app:
-[Ratio Estimation and Regression Estimation](../shinylives_sampling/app-ratio.html){target="_blank"}.
-It opens in a new tab, together with its documentation and the full
-[list of apps](../shinylives_sampling/index.html){target="_blank"}.
-
-
-## Interactive Demonstration: Post-stratifying a Simple Random Sample {#sec-poststrat-app}
-
-The simulation for this section runs as a standalone app:
-[Post-stratification of a Simple Random Sample](../shinylives_sampling/app-poststrat.html){target="_blank"}.
-It opens in a new tab, together with its documentation and the full
-[list of apps](../shinylives_sampling/index.html){target="_blank"}.
-

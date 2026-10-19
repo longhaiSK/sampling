@@ -840,63 +840,90 @@ between-sex variability from the standard error.
 
 ## Example: Post-Stratifying Farm Acreage by Region
 
-The SRS of $n=300$ counties (`agsrs.csv`, acres in thousands) is sorted
-afterward into the four census regions, whose sizes are known from the Census
-($N=3078$). The sample shares differ from the population shares:
+An SRS of $n=300$ counties (`agsrs_syn.csv`, acres in thousands) is sorted
+afterward into groups whose sizes are known from the Census population
+(`agpop.csv`, $N=3041$ counties). First, the four census regions:
 
 ```{r}
-#| label: tbl-poststrat-acreage
+#| label: tbl-poststrat-region
 #| message: false
 library(gt)
-agsrs <- read.csv("data/agsrs.csv")
-agsrs$y <- agsrs$acres92 / 1000
-Nh <- c(NE = 220, NC = 1054, S = 1382, W = 422)
-N <- sum(Nh); n <- nrow(agsrs); pih <- Nh / N
-nh    <- as.integer(table(agsrs$region)[names(Nh)])
-ybarh <- tapply(agsrs$y, agsrs$region, mean)[names(Nh)]
-s2h   <- tapply(agsrs$y, agsrs$region, var)[names(Nh)]
+pop <- read.csv("data/agpop.csv")
+for (v in c("acres92", "acres87", "acres82", "farms92")) pop[[v]][pop[[v]] == -99] <- NA
+pop <- pop[complete.cases(pop[, c("acres92", "acres87", "acres82", "farms92")]), ]
+pop$acres92 <- pop$acres92 / 1000; pop$acres87 <- pop$acres87 / 1000
+samp <- read.csv("data/agsrs_syn.csv")
+samp$acres92 <- samp$acres92 / 1000; samp$acres87 <- samp$acres87 / 1000
+N <- nrow(pop); n <- nrow(samp)
 
-ps_tab <- data.frame(Region = c("Northeast", "North Central", "South", "West"),
-                     Nh = Nh, pih = pih, nh = nh, nh_post = n * pih,
-                     ybarh = ybarh, s2h = s2h, pis2 = pih * s2h)
-gt(ps_tab, rowname_col = "Region") |>
-  fmt_number(columns = c(pih), decimals = 3) |>
-  fmt_number(columns = c(nh_post), decimals = 1) |>
-  fmt_number(columns = c(ybarh, s2h, pis2), decimals = 0, use_seps = TRUE) |>
-  fmt_number(columns = c(Nh, nh), decimals = 0) |>
-  cols_label(Nh = md("$N_h$"), pih = md("$\\pi_h$"), nh = md("$n_h$"),
-             nh_post = md("$n\\pi_h$"), ybarh = md("$\\bar y_h$"),
-             s2h = md("$s_h^2$"), pis2 = md("$\\pi_h s_h^2$")) |>
-  tab_options(table.font.size = "70%")
+## post-stratification summary for a grouping of the population and of the sample
+ps_summary <- function(gpop, gsamp, labels) {
+  Nh <- as.vector(table(gpop)); pih <- Nh / N
+  nh <- as.vector(table(gsamp))
+  ybarh <- as.vector(tapply(samp$acres92, gsamp, mean))
+  s2h <- as.vector(tapply(samp$acres92, gsamp, var))
+  data.frame(Group = labels, Nh = Nh, pih = pih, nh = nh, nh_post = n * pih,
+             ybarh = ybarh, s2h = s2h, pis2 = pih * s2h)
+}
+show_ps <- function(tab)
+  gt(tab, rowname_col = "Group") |>
+    fmt_number(columns = pih, decimals = 3) |>
+    fmt_number(columns = nh_post, decimals = 1) |>
+    fmt_number(columns = c(ybarh, s2h, pis2), decimals = 0, use_seps = TRUE) |>
+    fmt_number(columns = c(Nh, nh), decimals = 0, use_seps = TRUE) |>
+    cols_label(Nh = md("$N_h$"), pih = md("$\\pi_h$"), nh = md("$n_h$"),
+               nh_post = md("$n\\pi_h$"), ybarh = md("$\\bar y_h$"),
+               s2h = md("$s_h^2$"), pis2 = md("$\\pi_h s_h^2$")) |>
+    tab_options(table.font.size = "70%")
+
+reg <- c("NE", "NC", "S", "W")
+tab_reg <- ps_summary(factor(pop$region, reg), factor(samp$region, reg),
+                      c("Northeast", "North Central", "South", "West"))
+show_ps(tab_reg)
 ```
+
+## Example: Post-Stratifying by `acres87` Quantile Groups
+
+Second, the 1987 acreage, known for every county, cut at the population 25th,
+75th and 95th percentiles into groups $Q_1,\ldots,Q_4$ (as in the
+post-stratification app):
+
+```{r}
+#| label: tbl-poststrat-acres87
+brk <- quantile(pop$acres87, probs = c(0, 0.25, 0.75, 0.95, 1))
+grp <- function(x) cut(x, breaks = brk, include.lowest = TRUE, labels = paste0("Q", 1:4))
+tab_q <- ps_summary(grp(pop$acres87), grp(samp$acres87), paste0("Q", 1:4))
+show_ps(tab_q)
+```
+
+The groups are very unequal: $Q_4$ holds only 5% of the counties but has by far
+the largest acreage and variance.
 
 ## Example: Post-Stratified Acreage Results
 
 ```{r}
-ybar_post <- sum(pih * ybarh)
-sum_pis2  <- sum(pih * s2h)
-V_post    <- (1 - n / N) / n * sum_pis2
-se_post   <- sqrt(V_post)
-ybar_srs  <- mean(agsrs$y)
-se_srs    <- sqrt((1 - n / N) * var(agsrs$y) / n)
+res <- function(tab) {
+  m <- sum(tab$pih * tab$ybarh)
+  V <- (1 - n / N) / n * sum(tab$pis2)
+  c(sum_pis2 = sum(tab$pis2), est = m, se = sqrt(V))
+}
+r_reg <- res(tab_reg); r_q <- res(tab_q)
+se_srs <- sqrt((1 - n / N) * var(samp$acres92) / n)
+ybar_srs <- mean(samp$acres92)
 ```
 
-Using the short-cut formula, with $\sum_h\pi_hs_h^2=$ `r format(round(sum_pis2), big.mark = ",")`:
-$$
-\hat{\bar y}_{\text{post}}=\sum_h\pi_h\bar y_h=`r round(ybar_post, 1)`,
-\qquad
-\hat V=\Big(1-\frac{300}{3078}\Big)\frac{1}{300}\,(`r round(sum_pis2)`)
-=`r round(V_post, 1)` ,
-$$
-so $\text{SE}(\hat{\bar y}_{\text{post}})=`r round(se_post, 2)`$ thousand acres, and an
-approximate 95% CI is $`r round(ybar_post, 1)` \pm 1.96(`r round(se_post, 2)`)
-=[`r round(ybar_post - 1.96 * se_post, 1)`,\ `r round(ybar_post + 1.96 * se_post, 1)`]$.
+With the short-cut formula $\hat V=(1-\frac nN)\frac1n\sum_h\pi_hs_h^2$,
+$1-\frac nN=`r round(1 - n / N, 4)`$, and the sums $\sum_h\pi_hs_h^2$ from the two tables:
 
-Ignoring the regions, the SRS estimate is $\bar y=`r round(ybar_srs, 1)`$ with
-$\text{SE}=`r round(se_srs, 2)`$. Post-stratifying by region lowers the SE
-because the regions differ strongly in mean acreage
-(`r round(min(ybarh))` to `r round(max(ybarh))` thousand acres), which removes the
-between-region variability.
+| Estimator | $\sum_h\pi_hs_h^2$ | $\hat{\bar y}$ | SE | 95% CI |
+|:---|---:|---:|---:|:---|
+| SRS (no post-strat.) | | `r round(ybar_srs, 1)` | `r round(se_srs, 1)` | [`r round(ybar_srs - 1.96 * se_srs, 1)`, `r round(ybar_srs + 1.96 * se_srs, 1)`] |
+| By region | `r format(round(r_reg["sum_pis2"]), big.mark = ",")` | `r round(r_reg["est"], 1)` | `r round(r_reg["se"], 1)` | [`r round(r_reg["est"] - 1.96 * r_reg["se"], 1)`, `r round(r_reg["est"] + 1.96 * r_reg["se"], 1)`] |
+| By `acres87` groups | `r format(round(r_q["sum_pis2"]), big.mark = ",")` | `r round(r_q["est"], 1)` | `r round(r_q["se"], 1)` | [`r round(r_q["est"] - 1.96 * r_q["se"], 1)`, `r round(r_q["est"] + 1.96 * r_q["se"], 1)`] |
+
+The population mean is `r round(mean(pop$acres92), 1)` thousand acres. The
+`acres87` groups cut the SE by more than half, because 1987 acreage is a strong
+predictor of 1992 acreage; the regions help only a little.
 
 
 # Domain Analysis

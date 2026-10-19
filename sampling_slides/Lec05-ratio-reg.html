@@ -409,7 +409,7 @@ x_i = \text{total farm acreage of county } i \text{ in 1987}.
 </div><div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-france-toy" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" width="100%">
+<div id="fig-france-toy" class="quarto-float quarto-figure quarto-figure-center" width="100%" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig">
 <div aria-describedby="fig-france-toy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-france-toy-1.png" id="fig-france-toy" class="quarto-figure quarto-figure-center" style="width:100.0%">
@@ -796,14 +796,14 @@ y_i = \sum_{h=1}^H B_h\,x_{ih} + d_i, \qquad x_{ih}=\mathbf 1\{i\in\text{group }
 </section>
 <section id="example-post-stratifying-farm-acreage-by-region" class="slide level2">
 <h2>Example: Post-Stratifying Farm Acreage by Region</h2>
-<p>The SRS of <span class="math inline">n=300</span> counties (<code>agsrs.csv</code>, acres in thousands) is sorted afterward into the four census regions, whose sizes are known from the Census (<span class="math inline">N=3078</span>). The sample shares differ from the population shares:</p>
+<p>An SRS of <span class="math inline">n=300</span> counties (<code>agsrs_syn.csv</code>, acres in thousands) is sorted afterward into groups whose sizes are known from the Census population (<code>agpop.csv</code>, <span class="math inline">N=3041</span> counties). First, the four census regions:</p>
 <div class="cell" data-layout-align="center">
-<div id="tbl-poststrat-acreage" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
+<div id="tbl-poststrat-region" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
 <figure class="quarto-float quarto-float-tbl">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-poststrat-acreage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-poststrat-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;1
 </figcaption>
-<div aria-describedby="tbl-poststrat-acreage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="tbl-poststrat-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <div id="rrknfcyhyy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rrknfcyhyy table {
@@ -1271,43 +1271,43 @@ Table&nbsp;1
 <tbody class="gt_table_body">
 <tr class="odd">
 <th id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Northeast</th>
-<td class="gt_row gt_right" headers="stub_1_1 Nh">220</td>
-<td class="gt_row gt_right" headers="stub_1_1 pih">0.071</td>
-<td class="gt_row gt_right" headers="stub_1_1 nh">18</td>
-<td class="gt_row gt_right" headers="stub_1_1 nh_post">21.4</td>
-<td class="gt_row gt_right" headers="stub_1_1 ybarh">107</td>
-<td class="gt_row gt_right" headers="stub_1_1 s2h">16,724</td>
-<td class="gt_row gt_right" headers="stub_1_1 pis2">1,195</td>
+<td class="gt_row gt_right" headers="stub_1_1 Nh">211</td>
+<td class="gt_row gt_right" headers="stub_1_1 pih">0.069</td>
+<td class="gt_row gt_right" headers="stub_1_1 nh">17</td>
+<td class="gt_row gt_right" headers="stub_1_1 nh_post">20.8</td>
+<td class="gt_row gt_right" headers="stub_1_1 ybarh">63</td>
+<td class="gt_row gt_right" headers="stub_1_1 s2h">3,740</td>
+<td class="gt_row gt_right" headers="stub_1_1 pis2">260</td>
 </tr>
 <tr class="even">
 <th id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">North Central</th>
-<td class="gt_row gt_right" headers="stub_1_2 Nh">1,054</td>
-<td class="gt_row gt_right" headers="stub_1_2 pih">0.342</td>
-<td class="gt_row gt_right" headers="stub_1_2 nh">78</td>
-<td class="gt_row gt_right" headers="stub_1_2 nh_post">102.7</td>
-<td class="gt_row gt_right" headers="stub_1_2 ybarh">323</td>
-<td class="gt_row gt_right" headers="stub_1_2 s2h">77,824</td>
-<td class="gt_row gt_right" headers="stub_1_2 pis2">26,649</td>
+<td class="gt_row gt_right" headers="stub_1_2 Nh">1,049</td>
+<td class="gt_row gt_right" headers="stub_1_2 pih">0.345</td>
+<td class="gt_row gt_right" headers="stub_1_2 nh">110</td>
+<td class="gt_row gt_right" headers="stub_1_2 nh_post">103.5</td>
+<td class="gt_row gt_right" headers="stub_1_2 ybarh">355</td>
+<td class="gt_row gt_right" headers="stub_1_2 s2h">67,659</td>
+<td class="gt_row gt_right" headers="stub_1_2 pis2">23,339</td>
 </tr>
 <tr class="odd">
 <th id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">South</th>
-<td class="gt_row gt_right" headers="stub_1_3 Nh">1,382</td>
-<td class="gt_row gt_right" headers="stub_1_3 pih">0.449</td>
-<td class="gt_row gt_right" headers="stub_1_3 nh">160</td>
-<td class="gt_row gt_right" headers="stub_1_3 nh_post">134.7</td>
-<td class="gt_row gt_right" headers="stub_1_3 ybarh">246</td>
-<td class="gt_row gt_right" headers="stub_1_3 s2h">97,932</td>
-<td class="gt_row gt_right" headers="stub_1_3 pis2">43,971</td>
+<td class="gt_row gt_right" headers="stub_1_3 Nh">1,368</td>
+<td class="gt_row gt_right" headers="stub_1_3 pih">0.450</td>
+<td class="gt_row gt_right" headers="stub_1_3 nh">126</td>
+<td class="gt_row gt_right" headers="stub_1_3 nh_post">135.0</td>
+<td class="gt_row gt_right" headers="stub_1_3 ybarh">202</td>
+<td class="gt_row gt_right" headers="stub_1_3 s2h">38,942</td>
+<td class="gt_row gt_right" headers="stub_1_3 pis2">17,518</td>
 </tr>
 <tr class="even">
 <th id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">West</th>
-<td class="gt_row gt_right" headers="stub_1_4 Nh">422</td>
-<td class="gt_row gt_right" headers="stub_1_4 pih">0.137</td>
-<td class="gt_row gt_right" headers="stub_1_4 nh">44</td>
-<td class="gt_row gt_right" headers="stub_1_4 nh_post">41.1</td>
-<td class="gt_row gt_right" headers="stub_1_4 ybarh">519</td>
-<td class="gt_row gt_right" headers="stub_1_4 s2h">240,926</td>
-<td class="gt_row gt_right" headers="stub_1_4 pis2">33,031</td>
+<td class="gt_row gt_right" headers="stub_1_4 Nh">413</td>
+<td class="gt_row gt_right" headers="stub_1_4 pih">0.136</td>
+<td class="gt_row gt_right" headers="stub_1_4 nh">47</td>
+<td class="gt_row gt_right" headers="stub_1_4 nh_post">40.7</td>
+<td class="gt_row gt_right" headers="stub_1_4 ybarh">614</td>
+<td class="gt_row gt_right" headers="stub_1_4 s2h">477,694</td>
+<td class="gt_row gt_right" headers="stub_1_4 pis2">64,876</td>
 </tr>
 </tbody>
 </table>
@@ -1319,67 +1319,16 @@ Table&nbsp;1
 </div>
 </div>
 </section>
-<section id="example-post-stratified-acreage-results" class="slide level2">
-<h2>Example: Post-Stratified Acreage Results</h2>
-<p>Using the short-cut formula, with <span class="math inline">\sum_h\pi_hs_h^2=</span> 104,847: <span class="math display">
-\hat{\bar y}_{\text{post}}=\sum_h\pi_h\bar y_h=300.1,
-\qquad
-\hat V=\Big(1-\frac{300}{3078}\Big)\frac{1}{300}\,(1.04847\times 10^{5})
-=315.4 ,
-</span> so <span class="math inline">\text{SE}(\hat{\bar y}_{\text{post}})=17.76</span> thousand acres, and an approximate 95% CI is <span class="math inline">300.1 \pm 1.96(17.76)
-=[265.2,\ 334.9]</span>.</p>
-<p>Ignoring the regions, the SRS estimate is <span class="math inline">\bar y=297.9</span> with <span class="math inline">\text{SE}=18.9</span>. Post-stratifying by region lowers the SE because the regions differ strongly in mean acreage (107 to 519 thousand acres), which removes the between-region variability.</p>
-</section></section>
-<section>
-<section id="domain-analysis" class="title-slide slide level1 center" data-number="7">
-<h1><span class="header-section-number">7</span> Domain Analysis</h1>
-
-</section>
-<section id="domain-analysis-1" class="slide level2">
-<h2>Domain Analysis</h2>
-<p>Suppose there are <span class="math inline">D</span> <strong>domains</strong> (subpopulations of interest determined only <em>after</em> sampling — e.g., men and women). Let <span class="math inline">\mathcal U_d</span> be the population units in domain <span class="math inline">d</span>, and <span class="math inline">\mathcal S_d</span> the sampled units in domain <span class="math inline">d</span>, with <span class="math inline">N_d = |\mathcal U_d|</span> and <span class="math inline">n_d = |\mathcal S_d|</span>.</p>
-<p>We might want the mean salary for men and for women separately, but we don’t know a person’s gender before selecting them — we can’t stratify by domain in advance. Instead we estimate each domain’s mean/total after sampling, by splitting the sample by domain ID. <strong>Domain mean estimation is a special case of ratio estimation.</strong></p>
-</section>
-<section id="domain-means-are-ratio-estimates" class="slide level2">
-<h2>Domain Means Are Ratio Estimates</h2>
-<p>Define <span class="math display">
-x_i = \begin{cases}1 &amp; i\in\mathcal U_d\\0 &amp; i\notin\mathcal U_d\end{cases}
-\qquad
-u_i = y_ix_i = \begin{cases}y_i &amp; i\in\mathcal U_d\\0 &amp; i\notin\mathcal U_d\end{cases}
-</span></p>
-<p>Then <span class="math inline">t_x=N_d</span>, <span class="math inline">\bar x_U = N_d/N</span>, <span class="math inline">\bar y_{U_d} = t_u/t_x = B</span>, <span class="math inline">\bar x = n_d/n</span>, and <span class="math display">
-\bar y_d = \hat B = \frac{\bar u}{\bar x} = \frac{\hat t_u}{\hat t_x}
-= \frac{\sum_{i\in\mathcal S_d} y_i}{n_d}
-</span></p>
-<p>Although <span class="math inline">\bar y_d</span> <em>looks</em> like an ordinary sample mean, <span class="math inline">n_d</span> itself is random — a different SRS would very likely give a different <span class="math inline">n_d</span> — which is exactly why this is a ratio estimator, not a simple mean.</p>
-</section>
-<section id="standard-error-of-a-domain-mean" class="slide level2">
-<h2>Standard Error of a Domain Mean</h2>
-<p>Applying the formula for <span class="math inline">\hat V(\hat B)</span> with <span class="math inline">x_i,u_i</span> as defined above gives <span class="math display">
-\text{SE}(\bar y_d) = \sqrt{\Big(1-\frac nN\Big)\frac{n}{n_d^2}\cdot\frac{(n_d-1)s_{yd}^2}{n-1}}
-\approx \sqrt{\Big(1-\frac nN\Big)\frac{s_{yd}^2}{n_d}},
-</span> <span class="math inline">s_{yd}^2</span> being the sample variance of the <span class="math inline">y_i</span>’s within domain <span class="math inline">d</span>.</p>
-<p>This is <strong>not</strong> the same as naively applying SRS <em>within</em> domain <span class="math inline">d</span>, as if <span class="math inline">n_d</span> were fixed — that would use <span class="math inline">\big(1-\tfrac{n_d}{N_d}\big)</span> in place of <span class="math inline">\big(1-\tfrac nN\big)</span>. Only the fpc differs: <strong>overall</strong> rate (correct, since <span class="math inline">n_d</span> is random) vs.&nbsp;<strong>domain</strong> rate (wrong); they agree only when <span class="math inline">n_d/N_d\approx n/N</span>.</p>
-</section>
-<section id="estimating-a-domain-total" class="slide level2">
-<h2>Estimating a Domain Total</h2>
-<ul>
-<li>If <span class="math inline">N_d</span> is <strong>known</strong>: <span class="math inline">\hat t_{yd} = \bar y_d \times N_d</span>, with <span class="math inline">\text{SE}(\hat t_{yd}) = \text{SE}(\bar y_d)\times N_d</span>.</li>
-<li>If <span class="math inline">N_d</span> is <strong>unknown</strong>: estimate it first, <span class="math inline">\hat N_d = N\cdot n_d/n</span>, and use <span class="math inline">\hat t_{yd} = \bar y_d \times \hat N_d = N\bar u</span>, with <span class="math display">
-\text{SE}(\hat t_{yd}) = N\,\text{SE}(\bar u) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_u^2}{n}}
-</span></li>
-</ul>
-</section>
-<section id="example-domain-means-by-census-region" class="slide level2">
-<h2>Example: Domain Means by Census Region</h2>
-<p>Split the SRS of <span class="math inline">n=300</span> counties (<code>agsrs.csv</code>) by region; each <span class="math inline">N_d</span> is known from the full Census (<code>agpop.csv</code>). The <strong>naive</strong> column applies ordinary SRS estimation <em>within</em> each region, as if its <span class="math inline">n_d</span> had been fixed in advance:</p>
+<section id="example-post-stratifying-by-acres87-quantile-groups" class="slide level2">
+<h2>Example: Post-Stratifying by <code>acres87</code> Quantile Groups</h2>
+<p>Second, the 1987 acreage, known for every county, cut at the population 25th, 75th and 95th percentiles into groups <span class="math inline">Q_1,\ldots,Q_4</span> (as in the post-stratification app):</p>
 <div class="cell" data-layout-align="center">
-<div id="tbl-domain-agsrs" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
+<div id="tbl-poststrat-acres87" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
 <figure class="quarto-float quarto-float-tbl">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-domain-agsrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-poststrat-acres87-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;2
 </figcaption>
-<div aria-describedby="tbl-domain-agsrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="tbl-poststrat-acres87-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <div id="jwmqsrhbxd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#jwmqsrhbxd table {
@@ -1404,7 +1353,7 @@ Table&nbsp;2
   margin-left: auto;
   margin-right: auto;
   color: #333333;
-  font-size: 16px;
+  font-size: 70%;
   font-weight: normal;
   font-style: normal;
   background-color: #FFFFFF;
@@ -1827,6 +1776,611 @@ Table&nbsp;2
 }
 
 #jwmqsrhbxd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="a::stub" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="Nh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">N_h</span></th>
+<th id="pih" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\pi_h</span></th>
+<th id="nh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">n_h</span></th>
+<th id="nh_post" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">n\pi_h</span></th>
+<th id="ybarh" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\bar y_h</span></th>
+<th id="s2h" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">s_h^2</span></th>
+<th id="pis2" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\pi_h s_h^2</span></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<th id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Q1</th>
+<td class="gt_row gt_right" headers="stub_1_1 Nh">761</td>
+<td class="gt_row gt_right" headers="stub_1_1 pih">0.250</td>
+<td class="gt_row gt_right" headers="stub_1_1 nh">76</td>
+<td class="gt_row gt_right" headers="stub_1_1 nh_post">75.1</td>
+<td class="gt_row gt_right" headers="stub_1_1 ybarh">47</td>
+<td class="gt_row gt_right" headers="stub_1_1 s2h">670</td>
+<td class="gt_row gt_right" headers="stub_1_1 pis2">168</td>
+</tr>
+<tr class="even">
+<th id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Q2</th>
+<td class="gt_row gt_right" headers="stub_1_2 Nh">1,520</td>
+<td class="gt_row gt_right" headers="stub_1_2 pih">0.500</td>
+<td class="gt_row gt_right" headers="stub_1_2 nh">141</td>
+<td class="gt_row gt_right" headers="stub_1_2 nh_post">150.0</td>
+<td class="gt_row gt_right" headers="stub_1_2 ybarh">207</td>
+<td class="gt_row gt_right" headers="stub_1_2 s2h">6,983</td>
+<td class="gt_row gt_right" headers="stub_1_2 pis2">3,490</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Q3</th>
+<td class="gt_row gt_right" headers="stub_1_3 Nh">608</td>
+<td class="gt_row gt_right" headers="stub_1_3 pih">0.200</td>
+<td class="gt_row gt_right" headers="stub_1_3 nh">69</td>
+<td class="gt_row gt_right" headers="stub_1_3 nh_post">60.0</td>
+<td class="gt_row gt_right" headers="stub_1_3 ybarh">579</td>
+<td class="gt_row gt_right" headers="stub_1_3 s2h">27,343</td>
+<td class="gt_row gt_right" headers="stub_1_3 pis2">5,467</td>
+</tr>
+<tr class="even">
+<th id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">Q4</th>
+<td class="gt_row gt_right" headers="stub_1_4 Nh">152</td>
+<td class="gt_row gt_right" headers="stub_1_4 pih">0.050</td>
+<td class="gt_row gt_right" headers="stub_1_4 nh">14</td>
+<td class="gt_row gt_right" headers="stub_1_4 nh_post">15.0</td>
+<td class="gt_row gt_right" headers="stub_1_4 ybarh">1,549</td>
+<td class="gt_row gt_right" headers="stub_1_4 s2h">400,596</td>
+<td class="gt_row gt_right" headers="stub_1_4 pis2">20,023</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>The groups are very unequal: <span class="math inline">Q_4</span> holds only 5% of the counties but has by far the largest acreage and variance.</p>
+</section>
+<section id="example-post-stratified-acreage-results" class="slide level2">
+<h2>Example: Post-Stratified Acreage Results</h2>
+<p>With the short-cut formula <span class="math inline">\hat V=(1-\frac nN)\frac1n\sum_h\pi_hs_h^2</span>, <span class="math inline">1-\frac nN=0.9013</span>, and the sums <span class="math inline">\sum_h\pi_hs_h^2</span> from the two tables:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estimator</th>
+<th style="text-align: right;"><span class="math inline">\sum_h\pi_hs_h^2</span></th>
+<th style="text-align: right;"><span class="math inline">\hat{\bar y}</span></th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: left;">95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SRS (no post-strat.)</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">314.7</td>
+<td style="text-align: right;">20.4</td>
+<td style="text-align: left;">[274.7, 354.6]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">By region</td>
+<td style="text-align: right;">105,993</td>
+<td style="text-align: right;">301</td>
+<td style="text-align: right;">17.8</td>
+<td style="text-align: left;">[266, 336]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">By <code>acres87</code> groups</td>
+<td style="text-align: right;">29,148</td>
+<td style="text-align: right;">308.4</td>
+<td style="text-align: right;">9.4</td>
+<td style="text-align: left;">[290.1, 326.8]</td>
+</tr>
+</tbody>
+</table>
+<p>The population mean is 309.9 thousand acres. The <code>acres87</code> groups cut the SE by more than half, because 1987 acreage is a strong predictor of 1992 acreage; the regions help only a little.</p>
+</section></section>
+<section>
+<section id="domain-analysis" class="title-slide slide level1 center" data-number="7">
+<h1><span class="header-section-number">7</span> Domain Analysis</h1>
+
+</section>
+<section id="domain-analysis-1" class="slide level2">
+<h2>Domain Analysis</h2>
+<p>Suppose there are <span class="math inline">D</span> <strong>domains</strong> (subpopulations of interest determined only <em>after</em> sampling — e.g., men and women). Let <span class="math inline">\mathcal U_d</span> be the population units in domain <span class="math inline">d</span>, and <span class="math inline">\mathcal S_d</span> the sampled units in domain <span class="math inline">d</span>, with <span class="math inline">N_d = |\mathcal U_d|</span> and <span class="math inline">n_d = |\mathcal S_d|</span>.</p>
+<p>We might want the mean salary for men and for women separately, but we don’t know a person’s gender before selecting them — we can’t stratify by domain in advance. Instead we estimate each domain’s mean/total after sampling, by splitting the sample by domain ID. <strong>Domain mean estimation is a special case of ratio estimation.</strong></p>
+</section>
+<section id="domain-means-are-ratio-estimates" class="slide level2">
+<h2>Domain Means Are Ratio Estimates</h2>
+<p>Define <span class="math display">
+x_i = \begin{cases}1 &amp; i\in\mathcal U_d\\0 &amp; i\notin\mathcal U_d\end{cases}
+\qquad
+u_i = y_ix_i = \begin{cases}y_i &amp; i\in\mathcal U_d\\0 &amp; i\notin\mathcal U_d\end{cases}
+</span></p>
+<p>Then <span class="math inline">t_x=N_d</span>, <span class="math inline">\bar x_U = N_d/N</span>, <span class="math inline">\bar y_{U_d} = t_u/t_x = B</span>, <span class="math inline">\bar x = n_d/n</span>, and <span class="math display">
+\bar y_d = \hat B = \frac{\bar u}{\bar x} = \frac{\hat t_u}{\hat t_x}
+= \frac{\sum_{i\in\mathcal S_d} y_i}{n_d}
+</span></p>
+<p>Although <span class="math inline">\bar y_d</span> <em>looks</em> like an ordinary sample mean, <span class="math inline">n_d</span> itself is random — a different SRS would very likely give a different <span class="math inline">n_d</span> — which is exactly why this is a ratio estimator, not a simple mean.</p>
+</section>
+<section id="standard-error-of-a-domain-mean" class="slide level2">
+<h2>Standard Error of a Domain Mean</h2>
+<p>Applying the formula for <span class="math inline">\hat V(\hat B)</span> with <span class="math inline">x_i,u_i</span> as defined above gives <span class="math display">
+\text{SE}(\bar y_d) = \sqrt{\Big(1-\frac nN\Big)\frac{n}{n_d^2}\cdot\frac{(n_d-1)s_{yd}^2}{n-1}}
+\approx \sqrt{\Big(1-\frac nN\Big)\frac{s_{yd}^2}{n_d}},
+</span> <span class="math inline">s_{yd}^2</span> being the sample variance of the <span class="math inline">y_i</span>’s within domain <span class="math inline">d</span>.</p>
+<p>This is <strong>not</strong> the same as naively applying SRS <em>within</em> domain <span class="math inline">d</span>, as if <span class="math inline">n_d</span> were fixed — that would use <span class="math inline">\big(1-\tfrac{n_d}{N_d}\big)</span> in place of <span class="math inline">\big(1-\tfrac nN\big)</span>. Only the fpc differs: <strong>overall</strong> rate (correct, since <span class="math inline">n_d</span> is random) vs.&nbsp;<strong>domain</strong> rate (wrong); they agree only when <span class="math inline">n_d/N_d\approx n/N</span>.</p>
+</section>
+<section id="estimating-a-domain-total" class="slide level2">
+<h2>Estimating a Domain Total</h2>
+<ul>
+<li>If <span class="math inline">N_d</span> is <strong>known</strong>: <span class="math inline">\hat t_{yd} = \bar y_d \times N_d</span>, with <span class="math inline">\text{SE}(\hat t_{yd}) = \text{SE}(\bar y_d)\times N_d</span>.</li>
+<li>If <span class="math inline">N_d</span> is <strong>unknown</strong>: estimate it first, <span class="math inline">\hat N_d = N\cdot n_d/n</span>, and use <span class="math inline">\hat t_{yd} = \bar y_d \times \hat N_d = N\bar u</span>, with <span class="math display">
+\text{SE}(\hat t_{yd}) = N\,\text{SE}(\bar u) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_u^2}{n}}
+</span></li>
+</ul>
+</section>
+<section id="example-domain-means-by-census-region" class="slide level2">
+<h2>Example: Domain Means by Census Region</h2>
+<p>Split the SRS of <span class="math inline">n=300</span> counties (<code>agsrs.csv</code>) by region; each <span class="math inline">N_d</span> is known from the full Census (<code>agpop.csv</code>). The <strong>naive</strong> column applies ordinary SRS estimation <em>within</em> each region, as if its <span class="math inline">n_d</span> had been fixed in advance:</p>
+<div class="cell" data-layout-align="center">
+<div id="tbl-domain-agsrs" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-domain-agsrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3
+</figcaption>
+<div aria-describedby="tbl-domain-agsrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="ftcksjydbt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ftcksjydbt table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ftcksjydbt thead, #ftcksjydbt tbody, #ftcksjydbt tfoot, #ftcksjydbt tr, #ftcksjydbt td, #ftcksjydbt th {
+  border-style: none;
+}
+
+#ftcksjydbt p {
+  margin: 0;
+  padding: 0;
+}
+
+#ftcksjydbt .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ftcksjydbt .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ftcksjydbt .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ftcksjydbt .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ftcksjydbt .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ftcksjydbt .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ftcksjydbt .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ftcksjydbt .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ftcksjydbt .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ftcksjydbt .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ftcksjydbt .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ftcksjydbt .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ftcksjydbt .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ftcksjydbt .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ftcksjydbt .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ftcksjydbt .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ftcksjydbt .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ftcksjydbt .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ftcksjydbt .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ftcksjydbt .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ftcksjydbt .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ftcksjydbt .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ftcksjydbt .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ftcksjydbt .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ftcksjydbt .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ftcksjydbt .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ftcksjydbt .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ftcksjydbt .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ftcksjydbt .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ftcksjydbt .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ftcksjydbt .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ftcksjydbt .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ftcksjydbt .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ftcksjydbt .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ftcksjydbt .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ftcksjydbt .gt_left {
+  text-align: left;
+}
+
+#ftcksjydbt .gt_center {
+  text-align: center;
+}
+
+#ftcksjydbt .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ftcksjydbt .gt_font_normal {
+  font-weight: normal;
+}
+
+#ftcksjydbt .gt_font_bold {
+  font-weight: bold;
+}
+
+#ftcksjydbt .gt_font_italic {
+  font-style: italic;
+}
+
+#ftcksjydbt .gt_super {
+  font-size: 65%;
+}
+
+#ftcksjydbt .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ftcksjydbt .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ftcksjydbt .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ftcksjydbt .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ftcksjydbt .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ftcksjydbt .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ftcksjydbt .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ftcksjydbt .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ftcksjydbt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

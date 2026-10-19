@@ -9,6 +9,11 @@ vars <- c("acres92", "acres87", "acres82", "farms92")
 for (v in vars) pop[[v]][pop[[v]] == -99] <- NA
 pop <- pop[complete.cases(pop[, vars]), ]
 
-set.seed(348)
+## The seed was chosen for a teaching example: it is the first seed in 1, 2, 3, ...
+## for which both the SRS sample mean of acres92 and the mean post-stratified by
+## acres87 quantile groups (cuts at the 25%, 75%, 95% population percentiles)
+## are within 5 thousand acres of the population mean. An arbitrary SRS can be
+## much less typical, because acres92 is heavily skewed.
+set.seed(38)
 idx <- sort(sample(nrow(pop), 300))
 write.csv(pop[idx, ], "agsrs_syn.csv", row.names = FALSE)
