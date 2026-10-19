@@ -564,35 +564,111 @@ $$
 where $r$ is the Pearson correlation coefficient between $x$ and $y$ in the
 sample — the stronger the linear relationship, the smaller the SE.
 
-## Example: Correcting Aerial Survey Counts
+## Example: Counting Dead Trees from Photographs
 
-Aerial photographs are a cheap way to survey a large area (e.g., for a caribou
-herd), but tend to **undercount** animals that are hidden from view overhead.
-A more expensive, intensive ground/field count on a subsample of plots gives
-accurate counts that can calibrate the photo counts.
+An area is divided into $N=100$ square plots. Dead trees are counted on
+photographs for **every** plot, and the mean photo count is known,
+$\bar x_U=11.3$ (so $t_x=1130$). An SRS of $n=25$ plots also gets an exact
+**field count**.
 
 ```{r}
-#| label: fig-photo-field
+#| label: fig-deadtrees-data
 #| fig-width: 6.5
-#| fig-height: 5
-#| out-width: "60%"
-set.seed(6)
-n <- 25
-x <- round(runif(n, 2, 30))          # photo (undercounted) counts
-y <- round(1.35 * x + rnorm(n, 0, 2)) # true field counts
+#| fig-height: 4.5
+#| out-width: "55%"
+x <- c(10, 12, 7, 13, 13, 6, 17, 16, 15, 10, 14, 12, 10, 5, 12, 10,
+       10, 9, 6, 11, 7, 9, 11, 10, 10)          # photo counts
+y <- c(15, 14, 9, 14, 8, 5, 18, 15, 13, 15, 11, 15, 12, 8, 13,
+       9, 11, 12, 9, 12, 13, 11, 10, 9, 8)      # field counts
+n <- length(x); N <- 100; xbarU <- 11.3
+fit <- lm(y ~ x); B0 <- coef(fit)[[1]]; B1 <- coef(fit)[[2]]
+se2 <- sum(resid(fit)^2) / (n - 2)
+Bhat <- sum(y) / sum(x)
+se2_r <- sum((y - Bhat * x)^2) / (n - 1)
 
 par(mar = c(4, 4, 0.5, 0.5))
-plot(x, y, pch = 19, xlab = "Photo count  (x)", ylab = "Field count  (y)",
-     xlim = c(0, 32), ylim = c(0, 45))
-abline(lm(y ~ 0 + x), col = "firebrick", lwd = 2)
-abline(0, 1, col = "gray50", lty = 2)
-text(28, 28, "y = x", col = "gray50", pos = 3)
+plot(x, y, pch = 19, xlab = "Photo count (x)", ylab = "Field count (y)")
+abline(fit, col = "purple", lwd = 2)
+abline(v = c(mean(x), xbarU), lty = 3, col = c("darkgreen", "black"))
+text(mean(x), max(y), expression(bar(x)), col = "darkgreen", pos = 2)
+text(xbarU, max(y), expression(bar(x)[U]), pos = 4)
 ```
 
-Let $x_i$ = photo count and $y_i$ = field count on plot $i$. Fitting
-$\hat B = \bar y/\bar x$ on the subsample of plots with both counts, we can
-correct the total photo count of the *entire* surveyed area,
-$\hat t_{yr} = \hat B\, t_x$, for the systematic undercounting bias.
+The sampled plots average $\bar x=`r mean(x)`$ photo-counted trees, below the
+population average $\bar x_U=11.3$, with $\bar y=`r mean(y)`$ in the field.
+The fitted line has a clearly non-zero intercept.
+
+## Dead Trees: Computing $s_e^2$
+
+The residual variance needs the fitted value $\hat y_i=\hat B_0+\hat B_1x_i$ and
+residual $e_i=y_i-\hat y_i$ of every sampled plot. A snapshot with the first 5
+of the 25 plots:
+
+```{r}
+#| label: tbl-deadtrees-snapshot
+#| message: false
+library(gt)
+yhat <- fitted(fit); e <- resid(fit)
+snap <- data.frame(i = as.character(1:5), x = x[1:5], y = y[1:5],
+                   yhat = yhat[1:5], e = e[1:5], e2 = e[1:5]^2)
+snap <- rbind(snap,
+              data.frame(i = "$\\vdots$", x = NA, y = NA, yhat = NA, e = NA, e2 = NA),
+              data.frame(i = "**Sum (25 plots)**", x = sum(x), y = sum(y),
+                         yhat = sum(yhat), e = sum(e), e2 = sum(e^2)))
+gt(snap) |>
+  fmt_markdown(columns = i) |>
+  fmt_number(columns = c(yhat, e, e2), decimals = 2) |>
+  fmt_number(columns = c(x, y), decimals = 0) |>
+  sub_missing(missing_text = "") |>
+  cols_label(i = md("Plot $i$"), x = md("$x_i$"), y = md("$y_i$"),
+             yhat = md("$\\hat y_i=\\hat B_0+\\hat B_1x_i$"),
+             e = md("$e_i=y_i-\\hat y_i$"), e2 = md("$e_i^2$")) |>
+  tab_options(table.font.size = "75%")
+```
+
+With $\hat B_0=`r round(B0, 4)`$ and $\hat B_1=`r round(B1, 4)`$, the residuals sum
+to 0, and over all $n=25$ plots
+$$
+s_e^2=\frac{\sum_i e_i^2}{n-2}=\frac{`r round(sum(e^2), 2)`}{23}=`r round(se2, 4)`.
+$$
+
+## Dead Trees: The Regression Estimate
+
+From the 25 plots, $\hat B_1=`r round(B1, 4)`$ and $\hat B_0=`r round(B0, 4)`$,
+and the residual variance is $s_e^2=`r round(se2, 4)`$ (divisor $n-2=23$).
+$$
+\hat{\bar y}_{\text{reg}} = \bar y + \hat B_1(\bar x_U-\bar x)
+ = `r mean(y)` + `r round(B1, 4)`(11.3-`r mean(x)`) = `r round(mean(y) + B1 * (xbarU - mean(x)), 3)`
+$$
+$$
+\text{SE}(\hat{\bar y}_{\text{reg}}) = \sqrt{\Big(1-\frac{25}{100}\Big)\frac{`r round(se2, 4)`}{25}}
+ = `r round(sqrt((1 - n / N) * se2 / n), 3)`
+$$
+A 95% interval (with $t_{0.975,\,23}=`r round(qt(0.975, n - 2), 3)`$) is
+$`r round(mean(y) + B1 * (xbarU - mean(x)), 3)` \pm `r round(qt(0.975, n - 2), 3)`(`r round(sqrt((1 - n / N) * se2 / n), 3)`)
+=[`r round(mean(y) + B1 * (xbarU - mean(x)) - qt(0.975, n - 2) * sqrt((1 - n / N) * se2 / n), 2)`,\ `r round(mean(y) + B1 * (xbarU - mean(x)) + qt(0.975, n - 2) * sqrt((1 - n / N) * se2 / n), 2)`]$.
+
+For the total number of dead trees,
+$\hat t_{\text{reg}}=N\hat{\bar y}_{\text{reg}}=`r round(N * (mean(y) + B1 * (xbarU - mean(x))), 1)`$
+with $\text{SE}=100(`r round(sqrt((1 - n / N) * se2 / n), 3)`)=`r round(N * sqrt((1 - n / N) * se2 / n), 2)`$.
+
+## Dead Trees: Comparing Three Estimators
+
+```{r}
+est_srs <- mean(y);              se_srs <- sqrt((1 - n / N) * var(y) / n)
+est_rat <- Bhat * xbarU;         se_rat <- sqrt((1 - n / N) * (xbarU / mean(x))^2 * se2_r / n)
+est_reg <- mean(y) + B1 * (xbarU - mean(x)); se_reg <- sqrt((1 - n / N) * se2 / n)
+```
+
+| Estimator | Estimate of $\bar y_U$ | SE | Estimated total |
+|:---|---:|---:|---:|
+| SRS (ignores photo counts) | `r round(est_srs, 3)` | `r round(se_srs, 3)` | `r round(N * est_srs, 1)` |
+| Ratio, $\hat B=`r round(Bhat, 4)`$ | `r round(est_rat, 3)` | `r round(se_rat, 3)` | `r round(N * est_rat, 1)` |
+| Regression | `r round(est_reg, 3)` | `r round(se_reg, 3)` | `r round(N * est_reg, 1)` |
+
+The ratio estimator, $\hat B\bar x_U=`r round(Bhat, 4)`(11.3)$, barely improves
+on SRS, since the line through the origin fits poorly here. Because the true
+intercept is not zero, the **regression** estimator is the most precise.
 
 # Post-Stratification
 

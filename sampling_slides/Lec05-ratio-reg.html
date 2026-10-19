@@ -409,7 +409,7 @@ x_i = \text{total farm acreage of county } i \text{ in 1987}.
 </div><div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-france-toy" class="quarto-float quarto-figure quarto-figure-center" width="100%" data-fig-align="center">
+<div id="fig-france-toy" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center" width="100%">
 <figure class="quarto-float quarto-float-fig">
 <div aria-describedby="fig-france-toy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-france-toy-1.png" id="fig-france-toy" class="quarto-figure quarto-figure-center" style="width:100.0%">
@@ -552,13 +552,614 @@ s_e^2 = \frac{\sum_{i\in\mathcal S} e_i^2}{n-2}.
 </span></p>
 <p>where <span class="math inline">r</span> is the Pearson correlation coefficient between <span class="math inline">x</span> and <span class="math inline">y</span> in the sample — the stronger the linear relationship, the smaller the SE.</p>
 </section>
-<section id="example-correcting-aerial-survey-counts" class="slide level2">
-<h2>Example: Correcting Aerial Survey Counts</h2>
-<p>Aerial photographs are a cheap way to survey a large area (e.g., for a caribou herd), but tend to <strong>undercount</strong> animals that are hidden from view overhead. A more expensive, intensive ground/field count on a subsample of plots gives accurate counts that can calibrate the photo counts.</p>
+<section id="example-counting-dead-trees-from-photographs" class="slide level2">
+<h2>Example: Counting Dead Trees from Photographs</h2>
+<p>An area is divided into <span class="math inline">N=100</span> square plots. Dead trees are counted on photographs for <strong>every</strong> plot, and the mean photo count is known, <span class="math inline">\bar x_U=11.3</span> (so <span class="math inline">t_x=1130</span>). An SRS of <span class="math inline">n=25</span> plots also gets an exact <strong>field count</strong>.</p>
 
-<img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-photo-field-1.png" id="fig-photo-field" class="quarto-figure quarto-figure-center r-stretch" style="width:60.0%"><p class="caption">
+<img data-src="Lec05-ratio-reg_files/figure-revealjs/fig-deadtrees-data-1.png" id="fig-deadtrees-data" class="quarto-figure quarto-figure-center r-stretch" style="width:55.0%"><p class="caption">
 Figure&nbsp;5
-</p><p>Let <span class="math inline">x_i</span> = photo count and <span class="math inline">y_i</span> = field count on plot <span class="math inline">i</span>. Fitting <span class="math inline">\hat B = \bar y/\bar x</span> on the subsample of plots with both counts, we can correct the total photo count of the <em>entire</em> surveyed area, <span class="math inline">\hat t_{yr} = \hat B\, t_x</span>, for the systematic undercounting bias.</p>
+</p><p>The sampled plots average <span class="math inline">\bar x=10.6</span> photo-counted trees, below the population average <span class="math inline">\bar x_U=11.3</span>, with <span class="math inline">\bar y=11.56</span> in the field. The fitted line has a clearly non-zero intercept.</p>
+</section>
+<section id="dead-trees-computing-s_e2" class="slide level2">
+<h2>Dead Trees: Computing <span class="math inline">s_e^2</span></h2>
+<p>The residual variance needs the fitted value <span class="math inline">\hat y_i=\hat B_0+\hat B_1x_i</span> and residual <span class="math inline">e_i=y_i-\hat y_i</span> of every sampled plot. A snapshot with the first 5 of the 25 plots:</p>
+<div class="cell" data-layout-align="center">
+<div id="tbl-deadtrees-snapshot" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-deadtrees-snapshot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1
+</figcaption>
+<div aria-describedby="tbl-deadtrees-snapshot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="invnjubnze" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#invnjubnze table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#invnjubnze thead, #invnjubnze tbody, #invnjubnze tfoot, #invnjubnze tr, #invnjubnze td, #invnjubnze th {
+  border-style: none;
+}
+
+#invnjubnze p {
+  margin: 0;
+  padding: 0;
+}
+
+#invnjubnze .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 75%;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#invnjubnze .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#invnjubnze .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#invnjubnze .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#invnjubnze .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#invnjubnze .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#invnjubnze .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#invnjubnze .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#invnjubnze .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#invnjubnze .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#invnjubnze .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#invnjubnze .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#invnjubnze .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#invnjubnze .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#invnjubnze .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#invnjubnze .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#invnjubnze .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#invnjubnze .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#invnjubnze .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#invnjubnze .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#invnjubnze .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#invnjubnze .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#invnjubnze .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#invnjubnze .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#invnjubnze .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#invnjubnze .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#invnjubnze .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#invnjubnze .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#invnjubnze .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#invnjubnze .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#invnjubnze .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#invnjubnze .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#invnjubnze .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#invnjubnze .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#invnjubnze .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#invnjubnze .gt_left {
+  text-align: left;
+}
+
+#invnjubnze .gt_center {
+  text-align: center;
+}
+
+#invnjubnze .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#invnjubnze .gt_font_normal {
+  font-weight: normal;
+}
+
+#invnjubnze .gt_font_bold {
+  font-weight: bold;
+}
+
+#invnjubnze .gt_font_italic {
+  font-style: italic;
+}
+
+#invnjubnze .gt_super {
+  font-size: 65%;
+}
+
+#invnjubnze .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#invnjubnze .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#invnjubnze .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#invnjubnze .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#invnjubnze .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#invnjubnze .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#invnjubnze .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#invnjubnze .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#invnjubnze div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" style="width:100%;" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="gt_col_headings header">
+<th id="i" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Plot <span class="math inline">i</span></th>
+<th id="x" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">x_i</span></th>
+<th id="y" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">y_i</span></th>
+<th id="yhat" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\hat y_i=\hat B_0+\hat B_1x_i</span></th>
+<th id="e" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">e_i=y_i-\hat y_i</span></th>
+<th id="e2" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">e_i^2</span></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="i">1</td>
+<td class="gt_row gt_right" headers="x">10</td>
+<td class="gt_row gt_right" headers="y">15</td>
+<td class="gt_row gt_right" headers="yhat">11.19</td>
+<td class="gt_row gt_right" headers="e">3.81</td>
+<td class="gt_row gt_right" headers="e2">14.50</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="i">2</td>
+<td class="gt_row gt_right" headers="x">12</td>
+<td class="gt_row gt_right" headers="y">14</td>
+<td class="gt_row gt_right" headers="yhat">12.42</td>
+<td class="gt_row gt_right" headers="e">1.58</td>
+<td class="gt_row gt_right" headers="e2">2.50</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="i">3</td>
+<td class="gt_row gt_right" headers="x">7</td>
+<td class="gt_row gt_right" headers="y">9</td>
+<td class="gt_row gt_right" headers="yhat">9.35</td>
+<td class="gt_row gt_right" headers="e">−0.35</td>
+<td class="gt_row gt_right" headers="e2">0.12</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="i">4</td>
+<td class="gt_row gt_right" headers="x">13</td>
+<td class="gt_row gt_right" headers="y">14</td>
+<td class="gt_row gt_right" headers="yhat">13.03</td>
+<td class="gt_row gt_right" headers="e">0.97</td>
+<td class="gt_row gt_right" headers="e2">0.94</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="i">5</td>
+<td class="gt_row gt_right" headers="x">13</td>
+<td class="gt_row gt_right" headers="y">8</td>
+<td class="gt_row gt_right" headers="yhat">13.03</td>
+<td class="gt_row gt_right" headers="e">−5.03</td>
+<td class="gt_row gt_right" headers="e2">25.32</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="i"><span class="math inline">\vdots</span></td>
+<td class="gt_row gt_right" headers="x"><br>
+</td>
+<td class="gt_row gt_right" headers="y"><br>
+</td>
+<td class="gt_row gt_right" headers="yhat"><br>
+</td>
+<td class="gt_row gt_right" headers="e"><br>
+</td>
+<td class="gt_row gt_right" headers="e2"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="i"><strong>Sum (25 plots)</strong></td>
+<td class="gt_row gt_right" headers="x">265</td>
+<td class="gt_row gt_right" headers="y">289</td>
+<td class="gt_row gt_right" headers="yhat">289.00</td>
+<td class="gt_row gt_right" headers="e">0.00</td>
+<td class="gt_row gt_right" headers="e2">133.16</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>With <span class="math inline">\hat B_0=5.0593</span> and <span class="math inline">\hat B_1=0.6133</span>, the residuals sum to 0, and over all <span class="math inline">n=25</span> plots <span class="math display">
+s_e^2=\frac{\sum_i e_i^2}{n-2}=\frac{133.16}{23}=5.7896.
+</span></p>
+</section>
+<section id="dead-trees-the-regression-estimate" class="slide level2">
+<h2>Dead Trees: The Regression Estimate</h2>
+<p>From the 25 plots, <span class="math inline">\hat B_1=0.6133</span> and <span class="math inline">\hat B_0=5.0593</span>, and the residual variance is <span class="math inline">s_e^2=5.7896</span> (divisor <span class="math inline">n-2=23</span>). <span class="math display">
+\hat{\bar y}_{\text{reg}} = \bar y + \hat B_1(\bar x_U-\bar x)
+= 11.56 + 0.6133(11.3-10.6) = 11.989
+</span> <span class="math display">
+\text{SE}(\hat{\bar y}_{\text{reg}}) = \sqrt{\Big(1-\frac{25}{100}\Big)\frac{5.7896}{25}}
+= 0.417
+</span> A 95% interval (with <span class="math inline">t_{0.975,\,23}=2.069</span>) is <span class="math inline">11.989 \pm 2.069(0.417)
+=[11.13,\ 12.85]</span>.</p>
+<p>For the total number of dead trees, <span class="math inline">\hat t_{\text{reg}}=N\hat{\bar y}_{\text{reg}}=1198.9</span> with <span class="math inline">\text{SE}=100(0.417)=41.68</span>.</p>
+</section>
+<section id="dead-trees-comparing-three-estimators" class="slide level2">
+<h2>Dead Trees: Comparing Three Estimators</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estimator</th>
+<th style="text-align: right;">Estimate of <span class="math inline">\bar y_U</span></th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">Estimated total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SRS (ignores photo counts)</td>
+<td style="text-align: right;">11.56</td>
+<td style="text-align: right;">0.522</td>
+<td style="text-align: right;">1156</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ratio, <span class="math inline">\hat B=1.0906</span></td>
+<td style="text-align: right;">12.323</td>
+<td style="text-align: right;">0.512</td>
+<td style="text-align: right;">1232.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Regression</td>
+<td style="text-align: right;">11.989</td>
+<td style="text-align: right;">0.417</td>
+<td style="text-align: right;">1198.9</td>
+</tr>
+</tbody>
+</table>
+<p>The ratio estimator, <span class="math inline">\hat B\bar x_U=1.0906(11.3)</span>, barely improves on SRS, since the line through the origin fits poorly here. Because the true intercept is not zero, the <strong>regression</strong> estimator is the most precise.</p>
 </section></section>
 <section>
 <section id="post-stratification" class="title-slide slide level1 center" data-number="6">
@@ -801,7 +1402,7 @@ y_i = \sum_{h=1}^H B_h\,x_{ih} + d_i, \qquad x_{ih}=\mathbf 1\{i\in\text{group }
 <div id="tbl-poststrat-region" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
 <figure class="quarto-float quarto-float-tbl">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-poststrat-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1
+Table&nbsp;2
 </figcaption>
 <div aria-describedby="tbl-poststrat-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1326,7 +1927,7 @@ Table&nbsp;1
 <div id="tbl-poststrat-acres87" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
 <figure class="quarto-float quarto-float-tbl">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-poststrat-acres87-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2
+Table&nbsp;3
 </figcaption>
 <div aria-describedby="tbl-poststrat-acres87-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1931,7 +2532,7 @@ u_i = y_ix_i = \begin{cases}y_i &amp; i\in\mathcal U_d\\0 &amp; i\notin\mathcal 
 <div id="tbl-domain-agsrs" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
 <figure class="quarto-float quarto-float-tbl">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-domain-agsrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3
+Table&nbsp;4
 </figcaption>
 <div aria-describedby="tbl-domain-agsrs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
