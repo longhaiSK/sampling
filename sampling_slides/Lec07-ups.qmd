@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 Textbook sections:
 
-- 6.1--6.3 in Lohr's book (not covering UPS without replacement)
+- 6.1--6.3 in Lohr's book; UPS without replacement: the Horvitz-Thompson estimator at the end
 - 8.9 and 9.7 in Scheaffer et al., titled "Cluster Sampling with Probabilities
   Proportional to Size"
 
@@ -183,19 +183,22 @@ PPS probabilities, they give a biased result (214, not 300).
 
 ## How to Do Unequal Probability Sampling?
 
-Suppose $n>1$ and we sample **with replacement**: sampling with replacement
-means the selection probabilities do not change after the first draw. Let
+Suppose $n>1$ and we sample **with replacement**: the selection probabilities do not change after the first
+draw. Let
 $$
-\psi_i = P(\text{select unit } i \text{ on any given draw}).
+\psi_i = P(\text{select unit } i \text{ on any given draw}),\qquad \sum_{i=1}^N\psi_i=1 .
 $$
 
-The idea: draw $n$ psus with replacement (some psus may be drawn more than
-once). For each draw, estimate the population total using the single-draw
-estimator from before; average the $n$ (independent) estimates.
-
-A common choice, **probabilities proportional to size (PPS)**:
+Draw $n$ units with replacement (a unit may be drawn more than once). Each draw gives an unbiased estimate
+$y_j^*/\psi_j^*$ of the total $t$, and we average the $n$ independent estimates (**Hansen-Hurwitz**):
 $$
-\psi_i = \frac{M_i}{\sum_{k=1}^N M_k}
+\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat t_{\mathrm{HH}})=\frac{s_u}{\sqrt n},\quad s_u^2=\frac{1}{n-1}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2 .
+$$
+
+A common choice, **probabilities proportional to size (PPS)**, with a size variable $x_i>0$ known for every unit:
+$$
+\psi_i = \frac{x_i}{t_x},\qquad t_x=\sum_{k=1}^N x_k .
 $$
 
 ## Drawing Probabilities in Practice
@@ -222,320 +225,369 @@ points(draws, rep(0.5, 4), pch = 17, col = "firebrick", cex = 1.8)
 text(draws, rep(0.82, 4), sprintf("u=%.2f", draws), col = "firebrick", cex = 0.85)
 ```
 
-Divide $[0,1]$ into segments of length $\psi_1,\ldots,\psi_N$. Draw a random
-number $u\sim\text{Uniform}(0,1)$ (red triangles); whichever segment $u$ falls
-into determines the selected unit. In R: `sample(1:N, size = n, prob = psi, replace = TRUE)`.
+Divide $[0,1]$ into segments of length $\psi_1,\ldots,\psi_N$. Draw $u\sim\text{Uniform}(0,1)$ (red triangles);
+the segment that $u$ falls into determines the selected unit. In R:
+`sample(1:N, size = n, prob = psi, replace = TRUE)`.
 
-## Notation for the Sample $\mathcal R$
+## The Sample $\mathcal R$ and the IID View
 
-Because we sample with replacement, the sample may contain the same psu more
-than once. Let $\mathcal R$ (not $\mathcal S$) denote the multiset of $n$ draws,
-**including repeats**. For example, with the supermarket population, a sample
-of size $n=10$ might be
-$$
-\mathcal R = \{D,D,D,C,C,D,C,A,B,B\}.
-$$
+The sample $\mathcal R$ (not $\mathcal S$) is the list of the $n$ draws, **including repeats**. For example,
+$\mathcal R=\{D,D,D,C,C,D,C,A,B,B\}$ for $n=10$.
 
-## The Hansen-Hurwitz Estimator
-
-Let $u_i = t_i/\psi_i$. We saw that for a single draw, $u_i$ is an unbiased
-estimator of $t$. Sampling $n$ psus with replacement gives $n$ independent
-copies, which we average:
+Let $u_j^*=y_j^*/\psi_j^*$ be the estimate from the $j$th *draw*. The $u_j^*$ are IID with
 $$
-\hat t_\psi = \frac1n \sum_{i\in\mathcal R} \frac{t_i}{\psi_i} = \frac1n\sum_{i\in\mathcal R} u_i = \bar u
+E(u_j^*)=\sum_{i=1}^N\psi_i\frac{y_i}{\psi_i}=t,\qquad
+V(u_j^*)=\sum_{i=1}^N\psi_i\Big(\frac{y_i}{\psi_i}-t\Big)^2 ,
 $$
-
-The estimated variance:
-$$
-\hat V(\hat t_\psi) = \frac1n\cdot\frac{1}{n-1}\sum_{i\in\mathcal R}\Big(\frac{t_i}{\psi_i}-\hat t_\psi\Big)^2
-$$
-
-## Why $\hat t_\psi$ Is Unbiased: the IID View
-
-Let $u_j^*$ denote the value of $u_i=t_i/\psi_i$ for the $j$th *draw* (not the
-$j$th population unit) — so $\hat t_\psi = \frac1n\sum_{j=1}^n u_j^*=\bar u^*$.
-Since draws are independent and identically distributed,
-$$
-E(u_j^*) = \sum_{i=1}^N u_i\psi_i = \sum_{i=1}^N \frac{t_i}{\psi_i}\psi_i = \sum_{i=1}^N t_i = t
-$$
-$$
-V(u_j^*) = \sum_{i=1}^N \psi_i(u_i-t)^2 = \sum_{i=1}^N \psi_i\Big(\frac{t_i}{\psi_i}-t\Big)^2
-$$
-
-Since $\hat t_\psi$ is the mean of $n$ IID copies of $u_j^*$:
-$$
-E(\hat t_\psi) = E(u_j^*) = t, \qquad
-V(\hat t_\psi) = \frac{V(u_j^*)}{n} = \frac1n\sum_{i=1}^N \psi_i\Big(\frac{t_i}{\psi_i}-t\Big)^2
-$$
+so $\hat t_{\mathrm{HH}}=\bar u^*$ is unbiased with $V(\hat t_{\mathrm{HH}})=V(u_j^*)/n$.
 
 ::: {.callout-note}
-There is **no finite population correction** — the $n$ draws are independent
-(with replacement), unlike SRS without replacement.
+There is **no finite population correction**: the $n$ draws are independent.
 :::
 
-## Ratio Estimation for the ssu-Level Mean
+## Ratios $b_i$ and the Ratio $B$
 
-We estimate the population mean $\bar y_U = t/M_0$ by
+With $\psi_i=x_i/t_x$, define for every unit
 $$
-\hat{\bar y}_\psi = \frac{\hat t_\psi}{\hat M_{0\psi}}, \qquad
-\hat M_{0\psi} = \frac1n\sum_{i\in\mathcal R}\frac{M_i}{\psi_i}
+b_i=\frac{y_i}{x_i},\qquad B=\frac{t}{t_x}=\frac{\bar y_U}{\bar x_U},\qquad \bar x_U=\frac{t_x}{N}.
+$$
+$B=\sum x_ib_i/\sum x_i$ is the $x$-weighted mean of the $b_i$, and
+$$
+\bar y_U=\bar x_U\,B,\qquad t=t_x\,B .
+$$
+**Estimating $B$ is enough**: build $\hat B$, then multiply by $\bar x_U$ or $t_x$.
+
+Let $b_j^*$ be the ratio of the unit selected on draw $j$: it equals $b_i$ with probability $\psi_i$, so
+$$
+E(b_j^*)=\sum_{i=1}^N\frac{x_i}{t_x}\frac{y_i}{x_i}=B,\qquad
+S_{b^*}^2=V(b_j^*)=\sum_{i=1}^N\psi_i(b_i-B)^2 .
+$$
+(In the notation above, $u_j^*=t_x\,b_j^*$.)
+
+## HH Estimator of $B$, the Mean and the Total
+
+$$
+\boxed{\hat B_{\mathrm{HH}}=\bar b^*=\frac1n\sum_{j=1}^n b_j^*},\qquad
+\boxed{\widehat{\mathrm{SE}}(\hat B_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt n}},\qquad
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n(b_j^*-\bar b^*)^2
 $$
 
-Using Chapter 4's ratio-estimation results with $y_i=t_i/\psi_i$ and
-$x_i=M_i/\psi_i$:
+| Quantity | Estimate | Estimated SE |
+|:---|:---|:---|
+| Ratio $B=t/t_x$ | $\hat B_{\mathrm{HH}}$ | $s_{b^*}/\sqrt n$ |
+| Mean per unit $\bar y_U$ | $\bar x_U\,\hat B_{\mathrm{HH}}$ | $\bar x_U\,s_{b^*}/\sqrt n$ |
+| Total $t$ | $t_x\,\hat B_{\mathrm{HH}}$ | $t_x\,s_{b^*}/\sqrt n$ |
+
+With $w_i=x_i/\bar x_U=N\psi_i$ (relative size), the variance is a sum of terms in $w_i$ and $(b_i-B)$:
 $$
-\hat V(\hat{\bar y}_\psi) = \frac{1}{(\hat M_{0\psi})^2}\cdot\frac1n\cdot\frac{1}{n-1}\sum_{i\in\mathcal R}\Big(\frac{t_i}{\psi_i}-\hat{\bar y}_\psi\frac{M_i}{\psi_i}\Big)^2
+V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 .
 $$
 
-Again, no fpc is needed, since sampled psus are drawn independently.
+# Comparison of the HH, Ratio and Average Estimators
 
-# Example: College Statistics Classes
+## The Ratio Estimator and the Sample Average in Terms of $b_i$
 
-## Setup
+With an SRS $\mathcal S$ of $n$ units, write $y_i=x_ib_i=\bar x_U\,w_ib_i$:
 
-A college has 15 introductory statistics classes, with a total of 647
-students. We sample $n=5$ classes **with replacement**, with probability
-proportional to $M_i$ (class size), so $\psi_i = M_i/647$. We then survey
-every student in each sampled class about hours spent studying last week.
+* **Ratio estimator** (uses $x_i$ at the estimation stage):
+$$
+\hat B_r=\frac{\sum_{i\in\mathcal S}y_i}{\sum_{i\in\mathcal S}x_i}=\frac{\sum_{i\in\mathcal S}x_i\,b_i}{\sum_{i\in\mathcal S}x_i}
+$$
+the mean of the sampled $b_i$ with weights $x_i$ adding up to one.
 
-| Class | $M_i$ | $\psi_i$ |
-|:---:|---:|---:|
-| 1 | 44 | 0.0680 |
-| 5 | 76 | 0.1175 |
-| 12 | 24 | 0.0371 |
-| 14 | 100 | 0.1546 |
-| $\vdots$ | $\vdots$ | $\vdots$ |
-| **Total** | **647** | **1** |
+* **Sample average** (ignores $x_i$): $\bar y=\bar x_U\hat B_{\mathrm{avg}}$ with
+$$
+\hat B_{\mathrm{avg}}=\frac{\bar y}{\bar x_U}=\frac1n\sum_{i\in\mathcal S}w_i\,b_i
+$$
+weights $w_i$ that do not add up to one.
 
-Classes are drawn using cumulative ranges of $M_i$ (Lahiri's method): class 1
-gets numbers 1--44, class 2 gets 45--77, and so on up to class 15.
+## Comparison of the Three Estimators of $B$ {.smaller}
 
-## Sample and Estimate of the Total {.smaller}
+| Estimator | Estimator of $B$ | $x_i$ used at | Unbiased? |
+|:---|:--:|:---|:---|
+| Sample average (SRS) | $\dfrac1n\sum\limits_{i\in\mathcal S}w_ib_i$ | not used | yes |
+| Ratio (SRS) | $\dfrac{\sum_{\mathcal S} x_ib_i}{\sum_{\mathcal S} x_i}$ | estimation stage | slightly biased |
+| HH (UPSWR) | $\dfrac1n\sum\limits_{j=1}^n b_j^*$ | design stage | exactly unbiased |
 
-Suppose the sample (with repeats) is $\mathcal R = \{12, 14, 14, 5, 1\}$, with
-class totals $t_i$ (total hours studying, summed over all students). Writing
-$u_i=t_i/\psi_i$, the **Sum** row gives $\sum u_i$ and $\sum(u_i-\hat t_\psi)^2$
-directly:
-
-:::: {.columns}
-
-:::{.column style="width:60%;"}
-
-| Class | $\psi_i$ | $t_i$ | $u_i=t_i/\psi_i$ | $u_i-\hat t_\psi$ | $(u_i-\hat t_\psi)^2$ |
-|:---:|---:|---:|---:|---:|---:|
-| 12 | $24/647$ | 75 | 2021.875 | 272.861 | 74,452.9 |
-| 14 | $100/647$ | 203 | 1313.410 | $-435.604$ | 189,751.2 |
-| 14 | $100/647$ | 203 | 1313.410 | $-435.604$ | 189,751.2 |
-| 5 | $76/647$ | 191 | 1626.013 | $-123.001$ | 15,129.3 |
-| 1 | $44/647$ | 168 | 2470.364 | 721.349 | 520,344.8 |
-| **Sum** | | | **8745.07** | | **989,429.3** |
-
-:::
-
-:::{.column style="width:40%;"}
-
+Variances (multiply by $\bar x_U^2$ for the mean, $t_x^2$ for the total):
 $$
 \begin{aligned}
-\hat t_\psi &= \frac{\sum u_i}{n} = \frac{8745.07}{5} = 1749.014 \\[4pt]
-s^2 &= \frac{\sum(u_i-\hat t_\psi)^2}{n-1} = \frac{989{,}429.3}{4} = 247{,}357.3 \\[4pt]
-\text{SE}(\hat t_\psi) &= \sqrt{\frac{s^2}{n}} = \sqrt{\frac{247{,}357.3}{5}} = 222.42
+V(\hat B_{\mathrm{avg}})&=\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w_ib_i-B)^2\\
+V(\hat B_{r})&\approx\frac{1-n/N}{n(N-1)}\sum_{i=1}^N w_i^2\,(b_i-B)^2\\
+V(\hat B_{\mathrm{HH}})&=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2
 \end{aligned}
 $$
 
-:::
+## Per-Unit Squared Terms
 
-::::
+Each variance is $\frac1n\times$ the average over the units of one squared term:
 
-## Estimate of Hours per Student
+| Estimator | Squared term of unit $i$ | Spread of $y$ about |
+|:---|:--:|:---|
+| Sample average | $(w_ib_i-B)^2$ | the flat line $\bar y_U$ |
+| Ratio | $w_i^2\,(b_i-B)^2$ | the line $y=Bx$ |
+| HH | $w_i\,(b_i-B)^2$ | the line $y=Bx$, weight $1/w_i$ relative to ratio |
 
-Since $\psi_i = M_i/647$ exactly, $M_i/\psi_i = 647$ for every sampled class,
-so $\hat M_{0\psi} = M_0 = 647$ exactly. The average hours studied per student:
+HH divides the ratio estimator's term by $w_i$: units larger than average ($w_i>1$) are **downweighted**,
+smaller ones are upweighted, because large units are already drawn more often. UPSWR wins when the large
+residuals $y_i-Bx_i$ belong to the large units.
+
+## Toy Example: Four Supermarkets, One-Draw Variances {.smaller}
+
+$t_x=1600$, $\bar x_U=400$, $B=300/1600=0.1875$. Sales nearly proportional to floor area:
+
+| Store | $x_i$ | $y_i$ | $w_i$ | $b_i$ | $b_i-B$ | $(w_ib_i-B)^2$ | $w_i^2(b_i-B)^2$ | $w_i(b_i-B)^2$ |
+|:--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| A | 100 | 11 | 0.25 | 0.1100 | $-0.0775$ | 0.025600 | 0.000375 | 0.001502 |
+| B | 200 | 20 | 0.50 | 0.1000 | $-0.0875$ | 0.018906 | 0.001914 | 0.003828 |
+| C | 300 | 24 | 0.75 | 0.0800 | $-0.1075$ | 0.016256 | 0.006500 | 0.008667 |
+| D | 1000 | 245 | 2.50 | 0.2450 | $0.0575$ | 0.180625 | 0.020664 | 0.008266 |
+| **Variance** (Sum $/N$) | | | | | | **0.0603** | **0.00736** | **0.00557** |
+
+HH $<$ ratio $\ll$ sample average. If the sales were unrelated to the floor area, the ordering reverses
+(average $0.00078$, ratio $0.0288$, HH $0.0273$): **the size variable must be tied to $y$**.
+
+# Computation Example: Revenue from AI Token Usage
+
+## Setup and Sample {.smaller}
+
+An AI company has $N=6$ customers; the tokens $x_i$ (millions) are known for all, the revenue $y_i$
+(thousand dollars) is only observed for the sampled customers. Draw $n=5$ customers with replacement,
+$\psi_i=x_i/t_x$ ($t_x=100$, $\bar x_U=16.67$). The sample is $\mathcal R=\{F,E,F,D,C\}$:
+
+| Draw $j$ | Customer | $x_j^*$ | $y_j^*$ | $b_j^*=y_j^*/x_j^*$ | $b_j^*-\bar b^*$ | $(b_j^*-\bar b^*)^2$ |
+|:--:|:--:|--:|--:|--:|--:|--:|
+| 1 | F | 40 | 190 | 4.7500 | $-0.1417$ | 0.020069 |
+| 2 | E | 30 | 155 | 5.1667 | 0.2750 | 0.075625 |
+| 3 | F | 40 | 190 | 4.7500 | $-0.1417$ | 0.020069 |
+| 4 | D | 15 | 70 | 4.6667 | $-0.2250$ | 0.050625 |
+| 5 | C | 8 | 41 | 5.1250 | 0.2333 | 0.054444 |
+| **Sum** | | | | **24.4583** | 0 | **0.220833** |
+
+## Estimates {.smaller}
+
 $$
-\begin{aligned}
-\hat{\bar y}_\psi &= \frac{1749.014}{647} = 2.70 \text{ hours} \\[4pt]
-\text{SE}(\hat{\bar y}_\psi) &= \frac{222.42}{647} = 0.34 \text{ hours}
-\end{aligned}
+\hat B_{\mathrm{HH}}=\bar b^*=\frac{24.4583}{5}=4.8917,\qquad
+s_{b^*}^2=\frac{0.220833}{4}=0.055208,\quad s_{b^*}=0.2350
 $$
+
+| Quantity | Estimate | Estimated SE |
+|:---|:---|:---|
+| Revenue per million tokens $B$ | $4.8917$ | $0.2350/\sqrt5=0.1051$ |
+| Mean revenue per customer | $16.67\times4.8917=81.53$ | $16.67\times0.1051=1.75$ |
+| Total revenue | $100\times4.8917=489.2$ | $100\times0.1051=10.5$ |
+
+In R: `upswr_est(ydata, xdata, xbar_pop, tx_pop, method = "ratio")` with `method` equal to
+`"ratio"`, `"mean"` or `"total"` returns the estimate, SE and CI.
 
 # One-Stage Cluster Sampling with PPS
 
-## A Useful Simplification
+## Change of Notation
 
-When $\psi_i = M_i/M_0$ (PPS), then $u_i = t_i/\psi_i = t_i\cdot(M_0/M_i)=\bar y_i\cdot M_0$,
-where $\bar y_i=t_i/M_i$ is the $i$th cluster's own mean. So:
+Clusters (psus) are the units: $y_i\to t_i$ (cluster total), $x_i\to M_i$ (cluster size),
 $$
-\hat{\bar y}_{\text{pps}} = \frac{\hat t_\psi}{M_0} = \frac1n\sum_{i\in\mathcal R} \bar y_i
+t_x\to M_0=\sum_{i=1}^NM_i,\qquad \bar x_U\to\bar M_U=\frac{M_0}{N},\qquad \psi_i=\frac{M_i}{M_0}.
 $$
+The ratio of cluster $i$ is its **mean per element (ssu-level mean)**
 $$
-\text{SE}(\hat{\bar y}_{\text{pps}}) = \frac{\text{SE}(\hat t_\psi)}{M_0}
- = \sqrt{\frac1n\cdot\frac{\sum_{i\in\mathcal R}(\bar y_i-\hat{\bar y}_{\text{pps}})^2}{n-1}}
+b_i=\frac{t_i}{M_i}=\bar y_i ,\qquad B=\frac{t}{M_0}=\bar y_U\ \ (\text{mean per element}).
 $$
 
-Under PPS, we don't need to weight the cluster means by $M_i/\sum M_i$ at all
-— they can simply be averaged!
+## Estimates for One-Stage Cluster Sampling
 
-## Example: College Classes, Revisited with the PPS Shortcut
+Then $\hat B_{\mathrm{HH}}=\bar b^*=\dfrac1n\sum_{j=1}^n\bar y_j^*$: the **plain average of the sampled cluster
+means** (large clusters are already selected more often), with $\widehat{\mathrm{SE}}=s_{b^*}/\sqrt n$.
+
+| Quantity | Estimate | Estimated SE |
+|:---|:---|:---|
+| Mean per element $\bar y_U=B$ | $\hat B_{\mathrm{HH}}$ | $s_{b^*}/\sqrt n$ |
+| Mean per cluster $t/N$ | $\bar M_U\,\hat B_{\mathrm{HH}}$ | $\bar M_U\,s_{b^*}/\sqrt n$ |
+| Total $t$ | $M_0\,\hat B_{\mathrm{HH}}$ | $M_0\,s_{b^*}/\sqrt n$ |
+
+## Computation Example: Falls in Long-Term Care Homes {.smaller}
+
+$N=40$ homes, $M_0=3000$ residents ($\bar M_U=75$). $n=8$ draws with $\psi_i=M_i/M_0$; every resident of a
+selected home is reviewed ($t_i$ = falls in the home). Home H12 is drawn twice (same $t_i$):
 
 :::: {.columns}
 
-:::{.column style="width:50%;"}
+:::{.column style="width:58%;"}
 
-| Class | $\bar y_i = t_i/M_i$ |
-|:---:|---:|
-| 12 | $75/24 = 3.13$ |
-| 14 | $203/100 = 2.03$ |
-| 14 | $203/100 = 2.03$ |
-| 5 | $191/76 = 2.51$ |
-| 1 | $168/44 = 3.81$ |
-| **Sum** | **13.51** |
+| $j$ | Home | $M_j^*$ | $t_j^*$ | $b_j^*=t_j^*/M_j^*$ |
+|:--:|:--:|--:|--:|--:|
+| 1 | H12 | 180 | 160 | 0.8889 |
+| 2 | H03 | 60 | 49 | 0.8167 |
+| 3 | H27 | 240 | 205 | 0.8542 |
+| 4 | H12 | 180 | 160 | 0.8889 |
+| 5 | H31 | 95 | 70 | 0.7368 |
+| 6 | H08 | 120 | 118 | 0.9833 |
+| 7 | H19 | 45 | 30 | 0.6667 |
+| 8 | H36 | 150 | 140 | 0.9333 |
+| **Sum** | | | | **6.7688** |
 
 :::
 
-:::{.column style="width:50%;"}
+:::{.column style="width:42%;"}
 
-$$
-\begin{aligned}
-\hat{\bar y}_{\text{pps}} &= \frac{\sum \bar y_i}{5} = \frac{13.51}{5} = 2.70 \\[4pt]
-\text{SE}(\hat{\bar y}_{\text{pps}}) &= 0.34
-\end{aligned}
-$$
+$\hat B_{\mathrm{HH}}=6.7688/8=0.8461$ falls per resident, $s_{b^*}=0.1036$,
+$\widehat{\mathrm{SE}}=0.1036/\sqrt8=0.0366$.
 
-Identical to the weighted calculation on the previous slide — but computed
-directly as the mean and SE of the five class averages.
+| Quantity | Est. | SE |
+|:---|--:|--:|
+| per resident | 0.846 | 0.037 |
+| per home ($\times75$) | 63.5 | 2.7 |
+| total ($\times3000$) | 2538 | 110 |
 
 :::
 
 ::::
-
-# Review: SRS-of-Clusters vs. PPS
-
-## Ratio Estimation for Cluster Sampling with SRS
-
-Recall from cluster sampling: if psus are instead drawn by an ordinary SRS
-(not PPS with replacement), the ratio estimator is
-$$
-\hat{\bar y}_r = \frac{\sum_{i\in\mathcal S} \hat t_i}{\sum_{i\in\mathcal S} M_i} = \frac{\sum_{i\in\mathcal S} M_i\bar y_i}{\sum_{i\in\mathcal S} M_i}
-$$
-with estimated variance (including a finite-population correction)
-$$
-\hat V(\hat{\bar y}_r) = \frac{1}{\bar M^2}\Big(1-\frac nN\Big)\frac{s_r^2}{n} + \frac{1}{nN\bar M^2}\sum_{i\in\mathcal S}M_i^2\Big(1-\frac{m_i}{M_i}\Big)\frac{s_i^2}{m_i}
-$$
-
-## Key Contrast
-
-|  | SRS of psus + ratio estimation | PPS with replacement |
-|:---|:---|:---|
-| Selection | equal probability | $\psi_i \propto M_i$ |
-| Point estimator | $\hat{\bar y}_r$ (ratio, slightly biased) | $\hat{\bar y}_\psi$ (Hansen-Hurwitz ratio, still approx.) |
-| Finite population correction | yes, $(1-n/N)$ | **no** — draws are independent |
-| Weighting of cluster means | by $M_i/\sum M_i$ | **no weighting needed** if $\psi_i\propto M_i$ |
-
-Both approaches exploit the same correlation between $t_i$ and $M_i$, but PPS
-builds it into the *design*, giving the cleanest formulas when $\psi_i\propto M_i$
-exactly.
 
 # Two-Stage Cluster Sampling with Replacement
 
-## Setup
+## Setup and Estimators
 
-Now suppose that, instead of observing every ssu in a selected psu, we take a
-subsample. Let $Q_i$ be the number of times psu $i$ occurs in $\mathcal R$; if
-$Q_i>0$, we draw a **different, independent** subsample each time psu $i$ is
-selected (unlike one-stage sampling, where a repeated psu just contributes the
-same observed total again). For the $j$th subsample from psu $i$
-($j=1,\ldots,Q_i$), let $\hat t_{ij}$ estimate $t_i$, with $E[\hat t_{ij}]=t_i$.
+Select $n$ clusters with replacement, $\psi_i=M_i/M_0$, then take an SRS of $m_i$ elements from the cluster
+**on every draw**: a cluster drawn twice gets two **independent** subsamples. The cluster mean $b_i=t_i/M_i$ is
+not observed, but estimated by the subsample mean $\bar y_i$, and $\hat t_i=M_i\bar y_i$.
 
-## Estimators for the Total
+The one-stage formulas carry over with $\bar y_j^*$ (subsample mean of draw $j$) in place of $b_j^*$:
+$$
+\hat B_{\mathrm{HH}}=\bar y^*=\frac1n\sum_{j=1}^n\bar y_j^*,\qquad
+\widehat{\mathrm{SE}}(\hat B_{\mathrm{HH}})=\frac{s_{\bar y^*}}{\sqrt n},\qquad
+s_{\bar y^*}^2=\frac{1}{n-1}\sum_{j=1}^n(\bar y_j^*-\bar y^*)^2 ,
+$$
+mean per cluster $\bar M_U\hat B_{\mathrm{HH}}$ and total $M_0\hat B_{\mathrm{HH}}$ with SEs multiplied by the same constants
+(each draw estimates the total by $\hat t_j^*/\psi_j^*=M_0\bar y_j^*$).
 
-$$
-\hat t_\psi = \frac1n \sum_{i=1}^N\sum_{j=1}^{Q_i} \frac{\hat t_{ij}}{\psi_i}
-$$
-$$
-\hat V(\hat t_\psi) = \frac1n\cdot\frac{1}{n-1}\sum_{i=1}^N\sum_{j=1}^{Q_i}\Big(\frac{\hat t_{ij}}{\psi_i}-\hat t_\psi\Big)^2
-$$
+::: {.callout-note}
+**No second-stage variance formula is needed**: the draws are independent, and $s_{\bar y^*}^2$ captures both the
+choice of clusters and the choice of elements within them.
+:::
 
-(If $Q_i=0$ for some psu, that psu simply contributes no terms.) Because
-sampling is with replacement, it's possible to draw more than one independent
-subsample from the same psu — so this variance estimator automatically
-captures **both** the between-psu variability and the within-psu subsampling
-variability.
+## Computation Example: Care Homes with Subsamples {.smaller}
 
-## Estimator for the ssu-Level Mean
-
-$$
-\hat{\bar y}_\psi = \frac{\hat t_\psi}{\hat M_{0\psi}}, \qquad
-\hat M_{0\psi} = \frac1n\sum_{i\in\mathcal R}\frac{M_i}{\psi_i}
-$$
-$$
-\hat V(\hat{\bar y}_\psi) = \frac{1}{(\hat M_{0\psi})^2}\cdot\frac1n\cdot\frac{1}{n-1}\sum_{i=1}^N\sum_{j=1}^{Q_i}\Big(\frac{\hat t_{ij}}{\psi_i}-\hat{\bar y}_\psi\frac{M_i}{\psi_i}\Big)^2
-$$
-
-If an SRS of $m_i$ ssus is taken within psu $i$, the overall sampling weight
-for ssu $j$ in psu $i$ becomes
-$$
-w_{ij} = \frac{1}{n\psi_i}\cdot\frac{M_i}{m_i}
-$$
-
-## Example: Hours Spent Studying, Subsampled {.smaller}
-
-Instead of surveying every student, we now subsample 5 students per class
-(class 14 is selected twice, with a *different* subsample of 5 each time).
-Writing $u_i=\hat t_i/\psi_i$, the **Sum** row gives $\sum u_i$ and
-$\sum(u_i-\hat t_\psi)^2$ directly:
+Same eight draws, but $m_j^*=20$ residents are sampled per draw (15 for H19), recording their falls. H12 is
+drawn twice, with different subsample means:
 
 :::: {.columns}
 
-:::{.column style="width:65%;"}
+:::{.column style="width:58%;"}
 
-| Class | $M_i$ | $\psi_i$ | $\bar y_i$ | $\hat t_i$ | $u_i$ | $e_i=u_i-\hat t_\psi$ | $e^2_i$ |
-|:--:|---:|---:|---:|---:|---:|-------:|-----:|
-| 12 | 24 | 0.0371 | 2.4 | 57.6 | 1552.8 | $-64.7$ | 4,186.1 |
-| 14 | 100 | 0.1546 | 1.6 | 160.0 | 1035.2 | $-582.3$ | 339,073.3 |
-| 14 | 100 | 0.1546 | 2.0 | 200.0 | 1294.0 | $-323.5$ | 104,652.2 |
-| 5 | 76 | 0.1175 | 2.8 | 212.8 | 1811.6 | $194.1$ | 37,674.8 |
-| 1 | 44 | 0.0680 | 3.7 | 162.8 | 2393.9 | $776.4$ | 602,797.0 |
-| **Sum** | | | | | **8087.5** | 0| **1,088,383** |
+| $j$ | Home | $M_j^*$ | $m_j^*$ | Falls | $\bar y_j^*$ |
+|:--:|:--:|--:|--:|--:|--:|
+| 1 | H12 | 180 | 20 | 19 | 0.950 |
+| 2 | H03 | 60 | 20 | 15 | 0.750 |
+| 3 | H27 | 240 | 20 | 16 | 0.800 |
+| 4 | H12 | 180 | 20 | 16 | 0.800 |
+| 5 | H31 | 95 | 20 | 18 | 0.900 |
+| 6 | H08 | 120 | 20 | 21 | 1.050 |
+| 7 | H19 | 45 | 15 | 10 | 0.667 |
+| 8 | H36 | 150 | 20 | 17 | 0.850 |
+| **Sum** | | | | | **6.767** |
 
 :::
 
-:::{.column style="width:35%;"}
+:::{.column style="width:42%;"}
 
-$$
-\begin{aligned}
-\hat t_\psi &= \frac{8087.5}{5} = 1617.5 \\[4pt]
-s^2 &= \frac{1{,}088{,}383}{4} = 272{,}095.8 \\[4pt]
-\text{SE}(\hat t_\psi) &= \sqrt{\frac{s^2}{5}} = 233.28\\[4pt]
-\hat{\bar y}_\psi &= \frac{1617.5}{647} = 2.5\text{ h} \\[4pt]
-\text{SE}(\hat{\bar y}_\psi) &= \frac{233.28}{647} = 0.36\text{ h}
-\end{aligned}
-$$
+$\hat B_{\mathrm{HH}}=6.767/8=0.846$, $s_{\bar y^*}=0.120$, $\widehat{\mathrm{SE}}=0.120/\sqrt8=0.0425$.
+
+| Quantity | Est. | SE |
+|:---|--:|--:|
+| per resident | 0.846 | 0.042 |
+| per home ($\times75$) | 63.4 | 3.2 |
+| total ($\times3000$) | 2538 | 127 |
 
 :::
 
 ::::
 
-Compared with the full-census example ($\hat{\bar y}_\psi=2.70$,
-$\text{SE}=0.34$), subsampling gives a similar point estimate at a somewhat
-higher SE — the price of observing fewer students per class.
+# Unequal Probability Sampling Without Replacement (UPSWO)
+
+## The Horvitz-Thompson Estimator
+
+Select $n$ **distinct** units with **inclusion probabilities** $\pi_i=P(i\in\mathcal S)$, $\sum_{i=1}^N\pi_i=n$.
+For $\pi$ps, $\pi_i=n\,x_i/t_x=n\psi_i$. The **Horvitz-Thompson (HT)** estimator weights each unit by $1/\pi_i$:
+$$
+\boxed{\hat t_{\mathrm{HT}}=\sum_{i\in\mathcal S}\frac{y_i}{\pi_i}}
+$$
+*Unbiased*: with $I_i=1$ if $i\in\mathcal S$ (and $E(I_i)=\pi_i$), $\hat t_{\mathrm{HT}}=\sum_{i=1}^N I_i\,y_i/\pi_i$ and
+$$
+E(\hat t_{\mathrm{HT}})=\sum_{i=1}^N\frac{y_i}{\pi_i}E(I_i)=\sum_{i=1}^N y_i=t .
+$$
+
+## Mean and Ratio from the HT Total
+
+Mean per unit: $\hat t_{\mathrm{HT}}/N$. With $\pi_i\propto x_i$, the ratio is the HT total over $t_x$:
+$$
+\hat B_{\mathrm{HT}}=\frac{\hat t_{\mathrm{HT}}}{t_x}=\frac1n\sum_{i\in\mathcal S}b_i ,
+\qquad \widehat{\mathrm{SE}}(\hat B_{\mathrm{HT}})=\frac{\widehat{\mathrm{SE}}(\hat t_{\mathrm{HT}})}{t_x}.
+$$
+
+## Variances of the HT Estimator
+
+With joint inclusion probabilities $\pi_{ij}$ (fixed sample size), **Sen-Yates-Grundy**:
+$$
+\hat V_{\mathrm{SYG}}=\frac12\sum_{i\in\mathcal S}\sum_{j\in\mathcal S}\frac{\pi_i\pi_j-\pi_{ij}}{\pi_{ij}}\Big(\frac{y_i}{\pi_i}-\frac{y_j}{\pi_j}\Big)^2 .
+$$
+Approximations that need only $\pi_i$, with $u_i=y_i/\pi_i$:
+
+* **Hájek**: $\displaystyle\hat V_{\mathrm H}=\frac{n}{n-1}\sum_{i\in\mathcal S}(1-\pi_i)(u_i-A)^2,\quad
+A=\frac{\sum_{\mathcal S}(1-\pi_i)u_i}{\sum_{\mathcal S}(1-\pi_i)}$
+* **With-replacement (WR)**: treat the sample as $n$ draws with $\psi_i=\pi_i/n$,
+$\displaystyle\hat V_{\mathrm{WR}}=\frac{n}{n-1}\sum_{i\in\mathcal S}\Big(u_i-\frac{\hat t_{\mathrm{HT}}}{n}\Big)^2$,
+which ignores the factors $1-\pi_i$ and is a little too large.
+
+For the mean divide the SE by $N$; for $\hat B_{\mathrm{HT}}$ divide by $t_x$.
+
+## Computation Example: HT Estimate and Variances {.smaller}
+
+$N=20$ units, a sample of $n=4$ units with inclusion probabilities $\pi_i$:
+
+| $i$ | $y_i$ | $\pi_i$ | $u_i=y_i/\pi_i$ | $(1-\pi_i)u_i$ | $(1-\pi_i)(u_i-A)^2$ | $(u_i-\hat t_{\mathrm{HT}}/n)^2$ |
+|:--:|--:|--:|--:|--:|--:|--:|
+| 1 | 12 | 0.10 | 120.00 | 108.00 | 17.08 | 12.8 |
+| 2 | 30 | 0.20 | 150.00 | 120.00 | 526.1 | 698.5 |
+| 3 | 40 | 0.35 | 114.29 | 74.29 | 65.9 | 86.2 |
+| 4 | 33 | 0.30 | 110.00 | 77.00 | 144.3 | 184.2 |
+| **Sum** | | | **494.29** | **379.29** | **753.4** | **981.6** |
+
+$\hat t_{\mathrm{HT}}=494.29$, mean $494.29/20=24.71$; $A=379.29/3.05=124.36$, and
+
+$$
+\hat V_{\mathrm H}=\tfrac43\times753.4=1004.5\ (\mathrm{SE}=31.7),\qquad
+\hat V_{\mathrm{WR}}=\tfrac43\times981.6=1308.8\ (\mathrm{SE}=36.2).
+$$
+SE of the mean: $31.7/20=1.58$ (Hájek), $36.2/20=1.81$ (WR).
+
+# When to Use UPS
+
+## UPS Is Risky Unless $y$ Is Tied to the Size Variable
+
+The gain depends on the ratios $b_i=y_i/x_i$ being nearly constant, i.e. $y_i$ roughly proportional to $x_i$.
+Otherwise,
+
+* the estimate can be **much worse than a plain SRS average**;
+* a unit with small $x_i$ but large $y_i$ gets a huge weight $1/\psi_i$ ($1/\pi_i$), so the estimates are unstable and
+  the estimated SE tends to be too small (intervals under-cover).
+
+UPS is used mostly when the size is a good proxy of what is measured: selecting the clusters of a multi-stage
+survey proportional to households or students, auditing by monetary value, surveys of establishments by
+employment. If the size is only loosely related to $y$, use SRS or stratified sampling, with a ratio or
+regression estimator if $x_i$ is known.
 
 # Weights in Unequal-Probability Sampling
 
 ## General Weight Formula
 
-For sampling **without** replacement, the weight is the reciprocal of the
-inclusion probability, $1/E[Z_i]$. For sampling **with** replacement, we use
-the *first-stage* weight
+For sampling **without** replacement, the weight is the reciprocal of the inclusion probability, $1/\pi_i$.
+For sampling **with** replacement, we use the *first-stage* weight
 $$
-w_i = \frac{1}{\text{expected number of hits}} = \frac{1}{E[Q_i]} = \frac{1}{n\psi_i}
+w_i = \frac{1}{E[Q_i]} = \frac{1}{n\psi_i},
 $$
-
-For one-stage cluster sampling (every ssu observed each time psu $i$ is hit),
-$w_{ij}=w_i=1/(n\psi_i)$ for every ssu $j$ in psu $i$, and
+where $Q_i$ is the number of times unit $i$ occurs in $\mathcal R$. For one-stage cluster sampling, $w_{ij}=1/(n\psi_i)$
+for every ssu $j$ in psu $i$, and
 $$
-\hat t_\psi = \sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}, \qquad
-\hat{\bar y}_\psi = \frac{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}}{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}}
+\hat t_{\mathrm{HH}} = \sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}, \qquad
+\hat{\bar y}_U = \frac{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}}{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}} .
 $$
-
-For two-stage sampling with an SRS of $m_i$ ssus per selected psu, the weight
-picks up an extra factor $M_i/m_i$ for the subsampling stage, exactly as in
-ordinary two-stage cluster sampling.
+For two-stage sampling with an SRS of $m_i$ ssus, the weight has the extra factor $M_i/m_i$.

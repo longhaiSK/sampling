@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.9.37">
 
   <meta name="author" content="Longhai Li">
-  <meta name="dcterms.date" content="2026-10-21">
+  <meta name="dcterms.date" content="2026-10-22">
   <title>UPS-Slides</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -161,14 +161,14 @@ Longhai Li
 </div>
 </div>
 
-  <p class="date">2026-10-21</p>
+  <p class="date">2026-10-22</p>
 </section>
 <section>
 <section id="introduction-to-unequal-probability-sampling" class="title-slide slide level1 center" data-number="1">
 <h1><span class="header-section-number">1</span> Introduction to Unequal Probability Sampling</h1>
 <p>Textbook sections:</p>
 <ul>
-<li>6.1–6.3 in Lohr’s book (not covering UPS without replacement)</li>
+<li>6.1–6.3 in Lohr’s book; UPS without replacement: the Horvitz-Thompson estimator at the end</li>
 <li>8.9 and 9.7 in Scheaffer et al., titled “Cluster Sampling with Probabilities Proportional to Size”</li>
 </ul>
 </section>
@@ -473,12 +473,15 @@ E(\hat t_r) &amp;= \frac{856}{4} = 214 \quad(\ne 300,\ \text{biased!}) \\[4pt]
 </section>
 <section id="how-to-do-unequal-probability-sampling" class="slide level2">
 <h2>How to Do Unequal Probability Sampling?</h2>
-<p>Suppose <span class="math inline">n&gt;1</span> and we sample <strong>with replacement</strong>: sampling with replacement means the selection probabilities do not change after the first draw. Let <span class="math display">
-\psi_i = P(\text{select unit } i \text{ on any given draw}).
+<p>Suppose <span class="math inline">n&gt;1</span> and we sample <strong>with replacement</strong>: the selection probabilities do not change after the first draw. Let <span class="math display">
+\psi_i = P(\text{select unit } i \text{ on any given draw}),\qquad \sum_{i=1}^N\psi_i=1 .
 </span></p>
-<p>The idea: draw <span class="math inline">n</span> psus with replacement (some psus may be drawn more than once). For each draw, estimate the population total using the single-draw estimator from before; average the <span class="math inline">n</span> (independent) estimates.</p>
-<p>A common choice, <strong>probabilities proportional to size (PPS)</strong>: <span class="math display">
-\psi_i = \frac{M_i}{\sum_{k=1}^N M_k}
+<p>Draw <span class="math inline">n</span> units with replacement (a unit may be drawn more than once). Each draw gives an unbiased estimate <span class="math inline">y_j^*/\psi_j^*</span> of the total <span class="math inline">t</span>, and we average the <span class="math inline">n</span> independent estimates (<strong>Hansen-Hurwitz</strong>): <span class="math display">
+\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat t_{\mathrm{HH}})=\frac{s_u}{\sqrt n},\quad s_u^2=\frac{1}{n-1}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2 .
+</span></p>
+<p>A common choice, <strong>probabilities proportional to size (PPS)</strong>, with a size variable <span class="math inline">x_i&gt;0</span> known for every unit: <span class="math display">
+\psi_i = \frac{x_i}{t_x},\qquad t_x=\sum_{k=1}^N x_k .
 </span></p>
 </section>
 <section id="drawing-probabilities-in-practice" class="slide level2">
@@ -486,34 +489,15 @@ E(\hat t_r) &amp;= \frac{856}{4} = 214 \quad(\ne 300,\ \text{biased!}) \\[4pt]
 
 <img data-src="Lec07-ups_files/figure-revealjs/fig-pps-line-1.png" id="fig-pps-line" class="quarto-figure quarto-figure-center r-stretch" style="width:85.0%"><p class="caption">
 Figure&nbsp;1
-</p><p>Divide <span class="math inline">[0,1]</span> into segments of length <span class="math inline">\psi_1,\ldots,\psi_N</span>. Draw a random number <span class="math inline">u\sim\text{Uniform}(0,1)</span> (red triangles); whichever segment <span class="math inline">u</span> falls into determines the selected unit. In R: <code>sample(1:N, size = n, prob = psi, replace = TRUE)</code>.</p>
+</p><p>Divide <span class="math inline">[0,1]</span> into segments of length <span class="math inline">\psi_1,\ldots,\psi_N</span>. Draw <span class="math inline">u\sim\text{Uniform}(0,1)</span> (red triangles); the segment that <span class="math inline">u</span> falls into determines the selected unit. In R: <code>sample(1:N, size = n, prob = psi, replace = TRUE)</code>.</p>
 </section>
-<section id="notation-for-the-sample-mathcal-r" class="slide level2">
-<h2>Notation for the Sample <span class="math inline">\mathcal R</span></h2>
-<p>Because we sample with replacement, the sample may contain the same psu more than once. Let <span class="math inline">\mathcal R</span> (not <span class="math inline">\mathcal S</span>) denote the multiset of <span class="math inline">n</span> draws, <strong>including repeats</strong>. For example, with the supermarket population, a sample of size <span class="math inline">n=10</span> might be <span class="math display">
-\mathcal R = \{D,D,D,C,C,D,C,A,B,B\}.
-</span></p>
-</section>
-<section id="the-hansen-hurwitz-estimator" class="slide level2">
-<h2>The Hansen-Hurwitz Estimator</h2>
-<p>Let <span class="math inline">u_i = t_i/\psi_i</span>. We saw that for a single draw, <span class="math inline">u_i</span> is an unbiased estimator of <span class="math inline">t</span>. Sampling <span class="math inline">n</span> psus with replacement gives <span class="math inline">n</span> independent copies, which we average: <span class="math display">
-\hat t_\psi = \frac1n \sum_{i\in\mathcal R} \frac{t_i}{\psi_i} = \frac1n\sum_{i\in\mathcal R} u_i = \bar u
-</span></p>
-<p>The estimated variance: <span class="math display">
-\hat V(\hat t_\psi) = \frac1n\cdot\frac{1}{n-1}\sum_{i\in\mathcal R}\Big(\frac{t_i}{\psi_i}-\hat t_\psi\Big)^2
-</span></p>
-</section>
-<section id="why-hat-t_psi-is-unbiased-the-iid-view" class="slide level2">
-<h2>Why <span class="math inline">\hat t_\psi</span> Is Unbiased: the IID View</h2>
-<p>Let <span class="math inline">u_j^*</span> denote the value of <span class="math inline">u_i=t_i/\psi_i</span> for the <span class="math inline">j</span>th <em>draw</em> (not the <span class="math inline">j</span>th population unit) — so <span class="math inline">\hat t_\psi = \frac1n\sum_{j=1}^n u_j^*=\bar u^*</span>. Since draws are independent and identically distributed, <span class="math display">
-E(u_j^*) = \sum_{i=1}^N u_i\psi_i = \sum_{i=1}^N \frac{t_i}{\psi_i}\psi_i = \sum_{i=1}^N t_i = t
-</span> <span class="math display">
-V(u_j^*) = \sum_{i=1}^N \psi_i(u_i-t)^2 = \sum_{i=1}^N \psi_i\Big(\frac{t_i}{\psi_i}-t\Big)^2
-</span></p>
-<p>Since <span class="math inline">\hat t_\psi</span> is the mean of <span class="math inline">n</span> IID copies of <span class="math inline">u_j^*</span>: <span class="math display">
-E(\hat t_\psi) = E(u_j^*) = t, \qquad
-V(\hat t_\psi) = \frac{V(u_j^*)}{n} = \frac1n\sum_{i=1}^N \psi_i\Big(\frac{t_i}{\psi_i}-t\Big)^2
-</span></p>
+<section id="the-sample-mathcal-r-and-the-iid-view" class="slide level2">
+<h2>The Sample <span class="math inline">\mathcal R</span> and the IID View</h2>
+<p>The sample <span class="math inline">\mathcal R</span> (not <span class="math inline">\mathcal S</span>) is the list of the <span class="math inline">n</span> draws, <strong>including repeats</strong>. For example, <span class="math inline">\mathcal R=\{D,D,D,C,C,D,C,A,B,B\}</span> for <span class="math inline">n=10</span>.</p>
+<p>Let <span class="math inline">u_j^*=y_j^*/\psi_j^*</span> be the estimate from the <span class="math inline">j</span>th <em>draw</em>. The <span class="math inline">u_j^*</span> are IID with <span class="math display">
+E(u_j^*)=\sum_{i=1}^N\psi_i\frac{y_i}{\psi_i}=t,\qquad
+V(u_j^*)=\sum_{i=1}^N\psi_i\Big(\frac{y_i}{\psi_i}-t\Big)^2 ,
+</span> so <span class="math inline">\hat t_{\mathrm{HH}}=\bar u^*</span> is unbiased with <span class="math inline">V(\hat t_{\mathrm{HH}})=V(u_j^*)/n</span>.</p>
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -523,245 +507,345 @@ V(\hat t_\psi) = \frac{V(u_j^*)}{n} = \frac1n\sum_{i=1}^N \psi_i\Big(\frac{t_i}{
 <p><strong>Note</strong></p>
 </div>
 <div class="callout-content">
-<p>There is <strong>no finite population correction</strong> — the <span class="math inline">n</span> draws are independent (with replacement), unlike SRS without replacement.</p>
+<p>There is <strong>no finite population correction</strong>: the <span class="math inline">n</span> draws are independent.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="ratio-estimation-for-the-ssu-level-mean" class="slide level2">
-<h2>Ratio Estimation for the ssu-Level Mean</h2>
-<p>We estimate the population mean <span class="math inline">\bar y_U = t/M_0</span> by <span class="math display">
-\hat{\bar y}_\psi = \frac{\hat t_\psi}{\hat M_{0\psi}}, \qquad
-\hat M_{0\psi} = \frac1n\sum_{i\in\mathcal R}\frac{M_i}{\psi_i}
-</span></p>
-<p>Using Chapter 4’s ratio-estimation results with <span class="math inline">y_i=t_i/\psi_i</span> and <span class="math inline">x_i=M_i/\psi_i</span>: <span class="math display">
-\hat V(\hat{\bar y}_\psi) = \frac{1}{(\hat M_{0\psi})^2}\cdot\frac1n\cdot\frac{1}{n-1}\sum_{i\in\mathcal R}\Big(\frac{t_i}{\psi_i}-\hat{\bar y}_\psi\frac{M_i}{\psi_i}\Big)^2
-</span></p>
-<p>Again, no fpc is needed, since sampled psus are drawn independently.</p>
-</section></section>
-<section>
-<section id="example-college-statistics-classes" class="title-slide slide level1 center" data-number="3">
-<h1><span class="header-section-number">3</span> Example: College Statistics Classes</h1>
-
+<section id="ratios-b_i-and-the-ratio-b" class="slide level2">
+<h2>Ratios <span class="math inline">b_i</span> and the Ratio <span class="math inline">B</span></h2>
+<p>With <span class="math inline">\psi_i=x_i/t_x</span>, define for every unit <span class="math display">
+b_i=\frac{y_i}{x_i},\qquad B=\frac{t}{t_x}=\frac{\bar y_U}{\bar x_U},\qquad \bar x_U=\frac{t_x}{N}.
+</span> <span class="math inline">B=\sum x_ib_i/\sum x_i</span> is the <span class="math inline">x</span>-weighted mean of the <span class="math inline">b_i</span>, and <span class="math display">
+\bar y_U=\bar x_U\,B,\qquad t=t_x\,B .
+</span> <strong>Estimating <span class="math inline">B</span> is enough</strong>: build <span class="math inline">\hat B</span>, then multiply by <span class="math inline">\bar x_U</span> or <span class="math inline">t_x</span>.</p>
+<p>Let <span class="math inline">b_j^*</span> be the ratio of the unit selected on draw <span class="math inline">j</span>: it equals <span class="math inline">b_i</span> with probability <span class="math inline">\psi_i</span>, so <span class="math display">
+E(b_j^*)=\sum_{i=1}^N\frac{x_i}{t_x}\frac{y_i}{x_i}=B,\qquad
+S_{b^*}^2=V(b_j^*)=\sum_{i=1}^N\psi_i(b_i-B)^2 .
+</span> (In the notation above, <span class="math inline">u_j^*=t_x\,b_j^*</span>.)</p>
 </section>
-<section id="setup" class="slide level2">
-<h2>Setup</h2>
-<p>A college has 15 introductory statistics classes, with a total of 647 students. We sample <span class="math inline">n=5</span> classes <strong>with replacement</strong>, with probability proportional to <span class="math inline">M_i</span> (class size), so <span class="math inline">\psi_i = M_i/647</span>. We then survey every student in each sampled class about hours spent studying last week.</p>
+<section id="hh-estimator-of-b-the-mean-and-the-total" class="slide level2">
+<h2>HH Estimator of <span class="math inline">B</span>, the Mean and the Total</h2>
+<p><span class="math display">
+\boxed{\hat B_{\mathrm{HH}}=\bar b^*=\frac1n\sum_{j=1}^n b_j^*},\qquad
+\boxed{\widehat{\mathrm{SE}}(\hat B_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt n}},\qquad
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n(b_j^*-\bar b^*)^2
+</span></p>
 <table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: center;">Class</th>
-<th style="text-align: right;"><span class="math inline">M_i</span></th>
-<th style="text-align: right;"><span class="math inline">\psi_i</span></th>
+<th style="text-align: left;">Quantity</th>
+<th style="text-align: left;">Estimate</th>
+<th style="text-align: left;">Estimated SE</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">1</td>
-<td style="text-align: right;">44</td>
-<td style="text-align: right;">0.0680</td>
+<td style="text-align: left;">Ratio <span class="math inline">B=t/t_x</span></td>
+<td style="text-align: left;"><span class="math inline">\hat B_{\mathrm{HH}}</span></td>
+<td style="text-align: left;"><span class="math inline">s_{b^*}/\sqrt n</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">5</td>
-<td style="text-align: right;">76</td>
-<td style="text-align: right;">0.1175</td>
+<td style="text-align: left;">Mean per unit <span class="math inline">\bar y_U</span></td>
+<td style="text-align: left;"><span class="math inline">\bar x_U\,\hat B_{\mathrm{HH}}</span></td>
+<td style="text-align: left;"><span class="math inline">\bar x_U\,s_{b^*}/\sqrt n</span></td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">12</td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">0.0371</td>
+<td style="text-align: left;">Total <span class="math inline">t</span></td>
+<td style="text-align: left;"><span class="math inline">t_x\,\hat B_{\mathrm{HH}}</span></td>
+<td style="text-align: left;"><span class="math inline">t_x\,s_{b^*}/\sqrt n</span></td>
+</tr>
+</tbody>
+</table>
+<p>With <span class="math inline">w_i=x_i/\bar x_U=N\psi_i</span> (relative size), the variance is a sum of terms in <span class="math inline">w_i</span> and <span class="math inline">(b_i-B)</span>: <span class="math display">
+V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 .
+</span></p>
+</section></section>
+<section>
+<section id="comparison-of-the-hh-ratio-and-average-estimators" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Comparison of the HH, Ratio and Average Estimators</h1>
+
+</section>
+<section id="the-ratio-estimator-and-the-sample-average-in-terms-of-b_i" class="slide level2">
+<h2>The Ratio Estimator and the Sample Average in Terms of <span class="math inline">b_i</span></h2>
+<p>With an SRS <span class="math inline">\mathcal S</span> of <span class="math inline">n</span> units, write <span class="math inline">y_i=x_ib_i=\bar x_U\,w_ib_i</span>:</p>
+<ul>
+<li><p><strong>Ratio estimator</strong> (uses <span class="math inline">x_i</span> at the estimation stage): <span class="math display">
+\hat B_r=\frac{\sum_{i\in\mathcal S}y_i}{\sum_{i\in\mathcal S}x_i}=\frac{\sum_{i\in\mathcal S}x_i\,b_i}{\sum_{i\in\mathcal S}x_i}
+</span> the mean of the sampled <span class="math inline">b_i</span> with weights <span class="math inline">x_i</span> adding up to one.</p></li>
+<li><p><strong>Sample average</strong> (ignores <span class="math inline">x_i</span>): <span class="math inline">\bar y=\bar x_U\hat B_{\mathrm{avg}}</span> with <span class="math display">
+\hat B_{\mathrm{avg}}=\frac{\bar y}{\bar x_U}=\frac1n\sum_{i\in\mathcal S}w_i\,b_i
+</span> weights <span class="math inline">w_i</span> that do not add up to one.</p></li>
+</ul>
+</section>
+<section id="comparison-of-the-three-estimators-of-b" class="slide level2 smaller">
+<h2>Comparison of the Three Estimators of <span class="math inline">B</span></h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estimator</th>
+<th style="text-align: center;">Estimator of <span class="math inline">B</span></th>
+<th style="text-align: left;"><span class="math inline">x_i</span> used at</th>
+<th style="text-align: left;">Unbiased?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Sample average (SRS)</td>
+<td style="text-align: center;"><span class="math inline">\dfrac1n\sum\limits_{i\in\mathcal S}w_ib_i</span></td>
+<td style="text-align: left;">not used</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">14</td>
+<td style="text-align: left;">Ratio (SRS)</td>
+<td style="text-align: center;"><span class="math inline">\dfrac{\sum_{\mathcal S} x_ib_i}{\sum_{\mathcal S} x_i}</span></td>
+<td style="text-align: left;">estimation stage</td>
+<td style="text-align: left;">slightly biased</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HH (UPSWR)</td>
+<td style="text-align: center;"><span class="math inline">\dfrac1n\sum\limits_{j=1}^n b_j^*</span></td>
+<td style="text-align: left;">design stage</td>
+<td style="text-align: left;">exactly unbiased</td>
+</tr>
+</tbody>
+</table>
+<p>Variances (multiply by <span class="math inline">\bar x_U^2</span> for the mean, <span class="math inline">t_x^2</span> for the total): <span class="math display">
+\begin{aligned}
+V(\hat B_{\mathrm{avg}})&amp;=\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w_ib_i-B)^2\\
+V(\hat B_{r})&amp;\approx\frac{1-n/N}{n(N-1)}\sum_{i=1}^N w_i^2\,(b_i-B)^2\\
+V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2
+\end{aligned}
+</span></p>
+</section>
+<section id="per-unit-squared-terms" class="slide level2">
+<h2>Per-Unit Squared Terms</h2>
+<p>Each variance is <span class="math inline">\frac1n\times</span> the average over the units of one squared term:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estimator</th>
+<th style="text-align: center;">Squared term of unit <span class="math inline">i</span></th>
+<th style="text-align: left;">Spread of <span class="math inline">y</span> about</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Sample average</td>
+<td style="text-align: center;"><span class="math inline">(w_ib_i-B)^2</span></td>
+<td style="text-align: left;">the flat line <span class="math inline">\bar y_U</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ratio</td>
+<td style="text-align: center;"><span class="math inline">w_i^2\,(b_i-B)^2</span></td>
+<td style="text-align: left;">the line <span class="math inline">y=Bx</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HH</td>
+<td style="text-align: center;"><span class="math inline">w_i\,(b_i-B)^2</span></td>
+<td style="text-align: left;">the line <span class="math inline">y=Bx</span>, weight <span class="math inline">1/w_i</span> relative to ratio</td>
+</tr>
+</tbody>
+</table>
+<p>HH divides the ratio estimator’s term by <span class="math inline">w_i</span>: units larger than average (<span class="math inline">w_i&gt;1</span>) are <strong>downweighted</strong>, smaller ones are upweighted, because large units are already drawn more often. UPSWR wins when the large residuals <span class="math inline">y_i-Bx_i</span> belong to the large units.</p>
+</section>
+<section id="toy-example-four-supermarkets-one-draw-variances" class="slide level2 smaller">
+<h2>Toy Example: Four Supermarkets, One-Draw Variances</h2>
+<p><span class="math inline">t_x=1600</span>, <span class="math inline">\bar x_U=400</span>, <span class="math inline">B=300/1600=0.1875</span>. Sales nearly proportional to floor area:</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Store</th>
+<th style="text-align: right;"><span class="math inline">x_i</span></th>
+<th style="text-align: right;"><span class="math inline">y_i</span></th>
+<th style="text-align: right;"><span class="math inline">w_i</span></th>
+<th style="text-align: right;"><span class="math inline">b_i</span></th>
+<th style="text-align: right;"><span class="math inline">b_i-B</span></th>
+<th style="text-align: right;"><span class="math inline">(w_ib_i-B)^2</span></th>
+<th style="text-align: right;"><span class="math inline">w_i^2(b_i-B)^2</span></th>
+<th style="text-align: right;"><span class="math inline">w_i(b_i-B)^2</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">A</td>
 <td style="text-align: right;">100</td>
-<td style="text-align: right;">0.1546</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">\vdots</span></td>
-<td style="text-align: right;"><span class="math inline">\vdots</span></td>
-<td style="text-align: right;"><span class="math inline">\vdots</span></td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">0.1100</td>
+<td style="text-align: right;"><span class="math inline">-0.0775</span></td>
+<td style="text-align: right;">0.025600</td>
+<td style="text-align: right;">0.000375</td>
+<td style="text-align: right;">0.001502</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;"><strong>Total</strong></td>
-<td style="text-align: right;"><strong>647</strong></td>
-<td style="text-align: right;"><strong>1</strong></td>
+<td style="text-align: center;">B</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.1000</td>
+<td style="text-align: right;"><span class="math inline">-0.0875</span></td>
+<td style="text-align: right;">0.018906</td>
+<td style="text-align: right;">0.001914</td>
+<td style="text-align: right;">0.003828</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">C</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">0.75</td>
+<td style="text-align: right;">0.0800</td>
+<td style="text-align: right;"><span class="math inline">-0.1075</span></td>
+<td style="text-align: right;">0.016256</td>
+<td style="text-align: right;">0.006500</td>
+<td style="text-align: right;">0.008667</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">D</td>
+<td style="text-align: right;">1000</td>
+<td style="text-align: right;">245</td>
+<td style="text-align: right;">2.50</td>
+<td style="text-align: right;">0.2450</td>
+<td style="text-align: right;"><span class="math inline">0.0575</span></td>
+<td style="text-align: right;">0.180625</td>
+<td style="text-align: right;">0.020664</td>
+<td style="text-align: right;">0.008266</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>Variance</strong> (Sum <span class="math inline">/N</span>)</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>0.0603</strong></td>
+<td style="text-align: right;"><strong>0.00736</strong></td>
+<td style="text-align: right;"><strong>0.00557</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Classes are drawn using cumulative ranges of <span class="math inline">M_i</span> (Lahiri’s method): class 1 gets numbers 1–44, class 2 gets 45–77, and so on up to class 15.</p>
+<p>HH <span class="math inline">&lt;</span> ratio <span class="math inline">\ll</span> sample average. If the sales were unrelated to the floor area, the ordering reverses (average <span class="math inline">0.00078</span>, ratio <span class="math inline">0.0288</span>, HH <span class="math inline">0.0273</span>): <strong>the size variable must be tied to <span class="math inline">y</span></strong>.</p>
+</section></section>
+<section>
+<section id="computation-example-revenue-from-ai-token-usage" class="title-slide slide level1 center" data-number="4">
+<h1><span class="header-section-number">4</span> Computation Example: Revenue from AI Token Usage</h1>
+
 </section>
-<section id="sample-and-estimate-of-the-total" class="slide level2 smaller">
-<h2>Sample and Estimate of the Total</h2>
-<p>Suppose the sample (with repeats) is <span class="math inline">\mathcal R = \{12, 14, 14, 5, 1\}</span>, with class totals <span class="math inline">t_i</span> (total hours studying, summed over all students). Writing <span class="math inline">u_i=t_i/\psi_i</span>, the <strong>Sum</strong> row gives <span class="math inline">\sum u_i</span> and <span class="math inline">\sum(u_i-\hat t_\psi)^2</span> directly:</p>
-<div class="columns">
-<div class="column" style="width:60%;">
+<section id="setup-and-sample" class="slide level2 smaller">
+<h2>Setup and Sample</h2>
+<p>An AI company has <span class="math inline">N=6</span> customers; the tokens <span class="math inline">x_i</span> (millions) are known for all, the revenue <span class="math inline">y_i</span> (thousand dollars) is only observed for the sampled customers. Draw <span class="math inline">n=5</span> customers with replacement, <span class="math inline">\psi_i=x_i/t_x</span> (<span class="math inline">t_x=100</span>, <span class="math inline">\bar x_U=16.67</span>). The sample is <span class="math inline">\mathcal R=\{F,E,F,D,C\}</span>:</p>
 <table class="caption-top">
 <colgroup>
-<col style="width: 20%">
-<col style="width: 16%">
-<col style="width: 16%">
-<col style="width: 16%">
-<col style="width: 16%">
-<col style="width: 16%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: center;">Class</th>
-<th style="text-align: right;"><span class="math inline">\psi_i</span></th>
-<th style="text-align: right;"><span class="math inline">t_i</span></th>
-<th style="text-align: right;"><span class="math inline">u_i=t_i/\psi_i</span></th>
-<th style="text-align: right;"><span class="math inline">u_i-\hat t_\psi</span></th>
-<th style="text-align: right;"><span class="math inline">(u_i-\hat t_\psi)^2</span></th>
+<th style="text-align: center;">Draw <span class="math inline">j</span></th>
+<th style="text-align: center;">Customer</th>
+<th style="text-align: right;"><span class="math inline">x_j^*</span></th>
+<th style="text-align: right;"><span class="math inline">y_j^*</span></th>
+<th style="text-align: right;"><span class="math inline">b_j^*=y_j^*/x_j^*</span></th>
+<th style="text-align: right;"><span class="math inline">b_j^*-\bar b^*</span></th>
+<th style="text-align: right;"><span class="math inline">(b_j^*-\bar b^*)^2</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">12</td>
-<td style="text-align: right;"><span class="math inline">24/647</span></td>
-<td style="text-align: right;">75</td>
-<td style="text-align: right;">2021.875</td>
-<td style="text-align: right;">272.861</td>
-<td style="text-align: right;">74,452.9</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">14</td>
-<td style="text-align: right;"><span class="math inline">100/647</span></td>
-<td style="text-align: right;">203</td>
-<td style="text-align: right;">1313.410</td>
-<td style="text-align: right;"><span class="math inline">-435.604</span></td>
-<td style="text-align: right;">189,751.2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">14</td>
-<td style="text-align: right;"><span class="math inline">100/647</span></td>
-<td style="text-align: right;">203</td>
-<td style="text-align: right;">1313.410</td>
-<td style="text-align: right;"><span class="math inline">-435.604</span></td>
-<td style="text-align: right;">189,751.2</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">5</td>
-<td style="text-align: right;"><span class="math inline">76/647</span></td>
-<td style="text-align: right;">191</td>
-<td style="text-align: right;">1626.013</td>
-<td style="text-align: right;"><span class="math inline">-123.001</span></td>
-<td style="text-align: right;">15,129.3</td>
-</tr>
-<tr class="odd">
 <td style="text-align: center;">1</td>
-<td style="text-align: right;"><span class="math inline">44/647</span></td>
-<td style="text-align: right;">168</td>
-<td style="text-align: right;">2470.364</td>
-<td style="text-align: right;">721.349</td>
-<td style="text-align: right;">520,344.8</td>
+<td style="text-align: center;">F</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">4.7500</td>
+<td style="text-align: right;"><span class="math inline">-0.1417</span></td>
+<td style="text-align: right;">0.020069</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">E</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">155</td>
+<td style="text-align: right;">5.1667</td>
+<td style="text-align: right;">0.2750</td>
+<td style="text-align: right;">0.075625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">F</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">4.7500</td>
+<td style="text-align: right;"><span class="math inline">-0.1417</span></td>
+<td style="text-align: right;">0.020069</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">4.6667</td>
+<td style="text-align: right;"><span class="math inline">-0.2250</span></td>
+<td style="text-align: right;">0.050625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">5.1250</td>
+<td style="text-align: right;">0.2333</td>
+<td style="text-align: right;">0.054444</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><strong>Sum</strong></td>
+<td style="text-align: center;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
-<td style="text-align: right;"><strong>8745.07</strong></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"><strong>989,429.3</strong></td>
+<td style="text-align: right;"><strong>24.4583</strong></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;"><strong>0.220833</strong></td>
 </tr>
 </tbody>
 </table>
-</div><div class="column" style="width:40%;">
+</section>
+<section id="estimates" class="slide level2 smaller">
+<h2>Estimates</h2>
 <p><span class="math display">
-\begin{aligned}
-\hat t_\psi &amp;= \frac{\sum u_i}{n} = \frac{8745.07}{5} = 1749.014 \\[4pt]
-s^2 &amp;= \frac{\sum(u_i-\hat t_\psi)^2}{n-1} = \frac{989{,}429.3}{4} = 247{,}357.3 \\[4pt]
-\text{SE}(\hat t_\psi) &amp;= \sqrt{\frac{s^2}{n}} = \sqrt{\frac{247{,}357.3}{5}} = 222.42
-\end{aligned}
+\hat B_{\mathrm{HH}}=\bar b^*=\frac{24.4583}{5}=4.8917,\qquad
+s_{b^*}^2=\frac{0.220833}{4}=0.055208,\quad s_{b^*}=0.2350
 </span></p>
-</div></div>
-</section>
-<section id="estimate-of-hours-per-student" class="slide level2">
-<h2>Estimate of Hours per Student</h2>
-<p>Since <span class="math inline">\psi_i = M_i/647</span> exactly, <span class="math inline">M_i/\psi_i = 647</span> for every sampled class, so <span class="math inline">\hat M_{0\psi} = M_0 = 647</span> exactly. The average hours studied per student: <span class="math display">
-\begin{aligned}
-\hat{\bar y}_\psi &amp;= \frac{1749.014}{647} = 2.70 \text{ hours} \\[4pt]
-\text{SE}(\hat{\bar y}_\psi) &amp;= \frac{222.42}{647} = 0.34 \text{ hours}
-\end{aligned}
-</span></p>
-</section></section>
-<section>
-<section id="one-stage-cluster-sampling-with-pps" class="title-slide slide level1 center" data-number="4">
-<h1><span class="header-section-number">4</span> One-Stage Cluster Sampling with PPS</h1>
-
-</section>
-<section id="a-useful-simplification" class="slide level2">
-<h2>A Useful Simplification</h2>
-<p>When <span class="math inline">\psi_i = M_i/M_0</span> (PPS), then <span class="math inline">u_i = t_i/\psi_i = t_i\cdot(M_0/M_i)=\bar y_i\cdot M_0</span>, where <span class="math inline">\bar y_i=t_i/M_i</span> is the <span class="math inline">i</span>th cluster’s own mean. So: <span class="math display">
-\hat{\bar y}_{\text{pps}} = \frac{\hat t_\psi}{M_0} = \frac1n\sum_{i\in\mathcal R} \bar y_i
-</span> <span class="math display">
-\text{SE}(\hat{\bar y}_{\text{pps}}) = \frac{\text{SE}(\hat t_\psi)}{M_0}
-= \sqrt{\frac1n\cdot\frac{\sum_{i\in\mathcal R}(\bar y_i-\hat{\bar y}_{\text{pps}})^2}{n-1}}
-</span></p>
-<p>Under PPS, we don’t need to weight the cluster means by <span class="math inline">M_i/\sum M_i</span> at all — they can simply be averaged!</p>
-</section>
-<section id="example-college-classes-revisited-with-the-pps-shortcut" class="slide level2">
-<h2>Example: College Classes, Revisited with the PPS Shortcut</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th style="text-align: center;">Class</th>
-<th style="text-align: right;"><span class="math inline">\bar y_i = t_i/M_i</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">12</td>
-<td style="text-align: right;"><span class="math inline">75/24 = 3.13</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">14</td>
-<td style="text-align: right;"><span class="math inline">203/100 = 2.03</span></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">14</td>
-<td style="text-align: right;"><span class="math inline">203/100 = 2.03</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">5</td>
-<td style="text-align: right;"><span class="math inline">191/76 = 2.51</span></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">1</td>
-<td style="text-align: right;"><span class="math inline">168/44 = 3.81</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><strong>Sum</strong></td>
-<td style="text-align: right;"><strong>13.51</strong></td>
-</tr>
-</tbody>
-</table>
-</div><div class="column" style="width:50%;">
-<p><span class="math display">
-\begin{aligned}
-\hat{\bar y}_{\text{pps}} &amp;= \frac{\sum \bar y_i}{5} = \frac{13.51}{5} = 2.70 \\[4pt]
-\text{SE}(\hat{\bar y}_{\text{pps}}) &amp;= 0.34
-\end{aligned}
-</span></p>
-<p>Identical to the weighted calculation on the previous slide — but computed directly as the mean and SE of the five class averages.</p>
-</div></div>
-</section></section>
-<section>
-<section id="review-srs-of-clusters-vs.-pps" class="title-slide slide level1 center" data-number="5">
-<h1><span class="header-section-number">5</span> Review: SRS-of-Clusters vs.&nbsp;PPS</h1>
-
-</section>
-<section id="ratio-estimation-for-cluster-sampling-with-srs" class="slide level2">
-<h2>Ratio Estimation for Cluster Sampling with SRS</h2>
-<p>Recall from cluster sampling: if psus are instead drawn by an ordinary SRS (not PPS with replacement), the ratio estimator is <span class="math display">
-\hat{\bar y}_r = \frac{\sum_{i\in\mathcal S} \hat t_i}{\sum_{i\in\mathcal S} M_i} = \frac{\sum_{i\in\mathcal S} M_i\bar y_i}{\sum_{i\in\mathcal S} M_i}
-</span> with estimated variance (including a finite-population correction) <span class="math display">
-\hat V(\hat{\bar y}_r) = \frac{1}{\bar M^2}\Big(1-\frac nN\Big)\frac{s_r^2}{n} + \frac{1}{nN\bar M^2}\sum_{i\in\mathcal S}M_i^2\Big(1-\frac{m_i}{M_i}\Big)\frac{s_i^2}{m_i}
-</span></p>
-</section>
-<section id="key-contrast" class="slide level2">
-<h2>Key Contrast</h2>
 <table class="caption-top">
 <colgroup>
 <col style="width: 33%">
@@ -770,185 +854,475 @@ s^2 &amp;= \frac{\sum(u_i-\hat t_\psi)^2}{n-1} = \frac{989{,}429.3}{4} = 247{,}3
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: left;">SRS of psus + ratio estimation</th>
-<th style="text-align: left;">PPS with replacement</th>
+<th style="text-align: left;">Quantity</th>
+<th style="text-align: left;">Estimate</th>
+<th style="text-align: left;">Estimated SE</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Selection</td>
-<td style="text-align: left;">equal probability</td>
-<td style="text-align: left;"><span class="math inline">\psi_i \propto M_i</span></td>
+<td style="text-align: left;">Revenue per million tokens <span class="math inline">B</span></td>
+<td style="text-align: left;"><span class="math inline">4.8917</span></td>
+<td style="text-align: left;"><span class="math inline">0.2350/\sqrt5=0.1051</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Point estimator</td>
-<td style="text-align: left;"><span class="math inline">\hat{\bar y}_r</span> (ratio, slightly biased)</td>
-<td style="text-align: left;"><span class="math inline">\hat{\bar y}_\psi</span> (Hansen-Hurwitz ratio, still approx.)</td>
+<td style="text-align: left;">Mean revenue per customer</td>
+<td style="text-align: left;"><span class="math inline">16.67\times4.8917=81.53</span></td>
+<td style="text-align: left;"><span class="math inline">16.67\times0.1051=1.75</span></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Finite population correction</td>
-<td style="text-align: left;">yes, <span class="math inline">(1-n/N)</span></td>
-<td style="text-align: left;"><strong>no</strong> — draws are independent</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Weighting of cluster means</td>
-<td style="text-align: left;">by <span class="math inline">M_i/\sum M_i</span></td>
-<td style="text-align: left;"><strong>no weighting needed</strong> if <span class="math inline">\psi_i\propto M_i</span></td>
+<td style="text-align: left;">Total revenue</td>
+<td style="text-align: left;"><span class="math inline">100\times4.8917=489.2</span></td>
+<td style="text-align: left;"><span class="math inline">100\times0.1051=10.5</span></td>
 </tr>
 </tbody>
 </table>
-<p>Both approaches exploit the same correlation between <span class="math inline">t_i</span> and <span class="math inline">M_i</span>, but PPS builds it into the <em>design</em>, giving the cleanest formulas when <span class="math inline">\psi_i\propto M_i</span> exactly.</p>
+<p>In R: <code>upswr_est(ydata, xdata, xbar_pop, tx_pop, method = "ratio")</code> with <code>method</code> equal to <code>"ratio"</code>, <code>"mean"</code> or <code>"total"</code> returns the estimate, SE and CI.</p>
+</section></section>
+<section>
+<section id="one-stage-cluster-sampling-with-pps" class="title-slide slide level1 center" data-number="5">
+<h1><span class="header-section-number">5</span> One-Stage Cluster Sampling with PPS</h1>
+
+</section>
+<section id="change-of-notation" class="slide level2">
+<h2>Change of Notation</h2>
+<p>Clusters (psus) are the units: <span class="math inline">y_i\to t_i</span> (cluster total), <span class="math inline">x_i\to M_i</span> (cluster size), <span class="math display">
+t_x\to M_0=\sum_{i=1}^NM_i,\qquad \bar x_U\to\bar M_U=\frac{M_0}{N},\qquad \psi_i=\frac{M_i}{M_0}.
+</span> The ratio of cluster <span class="math inline">i</span> is its <strong>mean per element (ssu-level mean)</strong> <span class="math display">
+b_i=\frac{t_i}{M_i}=\bar y_i ,\qquad B=\frac{t}{M_0}=\bar y_U\ \ (\text{mean per element}).
+</span></p>
+</section>
+<section id="estimates-for-one-stage-cluster-sampling" class="slide level2">
+<h2>Estimates for One-Stage Cluster Sampling</h2>
+<p>Then <span class="math inline">\hat B_{\mathrm{HH}}=\bar b^*=\dfrac1n\sum_{j=1}^n\bar y_j^*</span>: the <strong>plain average of the sampled cluster means</strong> (large clusters are already selected more often), with <span class="math inline">\widehat{\mathrm{SE}}=s_{b^*}/\sqrt n</span>.</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Quantity</th>
+<th style="text-align: left;">Estimate</th>
+<th style="text-align: left;">Estimated SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Mean per element <span class="math inline">\bar y_U=B</span></td>
+<td style="text-align: left;"><span class="math inline">\hat B_{\mathrm{HH}}</span></td>
+<td style="text-align: left;"><span class="math inline">s_{b^*}/\sqrt n</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mean per cluster <span class="math inline">t/N</span></td>
+<td style="text-align: left;"><span class="math inline">\bar M_U\,\hat B_{\mathrm{HH}}</span></td>
+<td style="text-align: left;"><span class="math inline">\bar M_U\,s_{b^*}/\sqrt n</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total <span class="math inline">t</span></td>
+<td style="text-align: left;"><span class="math inline">M_0\,\hat B_{\mathrm{HH}}</span></td>
+<td style="text-align: left;"><span class="math inline">M_0\,s_{b^*}/\sqrt n</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="computation-example-falls-in-long-term-care-homes" class="slide level2 smaller">
+<h2>Computation Example: Falls in Long-Term Care Homes</h2>
+<p><span class="math inline">N=40</span> homes, <span class="math inline">M_0=3000</span> residents (<span class="math inline">\bar M_U=75</span>). <span class="math inline">n=8</span> draws with <span class="math inline">\psi_i=M_i/M_0</span>; every resident of a selected home is reviewed (<span class="math inline">t_i</span> = falls in the home). Home H12 is drawn twice (same <span class="math inline">t_i</span>):</p>
+<div class="columns">
+<div class="column" style="width:58%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">j</span></th>
+<th style="text-align: center;">Home</th>
+<th style="text-align: right;"><span class="math inline">M_j^*</span></th>
+<th style="text-align: right;"><span class="math inline">t_j^*</span></th>
+<th style="text-align: right;"><span class="math inline">b_j^*=t_j^*/M_j^*</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">H12</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">0.8889</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">H03</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">49</td>
+<td style="text-align: right;">0.8167</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">H27</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">205</td>
+<td style="text-align: right;">0.8542</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">H12</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">0.8889</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">H31</td>
+<td style="text-align: right;">95</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">0.7368</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">H08</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">118</td>
+<td style="text-align: right;">0.9833</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">H19</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">0.6667</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">H36</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">140</td>
+<td style="text-align: right;">0.9333</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>Sum</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>6.7688</strong></td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:42%;">
+<p><span class="math inline">\hat B_{\mathrm{HH}}=6.7688/8=0.8461</span> falls per resident, <span class="math inline">s_{b^*}=0.1036</span>, <span class="math inline">\widehat{\mathrm{SE}}=0.1036/\sqrt8=0.0366</span>.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Quantity</th>
+<th style="text-align: right;">Est.</th>
+<th style="text-align: right;">SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">per resident</td>
+<td style="text-align: right;">0.846</td>
+<td style="text-align: right;">0.037</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">per home (<span class="math inline">\times75</span>)</td>
+<td style="text-align: right;">63.5</td>
+<td style="text-align: right;">2.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">total (<span class="math inline">\times3000</span>)</td>
+<td style="text-align: right;">2538</td>
+<td style="text-align: right;">110</td>
+</tr>
+</tbody>
+</table>
+</div></div>
 </section></section>
 <section>
 <section id="two-stage-cluster-sampling-with-replacement" class="title-slide slide level1 center" data-number="6">
 <h1><span class="header-section-number">6</span> Two-Stage Cluster Sampling with Replacement</h1>
 
 </section>
-<section id="setup-1" class="slide level2">
-<h2>Setup</h2>
-<p>Now suppose that, instead of observing every ssu in a selected psu, we take a subsample. Let <span class="math inline">Q_i</span> be the number of times psu <span class="math inline">i</span> occurs in <span class="math inline">\mathcal R</span>; if <span class="math inline">Q_i&gt;0</span>, we draw a <strong>different, independent</strong> subsample each time psu <span class="math inline">i</span> is selected (unlike one-stage sampling, where a repeated psu just contributes the same observed total again). For the <span class="math inline">j</span>th subsample from psu <span class="math inline">i</span> (<span class="math inline">j=1,\ldots,Q_i</span>), let <span class="math inline">\hat t_{ij}</span> estimate <span class="math inline">t_i</span>, with <span class="math inline">E[\hat t_{ij}]=t_i</span>.</p>
+<section id="setup-and-estimators" class="slide level2">
+<h2>Setup and Estimators</h2>
+<p>Select <span class="math inline">n</span> clusters with replacement, <span class="math inline">\psi_i=M_i/M_0</span>, then take an SRS of <span class="math inline">m_i</span> elements from the cluster <strong>on every draw</strong>: a cluster drawn twice gets two <strong>independent</strong> subsamples. The cluster mean <span class="math inline">b_i=t_i/M_i</span> is not observed, but estimated by the subsample mean <span class="math inline">\bar y_i</span>, and <span class="math inline">\hat t_i=M_i\bar y_i</span>.</p>
+<p>The one-stage formulas carry over with <span class="math inline">\bar y_j^*</span> (subsample mean of draw <span class="math inline">j</span>) in place of <span class="math inline">b_j^*</span>: <span class="math display">
+\hat B_{\mathrm{HH}}=\bar y^*=\frac1n\sum_{j=1}^n\bar y_j^*,\qquad
+\widehat{\mathrm{SE}}(\hat B_{\mathrm{HH}})=\frac{s_{\bar y^*}}{\sqrt n},\qquad
+s_{\bar y^*}^2=\frac{1}{n-1}\sum_{j=1}^n(\bar y_j^*-\bar y^*)^2 ,
+</span> mean per cluster <span class="math inline">\bar M_U\hat B_{\mathrm{HH}}</span> and total <span class="math inline">M_0\hat B_{\mathrm{HH}}</span> with SEs multiplied by the same constants (each draw estimates the total by <span class="math inline">\hat t_j^*/\psi_j^*=M_0\bar y_j^*</span>).</p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>No second-stage variance formula is needed</strong>: the draws are independent, and <span class="math inline">s_{\bar y^*}^2</span> captures both the choice of clusters and the choice of elements within them.</p>
+</div>
+</div>
+</div>
 </section>
-<section id="estimators-for-the-total" class="slide level2">
-<h2>Estimators for the Total</h2>
-<p><span class="math display">
-\hat t_\psi = \frac1n \sum_{i=1}^N\sum_{j=1}^{Q_i} \frac{\hat t_{ij}}{\psi_i}
-</span> <span class="math display">
-\hat V(\hat t_\psi) = \frac1n\cdot\frac{1}{n-1}\sum_{i=1}^N\sum_{j=1}^{Q_i}\Big(\frac{\hat t_{ij}}{\psi_i}-\hat t_\psi\Big)^2
-</span></p>
-<p>(If <span class="math inline">Q_i=0</span> for some psu, that psu simply contributes no terms.) Because sampling is with replacement, it’s possible to draw more than one independent subsample from the same psu — so this variance estimator automatically captures <strong>both</strong> the between-psu variability and the within-psu subsampling variability.</p>
-</section>
-<section id="estimator-for-the-ssu-level-mean" class="slide level2">
-<h2>Estimator for the ssu-Level Mean</h2>
-<p><span class="math display">
-\hat{\bar y}_\psi = \frac{\hat t_\psi}{\hat M_{0\psi}}, \qquad
-\hat M_{0\psi} = \frac1n\sum_{i\in\mathcal R}\frac{M_i}{\psi_i}
-</span> <span class="math display">
-\hat V(\hat{\bar y}_\psi) = \frac{1}{(\hat M_{0\psi})^2}\cdot\frac1n\cdot\frac{1}{n-1}\sum_{i=1}^N\sum_{j=1}^{Q_i}\Big(\frac{\hat t_{ij}}{\psi_i}-\hat{\bar y}_\psi\frac{M_i}{\psi_i}\Big)^2
-</span></p>
-<p>If an SRS of <span class="math inline">m_i</span> ssus is taken within psu <span class="math inline">i</span>, the overall sampling weight for ssu <span class="math inline">j</span> in psu <span class="math inline">i</span> becomes <span class="math display">
-w_{ij} = \frac{1}{n\psi_i}\cdot\frac{M_i}{m_i}
-</span></p>
-</section>
-<section id="example-hours-spent-studying-subsampled" class="slide level2 smaller">
-<h2>Example: Hours Spent Studying, Subsampled</h2>
-<p>Instead of surveying every student, we now subsample 5 students per class (class 14 is selected twice, with a <em>different</em> subsample of 5 each time). Writing <span class="math inline">u_i=\hat t_i/\psi_i</span>, the <strong>Sum</strong> row gives <span class="math inline">\sum u_i</span> and <span class="math inline">\sum(u_i-\hat t_\psi)^2</span> directly:</p>
+<section id="computation-example-care-homes-with-subsamples" class="slide level2 smaller">
+<h2>Computation Example: Care Homes with Subsamples</h2>
+<p>Same eight draws, but <span class="math inline">m_j^*=20</span> residents are sampled per draw (15 for H19), recording their falls. H12 is drawn twice, with different subsample means:</p>
 <div class="columns">
-<div class="column" style="width:65%;">
+<div class="column" style="width:58%;">
 <table class="caption-top">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 21%">
-<col style="width: 15%">
-</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: center;">Class</th>
-<th style="text-align: right;"><span class="math inline">M_i</span></th>
-<th style="text-align: right;"><span class="math inline">\psi_i</span></th>
-<th style="text-align: right;"><span class="math inline">\bar y_i</span></th>
-<th style="text-align: right;"><span class="math inline">\hat t_i</span></th>
-<th style="text-align: right;"><span class="math inline">u_i</span></th>
-<th style="text-align: right;"><span class="math inline">e_i=u_i-\hat t_\psi</span></th>
-<th style="text-align: right;"><span class="math inline">e^2_i</span></th>
+<th style="text-align: center;"><span class="math inline">j</span></th>
+<th style="text-align: center;">Home</th>
+<th style="text-align: right;"><span class="math inline">M_j^*</span></th>
+<th style="text-align: right;"><span class="math inline">m_j^*</span></th>
+<th style="text-align: right;">Falls</th>
+<th style="text-align: right;"><span class="math inline">\bar y_j^*</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">12</td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">0.0371</td>
-<td style="text-align: right;">2.4</td>
-<td style="text-align: right;">57.6</td>
-<td style="text-align: right;">1552.8</td>
-<td style="text-align: right;"><span class="math inline">-64.7</span></td>
-<td style="text-align: right;">4,186.1</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">14</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">0.1546</td>
-<td style="text-align: right;">1.6</td>
-<td style="text-align: right;">160.0</td>
-<td style="text-align: right;">1035.2</td>
-<td style="text-align: right;"><span class="math inline">-582.3</span></td>
-<td style="text-align: right;">339,073.3</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">14</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">0.1546</td>
-<td style="text-align: right;">2.0</td>
-<td style="text-align: right;">200.0</td>
-<td style="text-align: right;">1294.0</td>
-<td style="text-align: right;"><span class="math inline">-323.5</span></td>
-<td style="text-align: right;">104,652.2</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">5</td>
-<td style="text-align: right;">76</td>
-<td style="text-align: right;">0.1175</td>
-<td style="text-align: right;">2.8</td>
-<td style="text-align: right;">212.8</td>
-<td style="text-align: right;">1811.6</td>
-<td style="text-align: right;"><span class="math inline">194.1</span></td>
-<td style="text-align: right;">37,674.8</td>
-</tr>
-<tr class="odd">
 <td style="text-align: center;">1</td>
-<td style="text-align: right;">44</td>
-<td style="text-align: right;">0.0680</td>
-<td style="text-align: right;">3.7</td>
-<td style="text-align: right;">162.8</td>
-<td style="text-align: right;">2393.9</td>
-<td style="text-align: right;"><span class="math inline">776.4</span></td>
-<td style="text-align: right;">602,797.0</td>
+<td style="text-align: center;">H12</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">0.950</td>
 </tr>
 <tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">H03</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.750</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">H27</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0.800</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">H12</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0.800</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">H31</td>
+<td style="text-align: right;">95</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">0.900</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">H08</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1.050</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">H19</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.667</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">H36</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">0.850</td>
+</tr>
+<tr class="odd">
 <td style="text-align: center;"><strong>Sum</strong></td>
+<td style="text-align: center;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"><strong>8087.5</strong></td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;"><strong>1,088,383</strong></td>
+<td style="text-align: right;"><strong>6.767</strong></td>
 </tr>
 </tbody>
 </table>
-</div><div class="column" style="width:35%;">
-<p><span class="math display">
-\begin{aligned}
-\hat t_\psi &amp;= \frac{8087.5}{5} = 1617.5 \\[4pt]
-s^2 &amp;= \frac{1{,}088{,}383}{4} = 272{,}095.8 \\[4pt]
-\text{SE}(\hat t_\psi) &amp;= \sqrt{\frac{s^2}{5}} = 233.28\\[4pt]
-\hat{\bar y}_\psi &amp;= \frac{1617.5}{647} = 2.5\text{ h} \\[4pt]
-\text{SE}(\hat{\bar y}_\psi) &amp;= \frac{233.28}{647} = 0.36\text{ h}
-\end{aligned}
-</span></p>
+</div><div class="column" style="width:42%;">
+<p><span class="math inline">\hat B_{\mathrm{HH}}=6.767/8=0.846</span>, <span class="math inline">s_{\bar y^*}=0.120</span>, <span class="math inline">\widehat{\mathrm{SE}}=0.120/\sqrt8=0.0425</span>.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Quantity</th>
+<th style="text-align: right;">Est.</th>
+<th style="text-align: right;">SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">per resident</td>
+<td style="text-align: right;">0.846</td>
+<td style="text-align: right;">0.042</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">per home (<span class="math inline">\times75</span>)</td>
+<td style="text-align: right;">63.4</td>
+<td style="text-align: right;">3.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">total (<span class="math inline">\times3000</span>)</td>
+<td style="text-align: right;">2538</td>
+<td style="text-align: right;">127</td>
+</tr>
+</tbody>
+</table>
 </div></div>
-<p>Compared with the full-census example (<span class="math inline">\hat{\bar y}_\psi=2.70</span>, <span class="math inline">\text{SE}=0.34</span>), subsampling gives a similar point estimate at a somewhat higher SE — the price of observing fewer students per class.</p>
 </section></section>
 <section>
-<section id="weights-in-unequal-probability-sampling" class="title-slide slide level1 center" data-number="7">
-<h1><span class="header-section-number">7</span> Weights in Unequal-Probability Sampling</h1>
+<section id="unequal-probability-sampling-without-replacement-upswo" class="title-slide slide level1 center" data-number="7">
+<h1><span class="header-section-number">7</span> Unequal Probability Sampling Without Replacement (UPSWO)</h1>
+
+</section>
+<section id="the-horvitz-thompson-estimator" class="slide level2">
+<h2>The Horvitz-Thompson Estimator</h2>
+<p>Select <span class="math inline">n</span> <strong>distinct</strong> units with <strong>inclusion probabilities</strong> <span class="math inline">\pi_i=P(i\in\mathcal S)</span>, <span class="math inline">\sum_{i=1}^N\pi_i=n</span>. For <span class="math inline">\pi</span>ps, <span class="math inline">\pi_i=n\,x_i/t_x=n\psi_i</span>. The <strong>Horvitz-Thompson (HT)</strong> estimator weights each unit by <span class="math inline">1/\pi_i</span>: <span class="math display">
+\boxed{\hat t_{\mathrm{HT}}=\sum_{i\in\mathcal S}\frac{y_i}{\pi_i}}
+</span> <em>Unbiased</em>: with <span class="math inline">I_i=1</span> if <span class="math inline">i\in\mathcal S</span> (and <span class="math inline">E(I_i)=\pi_i</span>), <span class="math inline">\hat t_{\mathrm{HT}}=\sum_{i=1}^N I_i\,y_i/\pi_i</span> and <span class="math display">
+E(\hat t_{\mathrm{HT}})=\sum_{i=1}^N\frac{y_i}{\pi_i}E(I_i)=\sum_{i=1}^N y_i=t .
+</span></p>
+</section>
+<section id="mean-and-ratio-from-the-ht-total" class="slide level2">
+<h2>Mean and Ratio from the HT Total</h2>
+<p>Mean per unit: <span class="math inline">\hat t_{\mathrm{HT}}/N</span>. With <span class="math inline">\pi_i\propto x_i</span>, the ratio is the HT total over <span class="math inline">t_x</span>: <span class="math display">
+\hat B_{\mathrm{HT}}=\frac{\hat t_{\mathrm{HT}}}{t_x}=\frac1n\sum_{i\in\mathcal S}b_i ,
+\qquad \widehat{\mathrm{SE}}(\hat B_{\mathrm{HT}})=\frac{\widehat{\mathrm{SE}}(\hat t_{\mathrm{HT}})}{t_x}.
+</span></p>
+</section>
+<section id="variances-of-the-ht-estimator" class="slide level2">
+<h2>Variances of the HT Estimator</h2>
+<p>With joint inclusion probabilities <span class="math inline">\pi_{ij}</span> (fixed sample size), <strong>Sen-Yates-Grundy</strong>: <span class="math display">
+\hat V_{\mathrm{SYG}}=\frac12\sum_{i\in\mathcal S}\sum_{j\in\mathcal S}\frac{\pi_i\pi_j-\pi_{ij}}{\pi_{ij}}\Big(\frac{y_i}{\pi_i}-\frac{y_j}{\pi_j}\Big)^2 .
+</span> Approximations that need only <span class="math inline">\pi_i</span>, with <span class="math inline">u_i=y_i/\pi_i</span>:</p>
+<ul>
+<li><strong>Hájek</strong>: <span class="math inline">\displaystyle\hat V_{\mathrm H}=\frac{n}{n-1}\sum_{i\in\mathcal S}(1-\pi_i)(u_i-A)^2,\quad
+A=\frac{\sum_{\mathcal S}(1-\pi_i)u_i}{\sum_{\mathcal S}(1-\pi_i)}</span></li>
+<li><strong>With-replacement (WR)</strong>: treat the sample as <span class="math inline">n</span> draws with <span class="math inline">\psi_i=\pi_i/n</span>, <span class="math inline">\displaystyle\hat V_{\mathrm{WR}}=\frac{n}{n-1}\sum_{i\in\mathcal S}\Big(u_i-\frac{\hat t_{\mathrm{HT}}}{n}\Big)^2</span>, which ignores the factors <span class="math inline">1-\pi_i</span> and is a little too large.</li>
+</ul>
+<p>For the mean divide the SE by <span class="math inline">N</span>; for <span class="math inline">\hat B_{\mathrm{HT}}</span> divide by <span class="math inline">t_x</span>.</p>
+</section>
+<section id="computation-example-ht-estimate-and-variances" class="slide level2 smaller">
+<h2>Computation Example: HT Estimate and Variances</h2>
+<p><span class="math inline">N=20</span> units, a sample of <span class="math inline">n=4</span> units with inclusion probabilities <span class="math inline">\pi_i</span>:</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">i</span></th>
+<th style="text-align: right;"><span class="math inline">y_i</span></th>
+<th style="text-align: right;"><span class="math inline">\pi_i</span></th>
+<th style="text-align: right;"><span class="math inline">u_i=y_i/\pi_i</span></th>
+<th style="text-align: right;"><span class="math inline">(1-\pi_i)u_i</span></th>
+<th style="text-align: right;"><span class="math inline">(1-\pi_i)(u_i-A)^2</span></th>
+<th style="text-align: right;"><span class="math inline">(u_i-\hat t_{\mathrm{HT}}/n)^2</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">120.00</td>
+<td style="text-align: right;">108.00</td>
+<td style="text-align: right;">17.08</td>
+<td style="text-align: right;">12.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">150.00</td>
+<td style="text-align: right;">120.00</td>
+<td style="text-align: right;">526.1</td>
+<td style="text-align: right;">698.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">0.35</td>
+<td style="text-align: right;">114.29</td>
+<td style="text-align: right;">74.29</td>
+<td style="text-align: right;">65.9</td>
+<td style="text-align: right;">86.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">0.30</td>
+<td style="text-align: right;">110.00</td>
+<td style="text-align: right;">77.00</td>
+<td style="text-align: right;">144.3</td>
+<td style="text-align: right;">184.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>Sum</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>494.29</strong></td>
+<td style="text-align: right;"><strong>379.29</strong></td>
+<td style="text-align: right;"><strong>753.4</strong></td>
+<td style="text-align: right;"><strong>981.6</strong></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\hat t_{\mathrm{HT}}=494.29</span>, mean <span class="math inline">494.29/20=24.71</span>; <span class="math inline">A=379.29/3.05=124.36</span>, and</p>
+<p><span class="math display">
+\hat V_{\mathrm H}=\tfrac43\times753.4=1004.5\ (\mathrm{SE}=31.7),\qquad
+\hat V_{\mathrm{WR}}=\tfrac43\times981.6=1308.8\ (\mathrm{SE}=36.2).
+</span> SE of the mean: <span class="math inline">31.7/20=1.58</span> (Hájek), <span class="math inline">36.2/20=1.81</span> (WR).</p>
+</section></section>
+<section>
+<section id="when-to-use-ups" class="title-slide slide level1 center" data-number="8">
+<h1><span class="header-section-number">8</span> When to Use UPS</h1>
+
+</section>
+<section id="ups-is-risky-unless-y-is-tied-to-the-size-variable" class="slide level2">
+<h2>UPS Is Risky Unless <span class="math inline">y</span> Is Tied to the Size Variable</h2>
+<p>The gain depends on the ratios <span class="math inline">b_i=y_i/x_i</span> being nearly constant, i.e.&nbsp;<span class="math inline">y_i</span> roughly proportional to <span class="math inline">x_i</span>. Otherwise,</p>
+<ul>
+<li>the estimate can be <strong>much worse than a plain SRS average</strong>;</li>
+<li>a unit with small <span class="math inline">x_i</span> but large <span class="math inline">y_i</span> gets a huge weight <span class="math inline">1/\psi_i</span> (<span class="math inline">1/\pi_i</span>), so the estimates are unstable and the estimated SE tends to be too small (intervals under-cover).</li>
+</ul>
+<p>UPS is used mostly when the size is a good proxy of what is measured: selecting the clusters of a multi-stage survey proportional to households or students, auditing by monetary value, surveys of establishments by employment. If the size is only loosely related to <span class="math inline">y</span>, use SRS or stratified sampling, with a ratio or regression estimator if <span class="math inline">x_i</span> is known.</p>
+</section></section>
+<section>
+<section id="weights-in-unequal-probability-sampling" class="title-slide slide level1 center" data-number="9">
+<h1><span class="header-section-number">9</span> Weights in Unequal-Probability Sampling</h1>
 
 </section>
 <section id="general-weight-formula" class="slide level2">
 <h2>General Weight Formula</h2>
-<p>For sampling <strong>without</strong> replacement, the weight is the reciprocal of the inclusion probability, <span class="math inline">1/E[Z_i]</span>. For sampling <strong>with</strong> replacement, we use the <em>first-stage</em> weight <span class="math display">
-w_i = \frac{1}{\text{expected number of hits}} = \frac{1}{E[Q_i]} = \frac{1}{n\psi_i}
-</span></p>
-<p>For one-stage cluster sampling (every ssu observed each time psu <span class="math inline">i</span> is hit), <span class="math inline">w_{ij}=w_i=1/(n\psi_i)</span> for every ssu <span class="math inline">j</span> in psu <span class="math inline">i</span>, and <span class="math display">
-\hat t_\psi = \sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}, \qquad
-\hat{\bar y}_\psi = \frac{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}}{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}}
-</span></p>
-<p>For two-stage sampling with an SRS of <span class="math inline">m_i</span> ssus per selected psu, the weight picks up an extra factor <span class="math inline">M_i/m_i</span> for the subsampling stage, exactly as in ordinary two-stage cluster sampling.</p>
+<p>For sampling <strong>without</strong> replacement, the weight is the reciprocal of the inclusion probability, <span class="math inline">1/\pi_i</span>. For sampling <strong>with</strong> replacement, we use the <em>first-stage</em> weight <span class="math display">
+w_i = \frac{1}{E[Q_i]} = \frac{1}{n\psi_i},
+</span> where <span class="math inline">Q_i</span> is the number of times unit <span class="math inline">i</span> occurs in <span class="math inline">\mathcal R</span>. For one-stage cluster sampling, <span class="math inline">w_{ij}=1/(n\psi_i)</span> for every ssu <span class="math inline">j</span> in psu <span class="math inline">i</span>, and <span class="math display">
+\hat t_{\mathrm{HH}} = \sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}, \qquad
+\hat{\bar y}_U = \frac{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}}{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}} .
+</span> For two-stage sampling with an SRS of <span class="math inline">m_i</span> ssus, the weight has the extra factor <span class="math inline">M_i/m_i</span>.</p>
 
 </section></section>
     </div>
