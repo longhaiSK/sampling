@@ -153,53 +153,30 @@ satisfy $\sum_{i=1}^N d_i=0$.
   \hat{B}_r=\frac{\sum_{i\in\mathcal{S}}y_i}{\sum_{i\in\mathcal{S}}x_i}
   =\frac{\sum_{i\in\mathcal{S}}x_i\,b_i}{\sum_{i\in\mathcal{S}}x_i},
   $$
-  the mean of the sampled $b_i$ weighted by $x_i$, and then $\hat{\bar{y}}_r=\bar{x}_U\hat{B}_r$,
-  $\hat{t}_r=t_x\hat{B}_r$. Its mean squared error is approximately
-  $V(\hat{\bar{y}}_r)\approx\left(1-\frac{n}{N}\right)\frac{1}{n(N-1)}\sum_{i=1}^N x_i^2\,(b_i-B)^2$.
+  the mean of the sampled $b_i$ weighted by $x_i$ (weights adding up to one), and then
+  $\hat{\bar{y}}_r=\bar{x}_U\hat{B}_r$, $\hat{t}_r=t_x\hat{B}_r$.
 
-* The **sample average** estimates $\bar{y}_U$ by $\bar{y}=\frac1n\sum_{i\in\mathcal{S}}y_i$, which ignores
-  $x_i$. In terms of $b_i$ it estimates $B$ by
+* The **sample average** $\bar{y}=\frac1n\sum_{i\in\mathcal{S}}y_i$ ignores $x_i$. In terms of $b_i$ it
+  estimates $B$ by
   $$
   \hat{B}_{\mathrm{avg}}=\frac{\bar{y}}{\bar{x}_U}=\frac{1}{n}\sum_{i\in\mathcal{S}}\frac{x_i}{\bar{x}_U}\,b_i ,
   $$
-  the mean of the sampled $b_i$ with weights $x_i/\bar{x}_U$ that do not add up to one, and
-  $V(\bar{y})=\left(1-\frac{n}{N}\right)\frac{1}{n(N-1)}\sum_{i=1}^N (x_ib_i-\bar{x}_UB)^2$, because
-  $y_i-\bar{y}_U=x_ib_i-\bar{x}_UB$.
+  the mean of the sampled $b_i$ with weights $x_i/\bar{x}_U$ that do not add up to one, and then
+  $\bar{y}=\bar{x}_U\hat{B}_{\mathrm{avg}}$, $\hat{t}_{\mathrm{avg}}=t_x\hat{B}_{\mathrm{avg}}$.
 
-**Comparison.** All three estimate $B$ by a weighted mean of ratios $b_i$ and then multiply by $\bar{x}_U$
-(or $t_x$), but they differ in the weights and in where $x_i$ is used:
+All three estimators multiply an estimate of $B$ by $\bar{x}_U$ (or $t_x$). They differ in how the
+$b_i$ are weighted, in the variance, and in where $x_i$ is used:
 
 |  | Sample average (SRS) | Ratio estimator (SRS) | HH estimator (UPSWR, $\psi_i=x_i/t_x$) |
 |:---|:---|:---|:---|
-| Selection | equal chances, without replacement | equal chances, without replacement | unit $i$ has chance $x_i/t_x$ on every draw |
-| Estimate of $B$ | $\dfrac1n\sum\dfrac{x_i}{\bar{x}_U}b_i$ | $\dfrac{\sum x_ib_i}{\sum x_i}$ | $\dfrac1n\sum b_j^*$ |
-| Weights on the $b_i$ | $x_i/\bar{x}_U$, not normalised | $x_i/\sum x_i$, normalised | equal $1/n$ |
-| Estimate of $\bar{y}_U$ | $\bar{y}$ | $\bar{x}_U\hat{B}_r$ | $\bar{x}_U\bar{b}^*$ |
-| Variance of the estimate of $\bar{y}_U$ | $\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (x_ib_i-\bar{x}_UB)^2$ | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N x_i^2\,(b_i-B)^2$ | $\dfrac{1}{nN}\sum\limits_{i=1}^N\bar{x}_U\,x_i\,(b_i-B)^2$ (exact) |
-| Estimated SE | $\sqrt{\left(1-\dfrac{n}{N}\right)\dfrac{s_y^2}{n}}$ | $\dfrac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\dfrac{n}{N}\right)\dfrac{s_e^2}{n}}$, $\ s_e^2=\dfrac{\sum(y_i-\hat{B}_rx_i)^2}{n-1}$ | $\bar{x}_U\,\dfrac{s_{b^*}}{\sqrt{n}}$ |
+| Estimator of $B$ | $\hat{B}_{\mathrm{avg}}=\dfrac1n\sum\limits_{i\in\mathcal{S}}\dfrac{x_i}{\bar{x}_U}b_i$ | $\hat{B}_r=\dfrac{\sum_{i\in\mathcal{S}} x_ib_i}{\sum_{i\in\mathcal{S}} x_i}$ | $\hat{B}_{\mathrm{HH}}=\dfrac1n\sum\limits_{j=1}^n b_j^*$ |
+| Variance of the estimate of $\bar{y}_U$ | $\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (x_ib_i-\bar{x}_UB)^2$ | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N x_i^2\,(b_i-B)^2$ | $\dfrac{1}{nN}\sum\limits_{i=1}^N\bar{x}_U\,x_i\,(b_i-B)^2$ |
 | $x_i$ is used at | not used | the **estimation** stage | the **design** stage |
 | Unbiased? | yes | slightly biased | exactly unbiased |
 
-For the totals, multiply the estimators by $N$ and the variances by $N^2$. Reading the three variances
-as $\frac1n$ times an average over the units of one squared term each (ignoring the finite population
-correction and the difference between $N-1$ and $N$), the terms are
-
-| Estimator | Squared term of unit $i$ | Spread of $y$ about |
-|:---|:---|:---|
-| Sample average | $(x_ib_i-\bar{x}_UB)^2=(y_i-\bar{y}_U)^2$ | the flat line $\bar{y}_U$ |
-| Ratio | $x_i^2\,(b_i-B)^2=d_i^2$ | the line $y=Bx$ |
-| HH | $\bar{x}_U\,x_i\,(b_i-B)^2=\dfrac{\bar{x}_U}{x_i}\,d_i^2$ | the line $y=Bx$, with weight $\bar{x}_U/x_i$ |
-
-The ratio estimator and HH use the same ratios and the same centre $B$, so their terms differ only in
-one factor: $x_i^2$ for the ratio estimator, $\bar{x}_U\,x_i$ for HH. Under UPSWR, units larger than
-average ($x_i>\bar{x}_U$) count less and smaller ones count more. The reason is that HH gives equal weights to
-the draws because the large units are already drawn more often, whereas the ratio estimator must give
-the large units larger weights $x_i$ to compensate for the equal chances. UPSWR therefore wins when
-the large residuals $d_i=x_i(b_i-B)$ belong to the large units, that is, when the spread of $y_i$ about the line
-grows with $x_i$, as it does for county acreages. When the spread of $y_i$ is the same for all $x_i$ (so that
-$b_i-B\propto1/x_i$), the SRS ratio estimator does better. When $y_i$ is not related to $x_i$ at all,
-all the $b_i-B$ are large and both estimators can be worse than the plain sample average
-(@sec-ups-toy).
+For the totals, multiply the estimators by $N$ and the variances by $N^2$. The variance of the sample average
+uses $y_i-\bar{y}_U=x_ib_i-\bar{x}_UB$, and that of the ratio estimator is an approximation for large $n$ in
+which $x_i(b_i-B)=d_i$. The next section compares the three variances on a small example.
 
 ### Toy Example: Four Supermarkets {#sec-ups-toy}
 
@@ -209,20 +186,29 @@ the ratios $b_i=y_i/x_i$ (sales per square metre) and $B=\bar{y}_U/\bar{x}_U$. T
 estimators use $x_i$, we compare their variances for a **single draw** ($n=1$); for $n$
 draws, each is divided by $n$. For the two SRS estimators we take $N=\infty$, that is, we ignore the
 finite population correction, so a single draw has the variance of one value drawn with equal
-probabilities $1/N$ (hence the divisor $N$ rather than $N-1$):
+probabilities $1/N$ (hence the divisor $N$ rather than $N-1$). The one-draw variance of each estimator of
+$\bar{y}_U$ is then $\frac1N$ times a sum over the stores of one squared term, so the three can be compared store
+by store:
 
-| Estimator | Design | Estimate of $B$ from one store | One-draw variance of the estimate of $\bar{y}_U$ |
+| Estimator | Design | Squared term of store $i$ | Spread of $y$ about |
 |:---|:---|:---|:---|
-| Sample average | SRS | $\dfrac{x_i}{\bar{x}_U}\,b_i$ | $\dfrac{1}{N}\sum\limits_{i=1}^N (x_ib_i-\bar{x}_UB)^2=\dfrac{1}{N}\sum\limits_{i=1}^N (y_i-\bar{y}_U)^2$ |
-| Ratio | SRS | $b_i$ | $\approx\dfrac{1}{N}\sum\limits_{i=1}^N x_i^2\,(b_i-B)^2$ |
-| HH | PPS, $\psi_i=x_i/t_x$ | $b_i$ | $\dfrac{1}{N}\sum\limits_{i=1}^N \bar{x}_U\,x_i\,(b_i-B)^2$ |
+| Sample average | SRS | $(x_ib_i-\bar{x}_UB)^2=(y_i-\bar{y}_U)^2$ | the flat line $\bar{y}_U$ |
+| Ratio | SRS | $x_i^2\,(b_i-B)^2=d_i^2$ | the line $y=Bx$ |
+| HH | PPS, $\psi_i=x_i/t_x$ | $\bar{x}_U\,x_i\,(b_i-B)^2=\dfrac{\bar{x}_U}{x_i}\,d_i^2$ | the line $y=Bx$, with weight $\bar{x}_U/x_i$ |
 
 With a single store, the ratio estimator and HH give the same estimate $\bar{x}_U\,b_i$, but store $i$ is
-drawn with probability $1/N$ under SRS and with probability $\psi_i=x_i/t_x$ under PPS. Their variances
-differ only in the squared term: $x_i^2(b_i-B)^2$ against $\bar{x}_U\,x_i\,(b_i-B)^2$, that is, HH
-multiplies the term of the ratio estimator by $\bar{x}_U/x_i$ (@sec-ups-hh-theory). A store larger than
+drawn with probability $1/N$ under SRS and with probability $\psi_i=x_i/t_x$ under PPS. Their terms differ
+only in one factor: $x_i^2$ for the ratio estimator, $\bar{x}_U\,x_i$ for HH, that is, HH
+multiplies the term of the ratio estimator by $\bar{x}_U/x_i$. A store larger than
 average, with $x_i>\bar{x}_U$, has weight less than 1, so its term is **downweighted** under HH, and a
-store smaller than average is upweighted.
+store smaller than average is upweighted. The reason is that HH gives equal weights to the draws because the
+large stores are already drawn more often, whereas the ratio estimator must give the large stores larger
+weights $x_i$ to compensate for the equal chances. UPSWR therefore wins when the large residuals
+$d_i=x_i(b_i-B)$ belong to the large units, that is, when the spread of $y_i$ about the line grows with $x_i$,
+as it does for county acreages. When the spread of $y_i$ is the same for all $x_i$ (so that
+$b_i-B\propto1/x_i$), the SRS ratio estimator does better. When $y_i$ is not related to $x_i$ at all, all the
+$b_i-B$ are large and both estimators can be worse than the plain sample average, as the second population
+below shows.
 
 For each population below, a single table works out the three variances side by side. The **Sum** row
 adds the squared terms, and the **Variance** row divides the sum by $N$.
