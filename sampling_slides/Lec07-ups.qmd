@@ -118,23 +118,34 @@ $$
 | Mean per unit $\bar y_U=\bar x_UB$ | $\bar x_U\,\hat B_{\mathrm{HH}}$ | $\bar x_U\,s_{b^*}/\sqrt n$ |
 | Total $t=t_xB$ | $t_x\,\hat B_{\mathrm{HH}}$ | $t_x\,s_{b^*}/\sqrt n$ |
 
-## HH Estimator in Terms of $\psi_i$: the Weight {.smaller}
+## HH Estimator in Terms of $\psi_i$
 
 **From $\hat B_{\mathrm{HH}}$** (PPS, $\psi_i=x_i/t_x$, so $t_x/x_i=1/\psi_i$):
 $$
 \begin{aligned}
-\hat t_{\mathrm{HH}}&=t_x\hat B_{\mathrm{HH}}=t_x\,\frac1n\sum_{j=1}^n b_j^*
-=\frac1n\sum_{j=1}^n t_x\frac{y_j^*}{x_j^*}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*}\\
-&=\sum_{j=1}^n w_j\,y_j^*,\qquad \boxed{w_j=\frac{1}{n\,\psi_j^*}}
+\hat t_{\mathrm{HH}}&=t_x\hat B_{\mathrm{HH}}\\
+&=t_x\,\frac1n\sum_{j=1}^n b_j^*\\
+&=\frac1n\sum_{j=1}^n t_x\frac{y_j^*}{x_j^*}\\
+&=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*}
 \end{aligned}
 $$
-This is the HH estimator for **any** selection probabilities $\psi_i$: a weighted sum over the $n$ draws in
-$\mathcal R$ (repeats included). Unit $i$ is expected to appear $n\psi_i$ times, so each draw of unit $i$
-**represents** $1/(n\psi_i)$ units of the population.
 
-With PPS the weight is $w_i=t_x/(n\,x_i)$: large units get small weights.
+## The Weight of the HH Estimator
 
-## Variance of the HH Estimator in Terms of $\psi_i$ {.smaller}
+Writing the sum over the draws in $\mathcal R$ (repeats included):
+$$
+\hat t_{\mathrm{HH}}=\frac1n\sum_{i\in\mathcal R}\frac{y_i}{\psi_i}=\sum_{i\in\mathcal R}w_i\,y_i,
+$$
+$$
+\boxed{w_i=\frac{1}{n\,\psi_i}}
+$$
+
+* Each term $y_i/\psi_i$ is an estimate of the total $t$; the information about $t_x$ is carried in $\psi_i$.
+* This holds for **any** selection probabilities $\psi_i$.
+* Unit $i$ is expected to appear $n\psi_i$ times, so each draw of unit $i$ **represents** $1/(n\psi_i)$ units.
+* With PPS, $w_i=t_x/(n\,x_i)$: large units get small weights.
+
+## Variance of the HH Estimator in Terms of $\psi_i$ 
 
 **From $V(\hat B_{\mathrm{HH}})=S_{b^*}^2/n$**, using $t_xb_i=y_i/\psi_i$ and $t_xB=t$, so that
 $t_x(b_i-B)=y_i/\psi_i-t$:
