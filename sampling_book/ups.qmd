@@ -169,7 +169,7 @@ ratio $B$, but they use $x_i$ in different ways:
 |:---|:---|:---|
 | Selection | every unit has the same chance, without replacement | unit $i$ has chance $x_i/t_x$ on every draw |
 | Estimator of $\bar{y}_U$ | $\bar{x}_U\,\dfrac{\sum y_i}{\sum x_i}$ (ratio of the sample means) | $\bar{x}_U\,\dfrac{1}{n}\sum\dfrac{y_j^*}{x_j^*}$ (mean of the ratios) |
-| Variance | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N d_i^2$ (large $n$) | $\dfrac{\bar{x}_U^2S_{q^*}^2}{n}=\dfrac{1}{nN}\sum\limits_{i=1}^N\dfrac{\bar{x}_U}{x_i}\,d_i^2$ (exact) |
+| Variance | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N d_i^2$ (large $n$) | $\dfrac{\bar{x}_U^2S_{q^*}^2}{n}=\dfrac{1}{nN}\sum\limits_{i=1}^N\bar{x}_U\,x_i\,(q_i-B)^2$ (exact) |
 | Estimated SE | $\dfrac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\dfrac{n}{N}\right)\dfrac{s_e^2}{n}}$, $\ s_e^2=\dfrac{\sum(y_i-\hat{B}x_i)^2}{n-1}$ | $\bar{x}_U\,\dfrac{s_q}{\sqrt{n}}$, $\ s_q^2=\dfrac{\sum(q_j^*-\bar{q}^*)^2}{n-1}$ |
 | $x_i$ is used at | the **estimation** stage | the **design** stage |
 | Needs | $x_i$ of the sampled units and $\bar{x}_U$ | $x_i$ of all the units, to construct $\psi_i$ |
@@ -195,80 +195,85 @@ probabilities $1/N$:
 
 | Estimator | Design | One-draw variance |
 |:---|:---|:---|
-| HH, $\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\,q_j^*$ | PPS, $\psi_i=x_i/t_x$ | $\bar{x}_U^2S_{q^*}^2=\bar{x}_U^2\sum\limits_{i=1}^N\psi_i\,(q_i-B)^2$ |
-| Ratio, $\hat{\bar{y}}_r=\bar{x}_U\,y_i/x_i$ | SRS | $\approx S_d^2=\dfrac{1}{N}\sum\limits_{i=1}^N d_i^2$ |
-| Sample mean, $\bar{y}=y_i$ | SRS | $S_y^2=\dfrac{1}{N}\sum\limits_{i=1}^N (y_i-\bar{y}_U)^2$ |
+| HH, $\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\,q_j^*$ | PPS, $\psi_i=x_i/t_x$ | $\dfrac{1}{N}\sum\limits_{i=1}^N\bar{x}_U\,x_i\,(q_i-B)^2$ |
+| Ratio, $\hat{\bar{y}}_r=\bar{x}_U\,y_i/x_i$ | SRS | $\approx\dfrac{1}{N}\sum\limits_{i=1}^N d_i^2=\dfrac{1}{N}\sum\limits_{i=1}^N x_i^2\,(q_i-B)^2$ |
+| Sample mean, $\bar{y}=y_i$ | SRS | $\dfrac{1}{N}\sum\limits_{i=1}^N (y_i-\bar{y}_U)^2$ |
 
-The HH variance is the ordinary variance of a discrete random variable: $q_j^*$ takes the value
-$q_i=y_i/x_i$ with probability $\psi_i$, its mean is $B$, and $S_{q^*}^2$ is the $\psi$-weighted sum of
-the squared deviations $(q_i-B)^2$. The two SRS variances are of the same kind with equal weights $1/N$
-(hence the divisor $N$ instead of $N-1$, as befits $N=\infty$), applied to the residuals $d_i=y_i-Bx_i$
-and to the deviations $y_i-\bar{y}_U$. The three variances thus measure the spread of $y$ about three
-different centres: the sample mean about the flat line $\bar{y}_U$, and the ratio estimator and HH about
-the line $y=Bx$, the latter on the scale of the ratios $q_i$ and with the weights $\psi_i$. (Since
-$q_i-B=d_i/x_i$, the HH variance also equals $\frac1N\sum(\bar{x}_U/x_i)d_i^2$, as in
-@sec-ups-hh-theory.)
+Each variance is $\frac1N$ times a sum over the stores of one squared term, the equal weights $1/N$
+(divisor $N$ rather than $N-1$, as befits $N=\infty$) being the only weights:
 
-For each population below, the first table works out $S_{q^*}^2$ term by term, and the second the sums
-of squares of the two SRS estimators. The last column of the first table, $\bar{x}_U^2\psi_i(q_i-B)^2$,
-and the columns $d_i^2/N$ and $(y_i-\bar{y}_U)^2/N$ of the second are on the same scale: each is the
-contribution of store $i$ to the one-draw variance of its estimator, so the three can be compared store by
-store, and each column sums to the variance.
+| Estimator | Squared term of store $i$ | Measures the spread of $y$ about |
+|:---|:---|:---|
+| Sample mean | $(y_i-\bar{y}_U)^2$ | the flat line $\bar{y}_U$ |
+| Ratio | $d_i^2=x_i^2\,(q_i-B)^2$ | the line $y=Bx$ |
+| HH | $\bar{x}_U\,x_i\,(q_i-B)^2$ | the line $y=Bx$, on the scale of the ratios $q_i$ |
+
+The HH term follows from $\bar{x}_U^2\psi_i=\bar{x}_U\,x_i/N$: it is the ratio term $x_i^2(q_i-B)^2$ with
+one factor $x_i$ replaced by the average size $\bar{x}_U$. Units larger than average, where $x_i>\bar{x}_U$,
+thus count less under HH than under the ratio estimator, and smaller ones count more, because $\psi_i$
+makes the large units drawn more often (equivalent to $\frac1N\sum(\bar{x}_U/x_i)d_i^2$ in
+@sec-ups-hh-theory).
+
+For each population below, the first table works out the squared terms of HH, and the second those of the two
+SRS estimators. The **Variance** row, the sum of the terms divided by $N$, is under the respective term
+column, so the three variances can be compared directly, store by store as well as in total.
 
 ```{r toy-functions}
 #| cache: false
 #| echo: false
-# HH working table: the psi-weighted squared deviations of q_i = y_i / x_i from B
+# HH working table: the terms xbar_U * x_i * (q_i - B)^2 of the variance, Variance = Sum / N
 hh_table <- function(store, x, y) {
-  psi <- x / sum(x)
+  N <- length(x)
   q <- y / x
   B <- sum(y) / sum(x)
-  tab <- data.frame(Store = store, x = x, y = y, psi = psi, q = q,
-                    dq = q - B, dq2 = (q - B)^2, wdq2 = psi * (q - B)^2,
-                    vhh = mean(x)^2 * psi * (q - B)^2)
-  sums <- data.frame(Store = "**Sum**", x = sum(x), y = sum(y), psi = sum(psi),
-                     q = NA, dq = NA, dq2 = NA, wdq2 = sum(tab$wdq2), vhh = sum(tab$vhh))
-  rbind(tab, sums)
+  tab <- data.frame(Store = store, x = x, y = y, q = q, dq = q - B, dq2 = (q - B)^2,
+                    vt = mean(x) * x * (q - B)^2)
+  sums <- data.frame(Store = "**Sum**", x = sum(x), y = sum(y), q = NA, dq = NA, dq2 = NA,
+                     vt = sum(tab$vt))
+  vr <- data.frame(Store = "**Variance** (Sum / $N$)", x = NA, y = NA, q = NA, dq = NA, dq2 = NA,
+                   vt = sum(tab$vt) / N)
+  rbind(tab, sums, vr)
 }
 
 show_hh_table <- function(tab) {
   options(knitr.kable.NA = "")
-  knitr::kable(tab, digits = c(0, 0, 0, 4, 4, 4, 6, 7, 2),
+  knitr::kable(tab, digits = c(0, 0, 0, 4, 4, 6, 2),
                format.args = list(big.mark = ","),
-               col.names = c("Store", "$x_i$", "$y_i$", "$\\psi_i=x_i/t_x$", "$q_i=y_i/x_i$",
-                             "$q_i-B$", "$(q_i-B)^2$", "$\\psi_i(q_i-B)^2$",
-                             "$\\bar{x}_U^2\\psi_i(q_i-B)^2$"))
+               col.names = c("Store", "$x_i$", "$y_i$", "$q_i=y_i/x_i$", "$q_i-B$", "$(q_i-B)^2$",
+                             "$\\bar{x}_U\\,x_i\\,(q_i-B)^2$"))
 }
 
 # SRS working table: residuals d_i = y_i - B x_i and deviations y_i - ybar_U
 srs_table <- function(store, x, y) {
   B <- sum(y) / sum(x)
-  d <- y - B * x
   N <- length(x)
-  tab <- data.frame(Store = store, x = x, y = y, d = d, d2 = d^2, vr = d^2 / N,
-                    dy = y - mean(y), dy2 = (y - mean(y))^2, vm = (y - mean(y))^2 / N)
+  d <- y - B * x
+  tab <- data.frame(Store = store, x = x, y = y, d = d, d2 = d^2,
+                    dy = y - mean(y), dy2 = (y - mean(y))^2)
   sums <- data.frame(Store = "**Sum**", lapply(tab[-1], sum))
-  rbind(tab, sums)
+  vr <- data.frame(Store = "**Variance** (Sum / $N$)", x = NA, y = NA, d = NA, d2 = sum(d^2) / N,
+                   dy = NA, dy2 = sum((y - mean(y))^2) / N)
+  rbind(tab, sums, vr)
 }
 
 show_srs_table <- function(tab) {
-  knitr::kable(tab, digits = c(0, 0, 0, 2, 2, 2, 2, 2, 2),
+  options(knitr.kable.NA = "")
+  knitr::kable(tab, digits = c(0, 0, 0, 2, 2, 2, 2),
                format.args = list(big.mark = ","),
-               col.names = c("Store", "$x_i$", "$y_i$", "$d_i=y_i-Bx_i$", "$d_i^2$", "$d_i^2/N$",
-                             "$y_i-\\bar{y}_U$", "$(y_i-\\bar{y}_U)^2$", "$(y_i-\\bar{y}_U)^2/N$"))
+               col.names = c("Store", "$x_i$", "$y_i$", "$d_i=y_i-Bx_i$", "$d_i^2$",
+                             "$y_i-\\bar{y}_U$", "$(y_i-\\bar{y}_U)^2$"))
 }
 
-# The three one-draw variances, from the Sum rows of the two working tables
+# The three one-draw variances, from the Variance rows of the two working tables
 toy_variances <- function(hh, srs) {
-  N <- nrow(hh) - 1
+  N <- nrow(hh) - 2
   xbar_U <- hh$x[N + 1] / N
-  S2q <- hh$wdq2[N + 1]
-  v <- c(HH = hh$vhh[N + 1], ratio = srs$vr[N + 1], mean = srs$vm[N + 1])
+  v <- c(HH = hh$vt[N + 2], ratio = srs$d2[N + 2], mean = srs$dy2[N + 2])
   data.frame(
     Estimator = c("HH (PPS)", "Ratio (SRS)", "Sample mean (SRS)"),
-    Formula = c("$\\bar{x}_U^2S_{q^*}^2=\\bar{x}_U^2\\sum\\psi_i(q_i-B)^2$",
-                "$S_d^2=\\sum d_i^2/N$", "$S_y^2=\\sum(y_i-\\bar{y}_U)^2/N$"),
-    Calculation = c(sprintf("$%s^2\\times %.7f$", format(xbar_U), S2q),
+    Formula = c("$\\sum\\bar{x}_U\\,x_i(q_i-B)^2/N$",
+                "$\\sum d_i^2/N$", "$\\sum(y_i-\\bar{y}_U)^2/N$"),
+    Calculation = c(sprintf("$%s/%d$", format(round(hh$vt[N + 1], 1), big.mark = ","), N),
                     sprintf("$%s/%d$", format(round(srs$d2[N + 1], 2), big.mark = ","), N),
                     sprintf("$%s/%d$", format(round(srs$dy2[N + 1], 2), big.mark = ","), N)),
     Variance = v,
@@ -298,8 +303,8 @@ srs_good <- srs_table(store, x, y_good)
 show_hh_table(hh_good)
 ```
 
-The ratios $q_i$ are close to each other (0.08 to 0.245), so every $(q_i-B)^2$ is small, and the sum of the
-column $\psi_i(q_i-B)^2$ is $S_{q^*}^2=`r round(hh_good$wdq2[5], 7)`$. For the SRS estimators:
+The ratios $q_i$ are close to each other (0.08 to 0.245), so every $(q_i-B)^2$ is small, and the HH
+variance is only `r round(hh_good$vt[6], 1)`. For the SRS estimators:
 
 ```{r toy-good-srs}
 #| cache: false
@@ -308,9 +313,8 @@ show_srs_table(srs_good)
 ```
 
 Comparing the contributions store by store, store D contributes
-`r format(round(srs_good$vm[4], 1), big.mark = ",")` to the variance of the sample mean, `r round(srs_good$vr[4], 1)` to that of the
-ratio estimator, and only `r round(hh_good$vhh[4], 1)` to that of HH. The sums of the three contribution
-columns are the one-draw variances:
+`r format(round(srs_good$dy2[4] / 4, 1), big.mark = ",")` to the variance of the sample mean, `r round(srs_good$d2[4] / 4, 1)` to that of the
+ratio estimator, and only `r round(hh_good$vt[4] / 4, 1)` to that of HH (each term divided by $N=4$). The three variances are:
 
 ```{r toy-good-var}
 #| cache: false
@@ -342,8 +346,8 @@ show_hh_table(hh_bad)
 
 Now the ratios range from 0.07 to 0.6. Store A, although drawn with probability only $1/16$, has
 $(q_A-B)^2=`r round(hh_bad$dq2[1], 4)`$ and contributes the largest term,
-$`r round(hh_bad$wdq2[1], 7)`$. In total $S_{q^*}^2=`r round(hh_bad$wdq2[5], 7)`$, about
-`r round(hh_bad$wdq2[5] / hh_good$wdq2[5], 1)` times the value above.
+$`r round(hh_bad$vt[1] / 4, 1)`$. In total the HH variance is $`r round(hh_bad$vt[6], 1)`$, about
+`r round(hh_bad$vt[6] / hh_good$vt[6], 1)` times the value above.
 
 ```{r toy-bad-srs}
 #| cache: false
