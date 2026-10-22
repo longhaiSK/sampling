@@ -210,7 +210,25 @@ sample average. The next section illustrates these cases.
 A town has four supermarkets, with floor areas $x_i$ from $100\,\text{m}^2$ to $1000\,\text{m}^2$, so
 $t_x=1600$, $\bar{x}_U=400$ and $w_i=x_i/\bar{x}_U=0.25,\,0.5,\,0.75,\,2.5$. We want to estimate the monthly
 sales per square metre $B=\bar{y}_U/\bar{x}_U$, from the ratios $b_i=y_i/x_i$ of the stores (the mean and the
-total of sales follow by multiplying by $\bar{x}_U$ and $t_x$). To compare the three estimators of $B$ in
+total of sales follow by multiplying by $\bar{x}_U$ and $t_x$). The data for the first population (the sales, in thousands of dollars per month, are nearly proportional to the
+floor areas) are:
+
+```{r toy-data}
+#| cache: false
+#| echo: false
+store <- c("A", "B", "C", "D")
+x <- c(100, 200, 300, 1000)
+y_good <- c(11, 20, 24, 245)
+B_true <- sum(y_good) / sum(x)
+dat <- data.frame(Store = c(store, "**Total**", "**True $B=\\sum y_i/\\sum x_i$**"),
+                  x = c(x, sum(x), NA), y = c(y_good, sum(y_good), NA),
+                  b = c(y_good / x, NA, B_true))
+options(knitr.kable.NA = "")
+knitr::kable(dat, digits = c(0, 0, 0, 4), format.args = list(big.mark = ","),
+             col.names = c("Store", "$x_i$ (floor area, m$^2$)", "$y_i$ (sales)", "$b_i=y_i/x_i$"))
+```
+
+To compare the three estimators of $B$ in
 @sec-ups-compare, we work out their variances for a **single draw** ($n=1$); for $n$ draws, each is divided
 by $n$. For the two SRS estimators we take $N=\infty$, that is, we ignore the finite population correction,
 so a single draw has the variance of one value drawn with equal probabilities $1/N$ (hence the divisor $N$
