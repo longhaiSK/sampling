@@ -489,6 +489,7 @@ upswr_est(y_U[R], x_U[R], xbar_U, t_x, method = "total", show.details = FALSE)$e
 The file `statepop.csv` contains data from an unequal-probability sample of 100 U.S. counties. Counties were chosen with probabilities proportional to their populations, $\psi_i=x_i/t_x$ with $x_i$ the population of county $i$ and $t_x=255{,}077{,}536$ the population of the US. We want to estimate the total number of physicians $t$ in the US. Because sampling was done **with replacement**, large counties like Los Angeles occur multiple times in the sample.
 
 ```{r tbl-statepop-sample-data}
+#| echo: false
 #| tbl-cap: "Sample of U.S. county population and physician counts"
 statepop <- read.csv("data/statepop.csv")
 
@@ -508,6 +509,7 @@ statepop |>
 The number of physicians is roughly proportional to the population, which is why this is a good size variable:
 
 ```{r fig-statepop-phys-vs-popn}
+#| echo: false
 #| fig-cap: "Physicians vs. population (log-log scale), sample of U.S. counties"
 plot(popn, phys, log = "xy",
      main = "Physicians vs Population (Log Scale)",
@@ -593,6 +595,7 @@ res_counties_reg$estimate |> format_est_gt("reg_total")
 **Summary.** The estimates of the total number of physicians in the US from all the methods above:
 
 ```{r tbl-statepop-summary}
+#| echo: false
 #| tbl-cap: "Estimates of the total number of physicians in the US (true value 532,638)"
 summ <- rbind(
   "Sample total, $N\\bar{y}$ (SRS)"      = res_counties_srs$estimate,
@@ -628,6 +631,7 @@ acres87 <- agpop$acres87
 # Storage vectors for simulation
 est_srs300 <- rep(0, 2000)
 est_srs300_reg_acres87 <- rep(0, 2000)
+est_srs300_ratio_acres87 <- rep(0, 2000)
 est_ups300_acres87 <- rep(0, 2000)
 
 for (i in 1:2000) {
@@ -640,6 +644,9 @@ for (i in 1:2000) {
   est_srs300_reg_acres87[i] <- reg_est(acres92_srs300, acres87_srs300,
                                            xbarU = total_acres87/N, N = N, estimate = "total", show.details = FALSE)$estimate[1]
 
+  est_srs300_ratio_acres87[i] <- ratio_est(acres92_srs300, acres87_srs300,
+                                           xbarU = total_acres87/N, N = N, estimate = "total", show.details = FALSE)$estimate[1]
+
   # UPSWR Simulation (Probability proportional to acres87)
   ups300 <- sample(1:N, size = 300, prob = acres87, replace = TRUE)
   acres92_ups300 <- agpop$acres92[ups300]
@@ -650,36 +657,38 @@ for (i in 1:2000) {
 ```
 
 ```{r fig-upswr-sim-comparison, fig.height=8, fig.width=8}
-#| fig-cap: "Estimator distribution: naive SRS vs. SRS regression vs. UPSWR (2000 simulations), full and zoomed views. The legend gives the variance of each estimator and its $R^2$ relative to the naive SRS average."
+#| echo: false
+#| fig-cap: "Estimator distribution: naive SRS vs. SRS ratio vs. SRS regression vs. UPSWR (2000 simulations), full and zoomed views. The legend gives the variance of each estimator and its $R^2$ relative to the naive SRS average."
 library(ggplot2)
 
 # Variance of each estimator and R^2 = 1 - Var / Var(naive SRS): the proportion
 # of the variance of the naive SRS average that the estimator removes
-v_sim <- c(var(est_srs300), var(est_srs300_reg_acres87), var(est_ups300_acres87))
+nm_sim <- c("SRS Naive", "SRS Ratio", "SRS Regression", "UPSWR")
+est_sim <- list(est_srs300, est_srs300_ratio_acres87, est_srs300_reg_acres87, est_ups300_acres87)
+v_sim <- sapply(est_sim, var)
 r2_sim <- 1 - v_sim / v_sim[1]
-lab_sim <- sprintf("%s: Var = %.2e, R² = %.3f",
-                   c("SRS Naive", "SRS Regression", "UPSWR"), v_sim, r2_sim)
+lab_sim <- sprintf("%s: Var = %.2e, R² = %.3f", nm_sim, v_sim, r2_sim)
 
 sim_long <- data.frame(
-  est = c(est_srs300, est_srs300_reg_acres87, est_ups300_acres87),
+  est = unlist(est_sim),
   Method = factor(rep(lab_sim, each = 2000), levels = lab_sim))
 sim_long <- rbind(
-  cbind(sim_long, Panel = "All three estimators"),
-  cbind(sim_long[sim_long$Method != lab_sim[1], ], Panel = "Zoomed: SRS-Regression vs. UPSWR"))
+  cbind(sim_long, Panel = "All four estimators"),
+  cbind(sim_long[sim_long$Method != lab_sim[1], ], Panel = "Zoomed: SRS-Ratio, SRS-Regression, and UPSWR"))
 sim_long$Panel <- factor(sim_long$Panel, levels = unique(sim_long$Panel))
 
 ggplot(sim_long, aes(x = Method, y = est, fill = Method)) +
   geom_violin(draw_quantiles = 0.5, trim = FALSE) +
   geom_hline(yintercept = total_acres92, colour = "red", linewidth = 0.8) +
   facet_wrap(~ Panel, ncol = 1, scales = "free") +
-  scale_fill_manual(values = c("lightblue", "lightgreen", "salmon")) +
-  scale_x_discrete(labels = setNames(c("SRS Naive", "SRS Regression", "UPSWR"), lab_sim)) +
+  scale_fill_manual(values = c("lightblue", "khaki", "lightgreen", "salmon")) +
+  scale_x_discrete(labels = setNames(nm_sim, lab_sim)) +
   labs(x = NULL, y = "Estimate of the total acres in 1992 (thousands)") +
   theme_bw() +
   theme(legend.position = "bottom", legend.direction = "vertical",
         legend.title = element_blank())
 ```
-**Output Note:** The red line represents the true total acreage, and the line inside each violin is the median. The naive SRS estimator has massive variance. Both SRS Regression and UPSWR drastically reduce variance, centering tightly around the true mean; the $R^2$ in the legend is the proportion of the variance of the naive SRS average that each method removes.
+**Output Note:** The red line represents the true total acreage, and the line inside each violin is the median. The naive SRS estimator has massive variance. The SRS ratio and regression estimators, which use the 1987 acres at the estimation stage, and UPSWR, which uses them at the design stage, drastically reduce the variance, centering tightly around the true mean; the $R^2$ in the legend is the proportion of the variance of the naive SRS average that each method removes.
 
 ### Shinylive App Comparing SRS and UPSWR {#sec-ups-app}
 
@@ -748,6 +757,7 @@ cluster means $\bar{y}_i$ vary little, that is, when $t_i$ is nearly proportiona
 We first manually define a small dataset describing the hours spent studying by groups of students. The probability of sampling a specific student group ($\psi_i$) was proportional to the number of students in that group ($M_i$), with $M=647$ students in total, and all students of a selected group were asked, so $t_i$ is the total hours of group $i$.
 
 ```{r tbl-studyhrs-raw-data}
+#| echo: false
 #| tbl-cap: "Raw data: student study hours by group, with selection probabilities"
 # 1. Define the raw data
 psi <- c(24, 100, 100, 76, 44) / 647
@@ -766,6 +776,7 @@ data.frame(Mi, psi, hrs) |>
 ```
 
 ```{r fig-studyhrs-vs-Mi}
+#| echo: false
 #| fig-cap: "Study hours vs. number of students, by group"
 plot(hrs ~ Mi, main = "Study Hours vs Number of Students",
      xlab = "Number of Students (Mi)", ylab = "Study Hours (hrs)")
