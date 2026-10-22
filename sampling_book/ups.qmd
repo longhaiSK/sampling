@@ -1085,8 +1085,8 @@ is a little too large, as expected. The violin plots show the whole distribution
 with the true variance (the variance of the 2000 HT estimates) as a red line: both are centred close to it,
 the with-replacement one slightly above. The HT estimates of the mean are centred at the true mean, as
 unbiasedness implies. The 95% confidence intervals, estimate $\pm$ $t_{n-1}$ SE, cover the true mean in
-`r round(100 * mean(sim[, "cover_hajek"]), 1)`% of the samples with the Hájek variance and in
-`r round(100 * mean(sim[, "cover_wr"]), 1)`% with the with-replacement variance; the latter is a little above the
+`r sprintf("%.1f", 100 * mean(sim[, "cover_hajek"]))`% of the samples with the Hájek variance and in
+`r sprintf("%.1f", 100 * mean(sim[, "cover_wr"]))`% with the with-replacement variance; the latter is a little above the
 nominal 95% because its variance is too large. The ratio of the total acres in 1992 to that in 1987 is
 $\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/t_x=`r round(est_B_hajek["Est."], 3)`$
 (SE `r round(est_B_hajek["S.E."], 3)`, Hájek).
