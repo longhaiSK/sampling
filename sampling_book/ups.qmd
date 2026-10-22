@@ -144,43 +144,46 @@ a sum of terms involving only $w_i$ and $b_i-B$; the variances of $\hat{\bar{y}}
 $\hat{t}_{\mathrm{HH}}$ are $\bar{x}_U^2$ and $t_x^2$ times this. The variance is small when all the ratios $b_i$
 are close to $B$, that is, when $y_i$ is nearly proportional to $x_i$.
 
-**Two estimators of $B$ under simple random sampling.** The ratio estimator and the sample average are
-used with a simple random sample (SRS) $\mathcal{S}$ of $n$ units without replacement. Each is also an
+### Comparison of the HH, Ratio, and Average Estimators of $B$ {#sec-ups-compare}
+
+The ratio estimator and the sample average are used with a simple random sample (SRS) $\mathcal{S}$ of $n$ units
+without replacement. Let $w_i=x_i/\bar{x}_U$ be the size of unit $i$ relative to the average, and
+$d_i=y_i-Bx_i=x_i(b_i-B)$ the residuals about the line through the origin $y=Bx$. Each estimator is also an
 estimator of $B$, which is then multiplied by $\bar{x}_U$ or $t_x$.
 
-* The **ratio estimator** (@sec-ratio-theory) is
+* The **ratio estimator** (@sec-ratio-theory) estimates $\bar{y}_U$ by $\bar{x}_U\,\bar{y}/\bar{x}$. Since
+  $y_i=x_ib_i$,
   $$
-  \hat{B}_r=\frac{\sum_{i\in\mathcal{S}}y_i}{\sum_{i\in\mathcal{S}}x_i}
+  \hat{B}_r=\frac{\bar{y}}{\bar{x}}=\frac{\sum_{i\in\mathcal{S}}y_i}{\sum_{i\in\mathcal{S}}x_i}
   =\frac{\sum_{i\in\mathcal{S}}x_i\,b_i}{\sum_{i\in\mathcal{S}}x_i},
   $$
   the mean of the sampled $b_i$ weighted by $x_i$ (weights adding up to one), and
   $\hat{\bar{y}}_r=\bar{x}_U\hat{B}_r$, $\hat{t}_r=t_x\hat{B}_r$.
 
-* The **sample average** $\bar{y}=\frac1n\sum_{i\in\mathcal{S}}y_i$ ignores $x_i$. In terms of $b_i$, it
-  corresponds to the estimator of $B$
+* The **sample average** $\bar{y}$ ignores $x_i$. Since $y_i=x_ib_i=\bar{x}_U\,w_ib_i$,
   $$
+  \bar{y}=\bar{x}_U\cdot\frac{1}{n}\sum_{i\in\mathcal{S}}w_i\,b_i
+  \quad\Longrightarrow\quad
   \hat{B}_{\mathrm{avg}}=\frac{\bar{y}}{\bar{x}_U}=\frac{1}{n}\sum_{i\in\mathcal{S}}w_i\,b_i ,
-  \qquad w_i=\frac{x_i}{\bar{x}_U},
   $$
   the mean of the sampled $b_i$ with weights $w_i$ that do not add up to one, and
-  $\bar{y}=\bar{x}_U\hat{B}_{\mathrm{avg}}$, $\hat{t}_{\mathrm{avg}}=t_x\hat{B}_{\mathrm{avg}}$.
+  $\hat{t}_{\mathrm{avg}}=t_x\hat{B}_{\mathrm{avg}}$.
 
-### Comparison of the HH, Ratio, and Average Estimators of $B$ {#sec-ups-compare}
+@tbl-ups-compare compares them with the HH estimator $\hat{B}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n b_j^*$.
+Their variances follow from the variances of $\bar{y}$ and $\hat{\bar{y}}_r$ for SRS divided by $\bar{x}_U^2$,
+using $w_ib_i-B=(y_i-\bar{y}_U)/\bar{x}_U$ and $w_i(b_i-B)=d_i/\bar{x}_U$ (the ratio estimator's variance is
+the large-$n$ approximation), and from the HH variance of the theory section.
 
-The three estimators of $B$ differ in how the ratios $b_i$ are weighted, in their variances, and in where
-$x_i$ is used. Let $w_i=x_i/\bar{x}_U$, and let $d_i=y_i-Bx_i=x_i(b_i-B)$ be the residuals about the line
-through the origin $y=Bx$.
+| Estimator | Estimator of $B$ | Variance | $x_i$ is used at | Unbiased? |
+|:---|:--:|:--:|:---|:---|
+| Sample average (SRS) | $\hat{B}_{\mathrm{avg}}=\dfrac1n\sum\limits_{i\in\mathcal{S}}w_ib_i$ | $\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (w_ib_i-B)^2$ | not used | yes, for $\bar{y}_U/\bar{x}_U$ |
+| Ratio (SRS) | $\hat{B}_r=\dfrac{\sum_{i\in\mathcal{S}} x_ib_i}{\sum_{i\in\mathcal{S}} x_i}$ | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N w_i^2\,(b_i-B)^2$ | the **estimation** stage | slightly biased |
+| HH (UPSWR, $\psi_i=x_i/t_x$) | $\hat{B}_{\mathrm{HH}}=\dfrac1n\sum\limits_{j=1}^n b_j^*$ | $\dfrac{1}{nN}\sum\limits_{i=1}^N w_i\,(b_i-B)^2$ | the **design** stage | exactly unbiased |
 
-|  | Sample average (SRS) | Ratio estimator (SRS) | HH estimator (UPSWR, $\psi_i=x_i/t_x$) |
-|:---|:---|:---|:---|
-| Estimator of $B$ | $\hat{B}_{\mathrm{avg}}=\dfrac1n\sum\limits_{i\in\mathcal{S}}w_ib_i$ | $\hat{B}_r=\dfrac{\sum_{i\in\mathcal{S}} x_ib_i}{\sum_{i\in\mathcal{S}} x_i}$ | $\hat{B}_{\mathrm{HH}}=\dfrac1n\sum\limits_{j=1}^n b_j^*$ |
-| Variance | $\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (w_ib_i-B)^2$ | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N w_i^2\,(b_i-B)^2$ | $\dfrac{1}{nN}\sum\limits_{i=1}^N w_i\,(b_i-B)^2$ |
-| $x_i$ is used at | not used | the **estimation** stage | the **design** stage |
-| Unbiased? | yes, for $\bar{y}_U/\bar{x}_U$ | slightly biased | exactly unbiased |
+: Estimators of $B=t/t_x$ from SRS and UPSWR samples of $n$ units. {#tbl-ups-compare}
 
 For the mean and the total, multiply the estimators by $\bar{x}_U$ and $t_x$, and the variances by
-$\bar{x}_U^2$ and $t_x^2$. The variance of the average uses $w_ib_i-B=(y_i-\bar{y}_U)/\bar{x}_U$, and the
-variance of the ratio estimator is a large-$n$ approximation which uses $w_i(b_i-B)=d_i/\bar{x}_U$.
+$\bar{x}_U^2$ and $t_x^2$.
 
 Ignoring the finite population correction and the difference between $N-1$ and $N$, each variance is
 $\frac1n$ times an average over the units of one squared term:
