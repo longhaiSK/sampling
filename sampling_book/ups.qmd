@@ -95,7 +95,7 @@ with replacement, the probabilities do not change from draw to draw, and $b_1^*,
 **independent and identically distributed** (iid) with this distribution. Its mean and variance are
 $$
 E(b_j^*)=\sum_{i=1}^N\frac{x_i}{t_x}\cdot\frac{y_i}{x_i}=\frac{t}{t_x}=B,\qquad
-S_b^2=V(b_j^*)=\sum_{i=1}^N\psi_i\,(b_i-B)^2 .
+S_{b^*}^2=V(b_j^*)=\sum_{i=1}^N\psi_i\,(b_i-B)^2 .
 $$
 A single draw is therefore an unbiased estimate of $B$, and it is a precise one when the $b_i$ are nearly
 the same for all units, that is, when $y_i$ is nearly proportional to $x_i$.
@@ -109,10 +109,10 @@ Being the mean of $n$ iid copies of $b_j^*$, it is unbiased, and its variance is
 divided by $n$:
 $$
 E(\hat{B}_{\mathrm{HH}})=B,\qquad
-V(\hat{B}_{\mathrm{HH}})=\frac{S_b^2}{n}=\frac{1}{n}\sum_{i=1}^N\psi_i\,(b_i-B)^2 .
+V(\hat{B}_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac{1}{n}\sum_{i=1}^N\psi_i\,(b_i-B)^2 .
 $$
 There is no finite population correction, since the draws are independent. For the same reason, the
-sample variance of the $b_j^*$ is an unbiased estimate of $S_b^2$, which gives
+sample variance of the $b_j^*$ is an unbiased estimate of $S_{b^*}^2$, which gives
 $$
 \widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_b}{\sqrt{n}},\qquad
 s_b^2=\frac{1}{n-1}\sum_{j=1}^n\left(b_j^*-\bar{b}^*\right)^2 .
@@ -124,10 +124,10 @@ $$
 \boxed{\;
 \begin{aligned}
 \hat{\bar{y}}_{\mathrm{HH}}&=\bar{x}_U\,\hat{B}_{\mathrm{HH}}=\bar{x}_U\,\bar{b}^*,\qquad
-&\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{S_b}{\sqrt{n}},\qquad
+&\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{S_{b^*}}{\sqrt{n}},\qquad
 &\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{s_b}{\sqrt{n}},\\[4pt]
 \hat{t}_{\mathrm{HH}}&=t_x\,\hat{B}_{\mathrm{HH}}=t_x\,\bar{b}^*,\qquad
-&\mathrm{SE}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{S_b}{\sqrt{n}},\qquad
+&\mathrm{SE}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{S_{b^*}}{\sqrt{n}},\qquad
 &\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{s_b}{\sqrt{n}} .
 \end{aligned}\;}
 $$
@@ -137,7 +137,7 @@ works for any $\psi_i$, not only for $\psi_i=x_i/t_x$, and is what the function 
 
 **The variance in terms of $x_i$ and $(b_i-B)$.** Since $\psi_i\bar{x}_U^2=(x_i/t_x)(t_x/N)^2=\bar{x}_U\,x_i/N$,
 $$
-V(\hat{\bar{y}}_{\mathrm{HH}})=\frac{\bar{x}_U^2S_b^2}{n}
+V(\hat{\bar{y}}_{\mathrm{HH}})=\frac{\bar{x}_U^2S_{b^*}^2}{n}
 =\frac{1}{nN}\sum_{i=1}^N\bar{x}_U\,x_i\,(b_i-B)^2 ,
 $$
 a sum of terms involving only $x_i$, $\bar{x}_U$ and $b_i-B$. The variance is small when all the ratios $b_i$
