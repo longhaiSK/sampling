@@ -584,14 +584,14 @@ $\bar{y}_U = y/N$ (here $y_i$ is `acres92` for county $i$, and $y=\sum_{i=1}^N y
 proportional to $x_i$, with replacement (UPSWR + Hansen--Hurwitz) or without replacement
 (UPSWO + Horvitz--Thompson). The plain SRS average is included as a baseline. Throughout, write
 $$
-b_i=\frac{y_i}{x_i},\qquad B=\frac{y}{t_x}=\frac{\bar{y}_U}{\bar{x}_U},\qquad w_i=\frac{x_i}{\bar{x}_U},
+b_i=\frac{y_i}{x_i},\qquad B=\frac{y}{t_x}=\frac{\bar{y}_U}{\bar{x}_U},\qquad w^x_i=\frac{x_i}{\bar{x}_U},
 $$
 so that $B=\sum x_ib_i/\sum x_i$ is the mean of the ratios $b_i$ weighted by $x_i$, and $\bar{y}_U=\bar{x}_U B$.
 Every estimator below is $\bar{x}_U$ times an estimate of $B$ that is built from the ratios $b_i$ of the
 sampled units; they differ in the weights on the $b_i$ and in the design.
 
 **SRS average.** $\bar{y}=\bar{x}_U\hat{B}_{\mathrm{avg}}$ with
-$\hat{B}_{\mathrm{avg}}=\frac{1}{n}\sum_{i\in\mathcal{S}}w_i\,b_i$, weights $w_i$ not adding to one, and
+$\hat{B}_{\mathrm{avg}}=\frac{1}{n}\sum_{i\in\mathcal{S}}w^x_i\,b_i$, weights $w^x_i$ not adding to one, and
 $\widehat{\mathrm{SE}}=\sqrt{(1-n/N)\,s_y^2/n}$.
 
 **SRS + ratio.** $x_i$ is used at the estimation stage:

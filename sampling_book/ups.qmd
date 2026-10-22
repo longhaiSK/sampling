@@ -110,11 +110,11 @@ Being the mean of $n$ iid copies of $b_j^*$, it is unbiased, and its variance is
 divided by $n$:
 $$
 E(\hat{B}_{\mathrm{HH}})=B,\qquad
-V(\hat{B}_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 ,
-\qquad w_i=\frac{x_i}{\bar{x}_U}=N\psi_i .
+V(\hat{B}_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2 ,
+\qquad w^x_i=\frac{x_i}{\bar{x}_U}=N\psi_i .
 $$
-Here $w_i$ is the size of unit $i$ relative to the average, so that $\psi_i=w_i/N$, and the variance is a sum of
-terms involving only $w_i$ and $b_i-B$.
+Here $w^x_i$ is the size of unit $i$ relative to the average, so that $\psi_i=w^x_i/N$, and the variance is a sum of
+terms involving only $w^x_i$ and $b_i-B$.
 There is no finite population correction, since the draws are independent. For the same reason, the
 sample variance of the $b_j^*$ is an unbiased estimate of $S_{b^*}^2$, which gives
 $$
@@ -146,7 +146,7 @@ are close to $B$, that is, when $y_i$ is nearly proportional to $x_i$.
 ### Comparison of the HH, Ratio, and Average Estimators of $B$ {#sec-ups-compare}
 
 The ratio estimator and the sample average are used with a simple random sample (SRS) $\mathcal{S}$ of $n$ units
-without replacement. Let $w_i=x_i/\bar{x}_U$ be the size of unit $i$ relative to the average, and
+without replacement. Let $w^x_i=x_i/\bar{x}_U$ be the size of unit $i$ relative to the average, and
 $d_i=y_i-Bx_i=x_i(b_i-B)$ the residuals about the line through the origin $y=Bx$. Each estimator is also an
 estimator of $B$, which is then multiplied by $\bar{x}_U$ or $t_x$.
 
@@ -159,29 +159,29 @@ estimator of $B$, which is then multiplied by $\bar{x}_U$ or $t_x$.
   the mean of the sampled $b_i$ weighted by $x_i$ (weights adding up to one), and
   $\hat{\bar{y}}_r=\bar{x}_U\hat{B}_r$, $\hat{t}_r=t_x\hat{B}_r$.
 
-* The **sample average** $\bar{y}$ ignores $x_i$. Since $y_i=x_ib_i=\bar{x}_U\,w_ib_i$,
+* The **sample average** $\bar{y}$ ignores $x_i$. Since $y_i=x_ib_i=\bar{x}_U\,w^x_ib_i$,
   $$
-  \bar{y}=\bar{x}_U\cdot\frac{1}{n}\sum_{i\in\mathcal{S}}w_i\,b_i
+  \bar{y}=\bar{x}_U\cdot\frac{1}{n}\sum_{i\in\mathcal{S}}w^x_i\,b_i
   \quad\Longrightarrow\quad
-  \hat{B}_{\mathrm{avg}}=\frac{\bar{y}}{\bar{x}_U}=\frac{1}{n}\sum_{i\in\mathcal{S}}w_i\,b_i ,
+  \hat{B}_{\mathrm{avg}}=\frac{\bar{y}}{\bar{x}_U}=\frac{1}{n}\sum_{i\in\mathcal{S}}w^x_i\,b_i ,
   $$
-  the mean of the sampled $b_i$ with weights $w_i$ that do not add up to one, and
+  the mean of the sampled $b_i$ with weights $w^x_i$ that do not add up to one, and
   $\hat{t}_{\mathrm{avg}}=t_x\hat{B}_{\mathrm{avg}}$.
 
 @tbl-ups-compare compares them with the HH estimator $\hat{B}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n b_j^*$.
 Their variances follow from the variances of $\bar{y}$ and $\hat{\bar{y}}_r$ for SRS divided by $\bar{x}_U^2$,
-using $w_ib_i-B=(y_i-\bar{y}_U)/\bar{x}_U$ and $w_i(b_i-B)=d_i/\bar{x}_U$ (the ratio estimator's variance is
+using $w^x_ib_i-B=(y_i-\bar{y}_U)/\bar{x}_U$ and $w^x_i(b_i-B)=d_i/\bar{x}_U$ (the ratio estimator's variance is
 the large-$n$ approximation), and from the HH variance of the theory section.
 
 | Estimator | Estimator of $B$ | Variance | $x_i$ is used at | Unbiased? |
 |:---|:--:|:--:|:---|:---|
-| Sample average (SRS) | $\hat{B}_{\mathrm{avg}}=\dfrac1n\sum\limits_{i\in\mathcal{S}}w_ib_i$ | $\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (w_ib_i-B)^2$ | not used | yes, for $\bar{y}_U/\bar{x}_U$ |
-| Ratio (SRS) | $\hat{B}_r=\dfrac{\sum_{i\in\mathcal{S}} x_ib_i}{\sum_{i\in\mathcal{S}} x_i}$ | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N w_i^2\,(b_i-B)^2$ | the **estimation** stage | slightly biased |
-| HH (UPSWR, $\psi_i=x_i/t_x$) | $\hat{B}_{\mathrm{HH}}=\dfrac1n\sum\limits_{j=1}^n b_j^*$ | $\dfrac{1}{nN}\sum\limits_{i=1}^N w_i\,(b_i-B)^2$ | the **design** stage | exactly unbiased |
+| Sample average (SRS) | $\hat{B}_{\mathrm{avg}}=\dfrac1n\sum\limits_{i\in\mathcal{S}}w^x_ib_i$ | $\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (w^x_ib_i-B)^2$ | not used | yes, for $\bar{y}_U/\bar{x}_U$ |
+| Ratio (SRS) | $\hat{B}_r=\dfrac{\sum_{i\in\mathcal{S}} x_ib_i}{\sum_{i\in\mathcal{S}} x_i}$ | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (w^x_i)^2\,(b_i-B)^2$ | the **estimation** stage | slightly biased |
+| HH (UPSWR, $\psi_i=x_i/t_x$) | $\hat{B}_{\mathrm{HH}}=\dfrac1n\sum\limits_{j=1}^n b_j^*$ | $\dfrac{1}{nN}\sum\limits_{i=1}^N w^x_i\,(b_i-B)^2$ | the **design** stage | exactly unbiased |
 
 : Estimators of $B=t/t_x$ from SRS and UPSWR samples of $n$ units. {#tbl-ups-compare}
 
-*Note:* for the sample average, $w_i=x_i/\bar{x}_U$ and $w_ib_i=y_i/\bar{x}_U$, so that $\hat{B}_{\mathrm{avg}}=\bar{y}/\bar{x}_U$ and its variance is the SRS variance of $y_i$ divided by $\bar{x}_U^2$.
+*Note:* for the sample average, $w^x_i=x_i/\bar{x}_U$ and $w^x_ib_i=y_i/\bar{x}_U$, so that $\hat{B}_{\mathrm{avg}}=\bar{y}/\bar{x}_U$ and its variance is the SRS variance of $y_i$ divided by $\bar{x}_U^2$.
 
 For the mean and the total, multiply the estimators by $\bar{x}_U$ and $t_x$, and the variances by
 $\bar{x}_U^2$ and $t_x^2$.
@@ -191,13 +191,13 @@ $\frac1n$ times an average over the units of one squared term:
 
 | Estimator | Squared term of unit $i$ | Spread of $y$ about |
 |:---|:---|:---|
-| Sample average | $(w_ib_i-B)^2$ | the flat line $\bar{y}_U$ |
-| Ratio | $w_i^2\,(b_i-B)^2$ | the line $y=Bx$ |
-| HH | $w_i\,(b_i-B)^2$ | the line $y=Bx$, with weight $1/w_i$ relative to the ratio estimator |
+| Sample average | $(w^x_ib_i-B)^2$ | the flat line $\bar{y}_U$ |
+| Ratio | $(w^x_i)^2\,(b_i-B)^2$ | the line $y=Bx$ |
+| HH | $w^x_i\,(b_i-B)^2$ | the line $y=Bx$, with weight $1/w^x_i$ relative to the ratio estimator |
 
 The ratio estimator and HH use the same ratios and the same centre $B$, so their terms differ only in one
-factor: $w_i^2$ for the ratio estimator, $w_i$ for HH. HH multiplies the term of the ratio estimator by
-$1/w_i=\bar{x}_U/x_i$. A unit larger than average ($w_i>1$) is **downweighted** under HH, and a smaller one
+factor: $(w^x_i)^2$ for the ratio estimator, $w^x_i$ for HH. HH multiplies the term of the ratio estimator by
+$1/w^x_i=\bar{x}_U/x_i$. A unit larger than average ($w^x_i>1$) is **downweighted** under HH, and a smaller one
 is upweighted. The reason is that HH gives equal weights to the draws because the large units are already
 drawn more often, whereas the ratio estimator must give the large units larger weights $x_i$ to compensate
 for the equal chances. UPSWR therefore wins when the large residuals $d_i$ belong to the large units, that is,
@@ -209,7 +209,7 @@ sample average. The next section illustrates these cases.
 ### Toy Example: Four Supermarkets {#sec-ups-toy}
 
 A town has four supermarkets, with floor areas $x_i$ from $100\,\text{m}^2$ to $1000\,\text{m}^2$, so
-$t_x=1600$, $\bar{x}_U=400$ and $w_i=x_i/\bar{x}_U=0.25,\,0.5,\,0.75,\,2.5$. We want to estimate the monthly
+$t_x=1600$, $\bar{x}_U=400$ and $w^x_i=x_i/\bar{x}_U=0.25,\,0.5,\,0.75,\,2.5$. We want to estimate the monthly
 sales per square metre $B=\bar{y}_U/\bar{x}_U$, from the ratios $b_i=y_i/x_i$ of the stores (the mean and the
 total of sales follow by multiplying by $\bar{x}_U$ and $t_x$). The data for the first population (the sales, in thousands of dollars per month, are nearly proportional to the
 floor areas) are:
@@ -238,9 +238,9 @@ squared term:
 
 | Estimator | Design | Squared term of store $i$ |
 |:---|:---|:---|
-| Sample average | SRS | $(w_ib_i-B)^2$ |
-| Ratio | SRS | $w_i^2\,(b_i-B)^2$ |
-| HH | PPS, $\psi_i=x_i/t_x$ | $w_i\,(b_i-B)^2$ |
+| Sample average | SRS | $(w^x_ib_i-B)^2$ |
+| Ratio | SRS | $(w^x_i)^2\,(b_i-B)^2$ |
+| HH | PPS, $\psi_i=x_i/t_x$ | $w^x_i\,(b_i-B)^2$ |
 
 For each population below, a single table works out the three variances side by side. The **Sum** row
 adds the squared terms, and the **Variance** row divides the sum by $N$.
@@ -269,8 +269,8 @@ show_toy_table <- function(tab) {
   options(knitr.kable.NA = "")
   knitr::kable(tab, digits = c(0, 0, 0, 2, 4, 4, 6, 6, 6),
                format.args = list(big.mark = ","),
-               col.names = c("Store", "$x_i$", "$y_i$", "$w_i=x_i/\\bar{x}_U$", "$b_i=y_i/x_i$", "$b_i-B$",
-                             "$(w_ib_i-B)^2$", "$w_i^2(b_i-B)^2$", "$w_i(b_i-B)^2$"))
+               col.names = c("Store", "$x_i$", "$y_i$", "$w^x_i=x_i/\\bar{x}_U$", "$b_i=y_i/x_i$", "$b_i-B$",
+                             "$(w^x_ib_i-B)^2$", "$(w^x_i)^2(b_i-B)^2$", "$w^x_i(b_i-B)^2$"))
 }
 
 # Unbiasedness of HH: the one-draw estimates b_i of B, weighted by psi_i
@@ -369,7 +369,7 @@ The ordering is reversed. The sales hardly vary, so the sample average has a tin
 and the ratio estimator and HH, with variances `r signif(v_bad[["ratio"]], 3)` and
 `r signif(v_bad[["HH"]], 3)`, are more than
 `r floor(min(v_bad[c("ratio", "HH")]) / v_bad[["mean"]])` times worse than the sample average. Dividing by
-$w_i$ helps little: it downweights the large negative deviation of store D, but upweights the
+$w^x_i$ helps little: it downweights the large negative deviation of store D, but upweights the
 positive deviations of the small stores, by $4$ for store A. Unequal probability sampling is only as good
 as the size variable used to construct $\psi_i$: before using PPS, check that $y_i$ is roughly
 proportional to $x_i$.

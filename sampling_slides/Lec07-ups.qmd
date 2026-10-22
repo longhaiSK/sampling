@@ -98,9 +98,9 @@ The HH estimator is the mean of the $n$ IID observations $b_j^*$ (the **mean of 
 $$
 \boxed{\hat B_{\mathrm{HH}}=\bar b^*=\frac1n\sum_{j=1}^n b_j^*},\qquad E(\hat B_{\mathrm{HH}})=B,
 $$
-and its variance is that of one draw divided by $n$. With $w_i=x_i/\bar x_U=N\psi_i$ (relative size),
+and its variance is that of one draw divided by $n$. With $w^x_i=x_i/\bar x_U=N\psi_i$ (relative size),
 $$
-V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac1n\sum_{i=1}^N\psi_i(b_i-B)^2=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 .
+V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac1n\sum_{i=1}^N\psi_i(b_i-B)^2=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2 .
 $$
 No finite population correction: the draws are independent.
 
@@ -166,7 +166,7 @@ Both hold for **any** $\psi_i$, with no finite population correction.
 
 ## The Ratio Estimator and the Sample Average in Terms of $b_i$
 
-With an SRS $\mathcal S$ of $n$ units, write $y_i=x_ib_i=\bar x_U\,w_ib_i$:
+With an SRS $\mathcal S$ of $n$ units, write $y_i=x_ib_i=\bar x_U\,w^x_ib_i$:
 
 * **Ratio estimator** (uses $x_i$ at the estimation stage):
 $$
@@ -176,24 +176,24 @@ the mean of the sampled $b_i$ with weights $x_i$ adding up to one.
 
 * **Sample average** (ignores $x_i$): $\bar y=\bar x_U\hat B_{\mathrm{avg}}$ with
 $$
-\hat B_{\mathrm{avg}}=\frac{\bar y}{\bar x_U}=\frac1n\sum_{i\in\mathcal S}w_i\,b_i
+\hat B_{\mathrm{avg}}=\frac{\bar y}{\bar x_U}=\frac1n\sum_{i\in\mathcal S}w^x_i\,b_i
 $$
-weights $w_i$ that do not add up to one.
+weights $w^x_i$ that do not add up to one.
 
 ## Comparison of the Three Estimators of $B$ {.smaller}
 
 | Estimator | Estimator of $B$ | $x_i$ used at | Unbiased? |
 |:---|:--:|:---|:---|
-| Sample average (SRS) | $\dfrac1n\sum\limits_{i\in\mathcal S}w_ib_i$ | not used | yes |
+| Sample average (SRS) | $\dfrac1n\sum\limits_{i\in\mathcal S}w^x_ib_i$ | not used | yes |
 | Ratio (SRS) | $\dfrac{\sum_{\mathcal S} x_ib_i}{\sum_{\mathcal S} x_i}$ | estimation stage | slightly biased |
 | HH (UPSWR) | $\dfrac1n\sum\limits_{j=1}^n b_j^*$ | design stage | exactly unbiased |
 
 Variances (multiply by $\bar x_U^2$ for the mean, $t_x^2$ for the total):
 $$
 \begin{aligned}
-V(\hat B_{\mathrm{avg}})&=\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w_ib_i-B)^2\\
-V(\hat B_{r})&\approx\frac{1-n/N}{n(N-1)}\sum_{i=1}^N w_i^2\,(b_i-B)^2\\
-V(\hat B_{\mathrm{HH}})&=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2
+V(\hat B_{\mathrm{avg}})&=\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w^x_ib_i-B)^2\\
+V(\hat B_{r})&\approx\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w^x_i)^2\,(b_i-B)^2\\
+V(\hat B_{\mathrm{HH}})&=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2
 \end{aligned}
 $$
 
@@ -203,11 +203,11 @@ Each variance is $\frac1n\times$ the average over the units of one squared term:
 
 | Estimator | Squared term of unit $i$ | Spread of $y$ about |
 |:---|:--:|:---|
-| Sample average | $(w_ib_i-B)^2$ | the flat line $\bar y_U$ |
-| Ratio | $w_i^2\,(b_i-B)^2$ | the line $y=Bx$ |
-| HH | $w_i\,(b_i-B)^2$ | the line $y=Bx$, weight $1/w_i$ relative to ratio |
+| Sample average | $(w^x_ib_i-B)^2$ | the flat line $\bar y_U$ |
+| Ratio | $(w^x_i)^2\,(b_i-B)^2$ | the line $y=Bx$ |
+| HH | $w^x_i\,(b_i-B)^2$ | the line $y=Bx$, weight $1/w^x_i$ relative to ratio |
 
-HH divides the ratio estimator's term by $w_i$: units larger than average ($w_i>1$) are **downweighted**,
+HH divides the ratio estimator's term by $w^x_i$: units larger than average ($w^x_i>1$) are **downweighted**,
 smaller ones are upweighted, because large units are already drawn more often. UPSWR wins when the large
 residuals $y_i-Bx_i$ belong to the large units.
 
@@ -215,7 +215,7 @@ residuals $y_i-Bx_i$ belong to the large units.
 
 $t_x=1600$, $\bar x_U=400$, $B=300/1600=0.1875$. Sales nearly proportional to floor area:
 
-| Store | $x_i$ | $y_i$ | $w_i$ | $b_i$ | $b_i-B$ | $(w_ib_i-B)^2$ | $w_i^2(b_i-B)^2$ | $w_i(b_i-B)^2$ |
+| Store | $x_i$ | $y_i$ | $w^x_i$ | $b_i$ | $b_i-B$ | $(w^x_ib_i-B)^2$ | $(w^x_i)^2(b_i-B)^2$ | $w^x_i(b_i-B)^2$ |
 |:--:|--:|--:|--:|--:|--:|--:|--:|--:|
 | A | 100 | 11 | 0.25 | 0.1100 | $-0.0775$ | 0.025600 | 0.000375 | 0.001502 |
 | B | 200 | 20 | 0.50 | 0.1000 | $-0.0875$ | 0.018906 | 0.001914 | 0.003828 |

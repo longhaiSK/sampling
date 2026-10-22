@@ -242,8 +242,8 @@ S_{b^*}^2=V(b_j^*)=\sum_{i=1}^N\psi_i(b_i-B)^2 .
 <h2>HH Estimator of <span class="math inline">B</span>: Mean and Variance</h2>
 <p>The HH estimator is the mean of the <span class="math inline">n</span> IID observations <span class="math inline">b_j^*</span> (the <strong>mean of the ratios</strong>): <span class="math display">
 \boxed{\hat B_{\mathrm{HH}}=\bar b^*=\frac1n\sum_{j=1}^n b_j^*},\qquad E(\hat B_{\mathrm{HH}})=B,
-</span> and its variance is that of one draw divided by <span class="math inline">n</span>. With <span class="math inline">w_i=x_i/\bar x_U=N\psi_i</span> (relative size), <span class="math display">
-V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac1n\sum_{i=1}^N\psi_i(b_i-B)^2=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 .
+</span> and its variance is that of one draw divided by <span class="math inline">n</span>. With <span class="math inline">w^x_i=x_i/\bar x_U=N\psi_i</span> (relative size), <span class="math display">
+V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac1n\sum_{i=1}^N\psi_i(b_i-B)^2=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2 .
 </span> No finite population correction: the draws are independent.</p>
 </section>
 <section id="estimating-the-variance-mean-and-total" class="slide level2">
@@ -327,14 +327,14 @@ V(\hat t_{\mathrm{HH}})&amp;=t_x^2\,V(\hat B_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\
 </section>
 <section id="the-ratio-estimator-and-the-sample-average-in-terms-of-b_i" class="slide level2">
 <h2>The Ratio Estimator and the Sample Average in Terms of <span class="math inline">b_i</span></h2>
-<p>With an SRS <span class="math inline">\mathcal S</span> of <span class="math inline">n</span> units, write <span class="math inline">y_i=x_ib_i=\bar x_U\,w_ib_i</span>:</p>
+<p>With an SRS <span class="math inline">\mathcal S</span> of <span class="math inline">n</span> units, write <span class="math inline">y_i=x_ib_i=\bar x_U\,w^x_ib_i</span>:</p>
 <ul>
 <li><p><strong>Ratio estimator</strong> (uses <span class="math inline">x_i</span> at the estimation stage): <span class="math display">
 \hat B_r=\frac{\sum_{i\in\mathcal S}y_i}{\sum_{i\in\mathcal S}x_i}=\frac{\sum_{i\in\mathcal S}x_i\,b_i}{\sum_{i\in\mathcal S}x_i}
 </span> the mean of the sampled <span class="math inline">b_i</span> with weights <span class="math inline">x_i</span> adding up to one.</p></li>
 <li><p><strong>Sample average</strong> (ignores <span class="math inline">x_i</span>): <span class="math inline">\bar y=\bar x_U\hat B_{\mathrm{avg}}</span> with <span class="math display">
-\hat B_{\mathrm{avg}}=\frac{\bar y}{\bar x_U}=\frac1n\sum_{i\in\mathcal S}w_i\,b_i
-</span> weights <span class="math inline">w_i</span> that do not add up to one.</p></li>
+\hat B_{\mathrm{avg}}=\frac{\bar y}{\bar x_U}=\frac1n\sum_{i\in\mathcal S}w^x_i\,b_i
+</span> weights <span class="math inline">w^x_i</span> that do not add up to one.</p></li>
 </ul>
 </section>
 <section id="comparison-of-the-three-estimators-of-b" class="slide level2 smaller">
@@ -357,7 +357,7 @@ V(\hat t_{\mathrm{HH}})&amp;=t_x^2\,V(\hat B_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Sample average (SRS)</td>
-<td style="text-align: center;"><span class="math inline">\dfrac1n\sum\limits_{i\in\mathcal S}w_ib_i</span></td>
+<td style="text-align: center;"><span class="math inline">\dfrac1n\sum\limits_{i\in\mathcal S}w^x_ib_i</span></td>
 <td style="text-align: left;">not used</td>
 <td style="text-align: left;">yes</td>
 </tr>
@@ -377,9 +377,9 @@ V(\hat t_{\mathrm{HH}})&amp;=t_x^2\,V(\hat B_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\
 </table>
 <p>Variances (multiply by <span class="math inline">\bar x_U^2</span> for the mean, <span class="math inline">t_x^2</span> for the total): <span class="math display">
 \begin{aligned}
-V(\hat B_{\mathrm{avg}})&amp;=\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w_ib_i-B)^2\\
-V(\hat B_{r})&amp;\approx\frac{1-n/N}{n(N-1)}\sum_{i=1}^N w_i^2\,(b_i-B)^2\\
-V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2
+V(\hat B_{\mathrm{avg}})&amp;=\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w^x_ib_i-B)^2\\
+V(\hat B_{r})&amp;\approx\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w^x_i)^2\,(b_i-B)^2\\
+V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2
 \end{aligned}
 </span></p>
 </section>
@@ -402,22 +402,22 @@ V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Sample average</td>
-<td style="text-align: center;"><span class="math inline">(w_ib_i-B)^2</span></td>
+<td style="text-align: center;"><span class="math inline">(w^x_ib_i-B)^2</span></td>
 <td style="text-align: left;">the flat line <span class="math inline">\bar y_U</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Ratio</td>
-<td style="text-align: center;"><span class="math inline">w_i^2\,(b_i-B)^2</span></td>
+<td style="text-align: center;"><span class="math inline">(w^x_i)^2\,(b_i-B)^2</span></td>
 <td style="text-align: left;">the line <span class="math inline">y=Bx</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HH</td>
-<td style="text-align: center;"><span class="math inline">w_i\,(b_i-B)^2</span></td>
-<td style="text-align: left;">the line <span class="math inline">y=Bx</span>, weight <span class="math inline">1/w_i</span> relative to ratio</td>
+<td style="text-align: center;"><span class="math inline">w^x_i\,(b_i-B)^2</span></td>
+<td style="text-align: left;">the line <span class="math inline">y=Bx</span>, weight <span class="math inline">1/w^x_i</span> relative to ratio</td>
 </tr>
 </tbody>
 </table>
-<p>HH divides the ratio estimator’s term by <span class="math inline">w_i</span>: units larger than average (<span class="math inline">w_i&gt;1</span>) are <strong>downweighted</strong>, smaller ones are upweighted, because large units are already drawn more often. UPSWR wins when the large residuals <span class="math inline">y_i-Bx_i</span> belong to the large units.</p>
+<p>HH divides the ratio estimator’s term by <span class="math inline">w^x_i</span>: units larger than average (<span class="math inline">w^x_i&gt;1</span>) are <strong>downweighted</strong>, smaller ones are upweighted, because large units are already drawn more often. UPSWR wins when the large residuals <span class="math inline">y_i-Bx_i</span> belong to the large units.</p>
 </section>
 <section id="toy-example-four-supermarkets-one-draw-variances" class="slide level2 smaller">
 <h2>Toy Example: Four Supermarkets, One-Draw Variances</h2>
@@ -439,12 +439,12 @@ V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2
 <th style="text-align: center;">Store</th>
 <th style="text-align: right;"><span class="math inline">x_i</span></th>
 <th style="text-align: right;"><span class="math inline">y_i</span></th>
-<th style="text-align: right;"><span class="math inline">w_i</span></th>
+<th style="text-align: right;"><span class="math inline">w^x_i</span></th>
 <th style="text-align: right;"><span class="math inline">b_i</span></th>
 <th style="text-align: right;"><span class="math inline">b_i-B</span></th>
-<th style="text-align: right;"><span class="math inline">(w_ib_i-B)^2</span></th>
-<th style="text-align: right;"><span class="math inline">w_i^2(b_i-B)^2</span></th>
-<th style="text-align: right;"><span class="math inline">w_i(b_i-B)^2</span></th>
+<th style="text-align: right;"><span class="math inline">(w^x_ib_i-B)^2</span></th>
+<th style="text-align: right;"><span class="math inline">(w^x_i)^2(b_i-B)^2</span></th>
+<th style="text-align: right;"><span class="math inline">w^x_i(b_i-B)^2</span></th>
 </tr>
 </thead>
 <tbody>
