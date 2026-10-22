@@ -520,7 +520,7 @@ thousands of people, so that $b_j^*$ is the number of physicians per 1,000 peopl
 takes the physicians and populations of the 100 draws, the population mean and total of $x$ (the number of
 counties is $N=3141$, so $\bar{x}_U=t_x/N$), and the `method`.
 
-*Physicians per capita,* $\hat{B}_{\mathrm{HH}}=\bar{b}^*$. The working table lists the ratios $b_j^*$ of
+*Physicians per 1,000 people,* $\hat{B}_{\mathrm{HH}}=\bar{b}^*$. The working table lists the ratios $b_j^*$ of
 the first draws, their deviations from $\hat{B}_{\mathrm{HH}}$, and the squared deviations, whose sum gives
 $s_{b^*}^2$:
 
@@ -532,7 +532,7 @@ res_phys_ratio_hh <- upswr_est(phys, popn_k, xbar_pop = M_k / N, tx_pop = M_k, m
 res_phys_ratio_hh$table
 res_phys_ratio_hh$estimate |> format_est_gt("hh_B")
 ```
-**Output Note:** Each draw gives an unbiased estimate of the national number of physicians per person,
+**Output Note:** Each draw gives an unbiased estimate of the national number of physicians per 1,000 people,
 and their average is $\hat{B}_{\mathrm{HH}}=`r round(res_phys_ratio_hh$estimate["Est."], 3)`$ physicians
 per 1,000 people, with a 95% interval of [`r round(res_phys_ratio_hh$estimate["ci.low"], 3)`,
 `r round(res_phys_ratio_hh$estimate["ci.upp"], 3)`].
