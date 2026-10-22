@@ -1092,3 +1092,23 @@ unbiasedness implies. The 95% confidence intervals, estimate $\pm$ $t_{n-1}$ SE,
 nominal 95% because its variance is too large. The ratio of the total acres in 1992 to that in 1987 is
 $\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/t_x=`r round(est_B_hajek["Est."], 3)`$
 (SE `r round(est_B_hajek["S.E."], 3)`, Hájek).
+
+## When to Use Unequal Probability Sampling {#sec-ups-when}
+
+::: {.callout-warning title="Remark: UPS is risky unless y is tied to the size variable"}
+The gain from unequal probability sampling depends entirely on how close the ratios $b_i=y_i/x_i$ are to a constant,
+that is, on $y_i$ being roughly proportional to the size variable $x_i$ used for $\psi_i$ or $\pi_i$. Then
+the variance in @tbl-ups-compare is small, as for the county acreages. Otherwise,
+
+* the estimate can be **much worse than a plain SRS average**, as in the second population of @sec-ups-toy,
+  where the sales are unrelated to the floor area;
+* a unit with a small $x_i$ but a large $y_i$ gets a very large weight $1/\psi_i$ (or $1/\pi_i$) when it is
+  selected, so the estimates are unstable, and the sample variance of the $b_j^*$ that estimates the SE
+  tends to be too small, so that the intervals under-cover.
+
+UPS is therefore used mostly when the size is a good proxy of what is measured: selecting the clusters of a multi-stage survey
+with probabilities proportional to their number of households or students, auditing by the monetary value of
+the items, or surveying establishments by their employment. When the size is only loosely related to
+$y_i$, use simple random or stratified sampling, with a ratio or regression estimator if $x_i$ is
+known, which is much safer than using $x_i$ at the design stage.
+:::
