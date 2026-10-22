@@ -1017,6 +1017,28 @@ for (i in 1:R) {
 }
 ```
 
+```{r fig-wo-variances}
+#| echo: false
+#| fig-height: 4.5
+#| fig-width: 7
+#| fig-cap: "Estimated variances of the HT mean in 2000 repeated samples: Hájek and with-replacement approximations. The red line is the Monte Carlo estimate of the true variance, the variance of the 2000 HT estimates."
+library(ggplot2)
+mc_var <- var(sim[, "est"])
+lab_v <- sprintf("%s: mean = %.2f", c("Hájek", "With-replacement"),
+                 c(mean(sim[, "se_hajek"]^2), mean(sim[, "se_wr"]^2)))
+vdat <- data.frame(v = c(sim[, "se_hajek"]^2, sim[, "se_wr"]^2),
+                   Method = factor(rep(lab_v, each = nrow(sim)), levels = lab_v))
+ggplot(vdat, aes(x = Method, y = v, fill = Method)) +
+  geom_violin() +
+  geom_hline(yintercept = mc_var, colour = "red", linewidth = 0.8) +
+  scale_fill_manual(values = c("lightgreen", "salmon")) +
+  scale_x_discrete(labels = c("Hájek", "With-replacement")) +
+  labs(x = NULL, y = "Estimated variance of the HT mean",
+       subtitle = sprintf("Red line: Monte Carlo true variance = %.2f", mc_var)) +
+  theme_bw() + theme(legend.position = "bottom", legend.direction = "vertical",
+                     legend.title = element_blank())
+```
+
 ```{r tbl-wo-summary}
 #| echo: false
 #| tbl-cap: "Estimates of the mean acres of farmland in 1992 per county from one sample of 100 counties drawn without replacement"
@@ -1041,6 +1063,8 @@ that. The Hájek and with-replacement SEs are `r round(est_ht_hajek["S.E."], 2)`
 `r round(est_ht_wr["S.E."], 2)`. Over the 2000 repeated samples the true standard error of the HT mean is
 `r round(mc_sd, 2)`, and the average estimated SEs are `r round(mean(sim[, "se_hajek"]), 2)` for the Hájek
 approximation and `r round(mean(sim[, "se_wr"]), 2)` for the with-replacement approximation, which
-is a little too large, as expected. The ratio of the total acres in 1992 to that in 1987 is
+is a little too large, as expected. The violin plots show the whole distribution of the two estimated variances,
+with the true variance (the variance of the 2000 HT estimates) as a red line: both are centred close to it,
+the with-replacement one slightly above. The ratio of the total acres in 1992 to that in 1987 is
 $\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/t_x=`r round(est_B_hajek["Est."], 3)`$
 (SE `r round(est_B_hajek["S.E."], 3)`, Hájek).
