@@ -57,72 +57,250 @@ $$
 \psi_i=\frac{x_i}{t_x}.
 $$
 
-**Hansen--Hurwitz estimator of the total.** On each draw, if unit $i$ is selected, then
+**The sample $\mathcal{R}$ and its observations $u_j^*$.** We make $n$ independent draws with
+replacement; on each draw, unit $i$ is selected with probability $\psi_i$. The sample, denoted
+$\mathcal{R}$ (not $\mathcal{S}$), is the list of the $n$ draws **including repeats**: a unit drawn twice
+appears twice. For every unit of the population define
 $$
-u_i=\frac{y_i}{\psi_i}
+u_i=\frac{y_i}{\psi_i},\qquad i=1,\ldots,N,
 $$
-is an unbiased estimate of $t$ by itself, since
-$E(u)=\sum_{i=1}^N\psi_i\,(y_i/\psi_i)=\sum_{i=1}^N y_i=t$. The $n$ draws are independent, so the HH
-estimator is their average, and its variance is estimated by the sample variance of the $u_i$ divided by $n$:
+and let $u_j^*$ denote the value of $u$ for the unit selected on the $j$th draw, that is, the $j$th
+observation in $\mathcal{R}$ ($j=1,\ldots,n$). The star reminds us that $u_j^*$ is indexed by the draw,
+not by the population unit: $u_j^*$ is random, while $u_1,\ldots,u_N$ are fixed numbers.
+
+**Sampling distribution of $u_j^*$.** On every draw, $u_j^*$ equals $u_i$ exactly when unit $i$ is
+selected, so $u_j^*$ is a discrete random variable with distribution
+
+| Unit selected on draw $j$ | $1$ | $2$ | $\cdots$ | $N$ |
+|:---|:---:|:---:|:---:|:---:|
+| Value of $u_j^*$ | $y_1/\psi_1$ | $y_2/\psi_2$ | $\cdots$ | $y_N/\psi_N$ |
+| Probability | $\psi_1$ | $\psi_2$ | $\cdots$ | $\psi_N$ |
+
+(if several units have the same value of $u_i$, their probabilities add up). Since the draws are made
+with replacement, the probabilities do not change from draw to draw, and $u_1^*,\ldots,u_n^*$ are
+**independent and identically distributed** (iid) with this distribution. Its mean and variance are
 $$
-\hat{t}_{\mathrm{HH}}=\frac{1}{n}\sum_{i=1}^n\frac{y_i}{\psi_i},\qquad
+E(u_j^*)=\sum_{i=1}^N\psi_i\,\frac{y_i}{\psi_i}=\sum_{i=1}^N y_i=t,\qquad
+V(u_j^*)=\sum_{i=1}^N\psi_i\left(\frac{y_i}{\psi_i}-t\right)^2=\sum_{i=1}^N\frac{y_i^2}{\psi_i}-t^2 .
+$$
+A single draw is therefore an unbiased estimate of $t$, and it is a precise one when $u_i=y_i/\psi_i$ is
+nearly the same for all units, that is, when $\psi_i$ is nearly proportional to $y_i$.
+
+**Hansen--Hurwitz estimator of the total.** The HH estimator is the average of the $n$ observations
+in $\mathcal{R}$:
+$$
+\hat{t}_{\mathrm{HH}}=\frac{1}{n}\sum_{j=1}^n u_j^*=\bar{u}^* .
+$$
+Being the mean of $n$ iid copies of $u_j^*$, it is unbiased, and its variance is that of one draw
+divided by $n$:
+$$
+E(\hat{t}_{\mathrm{HH}})=t,\qquad
+V(\hat{t}_{\mathrm{HH}})=\frac{V(u_j^*)}{n}=\frac{1}{n}\sum_{i=1}^N\psi_i\left(\frac{y_i}{\psi_i}-t\right)^2 .
+$$
+There is no finite population correction, since the draws are independent. For the same reason, the
+sample variance of the $u_j^*$ is an unbiased estimate of $V(u_j^*)$, which gives
+$$
 \widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt{n}},\qquad
-s_u^2=\frac{1}{n-1}\sum_{i=1}^n\left(\frac{y_i}{\psi_i}-\hat{t}_{\mathrm{HH}}\right)^2 .
-$$
-Dividing by $N$ gives the estimator of the mean per unit and its standard error:
-$$
-\hat{\bar{y}}_{\mathrm{HH}}=\frac{\hat{t}_{\mathrm{HH}}}{N},\qquad
-\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\frac{\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})}{N}.
+s_u^2=\frac{1}{n-1}\sum_{j=1}^n\left(u_j^*-\bar{u}^*\right)^2 .
 $$
 
-**Why construct $\psi_i$ from $x_i$.** With $\psi_i=x_i/t_x$, each draw gives
+**Mean per unit.** Dividing by $N$ gives the estimator of $\bar{y}_U=t/N$, its variance, and its
+standard error:
 $$
-u_i=\frac{y_i}{\psi_i}=t_x\,\frac{y_i}{x_i},
+\hat{\bar{y}}_{\mathrm{HH}}=\frac{\hat{t}_{\mathrm{HH}}}{N}=\frac{1}{n}\sum_{j=1}^n\frac{u_j^*}{N},\qquad
+V(\hat{\bar{y}}_{\mathrm{HH}})=\frac{1}{n}\sum_{i=1}^N\psi_i\left(\frac{y_i}{N\psi_i}-\bar{y}_U\right)^2,\qquad
+\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\frac{s_u}{N\sqrt{n}} .
 $$
-so the HH estimator is the known total $t_x$ times the *mean of the ratios* $y_i/x_i$ of the sampled units:
-$$
-\hat{t}_{\mathrm{HH}}=t_x\cdot\frac{1}{n}\sum_{i=1}^n\frac{y_i}{x_i}.
-$$
-Its variance is $V(\hat{t}_{\mathrm{HH}})=\frac{1}{n}\sum_{i=1}^N\psi_i\,(y_i/\psi_i-t)^2$, which is small when
-$u_i$ is nearly constant, that is, when $y_i$ is nearly proportional to $x_i$.
 
-**Comparison with the ratio estimator.** Under a simple random sample (SRS) of $n$ units, the ratio
-estimator also uses $x_i$:
+**In terms of the auxiliary variable $x_i$.** Substituting $\psi_i=x_i/t_x$ gives
+$y_i/(N\psi_i)=\bar{x}_U\,y_i/x_i$, where $\bar{x}_U=t_x/N$. Write the ratio of unit $i$ as
 $$
-\hat{t}_r=t_x\,\hat{B},\qquad \hat{B}=\frac{\sum_{i=1}^n y_i}{\sum_{i=1}^n x_i},
+q_i=\frac{y_i}{x_i},\qquad i=1,\ldots,N,
 $$
-the known total $t_x$ times the *ratio of the sample totals*. Both estimate $t=B\,t_x$ with $B=t/t_x$,
-and both work well when $y_i\approx Bx_i$, but they use $x_i$ in different ways:
+and $q_j^*$ for the ratio of the unit selected on draw $j$. Like $u_j^*$, the $q_j^*$ are iid, taking the
+value $q_i$ with probability $\psi_i=x_i/t_x$, so their mean and variance are
+$$
+E(q_j^*)=\sum_{i=1}^N\frac{x_i}{t_x}\cdot\frac{y_i}{x_i}=\frac{t}{t_x}=B,\qquad
+S_q^2=V(q_j^*)=\sum_{i=1}^N\psi_i\,(q_i-B)^2 ,
+$$
+where $B=t/t_x=\bar{y}_U/\bar{x}_U$ is the population ratio. The HH estimator is the known mean
+$\bar{x}_U$ times the *mean of the ratios* in $\mathcal{R}$, and its variance is $\bar{x}_U^2$ times that
+of $\bar{q}^*$:
+$$
+\boxed{\;
+\begin{aligned}
+\hat{\bar{y}}_{\mathrm{HH}}&=\bar{x}_U\,\bar{q}^*,\qquad
+&\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{S_q}{\sqrt{n}},\qquad
+&\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{s_q}{\sqrt{n}},\\[4pt]
+\hat{t}_{\mathrm{HH}}&=t_x\,\bar{q}^*,\qquad
+&\mathrm{SE}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{S_q}{\sqrt{n}},\qquad
+&\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{s_q}{\sqrt{n}},
+\end{aligned}\;}
+$$
+where $\hat{t}_{\mathrm{HH}}=N\hat{\bar{y}}_{\mathrm{HH}}$, and the theoretical SE uses $S_q$ while the
+estimated SE replaces it by the sample standard deviation of the ratios in $\mathcal{R}$:
+$$
+\bar{q}^*=\frac{1}{n}\sum_{j=1}^n q_j^*,\qquad
+s_q^2=\frac{1}{n-1}\sum_{j=1}^n\left(q_j^*-\bar{q}^*\right)^2 .
+$$
+To compare with the ratio estimator, let $d_i=y_i-Bx_i$ be the population residuals about the line
+through the origin $y=Bx$, which satisfy $\sum_{i=1}^N d_i=0$. Since $q_i-B=d_i/x_i$,
+$$
+V(\hat{\bar{y}}_{\mathrm{HH}})=\frac{\bar{x}_U^2S_q^2}{n}
+=\frac{\bar{x}_U^2}{n}\sum_{i=1}^N\frac{x_i}{t_x}\cdot\frac{d_i^2}{x_i^2}
+=\frac{1}{nN}\sum_{i=1}^N\frac{\bar{x}_U}{x_i}\,d_i^2 .
+$$
+The variance is small when $y_i$ is nearly proportional to $x_i$, so that all residuals $d_i$ are small.
 
-|  | Ratio estimator (SRS) | HH estimator (UPSWR) |
+**Comparison with the ratio estimator.** Under a simple random sample (SRS) of $n$ units without
+replacement, the ratio estimator (@sec-ratio-theory) also uses $x_i$:
+$$
+\hat{\bar{y}}_r=\bar{x}_U\,\frac{\bar{y}}{\bar{x}}=\bar{x}_U\,\frac{\sum_{i\in\mathcal{S}}y_i}{\sum_{i\in\mathcal{S}}x_i},
+\qquad
+\mathrm{MSE}(\hat{\bar{y}}_r)\approx\left(1-\frac{n}{N}\right)\frac{S_d^2}{n},\qquad
+S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
+$$
+with the same residuals $d_i$. Both estimators are the known mean $\bar{x}_U$ times an estimate of the
+ratio $B$, but they use $x_i$ in different ways:
+
+|  | Ratio estimator (SRS) | HH estimator (UPSWR, $\psi_i=x_i/t_x$) |
 |:---|:---|:---|
-| Selection | every unit has the same chance | unit $i$ has chance $\psi_i=x_i/t_x$ |
-| Estimator | $t_x\,\dfrac{\sum y_i}{\sum x_i}$ | $t_x\,\dfrac{1}{n}\sum\dfrac{y_i}{x_i}$ |
+| Selection | every unit has the same chance, without replacement | unit $i$ has chance $x_i/t_x$ on every draw |
+| Estimator of $\bar{y}_U$ | $\bar{x}_U\,\dfrac{\sum y_i}{\sum x_i}$ (ratio of the sample means) | $\bar{x}_U\,\dfrac{1}{n}\sum\dfrac{y_j^*}{x_j^*}$ (mean of the ratios) |
+| Variance | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N d_i^2$ (large $n$) | $\dfrac{\bar{x}_U^2S_q^2}{n}=\dfrac{1}{nN}\sum\limits_{i=1}^N\dfrac{\bar{x}_U}{x_i}\,d_i^2$ (exact) |
+| Estimated SE | $\dfrac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\dfrac{n}{N}\right)\dfrac{s_e^2}{n}}$, $\ s_e^2=\dfrac{\sum(y_i-\hat{B}x_i)^2}{n-1}$ | $\bar{x}_U\,\dfrac{s_q}{\sqrt{n}}$, $\ s_q^2=\dfrac{\sum(q_j^*-\bar{q}^*)^2}{n-1}$ |
 | $x_i$ is used at | the **estimation** stage | the **design** stage |
-| Needs | $x_i$ of the sampled units and $t_x$ | $x_i$ of all the units, to construct $\psi_i$ |
+| Needs | $x_i$ of the sampled units and $\bar{x}_U$ | $x_i$ of all the units, to construct $\psi_i$ |
 | Unbiased? | slightly biased | exactly unbiased |
 
-Both errors can be written with the residuals $e_i=y_i-Bx_i$ of the line through the origin. The
-draws of an HH estimator have the error
-$$
-\frac{y_i}{\psi_i}-t=t_x\,\frac{y_i-Bx_i}{x_i}=\frac{t_x}{x_i}\,e_i ,
-$$
-which averages to zero over the draws (a unit is drawn with probability $x_i/t_x$, and
-$\sum_i e_i=0$), so HH is unbiased. The draws are independent, so
-$$
-V(\hat{t}_{\mathrm{HH}})=\frac{1}{n}\sum_{i=1}^N\psi_i\left(\frac{t_x}{x_i}e_i\right)^2
-=\frac{N}{n}\sum_{i=1}^N e_i^2\,\frac{\bar{x}_U}{x_i}\quad(\bar{x}_U=t_x/N).
-$$
-For the ratio estimator, $\sum_{i=1}^n y_i-B\sum_{i=1}^n x_i=\sum_{i=1}^n e_i$, so
-$\hat{t}_r-t=(t_x/\sum x_i)\sum_{i=1}^n e_i\approx N\bar{e}$, the SRS mean of the residuals times $N$, and
-ignoring the finite population correction,
-$$
-V(\hat{t}_r)\approx\frac{N}{n}\sum_{i=1}^N e_i^2 .
-$$
-The two variances differ only by the weight $\bar{x}_U/x_i$ on each squared residual. Under UPSWR,
-units larger than average count less and smaller ones count more. UPSWR therefore wins when the large
-residuals belong to the large units, that is, when the spread of $y_i$ about the line grows with $x_i$, as it
-does for county acreages. When the spread is the same for all $x_i$, the SRS ratio estimator does better.
+For the totals, multiply the estimators by $N$ and the variances by $N^2$. Ignoring the finite population
+correction and the difference between $N-1$ and $N$, the two variances differ only by the weight
+$\bar{x}_U/x_i$ on each squared residual. Under UPSWR, units larger than average count less and smaller
+ones count more. UPSWR therefore wins when the large residuals belong to the large units, that is, when
+the spread of $y_i$ about the line grows with $x_i$, as it does for county acreages. When the spread is
+the same for all $x_i$, the SRS ratio estimator does better. When $y_i$ is not related to $x_i$ at all,
+all the residuals are large and both estimators can be worse than the plain SRS mean
+(@sec-ups-toy).
+
+### Toy Example: Four Supermarkets {#sec-ups-toy}
+
+A town has four supermarkets, with floor areas $x_i$ from $100\,\text{m}^2$ to $1000\,\text{m}^2$, so
+$t_x=1600$ and $\bar{x}_U=400$. We want to estimate the mean monthly sales per store, $\bar{y}_U$. To see
+how the three estimators use $x_i$, we compare their variances for a **single draw** ($n=1$); for $n$
+draws, each is divided by $n$. For the two SRS estimators we take $N=\infty$, that is, we ignore the
+finite population correction, so a single draw has the variance of one value drawn with equal
+probabilities $1/N$:
+
+| Estimator | Design | One-draw variance |
+|:---|:---|:---|
+| HH, $\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\,q_j^*$ | PPS, $\psi_i=x_i/t_x$ | $\bar{x}_U^2S_q^2=\bar{x}_U^2\sum\limits_{i=1}^N\psi_i(q_i-B)^2$ |
+| Ratio, $\hat{\bar{y}}_r=\bar{x}_U\,y_i/x_i$ | SRS | $\approx S_d^2=\dfrac{1}{N}\sum\limits_{i=1}^N d_i^2$ |
+| Sample mean, $\bar{y}=y_i$ | SRS | $S_y^2=\dfrac{1}{N}\sum\limits_{i=1}^N (y_i-\bar{y}_U)^2$ |
+
+Here $S_d^2$ and $S_y^2$ use the divisor $N$ instead of $N-1$, as befits $N=\infty$. The three variances
+measure the spread of $y$ about three different centres: the sample mean about the flat line
+$\bar{y}_U$, the ratio estimator about the line $y=Bx$, and HH about the same line but with the weights
+$\psi_i$ on the squared ratio deviations, which equals $\frac1N\sum(\bar{x}_U/x_i)d_i^2$.
+
+```{r toy-functions}
+#| cache: false
+# Working table for the three one-draw variances
+toy_table <- function(store, x, y) {
+  psi <- x / sum(x)
+  B <- sum(y) / sum(x)
+  q <- y / x
+  d <- y - B * x
+  tab <- data.frame(Store = store, x = x, y = y, psi = psi, q = q,
+                    wq = psi * (q - B)^2, d = d, d2 = d^2,
+                    dy = y - mean(y), dy2 = (y - mean(y))^2)
+  sums <- data.frame(Store = "**Sum**", lapply(tab[-1], sum))
+  sums$q <- NA                                       # a sum of ratios means nothing
+  rbind(tab, sums)
+}
+
+show_toy_table <- function(tab) {
+  options(knitr.kable.NA = "")
+  knitr::kable(tab, digits = c(0, 0, 0, 4, 4, 6, 2, 2, 2, 2),
+               format.args = list(big.mark = ","),
+               col.names = c("Store", "$x_i$", "$y_i$", "$\\psi_i$", "$q_i=y_i/x_i$",
+                             "$\\psi_i(q_i-B)^2$", "$d_i=y_i-Bx_i$", "$d_i^2$",
+                             "$y_i-\\bar{y}_U$", "$(y_i-\\bar{y}_U)^2$"))
+}
+
+# The three one-draw variances, from the Sum row of the working table
+toy_variances <- function(tab) {
+  N <- nrow(tab) - 1
+  xbar_U <- tab$x[N + 1] / N
+  v <- c(HH = xbar_U^2 * tab$wq[N + 1], ratio = tab$d2[N + 1] / N, mean = tab$dy2[N + 1] / N)
+  data.frame(
+    Estimator = c("HH (PPS)", "Ratio (SRS)", "Sample mean (SRS)"),
+    Formula = c("$\\bar{x}_U^2S_q^2$", "$S_d^2=\\sum d_i^2/N$", "$S_y^2=\\sum(y_i-\\bar{y}_U)^2/N$"),
+    Variance = v,
+    `Relative to sample mean` = v / v["mean"],
+    check.names = FALSE
+  )
+}
+
+show_toy_variances <- function(vt) {
+  knitr::kable(vt, digits = c(0, 0, 1, 3), row.names = FALSE,
+               format.args = list(big.mark = ","))
+}
+```
+
+**Sales proportional to floor area.** The monthly sales (thousands of dollars) are nearly proportional
+to the floor areas, as in the slides for this chapter:
+
+```{r toy-good}
+#| cache: false
+store <- c("A", "B", "C", "D")
+x <- c(100, 200, 300, 1000)
+y_good <- c(11, 20, 24, 245)
+tab_good <- toy_table(store, x, y_good)
+show_toy_table(tab_good)
+```
+
+Here $t=300$, $\bar{y}_U=75$ and $B=300/1600=0.1875$. Dividing the sums of the last columns gives the
+three one-draw variances:
+
+```{r toy-good-var}
+#| cache: false
+var_good <- toy_variances(tab_good)
+show_toy_variances(var_good)
+```
+
+The sample mean ignores the floor areas, and its variance is dominated by store D, whose sales are far
+from $\bar{y}_U=75$. The ratio estimator measures each store against the line $y=Bx$ instead, which cuts
+the variance from `r format(var_good$Variance[3], big.mark = ",")` to
+`r round(var_good$Variance[2], 1)`. HH uses the same residuals, but weighs $d_i^2$ by $\bar{x}_U/x_i$; the
+largest residual, $d_D=57.5$, belongs to the largest store, whose weight is $400/1000=0.4$, so HH does better
+still, with `r round(var_good$Variance[1], 1)`.
+
+**Sales not related to floor area: a poor choice of $\psi_i$.** Now suppose the sales are about the same
+in all four stores, for example because the large store D is a warehouse outlet with few customers, while
+the total is still $t=300$. The floor area is then a poor size variable, but we still draw with
+$\psi_i=x_i/t_x$:
+
+```{r toy-bad}
+#| cache: false
+y_bad <- c(60, 80, 90, 70)
+tab_bad <- toy_table(store, x, y_bad)
+show_toy_table(tab_bad)
+```
+
+```{r toy-bad-var}
+#| cache: false
+var_bad <- toy_variances(tab_bad)
+show_toy_variances(var_bad)
+```
+
+The ordering is reversed. The sales hardly vary, so the sample mean has a tiny variance,
+`r round(var_bad$Variance[3], 1)`. The line $y=Bx$ fits the sales badly, so the residuals $d_i$ are large,
+and both estimators that rely on $y_i\propto x_i$ are more than
+`r floor(min(var_bad[[4]][1:2]))` times worse than the sample mean. The weights $\bar{x}_U/x_i$ do not help
+HH much here: the small stores A, B and C, which have large positive residuals, get weights $4$, $2$ and
+$4/3$, and store A, drawn only once in 16 draws, has its sales multiplied by $1/\psi_A=16$. Unequal
+probability sampling is only as good as the size variable used to construct $\psi_i$: before using PPS,
+check that $y_i$ is roughly proportional to $x_i$.
 
 ### Example: Physicians in U.S. Counties (`statepop.csv`) {#sec-ups-statepop}
 
