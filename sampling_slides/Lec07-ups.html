@@ -284,14 +284,17 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n(b_j^*-\bar b^*)^2 .
 </tbody>
 </table>
 </section>
-<section id="hh-estimator-in-terms-of-psi_i-the-weight" class="slide level2">
+<section id="hh-estimator-in-terms-of-psi_i-the-weight" class="slide level2 smaller">
 <h2>HH Estimator in Terms of <span class="math inline">\psi_i</span>: the Weight</h2>
-<p>For any selection probabilities <span class="math inline">\psi_i</span>, the HH estimator of the total is a <strong>weighted sum</strong> over the <span class="math inline">n</span> draws in <span class="math inline">\mathcal R</span> (repeats included): <span class="math display">
-\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*}=\sum_{j=1}^n w_j\,y_j^*,\qquad
-\boxed{w_j=\frac{1}{n\,\psi_j^*}}
-</span> Unit <span class="math inline">i</span> is expected to appear <span class="math inline">n\psi_i</span> times in <span class="math inline">\mathcal R</span>, so each draw of unit <span class="math inline">i</span> <strong>represents</strong> <span class="math inline">1/(n\psi_i)</span> units of the population. The estimated variance is <span class="math display">
+<p><strong>From <span class="math inline">\hat B_{\mathrm{HH}}</span></strong> (PPS, <span class="math inline">\psi_i=x_i/t_x</span>, so <span class="math inline">t_x/x_i=1/\psi_i</span>): <span class="math display">
+\begin{aligned}
+\hat t_{\mathrm{HH}}&amp;=t_x\hat B_{\mathrm{HH}}=t_x\,\frac1n\sum_{j=1}^n b_j^*
+=\frac1n\sum_{j=1}^n t_x\frac{y_j^*}{x_j^*}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*}\\
+&amp;=\sum_{j=1}^n w_j\,y_j^*,\qquad \boxed{w_j=\frac{1}{n\,\psi_j^*}}
+\end{aligned}
+</span> This is the HH estimator for <strong>any</strong> selection probabilities <span class="math inline">\psi_i</span>: a weighted sum over the <span class="math inline">n</span> draws in <span class="math inline">\mathcal R</span> (repeats included). Unit <span class="math inline">i</span> is expected to appear <span class="math inline">n\psi_i</span> times, so each draw of unit <span class="math inline">i</span> <strong>represents</strong> <span class="math inline">1/(n\psi_i)</span> units of the population. The estimated variance is <span class="math display">
 \hat V(\hat t_{\mathrm{HH}})=\frac{1}{n(n-1)}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2 .
-</span> With PPS, <span class="math inline">\psi_i=x_i/t_x</span>, the weight is <span class="math inline">w_i=t_x/(n\,x_i)</span>: large units get small weights.</p>
+</span> With PPS the weight is <span class="math inline">w_i=t_x/(n\,x_i)</span>: large units get small weights.</p>
 </section></section>
 <section>
 <section id="comparison-of-the-hh-ratio-and-average-estimators" class="title-slide slide level1 center" data-number="2">
