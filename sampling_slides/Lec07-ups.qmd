@@ -180,7 +180,7 @@ $$
 $$
 weights $w^x_i$ that do not add up to one.
 
-## Comparison of the Three Estimators of $B$ {.smaller}
+## Comparison of the Three Estimators of $B$ 
 
 | Estimator | Estimator of $B$ | $x_i$ used at | Unbiased? |
 |:---|:--:|:---|:---|
@@ -211,7 +211,7 @@ HH divides the ratio estimator's term by $w^x_i$: units larger than average ($w^
 smaller ones are upweighted, because large units are already drawn more often. UPSWR wins when the large
 residuals $y_i-Bx_i$ belong to the large units.
 
-## Toy Example: Four Supermarkets, One-Draw Variances {.smaller}
+## Toy Example: Four Supermarkets, One-Draw Variances 
 
 $t_x=1600$, $\bar x_U=400$, $B=300/1600=0.1875$. Sales nearly proportional to floor area:
 
@@ -226,16 +226,16 @@ $t_x=1600$, $\bar x_U=400$, $B=300/1600=0.1875$. Sales nearly proportional to fl
 HH $<$ ratio $\ll$ sample average. If the sales were unrelated to the floor area, the ordering reverses
 (average $0.00078$, ratio $0.0288$, HH $0.0273$): **the size variable must be tied to $y$**.
 
-# Computation Example: Revenue from AI Token Usage
+# Example: Revenue from AI Token Usage
 
-## Setup and Sample {.smaller}
+## Setup and Sample 
 
 An AI company has $N=6$ customers; the tokens $x_i$ (millions) are known for all, the revenue $y_i$
 (thousand dollars) is only observed for the sampled customers. Draw $n=5$ customers with replacement,
 $\psi_i=x_i/t_x$ ($t_x=100$, $\bar x_U=16.67$). The sample is $\mathcal R=\{F,E,F,D,C\}$:
 
 | Draw $j$ | Customer | $x_j^*$ | $y_j^*$ | $b_j^*=y_j^*/x_j^*$ | $b_j^*-\bar b^*$ | $(b_j^*-\bar b^*)^2$ |
-|:--:|:--:|--:|--:|--:|--:|--:|
+|:--:|:--:|--:|--:|----:|----:|----:|
 | 1 | F | 40 | 190 | 4.7500 | $-0.1417$ | 0.020069 |
 | 2 | E | 30 | 155 | 5.1667 | 0.2750 | 0.075625 |
 | 3 | F | 40 | 190 | 4.7500 | $-0.1417$ | 0.020069 |
@@ -243,7 +243,7 @@ $\psi_i=x_i/t_x$ ($t_x=100$, $\bar x_U=16.67$). The sample is $\mathcal R=\{F,E,
 | 5 | C | 8 | 41 | 5.1250 | 0.2333 | 0.054444 |
 | **Sum** | | | | **24.4583** | 0 | **0.220833** |
 
-## Estimates {.smaller}
+## Estimates 
 
 $$
 \hat B_{\mathrm{HH}}=\bar b^*=\frac{24.4583}{5}=4.8917,\qquad
@@ -283,7 +283,7 @@ means** (large clusters are already selected more often), with $\widehat{\mathrm
 | Mean per cluster $t/N$ | $\bar M_U\,\hat B_{\mathrm{HH}}$ | $\bar M_U\,s_{b^*}/\sqrt n$ |
 | Total $t$ | $M_0\,\hat B_{\mathrm{HH}}$ | $M_0\,s_{b^*}/\sqrt n$ |
 
-## Computation Example: Falls in Long-Term Care Homes {.smaller}
+## Example: Falls in Long-Term Care Homes 
 
 $N=40$ homes, $M_0=3000$ residents ($\bar M_U=75$). $n=8$ draws with $\psi_i=M_i/M_0$; every resident of a
 selected home is reviewed ($t_i$ = falls in the home). Home H12 is drawn twice (same $t_i$):
@@ -343,7 +343,7 @@ mean per cluster $\bar M_U\hat B_{\mathrm{HH}}$ and total $M_0\hat B_{\mathrm{HH
 choice of clusters and the choice of elements within them.
 :::
 
-## Computation Example: Care Homes with Subsamples {.smaller}
+## Example: Care Homes with Subsamples 
 
 Same eight draws, but $m_j^*=20$ residents are sampled per draw (15 for H19), recording their falls. H12 is
 drawn twice, with different subsample means:
@@ -418,12 +418,12 @@ which ignores the factors $1-\pi_i$ and is a little too large.
 
 For the mean divide the SE by $N$; for $\hat B_{\mathrm{HT}}$ divide by $t_x$.
 
-## Computation Example: HT Estimate and Variances {.smaller}
+## Example: HT Estimate and Variances 
 
 $N=20$ units, a sample of $n=4$ units with inclusion probabilities $\pi_i$:
 
 | $i$ | $y_i$ | $\pi_i$ | $u_i=y_i/\pi_i$ | $(1-\pi_i)u_i$ | $(1-\pi_i)(u_i-A)^2$ | $(u_i-\hat t_{\mathrm{HT}}/n)^2$ |
-|:--:|--:|--:|--:|--:|--:|--:|
+|:--:|--:|--:|------------:|------------:|----------------------:|-----------------:|
 | 1 | 12 | 0.10 | 120.00 | 108.00 | 17.08 | 12.8 |
 | 2 | 30 | 0.20 | 150.00 | 120.00 | 526.1 | 698.5 |
 | 3 | 40 | 0.35 | 114.29 | 74.29 | 65.9 | 86.2 |
@@ -433,8 +433,10 @@ $N=20$ units, a sample of $n=4$ units with inclusion probabilities $\pi_i$:
 $\hat t_{\mathrm{HT}}=494.29$, mean $494.29/20=24.71$; $A=379.29/3.05=124.36$, and
 
 $$
-\hat V_{\mathrm H}=\tfrac43\times753.4=1004.5\ (\mathrm{SE}=31.7),\qquad
-\hat V_{\mathrm{WR}}=\tfrac43\times981.6=1308.8\ (\mathrm{SE}=36.2).
+\begin{aligned}
+\hat V_{\mathrm H}&=\tfrac43\times753.4=1004.5\ (\mathrm{SE}=31.7),\\
+\hat V_{\mathrm{WR}}&=\tfrac43\times981.6=1308.8\ (\mathrm{SE}=36.2).
+\end{aligned}
 $$
 SE of the mean: $31.7/20=1.58$ (Hájek), $36.2/20=1.81$ (WR).
 

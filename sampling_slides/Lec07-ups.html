@@ -337,7 +337,7 @@ V(\hat t_{\mathrm{HH}})&amp;=t_x^2\,V(\hat B_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\
 </span> weights <span class="math inline">w^x_i</span> that do not add up to one.</p></li>
 </ul>
 </section>
-<section id="comparison-of-the-three-estimators-of-b" class="slide level2 smaller">
+<section id="comparison-of-the-three-estimators-of-b" class="slide level2">
 <h2>Comparison of the Three Estimators of <span class="math inline">B</span></h2>
 <table class="caption-top">
 <colgroup>
@@ -419,7 +419,7 @@ V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2
 </table>
 <p>HH divides the ratio estimator’s term by <span class="math inline">w^x_i</span>: units larger than average (<span class="math inline">w^x_i&gt;1</span>) are <strong>downweighted</strong>, smaller ones are upweighted, because large units are already drawn more often. UPSWR wins when the large residuals <span class="math inline">y_i-Bx_i</span> belong to the large units.</p>
 </section>
-<section id="toy-example-four-supermarkets-one-draw-variances" class="slide level2 smaller">
+<section id="toy-example-four-supermarkets-one-draw-variances" class="slide level2">
 <h2>Toy Example: Four Supermarkets, One-Draw Variances</h2>
 <p><span class="math inline">t_x=1600</span>, <span class="math inline">\bar x_U=400</span>, <span class="math inline">B=300/1600=0.1875</span>. Sales nearly proportional to floor area:</p>
 <table class="caption-top" style="width:100%;">
@@ -508,22 +508,22 @@ V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2
 <p>HH <span class="math inline">&lt;</span> ratio <span class="math inline">\ll</span> sample average. If the sales were unrelated to the floor area, the ordering reverses (average <span class="math inline">0.00078</span>, ratio <span class="math inline">0.0288</span>, HH <span class="math inline">0.0273</span>): <strong>the size variable must be tied to <span class="math inline">y</span></strong>.</p>
 </section></section>
 <section>
-<section id="computation-example-revenue-from-ai-token-usage" class="title-slide slide level1 center" data-number="3">
-<h1><span class="header-section-number">3</span> Computation Example: Revenue from AI Token Usage</h1>
+<section id="example-revenue-from-ai-token-usage" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Example: Revenue from AI Token Usage</h1>
 
 </section>
-<section id="setup-and-sample" class="slide level2 smaller">
+<section id="setup-and-sample" class="slide level2">
 <h2>Setup and Sample</h2>
 <p>An AI company has <span class="math inline">N=6</span> customers; the tokens <span class="math inline">x_i</span> (millions) are known for all, the revenue <span class="math inline">y_i</span> (thousand dollars) is only observed for the sampled customers. Draw <span class="math inline">n=5</span> customers with replacement, <span class="math inline">\psi_i=x_i/t_x</span> (<span class="math inline">t_x=100</span>, <span class="math inline">\bar x_U=16.67</span>). The sample is <span class="math inline">\mathcal R=\{F,E,F,D,C\}</span>:</p>
 <table class="caption-top">
 <colgroup>
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 10%">
+<col style="width: 10%">
 <col style="width: 17%">
 <col style="width: 17%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
+<col style="width: 17%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -594,7 +594,7 @@ V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2
 </tbody>
 </table>
 </section>
-<section id="estimates" class="slide level2 smaller">
+<section id="estimates" class="slide level2">
 <h2>Estimates</h2>
 <p><span class="math display">
 \hat B_{\mathrm{HH}}=\bar b^*=\frac{24.4583}{5}=4.8917,\qquad
@@ -681,8 +681,8 @@ b_i=\frac{t_i}{M_i}=\bar y_i ,\qquad B=\frac{t}{M_0}=\bar y_U\ \ (\text{mean per
 </tbody>
 </table>
 </section>
-<section id="computation-example-falls-in-long-term-care-homes" class="slide level2 smaller">
-<h2>Computation Example: Falls in Long-Term Care Homes</h2>
+<section id="example-falls-in-long-term-care-homes" class="slide level2">
+<h2>Example: Falls in Long-Term Care Homes</h2>
 <p><span class="math inline">N=40</span> homes, <span class="math inline">M_0=3000</span> residents (<span class="math inline">\bar M_U=75</span>). <span class="math inline">n=8</span> draws with <span class="math inline">\psi_i=M_i/M_0</span>; every resident of a selected home is reviewed (<span class="math inline">t_i</span> = falls in the home). Home H12 is drawn twice (same <span class="math inline">t_i</span>):</p>
 <div class="columns">
 <div class="column" style="width:58%;">
@@ -819,8 +819,8 @@ s_{\bar y^*}^2=\frac{1}{n-1}\sum_{j=1}^n(\bar y_j^*-\bar y^*)^2 ,
 </div>
 </div>
 </section>
-<section id="computation-example-care-homes-with-subsamples" class="slide level2 smaller">
-<h2>Computation Example: Care Homes with Subsamples</h2>
+<section id="example-care-homes-with-subsamples" class="slide level2">
+<h2>Example: Care Homes with Subsamples</h2>
 <p>Same eight draws, but <span class="math inline">m_j^*=20</span> residents are sampled per draw (15 for H19), recording their falls. H12 is drawn twice, with different subsample means:</p>
 <div class="columns">
 <div class="column" style="width:58%;">
@@ -972,18 +972,18 @@ A=\frac{\sum_{\mathcal S}(1-\pi_i)u_i}{\sum_{\mathcal S}(1-\pi_i)}</span></li>
 </ul>
 <p>For the mean divide the SE by <span class="math inline">N</span>; for <span class="math inline">\hat B_{\mathrm{HT}}</span> divide by <span class="math inline">t_x</span>.</p>
 </section>
-<section id="computation-example-ht-estimate-and-variances" class="slide level2 smaller">
-<h2>Computation Example: HT Estimate and Variances</h2>
+<section id="example-ht-estimate-and-variances" class="slide level2">
+<h2>Example: HT Estimate and Variances</h2>
 <p><span class="math inline">N=20</span> units, a sample of <span class="math inline">n=4</span> units with inclusion probabilities <span class="math inline">\pi_i</span>:</p>
 <table class="caption-top" style="width:100%;">
 <colgroup>
-<col style="width: 18%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
+<col style="width: 5%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 29%">
+<col style="width: 23%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1046,8 +1046,10 @@ A=\frac{\sum_{\mathcal S}(1-\pi_i)u_i}{\sum_{\mathcal S}(1-\pi_i)}</span></li>
 </table>
 <p><span class="math inline">\hat t_{\mathrm{HT}}=494.29</span>, mean <span class="math inline">494.29/20=24.71</span>; <span class="math inline">A=379.29/3.05=124.36</span>, and</p>
 <p><span class="math display">
-\hat V_{\mathrm H}=\tfrac43\times753.4=1004.5\ (\mathrm{SE}=31.7),\qquad
-\hat V_{\mathrm{WR}}=\tfrac43\times981.6=1308.8\ (\mathrm{SE}=36.2).
+\begin{aligned}
+\hat V_{\mathrm H}&amp;=\tfrac43\times753.4=1004.5\ (\mathrm{SE}=31.7),\\
+\hat V_{\mathrm{WR}}&amp;=\tfrac43\times981.6=1308.8\ (\mathrm{SE}=36.2).
+\end{aligned}
 </span> SE of the mean: <span class="math inline">31.7/20=1.58</span> (Hájek), <span class="math inline">36.2/20=1.81</span> (WR).</p>
 </section></section>
 <section>
