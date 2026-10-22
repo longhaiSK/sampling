@@ -925,17 +925,17 @@ $E(I_i)=P(I_i=1)=\pi_i$. Then $\hat{t}_{\mathrm{HT}}=\sum_{i=1}^N I_i\,y_i/\pi_i
 $$
 E(\hat{t}_{\mathrm{HT}})=\sum_{i=1}^N\frac{y_i}{\pi_i}\,E(I_i)=\sum_{i=1}^N\frac{y_i}{\pi_i}\,\pi_i=\sum_{i=1}^N y_i=t .
 $$
-This needs only $\pi_i>0$ for all units. The estimators of the mean per unit and of the ratio of the totals of two
-variables $y$ and $x$ follow by applying the HT estimator to each total:
+This needs only $\pi_i>0$ for all units. The estimator of the mean per unit is
+$\hat{t}_{\mathrm{HT}}/N$. When the inclusion probabilities are proportional to a size variable $x_i$,
+$\pi_i=n\,x_i/t_x$, the estimator of the ratio $B=t/t_x$ is, as for UPSWR, the HT total divided by $t_x$,
 $$
-\hat{\bar{y}}_{\mathrm{HT}}=\frac{\hat{t}_{\mathrm{HT}}}{N},\qquad
-\hat{B}_{\mathrm{HT}}=\frac{\hat{t}_{y,\mathrm{HT}}}{\hat{t}_{x,\mathrm{HT}}}
-=\frac{\sum_{i\in\mathcal{S}}y_i/\pi_i}{\sum_{i\in\mathcal{S}}x_i/\pi_i}.
+\hat{B}_{\mathrm{HT}}=\frac{\hat{t}_{\mathrm{HT}}}{t_x}=\frac{1}{t_x}\sum_{i\in\mathcal{S}}\frac{y_i}{\pi_i}
+=\frac{1}{n}\sum_{i\in\mathcal{S}}\frac{y_i}{x_i}=\frac{1}{n}\sum_{i\in\mathcal{S}}b_i ,
 $$
-For the mean per element of clusters, take $y_i=t_i$ and $x_i=M_i$ (@sec-ups-cluster-theory), which gives
-$\hat{B}_{\mathrm{HT}}=\sum t_i/\pi_i\big/\sum M_i/\pi_i$. If $\pi_i\propto M_i$, the denominator is the known
-constant $M_0$, and the ratio again collapses to the HT estimate of the total divided by $M_0$, as in
-UPSWR. The ratio is slightly biased, like every ratio estimator.
+the plain average of the ratios $b_i=y_i/x_i$ of the $n$ sampled units, with
+$\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HT}})=\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HT}})/t_x$. In cluster sampling, $y_i=t_i$ and
+$x_i=M_i$, so that $\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/M_0$ is the mean per element
+(@sec-ups-cluster-theory).
 
 **Variances.** For a fixed sample size, with the joint inclusion probabilities $\pi_{ij}=P(i,j\in\mathcal{S})$,
 $$
@@ -967,9 +967,7 @@ only $\pi_i$ are used:
   It ignores the factors $1-\pi_i$ that account for sampling without replacement, so it overestimates the
   variance, the more so the larger the $\pi_i$.
 
-For the mean per unit, divide the estimate and the SE by $N$. For the ratio $\hat{B}_{\mathrm{HT}}$, apply the
-variance estimators to the residuals $e_i=y_i-\hat{B}_{\mathrm{HT}}x_i$ in place of $y_i$ and divide by $t_x$:
-$\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HT}})\approx\sqrt{\hat{V}(\hat{t}_{e,\mathrm{HT}})}\big/t_x$.
+For the mean per unit, divide the estimate and the SE by $N$; for the ratio $\hat{B}_{\mathrm{HT}}$, divide by $t_x$.
 
 ### Example: Acres of Farmland in Counties (`agpop.csv`) {#sec-ups-wo-example}
 
@@ -995,15 +993,14 @@ y <- agpop$acres92[s]; x <- agpop$acres87[s]; p <- pik[s]
 ```
 
 The mean per county, estimated by HT with the two variance estimators (the plain sample mean ignores the
-inclusion probabilities and is shown for contrast), and the ratio of the total acres in 1992 to that in 1987,
-with the mean per county from the ratio estimator:
+inclusion probabilities and is shown for contrast), and the ratio $\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/t_x$,
+the acres in 1992 per acre in 1987:
 
 ```{r wo-estimates}
 est_ht_hajek <- upswo_est(y, p, N, method = "mean", variance = "hajek")
 est_ht_wr    <- upswo_est(y, p, N, method = "mean", variance = "wr")
-est_ratio_hajek <- upswo_est(y, p, N, x, tx, method = "mean", variance = "hajek")
-est_B_hajek <- upswo_est(y, p, N, x, tx, method = "ratio", variance = "hajek")
-est_B_wr    <- upswo_est(y, p, N, x, tx, method = "ratio", variance = "wr")
+est_B_hajek <- upswo_est(y, p, N, tx, method = "ratio", variance = "hajek")
+est_B_wr    <- upswo_est(y, p, N, tx, method = "ratio", variance = "wr")
 ```
 
 To judge the variance estimators, we repeat the sampling 2000 times, and compute the standard deviation of the
@@ -1025,10 +1022,9 @@ for (i in 1:R) {
 #| tbl-cap: "Estimates of the mean acres of farmland in 1992 per county from one sample of 100 counties drawn without replacement"
 true_mean <- mean(agpop$acres92)
 tab <- data.frame(
-  Method = c("Sample mean (ignores $\\pi_i$)", "HT, Hájek variance", "HT, with-replacement variance",
-             "HT ratio, Hájek variance"),
-  Estimate = c(mean(y), est_ht_hajek["Est."], est_ht_wr["Est."], est_ratio_hajek["Est."]),
-  SE = c(sd(y) / sqrt(n), est_ht_hajek["S.E."], est_ht_wr["S.E."], est_ratio_hajek["S.E."]))
+  Method = c("Sample mean (ignores $\\pi_i$)", "HT, Hájek variance", "HT, with-replacement variance"),
+  Estimate = c(mean(y), est_ht_hajek["Est."], est_ht_wr["Est."]),
+  SE = c(sd(y) / sqrt(n), est_ht_hajek["S.E."], est_ht_wr["S.E."]))
 knitr::kable(tab, row.names = FALSE, digits = c(0, 1, 2),
              col.names = c("Method", "Estimate", "Estimated SE"))
 ```
@@ -1045,7 +1041,6 @@ that. The Hájek and with-replacement SEs are `r round(est_ht_hajek["S.E."], 2)`
 `r round(est_ht_wr["S.E."], 2)`. Over the 2000 repeated samples the true standard error of the HT mean is
 `r round(mc_sd, 2)`, and the average estimated SEs are `r round(mean(sim[, "se_hajek"]), 2)` for the Hájek
 approximation and `r round(mean(sim[, "se_wr"]), 2)` for the with-replacement approximation, which
-is a little too large, as expected. Since $\pi_i\propto x_i$, the HT ratio estimate of the mean,
-`r round(est_ratio_hajek["Est."], 1)`, equals the HT estimate, because $\sum_{i\in\mathcal{S}}x_i/\pi_i=t_x$ for
-every sample, and the ratio of the total acres in 1992 to that in 1987 is
-$\hat{B}_{\mathrm{HT}}=`r round(est_B_hajek["Est."], 3)`$ (SE `r round(est_B_hajek["S.E."], 3)`).
+is a little too large, as expected. The ratio of the total acres in 1992 to that in 1987 is
+$\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/t_x=`r round(est_B_hajek["Est."], 3)`$
+(SE `r round(est_B_hajek["S.E."], 3)`, Hájek).

@@ -938,41 +938,28 @@ ht_var <- function (y, pik, method = c ("hajek", "wr"))
     n / (n - 1) * sum ((u - sum (u) / n)^2)
 }
 
-## Horvitz-Thompson estimation for UPS without replacement (fixed sample size).
+## Horvitz-Thompson estimation for UPS without replacement (fixed sample size),
+## with pik = n x / tx_pop proportional to the size variable x.
 ## ydata, pik --- y and inclusion probabilities of the n sampled units
 ## N --- number of units in the population
-## xdata, tx_pop --- (for the ratio method) x of the sampled units and its
-##            population total
-## method --- "total": sum(y/pik), or tx_pop * Bhat if xdata is given
-##            "mean": the total divided by N
-##            "ratio": Bhat = sum(y/pik) / sum(x/pik), the HT ratio estimator
-##            (needs xdata and tx_pop; variance from the residuals
-##            e = y - Bhat x, V(Bhat) = V(that_e) / tx_pop^2)
+## tx_pop --- population total of x (needed for method = "ratio")
+## method --- "total": that = sum(y/pik)
+##            "mean": that / N
+##            "ratio": Bhat = that / tx_pop, the total of y per unit of x
 ## variance --- see ht_var()
-upswo_est <- function (ydata, pik, N, xdata = NULL, tx_pop = NULL,
+upswo_est <- function (ydata, pik, N, tx_pop = NULL,
                        method = c ("total", "mean", "ratio"),
                        variance = c ("hajek", "wr"))
 {
   method <- match.arg (method)
   variance <- match.arg (variance)
   n <- length (ydata)
+  if (method == "ratio" && is.null (tx_pop))
+    stop ("tx_pop is required for method = \"ratio\"")
 
-  if (is.null (xdata))
-  {
-    if (method == "ratio") stop ("xdata and tx_pop are required for method = \"ratio\"")
-    est <- sum (ydata / pik)
-    se <- sqrt (ht_var (ydata, pik, variance))
-    if (method == "mean") { est <- est / N; se <- se / N }
-  }
-  else
-  {
-    if (is.null (tx_pop)) stop ("tx_pop is required when xdata is given")
-    B <- sum (ydata / pik) / sum (xdata / pik)
-    se_B <- sqrt (ht_var (ydata - B * xdata, pik, variance)) / tx_pop
-    scale <- switch (method, ratio = 1, mean = tx_pop / N, total = tx_pop)
-    est <- scale * B
-    se <- scale * se_B
-  }
+  scale <- switch (method, total = 1, mean = 1 / N, ratio = 1 / tx_pop)
+  est <- scale * sum (ydata / pik)
+  se <- scale * sqrt (ht_var (ydata, pik, variance))
   mem <- qt (0.975, df = n - 1) * se
   c (Est. = est, S.E. = se, ci.low = est - mem, ci.upp = est + mem)
 }
