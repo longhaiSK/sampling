@@ -693,12 +693,14 @@ ggplot(sim_long, aes(x = Method, y = est, fill = Method)) +
 ### Shinylive App Comparing SRS and UPSWR {#sec-ups-app}
 
 The same simulation runs as a standalone app:
-[SRS (average and ratio) with UPSWR (Hansen–Hurwitz)](../shinylives_sampling/app-ups.html){target="_blank"}.
+[SRS (average and ratio) with UPSWR (Hansen–Hurwitz) and UPSWO (Horvitz–Thompson)](../shinylives_sampling/app-ups.html){target="_blank"}.
 It opens in a new tab, together with its documentation and the full
 [list of apps](../shinylives_sampling/index.html){target="_blank"}. Its
-"Variance reduction vs. SRS average" legend reports the variances of the ratio and HH estimators, simulated and
-theoretical, relative to the plain SRS average, and illustrates the comparison of the two variances in
-@sec-ups-hh-theory.
+"Variance reduction vs. SRS average" legend reports the variances of the ratio, HH and HT estimators, simulated and
+theoretical, relative to the plain SRS average, and illustrates the comparison of the variances in
+@sec-ups-compare. The app describes all the estimators through the ratios $b_i$, and for the UPSWO estimator
+it shows the coverage of the confidence intervals based on the Hájek and the with-replacement variance
+estimators (@sec-ups-wo).
 
 ## One-Stage Cluster Sampling with PPS {#sec-ups-cluster}
 

@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Longhai Li">
-<meta name="dcterms.date" content="2026-10-08">
-<meta name="description" content="SRS (average and ratio) with UPSWR (Hansen–Hurwitz)">
+<meta name="dcterms.date" content="2026-10-22">
+<meta name="description" content="SRS (average and ratio) with UPSWR (Hansen–Hurwitz) and UPSWO (Horvitz–Thompson, Hájek and with-replacement CIs)">
 
-<title>Shinylive App Comparing SRS (average and ratio) with UPSWR (Hansen–Hurwitz) – Shinylive Apps for Sampling Survey</title>
+<title>Shinylive App Comparing SRS (average and ratio) with UPSWR (Hansen–Hurwitz) and UPSWO (Horvitz–Thompson) – Shinylive Apps for Sampling Survey</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -185,12 +185,12 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Shinylive App Comparing SRS (average and ratio) with UPSWR (Hansen–Hurwitz)</h1>
+<h1 class="title">Shinylive App Comparing SRS (average and ratio) with UPSWR (Hansen–Hurwitz) and UPSWO (Horvitz–Thompson)</h1>
 </div>
 
 <div>
   <div class="description">
-    SRS (average and ratio) with UPSWR (Hansen–Hurwitz)
+    SRS (average and ratio) with UPSWR (Hansen–Hurwitz) and UPSWO (Horvitz–Thompson, Hájek and with-replacement CIs)
   </div>
 </div>
 
@@ -207,7 +207,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 8, 2026</p>
+      <p class="date">October 22, 2026</p>
     </div>
   </div>
   
@@ -277,10 +277,12 @@ ypl &lt;- yv + rnorm(N, 0, 0.004 * diff(range(yv)))
 rgy &lt;- range(ypl)
 
 ## ------------------------------------------------------------ estimator specs
-EST &lt;- c("srs", "ratio", "hh")
-LAB &lt;- c(srs = "SRS average", ratio = "SRS ratio", hh = "UPSWR HH")
-COL &lt;- c(srs = "#e07b39", ratio = "#2ca02c", hh = "#9467bd")
-PCH &lt;- c(srs = 17, ratio = 16, hh = 15)
+EST &lt;- c("srs", "ratio", "hh", "htH", "htW")
+LAB &lt;- c(srs = "SRS average", ratio = "SRS ratio", hh = "UPSWR HH",
+         htH = "UPSWO HT (Hajek)", htW = "UPSWO HT (WR)")
+COL &lt;- c(srs = "#e07b39", ratio = "#2ca02c", hh = "#9467bd",
+         htH = "#1f77b4", htW = "#8c564b")
+PCH &lt;- c(srs = 17, ratio = 16, hh = 15, htH = 18, htW = 25)
 
 col_samp &lt;- "#d62728"                # missed intervals and the population mean
 col_pts  &lt;- "blue"                   # sampled observations
@@ -397,6 +399,47 @@ violin &lt;- function(x, at, col, w = 0.32) {
 
 pct &lt;- function(v) if (is.na(v)) "--" else sprintf("%.1f%%", 100 * v)
 
+## ------------------------------------------------- UPS without replacement
+## inclusion probabilities pi_i = n m_i / sum(m), proportional to the size m;
+## a unit with n m_i / sum(m) &gt; 1 is included with certainty (pi_i = 1) and the
+## others are recomputed from the remaining sample size
+incl_prob &lt;- function(m, n) {
+  pik &lt;- rep(0, length(m))
+  cert &lt;- rep(FALSE, length(m))
+  repeat {
+    rest &lt;- !cert &amp; m &gt; 0
+    pik[rest] &lt;- (n - sum(cert)) * m[rest] / sum(m[rest])
+    new &lt;- rest &amp; pik &gt;= 1
+    if (!any(new)) break
+    cert &lt;- cert | new
+  }
+  pik[cert] &lt;- 1
+  pik
+}
+
+## fixed-size PPS sample without replacement: systematic sampling of the units
+## in random order, so that unit i is included with probability pi_i
+sys_pps &lt;- function(pik) {
+  o  &lt;- sample.int(length(pik))
+  f  &lt;- floor(c(0, cumsum(pik[o])) - runif(1))
+  o[which(diff(f) &gt; 0)]
+}
+
+## variance estimate of the HT total sum(y / pi) from the n sampled units:
+## "hajek": n/(n-1) sum (1 - pi)(y/pi - A)^2, A = sum (1 - pi) y/pi / sum (1 - pi)
+## "wr":    n/(n-1) sum (y/pi - that/n)^2, the with-replacement approximation
+ht_var &lt;- function(y, pik, method = c("hajek", "wr")) {
+  method &lt;- match.arg(method)
+  n &lt;- length(y)
+  u &lt;- y / pik
+  if (method == "hajek") {
+    A &lt;- sum((1 - pik) * u) / sum(1 - pik)
+    n / (n - 1) * sum((1 - pik) * (u - A)^2)
+  } else {
+    n / (n - 1) * sum((u - sum(u) / n)^2)
+  }
+}
+
 ## ---- inline SVG button icons (no font or icon-library dependency) ----------
 svg_icon &lt;- function(paths)
   HTML(sprintf(paste0('&lt;svg width="16" height="16" viewBox="0 0 16 16" ',
@@ -431,14 +474,16 @@ ui &lt;- fluidPage(
         checkboxGroupInput("show", "Estimators",
                            choices = c("SRS + average" = "srs",
                                        "SRS + ratio" = "ratio",
-                                       "UPSWR + HH ratio" = "hh"),
+                                       "UPSWR + HH" = "hh",
+                                       "UPSWO + HT, Hajek CI" = "htH",
+                                       "UPSWO + HT, WR CI" = "htW"),
                            selected = EST),
         sliderInput("n", "Sample size (n)", 10, 500, 100, step = 10)
       ),
       column(
         3,
         radioButtons("design", "Show sample from",
-                     choices = c("SRS" = "srs", "UPSWR" = "ups"),
+                     choices = c("SRS" = "srs", "UPSWR" = "ups", "UPSWO" = "uwo"),
                      selected = "ups", inline = TRUE),
         sliderInput("speed", "Samples per second", min = 1, max = 10, value = 5, step = 1),
         numericInput("nrep", "Stop after this many samples",
@@ -467,7 +512,7 @@ ui &lt;- fluidPage(
 ## ------------------------------------------------------------------- server
 server &lt;- function(input, output, session) {
 
-  rv &lt;- reactiveValues(s_srs = NULL, s_ups = NULL, n = 100, ests = NULL)
+  rv &lt;- reactiveValues(s_srs = NULL, s_ups = NULL, s_uwo = NULL, n = 100, ests = NULL)
   running &lt;- reactiveVal(FALSE)
 
   nrep &lt;- reactive({
@@ -498,12 +543,20 @@ server &lt;- function(input, output, session) {
                       cuty = cut_psi_share(ypl, psi))))
   })
 
-  se_theory &lt;- function(a, n)
-    sqrt(c(srs = 1 - n / N, ratio = 1 - n / N, hh = 1) * a$V / n)
+  ## theoretical SEs; for the HT estimator, Hajek's approximation
+  ## V = sum pi (1 - pi) (y/pi - R)^2, R = sum (1 - pi) y / sum pi (1 - pi)
+  se_theory &lt;- function(a, n) {
+    pk &lt;- incl_prob(a$m, n)
+    ps &lt;- pk &gt; 0
+    R  &lt;- sum((1 - pk[ps]) * yv[ps]) / sum(pk[ps] * (1 - pk[ps]))
+    se_ht &lt;- sqrt(sum(pk[ps] * (1 - pk[ps]) * (yv[ps] / pk[ps] - R)^2)) / N
+    c(sqrt(c(srs = 1 - n / N, ratio = 1 - n / N, hh = 1) * a$V / n),
+      htH = se_ht, htW = se_ht)
+  }
 
   ## one replication: an SRS (without replacement) feeding the average and the
   ## ratio estimator, and an independent PPS-with-replacement sample feeding HH
-  one_draw &lt;- function(a, n) {
+  one_draw &lt;- function(a, n, pik) {
     s   &lt;- sample.int(N, n)
     u   &lt;- sample.int(N, n, replace = TRUE, prob = a$psi)
     ys  &lt;- yv[s]
@@ -513,19 +566,28 @@ server &lt;- function(input, output, session) {
     Bhat &lt;- if (sum(xs) &gt; 0) sum(ys) / sum(xs) else 0
     z    &lt;- yv[u] / a$psi[u] / N          # each draw's estimate of the mean
 
+    ## UPSWO: fixed-size PPS sample without replacement, HT estimate of the mean
+    w     &lt;- sys_pps(pik)
+    ht    &lt;- sum(yv[w] / pik[w])
+    se_hw &lt;- sqrt(c(htH = ht_var(yv[w], pik[w], "hajek"),
+                    htW = ht_var(yv[w], pik[w], "wr"))) / N
+
     est &lt;- c(srs   = mean(ys),
              ratio = Bhat * a$xbar,
-             hh    = mean(z))
+             hh    = mean(z),
+             htH   = ht / N,
+             htW   = ht / N)
     se  &lt;- c(srs   = sqrt(fpc * var(ys) / n),
              ratio = (a$xbar / mean(xs)) * sqrt(fpc * var(ys - Bhat * xs) / n),
-             hh    = sd(z) / sqrt(n))
+             hh    = sd(z) / sqrt(n),
+             se_hw)
 
     e &lt;- c(setNames(est, paste0("est_", EST)),
            setNames(est - ZCRIT * se, paste0("lo_", EST)),
            setNames(est + ZCRIT * se, paste0("hi_", EST)),
            setNames(as.numeric(abs(est - ybarU) &lt;= ZCRIT * se), paste0("cov_", EST)),
-           Bhat = Bhat, Bhh = mean(yv[u] / a$m[u]))
-    list(s = s, u = u, e = e)
+           Bhat = Bhat, Bhh = mean(yv[u] / a$m[u]), Bht = ht / sum(a$m))
+    list(s = s, u = u, w = w, e = e)
   }
 
   ## draw k replications; only the last one's samples are kept for the left
@@ -534,12 +596,14 @@ server &lt;- function(input, output, session) {
     a &lt;- isolate(aux())
     n &lt;- isolate(input$n)
     E &lt;- vector("list", k)
+    pik &lt;- incl_prob(a$m, n)
     for (i in seq_len(k)) {
-      d &lt;- one_draw(a, n)
+      d &lt;- one_draw(a, n, pik)
       E[[i]] &lt;- d$e
     }
     rv$s_srs &lt;- d$s
     rv$s_ups &lt;- d$u
+    rv$s_uwo &lt;- d$w
     rv$n     &lt;- n
     rv$ests  &lt;- rbind(rv$ests, do.call(rbind, E))
   }
@@ -595,8 +659,9 @@ server &lt;- function(input, output, session) {
     M    &lt;- rv$ests
     nrep &lt;- NROW(M)
     cur  &lt;- M[nrep, ]
-    ups  &lt;- identical(input$design, "ups")
-    s    &lt;- if (ups) rv$s_ups else rv$s_srs
+    des  &lt;- input$design
+    ups  &lt;- des %in% c("ups", "uwo")          # views with M on the horizontal axis
+    s    &lt;- switch(des, ups = rv$s_ups, uwo = rv$s_uwo, rv$s_srs)
     xpos &lt;- setNames(0.02 + 0.04 * (seq_along(sel) - 1), sel)   # CI bar positions
 
     ## violin window, wide enough for the least precise estimator shown
@@ -634,16 +699,20 @@ server &lt;- function(input, output, session) {
     par(mar = c(4.2, 4.8, 3.0, 1.0))
     plot(NA, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE,
          xlab = paste0(if (ups) "M: " else "x: ", h$name, unit_lab(divx)),
-         ylab = paste0("t: acres92", unit_lab(divy)),
+         ylab = paste0("y: acres92", unit_lab(divy)),
          main = sprintf("Population and %s sample, n = %d",
-                        if (ups) "UPSWR" else "SRS", n))
+                        switch(des, ups = "UPSWR", uwo = "UPSWO", "SRS"), n))
     rect(0, tfy(lo), 1, tfy(hi), col = col_band, border = NA)
     points(tfx(h$v), tfy(ypl), pch = 16, cex = cexp, col = col_pop)
 
     draw_line(h$slope * xg, col = col_true, lwd = 1.8)
-    if (ups) {
+    if (des == "ups") {
       if ("hh" %in% sel)
         draw_line(cur[["Bhh"]] * xg, col = COL["hh"], lwd = 2, lty = 2)
+    } else if (des == "uwo") {
+      if (any(c("htH", "htW") %in% sel))
+        draw_line(cur[["Bht"]] * xg, col = COL[[intersect(c("htH", "htW"), sel)[1]]],
+                  lwd = 2, lty = 2)
     } else {
       if ("ratio" %in% sel)
         draw_line(cur[["Bhat"]] * xg, col = COL["ratio"], lwd = 2, lty = 2)
@@ -668,12 +737,14 @@ server &lt;- function(input, output, session) {
     box(); draw_axis(bky, 2, divy); draw_axis(bkx, 1, divx)
 
     leg &lt;- data.frame(l = c(if (ups) "size ~ psi = M / M0" else "size ~ 1/N (equal)",
-                            "sampled t"),
+                            "sampled y"),
                       c = c("grey55", col_pts), lt = NA, p = 16, w = NA)
-    leg &lt;- rbind(leg, data.frame(l = if (ups) "true t = (t/M0) M" else "true t = (t/tx) x",
+    leg &lt;- rbind(leg, data.frame(l = if (ups) "true y = B M" else "true y = B x",
                                  c = col_true, lt = 1, p = NA, w = 1.8))
-    if (ups &amp;&amp; "hh" %in% sel) leg &lt;- rbind(leg, data.frame(
-      l = "HH slope mean(t/M)", c = COL[["hh"]], lt = 2, p = NA, w = 2))
+    if (des == "ups" &amp;&amp; "hh" %in% sel) leg &lt;- rbind(leg, data.frame(
+      l = "HH slope mean(b)", c = COL[["hh"]], lt = 2, p = NA, w = 2))
+    if (des == "uwo" &amp;&amp; any(c("htH", "htW") %in% sel)) leg &lt;- rbind(leg, data.frame(
+      l = "HT slope mean(b)", c = COL[[intersect(c("htH", "htW"), sel)[1]]], lt = 2, p = NA, w = 2))
     if (!ups &amp;&amp; "ratio" %in% sel) leg &lt;- rbind(leg, data.frame(
       l = "ratio fit", c = COL[["ratio"]], lt = 2, p = NA, w = 2))
     if (!ups &amp;&amp; "srs" %in% sel) leg &lt;- rbind(leg, data.frame(
@@ -687,7 +758,7 @@ server &lt;- function(input, output, session) {
     k_n &lt;- length(sel)
     at  &lt;- setNames(seq_len(k_n), sel)
     plot(NA, xlim = c(0.4, k_n + 0.6), ylim = c(lo, hi), axes = FALSE,
-         xlab = "", ylab = paste0("estimate of mean t (acres92)", unit_lab(divy)),
+         xlab = "", ylab = paste0("estimate of mean y (acres92)", unit_lab(divy)),
          main = "Sampling distributions of the estimates")
     usr &lt;- par("usr")
     rect(usr[1], usr[3], usr[2], usr[4], col = col_band, border = NA)
@@ -706,7 +777,7 @@ server &lt;- function(input, output, session) {
     axis(2, at = vy, labels = formatC(vy / divy, format = "f",
                                       digits = if ((hi - lo) / divy &lt; 40) 1 else 0,
                                       big.mark = ","), las = 1, cex.axis = 0.75)
-    axis(1, at = at, labels = LAB[sel], tick = FALSE, cex.axis = 0.9)
+    axis(1, at = at, labels = LAB[sel], tick = FALSE, cex.axis = if (k_n &gt; 3) 0.7 else 0.9)
 
     cov_txt &lt;- function(k) if (nrep &gt;= 10) pct(mean(M[, paste0("cov_", k)])) else "--"
     legend("topleft", bty = "n", cex = 0.9, inset = c(0.02, 0.01),
@@ -735,23 +806,31 @@ server &lt;- function(input, output, session) {
 shinyApp(ui, server)</code></pre>
 <section id="about-this-app" class="level2">
 <h2 class="anchored" data-anchor-id="about-this-app">About this app</h2>
-<p>The app compares two ways of using a size variable <span class="math inline">\(x_i\)</span> to estimate the mean per unit <span class="math inline">\(\bar{t}_U = t/N\)</span> (here <span class="math inline">\(t_i\)</span> is <code>acres92</code> for county <span class="math inline">\(i\)</span>): at the <strong>estimation</strong> stage (SRS + ratio) or at the <strong>design</strong> stage (UPSWR with <span class="math inline">\(\psi_i = x_i/t_x\)</span>). Choosing the same variable for <span class="math inline">\(M_i\)</span> and <span class="math inline">\(x_i\)</span> in the app gives exactly this comparison. The plain SRS average is included as a baseline. Throughout, write <span class="math display">\[
-B = \frac{t}{t_x}, \qquad r_i = \frac{t_i}{x_i}, \qquad e_i = t_i - B x_i ,
-\]</span> so <span class="math inline">\(e_i\)</span> is unit <span class="math inline">\(i\)</span>’s residual from the line through the origin with the population slope. Note that <span class="math inline">\(\sum_{i=1}^N e_i = t - B t_x = 0\)</span>.</p>
-<p><strong>SRS + ratio.</strong> Use <span class="math inline">\(x_i\)</span> only at the estimation stage: <span class="math display">\[
-\hat{\bar{t}}_{r} = \hat{B}\,\bar{x}_U, \quad \hat{B} = \frac{\sum_{i=1}^n t_i}{\sum_{i=1}^n x_i}, \qquad
-\widehat{\mathrm{SE}}(\hat{\bar{t}}_{r}) = \frac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\frac{n}{N}\right)\frac{s_e^2}{n}}, \qquad
-s_e^2 = \frac{1}{n-1}\sum_{i=1}^n \left(t_i - \hat{B}x_i\right)^2 .
+<p>The app compares ways of using a size variable <span class="math inline">\(x_i\)</span> to estimate the mean per unit <span class="math inline">\(\bar{y}_U = y/N\)</span> (here <span class="math inline">\(y_i\)</span> is <code>acres92</code> for county <span class="math inline">\(i\)</span>, and <span class="math inline">\(y=\sum_{i=1}^N y_i\)</span>): at the <strong>estimation</strong> stage (SRS + ratio), or at the <strong>design</strong> stage with probabilities proportional to <span class="math inline">\(x_i\)</span>, with replacement (UPSWR + Hansen–Hurwitz) or without replacement (UPSWO + Horvitz–Thompson). Choosing the same variable for <span class="math inline">\(M_i\)</span> and <span class="math inline">\(x_i\)</span> in the app gives exactly this comparison. The plain SRS average is included as a baseline. Throughout, write <span class="math display">\[
+b_i=\frac{y_i}{x_i},\qquad B=\frac{y}{t_x}=\frac{\bar{y}_U}{\bar{x}_U},\qquad w_i=\frac{x_i}{\bar{x}_U},
+\]</span> so that <span class="math inline">\(B=\sum x_ib_i/\sum x_i\)</span> is the mean of the ratios <span class="math inline">\(b_i\)</span> weighted by <span class="math inline">\(x_i\)</span>, and <span class="math inline">\(\bar{y}_U=\bar{x}_U B\)</span>. Every estimator below is <span class="math inline">\(\bar{x}_U\)</span> times an estimate of <span class="math inline">\(B\)</span> that is built from the ratios <span class="math inline">\(b_i\)</span> of the sampled units; they differ in the weights on the <span class="math inline">\(b_i\)</span> and in the design.</p>
+<p><strong>SRS average.</strong> <span class="math inline">\(\bar{y}=\bar{x}_U\hat{B}_{\mathrm{avg}}\)</span> with <span class="math inline">\(\hat{B}_{\mathrm{avg}}=\frac{1}{n}\sum_{i\in\mathcal{S}}w_i\,b_i\)</span>, weights <span class="math inline">\(w_i\)</span> not adding to one, and <span class="math inline">\(\widehat{\mathrm{SE}}=\sqrt{(1-n/N)\,s_y^2/n}\)</span>.</p>
+<p><strong>SRS + ratio.</strong> <span class="math inline">\(x_i\)</span> is used at the estimation stage: <span class="math display">\[
+\hat{\bar{y}}_{r}=\bar{x}_U\hat{B}_r,\quad
+\hat{B}_r=\frac{\sum_{i\in\mathcal{S}}x_i\,b_i}{\sum_{i\in\mathcal{S}}x_i},\qquad
+\widehat{\mathrm{SE}}(\hat{\bar{y}}_{r})=\frac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\frac{n}{N}\right)\frac{s_e^2}{n}},\quad
+s_e^2=\frac{1}{n-1}\sum_{i\in\mathcal{S}}\left(y_i-\hat{B}_rx_i\right)^2 .
 \]</span></p>
-<p><strong>UPSWR + ratio.</strong> Use <span class="math inline">\(x_i\)</span> at the design stage, with <span class="math inline">\(\psi_i = x_i/t_x\)</span>. Every draw then has <span class="math inline">\(x_i/\psi_i = t_x\)</span>. So the HH ratio estimator, scaled by <span class="math inline">\(\bar{x}_U\)</span>, is exactly the HH estimator of the mean, <span class="math inline">\(\hat{t}_{\mathrm{HH}}/N\)</span>, and it reduces to <span class="math inline">\(\bar{x}_U\)</span> times the average of the sampled ratios <span class="math inline">\(r_i\)</span>: <span class="math display">\[
-\hat{\bar{t}}_{\mathrm{HH}} = \bar{x}_U\,\hat{\bar{y}}_{\mathrm{HH},r}
-= \bar{x}_U\,\frac{\sum_{i=1}^n t_i/\psi_i}{\sum_{i=1}^n x_i/\psi_i}
-= \frac{\hat{t}_{\mathrm{HH}}}{N}
-= \bar{x}_U\,\frac{1}{n}\sum_{i=1}^n r_i ,
-\]</span> <span class="math display">\[
-\widehat{\mathrm{SE}}(\hat{\bar{t}}_{\mathrm{HH}}) = \bar{x}_U\,\frac{s_r}{\sqrt{n}}, \qquad
-s_r^2 = \frac{1}{n-1}\sum_{i=1}^n \left(r_i - \frac{1}{n}\sum_{j=1}^n r_j\right)^2 .
+<p><strong>UPSWR + HH.</strong> <span class="math inline">\(x_i\)</span> is used at the design stage, with <span class="math inline">\(\psi_i=x_i/t_x\)</span> on each of <span class="math inline">\(n\)</span> independent draws. The ratio <span class="math inline">\(b_j^*\)</span> of the unit selected on draw <span class="math inline">\(j\)</span> is unbiased for <span class="math inline">\(B\)</span>, and <span class="math display">\[
+\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\hat{B}_{\mathrm{HH}},\quad
+\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{n}\sum_{j=1}^n b_j^*,\qquad
+\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\bar{x}_U\frac{s_{b^*}}{\sqrt{n}},\quad
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(b_j^*-\bar{b}^*\right)^2 .
 \]</span></p>
+<p><strong>UPSWO + HT.</strong> A fixed-size sample of <span class="math inline">\(n\)</span> distinct units is drawn with inclusion probabilities <span class="math inline">\(\pi_i=n\,x_i/t_x\)</span> (the app uses systematic sampling of the units in random order). The Horvitz–Thompson estimate of the total is <span class="math inline">\(\hat{y}_{\mathrm{HT}}=\sum_{i\in\mathcal{S}}y_i/\pi_i\)</span>, so that <span class="math display">\[
+\hat{\bar{y}}_{\mathrm{HT}}=\frac{\hat{y}_{\mathrm{HT}}}{N}=\bar{x}_U\hat{B}_{\mathrm{HT}},\quad
+\hat{B}_{\mathrm{HT}}=\frac{\hat{y}_{\mathrm{HT}}}{t_x}=\frac{1}{n}\sum_{i\in\mathcal{S}}b_i ,
+\]</span> the plain average of the sampled ratios. Its variance is estimated in two ways, which give the two confidence intervals shown, <span class="math inline">\(\hat{\bar{y}}_{\mathrm{HT}}\pm1.96\,\widehat{\mathrm{SE}}\)</span>, with <span class="math inline">\(u_i=y_i/\pi_i\)</span>:</p>
+<ul>
+<li><strong>Hájek:</strong> <span class="math inline">\(\widehat{V}(\hat{y}_{\mathrm{HT}})=\dfrac{n}{n-1}\sum_{i\in\mathcal{S}}(1-\pi_i)(u_i-A)^2\)</span>, <span class="math inline">\(A=\dfrac{\sum_{i\in\mathcal{S}}(1-\pi_i)u_i}{\sum_{i\in\mathcal{S}}(1-\pi_i)}\)</span>.</li>
+<li><strong>With-replacement (WR):</strong> <span class="math inline">\(\widehat{V}(\hat{y}_{\mathrm{HT}})=\dfrac{n}{n-1}\sum_{i\in\mathcal{S}}\left(u_i-\dfrac{\hat{y}_{\mathrm{HT}}}{n}\right)^2\)</span>, which ignores the factors <span class="math inline">\(1-\pi_i\)</span> and is therefore a little too large.</li>
+</ul>
+<p>The SE of the mean is <span class="math inline">\(\sqrt{\widehat{V}}/N\)</span>. Both give the same estimates, and the coverage rates of their intervals are shown in the right panel; the theoretical SE and the variance reduction of the UPSWO estimator in the legend use Hájek’s approximation <span class="math inline">\(\sum_i\pi_i(1-\pi_i)(y_i/\pi_i-R)^2\)</span>, <span class="math inline">\(R=\sum_i(1-\pi_i)y_i/\sum_i\pi_i(1-\pi_i)\)</span>.</p>
 <div class="appsource">
 <p>This app accompanies <a href="../sampling_book/ups.html#sec-ups-app" target="_blank">Shinylive App Comparing SRS and UPSWR</a> in <em>Elements of Sampling Survey</em>.</p>
 </div>
