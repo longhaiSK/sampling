@@ -114,8 +114,8 @@ $$
 There is no finite population correction, since the draws are independent. For the same reason, the
 sample variance of the $b_j^*$ is an unbiased estimate of $S_{b^*}^2$, which gives
 $$
-\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_b}{\sqrt{n}},\qquad
-s_b^2=\frac{1}{n-1}\sum_{j=1}^n\left(b_j^*-\bar{b}^*\right)^2 .
+\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}},\qquad
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(b_j^*-\bar{b}^*\right)^2 .
 $$
 
 **Mean and total.** Multiplying by the known $\bar{x}_U$ and $t_x$, the estimator, its standard
@@ -125,10 +125,10 @@ $$
 \begin{aligned}
 \hat{\bar{y}}_{\mathrm{HH}}&=\bar{x}_U\,\hat{B}_{\mathrm{HH}}=\bar{x}_U\,\bar{b}^*,\qquad
 &\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{S_{b^*}}{\sqrt{n}},\qquad
-&\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{s_b}{\sqrt{n}},\\[4pt]
+&\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{s_{b^*}}{\sqrt{n}},\\[4pt]
 \hat{t}_{\mathrm{HH}}&=t_x\,\hat{B}_{\mathrm{HH}}=t_x\,\bar{b}^*,\qquad
 &\mathrm{SE}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{S_{b^*}}{\sqrt{n}},\qquad
-&\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{s_b}{\sqrt{n}} .
+&\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{s_{b^*}}{\sqrt{n}} .
 \end{aligned}\;}
 $$
 In the more general notation of unequal probability sampling, $y_j^*/\psi_j^*=t_x\,b_j^*$ is the
@@ -176,7 +176,7 @@ satisfy $\sum_{i=1}^N d_i=0$.
 | Weights on the $b_i$ | $x_i/\bar{x}_U$, not normalised | $x_i/\sum x_i$, normalised | equal $1/n$ |
 | Estimate of $\bar{y}_U$ | $\bar{y}$ | $\bar{x}_U\hat{B}_r$ | $\bar{x}_U\bar{b}^*$ |
 | Variance of the estimate of $\bar{y}_U$ | $\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (x_ib_i-\bar{x}_UB)^2$ | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N x_i^2\,(b_i-B)^2$ | $\dfrac{1}{nN}\sum\limits_{i=1}^N\bar{x}_U\,x_i\,(b_i-B)^2$ (exact) |
-| Estimated SE | $\sqrt{\left(1-\dfrac{n}{N}\right)\dfrac{s_y^2}{n}}$ | $\dfrac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\dfrac{n}{N}\right)\dfrac{s_e^2}{n}}$, $\ s_e^2=\dfrac{\sum(y_i-\hat{B}_rx_i)^2}{n-1}$ | $\bar{x}_U\,\dfrac{s_b}{\sqrt{n}}$ |
+| Estimated SE | $\sqrt{\left(1-\dfrac{n}{N}\right)\dfrac{s_y^2}{n}}$ | $\dfrac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\dfrac{n}{N}\right)\dfrac{s_e^2}{n}}$, $\ s_e^2=\dfrac{\sum(y_i-\hat{B}_rx_i)^2}{n-1}$ | $\bar{x}_U\,\dfrac{s_{b^*}}{\sqrt{n}}$ |
 | $x_i$ is used at | not used | the **estimation** stage | the **design** stage |
 | Unbiased? | yes | slightly biased | exactly unbiased |
 
@@ -410,16 +410,16 @@ The true values are $\bar{y}_U=75$ and $t=300$.
 
 **Step 3: the sample variance of the ratios.** From the last column,
 $$
-s_b^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{`r round(sum(samp$dev2), 6)`}{4}
-=`r round(s2_b, 7)`,\qquad s_b=`r round(sqrt(s2_b), 5)`.
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{`r round(sum(samp$dev2), 6)`}{4}
+=`r round(s2_b, 7)`,\qquad s_{b^*}=`r round(sqrt(s2_b), 5)`.
 $$
 
 **Step 4: the estimated standard errors.**
 $$
-\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_b}{\sqrt{n}}=`r round(se_B, 5)`,\qquad
-\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\bar{x}_U\,\frac{s_b}{\sqrt{n}}
+\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}}=`r round(se_B, 5)`,\qquad
+\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\bar{x}_U\,\frac{s_{b^*}}{\sqrt{n}}
 =400\times`r round(se_B, 5)`=`r round(se_ybar, 2)`,\qquad
-\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=t_x\,\frac{s_b}{\sqrt{n}}=N\times`r round(se_ybar, 2)`=`r round(se_t, 2)`.
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=t_x\,\frac{s_{b^*}}{\sqrt{n}}=N\times`r round(se_ybar, 2)`=`r round(se_t, 2)`.
 $$
 For comparison, the theoretical standard error from @sec-ups-toy is
 $\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})=\sqrt{890.5/5}=`r round(se_true, 2)`$. The estimate
