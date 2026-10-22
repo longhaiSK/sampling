@@ -87,7 +87,7 @@ truncate_working <- function (working, id_col, head_n = 6)
 
 # Helper function to format estimation outputs with appropriate mathematical headers
 format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_mean", "reg_total", "ratio_mean", "domain_mean",
-                                                 "hh_total", "hh_mean", "hh_ratio_mean")) {
+                                                 "hh_total", "hh_mean", "hh_ratio_mean", "hh_B", "hh_ybar")) {
   est_type <- match.arg(est_type)
 
   sym_map <- list(
@@ -104,7 +104,12 @@ format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_
     "hh_mean"       = c(est = "$\\hat{\\bar{t}}_{\\mathrm{HH}}$",
                         se  = "$\\mathrm{SE}(\\hat{\\bar{t}}_{\\mathrm{HH}})$"),
     "hh_ratio_mean" = c(est = "$\\hat{\\bar{y}}_{\\mathrm{HH},r}$",
-                        se  = "$\\mathrm{SE}(\\hat{\\bar{y}}_{\\mathrm{HH},r})$")
+                        se  = "$\\mathrm{SE}(\\hat{\\bar{y}}_{\\mathrm{HH},r})$"),
+    ## UPSWR with psi_i = x_i / t_x (upswr_est): ratio B, mean of y per unit
+    "hh_B"          = c(est = "$\\hat{B}_{\\mathrm{HH}}$",
+                        se  = "$\\mathrm{SE}(\\hat{B}_{\\mathrm{HH}})$"),
+    "hh_ybar"       = c(est = "$\\hat{\\bar{y}}_{\\mathrm{HH}}$",
+                        se  = "$\\mathrm{SE}(\\hat{\\bar{y}}_{\\mathrm{HH}})$")
   )
 
   est_sym <- sym_map[[est_type]]["est"]
@@ -875,6 +880,29 @@ upswr_total <- function (total, psi, N = Inf, estimate = c ("total", "mean"), sh
       if (!is.finite (N)) stop ("N must be finite to compute estimate = \"mean\" (mean total per psu)")
       res$estimate <- res$estimate / N
   }
+  res
+}
+
+## UPSWR Hansen-Hurwitz estimation when the drawing probabilities are
+## psi_i = x_i / tx_pop, built from the auxiliary variable x. Works with the
+## ratios b_j* = y_j*/x_j* of the n draws (repeats kept): Bhat = mean(b_j*)
+## estimates B = t/t_x with SE s_b*/sqrt(n) (no fpc, draws are independent).
+## ydata, xdata --- y and x of the n draws
+## xbar_pop, tx_pop --- population mean and total of x
+## method --- "ratio" (default): Bhat, i.e. the total of y per unit of x
+##            "mean": the population mean of y, xbar_pop * Bhat
+##            "total": the population total of y, tx_pop * Bhat
+## (the working table, if shown, is on the scale of the ratio b_j*)
+upswr_est <- function (ydata, xdata, xbar_pop, tx_pop,
+                       method = c ("ratio", "mean", "total"), show.details = TRUE)
+{
+  method <- match.arg (method)
+  scale <- switch (method, ratio = 1, mean = xbar_pop, total = tx_pop)
+  res <- srs_est (ydata/xdata, N = Inf, estimate = "mean", show.details = show.details,
+                  col_labels = list (y = "b_j^*", yhat = "\\hat B_{\\mathrm{HH}}",
+                                     ybar = "\\hat B_{\\mathrm{HH}}", s = "s_{b^*}"),
+                  title = "UPSWR Hansen-Hurwitz Estimation: Working Table")
+  res$estimate <- scale * res$estimate
   res
 }
 

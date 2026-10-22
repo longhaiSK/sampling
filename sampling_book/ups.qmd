@@ -19,7 +19,7 @@ per draw. Sampling without replacement is briefly discussed at the end (@sec-ups
 
 ## Functions and Packages
 
-The estimating functions used throughout this book (including `ratio_est`, `reg_est`, `srs_est`, `upswr_total`, `upswr_ratio`, `cluster_upswr_ratio`, `cluster_upswo_ratio`, and the `format_est_gt` table-formatting helper used below) live in a single shared file, `samplingestimate.r`, which we source below.
+The estimating functions used throughout this book (including `ratio_est`, `reg_est`, `srs_est`, `upswr_est`, `upswr_total`, `upswr_ratio`, `cluster_upswr_ratio`, `cluster_upswo_ratio`, and the `format_est_gt` table-formatting helper used below) live in a single shared file, `samplingestimate.r`, which we source below.
 
 ```{r source-functions, message=FALSE, warning=FALSE}
 #| echo: false
@@ -137,7 +137,7 @@ $$
 $$
 In the more general notation of unequal probability sampling, $y_j^*/\psi_j^*=t_x\,b_j^*$ is the
 estimate of the total from draw $j$, so $\hat{t}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n y_j^*/\psi_j^*$. This form
-works for any $\psi_i$, not only for $\psi_i=x_i/t_x$, and is what the function `upswr_total` computes.
+works for any $\psi_i$, not only for $\psi_i=x_i/t_x$, and is what the function `upswr_total` computes; for $\psi_i=x_i/t_x$, the function `upswr_est` works directly with the ratios $b_j^*$.
 
 **Variance of the mean and total.** The variances of $\hat{\bar{y}}_{\mathrm{HH}}$ and
 $\hat{t}_{\mathrm{HH}}$ are $\bar{x}_U^2$ and $t_x^2$ times $V(\hat{B}_{\mathrm{HH}})$. The variance is small when all the ratios $b_i$
@@ -471,34 +471,17 @@ that is, $\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})=`r round(se_true, 2)`$. The e
 $`r round(ybar_HH, 2)`$ is $`r round(abs(mean(y_U) - ybar_HH) / se_ybar, 2)`$ estimated standard errors
 `r ifelse(ybar_HH < mean(y_U), "below", "above")` $\bar{y}_U=`r round(mean(y_U), 2)`$.
 
-**The same form for the ratio estimator and the sample average.** For contrast, suppose an SRS of
-two customers, $\mathcal{S}=\{D,F\}$, had been audited instead (the SRS estimators do not apply to the PPS
-sample above). With $b_D=`r round(y_U[["D"]] / x_U[["D"]], 4)`$ and $b_F=`r round(y_U[["F"]] / x_U[["F"]], 4)`$,
-and $w_i=x_i/\bar{x}_U$,
-$$
-\hat{B}_r=\frac{x_Db_D+x_Fb_F}{x_D+x_F}=\frac{`r x_U[["D"]]`\times`r round(y_U[["D"]] / x_U[["D"]], 4)`+`r x_U[["F"]]`\times`r round(y_U[["F"]] / x_U[["F"]], 4)`}{`r x_U[["D"]] + x_U[["F"]]`}
-=`r round((y_U[["D"]] + y_U[["F"]]) / (x_U[["D"]] + x_U[["F"]]), 4)`,
-$$
-$$
-\hat{B}_{\mathrm{avg}}=\frac{1}{2}\left(w_Db_D+w_Fb_F\right)
-=\frac{1}{2}\left(`r round(x_U[["D"]] / xbar_U, 2)`\times`r round(y_U[["D"]] / x_U[["D"]], 4)`+`r round(x_U[["F"]] / xbar_U, 2)`\times`r round(y_U[["F"]] / x_U[["F"]], 4)`\right)
-=`r round(((y_U[["D"]] + y_U[["F"]]) / 2) / xbar_U, 4)`.
-$$
-Multiplying by $\bar{x}_U$ gives $\hat{\bar{y}}_r=`r round(xbar_U * (y_U[["D"]] + y_U[["F"]]) / (x_U[["D"]] + x_U[["F"]]), 2)`$ and
-$\bar{y}=`r (y_U[["D"]] + y_U[["F"]]) / 2`$. The ratio estimator is a weighted mean of $b_D$ and $b_F$ with weights
-adding to one, so it stays between them. The sample average has weights $w_i/n$ adding to
-$`r round((x_U[["D"]] + x_U[["F"]]) / xbar_U / 2, 3)`>1$ here, because the sampled customers happen to be larger than average, so
-it overshoots: its $\hat{B}_{\mathrm{avg}}$ is far above both ratios.
-
-The same HH estimates from the shared function `upswr_total` (@sec-ups-statepop uses it for real data),
-which works with the totals $y_j^*/\psi_j^*=t_x\,b_j^*$:
+The same HH estimates from the shared function `upswr_est` (@sec-ups-statepop uses it for real data),
+which takes the $y$ and $x$ values of the draws and the population mean and total of $x$:
 
 ```{r toy-sample-fn}
 #| cache: false
-psi_R <- x_U[R] / sum(x_U)
-upswr_total(y_U[R], psi_R, show.details = FALSE)$estimate |> format_est_gt("hh_total")
-upswr_total(y_U[R], psi_R, N = N, estimate = "mean", show.details = FALSE)$estimate |>
-  format_est_gt("hh_mean")
+upswr_est(y_U[R], x_U[R], xbar_U, t_x, method = "ratio", show.details = FALSE)$estimate |>
+  format_est_gt("hh_B")
+upswr_est(y_U[R], x_U[R], xbar_U, t_x, method = "mean", show.details = FALSE)$estimate |>
+  format_est_gt("hh_ybar")
+upswr_est(y_U[R], x_U[R], xbar_U, t_x, method = "total", show.details = FALSE)$estimate |>
+  format_est_gt("hh_total")
 ```
 
 ### Example: Physicians in U.S. Counties (`statepop.csv`) {#sec-ups-statepop}
@@ -534,7 +517,8 @@ plot(popn, phys, log = "xy",
 *Total physicians in the US,* $\hat{t}_{\mathrm{HH}}$:
 
 ```{r statepop-upswr-total}
-res_phys_total <- upswr_total(phys, psi, show.details = FALSE)
+res_phys_total <- upswr_est(phys, popn, xbar_pop = M / 3141, tx_pop = M,
+                            method = "total", show.details = FALSE)
 res_phys_total$estimate |> format_est_gt("hh_total")
 ```
 **Output Note:** Each draw contributes $\mathrm{phys}_i/\psi_i$, an unbiased estimate of
@@ -547,8 +531,9 @@ with a 95% interval of [`r format(round(res_phys_total$estimate["ci.low"]), big.
 
 ```{r statepop-upswr-per-county}
 N <- 3141   # counties in the US
-res_phys_county <- upswr_total(phys, psi, N = N, estimate = "mean", show.details = FALSE)
-res_phys_county$estimate |> format_est_gt("hh_mean")
+res_phys_county <- upswr_est(phys, popn, xbar_pop = M / N, tx_pop = M,
+                             method = "mean", show.details = FALSE)
+res_phys_county$estimate |> format_est_gt("hh_ybar")
 ```
 **Output Note:** This is the same estimate divided by the known $N$, so its standard error
 shrinks by the same factor and the two statements carry identical information. It averages
