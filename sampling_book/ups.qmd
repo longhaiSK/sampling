@@ -650,24 +650,36 @@ for (i in 1:2000) {
 ```
 
 ```{r fig-upswr-sim-comparison, fig.height=8, fig.width=8}
-#| fig-cap: "Estimator variance: naive SRS vs. SRS regression vs. UPSWR (2000 simulations), full and zoomed views"
-par(mfrow = c(2,1))
+#| fig-cap: "Estimator distribution: naive SRS vs. SRS regression vs. UPSWR (2000 simulations), full and zoomed views. The legend gives the variance of each estimator and its $R^2$ relative to the naive SRS average."
+library(ggplot2)
 
-# Compare Naive SRS, Regression SRS, and UPSWR
-boxplot(data.frame(est_srs300, est_srs300_reg_acres87, est_ups300_acres87),
-        main = "Comparing SRS, SRS-Regression, and UPSWR",
-        names = c("SRS Naive", "SRS Regression", "UPSWR"),
-        col = c("lightblue", "lightgreen", "salmon"))
-abline(h = total_acres92, col = "red", lwd = 2)
+# Variance of each estimator and R^2 = 1 - Var / Var(naive SRS): the proportion
+# of the variance of the naive SRS average that the estimator removes
+v_sim <- c(var(est_srs300), var(est_srs300_reg_acres87), var(est_ups300_acres87))
+r2_sim <- 1 - v_sim / v_sim[1]
+lab_sim <- sprintf("%s: Var = %.2e, R² = %.3f",
+                   c("SRS Naive", "SRS Regression", "UPSWR"), v_sim, r2_sim)
 
-# Zoom in on the two high-precision estimators
-boxplot(data.frame(est_srs300_reg_acres87, est_ups300_acres87),
-        main = "Zoomed: SRS-Regression vs. UPSWR",
-        names = c("SRS Regression", "UPSWR"),
-        col = c("lightgreen", "salmon"))
-abline(h = total_acres92, col = "red", lwd = 2)
+sim_long <- data.frame(
+  est = c(est_srs300, est_srs300_reg_acres87, est_ups300_acres87),
+  Method = factor(rep(lab_sim, each = 2000), levels = lab_sim))
+sim_long <- rbind(
+  cbind(sim_long, Panel = "All three estimators"),
+  cbind(sim_long[sim_long$Method != lab_sim[1], ], Panel = "Zoomed: SRS-Regression vs. UPSWR"))
+sim_long$Panel <- factor(sim_long$Panel, levels = unique(sim_long$Panel))
+
+ggplot(sim_long, aes(x = Method, y = est, fill = Method)) +
+  geom_violin(draw_quantiles = 0.5, trim = FALSE) +
+  geom_hline(yintercept = total_acres92, colour = "red", linewidth = 0.8) +
+  facet_wrap(~ Panel, ncol = 1, scales = "free") +
+  scale_fill_manual(values = c("lightblue", "lightgreen", "salmon")) +
+  scale_x_discrete(labels = setNames(c("SRS Naive", "SRS Regression", "UPSWR"), lab_sim)) +
+  labs(x = NULL, y = "Estimate of the total acres in 1992 (thousands)") +
+  theme_bw() +
+  theme(legend.position = "bottom", legend.direction = "vertical",
+        legend.title = element_blank())
 ```
-**Output Note:** The red line represents the true total acreage. The naive SRS estimator has massive variance. Both SRS Regression and UPSWR drastically reduce variance, centering tightly around the true mean.
+**Output Note:** The red line represents the true total acreage, and the line inside each violin is the median. The naive SRS estimator has massive variance. Both SRS Regression and UPSWR drastically reduce variance, centering tightly around the true mean; the $R^2$ in the legend is the proportion of the variance of the naive SRS average that each method removes.
 
 ### Shinylive App Comparing SRS and UPSWR {#sec-ups-app}
 
