@@ -892,31 +892,160 @@ of the second stage (for home H12, the two draws gave $\bar{y}=0.95$ and $0.80$)
 
 ## UPS Without Replacement {#sec-ups-wo}
 
-When sampling **without replacement** with unequal probabilities, the units are selected using the inclusion probabilities $\pi_i$ of the units across all draws, rather than the single-draw probabilities $\psi_i$, and a unit appears at most once in the sample. The Horvitz--Thompson (HT) estimator replaces $\psi_i$ by $\pi_i$:
+### Review of UPSWR and the Horvitz--Thompson Estimator {#sec-ups-wo-theory}
+
+**Review of UPSWR in terms of $\psi_i$.** With replacement, each of the $n$ draws selects unit $i$ with
+probability $\psi_i$, and draw $j$ gives the unbiased estimate $y_j^*/\psi_j^*$ of the total $t$, since
+$E(y_j^*/\psi_j^*)=\sum_i\psi_i\,y_i/\psi_i=t$. The HH estimator averages the $n$ estimates,
 $$
-\hat{t}_{HT} = \sum_{i=1}^n \frac{y_i}{\pi_i}.
+\hat{t}_{\mathrm{HH}}=\frac{1}{n}\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt{n}},\qquad
+s_u^2=\frac{1}{n-1}\sum_{j=1}^n\left(\frac{y_j^*}{\psi_j^*}-\hat{t}_{\mathrm{HH}}\right)^2 ,
 $$
+where the SE is easy because the $n$ estimates are iid. With $\psi_i=x_i/t_x$, $\frac{y_j^*}{\psi_j^*}=t_x\,b_j^*$,
+which gives the estimator $\hat{t}_{\mathrm{HH}}=t_x\bar{b}^*$ of @sec-ups-hh-theory. The drawback of
+UPSWR is that a large unit can be drawn several times, which is wasteful.
 
-### Example: Study Hours of Students in Classes (`classpps.csv`)
+**Without replacement.** Now $n$ **distinct** units are selected, and the design is described by the
+**inclusion probabilities**
+$$
+\pi_i=P(\text{unit } i\in\mathcal{S}),\qquad \sum_{i=1}^N\pi_i=n ,
+$$
+for a sample of fixed size $n$. For a size variable $x_i$, we take $\pi_i=n\,x_i/t_x$ (inclusion probability
+proportional to size, $\pi$ps), which is $n\psi_i$ for $\psi_i=x_i/t_x$. A unit with $n\,x_i/t_x>1$ is
+included with certainty, $\pi_i=1$, and the other probabilities are recomputed from the remaining units.
 
-```{r classpps-upswo}
-classpps <- read.csv("data/classpps.csv")
+**The Horvitz--Thompson (HT) estimator.** Weighting each sampled unit by $1/\pi_i$ gives
+$$
+\boxed{\hat{t}_{\mathrm{HT}}=\sum_{i\in\mathcal{S}}\frac{y_i}{\pi_i}} .
+$$
+It has the same form as the HH estimator with $n\psi_i$ replaced by $\pi_i$ (the two coincide if no unit is
+drawn twice). *It is unbiased.* Let $I_i=1$ if unit $i$ is in the sample and $0$ otherwise, so that
+$E(I_i)=P(I_i=1)=\pi_i$. Then $\hat{t}_{\mathrm{HT}}=\sum_{i=1}^N I_i\,y_i/\pi_i$, and
+$$
+E(\hat{t}_{\mathrm{HT}})=\sum_{i=1}^N\frac{y_i}{\pi_i}\,E(I_i)=\sum_{i=1}^N\frac{y_i}{\pi_i}\,\pi_i=\sum_{i=1}^N y_i=t .
+$$
+This needs only $\pi_i>0$ for all units. The estimators of the mean per unit and of the ratio of the totals of two
+variables $y$ and $x$ follow by applying the HT estimator to each total:
+$$
+\hat{\bar{y}}_{\mathrm{HT}}=\frac{\hat{t}_{\mathrm{HT}}}{N},\qquad
+\hat{B}_{\mathrm{HT}}=\frac{\hat{t}_{y,\mathrm{HT}}}{\hat{t}_{x,\mathrm{HT}}}
+=\frac{\sum_{i\in\mathcal{S}}y_i/\pi_i}{\sum_{i\in\mathcal{S}}x_i/\pi_i}.
+$$
+For the mean per element of clusters, take $y_i=t_i$ and $x_i=M_i$ (@sec-ups-cluster-theory), which gives
+$\hat{B}_{\mathrm{HT}}=\sum t_i/\pi_i\big/\sum M_i/\pi_i$. If $\pi_i\propto M_i$, the denominator is the known
+constant $M_0$, and the ratio again collapses to the HT estimate of the total divided by $M_0$, as in
+UPSWR. The ratio is slightly biased, like every ratio estimator.
 
-res_upswo <- cluster_upswo_ratio(
-  data = classpps,
-  cname = "class",
-  csize = "clssize",
-  cpik = "clssize", # Assuming inclusion prob is proportional to class size
-  yvar = "hours",
-  estimate = "mean"
-)
+**Variances.** For a fixed sample size, with the joint inclusion probabilities $\pi_{ij}=P(i,j\in\mathcal{S})$,
+$$
+V(\hat{t}_{\mathrm{HT}})=\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N(\pi_i\pi_j-\pi_{ij})
+\left(\frac{y_i}{\pi_i}-\frac{y_j}{\pi_j}\right)^2
+\qquad\text{(Sen--Yates--Grundy)},
+$$
+which is estimated unbiasedly by summing over the sampled pairs only, each divided by $\pi_{ij}$:
+$$
+\hat{V}_{\mathrm{SYG}}(\hat{t}_{\mathrm{HT}})=\frac{1}{2}\sum_{i\in\mathcal{S}}\sum_{j\in\mathcal{S}}
+\frac{\pi_i\pi_j-\pi_{ij}}{\pi_{ij}}\left(\frac{y_i}{\pi_i}-\frac{y_j}{\pi_j}\right)^2 .
+$$
+The joint probabilities $\pi_{ij}$ are hard to compute for most sampling methods, so approximations that need
+only $\pi_i$ are used:
 
-# Display the cluster-level working table
-res_upswo$table
+* **Hájek's approximation** (for designs with high entropy), obtained by
+  $\pi_{ij}\approx\pi_i\pi_j\left[1-\frac{(1-\pi_i)(1-\pi_j)}{\sum_k\pi_k(1-\pi_k)}\right]$ in the SYG estimator:
+  $$
+  \hat{V}_{\mathrm{H}}(\hat{t}_{\mathrm{HT}})=\frac{n}{n-1}\sum_{i\in\mathcal{S}}(1-\pi_i)
+  \left(\frac{y_i}{\pi_i}-A\right)^2,\qquad
+  A=\frac{\sum_{i\in\mathcal{S}}(1-\pi_i)\,y_i/\pi_i}{\sum_{i\in\mathcal{S}}(1-\pi_i)} .
+  $$
+
+* **With-replacement approximation:** treat the sample as $n$ draws with $\psi_i=\pi_i/n$ and use the
+  UPSWR formula,
+  $$
+  \hat{V}_{\mathrm{WR}}(\hat{t}_{\mathrm{HT}})=\frac{n}{n-1}\sum_{i\in\mathcal{S}}\left(\frac{y_i}{\pi_i}-\frac{\hat{t}_{\mathrm{HT}}}{n}\right)^2 .
+  $$
+  It ignores the factors $1-\pi_i$ that account for sampling without replacement, so it overestimates the
+  variance, the more so the larger the $\pi_i$.
+
+For the mean per unit, divide the estimate and the SE by $N$. For the ratio $\hat{B}_{\mathrm{HT}}$, apply the
+variance estimators to the residuals $e_i=y_i-\hat{B}_{\mathrm{HT}}x_i$ in place of $y_i$ and divide by $t_x$:
+$\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HT}})\approx\sqrt{\hat{V}(\hat{t}_{e,\mathrm{HT}})}\big/t_x$.
+
+### Example: Acres of Farmland in Counties (`agpop.csv`) {#sec-ups-wo-example}
+
+We draw a sample of $n=100$ of the counties of `agpop` without replacement, with inclusion probabilities
+$\pi_i=100\,x_i/t_x$ proportional to the acres in 1987 ($x_i$), and estimate the mean acres of farmland in 1992
+($y_i$) per county. (The few counties with no farmland in 1987 cannot be selected and are left out.) The sample
+is drawn by maximum entropy sampling, a fixed-size design with these inclusion probabilities, from the R package
+`sampling`; a county with $100x_i/t_x>1$ would be included with certainty (none is here).
+
+```{r wo-sample}
+library(sampling)
+agpop <- acres_in_thousands(read.csv("data/agpop.csv", na.strings = "-99"))
+agpop <- agpop |> filter(!is.na(acres92), !is.na(acres87), acres87 > 0)
+N <- nrow(agpop)
+n <- 100
+tx <- sum(agpop$acres87)
+pik <- inclusionprobabilities(agpop$acres87, n)    # pi_i = n x_i / t_x
+
+set.seed(348)
+q_me <- UPMEqfromw(UPMEpiktildefrompik(pik), n)    # set-up of the sampling design
+s <- which(UPMEsfromq(q_me) == 1)                  # indices of the n sampled counties
+y <- agpop$acres92[s]; x <- agpop$acres87[s]; p <- pik[s]
 ```
 
-**Estimate the overall mean study hours (Horvitz-Thompson ratio style):**
+The mean per county, estimated by HT with the two variance estimators (the plain sample mean ignores the
+inclusion probabilities and is shown for contrast), and the ratio of the total acres in 1992 to that in 1987,
+with the mean per county from the ratio estimator:
 
-```{r classpps-upswo-est}
-res_upswo$estimate |> format_est_gt("ratio_mean")
+```{r wo-estimates}
+est_ht_hajek <- upswo_est(y, p, N, method = "mean", variance = "hajek")
+est_ht_wr    <- upswo_est(y, p, N, method = "mean", variance = "wr")
+est_ratio_hajek <- upswo_est(y, p, N, x, tx, method = "mean", variance = "hajek")
+est_B_hajek <- upswo_est(y, p, N, x, tx, method = "ratio", variance = "hajek")
+est_B_wr    <- upswo_est(y, p, N, x, tx, method = "ratio", variance = "wr")
 ```
+
+To judge the variance estimators, we repeat the sampling 2000 times, and compute the standard deviation of the
+2000 HT estimates, which is the true standard error of the design, and the average of the estimated standard
+errors:
+
+```{r wo-simulation, cache=TRUE}
+R <- 2000
+sim <- matrix(0, R, 3, dimnames = list(NULL, c("est", "se_hajek", "se_wr")))
+for (i in 1:R) {
+  si <- which(UPMEsfromq(q_me) == 1)
+  sim[i, ] <- c(upswo_est(agpop$acres92[si], pik[si], N, method = "mean", variance = "hajek")[1:2],
+                upswo_est(agpop$acres92[si], pik[si], N, method = "mean", variance = "wr")[2])
+}
+```
+
+```{r tbl-wo-summary}
+#| echo: false
+#| tbl-cap: "Estimates of the mean acres of farmland in 1992 per county from one sample of 100 counties drawn without replacement"
+true_mean <- mean(agpop$acres92)
+tab <- data.frame(
+  Method = c("Sample mean (ignores $\\pi_i$)", "HT, Hájek variance", "HT, with-replacement variance",
+             "HT ratio, Hájek variance"),
+  Estimate = c(mean(y), est_ht_hajek["Est."], est_ht_wr["Est."], est_ratio_hajek["Est."]),
+  SE = c(sd(y) / sqrt(n), est_ht_hajek["S.E."], est_ht_wr["S.E."], est_ratio_hajek["S.E."]))
+knitr::kable(tab, row.names = FALSE, digits = c(0, 1, 2),
+             col.names = c("Method", "Estimate", "Estimated SE"))
+```
+
+```{r wo-notes}
+#| echo: false
+mc_sd <- sd(sim[, "est"])
+```
+
+**Output Note:** The true mean is `r round(true_mean, 1)` thousand acres per county. The plain sample mean,
+`r round(mean(y), 1)`, is far off because it gives every sampled county the same weight, although the large
+counties had a larger chance of being selected; the HT estimate `r round(est_ht_hajek["Est."], 1)` corrects for
+that. The Hájek and with-replacement SEs are `r round(est_ht_hajek["S.E."], 2)` and
+`r round(est_ht_wr["S.E."], 2)`. Over the 2000 repeated samples the true standard error of the HT mean is
+`r round(mc_sd, 2)`, and the average estimated SEs are `r round(mean(sim[, "se_hajek"]), 2)` for the Hájek
+approximation and `r round(mean(sim[, "se_wr"]), 2)` for the with-replacement approximation, which
+is a little too large, as expected. Since $\pi_i\propto x_i$, the HT ratio estimate of the mean,
+`r round(est_ratio_hajek["Est."], 1)`, equals the HT estimate, because $\sum_{i\in\mathcal{S}}x_i/\pi_i=t_x$ for
+every sample, and the ratio of the total acres in 1992 to that in 1987 is
+$\hat{B}_{\mathrm{HT}}=`r round(est_B_hajek["Est."], 3)`$ (SE `r round(est_B_hajek["S.E."], 3)`).

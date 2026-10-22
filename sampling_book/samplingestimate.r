@@ -912,6 +912,71 @@ upswr_est <- function (ydata, xdata, xbar_pop, tx_pop,
   res
 }
 
+## Variance estimate of the Horvitz-Thompson total sum(y/pik) for a fixed-size
+## sample drawn without replacement with inclusion probabilities pik.
+## y, pik --- values and inclusion probabilities of the n sampled units
+## method --- "hajek": Hajek (1964) approximation, which needs only pik (it is
+##            the Sen-Yates-Grundy estimator with pi_ij approximated by
+##            pi_i pi_j [1 - (1 - pi_i)(1 - pi_j) / sum_k pi_k (1 - pi_k)])
+##            v = n/(n-1) sum (1 - pi_i) (y_i/pi_i - A)^2,
+##            A = sum (1 - pi_i) y_i/pi_i / sum (1 - pi_i)
+##            "wr": the with-replacement approximation, treating the units as
+##            n draws with psi_i = pik/n; ignores the factor (1 - pi_i),
+##            so it is conservative
+##            v = n/(n-1) sum (y_i/pi_i - that/n)^2
+ht_var <- function (y, pik, method = c ("hajek", "wr"))
+{
+  method <- match.arg (method)
+  n <- length (y)
+  u <- y / pik
+  if (method == "hajek")
+  {
+    A <- sum ((1 - pik) * u) / sum (1 - pik)
+    n / (n - 1) * sum ((1 - pik) * (u - A)^2)
+  }
+  else
+    n / (n - 1) * sum ((u - sum (u) / n)^2)
+}
+
+## Horvitz-Thompson estimation for UPS without replacement (fixed sample size).
+## ydata, pik --- y and inclusion probabilities of the n sampled units
+## N --- number of units in the population
+## xdata, tx_pop --- (for the ratio method) x of the sampled units and its
+##            population total
+## method --- "total": sum(y/pik), or tx_pop * Bhat if xdata is given
+##            "mean": the total divided by N
+##            "ratio": Bhat = sum(y/pik) / sum(x/pik), the HT ratio estimator
+##            (needs xdata and tx_pop; variance from the residuals
+##            e = y - Bhat x, V(Bhat) = V(that_e) / tx_pop^2)
+## variance --- see ht_var()
+upswo_est <- function (ydata, pik, N, xdata = NULL, tx_pop = NULL,
+                       method = c ("total", "mean", "ratio"),
+                       variance = c ("hajek", "wr"))
+{
+  method <- match.arg (method)
+  variance <- match.arg (variance)
+  n <- length (ydata)
+
+  if (is.null (xdata))
+  {
+    if (method == "ratio") stop ("xdata and tx_pop are required for method = \"ratio\"")
+    est <- sum (ydata / pik)
+    se <- sqrt (ht_var (ydata, pik, variance))
+    if (method == "mean") { est <- est / N; se <- se / N }
+  }
+  else
+  {
+    if (is.null (tx_pop)) stop ("tx_pop is required when xdata is given")
+    B <- sum (ydata / pik) / sum (xdata / pik)
+    se_B <- sqrt (ht_var (ydata - B * xdata, pik, variance)) / tx_pop
+    scale <- switch (method, ratio = 1, mean = tx_pop / N, total = tx_pop)
+    est <- scale * B
+    se <- scale * se_B
+  }
+  mem <- qt (0.975, df = n - 1) * se
+  c (Est. = est, S.E. = se, ci.low = est - mem, ci.upp = est + mem)
+}
+
 ## Ratio estimation for datasets collected with UPS with Replacement.
 ## estimate --- "mean" (default) or "model" both return the raw ratio
 ##              Bhat = sum(t_i/psi_i)/sum(M_i/psi_i) --- that raw B IS the
