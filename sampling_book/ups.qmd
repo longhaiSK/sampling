@@ -1009,11 +1009,15 @@ errors:
 
 ```{r wo-simulation, cache=TRUE}
 R <- 2000
-sim <- matrix(0, R, 3, dimnames = list(NULL, c("est", "se_hajek", "se_wr")))
+sim <- matrix(0, R, 5, dimnames = list(NULL, c("est", "se_hajek", "se_wr", "cover_hajek", "cover_wr")))
 for (i in 1:R) {
   si <- which(UPMEsfromq(q_me) == 1)
-  sim[i, ] <- c(upswo_est(agpop$acres92[si], pik[si], N, method = "mean", variance = "hajek")[1:2],
-                upswo_est(agpop$acres92[si], pik[si], N, method = "mean", variance = "wr")[2])
+  yi <- agpop$acres92[si]
+  eh <- upswo_est(yi, pik[si], N, method = "mean", variance = "hajek")
+  ew <- upswo_est(yi, pik[si], N, method = "mean", variance = "wr")
+  sim[i, ] <- c(eh["Est."], eh["S.E."], ew["S.E."],
+                eh["ci.low"] <= mean(agpop$acres92) & mean(agpop$acres92) <= eh["ci.upp"],
+                ew["ci.low"] <= mean(agpop$acres92) & mean(agpop$acres92) <= ew["ci.upp"])
 }
 ```
 
@@ -1037,6 +1041,20 @@ ggplot(vdat, aes(x = Method, y = v, fill = Method)) +
        subtitle = sprintf("Red line: Monte Carlo true variance = %.2f", mc_var)) +
   theme_bw() + theme(legend.position = "bottom", legend.direction = "vertical",
                      legend.title = element_blank())
+```
+
+```{r fig-wo-mean}
+#| echo: false
+#| fig-height: 4
+#| fig-width: 7
+#| fig-cap: "HT estimates of the mean acres per county in 2000 repeated samples. The red line is the true mean; the coverage rates of the 95% confidence intervals with the Hájek and the with-replacement variance estimates are given in the subtitle."
+cov_h <- mean(sim[, "cover_hajek"]); cov_w <- mean(sim[, "cover_wr"])
+ggplot(data.frame(est = sim[, "est"], Method = "HT estimate of the mean"), aes(x = Method, y = est)) +
+  geom_violin(fill = "lightblue", draw_quantiles = 0.5) +
+  geom_hline(yintercept = mean(agpop$acres92), colour = "red", linewidth = 0.8) +
+  labs(x = NULL, y = "Estimated mean acres per county (thousands)",
+       subtitle = sprintf("Coverage of 95%% CI: Hájek %.1f%%, with-replacement %.1f%%", 100 * cov_h, 100 * cov_w)) +
+  theme_bw()
 ```
 
 ```{r tbl-wo-summary}
@@ -1065,6 +1083,10 @@ that. The Hájek and with-replacement SEs are `r round(est_ht_hajek["S.E."], 2)`
 approximation and `r round(mean(sim[, "se_wr"]), 2)` for the with-replacement approximation, which
 is a little too large, as expected. The violin plots show the whole distribution of the two estimated variances,
 with the true variance (the variance of the 2000 HT estimates) as a red line: both are centred close to it,
-the with-replacement one slightly above. The ratio of the total acres in 1992 to that in 1987 is
+the with-replacement one slightly above. The HT estimates of the mean are centred at the true mean, as
+unbiasedness implies. The 95% confidence intervals, estimate $\pm$ $t_{n-1}$ SE, cover the true mean in
+`r round(100 * mean(sim[, "cover_hajek"]), 1)`% of the samples with the Hájek variance and in
+`r round(100 * mean(sim[, "cover_wr"]), 1)`% with the with-replacement variance; the latter is a little above the
+nominal 95% because its variance is too large. The ratio of the total acres in 1992 to that in 1987 is
 $\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/t_x=`r round(est_B_hajek["Est."], 3)`$
 (SE `r round(est_B_hajek["S.E."], 3)`, Hájek).
