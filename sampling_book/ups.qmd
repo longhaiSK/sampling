@@ -23,6 +23,7 @@ The estimating functions used throughout this book (including `ratio_est`, `reg_
 
 ```{r source-functions, message=FALSE, warning=FALSE}
 #| echo: false
+#| cache: false
 library(dplyr)
 library(latex2exp)
 library(gt)
@@ -50,7 +51,7 @@ cat("\n```\n")
 
 ### Theory {#sec-ups-hh-theory}
 
-**Setting.** The population has $N$ units. Unit $i$ has a study value $y_i$, with population total
+The population has $N$ units. Unit $i$ has a study value $y_i$, with population total
 $t=\sum_{i=1}^N y_i$ and mean $\bar{y}_U=t/N$, and an auxiliary variable $x_i>0$ whose total
 $t_x=\sum_{i=1}^N x_i$ is known. If $y_i$ is roughly proportional to $x_i$ (for example, the number of
 physicians of a county and its population), we construct the selection probabilities from $x_i$:
