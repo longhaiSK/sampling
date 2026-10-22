@@ -6,8 +6,8 @@
 <script src="Lec07-ups_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="Lec07-ups_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="Lec07-ups_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="Lec07-ups_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.37">
+<link href="Lec07-ups_files/libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.18">
 
   <meta name="author" content="Longhai Li">
   <meta name="dcterms.date" content="2026-10-22">
@@ -21,10 +21,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -156,7 +159,7 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Longhai Li 
+Longhai Li
 </div>
 </div>
 </div>
@@ -375,6 +378,9 @@ V(\hat t_{\mathrm{HH}})&amp;=t_x^2\,V(\hat B_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\
 </tr>
 </tbody>
 </table>
+</section>
+<section id="variances-of-the-three-estimators-of-b" class="slide level2">
+<h2>Variances of the Three Estimators of <span class="math inline">B</span></h2>
 <p>Variances (multiply by <span class="math inline">\bar x_U^2</span> for the mean, <span class="math inline">t_x^2</span> for the total): <span class="math display">
 \begin{aligned}
 V(\hat B_{\mathrm{avg}})&amp;=\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w^x_ib_i-B)^2\\
@@ -419,20 +425,20 @@ V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2
 </table>
 <p>HH divides the ratio estimator’s term by <span class="math inline">w^x_i</span>: units larger than average (<span class="math inline">w^x_i&gt;1</span>) are <strong>downweighted</strong>, smaller ones are upweighted, because large units are already drawn more often. UPSWR wins when the large residuals <span class="math inline">y_i-Bx_i</span> belong to the large units.</p>
 </section>
-<section id="toy-example-four-supermarkets-one-draw-variances" class="slide level2">
+<section id="toy-example-four-supermarkets-one-draw-variances" class="slide level2 smaller">
 <h2>Toy Example: Four Supermarkets, One-Draw Variances</h2>
 <p><span class="math inline">t_x=1600</span>, <span class="math inline">\bar x_U=400</span>, <span class="math inline">B=300/1600=0.1875</span>. Sales nearly proportional to floor area:</p>
-<table class="caption-top" style="width:100%;">
+<table class="caption-top">
 <colgroup>
-<col style="width: 14%">
 <col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1065,20 +1071,6 @@ A=\frac{\sum_{\mathcal S}(1-\pi_i)u_i}{\sum_{\mathcal S}(1-\pi_i)}</span></li>
 <li>a unit with small <span class="math inline">x_i</span> but large <span class="math inline">y_i</span> gets a huge weight <span class="math inline">1/\psi_i</span> (<span class="math inline">1/\pi_i</span>), so the estimates are unstable and the estimated SE tends to be too small (intervals under-cover).</li>
 </ul>
 <p>UPS is used mostly when the size is a good proxy of what is measured: selecting the clusters of a multi-stage survey proportional to households or students, auditing by monetary value, surveys of establishments by employment. If the size is only loosely related to <span class="math inline">y</span>, use SRS or stratified sampling, with a ratio or regression estimator if <span class="math inline">x_i</span> is known.</p>
-</section></section>
-<section>
-<section id="weights-in-unequal-probability-sampling" class="title-slide slide level1 center" data-number="8">
-<h1><span class="header-section-number">8</span> Weights in Unequal-Probability Sampling</h1>
-
-</section>
-<section id="general-weight-formula" class="slide level2">
-<h2>General Weight Formula</h2>
-<p>For sampling <strong>without</strong> replacement, the weight is the reciprocal of the inclusion probability, <span class="math inline">1/\pi_i</span>. For sampling <strong>with</strong> replacement, we use the <em>first-stage</em> weight <span class="math display">
-w_i = \frac{1}{E[Q_i]} = \frac{1}{n\psi_i},
-</span> where <span class="math inline">Q_i</span> is the number of times unit <span class="math inline">i</span> occurs in <span class="math inline">\mathcal R</span>. For one-stage cluster sampling, <span class="math inline">w_{ij}=1/(n\psi_i)</span> for every ssu <span class="math inline">j</span> in psu <span class="math inline">i</span>, and <span class="math display">
-\hat t_{\mathrm{HH}} = \sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}, \qquad
-\hat{\bar y}_U = \frac{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}}{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}} .
-</span> For two-stage sampling with an SRS of <span class="math inline">m_i</span> ssus, the weight has the extra factor <span class="math inline">M_i/m_i</span>.</p>
 
 </section></section>
     </div>

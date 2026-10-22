@@ -188,6 +188,8 @@ weights $w^x_i$ that do not add up to one.
 | Ratio (SRS) | $\dfrac{\sum_{\mathcal S} x_ib_i}{\sum_{\mathcal S} x_i}$ | estimation stage | slightly biased |
 | HH (UPSWR) | $\dfrac1n\sum\limits_{j=1}^n b_j^*$ | design stage | exactly unbiased |
 
+## Variances of the Three Estimators of $B$ 
+
 Variances (multiply by $\bar x_U^2$ for the mean, $t_x^2$ for the total):
 $$
 \begin{aligned}
@@ -211,12 +213,12 @@ HH divides the ratio estimator's term by $w^x_i$: units larger than average ($w^
 smaller ones are upweighted, because large units are already drawn more often. UPSWR wins when the large
 residuals $y_i-Bx_i$ belong to the large units.
 
-## Toy Example: Four Supermarkets, One-Draw Variances 
+## Toy Example: Four Supermarkets, One-Draw Variances {.smaller}
 
 $t_x=1600$, $\bar x_U=400$, $B=300/1600=0.1875$. Sales nearly proportional to floor area:
 
 | Store | $x_i$ | $y_i$ | $w^x_i$ | $b_i$ | $b_i-B$ | $(w^x_ib_i-B)^2$ | $(w^x_i)^2(b_i-B)^2$ | $w^x_i(b_i-B)^2$ |
-|:--:|--:|--:|--:|--:|--:|--:|--:|--:|
+|:--:|--:|--:|--:|--:|--:|------:|------:|------:|
 | A | 100 | 11 | 0.25 | 0.1100 | $-0.0775$ | 0.025600 | 0.000375 | 0.001502 |
 | B | 200 | 20 | 0.50 | 0.1000 | $-0.0875$ | 0.018906 | 0.001914 | 0.003828 |
 | C | 300 | 24 | 0.75 | 0.0800 | $-0.1075$ | 0.016256 | 0.006500 | 0.008667 |
@@ -455,20 +457,3 @@ UPS is used mostly when the size is a good proxy of what is measured: selecting 
 survey proportional to households or students, auditing by monetary value, surveys of establishments by
 employment. If the size is only loosely related to $y$, use SRS or stratified sampling, with a ratio or
 regression estimator if $x_i$ is known.
-
-# Weights in Unequal-Probability Sampling
-
-## General Weight Formula
-
-For sampling **without** replacement, the weight is the reciprocal of the inclusion probability, $1/\pi_i$.
-For sampling **with** replacement, we use the *first-stage* weight
-$$
-w_i = \frac{1}{E[Q_i]} = \frac{1}{n\psi_i},
-$$
-where $Q_i$ is the number of times unit $i$ occurs in $\mathcal R$. For one-stage cluster sampling, $w_{ij}=1/(n\psi_i)$
-for every ssu $j$ in psu $i$, and
-$$
-\hat t_{\mathrm{HH}} = \sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}, \qquad
-\hat{\bar y}_U = \frac{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}y_{ij}}{\sum_{i\in\mathcal R}\sum_{j=1}^{M_i} w_{ij}} .
-$$
-For two-stage sampling with an SRS of $m_i$ ssus, the weight has the extra factor $M_i/m_i$.
