@@ -135,80 +135,90 @@ In the more general notation of unequal probability sampling, $y_j^*/\psi_j^*=t_
 estimate of the total from draw $j$, so $\hat{t}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n y_j^*/\psi_j^*$. This form
 works for any $\psi_i$, not only for $\psi_i=x_i/t_x$, and is what the function `upswr_total` computes.
 
-**The variance in terms of $x_i$ and $(b_i-B)$.** Since $\psi_i\bar{x}_U^2=(x_i/t_x)(t_x/N)^2=\bar{x}_U\,x_i/N$,
+**The variance in terms of $x_i$ and $(b_i-B)$.** Write $w_i=x_i/\bar{x}_U$ for the size of unit $i$ relative to
+the average, so that $\psi_i=w_i/N$. Then
 $$
-V(\hat{\bar{y}}_{\mathrm{HH}})=\frac{\bar{x}_U^2S_{b^*}^2}{n}
-=\frac{1}{nN}\sum_{i=1}^N\bar{x}_U\,x_i\,(b_i-B)^2 ,
+V(\hat{B}_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 ,
 $$
-a sum of terms involving only $x_i$, $\bar{x}_U$ and $b_i-B$. The variance is small when all the ratios $b_i$
+a sum of terms involving only $w_i$ and $b_i-B$; the variances of $\hat{\bar{y}}_{\mathrm{HH}}$ and
+$\hat{t}_{\mathrm{HH}}$ are $\bar{x}_U^2$ and $t_x^2$ times this. The variance is small when all the ratios $b_i$
 are close to $B$, that is, when $y_i$ is nearly proportional to $x_i$.
 
-**The ratio estimator and the sample average, in terms of $b_i$.** Both are used with a simple random
-sample (SRS) $\mathcal{S}$ of $n$ units without replacement. Let
-$d_i=y_i-Bx_i=x_i(b_i-B)$ be the population residuals about the line through the origin $y=Bx$; they
-satisfy $\sum_{i=1}^N d_i=0$.
+**Two estimators of $B$ under simple random sampling.** The ratio estimator and the sample average are
+used with a simple random sample (SRS) $\mathcal{S}$ of $n$ units without replacement. Each is also an
+estimator of $B$, which is then multiplied by $\bar{x}_U$ or $t_x$.
 
-* The **ratio estimator** (@sec-ratio-theory) estimates $B$ by
+* The **ratio estimator** (@sec-ratio-theory) is
   $$
   \hat{B}_r=\frac{\sum_{i\in\mathcal{S}}y_i}{\sum_{i\in\mathcal{S}}x_i}
   =\frac{\sum_{i\in\mathcal{S}}x_i\,b_i}{\sum_{i\in\mathcal{S}}x_i},
   $$
-  the mean of the sampled $b_i$ weighted by $x_i$ (weights adding up to one), and then
+  the mean of the sampled $b_i$ weighted by $x_i$ (weights adding up to one), and
   $\hat{\bar{y}}_r=\bar{x}_U\hat{B}_r$, $\hat{t}_r=t_x\hat{B}_r$.
 
-* The **sample average** $\bar{y}=\frac1n\sum_{i\in\mathcal{S}}y_i$ ignores $x_i$. In terms of $b_i$ it
-  estimates $B$ by
+* The **sample average** $\bar{y}=\frac1n\sum_{i\in\mathcal{S}}y_i$ ignores $x_i$. In terms of $b_i$, it
+  corresponds to the estimator of $B$
   $$
-  \hat{B}_{\mathrm{avg}}=\frac{\bar{y}}{\bar{x}_U}=\frac{1}{n}\sum_{i\in\mathcal{S}}\frac{x_i}{\bar{x}_U}\,b_i ,
+  \hat{B}_{\mathrm{avg}}=\frac{\bar{y}}{\bar{x}_U}=\frac{1}{n}\sum_{i\in\mathcal{S}}w_i\,b_i ,
+  \qquad w_i=\frac{x_i}{\bar{x}_U},
   $$
-  the mean of the sampled $b_i$ with weights $x_i/\bar{x}_U$ that do not add up to one, and then
+  the mean of the sampled $b_i$ with weights $w_i$ that do not add up to one, and
   $\bar{y}=\bar{x}_U\hat{B}_{\mathrm{avg}}$, $\hat{t}_{\mathrm{avg}}=t_x\hat{B}_{\mathrm{avg}}$.
 
-All three estimators multiply an estimate of $B$ by $\bar{x}_U$ (or $t_x$). They differ in how the
-$b_i$ are weighted, in the variance, and in where $x_i$ is used:
+### Comparison of the HH, Ratio, and Average Estimators of $B$ {#sec-ups-compare}
+
+The three estimators of $B$ differ in how the ratios $b_i$ are weighted, in their variances, and in where
+$x_i$ is used. Let $w_i=x_i/\bar{x}_U$, and let $d_i=y_i-Bx_i=x_i(b_i-B)$ be the residuals about the line
+through the origin $y=Bx$.
 
 |  | Sample average (SRS) | Ratio estimator (SRS) | HH estimator (UPSWR, $\psi_i=x_i/t_x$) |
 |:---|:---|:---|:---|
-| Estimator of $B$ | $\hat{B}_{\mathrm{avg}}=\dfrac1n\sum\limits_{i\in\mathcal{S}}\dfrac{x_i}{\bar{x}_U}b_i$ | $\hat{B}_r=\dfrac{\sum_{i\in\mathcal{S}} x_ib_i}{\sum_{i\in\mathcal{S}} x_i}$ | $\hat{B}_{\mathrm{HH}}=\dfrac1n\sum\limits_{j=1}^n b_j^*$ |
-| Variance of the estimate of $\bar{y}_U$ | $\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (x_ib_i-\bar{x}_UB)^2$ | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N x_i^2\,(b_i-B)^2$ | $\dfrac{1}{nN}\sum\limits_{i=1}^N\bar{x}_U\,x_i\,(b_i-B)^2$ |
+| Estimator of $B$ | $\hat{B}_{\mathrm{avg}}=\dfrac1n\sum\limits_{i\in\mathcal{S}}w_ib_i$ | $\hat{B}_r=\dfrac{\sum_{i\in\mathcal{S}} x_ib_i}{\sum_{i\in\mathcal{S}} x_i}$ | $\hat{B}_{\mathrm{HH}}=\dfrac1n\sum\limits_{j=1}^n b_j^*$ |
+| Variance | $\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (w_ib_i-B)^2$ | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N w_i^2\,(b_i-B)^2$ | $\dfrac{1}{nN}\sum\limits_{i=1}^N w_i\,(b_i-B)^2$ |
 | $x_i$ is used at | not used | the **estimation** stage | the **design** stage |
-| Unbiased? | yes | slightly biased | exactly unbiased |
+| Unbiased? | yes, for $\bar{y}_U/\bar{x}_U$ | slightly biased | exactly unbiased |
 
-For the totals, multiply the estimators by $N$ and the variances by $N^2$. The variance of the sample average
-uses $y_i-\bar{y}_U=x_ib_i-\bar{x}_UB$, and that of the ratio estimator is an approximation for large $n$ in
-which $x_i(b_i-B)=d_i$. The next section compares the three variances on a small example.
+For the mean and the total, multiply the estimators by $\bar{x}_U$ and $t_x$, and the variances by
+$\bar{x}_U^2$ and $t_x^2$. The variance of the average uses $w_ib_i-B=(y_i-\bar{y}_U)/\bar{x}_U$, and the
+variance of the ratio estimator is a large-$n$ approximation which uses $w_i(b_i-B)=d_i/\bar{x}_U$.
+
+Ignoring the finite population correction and the difference between $N-1$ and $N$, each variance is
+$\frac1n$ times an average over the units of one squared term:
+
+| Estimator | Squared term of unit $i$ | Spread of $y$ about |
+|:---|:---|:---|
+| Sample average | $(w_ib_i-B)^2$ | the flat line $\bar{y}_U$ |
+| Ratio | $w_i^2\,(b_i-B)^2$ | the line $y=Bx$ |
+| HH | $w_i\,(b_i-B)^2$ | the line $y=Bx$, with weight $1/w_i$ relative to the ratio estimator |
+
+The ratio estimator and HH use the same ratios and the same centre $B$, so their terms differ only in one
+factor: $w_i^2$ for the ratio estimator, $w_i$ for HH. HH multiplies the term of the ratio estimator by
+$1/w_i=\bar{x}_U/x_i$. A unit larger than average ($w_i>1$) is **downweighted** under HH, and a smaller one
+is upweighted. The reason is that HH gives equal weights to the draws because the large units are already
+drawn more often, whereas the ratio estimator must give the large units larger weights $x_i$ to compensate
+for the equal chances. UPSWR therefore wins when the large residuals $d_i$ belong to the large units, that is,
+when the spread of $y_i$ about the line grows with $x_i$, as it does for county acreages. When the spread of
+$y_i$ is the same for all $x_i$ (so that $b_i-B\propto1/x_i$), the SRS ratio estimator does better. When $y_i$
+is not related to $x_i$ at all, all the $b_i-B$ are large and both estimators can be worse than the plain
+sample average. The next section illustrates these cases.
 
 ### Toy Example: Four Supermarkets {#sec-ups-toy}
 
 A town has four supermarkets, with floor areas $x_i$ from $100\,\text{m}^2$ to $1000\,\text{m}^2$, so
-$t_x=1600$ and $\bar{x}_U=400$. We want to estimate the mean monthly sales per store, $\bar{y}_U$, through
-the ratios $b_i=y_i/x_i$ (sales per square metre) and $B=\bar{y}_U/\bar{x}_U$. To see how the three
-estimators use $x_i$, we compare their variances for a **single draw** ($n=1$); for $n$
-draws, each is divided by $n$. For the two SRS estimators we take $N=\infty$, that is, we ignore the
-finite population correction, so a single draw has the variance of one value drawn with equal
-probabilities $1/N$ (hence the divisor $N$ rather than $N-1$). The one-draw variance of each estimator of
-$\bar{y}_U$ is then $\frac1N$ times a sum over the stores of one squared term, so the three can be compared store
-by store:
+$t_x=1600$, $\bar{x}_U=400$ and $w_i=x_i/\bar{x}_U=0.25,\,0.5,\,0.75,\,2.5$. We want to estimate the monthly
+sales per square metre $B=\bar{y}_U/\bar{x}_U$, from the ratios $b_i=y_i/x_i$ of the stores (the mean and the
+total of sales follow by multiplying by $\bar{x}_U$ and $t_x$). To compare the three estimators of $B$ in
+@sec-ups-compare, we work out their variances for a **single draw** ($n=1$); for $n$ draws, each is divided
+by $n$. For the two SRS estimators we take $N=\infty$, that is, we ignore the finite population correction,
+so a single draw has the variance of one value drawn with equal probabilities $1/N$ (hence the divisor $N$
+rather than $N-1$). The one-draw variance of each estimator is $\frac1N$ times the sum over the stores of its
+squared term:
 
-| Estimator | Design | Squared term of store $i$ | Spread of $y$ about |
-|:---|:---|:---|:---|
-| Sample average | SRS | $(x_ib_i-\bar{x}_UB)^2=(y_i-\bar{y}_U)^2$ | the flat line $\bar{y}_U$ |
-| Ratio | SRS | $x_i^2\,(b_i-B)^2=d_i^2$ | the line $y=Bx$ |
-| HH | PPS, $\psi_i=x_i/t_x$ | $\bar{x}_U\,x_i\,(b_i-B)^2=\dfrac{\bar{x}_U}{x_i}\,d_i^2$ | the line $y=Bx$, with weight $\bar{x}_U/x_i$ |
-
-With a single store, the ratio estimator and HH give the same estimate $\bar{x}_U\,b_i$, but store $i$ is
-drawn with probability $1/N$ under SRS and with probability $\psi_i=x_i/t_x$ under PPS. Their terms differ
-only in one factor: $x_i^2$ for the ratio estimator, $\bar{x}_U\,x_i$ for HH, that is, HH
-multiplies the term of the ratio estimator by $\bar{x}_U/x_i$. A store larger than
-average, with $x_i>\bar{x}_U$, has weight less than 1, so its term is **downweighted** under HH, and a
-store smaller than average is upweighted. The reason is that HH gives equal weights to the draws because the
-large stores are already drawn more often, whereas the ratio estimator must give the large stores larger
-weights $x_i$ to compensate for the equal chances. UPSWR therefore wins when the large residuals
-$d_i=x_i(b_i-B)$ belong to the large units, that is, when the spread of $y_i$ about the line grows with $x_i$,
-as it does for county acreages. When the spread of $y_i$ is the same for all $x_i$ (so that
-$b_i-B\propto1/x_i$), the SRS ratio estimator does better. When $y_i$ is not related to $x_i$ at all, all the
-$b_i-B$ are large and both estimators can be worse than the plain sample average, as the second population
-below shows.
+| Estimator | Design | Squared term of store $i$ |
+|:---|:---|:---|
+| Sample average | SRS | $(w_ib_i-B)^2$ |
+| Ratio | SRS | $w_i^2\,(b_i-B)^2$ |
+| HH | PPS, $\psi_i=x_i/t_x$ | $w_i\,(b_i-B)^2$ |
 
 For each population below, a single table works out the three variances side by side. The **Sum** row
 adds the squared terms, and the **Variance** row divides the sum by $N$.
@@ -216,29 +226,29 @@ adds the squared terms, and the **Variance** row divides the sum by $N$.
 ```{r toy-functions}
 #| cache: false
 #| echo: false
-# One working table for the three one-draw variances: sample average, ratio, HH
+# One working table for the three one-draw variances of the estimators of B: sample average, ratio, HH
 toy_table <- function(store, x, y) {
   N <- length(x)
   B <- sum(y) / sum(x)
   b <- y / x
-  tab <- data.frame(Store = store, x = x, y = y, b = b, db = b - B,
-                    dy2 = (x * b - mean(x) * B)^2,
-                    r = x^2 * (b - B)^2,
-                    h = mean(x) * x * (b - B)^2)
-  sums <- data.frame(Store = "**Sum**", x = sum(x), y = sum(y), b = NA, db = NA,
+  w <- x / mean(x)
+  tab <- data.frame(Store = store, x = x, y = y, w = w, b = b, db = b - B,
+                    dy2 = (w * b - B)^2,
+                    r = w^2 * (b - B)^2,
+                    h = w * (b - B)^2)
+  sums <- data.frame(Store = "**Sum**", x = sum(x), y = sum(y), w = sum(w), b = NA, db = NA,
                      dy2 = sum(tab$dy2), r = sum(tab$r), h = sum(tab$h))
-  vr <- data.frame(Store = "**Variance** (Sum / $N$)", x = NA, y = NA, b = NA, db = NA,
+  vr <- data.frame(Store = "**Variance** (Sum / $N$)", x = NA, y = NA, w = NA, b = NA, db = NA,
                    dy2 = sums$dy2 / N, r = sums$r / N, h = sums$h / N)
   rbind(tab, sums, vr)
 }
 
 show_toy_table <- function(tab) {
   options(knitr.kable.NA = "")
-  knitr::kable(tab, digits = c(0, 0, 0, 4, 4, 2, 2, 2),
+  knitr::kable(tab, digits = c(0, 0, 0, 2, 4, 4, 6, 6, 6),
                format.args = list(big.mark = ","),
-               col.names = c("Store", "$x_i$", "$y_i$", "$b_i=y_i/x_i$", "$b_i-B$",
-                             "$(x_ib_i-\\bar{x}_UB)^2$", "$x_i^2(b_i-B)^2$",
-                             "$\\bar{x}_Ux_i(b_i-B)^2$"))
+               col.names = c("Store", "$x_i$", "$y_i$", "$w_i=x_i/\\bar{x}_U$", "$b_i=y_i/x_i$", "$b_i-B$",
+                             "$(w_ib_i-B)^2$", "$w_i^2(b_i-B)^2$", "$w_i(b_i-B)^2$"))
 }
 
 # Unbiasedness of HH: the one-draw estimates b_i of B, weighted by psi_i
@@ -308,13 +318,15 @@ show_toy_table(tab_good)
 ```
 
 The sample average ignores the floor areas, and its variance,
-`r format(v_good[["mean"]], big.mark = ",")`, is dominated by store D, whose sales are far from
+`r signif(v_good[["mean"]], 3)`, is dominated by store D, whose sales are far from
 $\bar{y}_U=75$. The ratio estimator measures each store against the line $y=Bx$ instead, that is, it looks
-at $b_i-B$ on the scale $x_i^2$, which cuts the variance to `r format(round(v_good[["ratio"]], 1), big.mark = ",")`.
-HH uses the same ratios, but the largest term, store D's `r format(tab_good$r[4], big.mark = ",")`, belongs to
-the largest store, whose weight is $400/1000=0.4$: it is downweighted to
-`r format(tab_good$h[4], big.mark = ",")`, and the HH variance drops to `r round(v_good[["HH"]], 1)`, about
-`r round(100 * v_good[["HH"]] / v_good[["mean"]])`% of that of the sample average.
+at $b_i-B$, which cuts the variance to `r signif(v_good[["ratio"]], 3)`.
+HH uses the same ratios, but the largest term of the ratio estimator, store D's `r signif(tab_good$r[4], 3)`,
+belongs to the largest store, with $w_D=2.5$: HH divides it by $w_D$, giving
+`r signif(tab_good$h[4], 3)`, and the HH variance drops to `r signif(v_good[["HH"]], 3)`, about
+`r round(100 * v_good[["HH"]] / v_good[["mean"]])`% of that of the sample average. (Multiplying by
+$\bar{x}_U^2=160{,}000$ gives the variances of the estimates of the mean, `r format(round(160000 * v_good[["mean"]]), big.mark = ",")`,
+`r format(round(160000 * v_good[["ratio"]], 1), big.mark = ",")` and `r format(round(160000 * v_good[["HH"]], 1), big.mark = ",")`.)
 
 **Sales not related to floor area: a poor choice of $\psi_i$.** Now suppose the sales are about the same
 in all four stores, for example because the large store D is a warehouse outlet with few customers, while
@@ -331,11 +343,11 @@ show_toy_table(tab_bad)
 ```
 
 The ordering is reversed. The sales hardly vary, so the sample average has a tiny variance,
-`r round(v_bad[["mean"]], 1)`. The line $y=Bx$ fits the sales badly, so all the deviations $b_i-B$ are large,
-and the ratio estimator and HH, with variances `r format(round(v_bad[["ratio"]], 1), big.mark = ",")` and
-`r format(round(v_bad[["HH"]], 1), big.mark = ",")`, are more than
-`r floor(min(v_bad[c("ratio", "HH")]) / v_bad[["mean"]])` times worse than the sample average. The weights
-$\bar{x}_U/x_i$ help little: they downweight the large negative deviation of store D, but upweight the
+`r format(signif(v_bad[["mean"]], 3), scientific = FALSE)`. The line $y=Bx$ fits the sales badly, so all the deviations $b_i-B$ are large,
+and the ratio estimator and HH, with variances `r signif(v_bad[["ratio"]], 3)` and
+`r signif(v_bad[["HH"]], 3)`, are more than
+`r floor(min(v_bad[c("ratio", "HH")]) / v_bad[["mean"]])` times worse than the sample average. Dividing by
+$w_i$ helps little: it downweights the large negative deviation of store D, but upweights the
 positive deviations of the small stores, by $4$ for store A. Unequal probability sampling is only as good
 as the size variable used to construct $\psi_i$: before using PPS, check that $y_i$ is roughly
 proportional to $x_i$.
@@ -408,7 +420,8 @@ $$
 \widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=t_x\,\frac{s_{b^*}}{\sqrt{n}}=N\times`r round(se_ybar, 2)`=`r round(se_t, 2)`.
 $$
 For comparison, the theoretical standard error from @sec-ups-toy is
-$\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})=\sqrt{890.5/5}=`r round(se_true, 2)`$. The estimate
+$\mathrm{SE}(\hat{B}_{\mathrm{HH}})=\sqrt{`r signif(v_good[["HH"]], 3)`/5}=`r round(sqrt(v_good[["HH"]] / 5), 5)`$,
+that is, $\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})=400\times`r round(sqrt(v_good[["HH"]] / 5), 5)`=`r round(se_true, 2)`$. The estimate
 $`r ybar_HH`$ is $`r round((75 - ybar_HH) / se_ybar, 2)`$ estimated standard errors below $\bar{y}_U=75$.
 
 **The same form for the ratio estimator and the sample average.** For contrast, suppose an SRS of
