@@ -209,9 +209,12 @@ format_lm_gt <- function (lmfit)
 ## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
 srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
                       show.details = TRUE, col_labels = list (),
-                      title = "SRS Mean Estimation: Working Table")
+                      title = "SRS Mean Estimation: Working Table", decimals = 2)
 {
     estimate <- match.arg (estimate)
+    ## show `decimals` decimals in the working table and its notes
+    fmt_num_default <- fmt_num
+    fmt_num <- function (x, d = decimals) fmt_num_default (x, decimals = if (d == 2) decimals else d)
     col_labels <- modifyList (list (y = "y_i", yhat = "\\hat y_i", dev = "e_i",
                                     ybar = "\\bar y", s = "s_y"), col_labels)
     ybar_lab <- col_labels$ybar
@@ -260,7 +263,7 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
             dev2 = md (sprintf ("$(%s-%s)^2$", col_labels$y, col_labels$yhat))
         ) |>
         cols_width (i ~ px (40), everything () ~ px (110)) |>
-        fmt_auto (data = working, columns = c ("y", "yhat", "dev", "dev2"), decimals = 2) |>
+        fmt_auto (data = working, columns = c ("y", "yhat", "dev", "dev2"), decimals = decimals) |>
         sub_missing (missing_text = "...") |>
         tab_style (
             style     = cell_text (weight = "bold"),
@@ -892,9 +895,10 @@ upswr_total <- function (total, psi, N = Inf, estimate = c ("total", "mean"), sh
 ## method --- "ratio" (default): Bhat, i.e. the total of y per unit of x
 ##            "mean": the population mean of y, xbar_pop * Bhat
 ##            "total": the population total of y, tx_pop * Bhat
+## decimals --- decimals shown in the working table
 ## (the working table, if shown, is on the scale of the ratio b_j*)
 upswr_est <- function (ydata, xdata, xbar_pop, tx_pop,
-                       method = c ("ratio", "mean", "total"), show.details = TRUE)
+                       method = c ("ratio", "mean", "total"), show.details = TRUE, decimals = 2)
 {
   method <- match.arg (method)
   scale <- switch (method, ratio = 1, mean = xbar_pop, total = tx_pop)
@@ -902,7 +906,8 @@ upswr_est <- function (ydata, xdata, xbar_pop, tx_pop,
                   col_labels = list (y = "b_j^*", yhat = "\\hat B_{\\mathrm{HH}}",
                                      dev = "b_j^*-\\hat B_{\\mathrm{HH}}",
                                      ybar = "\\hat B_{\\mathrm{HH}}", s = "s_{b^*}"),
-                  title = "UPSWR Hansen-Hurwitz Estimation: Working Table")
+                  title = "UPSWR Hansen-Hurwitz Estimation: Working Table",
+                  decimals = decimals)
   res$estimate <- scale * res$estimate
   res
 }

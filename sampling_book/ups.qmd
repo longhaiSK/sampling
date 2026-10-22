@@ -706,126 +706,105 @@ theoretical, relative to the plain SRS average, and illustrates the comparison o
 
 In cluster sampling, the units of the HH estimator are **clusters** (primary sampling units, psus), and
 the study value of unit $i$ is the **cluster total** $t_i=\sum_{j=1}^{M_i}y_{ij}$. In a one-stage design,
-every element of a selected cluster is observed, so $t_i$ is known for the sampled clusters. The auxiliary
-variable is the **cluster size** $M_i$, which is known for all clusters, so the general notation becomes
+every element (secondary sampling unit, ssu) of a selected cluster is observed, so $t_i$ is known for the
+sampled clusters. The auxiliary variable is the **cluster size** $M_i$, known for all clusters. So the
+notation of @sec-ups-hh-theory changes as
 $$
-y_i \to t_i,\qquad x_i\to M_i,\qquad t_x\to M=\sum_{i=1}^N M_i,\qquad
-\psi_i=\frac{M_i}{M}.
+y_i \to t_i,\qquad x_i\to M_i,\qquad t_x\to M_0=\sum_{i=1}^N M_i,\qquad \bar{x}_U\to\bar{M}_U=\frac{M_0}{N},
+\qquad \psi_i=\frac{M_i}{M_0}.
 $$
-Then the ratio of cluster $i$ is $b_i=t_i/M_i=\bar{y}_i$, the **mean per element** of cluster $i$, and
-$B=t/M$ is the mean per element of the population. Each draw estimates the total by
-$t_i/\psi_i=M\,b_i=M\,\bar{y}_i$. The results of @sec-ups-hh-theory become:
+The ratio of cluster $i$ is
+$$
+b_i=\frac{t_i}{M_i}=\bar{y}_i ,
+$$
+the **mean per element (ssu-level mean)** of cluster $i$, and $B=t/M_0$ is the mean per element of the
+whole population, which we denote also by $\bar{y}_U$. Let $b_j^*=\bar{y}_j^*$ be the mean per element of the
+cluster selected on draw $j$. Then everything in @sec-ups-hh-theory applies:
 
-* **Total of the population:** $t=\sum_{i=1}^N t_i$ is estimated by
-  $$
-  \hat{t}_{\mathrm{HH}}=\frac{1}{n}\sum_{i=1}^n\frac{t_i}{\psi_i}=M\cdot\frac{1}{n}\sum_{i=1}^n\bar{y}_i,
-  \qquad
-  \widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=M\,\frac{s_{\bar{y}}}{\sqrt{n}} .
-  $$
+$$
+\boxed{\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}},\qquad
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{b}^*\right)^2 .
+$$
 
-* **Mean per cluster (psu-level mean)** $\bar{t}_U=t/N$: divide by $N$,
-  $$
-  \hat{\bar{t}}_{\mathrm{HH}}=\frac{\hat{t}_{\mathrm{HH}}}{N}=\bar{M}\cdot\frac{1}{n}\sum_{i=1}^n\bar{y}_i,
-  \qquad \bar{M}=\frac{M}{N}.
-  $$
+That is, the estimate of the mean per element is the plain average of the means of the sampled clusters:
+large clusters are selected more often, and each selected cluster is then weighted equally. Multiplying by
+the known constants gives the estimates of the three quantities of interest, with their estimated SEs
+multiplied by the same constants:
 
-* **Mean per element** $\bar{y}_U=t/M$, the ratio of the total of $t_i$ to the total of $M_i$.
-  Estimate both totals by HH, using the same draws:
-  $$
-  \hat{\bar{y}}_{\mathrm{HH}}=\frac{\hat{t}_{\mathrm{HH}}}{\hat{M}_{\mathrm{HH}}}
-  =\frac{\sum_{i=1}^n t_i/\psi_i}{\sum_{i=1}^n M_i/\psi_i}.
-  $$
-  Since $M_i/\psi_i=M$ for every draw, the denominator is the constant $nM$, so the estimator
-  *collapses* to the plain average of the sampled cluster means,
-  $$
-  \hat{\bar{y}}_{\mathrm{HH}}=\frac{1}{nM}\sum_{i=1}^n\frac{t_i}{\psi_i}
-  =\frac{1}{n}\sum_{i=1}^n\frac{t_i}{M_i}=\frac{1}{n}\sum_{i=1}^n\bar{y}_i ,
-  $$
-  with the standard error computed from the sample variance of the $\bar{y}_i$,
-  $$
-  \widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\frac{s_{\bar{y}}}{\sqrt{n}},\qquad
-  s_{\bar{y}}^2=\frac{1}{n-1}\sum_{i=1}^n\left(\bar{y}_i-\hat{\bar{y}}_{\mathrm{HH}}\right)^2 .
-  $$
+| Quantity | Estimate | Estimated SE |
+|:---|:---|:---|
+| Mean per element, $\bar{y}_U=B=t/M_0$ | $\hat{B}_{\mathrm{HH}}$ | $s_{b^*}/\sqrt{n}$ |
+| Mean per cluster (psu-level mean), $\bar{t}_U=t/N$ | $\bar{M}_U\,\hat{B}_{\mathrm{HH}}$ | $\bar{M}_U\,s_{b^*}/\sqrt{n}$ |
+| Total, $t=\sum_{i=1}^N t_i$ | $M_0\,\hat{B}_{\mathrm{HH}}$ | $M_0\,s_{b^*}/\sqrt{n}$ |
 
-Compared with SRS of clusters in the chapter on cluster sampling, the ratio estimator
-$\sum t_i/\sum M_i$ is replaced by a plain average, because the cluster sizes have been used at the design stage: large clusters are
-selected more often, and each selected cluster is then weighted equally. The estimator is most precise when the
-cluster means $\bar{y}_i$ vary little, that is, when $t_i$ is nearly proportional to $M_i$.
+The estimator is most precise when the cluster means $\bar{y}_i$ vary little, that is, when $t_i$ is nearly
+proportional to $M_i$. Note that this differs from the ratio estimator $\sum_{i\in\mathcal{S}}t_i/\sum_{i\in\mathcal{S}}M_i$
+of cluster sampling with a simple random sample of clusters: here the cluster sizes have been used at the
+design stage, so a plain average replaces the ratio.
 
-### Example: Study Hours of Student Groups {#sec-ups-studyhrs}
+### Example: Falls in Long-Term Care Homes {#sec-ups-cluster-example}
 
-We first manually define a small dataset describing the hours spent studying by groups of students. The probability of sampling a specific student group ($\psi_i$) was proportional to the number of students in that group ($M_i$), with $M=647$ students in total, and all students of a selected group were asked, so $t_i$ is the total hours of group $i$.
+A health authority wants to estimate the number of falls over the past year of the residents of its
+$N=40$ long-term care homes. From the registry it knows the number of residents $M_i$ of every home, and
+$M_0=3{,}000$ residents in total, so $\bar{M}_U=M_0/N=75$ residents per home. Visiting a home to review the
+incident reports of all its residents is costly, so $n=8$ draws of homes are made with replacement with
+probabilities $\psi_i=M_i/M_0$ proportional to the number of residents. The sample is a one-stage cluster
+sample: every resident of a selected home is reviewed, and $t_i$ is the number of falls in home $i$. (The
+data are made up for illustration.) Home H12 was drawn twice; a repeated draw is kept as a separate
+observation, and since all its residents are reviewed, it has the same $t_i$:
 
-```{r tbl-studyhrs-raw-data}
+```{r tbl-falls-data}
 #| echo: false
-#| tbl-cap: "Raw data: student study hours by group, with selection probabilities"
-# 1. Define the raw data
-psi <- c(24, 100, 100, 76, 44) / 647
-Mi <- c(24, 100, 100, 76, 44)
-hrs <- c(75, 203, 203, 191, 168)
-
-# Display the data cleanly
-data.frame(Mi, psi, hrs) |>
-  gt() |>
-  cols_label(
-    Mi = md("$M_i$"),
-    psi = md("$\\psi_i$"),
-    hrs = md("**Total Hours ($t_i$)**")
-  ) |>
-  fmt_number(columns = psi, decimals = 3)
+#| tbl-cap: "Falls in the sampled long-term care homes, $n=8$ draws"
+home <- c("H12", "H03", "H27", "H12", "H31", "H08", "H19", "H36")
+Mi <- c(180, 60, 240, 180, 95, 120, 45, 150)
+ti <- c(160, 49, 205, 160, 70, 118, 30, 140)
+N <- 40
+M0 <- 3000
+Mbar_U <- M0 / N
+knitr::kable(data.frame(j = 1:8, home, Mi, psi = Mi / M0, ti, b = ti / Mi),
+             digits = c(0, 0, 0, 3, 0, 4),
+             col.names = c("Draw $j$", "Home", "$M_j^*$ (residents)", "$\\psi_j^*=M_j^*/M_0$",
+                           "$t_j^*$ (falls)", "$b_j^*=t_j^*/M_j^*$ (falls per resident)"))
 ```
 
-```{r fig-studyhrs-vs-Mi}
-#| echo: false
-#| fig-cap: "Study hours vs. number of students, by group"
-plot(hrs ~ Mi, main = "Study Hours vs Number of Students",
-     xlab = "Number of Students (Mi)", ylab = "Study Hours (hrs)")
-abline(lm(hrs ~ Mi), col = "blue")
+We estimate $B$, the number of falls per resident, with `upswr_est`, using the totals $t_i$ of the
+sampled homes as `ydata` and their sizes $M_i$ as `xdata`. The working table lists the cluster means
+$b_j^*$, their deviations from $\hat{B}_{\mathrm{HH}}$, and the squared deviations:
+
+```{r falls-upswr-ratio}
+res_falls_B <- upswr_est(ti, Mi, xbar_pop = Mbar_U, tx_pop = M0, method = "ratio", decimals = 4)
+res_falls_B$table
+res_falls_B$estimate |> format_est_gt("hh_B")
 ```
 
-**Estimate the total hours spent by all students,** $\hat{t}_{\mathrm{HH}}$:
+Then we multiply by $\bar{M}_U=75$ for the number of falls per home, and by $M_0=3{,}000$ for the total
+number of falls:
 
-```{r studyhrs-upswr-est}
-res_hrs_total <- upswr_total(total = hrs, psi = psi, show.details = TRUE)
-res_hrs_total$table
-res_hrs_total$estimate |> format_est_gt("hh_total")
+```{r falls-upswr-mean-total}
+res_falls_home <- upswr_est(ti, Mi, xbar_pop = Mbar_U, tx_pop = M0, method = "mean", show.details = FALSE)
+res_falls_home$estimate |> format_est_gt("hh_ybar")
+
+res_falls_total <- upswr_est(ti, Mi, xbar_pop = Mbar_U, tx_pop = M0, method = "total", show.details = FALSE)
+res_falls_total$estimate |> format_est_gt("hh_total")
 ```
-
-**Estimate the mean hours spent by each student,** $\hat{\bar{y}}_{\mathrm{HH}}$. As shown above, this is $\hat{t}_{\mathrm{HH}}/M$, and it is also
-the plain average of the group means $t_i/M_i$:
-
-```{r studyhrs-upswr-mean}
-# t_HH / M, with the SE scaled down by the same factor
-(res_hrs_total$estimate / 647) |> format_est_gt("hh_ratio_mean")
-
-# The HH ratio estimator, from the function for ratios of two HH totals
-res_hrs_ratio <- upswr_ratio(total = hrs, M = Mi, psi = psi, estimate = "mean")
-res_hrs_ratio$table
-res_hrs_ratio$estimate |> format_est_gt("hh_ratio_mean")
-```
-
-### Example: Physicians per Capita (`statepop.csv`) {#sec-ups-statepop-percap}
-
-The county sample of @sec-ups-statepop is also a one-stage cluster sample, with counties as clusters, the
-physicians of a county as $t_i$, and the population of the county as its size $M_i$: the estimand
-$\bar{y}_U=t/M$ is then the number of **physicians per capita**.
-
-```{r statepop-upswr-per-capita}
-res_phys_ratio <- upswr_ratio(phys, popn, psi, estimate = "mean")
-res_phys_ratio$table
-res_phys_ratio$estimate |> format_est_gt("hh_ratio_mean")
-```
-**Output Note:** Every $M_i/\psi_i$ equals the US population $M$, so the ratio estimator is the plain average of
-the county rates $\mathrm{phys}_i/\mathrm{popn}_i$ shown in the working table. The
-estimate is about `r signif(res_phys_ratio$estimate["Est."], 3)` physicians per person, i.e.
-roughly `r round(res_phys_ratio$estimate["Est."] * 1e5)` per 100,000 people --- a
-population-weighted figure, unlike the per-county average of @sec-ups-statepop.
+**Output Note:** The estimated number of falls per resident is
+$\hat{B}_{\mathrm{HH}}=`r round(res_falls_B$estimate["Est."], 3)`$ (SE `r round(res_falls_B$estimate["S.E."], 3)`),
+the plain average of the eight cluster means in the working table. A typical home has
+$\bar{M}_U\hat{B}_{\mathrm{HH}}=`r round(res_falls_home$estimate["Est."], 1)`$ falls per year
+(SE `r round(res_falls_home$estimate["S.E."], 1)`), and the 40 homes together have about
+$M_0\hat{B}_{\mathrm{HH}}=`r format(round(res_falls_total$estimate["Est."]), big.mark = ",")`$ falls
+(SE `r round(res_falls_total$estimate["S.E."])`, 95% interval
+[`r format(round(res_falls_total$estimate["ci.low"]), big.mark = ",")`,
+`r format(round(res_falls_total$estimate["ci.upp"]), big.mark = ",")`]). The three
+statements carry the same information: the estimates and the standard errors are in the same proportion.
 
 ## Two-Stage Cluster Sampling with PPS {#sec-ups-twostage}
 
 ### Theory {#sec-ups-twostage-theory}
 
-In a two-stage design, we select $n$ clusters with replacement with probabilities $\psi_i=M_i/M$, and then take a simple random sample of
+In a two-stage design, we select $n$ clusters with replacement with probabilities $\psi_i=M_i/M_0$, and then take a simple random sample of
 $m_i$ elements from the $M_i$ elements of every draw of the cluster. The cluster total $t_i$ is no
 longer observed, but estimated from the subsample,
 $$
@@ -834,19 +813,19 @@ $$
 where $\bar{y}_i$ is now the mean of the *subsample*. The HH estimator is the one of
 @sec-ups-cluster-theory with $t_i$ replaced by $\hat{t}_i$, and each draw gives
 $$
-\hat{u}_i=\frac{\hat{t}_i}{\psi_i}=M\,\bar{y}_i .
+\frac{\hat{t}_i}{\psi_i}=M_0\,\bar{y}_i .
 $$
 Consequently, **all the formulas of one-stage cluster sampling carry over unchanged**, with $\bar{y}_i$
 the subsample means:
 $$
-\hat{t}_{\mathrm{HH}}=M\cdot\frac{1}{n}\sum_{i=1}^n\bar{y}_i,\qquad
-\hat{\bar{y}}_{\mathrm{HH}}=\frac{\sum_{i=1}^n\hat{t}_i/\psi_i}{\sum_{i=1}^n M_i/\psi_i}=\frac{1}{n}\sum_{i=1}^n\bar{y}_i,\qquad
+\hat{t}_{\mathrm{HH}}=M_0\cdot\frac{1}{n}\sum_{i=1}^n\bar{y}_i,\qquad
+\hat{\bar{y}}_{\mathrm{HH}}=\hat{B}_{\mathrm{HH}}=\frac{1}{n}\sum_{i=1}^n\bar{y}_i,\qquad
 \widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\frac{s_{\bar{y}}}{\sqrt{n}},
 $$
-and the psu-level mean is $\hat{\bar{t}}_{\mathrm{HH}}=\bar{M}\,\hat{\bar{y}}_{\mathrm{HH}}$.
+and the psu-level mean is $\hat{\bar{t}}_{\mathrm{HH}}=\bar{M}_U\,\hat{\bar{y}}_{\mathrm{HH}}$.
 
 **No second-stage formula is needed for the standard error.** The $n$ draws are independent, and the
-values $\hat{u}_i$ differ between draws for two reasons, the choice of the clusters and the choice of the elements within
+values $\hat{t}_i/\psi_i$ differ between draws for two reasons, the choice of the clusters and the choice of the elements within
 them. The sample variance $s_{\bar{y}}^2$ of the values $\bar{y}_i$ captures both, so the
 variance of the two-stage estimator is computed in exactly the same way as that of the one-stage estimator.
 (For this, a cluster selected twice should be subsampled independently on each draw.) This
