@@ -292,9 +292,19 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n(b_j^*-\bar b^*)^2 .
 =\frac1n\sum_{j=1}^n t_x\frac{y_j^*}{x_j^*}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*}\\
 &amp;=\sum_{j=1}^n w_j\,y_j^*,\qquad \boxed{w_j=\frac{1}{n\,\psi_j^*}}
 \end{aligned}
-</span> This is the HH estimator for <strong>any</strong> selection probabilities <span class="math inline">\psi_i</span>: a weighted sum over the <span class="math inline">n</span> draws in <span class="math inline">\mathcal R</span> (repeats included). Unit <span class="math inline">i</span> is expected to appear <span class="math inline">n\psi_i</span> times, so each draw of unit <span class="math inline">i</span> <strong>represents</strong> <span class="math inline">1/(n\psi_i)</span> units of the population. The estimated variance is <span class="math display">
-\hat V(\hat t_{\mathrm{HH}})=\frac{1}{n(n-1)}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2 .
-</span> With PPS the weight is <span class="math inline">w_i=t_x/(n\,x_i)</span>: large units get small weights.</p>
+</span> This is the HH estimator for <strong>any</strong> selection probabilities <span class="math inline">\psi_i</span>: a weighted sum over the <span class="math inline">n</span> draws in <span class="math inline">\mathcal R</span> (repeats included). Unit <span class="math inline">i</span> is expected to appear <span class="math inline">n\psi_i</span> times, so each draw of unit <span class="math inline">i</span> <strong>represents</strong> <span class="math inline">1/(n\psi_i)</span> units of the population.</p>
+<p>With PPS the weight is <span class="math inline">w_i=t_x/(n\,x_i)</span>: large units get small weights.</p>
+</section>
+<section id="variance-of-the-hh-estimator-in-terms-of-psi_i" class="slide level2 smaller">
+<h2>Variance of the HH Estimator in Terms of <span class="math inline">\psi_i</span></h2>
+<p><strong>From <span class="math inline">V(\hat B_{\mathrm{HH}})=S_{b^*}^2/n</span></strong>, using <span class="math inline">t_xb_i=y_i/\psi_i</span> and <span class="math inline">t_xB=t</span>, so that <span class="math inline">t_x(b_i-B)=y_i/\psi_i-t</span>: <span class="math display">
+\begin{aligned}
+V(\hat t_{\mathrm{HH}})&amp;=t_x^2\,V(\hat B_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\psi_i\,t_x^2(b_i-B)^2\\
+&amp;=\boxed{\frac1n\sum_{i=1}^N\psi_i\Big(\frac{y_i}{\psi_i}-t\Big)^2}
+\end{aligned}
+</span> Likewise <span class="math inline">t_x(b_j^*-\bar b^*)=y_j^*/\psi_j^*-\hat t_{\mathrm{HH}}</span>, so the estimated variance <span class="math inline">t_x^2s_{b^*}^2/n</span> is <span class="math display">
+\hat V(\hat t_{\mathrm{HH}})=\boxed{\frac{1}{n(n-1)}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2}
+</span> Both hold for <strong>any</strong> <span class="math inline">\psi_i</span>, with no finite population correction.</p>
 </section></section>
 <section>
 <section id="comparison-of-the-hh-ratio-and-average-estimators" class="title-slide slide level1 center" data-number="2">

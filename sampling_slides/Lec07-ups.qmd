@@ -130,11 +130,26 @@ $$
 $$
 This is the HH estimator for **any** selection probabilities $\psi_i$: a weighted sum over the $n$ draws in
 $\mathcal R$ (repeats included). Unit $i$ is expected to appear $n\psi_i$ times, so each draw of unit $i$
-**represents** $1/(n\psi_i)$ units of the population. The estimated variance is
-$$
-\hat V(\hat t_{\mathrm{HH}})=\frac{1}{n(n-1)}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2 .
-$$
+**represents** $1/(n\psi_i)$ units of the population.
+
 With PPS the weight is $w_i=t_x/(n\,x_i)$: large units get small weights.
+
+## Variance of the HH Estimator in Terms of $\psi_i$ {.smaller}
+
+**From $V(\hat B_{\mathrm{HH}})=S_{b^*}^2/n$**, using $t_xb_i=y_i/\psi_i$ and $t_xB=t$, so that
+$t_x(b_i-B)=y_i/\psi_i-t$:
+$$
+\begin{aligned}
+V(\hat t_{\mathrm{HH}})&=t_x^2\,V(\hat B_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\psi_i\,t_x^2(b_i-B)^2\\
+&=\boxed{\frac1n\sum_{i=1}^N\psi_i\Big(\frac{y_i}{\psi_i}-t\Big)^2}
+\end{aligned}
+$$
+Likewise $t_x(b_j^*-\bar b^*)=y_j^*/\psi_j^*-\hat t_{\mathrm{HH}}$, so the estimated variance
+$t_x^2s_{b^*}^2/n$ is
+$$
+\hat V(\hat t_{\mathrm{HH}})=\boxed{\frac{1}{n(n-1)}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2}
+$$
+Both hold for **any** $\psi_i$, with no finite population correction.
 
 # Comparison of the HH, Ratio and Average Estimators
 
