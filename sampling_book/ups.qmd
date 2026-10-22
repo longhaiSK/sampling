@@ -374,27 +374,49 @@ positive deviations of the small stores, by $4$ for store A. Unequal probability
 as the size variable used to construct $\psi_i$: before using PPS, check that $y_i$ is roughly
 proportional to $x_i$.
 
-### Computation Example: Five Draws with a Repeat {#sec-ups-toy-sample}
+### Computation Example: Revenue from AI Token Usage {#sec-ups-toy-sample}
 
-Back to the supermarkets with sales nearly proportional to floor area (@sec-ups-toy), suppose we make
-$n=5$ draws with replacement, with $\psi_i=x_i/t_x$. Store D, with $\psi_D=10/16$, is likely to be drawn
-more than once; in our sample it is drawn twice:
+An AI company has $N=6$ enterprise customers. From its usage logs it knows, for every customer, the number
+of tokens $x_i$ (in millions) the customer processed last month, but the revenue $y_i$ (in thousands of
+dollars) that the customer generated has to be audited from the billing records, which is costly. Revenue is
+roughly proportional to token usage, so we draw $n=5$ customers with replacement, with probabilities
+$\psi_i=x_i/t_x$ proportional to the tokens, and estimate the revenue per million tokens $B$, the mean
+revenue per customer $\bar{y}_U$, and the total revenue $t$.
+
+```{r toy-sample-pop}
+#| cache: false
+#| echo: false
+cust <- c("A", "B", "C", "D", "E", "F")
+x_U <- c(A = 2, B = 5, C = 8, D = 15, E = 30, F = 40)
+y_U <- c(A = 11, B = 24, C = 41, D = 70, E = 155, F = 190)
+N <- length(x_U)
+xbar_U <- mean(x_U)
+t_x <- sum(x_U)
+B_pop <- sum(y_U) / t_x
+pop <- data.frame(Customer = c(cust, "**Total**", "**True $B=\\sum y_i/\\sum x_i$**"),
+                  x = c(x_U, t_x, NA), psi = c(x_U / t_x, 1, NA),
+                  y = c(y_U, sum(y_U), NA), b = c(y_U / x_U, NA, B_pop))
+options(knitr.kable.NA = "")
+knitr::kable(pop, digits = c(0, 0, 2, 0, 4), format.args = list(big.mark = ","),
+             col.names = c("Customer", "$x_i$ (million tokens)", "$\\psi_i=x_i/t_x$",
+                           "$y_i$ (revenue, $ thousand)", "$b_i=y_i/x_i$"))
+```
+
+The $y_i$ and $b_i$ columns are unknown to the company before the audit; they are shown here so that we can
+check the estimates. The largest customer F, with $\psi_F=0.4$, is likely to be drawn more than once; in our
+sample it is drawn twice:
 $$
-\mathcal{R}=\{D,\ C,\ D,\ B,\ A\}.
+\mathcal{R}=\{F,\ E,\ F,\ D,\ C\}.
 $$
-Both copies of D are kept: each is a separate draw, so each is a separate observation $b_j^*$.
+Both copies of F are kept: each is a separate draw, so each is a separate observation $b_j^*$. Only
+these customers are audited.
 
 ```{r toy-sample}
 #| cache: false
 #| echo: false
-x_U <- c(A = 100, B = 200, C = 300, D = 1000)
-y_U <- c(A = 11, B = 20, C = 24, D = 245)
-R <- c("D", "C", "D", "B", "A")           # the draws; in practice
-                                           # sample(names(x_U), 5, replace = TRUE, prob = x_U / sum(x_U))
+R <- c("F", "E", "F", "D", "C")           # the draws; in practice
+                                           # sample(cust, 5, replace = TRUE, prob = x_U / sum(x_U))
 n <- length(R)
-N <- length(x_U)
-xbar_U <- mean(x_U)
-t_x <- sum(x_U)
 b_star <- y_U[R] / x_U[R]
 bbar <- mean(b_star)
 s2_b <- var(b_star)
@@ -403,66 +425,70 @@ se_ybar <- xbar_U * sqrt(s2_b / n)
 t_HH <- t_x * bbar
 se_t <- t_x * sqrt(s2_b / n)
 se_B <- sqrt(s2_b / n)
-B_pop <- sum(y_U) / t_x
-se_true <- sqrt(sum(xbar_U * x_U * (y_U / x_U - B_pop)^2) / N / n)
+# theoretical one-draw variance of B_HH: sum_i psi_i (b_i - B)^2
+V_B <- sum(x_U / t_x * (y_U / x_U - B_pop)^2)
+se_true <- xbar_U * sqrt(V_B / n)
 
-samp <- data.frame(j = seq_len(n), Store = R, x = x_U[R], y = y_U[R], b = b_star,
+samp <- data.frame(j = seq_len(n), Customer = R, x = x_U[R], y = y_U[R], b = b_star,
                    dev = b_star - bbar, dev2 = (b_star - bbar)^2)
-sums <- data.frame(j = NA, Store = "**Sum**", x = NA, y = NA, b = sum(b_star), dev = sum(samp$dev),
+sums <- data.frame(j = NA, Customer = "**Sum**", x = NA, y = NA, b = sum(b_star), dev = sum(samp$dev),
                    dev2 = sum(samp$dev2))
 options(knitr.kable.NA = "")
 knitr::kable(rbind(samp, sums), digits = c(0, 0, 0, 0, 4, 4, 6), row.names = FALSE,
-             col.names = c("Draw $j$", "Store", "$x_j^*$", "$y_j^*$", "$b_j^*=y_j^*/x_j^*$",
+             col.names = c("Draw $j$", "Customer", "$x_j^*$", "$y_j^*$", "$b_j^*=y_j^*/x_j^*$",
                            "$b_j^*-\\bar{b}^*$", "$(b_j^*-\\bar{b}^*)^2$"))
 ```
 
 **Step 1: HH estimate of $B$, the mean of the ratios.** From the column $b_j^*$,
 $$
-\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{5}\sum_{j=1}^5 b_j^*=\frac{`r sum(b_star)`}{5}=`r bbar`.
+\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{5}\sum_{j=1}^5 b_j^*=\frac{`r round(sum(b_star), 4)`}{5}=`r round(bbar, 4)`.
 $$
 
-**Step 2: the HH estimates of the mean and the total.** Multiply by the known mean and total of the floor areas:
+**Step 2: the HH estimates of the mean and the total.** Multiply by the known mean and total of the tokens,
+$\bar{x}_U=`r round(xbar_U, 3)`$ and $t_x=`r t_x`$:
 $$
-\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\,\hat{B}_{\mathrm{HH}}=400\times `r bbar`=`r ybar_HH`,\qquad
-\hat{t}_{\mathrm{HH}}=t_x\,\hat{B}_{\mathrm{HH}}=1600\times `r bbar`=`r t_HH`.
+\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\,\hat{B}_{\mathrm{HH}}=`r round(xbar_U, 3)`\times `r round(bbar, 4)`=`r round(ybar_HH, 2)`,\qquad
+\hat{t}_{\mathrm{HH}}=t_x\,\hat{B}_{\mathrm{HH}}=`r t_x`\times `r round(bbar, 4)`=`r round(t_HH, 1)`.
 $$
-The true values are $\bar{y}_U=75$ and $t=300$.
+The true values are $B=`r round(B_pop, 4)`$, $\bar{y}_U=`r round(mean(y_U), 2)`$ and $t=`r sum(y_U)`$.
 
 **Step 3: the sample variance of the ratios.** From the last column,
 $$
 s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{`r round(sum(samp$dev2), 6)`}{4}
-=`r round(s2_b, 7)`,\qquad s_{b^*}=`r round(sqrt(s2_b), 5)`.
+=`r round(s2_b, 6)`,\qquad s_{b^*}=`r round(sqrt(s2_b), 5)`.
 $$
 
 **Step 4: the estimated standard errors.**
 $$
 \widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}}=`r round(se_B, 5)`,\qquad
 \widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\bar{x}_U\,\frac{s_{b^*}}{\sqrt{n}}
-=400\times`r round(se_B, 5)`=`r round(se_ybar, 2)`,\qquad
-\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=t_x\,\frac{s_{b^*}}{\sqrt{n}}=N\times`r round(se_ybar, 2)`=`r round(se_t, 2)`.
+=`r round(xbar_U, 3)`\times`r round(se_B, 5)`=`r round(se_ybar, 2)`,\qquad
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=t_x\,\frac{s_{b^*}}{\sqrt{n}}=`r t_x`\times`r round(se_B, 5)`=`r round(se_t, 1)`.
 $$
-For comparison, the theoretical standard error from @sec-ups-toy is
-$\mathrm{SE}(\hat{B}_{\mathrm{HH}})=\sqrt{`r signif(v_good[["HH"]], 3)`/5}=`r round(sqrt(v_good[["HH"]] / 5), 5)`$,
-that is, $\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})=400\times`r round(sqrt(v_good[["HH"]] / 5), 5)`=`r round(se_true, 2)`$. The estimate
-$`r ybar_HH`$ is $`r round((75 - ybar_HH) / se_ybar, 2)`$ estimated standard errors below $\bar{y}_U=75$.
+For comparison, the theoretical standard error is
+$\mathrm{SE}(\hat{B}_{\mathrm{HH}})=\sqrt{S_{b^*}^2/n}=\sqrt{`r round(V_B, 6)`/5}=`r round(sqrt(V_B / n), 5)`$,
+that is, $\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})=`r round(se_true, 2)`$. The estimate
+$`r round(ybar_HH, 2)`$ is $`r round(abs(mean(y_U) - ybar_HH) / se_ybar, 2)`$ estimated standard errors
+`r ifelse(ybar_HH < mean(y_U), "below", "above")` $\bar{y}_U=`r round(mean(y_U), 2)`$.
 
 **The same form for the ratio estimator and the sample average.** For contrast, suppose an SRS of
-two stores, $\mathcal{S}=\{C,D\}$, had been drawn instead (the SRS estimators do not apply to the PPS
-sample above). With $b_C=`r y_U[["C"]] / x_U[["C"]]`$ and $b_D=`r y_U[["D"]] / x_U[["D"]]`$,
+two customers, $\mathcal{S}=\{D,F\}$, had been audited instead (the SRS estimators do not apply to the PPS
+sample above). With $b_D=`r round(y_U[["D"]] / x_U[["D"]], 4)`$ and $b_F=`r round(y_U[["F"]] / x_U[["F"]], 4)`$,
+and $w_i=x_i/\bar{x}_U$,
 $$
-\hat{B}_r=\frac{x_Cb_C+x_Db_D}{x_C+x_D}=\frac{300\times`r y_U[["C"]] / x_U[["C"]]`+1000\times`r y_U[["D"]] / x_U[["D"]]`}{1300}
-=`r round((y_U[["C"]] + y_U[["D"]]) / (x_U[["C"]] + x_U[["D"]]), 4)`,
+\hat{B}_r=\frac{x_Db_D+x_Fb_F}{x_D+x_F}=\frac{`r x_U[["D"]]`\times`r round(y_U[["D"]] / x_U[["D"]], 4)`+`r x_U[["F"]]`\times`r round(y_U[["F"]] / x_U[["F"]], 4)`}{`r x_U[["D"]] + x_U[["F"]]`}
+=`r round((y_U[["D"]] + y_U[["F"]]) / (x_U[["D"]] + x_U[["F"]]), 4)`,
 $$
 $$
-\hat{B}_{\mathrm{avg}}=\frac{1}{2}\left(\frac{x_C}{\bar{x}_U}b_C+\frac{x_D}{\bar{x}_U}b_D\right)
-=\frac{1}{2}\left(0.75\times`r y_U[["C"]] / x_U[["C"]]`+2.5\times`r y_U[["D"]] / x_U[["D"]]`\right)
-=`r round(((y_U[["C"]] + y_U[["D"]]) / 2) / 400, 4)`.
+\hat{B}_{\mathrm{avg}}=\frac{1}{2}\left(w_Db_D+w_Fb_F\right)
+=\frac{1}{2}\left(`r round(x_U[["D"]] / xbar_U, 2)`\times`r round(y_U[["D"]] / x_U[["D"]], 4)`+`r round(x_U[["F"]] / xbar_U, 2)`\times`r round(y_U[["F"]] / x_U[["F"]], 4)`\right)
+=`r round(((y_U[["D"]] + y_U[["F"]]) / 2) / xbar_U, 4)`.
 $$
-Multiplying by $\bar{x}_U=400$ gives $\hat{\bar{y}}_r=`r round(400 * (y_U[["C"]] + y_U[["D"]]) / (x_U[["C"]] + x_U[["D"]]), 1)`$ and
-$\bar{y}=`r (y_U[["C"]] + y_U[["D"]]) / 2`$. The ratio estimator weights the two ratios by $x_i$, so it is
-dominated by the large store D but is normalised to be a weighted mean of the $b_i$, so it stays between
-$b_C$ and $b_D$. The sample average has weights $x_i/(n\bar{x}_U)$ adding to $1.625>1$ here, because the sampled
-stores happen to be larger than average, so it overshoots: its implied $\hat{B}_{\mathrm{avg}}$ is above both ratios.
+Multiplying by $\bar{x}_U$ gives $\hat{\bar{y}}_r=`r round(xbar_U * (y_U[["D"]] + y_U[["F"]]) / (x_U[["D"]] + x_U[["F"]]), 2)`$ and
+$\bar{y}=`r (y_U[["D"]] + y_U[["F"]]) / 2`$. The ratio estimator is a weighted mean of $b_D$ and $b_F$ with weights
+adding to one, so it stays between them. The sample average has weights $w_i/n$ adding to
+$`r round((x_U[["D"]] + x_U[["F"]]) / xbar_U / 2, 3)`>1$ here, because the sampled customers happen to be larger than average, so
+it overshoots: its $\hat{B}_{\mathrm{avg}}$ is far above both ratios.
 
 The same HH estimates from the shared function `upswr_total` (@sec-ups-statepop uses it for real data),
 which works with the totals $y_j^*/\psi_j^*=t_x\,b_j^*$:
@@ -471,7 +497,7 @@ which works with the totals $y_j^*/\psi_j^*=t_x\,b_j^*$:
 #| cache: false
 psi_R <- x_U[R] / sum(x_U)
 upswr_total(y_U[R], psi_R, show.details = FALSE)$estimate |> format_est_gt("hh_total")
-upswr_total(y_U[R], psi_R, N = 4, estimate = "mean", show.details = FALSE)$estimate |>
+upswr_total(y_U[R], psi_R, N = N, estimate = "mean", show.details = FALSE)$estimate |>
   format_est_gt("hh_mean")
 ```
 
