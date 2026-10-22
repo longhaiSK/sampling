@@ -32,11 +32,12 @@ $$
 \psi_i = P(\text{select unit } i \text{ on any given draw}),\qquad \sum_{i=1}^N\psi_i=1 .
 $$
 
-Draw $n$ units with replacement (a unit may be drawn more than once). Each draw gives an unbiased estimate
-$y_j^*/\psi_j^*$ of the total $t$, and we average the $n$ independent estimates (**Hansen-Hurwitz**):
+Draw $n$ units with replacement (a unit may be drawn more than once). The sample $\mathcal R$ (not $\mathcal S$)
+is the list of the $n$ draws, **including repeats**: for example $\mathcal R=\{D,D,D,C,C,D,C,A,B,B\}$ for $n=10$.
+Each draw $j$ gives an unbiased estimate $y_j^*/\psi_j^*$ of the total $t$ (the star indicates that it is
+indexed by the *draw*), and we average the $n$ independent estimates (**Hansen-Hurwitz**):
 $$
-\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
-\widehat{\mathrm{SE}}(\hat t_{\mathrm{HH}})=\frac{s_u}{\sqrt n},\quad s_u^2=\frac{1}{n-1}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2 .
+\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*} .
 $$
 
 A common choice, **probabilities proportional to size (PPS)**, with a size variable $x_i>0$ known for every unit:
@@ -72,22 +73,6 @@ Divide $[0,1]$ into segments of length $\psi_1,\ldots,\psi_N$. Draw $u\sim\text{
 the segment that $u$ falls into determines the selected unit. In R:
 `sample(1:N, size = n, prob = psi, replace = TRUE)`.
 
-## The Sample $\mathcal R$ and the IID View
-
-The sample $\mathcal R$ (not $\mathcal S$) is the list of the $n$ draws, **including repeats**. For example,
-$\mathcal R=\{D,D,D,C,C,D,C,A,B,B\}$ for $n=10$.
-
-Let $u_j^*=y_j^*/\psi_j^*$ be the estimate from the $j$th *draw*. The $u_j^*$ are IID with
-$$
-E(u_j^*)=\sum_{i=1}^N\psi_i\frac{y_i}{\psi_i}=t,\qquad
-V(u_j^*)=\sum_{i=1}^N\psi_i\Big(\frac{y_i}{\psi_i}-t\Big)^2 ,
-$$
-so $\hat t_{\mathrm{HH}}=\bar u^*$ is unbiased with $V(\hat t_{\mathrm{HH}})=V(u_j^*)/n$.
-
-::: {.callout-note}
-There is **no finite population correction**: the $n$ draws are independent.
-:::
-
 ## Ratios $b_i$ and the Ratio $B$
 
 With $\psi_i=x_i/t_x$, define for every unit
@@ -119,7 +104,6 @@ E(b_j^*)=\sum_{i=1}^N\psi_i\,b_i=\sum_{i=1}^N\frac{x_i}{t_x}\frac{y_i}{x_i}=\fra
 S_{b^*}^2=V(b_j^*)=\sum_{i=1}^N\psi_i(b_i-B)^2 .
 $$
 A single draw is unbiased for $B$, and precise when the $b_i$ are nearly equal, i.e. $y_i\propto x_i$.
-(In the notation of the previous slides, $u_j^*=y_j^*/\psi_j^*=t_x\,b_j^*$.)
 
 ## HH Estimator of $B$: Mean and Variance
 

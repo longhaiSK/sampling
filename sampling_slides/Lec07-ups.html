@@ -181,9 +181,8 @@ Longhai Li
 <p>Suppose <span class="math inline">n&gt;1</span> and we sample <strong>with replacement</strong>: the selection probabilities do not change after the first draw. Let <span class="math display">
 \psi_i = P(\text{select unit } i \text{ on any given draw}),\qquad \sum_{i=1}^N\psi_i=1 .
 </span></p>
-<p>Draw <span class="math inline">n</span> units with replacement (a unit may be drawn more than once). Each draw gives an unbiased estimate <span class="math inline">y_j^*/\psi_j^*</span> of the total <span class="math inline">t</span>, and we average the <span class="math inline">n</span> independent estimates (<strong>Hansen-Hurwitz</strong>): <span class="math display">
-\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
-\widehat{\mathrm{SE}}(\hat t_{\mathrm{HH}})=\frac{s_u}{\sqrt n},\quad s_u^2=\frac{1}{n-1}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2 .
+<p>Draw <span class="math inline">n</span> units with replacement (a unit may be drawn more than once). The sample <span class="math inline">\mathcal R</span> (not <span class="math inline">\mathcal S</span>) is the list of the <span class="math inline">n</span> draws, <strong>including repeats</strong>: for example <span class="math inline">\mathcal R=\{D,D,D,C,C,D,C,A,B,B\}</span> for <span class="math inline">n=10</span>. Each draw <span class="math inline">j</span> gives an unbiased estimate <span class="math inline">y_j^*/\psi_j^*</span> of the total <span class="math inline">t</span> (the star indicates that it is indexed by the <em>draw</em>), and we average the <span class="math inline">n</span> independent estimates (<strong>Hansen-Hurwitz</strong>): <span class="math display">
+\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*} .
 </span></p>
 <p>A common choice, <strong>probabilities proportional to size (PPS)</strong>, with a size variable <span class="math inline">x_i&gt;0</span> known for every unit: <span class="math display">
 \psi_i = \frac{x_i}{t_x},\qquad t_x=\sum_{k=1}^N x_k .
@@ -195,27 +194,6 @@ Longhai Li
 <img data-src="Lec07-ups_files/figure-revealjs/fig-pps-line-1.png" id="fig-pps-line" class="quarto-figure quarto-figure-center r-stretch" style="width:85.0%"><p class="caption">
 Figure&nbsp;1
 </p><p>Divide <span class="math inline">[0,1]</span> into segments of length <span class="math inline">\psi_1,\ldots,\psi_N</span>. Draw <span class="math inline">u\sim\text{Uniform}(0,1)</span> (red triangles); the segment that <span class="math inline">u</span> falls into determines the selected unit. In R: <code>sample(1:N, size = n, prob = psi, replace = TRUE)</code>.</p>
-</section>
-<section id="the-sample-mathcal-r-and-the-iid-view" class="slide level2">
-<h2>The Sample <span class="math inline">\mathcal R</span> and the IID View</h2>
-<p>The sample <span class="math inline">\mathcal R</span> (not <span class="math inline">\mathcal S</span>) is the list of the <span class="math inline">n</span> draws, <strong>including repeats</strong>. For example, <span class="math inline">\mathcal R=\{D,D,D,C,C,D,C,A,B,B\}</span> for <span class="math inline">n=10</span>.</p>
-<p>Let <span class="math inline">u_j^*=y_j^*/\psi_j^*</span> be the estimate from the <span class="math inline">j</span>th <em>draw</em>. The <span class="math inline">u_j^*</span> are IID with <span class="math display">
-E(u_j^*)=\sum_{i=1}^N\psi_i\frac{y_i}{\psi_i}=t,\qquad
-V(u_j^*)=\sum_{i=1}^N\psi_i\Big(\frac{y_i}{\psi_i}-t\Big)^2 ,
-</span> so <span class="math inline">\hat t_{\mathrm{HH}}=\bar u^*</span> is unbiased with <span class="math inline">V(\hat t_{\mathrm{HH}})=V(u_j^*)/n</span>.</p>
-<div class="callout callout-note callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Note</strong></p>
-</div>
-<div class="callout-content">
-<p>There is <strong>no finite population correction</strong>: the <span class="math inline">n</span> draws are independent.</p>
-</div>
-</div>
-</div>
 </section>
 <section id="ratios-b_i-and-the-ratio-b" class="slide level2">
 <h2>Ratios <span class="math inline">b_i</span> and the Ratio <span class="math inline">B</span></h2>
@@ -269,7 +247,7 @@ b_i=\frac{y_i}{x_i},\qquad B=\frac{t}{t_x}=\frac{\bar y_U}{\bar x_U},\qquad \bar
 <p><span class="math display">
 E(b_j^*)=\sum_{i=1}^N\psi_i\,b_i=\sum_{i=1}^N\frac{x_i}{t_x}\frac{y_i}{x_i}=\frac{t}{t_x}=B,\qquad
 S_{b^*}^2=V(b_j^*)=\sum_{i=1}^N\psi_i(b_i-B)^2 .
-</span> A single draw is unbiased for <span class="math inline">B</span>, and precise when the <span class="math inline">b_i</span> are nearly equal, i.e.&nbsp;<span class="math inline">y_i\propto x_i</span>. (In the notation of the previous slides, <span class="math inline">u_j^*=y_j^*/\psi_j^*=t_x\,b_j^*</span>.)</p>
+</span> A single draw is unbiased for <span class="math inline">B</span>, and precise when the <span class="math inline">b_i</span> are nearly equal, i.e.&nbsp;<span class="math inline">y_i\propto x_i</span>.</p>
 </section>
 <section id="hh-estimator-of-b-mean-and-variance" class="slide level2">
 <h2>HH Estimator of <span class="math inline">B</span>: Mean and Variance</h2>
