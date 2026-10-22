@@ -168,23 +168,12 @@ Longhai Li
 <h1><span class="header-section-number">1</span> Unequal Probability Sampling with Replacement (UPSWR)</h1>
 
 </section>
-<section id="textbook-sections" class="slide level2">
-<h2>Textbook Sections</h2>
-<p>Textbook sections:</p>
-<ul>
-<li>6.1–6.3 in Lohr’s book; UPS without replacement: the Horvitz-Thompson estimator at the end</li>
-<li>8.9 and 9.7 in Scheaffer et al., titled “Cluster Sampling with Probabilities Proportional to Size”</li>
-</ul>
-</section>
 <section id="how-to-do-unequal-probability-sampling" class="slide level2">
 <h2>How to Do Unequal Probability Sampling?</h2>
 <p>Suppose <span class="math inline">n&gt;1</span> and we sample <strong>with replacement</strong>: the selection probabilities do not change after the first draw. Let <span class="math display">
 \psi_i = P(\text{select unit } i \text{ on any given draw}),\qquad \sum_{i=1}^N\psi_i=1 .
 </span></p>
-<p>Draw <span class="math inline">n</span> units with replacement (a unit may be drawn more than once). The sample <span class="math inline">\mathcal R</span> (not <span class="math inline">\mathcal S</span>) is the list of the <span class="math inline">n</span> draws, <strong>including repeats</strong>: for example <span class="math inline">\mathcal R=\{D,D,D,C,C,D,C,A,B,B\}</span> for <span class="math inline">n=10</span>. Each draw <span class="math inline">j</span> gives an unbiased estimate <span class="math inline">y_j^*/\psi_j^*</span> of the total <span class="math inline">t</span> (the star indicates that it is indexed by the <em>draw</em>), and we average the <span class="math inline">n</span> independent estimates (<strong>Hansen-Hurwitz</strong>): <span class="math display">
-\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*} .
-</span></p>
-<p>A common choice, <strong>probabilities proportional to size (PPS)</strong>, with a size variable <span class="math inline">x_i&gt;0</span> known for every unit: <span class="math display">
+<p>Draw <span class="math inline">n</span> units with replacement (a unit may be drawn more than once). The sample <span class="math inline">\mathcal R</span> (not <span class="math inline">\mathcal S</span>) is the list of the <span class="math inline">n</span> draws, <strong>including repeats</strong>: for example, <span class="math inline">n=10</span>, <span class="math display">\mathcal R=\{D,D,D,C,C,D,C,A,B,B\}</span> A common choice, <strong>probabilities proportional to size (PPS)</strong>, with a size variable <span class="math inline">x_i&gt;0</span> known for every unit: <span class="math display">
 \psi_i = \frac{x_i}{t_x},\qquad t_x=\sum_{k=1}^N x_k .
 </span></p>
 </section>
@@ -198,7 +187,7 @@ Figure&nbsp;1
 <section id="ratios-b_i-and-the-ratio-b" class="slide level2">
 <h2>Ratios <span class="math inline">b_i</span> and the Ratio <span class="math inline">B</span></h2>
 <p>With <span class="math inline">\psi_i=x_i/t_x</span>, define for every unit <span class="math display">
-b_i=\frac{y_i}{x_i},\qquad B=\frac{t}{t_x}=\frac{\bar y_U}{\bar x_U},\qquad \bar x_U=\frac{t_x}{N}.
+b_i=\frac{y_i}{x_i},\qquad B=\frac{t_y}{t_x}=\frac{\bar y_U}{\bar x_U},\qquad \bar x_U=\frac{t_x}{N}.
 </span> <span class="math inline">B=\sum x_ib_i/\sum x_i</span> is the <span class="math inline">x</span>-weighted mean of the <span class="math inline">b_i</span>, and <span class="math display">
 \bar y_U=\bar x_U\,B,\qquad t=t_x\,B .
 </span> <strong>Estimating <span class="math inline">B</span> is enough</strong>: build <span class="math inline">\hat B</span>, then multiply by <span class="math inline">\bar x_U</span> or <span class="math inline">t_x</span>.</p>
@@ -294,6 +283,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n(b_j^*-\bar b^*)^2 .
 </tr>
 </tbody>
 </table>
+</section>
+<section id="hh-estimator-in-terms-of-psi_i-the-weight" class="slide level2">
+<h2>HH Estimator in Terms of <span class="math inline">\psi_i</span>: the Weight</h2>
+<p>For any selection probabilities <span class="math inline">\psi_i</span>, the HH estimator of the total is a <strong>weighted sum</strong> over the <span class="math inline">n</span> draws in <span class="math inline">\mathcal R</span> (repeats included): <span class="math display">
+\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*}=\sum_{j=1}^n w_j\,y_j^*,\qquad
+\boxed{w_j=\frac{1}{n\,\psi_j^*}}
+</span> Unit <span class="math inline">i</span> is expected to appear <span class="math inline">n\psi_i</span> times in <span class="math inline">\mathcal R</span>, so each draw of unit <span class="math inline">i</span> <strong>represents</strong> <span class="math inline">1/(n\psi_i)</span> units of the population. The estimated variance is <span class="math display">
+\hat V(\hat t_{\mathrm{HH}})=\frac{1}{n(n-1)}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2 .
+</span> With PPS, <span class="math inline">\psi_i=x_i/t_x</span>, the weight is <span class="math inline">w_i=t_x/(n\,x_i)</span>: large units get small weights.</p>
 </section></section>
 <section>
 <section id="comparison-of-the-hh-ratio-and-average-estimators" class="title-slide slide level1 center" data-number="2">

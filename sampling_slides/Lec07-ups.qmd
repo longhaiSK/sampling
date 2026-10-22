@@ -16,13 +16,6 @@ knitr::opts_chunk$set(
 
 # Unequal Probability Sampling with Replacement (UPSWR)
 
-## Textbook Sections
-
-Textbook sections:
-
-- 6.1--6.3 in Lohr's book; UPS without replacement: the Horvitz-Thompson estimator at the end
-- 8.9 and 9.7 in Scheaffer et al., titled "Cluster Sampling with Probabilities
-  Proportional to Size"
 
 ## How to Do Unequal Probability Sampling?
 
@@ -33,13 +26,7 @@ $$
 $$
 
 Draw $n$ units with replacement (a unit may be drawn more than once). The sample $\mathcal R$ (not $\mathcal S$)
-is the list of the $n$ draws, **including repeats**: for example $\mathcal R=\{D,D,D,C,C,D,C,A,B,B\}$ for $n=10$.
-Each draw $j$ gives an unbiased estimate $y_j^*/\psi_j^*$ of the total $t$ (the star indicates that it is
-indexed by the *draw*), and we average the $n$ independent estimates (**Hansen-Hurwitz**):
-$$
-\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*} .
-$$
-
+is the list of the $n$ draws, **including repeats**: for example, $n=10$, $$\mathcal R=\{D,D,D,C,C,D,C,A,B,B\}$$ 
 A common choice, **probabilities proportional to size (PPS)**, with a size variable $x_i>0$ known for every unit:
 $$
 \psi_i = \frac{x_i}{t_x},\qquad t_x=\sum_{k=1}^N x_k .
@@ -77,7 +64,7 @@ the segment that $u$ falls into determines the selected unit. In R:
 
 With $\psi_i=x_i/t_x$, define for every unit
 $$
-b_i=\frac{y_i}{x_i},\qquad B=\frac{t}{t_x}=\frac{\bar y_U}{\bar x_U},\qquad \bar x_U=\frac{t_x}{N}.
+b_i=\frac{y_i}{x_i},\qquad B=\frac{t_y}{t_x}=\frac{\bar y_U}{\bar x_U},\qquad \bar x_U=\frac{t_x}{N}.
 $$
 $B=\sum x_ib_i/\sum x_i$ is the $x$-weighted mean of the $b_i$, and
 $$
@@ -130,6 +117,21 @@ $$
 | Ratio $B=t/t_x$ | $\hat B_{\mathrm{HH}}$ | $s_{b^*}/\sqrt n$ |
 | Mean per unit $\bar y_U=\bar x_UB$ | $\bar x_U\,\hat B_{\mathrm{HH}}$ | $\bar x_U\,s_{b^*}/\sqrt n$ |
 | Total $t=t_xB$ | $t_x\,\hat B_{\mathrm{HH}}$ | $t_x\,s_{b^*}/\sqrt n$ |
+
+## HH Estimator in Terms of $\psi_i$: the Weight
+
+For any selection probabilities $\psi_i$, the HH estimator of the total is a **weighted sum** over the $n$ draws
+in $\mathcal R$ (repeats included):
+$$
+\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*}=\sum_{j=1}^n w_j\,y_j^*,\qquad
+\boxed{w_j=\frac{1}{n\,\psi_j^*}}
+$$
+Unit $i$ is expected to appear $n\psi_i$ times in $\mathcal R$, so each draw of unit $i$ **represents**
+$1/(n\psi_i)$ units of the population. The estimated variance is
+$$
+\hat V(\hat t_{\mathrm{HH}})=\frac{1}{n(n-1)}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2 .
+$$
+With PPS, $\psi_i=x_i/t_x$, the weight is $w_i=t_x/(n\,x_i)$: large units get small weights.
 
 # Comparison of the HH, Ratio and Average Estimators
 
