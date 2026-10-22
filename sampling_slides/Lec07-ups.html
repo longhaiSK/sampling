@@ -164,312 +164,17 @@ Longhai Li
   <p class="date">2026-10-22</p>
 </section>
 <section>
-<section id="introduction-to-unequal-probability-sampling" class="title-slide slide level1 center" data-number="1">
-<h1><span class="header-section-number">1</span> Introduction to Unequal Probability Sampling</h1>
+<section id="unequal-probability-sampling-with-replacement-upswr" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> Unequal Probability Sampling with Replacement (UPSWR)</h1>
+
+</section>
+<section id="textbook-sections" class="slide level2">
+<h2>Textbook Sections</h2>
 <p>Textbook sections:</p>
 <ul>
 <li>6.1–6.3 in Lohr’s book; UPS without replacement: the Horvitz-Thompson estimator at the end</li>
 <li>8.9 and 9.7 in Scheaffer et al., titled “Cluster Sampling with Probabilities Proportional to Size”</li>
 </ul>
-</section>
-<section id="introductory-example" class="slide level2">
-<h2>Introductory Example</h2>
-<p>O’Brien et al.&nbsp;(1995) sampled nursing home residents in the Philadelphia area to determine residents’ preferences on life-sustaining treatments (CPR, hospital transfer, feeding tubes). The target population was all residents of 294 licensed nursing homes, with 37,652 beds total — before sampling, only the number of <em>beds</em> was known, not the number of residents.</p>
-<p>In a cluster sample with <strong>equal</strong> probabilities, a nursing home with 20 beds is just as likely to be chosen as one with 1000 beds — wasting the fact that we already know home size, and that resident counts (and hence answers) are tied to home size.</p>
-</section>
-<section id="a-toy-example" class="slide level2">
-<h2>A Toy Example</h2>
-<p>A town has four supermarkets, ranging in size from <span class="math inline">100\,\text{m}^2</span> to <span class="math inline">1000\,\text{m}^2</span>. We want to estimate total sales across the four stores last month, but can only afford to sample <strong>one</strong> store. Let <span class="math inline">\psi_i = P(\text{Store } i \text{ selected})</span>.</p>
-</section>
-<section id="scheme-1-probabilities-proportional-to-size-pps" class="slide level2">
-<h2>Scheme 1: Probabilities Proportional to Size (PPS)</h2>
-<p>Since Store D accounts for <span class="math inline">10/16</span> of the total floor area, we sample it with probability <span class="math inline">10/16</span>:</p>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th style="text-align: center;">Store</th>
-<th style="text-align: right;">Size (<span class="math inline">M_i</span>)</th>
-<th style="text-align: right;"><span class="math inline">\psi_i</span></th>
-<th style="text-align: right;"><span class="math inline">t_i</span> (thousands)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">A</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;"><span class="math inline">1/16</span></td>
-<td style="text-align: right;">11</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">B</td>
-<td style="text-align: right;">200</td>
-<td style="text-align: right;"><span class="math inline">2/16</span></td>
-<td style="text-align: right;">20</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">C</td>
-<td style="text-align: right;">300</td>
-<td style="text-align: right;"><span class="math inline">3/16</span></td>
-<td style="text-align: right;">24</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">D</td>
-<td style="text-align: right;">1000</td>
-<td style="text-align: right;"><span class="math inline">10/16</span></td>
-<td style="text-align: right;">245</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><strong>Total</strong></td>
-<td style="text-align: right;"><strong>1600</strong></td>
-<td style="text-align: right;"><strong>1</strong></td>
-<td style="text-align: right;"><strong>300</strong></td>
-</tr>
-</tbody>
-</table>
-<p>We could realize this design with 16 numbered cards: card 1 <span class="math inline">\to</span> A; cards 2–3 <span class="math inline">\to</span> B; cards 4–6 <span class="math inline">\to</span> C; cards 7–16 <span class="math inline">\to</span> D.</p>
-</section>
-<section id="estimation-for-scheme-1" class="slide level2 smaller">
-<h2>Estimation for Scheme 1</h2>
-<p>Since only one store is sampled, define the <strong>Hansen-Hurwitz</strong> estimator <span class="math inline">\hat t_\psi = t_i/\psi_i</span> for the selected store <span class="math inline">i</span>. The <strong>Sum</strong> row gives <span class="math inline">E[\hat t_\psi]</span> and <span class="math inline">V[\hat t_\psi]</span> directly:</p>
-<div class="columns">
-<div class="column" style="width:60%;">
-<table class="caption-top" style="width:100%;">
-<colgroup>
-<col style="width: 17%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 13%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Sample</th>
-<th style="text-align: right;"><span class="math inline">\psi_i</span></th>
-<th style="text-align: right;"><span class="math inline">t_i</span></th>
-<th style="text-align: right;"><span class="math inline">\hat t_\psi</span></th>
-<th style="text-align: right;"><span class="math inline">\psi_i\hat t_\psi</span></th>
-<th style="text-align: right;"><span class="math inline">(\hat t_\psi-t)^2</span></th>
-<th style="text-align: right;"><span class="math inline">\psi_i(\hat t_\psi-t)^2</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">\{A\}</span></td>
-<td style="text-align: right;"><span class="math inline">1/16</span></td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">176</td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">15,376</td>
-<td style="text-align: right;">961</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><span class="math inline">\{B\}</span></td>
-<td style="text-align: right;"><span class="math inline">2/16</span></td>
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">160</td>
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">19,600</td>
-<td style="text-align: right;">2,450</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">\{C\}</span></td>
-<td style="text-align: right;"><span class="math inline">3/16</span></td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">128</td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">29,584</td>
-<td style="text-align: right;">5,547</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><span class="math inline">\{D\}</span></td>
-<td style="text-align: right;"><span class="math inline">10/16</span></td>
-<td style="text-align: right;">245</td>
-<td style="text-align: right;">392</td>
-<td style="text-align: right;">245</td>
-<td style="text-align: right;">8,464</td>
-<td style="text-align: right;">5,290</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><strong>Sum</strong></td>
-<td style="text-align: right;"><strong>1</strong></td>
-<td style="text-align: right;"><strong>300</strong></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"><strong>300</strong></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"><strong>14,248</strong></td>
-</tr>
-</tbody>
-</table>
-</div><div class="column" style="width:40%;">
-<p><span class="math display">
-\begin{aligned}
-E[\hat t_\psi] &amp;= \sum_{i=1}^N \psi_i\hat t_\psi = 300 = t \\[4pt]
-V[\hat t_\psi] &amp;= \sum_{i=1}^N \psi_i(\hat t_\psi-t)^2 = 14{,}248
-\end{aligned}
-</span></p>
-<p><span class="math inline">\hat t_\psi</span> is always unbiased, because in general <span class="math inline">E[\hat t_\psi]=\sum_{i=1}^N \psi_i\dfrac{t_i}{\psi_i}=t</span>.</p>
-</div></div>
-</section>
-<section id="scheme-2-srs-with-simple-unbiased-estimation" class="slide level2 smaller">
-<h2>Scheme 2: SRS with Simple (Unbiased) Estimation</h2>
-<p>Now suppose instead we take an SRS of size 1, so <span class="math inline">\psi_i=1/4</span> for every store (and <span class="math inline">1/\psi_i=4=N</span>). The <strong>Sum</strong> row gives <span class="math inline">V[\hat t_{\text{SRS}}]</span> directly:</p>
-<div class="columns">
-<div class="column" style="width:60%;">
-<table class="caption-top">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 16%">
-<col style="width: 16%">
-<col style="width: 16%">
-<col style="width: 16%">
-<col style="width: 16%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Sample</th>
-<th style="text-align: right;"><span class="math inline">\psi_i</span></th>
-<th style="text-align: right;"><span class="math inline">t_i</span></th>
-<th style="text-align: right;"><span class="math inline">\hat t_\psi</span></th>
-<th style="text-align: right;"><span class="math inline">(\hat t_\psi-t)^2</span></th>
-<th style="text-align: right;"><span class="math inline">\psi_i(\hat t_\psi-t)^2</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">\{A\}</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">44</td>
-<td style="text-align: right;">65,536</td>
-<td style="text-align: right;">16,384</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><span class="math inline">\{B\}</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">80</td>
-<td style="text-align: right;">48,400</td>
-<td style="text-align: right;">12,100</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">\{C\}</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">96</td>
-<td style="text-align: right;">41,616</td>
-<td style="text-align: right;">10,404</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><span class="math inline">\{D\}</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;">245</td>
-<td style="text-align: right;">980</td>
-<td style="text-align: right;">462,400</td>
-<td style="text-align: right;">115,600</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><strong>Sum</strong></td>
-<td style="text-align: right;"><strong>1</strong></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"><strong>154,488</strong></td>
-</tr>
-</tbody>
-</table>
-</div><div class="column" style="width:40%;">
-<p><span class="math display">
-\begin{aligned}
-E[\hat t_{\text{SRS}}] &amp;= 300 = t \\[4pt]
-V[\hat t_{\text{SRS}}] &amp;= \sum_{i} \psi_i(\hat t_\psi-t)^2 = 154{,}488
-\end{aligned}
-</span></p>
-<p><span class="math inline">\hat t_{\text{SRS}}</span> is still unbiased, but this is over ten times larger than the PPS design’s variance of 14,248!</p>
-</div></div>
-<p>The PPS design uses <strong>auxiliary information</strong>: store size is known and related to sales, and the design exploits this. If Store D were selected under SRS, its huge sales total gets multiplied by <span class="math inline">N=4</span> (since it represents only itself), producing a wildly unstable estimate.</p>
-</section>
-<section id="scheme-2-srs-with-ratio-estimation" class="slide level2" style="font-size: 32px">
-<h2>Scheme 2: SRS with Ratio Estimation</h2>
-<p>Alternatively, keep the SRS of size 1 but use <em>ratio</em> estimation with <span class="math inline">x_i=M_i</span> (known total <span class="math inline">M_0=1600</span>), <span class="math inline">\hat t_r = \dfrac{t_i}{M_i}\cdot M_0</span>. The <strong>Sum</strong> row gives <span class="math inline">\sum(\hat t_r-t)^2</span> directly:</p>
-<div class="columns">
-<div class="column" style="width:55%;">
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th style="text-align: center;">Store</th>
-<th style="text-align: right;"><span class="math inline">M_i</span></th>
-<th style="text-align: right;"><span class="math inline">t_i</span></th>
-<th style="text-align: right;"><span class="math inline">\hat t_r</span></th>
-<th style="text-align: right;"><span class="math inline">\hat t_r-t</span></th>
-<th style="text-align: right;"><span class="math inline">(\hat t_r-t)^2</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">A</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">176</td>
-<td style="text-align: right;"><span class="math inline">-124</span></td>
-<td style="text-align: right;">15,376</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">B</td>
-<td style="text-align: right;">200</td>
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">160</td>
-<td style="text-align: right;"><span class="math inline">-140</span></td>
-<td style="text-align: right;">19,600</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">C</td>
-<td style="text-align: right;">300</td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">128</td>
-<td style="text-align: right;"><span class="math inline">-172</span></td>
-<td style="text-align: right;">29,584</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">D</td>
-<td style="text-align: right;">1000</td>
-<td style="text-align: right;">245</td>
-<td style="text-align: right;">392</td>
-<td style="text-align: right;"><span class="math inline">92</span></td>
-<td style="text-align: right;">8,464</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><strong>Sum</strong></td>
-<td style="text-align: right;"><strong>1600</strong></td>
-<td style="text-align: right;"><strong>300</strong></td>
-<td style="text-align: right;"><strong>856</strong></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"><strong>73,024</strong></td>
-</tr>
-</tbody>
-</table>
-</div><div class="column" style="width:45%;">
-<p><span class="math display">
-\begin{aligned}
-E(\hat t_r) &amp;= \frac{856}{4} = 214 \quad(\ne 300,\ \text{biased!}) \\[4pt]
-\text{MSE}(\hat t_r) &amp;= \frac{\sum(\hat t_r-t)^2}{4} = \frac{73{,}024}{4} = 18{,}256
-\end{aligned}
-</span></p>
-</div></div>
-</section>
-<section id="ratio-estimation-vs.-unequal-probability-sampling" class="slide level2">
-<h2>Ratio Estimation vs.&nbsp;Unequal Probability Sampling</h2>
-<p>Notice the four <span class="math inline">\hat t_r</span> values (176, 160, 128, 392) are <em>numerically identical</em> to the PPS estimates <span class="math inline">\hat t_\psi</span> from Scheme 1! But averaged with the <strong>equal</strong> SRS probabilities (<span class="math inline">1/4</span> each) rather than the <strong>size-based</strong> PPS probabilities, they give a biased result (214, not 300).</p>
-<ul>
-<li><strong>Ratio estimation</strong> is an <em>estimating</em> method that exploits the correlation between <span class="math inline">t_i</span> and <span class="math inline">M_i</span> <em>after</em> an SRS is drawn.</li>
-<li><strong>Unequal probability sampling</strong> is a <em>sampling design</em> that exploits the same correlation <em>before</em> the sample is drawn, by choosing <span class="math inline">\psi_i\propto M_i</span>.</li>
-</ul>
-</section></section>
-<section>
-<section id="unequal-probability-sampling-with-replacement-upswr" class="title-slide slide level1 center" data-number="2">
-<h1><span class="header-section-number">2</span> Unequal Probability Sampling with Replacement (UPSWR)</h1>
-
 </section>
 <section id="how-to-do-unequal-probability-sampling" class="slide level2">
 <h2>How to Do Unequal Probability Sampling?</h2>
@@ -519,17 +224,66 @@ b_i=\frac{y_i}{x_i},\qquad B=\frac{t}{t_x}=\frac{\bar y_U}{\bar x_U},\qquad \bar
 </span> <span class="math inline">B=\sum x_ib_i/\sum x_i</span> is the <span class="math inline">x</span>-weighted mean of the <span class="math inline">b_i</span>, and <span class="math display">
 \bar y_U=\bar x_U\,B,\qquad t=t_x\,B .
 </span> <strong>Estimating <span class="math inline">B</span> is enough</strong>: build <span class="math inline">\hat B</span>, then multiply by <span class="math inline">\bar x_U</span> or <span class="math inline">t_x</span>.</p>
-<p>Let <span class="math inline">b_j^*</span> be the ratio of the unit selected on draw <span class="math inline">j</span>: it equals <span class="math inline">b_i</span> with probability <span class="math inline">\psi_i</span>, so <span class="math display">
-E(b_j^*)=\sum_{i=1}^N\frac{x_i}{t_x}\frac{y_i}{x_i}=B,\qquad
-S_{b^*}^2=V(b_j^*)=\sum_{i=1}^N\psi_i(b_i-B)^2 .
-</span> (In the notation above, <span class="math inline">u_j^*=t_x\,b_j^*</span>.)</p>
 </section>
-<section id="hh-estimator-of-b-the-mean-and-the-total" class="slide level2">
-<h2>HH Estimator of <span class="math inline">B</span>, the Mean and the Total</h2>
+<section id="sampling-distribution-of-b_j" class="slide level2">
+<h2>Sampling Distribution of <span class="math inline">b_j^*</span></h2>
+<p>Let <span class="math inline">b_j^*</span> be the ratio <span class="math inline">b</span> of the unit selected on draw <span class="math inline">j</span> (the star: it is indexed by the <em>draw</em>, so it is random, while <span class="math inline">b_1,\ldots,b_N</span> are fixed numbers). It is a discrete random variable with distribution</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Unit selected on draw <span class="math inline">j</span></th>
+<th style="text-align: center;"><span class="math inline">1</span></th>
+<th style="text-align: center;"><span class="math inline">2</span></th>
+<th style="text-align: center;"><span class="math inline">\cdots</span></th>
+<th style="text-align: center;"><span class="math inline">N</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Value of <span class="math inline">b_j^*</span></td>
+<td style="text-align: center;"><span class="math inline">b_1</span></td>
+<td style="text-align: center;"><span class="math inline">b_2</span></td>
+<td style="text-align: center;"><span class="math inline">\cdots</span></td>
+<td style="text-align: center;"><span class="math inline">b_N</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Probability</td>
+<td style="text-align: center;"><span class="math inline">\psi_1=x_1/t_x</span></td>
+<td style="text-align: center;"><span class="math inline">\psi_2=x_2/t_x</span></td>
+<td style="text-align: center;"><span class="math inline">\cdots</span></td>
+<td style="text-align: center;"><span class="math inline">\psi_N=x_N/t_x</span></td>
+</tr>
+</tbody>
+</table>
+<p>Draws are with replacement, so <span class="math inline">b_1^*,\ldots,b_n^*</span> are <strong>IID</strong> with this distribution.</p>
+</section>
+<section id="mean-and-variance-of-b_j" class="slide level2">
+<h2>Mean and Variance of <span class="math inline">b_j^*</span></h2>
 <p><span class="math display">
-\boxed{\hat B_{\mathrm{HH}}=\bar b^*=\frac1n\sum_{j=1}^n b_j^*},\qquad
+E(b_j^*)=\sum_{i=1}^N\psi_i\,b_i=\sum_{i=1}^N\frac{x_i}{t_x}\frac{y_i}{x_i}=\frac{t}{t_x}=B,\qquad
+S_{b^*}^2=V(b_j^*)=\sum_{i=1}^N\psi_i(b_i-B)^2 .
+</span> A single draw is unbiased for <span class="math inline">B</span>, and precise when the <span class="math inline">b_i</span> are nearly equal, i.e.&nbsp;<span class="math inline">y_i\propto x_i</span>. (In the notation of the previous slides, <span class="math inline">u_j^*=y_j^*/\psi_j^*=t_x\,b_j^*</span>.)</p>
+</section>
+<section id="hh-estimator-of-b-mean-and-variance" class="slide level2">
+<h2>HH Estimator of <span class="math inline">B</span>: Mean and Variance</h2>
+<p>The HH estimator is the mean of the <span class="math inline">n</span> IID observations <span class="math inline">b_j^*</span> (the <strong>mean of the ratios</strong>): <span class="math display">
+\boxed{\hat B_{\mathrm{HH}}=\bar b^*=\frac1n\sum_{j=1}^n b_j^*},\qquad E(\hat B_{\mathrm{HH}})=B,
+</span> and its variance is that of one draw divided by <span class="math inline">n</span>. With <span class="math inline">w_i=x_i/\bar x_U=N\psi_i</span> (relative size), <span class="math display">
+V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac1n\sum_{i=1}^N\psi_i(b_i-B)^2=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 .
+</span> No finite population correction: the draws are independent.</p>
+</section>
+<section id="estimating-the-variance-mean-and-total" class="slide level2">
+<h2>Estimating the Variance; Mean and Total</h2>
+<p>The sample variance of the <span class="math inline">b_j^*</span> is unbiased for <span class="math inline">S_{b^*}^2</span>: <span class="math display">
 \boxed{\widehat{\mathrm{SE}}(\hat B_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt n}},\qquad
-s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n(b_j^*-\bar b^*)^2
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n(b_j^*-\bar b^*)^2 .
 </span></p>
 <table class="caption-top">
 <colgroup>
@@ -551,24 +305,21 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n(b_j^*-\bar b^*)^2
 <td style="text-align: left;"><span class="math inline">s_{b^*}/\sqrt n</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Mean per unit <span class="math inline">\bar y_U</span></td>
+<td style="text-align: left;">Mean per unit <span class="math inline">\bar y_U=\bar x_UB</span></td>
 <td style="text-align: left;"><span class="math inline">\bar x_U\,\hat B_{\mathrm{HH}}</span></td>
 <td style="text-align: left;"><span class="math inline">\bar x_U\,s_{b^*}/\sqrt n</span></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Total <span class="math inline">t</span></td>
+<td style="text-align: left;">Total <span class="math inline">t=t_xB</span></td>
 <td style="text-align: left;"><span class="math inline">t_x\,\hat B_{\mathrm{HH}}</span></td>
 <td style="text-align: left;"><span class="math inline">t_x\,s_{b^*}/\sqrt n</span></td>
 </tr>
 </tbody>
 </table>
-<p>With <span class="math inline">w_i=x_i/\bar x_U=N\psi_i</span> (relative size), the variance is a sum of terms in <span class="math inline">w_i</span> and <span class="math inline">(b_i-B)</span>: <span class="math display">
-V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 .
-</span></p>
 </section></section>
 <section>
-<section id="comparison-of-the-hh-ratio-and-average-estimators" class="title-slide slide level1 center" data-number="3">
-<h1><span class="header-section-number">3</span> Comparison of the HH, Ratio and Average Estimators</h1>
+<section id="comparison-of-the-hh-ratio-and-average-estimators" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Comparison of the HH, Ratio and Average Estimators</h1>
 
 </section>
 <section id="the-ratio-estimator-and-the-sample-average-in-terms-of-b_i" class="slide level2">
@@ -754,8 +505,8 @@ V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2
 <p>HH <span class="math inline">&lt;</span> ratio <span class="math inline">\ll</span> sample average. If the sales were unrelated to the floor area, the ordering reverses (average <span class="math inline">0.00078</span>, ratio <span class="math inline">0.0288</span>, HH <span class="math inline">0.0273</span>): <strong>the size variable must be tied to <span class="math inline">y</span></strong>.</p>
 </section></section>
 <section>
-<section id="computation-example-revenue-from-ai-token-usage" class="title-slide slide level1 center" data-number="4">
-<h1><span class="header-section-number">4</span> Computation Example: Revenue from AI Token Usage</h1>
+<section id="computation-example-revenue-from-ai-token-usage" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Computation Example: Revenue from AI Token Usage</h1>
 
 </section>
 <section id="setup-and-sample" class="slide level2 smaller">
@@ -880,8 +631,8 @@ s_{b^*}^2=\frac{0.220833}{4}=0.055208,\quad s_{b^*}=0.2350
 <p>In R: <code>upswr_est(ydata, xdata, xbar_pop, tx_pop, method = "ratio")</code> with <code>method</code> equal to <code>"ratio"</code>, <code>"mean"</code> or <code>"total"</code> returns the estimate, SE and CI.</p>
 </section></section>
 <section>
-<section id="one-stage-cluster-sampling-with-pps" class="title-slide slide level1 center" data-number="5">
-<h1><span class="header-section-number">5</span> One-Stage Cluster Sampling with PPS</h1>
+<section id="one-stage-cluster-sampling-with-pps" class="title-slide slide level1 center" data-number="4">
+<h1><span class="header-section-number">4</span> One-Stage Cluster Sampling with PPS</h1>
 
 </section>
 <section id="change-of-notation" class="slide level2">
@@ -1039,8 +790,8 @@ b_i=\frac{t_i}{M_i}=\bar y_i ,\qquad B=\frac{t}{M_0}=\bar y_U\ \ (\text{mean per
 </div></div>
 </section></section>
 <section>
-<section id="two-stage-cluster-sampling-with-replacement" class="title-slide slide level1 center" data-number="6">
-<h1><span class="header-section-number">6</span> Two-Stage Cluster Sampling with Replacement</h1>
+<section id="two-stage-cluster-sampling-with-replacement" class="title-slide slide level1 center" data-number="5">
+<h1><span class="header-section-number">5</span> Two-Stage Cluster Sampling with Replacement</h1>
 
 </section>
 <section id="setup-and-estimators" class="slide level2">
@@ -1187,8 +938,8 @@ s_{\bar y^*}^2=\frac{1}{n-1}\sum_{j=1}^n(\bar y_j^*-\bar y^*)^2 ,
 </div></div>
 </section></section>
 <section>
-<section id="unequal-probability-sampling-without-replacement-upswo" class="title-slide slide level1 center" data-number="7">
-<h1><span class="header-section-number">7</span> Unequal Probability Sampling Without Replacement (UPSWO)</h1>
+<section id="unequal-probability-sampling-without-replacement-upswo" class="title-slide slide level1 center" data-number="6">
+<h1><span class="header-section-number">6</span> Unequal Probability Sampling Without Replacement (UPSWO)</h1>
 
 </section>
 <section id="the-horvitz-thompson-estimator" class="slide level2">
@@ -1297,8 +1048,8 @@ A=\frac{\sum_{\mathcal S}(1-\pi_i)u_i}{\sum_{\mathcal S}(1-\pi_i)}</span></li>
 </span> SE of the mean: <span class="math inline">31.7/20=1.58</span> (Hájek), <span class="math inline">36.2/20=1.81</span> (WR).</p>
 </section></section>
 <section>
-<section id="when-to-use-ups" class="title-slide slide level1 center" data-number="8">
-<h1><span class="header-section-number">8</span> When to Use UPS</h1>
+<section id="when-to-use-ups" class="title-slide slide level1 center" data-number="7">
+<h1><span class="header-section-number">7</span> When to Use UPS</h1>
 
 </section>
 <section id="ups-is-risky-unless-y-is-tied-to-the-size-variable" class="slide level2">
@@ -1311,8 +1062,8 @@ A=\frac{\sum_{\mathcal S}(1-\pi_i)u_i}{\sum_{\mathcal S}(1-\pi_i)}</span></li>
 <p>UPS is used mostly when the size is a good proxy of what is measured: selecting the clusters of a multi-stage survey proportional to households or students, auditing by monetary value, surveys of establishments by employment. If the size is only loosely related to <span class="math inline">y</span>, use SRS or stratified sampling, with a ratio or regression estimator if <span class="math inline">x_i</span> is known.</p>
 </section></section>
 <section>
-<section id="weights-in-unequal-probability-sampling" class="title-slide slide level1 center" data-number="9">
-<h1><span class="header-section-number">9</span> Weights in Unequal-Probability Sampling</h1>
+<section id="weights-in-unequal-probability-sampling" class="title-slide slide level1 center" data-number="8">
+<h1><span class="header-section-number">8</span> Weights in Unequal-Probability Sampling</h1>
 
 </section>
 <section id="general-weight-formula" class="slide level2">

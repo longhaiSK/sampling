@@ -14,172 +14,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Introduction to Unequal Probability Sampling
+# Unequal Probability Sampling with Replacement (UPSWR)
+
+## Textbook Sections
 
 Textbook sections:
 
 - 6.1--6.3 in Lohr's book; UPS without replacement: the Horvitz-Thompson estimator at the end
 - 8.9 and 9.7 in Scheaffer et al., titled "Cluster Sampling with Probabilities
   Proportional to Size"
-
-## Introductory Example
-
-O'Brien et al. (1995) sampled nursing home residents in the Philadelphia area
-to determine residents' preferences on life-sustaining treatments (CPR,
-hospital transfer, feeding tubes). The target population was all residents of
-294 licensed nursing homes, with 37,652 beds total — before sampling, only the
-number of *beds* was known, not the number of residents.
-
-In a cluster sample with **equal** probabilities, a nursing home with 20 beds
-is just as likely to be chosen as one with 1000 beds — wasting the fact that
-we already know home size, and that resident counts (and hence answers) are
-tied to home size.
-
-## A Toy Example
-
-A town has four supermarkets, ranging in size from $100\,\text{m}^2$ to
-$1000\,\text{m}^2$. We want to estimate total sales across the four stores
-last month, but can only afford to sample **one** store. Let $\psi_i = P(\text{Store } i \text{ selected})$.
-
-## Scheme 1: Probabilities Proportional to Size (PPS)
-
-Since Store D accounts for $10/16$ of the total floor area, we sample it with
-probability $10/16$:
-
-| Store | Size ($M_i$) | $\psi_i$ | $t_i$ (thousands) |
-|:---:|---:|---:|---:|
-| A | 100 | $1/16$ | 11 |
-| B | 200 | $2/16$ | 20 |
-| C | 300 | $3/16$ | 24 |
-| D | 1000 | $10/16$ | 245 |
-| **Total** | **1600** | **1** | **300** |
-
-We could realize this design with 16 numbered cards: card 1 $\to$ A; cards 2--3
-$\to$ B; cards 4--6 $\to$ C; cards 7--16 $\to$ D.
-
-## Estimation for Scheme 1 {.smaller}
-
-Since only one store is sampled, define the **Hansen-Hurwitz** estimator
-$\hat t_\psi = t_i/\psi_i$ for the selected store $i$. The **Sum** row gives
-$E[\hat t_\psi]$ and $V[\hat t_\psi]$ directly:
-
-:::: {.columns}
-
-:::{.column style="width:60%;"}
-
-| Sample | $\psi_i$ | $t_i$ | $\hat t_\psi$ | $\psi_i\hat t_\psi$ | $(\hat t_\psi-t)^2$ | $\psi_i(\hat t_\psi-t)^2$ |
-|:---:|---:|---:|---:|---:|---:|---:|
-| $\{A\}$ | $1/16$ | 11 | 176 | 11 | 15,376 | 961 |
-| $\{B\}$ | $2/16$ | 20 | 160 | 20 | 19,600 | 2,450 |
-| $\{C\}$ | $3/16$ | 24 | 128 | 24 | 29,584 | 5,547 |
-| $\{D\}$ | $10/16$ | 245 | 392 | 245 | 8,464 | 5,290 |
-| **Sum** | **1** | **300** | | **300** | | **14,248** |
-
-:::
-
-:::{.column style="width:40%;"}
-
-$$
-\begin{aligned}
-E[\hat t_\psi] &= \sum_{i=1}^N \psi_i\hat t_\psi = 300 = t \\[4pt]
-V[\hat t_\psi] &= \sum_{i=1}^N \psi_i(\hat t_\psi-t)^2 = 14{,}248
-\end{aligned}
-$$
-
-$\hat t_\psi$ is always unbiased, because in general
-$E[\hat t_\psi]=\sum_{i=1}^N \psi_i\dfrac{t_i}{\psi_i}=t$.
-
-:::
-
-::::
-
-## Scheme 2: SRS with Simple (Unbiased) Estimation {.smaller}
-
-Now suppose instead we take an SRS of size 1, so $\psi_i=1/4$ for every store
-(and $1/\psi_i=4=N$). The **Sum** row gives $V[\hat t_{\text{SRS}}]$ directly:
-
-:::: {.columns}
-
-:::{.column style="width:60%;"}
-
-| Sample | $\psi_i$ | $t_i$ | $\hat t_\psi$ | $(\hat t_\psi-t)^2$ | $\psi_i(\hat t_\psi-t)^2$ |
-|:---:|---:|---:|---:|---:|---:|
-| $\{A\}$ | $1/4$ | 11 | 44 | 65,536 | 16,384 |
-| $\{B\}$ | $1/4$ | 20 | 80 | 48,400 | 12,100 |
-| $\{C\}$ | $1/4$ | 24 | 96 | 41,616 | 10,404 |
-| $\{D\}$ | $1/4$ | 245 | 980 | 462,400 | 115,600 |
-| **Sum** | **1** | | | | **154,488** |
-
-:::
-
-:::{.column style="width:40%;"}
-
-$$
-\begin{aligned}
-E[\hat t_{\text{SRS}}] &= 300 = t \\[4pt]
-V[\hat t_{\text{SRS}}] &= \sum_{i} \psi_i(\hat t_\psi-t)^2 = 154{,}488
-\end{aligned}
-$$
-
-$\hat t_{\text{SRS}}$ is still unbiased, but this is over ten times larger
-than the PPS design's variance of 14,248!
-
-:::
-
-::::
-
-The PPS
-design uses **auxiliary information**: store size is known and related to
-sales, and the design exploits this. If Store D were selected under SRS, its
-huge sales total gets multiplied by $N=4$ (since it represents only itself),
-producing a wildly unstable estimate.
-
-## Scheme 2: SRS with Ratio Estimation {style="font-size: 32px"}
-
-Alternatively, keep the SRS of size 1 but use *ratio* estimation with $x_i=M_i$
-(known total $M_0=1600$), $\hat t_r = \dfrac{t_i}{M_i}\cdot M_0$. The **Sum**
-row gives $\sum(\hat t_r-t)^2$ directly:
-
-:::: {.columns}
-
-:::{.column style="width:55%;"}
-
-| Store | $M_i$ | $t_i$ | $\hat t_r$ | $\hat t_r-t$ | $(\hat t_r-t)^2$ |
-|:---:|---:|---:|---:|---:|---:|
-| A | 100 | 11 | 176 | $-124$ | 15,376 |
-| B | 200 | 20 | 160 | $-140$ | 19,600 |
-| C | 300 | 24 | 128 | $-172$ | 29,584 |
-| D | 1000 | 245 | 392 | $92$ | 8,464 |
-| **Sum** | **1600** | **300** | **856** | | **73,024** |
-
-:::
-
-:::{.column style="width:45%;"}
-
-$$
-\begin{aligned}
-E(\hat t_r) &= \frac{856}{4} = 214 \quad(\ne 300,\ \text{biased!}) \\[4pt]
-\text{MSE}(\hat t_r) &= \frac{\sum(\hat t_r-t)^2}{4} = \frac{73{,}024}{4} = 18{,}256
-\end{aligned}
-$$
-
-:::
-
-::::
-
-## Ratio Estimation vs. Unequal Probability Sampling
-
-Notice the four $\hat t_r$ values (176, 160, 128, 392) are *numerically
-identical* to the PPS estimates $\hat t_\psi$ from Scheme 1! But averaged with
-the **equal** SRS probabilities ($1/4$ each) rather than the **size-based**
-PPS probabilities, they give a biased result (214, not 300).
-
-- **Ratio estimation** is an *estimating* method that exploits the correlation
-  between $t_i$ and $M_i$ *after* an SRS is drawn.
-- **Unequal probability sampling** is a *sampling design* that exploits the
-  same correlation *before* the sample is drawn, by choosing $\psi_i\propto M_i$.
-
-# Unequal Probability Sampling with Replacement (UPSWR)
 
 ## How to Do Unequal Probability Sampling?
 
@@ -257,31 +100,52 @@ $$
 $$
 **Estimating $B$ is enough**: build $\hat B$, then multiply by $\bar x_U$ or $t_x$.
 
-Let $b_j^*$ be the ratio of the unit selected on draw $j$: it equals $b_i$ with probability $\psi_i$, so
+## Sampling Distribution of $b_j^*$
+
+Let $b_j^*$ be the ratio $b$ of the unit selected on draw $j$ (the star: it is indexed by the *draw*, so it is
+random, while $b_1,\ldots,b_N$ are fixed numbers). It is a discrete random variable with distribution
+
+| Unit selected on draw $j$ | $1$ | $2$ | $\cdots$ | $N$ |
+|:---|:---:|:---:|:---:|:---:|
+| Value of $b_j^*$ | $b_1$ | $b_2$ | $\cdots$ | $b_N$ |
+| Probability | $\psi_1=x_1/t_x$ | $\psi_2=x_2/t_x$ | $\cdots$ | $\psi_N=x_N/t_x$ |
+
+Draws are with replacement, so $b_1^*,\ldots,b_n^*$ are **IID** with this distribution.
+
+## Mean and Variance of $b_j^*$
+
 $$
-E(b_j^*)=\sum_{i=1}^N\frac{x_i}{t_x}\frac{y_i}{x_i}=B,\qquad
+E(b_j^*)=\sum_{i=1}^N\psi_i\,b_i=\sum_{i=1}^N\frac{x_i}{t_x}\frac{y_i}{x_i}=\frac{t}{t_x}=B,\qquad
 S_{b^*}^2=V(b_j^*)=\sum_{i=1}^N\psi_i(b_i-B)^2 .
 $$
-(In the notation above, $u_j^*=t_x\,b_j^*$.)
+A single draw is unbiased for $B$, and precise when the $b_i$ are nearly equal, i.e. $y_i\propto x_i$.
+(In the notation of the previous slides, $u_j^*=y_j^*/\psi_j^*=t_x\,b_j^*$.)
 
-## HH Estimator of $B$, the Mean and the Total
+## HH Estimator of $B$: Mean and Variance
 
+The HH estimator is the mean of the $n$ IID observations $b_j^*$ (the **mean of the ratios**):
 $$
-\boxed{\hat B_{\mathrm{HH}}=\bar b^*=\frac1n\sum_{j=1}^n b_j^*},\qquad
+\boxed{\hat B_{\mathrm{HH}}=\bar b^*=\frac1n\sum_{j=1}^n b_j^*},\qquad E(\hat B_{\mathrm{HH}})=B,
+$$
+and its variance is that of one draw divided by $n$. With $w_i=x_i/\bar x_U=N\psi_i$ (relative size),
+$$
+V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac1n\sum_{i=1}^N\psi_i(b_i-B)^2=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 .
+$$
+No finite population correction: the draws are independent.
+
+## Estimating the Variance; Mean and Total
+
+The sample variance of the $b_j^*$ is unbiased for $S_{b^*}^2$:
+$$
 \boxed{\widehat{\mathrm{SE}}(\hat B_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt n}},\qquad
-s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n(b_j^*-\bar b^*)^2
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n(b_j^*-\bar b^*)^2 .
 $$
 
 | Quantity | Estimate | Estimated SE |
 |:---|:---|:---|
 | Ratio $B=t/t_x$ | $\hat B_{\mathrm{HH}}$ | $s_{b^*}/\sqrt n$ |
-| Mean per unit $\bar y_U$ | $\bar x_U\,\hat B_{\mathrm{HH}}$ | $\bar x_U\,s_{b^*}/\sqrt n$ |
-| Total $t$ | $t_x\,\hat B_{\mathrm{HH}}$ | $t_x\,s_{b^*}/\sqrt n$ |
-
-With $w_i=x_i/\bar x_U=N\psi_i$ (relative size), the variance is a sum of terms in $w_i$ and $(b_i-B)$:
-$$
-V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 .
-$$
+| Mean per unit $\bar y_U=\bar x_UB$ | $\bar x_U\,\hat B_{\mathrm{HH}}$ | $\bar x_U\,s_{b^*}/\sqrt n$ |
+| Total $t=t_xB$ | $t_x\,\hat B_{\mathrm{HH}}$ | $t_x\,s_{b^*}/\sqrt n$ |
 
 # Comparison of the HH, Ratio and Average Estimators
 
