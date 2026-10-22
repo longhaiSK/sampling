@@ -590,6 +590,27 @@ res_counties_reg$estimate |> format_est_gt("reg_total")
 ```
 **Output Note:** The true value is **532,638**. Notice how poorly the naive SRS estimate performs (predicting over 800,000) because it ignores county sizes. Both the SRS Ratio and SRS Regression methods perform much better by incorporating auxiliary population data, as does the HH estimator above, which uses the county sizes at the design stage.
 
+**Summary.** The estimates of the total number of physicians in the US from all the methods above:
+
+```{r tbl-statepop-summary}
+#| tbl-cap: "Estimates of the total number of physicians in the US (true value 532,638)"
+summ <- rbind(
+  "Sample total, $N\\bar{y}$ (SRS)"      = res_counties_srs$estimate,
+  "Ratio estimator (SRS)"                 = res_counties_ratio$estimate,
+  "Regression estimator (SRS)"            = res_counties_reg$estimate,
+  "Hansen--Hurwitz, $t_x\\hat{B}_{\\mathrm{HH}}$ (UPSWR)" = res_phys_total$estimate)
+summ <- data.frame(Method = rownames(summ), unname(summ), check.names = FALSE,
+                   Error = unname(summ[, 1]) - 532638)
+knitr::kable(summ, row.names = FALSE, digits = 0, format.args = list(big.mark = ","),
+             col.names = c("Method", "Estimate", "SE", "95% CI lower", "95% CI upper",
+                           "Estimate $-$ true"))
+```
+
+The naive SRS total ignores the county sizes: it is far too large, with a huge SE. The ratio and regression
+estimators use the county populations at the estimation stage and have much smaller SEs, and HH, which uses
+them at the design stage, has the smallest SE and the smallest error here, even though its sample is of the same
+size, 100 counties.
+
 ### Simulation Study using `agpop` Data {#sec-ups-sim}
 
 Let's simulate 2000 random samples of 300 counties to see how UPSWR, with $\psi_i$ proportional to the acres in 1987 ($x_i$), empirically compares to SRS for estimating the total acres in 1992 ($y_i$).
