@@ -109,8 +109,11 @@ Being the mean of $n$ iid copies of $b_j^*$, it is unbiased, and its variance is
 divided by $n$:
 $$
 E(\hat{B}_{\mathrm{HH}})=B,\qquad
-V(\hat{B}_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac{1}{n}\sum_{i=1}^N\psi_i\,(b_i-B)^2 .
+V(\hat{B}_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 ,
+\qquad w_i=\frac{x_i}{\bar{x}_U}=N\psi_i .
 $$
+Here $w_i$ is the size of unit $i$ relative to the average, so that $\psi_i=w_i/N$, and the variance is a sum of
+terms involving only $w_i$ and $b_i-B$.
 There is no finite population correction, since the draws are independent. For the same reason, the
 sample variance of the $b_j^*$ is an unbiased estimate of $S_{b^*}^2$, which gives
 $$
@@ -135,13 +138,8 @@ In the more general notation of unequal probability sampling, $y_j^*/\psi_j^*=t_
 estimate of the total from draw $j$, so $\hat{t}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n y_j^*/\psi_j^*$. This form
 works for any $\psi_i$, not only for $\psi_i=x_i/t_x$, and is what the function `upswr_total` computes.
 
-**The variance in terms of $x_i$ and $(b_i-B)$.** Write $w_i=x_i/\bar{x}_U$ for the size of unit $i$ relative to
-the average, so that $\psi_i=w_i/N$. Then
-$$
-V(\hat{B}_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac{1}{nN}\sum_{i=1}^N w_i\,(b_i-B)^2 ,
-$$
-a sum of terms involving only $w_i$ and $b_i-B$; the variances of $\hat{\bar{y}}_{\mathrm{HH}}$ and
-$\hat{t}_{\mathrm{HH}}$ are $\bar{x}_U^2$ and $t_x^2$ times this. The variance is small when all the ratios $b_i$
+**Variance of the mean and total.** The variances of $\hat{\bar{y}}_{\mathrm{HH}}$ and
+$\hat{t}_{\mathrm{HH}}$ are $\bar{x}_U^2$ and $t_x^2$ times $V(\hat{B}_{\mathrm{HH}})$. The variance is small when all the ratios $b_i$
 are close to $B$, that is, when $y_i$ is nearly proportional to $x_i$.
 
 ### Comparison of the HH, Ratio, and Average Estimators of $B$ {#sec-ups-compare}
