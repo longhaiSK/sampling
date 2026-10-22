@@ -804,66 +804,91 @@ statements carry the same information: the estimates and the standard errors are
 
 ### Theory {#sec-ups-twostage-theory}
 
-In a two-stage design, we select $n$ clusters with replacement with probabilities $\psi_i=M_i/M_0$, and then take a simple random sample of
-$m_i$ elements from the $M_i$ elements of every draw of the cluster. The cluster total $t_i$ is no
-longer observed, but estimated from the subsample,
+In a two-stage design, we select $n$ clusters with replacement with probabilities $\psi_i=M_i/M_0$, and
+then take a simple random sample of $m_i$ elements from the $M_i$ elements of the cluster **on every draw**.
+The cluster total $t_i$ is no longer observed, so we cannot compute the cluster mean $b_i=t_i/M_i$ of
+@sec-ups-cluster-theory. We estimate it from the subsample,
 $$
-\hat{t}_i=M_i\,\bar{y}_i,\qquad \bar{y}_i=\frac{1}{m_i}\sum_{j=1}^{m_i}y_{ij},
+\bar{y}_i=\frac{1}{m_i}\sum_{j=1}^{m_i}y_{ij},\qquad \hat{t}_i=M_i\,\bar{y}_i ,
 $$
-where $\bar{y}_i$ is now the mean of the *subsample*. The HH estimator is the one of
-@sec-ups-cluster-theory with $t_i$ replaced by $\hat{t}_i$, and each draw gives
+where $\bar{y}_i$ is the mean of the *subsample*. The one-stage formulas carry over with the subsample mean
+$\bar{y}_j^*$ of draw $j$ in place of the cluster mean $b_j^*$:
 $$
-\frac{\hat{t}_i}{\psi_i}=M_0\,\bar{y}_i .
+\boxed{\hat{B}_{\mathrm{HH}}=\bar{y}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
+s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{y}^*\right)^2 ,
 $$
-Consequently, **all the formulas of one-stage cluster sampling carry over unchanged**, with $\bar{y}_i$
-the subsample means:
-$$
-\hat{t}_{\mathrm{HH}}=M_0\cdot\frac{1}{n}\sum_{i=1}^n\bar{y}_i,\qquad
-\hat{\bar{y}}_{\mathrm{HH}}=\hat{B}_{\mathrm{HH}}=\frac{1}{n}\sum_{i=1}^n\bar{y}_i,\qquad
-\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\frac{s_{\bar{y}}}{\sqrt{n}},
-$$
-and the psu-level mean is $\hat{\bar{t}}_{\mathrm{HH}}=\bar{M}_U\,\hat{\bar{y}}_{\mathrm{HH}}$.
+and the estimates of the mean per element, the mean per cluster and the total are $\hat{B}_{\mathrm{HH}}$,
+$\bar{M}_U\hat{B}_{\mathrm{HH}}$ and $M_0\hat{B}_{\mathrm{HH}}$, with their SEs multiplied by the same constants,
+as in the table of @sec-ups-cluster-theory. Equivalently, each draw estimates the total by
+$\hat{t}_j^*/\psi_j^*=M_0\,\bar{y}_j^*$.
 
-**No second-stage formula is needed for the standard error.** The $n$ draws are independent, and the
-values $\hat{t}_i/\psi_i$ differ between draws for two reasons, the choice of the clusters and the choice of the elements within
-them. The sample variance $s_{\bar{y}}^2$ of the values $\bar{y}_i$ captures both, so the
-variance of the two-stage estimator is computed in exactly the same way as that of the one-stage estimator.
-(For this, a cluster selected twice should be subsampled independently on each draw.) This
-is a major simplification compared with two-stage SRS of clusters, where the
-variance has a between-cluster and a within-cluster piece. Of course, a larger subsample $m_i$ makes the
-$\bar{y}_i$ closer to $t_i/M_i$ and reduces the variance, but it does so through $s_{\bar{y}}^2$.
+There are two differences from the one-stage case. First, a cluster that is drawn twice is subsampled
+**independently** on each draw, so the two draws give different subsample means $\bar{y}_j^*$, and both are kept
+as separate observations. Second, **no second-stage formula is needed for the standard error.** The $n$ draws are
+independent, and the values $\bar{y}_j^*$ differ between draws for two reasons, the choice of the clusters and the
+choice of the elements within them. The sample variance $s_{\bar{y}^*}^2$ of the values $\bar{y}_j^*$ captures
+both, so the variance of the two-stage estimator is computed in exactly the same way as that of the one-stage
+estimator. This is a major simplification compared with two-stage SRS of clusters, where the variance has a
+between-cluster and a within-cluster piece. Of course, a larger subsample $m_i$ makes $\bar{y}_i$ closer to
+$t_i/M_i$ and reduces the variance, but it does so through $s_{\bar{y}^*}^2$.
 
-### Example: Study Hours of Students in Classes (`studentshrs.txt`) {#sec-ups-studenthrs}
+### Example: Falls in Long-Term Care Homes, Two Stages {#sec-ups-twostage-example}
 
-Here, we sample classes (primary sampling units) with replacement with probabilities proportional to class size, and then subsample students within them to ask about their study hours.
+Suppose the health authority of @sec-ups-cluster-example cannot afford to review all the residents of a
+selected home. On each of the same $n=8$ draws of homes, with probabilities $\psi_i=M_i/M_0$, a simple random
+sample of $m_i$ residents is drawn, and the number of falls of each sampled resident over the past year is
+recorded. The data below are made up for illustration. Home H12 was drawn twice, and the two subsamples were
+drawn independently, so the two draws have different subsample means. The table gives the total number of falls
+of the $m_j^*$ sampled residents, their mean $\bar{y}_j^*$, and the estimated total of the home
+$\hat{t}_j^*=M_j^*\bar{y}_j^*$:
 
-```{r studenthrs-2stage-upswr}
-studenthrs <- read.table("data/studentshrs.txt", header = TRUE)
-
-# Calculate sampling probability (cpsi) based on known total students (647)
-studenthrs <- studenthrs |>
-  mutate(cpsi = class_size / 647)
-
-# Run the 2-stage UPSWR function
-res_hrs <- cluster_upswr_ratio(
-  data = studenthrs,
-  sid = "sid",
-  csize = "class_size",
-  cpsi = "cpsi",
-  yvar = "hrs",
-  estimate = "mean"
-)
-
-# Display the cluster-level working table
-res_hrs$table
+```{r tbl-falls2-data}
+#| echo: false
+#| tbl-cap: "Two-stage sample of long-term care homes, $n=8$ draws"
+home2 <- c("H12", "H03", "H27", "H12", "H31", "H08", "H19", "H36")
+Mi2 <- c(180, 60, 240, 180, 95, 120, 45, 150)
+mi2 <- c(20, 20, 20, 20, 20, 20, 15, 20)
+falls2 <- c(19, 15, 16, 16, 18, 21, 10, 17)   # falls of the m_j sampled residents
+ybari2 <- falls2 / mi2
+ti_hat2 <- Mi2 * ybari2
+N <- 40
+M0 <- 3000
+Mbar_U <- M0 / N
+knitr::kable(data.frame(j = 1:8, home2, Mi2, psi = Mi2 / M0, mi2, falls2, ybari2, ti_hat2),
+             digits = c(0, 0, 0, 3, 0, 0, 3, 1),
+             col.names = c("Draw $j$", "Home", "$M_j^*$", "$\\psi_j^*=M_j^*/M_0$", "$m_j^*$",
+                           "Falls in subsample", "$\\bar{y}_j^*$", "$\\hat{t}_j^*=M_j^*\\bar{y}_j^*$"))
 ```
 
-**Estimate the overall mean study hours:**
+The data enter `upswr_est` through the estimated totals $\hat{t}_j^*$ (as `ydata`) and the sizes $M_j^*$ (as
+`xdata`), whose ratios are the subsample means $\bar{y}_j^*$. The working table lists them, their deviations
+from $\hat{B}_{\mathrm{HH}}$ and the squared deviations:
 
-```{r studenthrs-mean-est}
-res_hrs$estimate |> format_est_gt("hh_ratio_mean")
+```{r falls2-upswr-ratio}
+res_falls2_B <- upswr_est(ti_hat2, Mi2, xbar_pop = Mbar_U, tx_pop = M0, method = "ratio", decimals = 4)
+res_falls2_B$table
+res_falls2_B$estimate |> format_est_gt("hh_B")
 ```
-**Output Note:** The function first computes the subsample means $\bar{y}_i$ and the estimated cluster totals $\hat{t}_i=M_i\bar{y}_i$, and then applies the HH ratio estimator to them. Since $M_i/\psi_i=647$ for every draw, the estimate is the plain average of the subsample means in the working table, and its standard error is $s_{\bar{y}}/\sqrt{n}$.
+
+Multiplying by $\bar{M}_U=75$ and $M_0=3{,}000$:
+
+```{r falls2-upswr-mean-total}
+res_falls2_home <- upswr_est(ti_hat2, Mi2, xbar_pop = Mbar_U, tx_pop = M0, method = "mean", show.details = FALSE)
+res_falls2_home$estimate |> format_est_gt("hh_ybar")
+
+res_falls2_total <- upswr_est(ti_hat2, Mi2, xbar_pop = Mbar_U, tx_pop = M0, method = "total", show.details = FALSE)
+res_falls2_total$estimate |> format_est_gt("hh_total")
+```
+**Output Note:** The estimated number of falls per resident is
+$\hat{B}_{\mathrm{HH}}=`r round(res_falls2_B$estimate["Est."], 3)`$ (SE `r round(res_falls2_B$estimate["S.E."], 3)`),
+the plain average of the eight subsample means. A typical home has
+`r round(res_falls2_home$estimate["Est."], 1)` falls per year (SE `r round(res_falls2_home$estimate["S.E."], 1)`),
+and the 40 homes together have about `r format(round(res_falls2_total$estimate["Est."]), big.mark = ",")` falls
+(SE `r round(res_falls2_total$estimate["S.E."])`). The standard error is computed exactly as in the one-stage
+example, from the eight values $\bar{y}_j^*$ alone. Here it is a little larger than the one-stage SE of
+`r round(res_falls_B$estimate["S.E."], 3)`, as expected, since the subsample means carry the extra sampling noise
+of the second stage (for home H12, the two draws gave $\bar{y}=0.95$ and $0.80$); in a single sample this is not guaranteed.
 
 ## UPS Without Replacement {#sec-ups-wo}
 
