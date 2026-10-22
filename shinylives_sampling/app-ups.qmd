@@ -36,7 +36,7 @@ yv  <- raw$acres92
 N   <- length(yv)
 
 ## every numeric column other than y is a candidate auxiliary variable, both
-## for the UPS sizes M and for the ratio estimator's x;
+## for the UPS sizes and for the ratio estimator;
 ## -99 marks a missing entry and is replaced by the mean of the rest
 num <- vapply(raw, is.numeric, logical(1))
 X <- raw[, num & names(raw) != "acres92", drop = FALSE]
@@ -50,7 +50,6 @@ keep <- vapply(X, function(v) all(is.finite(v)) && all(v >= 0) && var(v) > 0,
 X <- X[, keep, drop = FALSE]
 xvars <- names(X)
 xdef  <- if ("acres87" %in% xvars) "acres87" else xvars[1]
-mdef  <- xdef
 
 ybarU <- mean(yv)
 Vy    <- var(yv)                     # S^2 of y, for the SRS average
@@ -246,11 +245,8 @@ ui <- fluidPage(
     fluidRow(
       column(
         3,
-        selectInput("mvar", HTML("Aux. var. for UPS (M<sub>i</sub>)"),
-                    choices = xvars, selected = mdef),
-        selectInput("xvar", HTML("Aux. var. for estimation (x<sub>i</sub>)"),
+        selectInput("xvar", HTML("Aux. variable (x<sub>i</sub>)"),
                     choices = xvars, selected = xdef),
-        checkboxInput("sync", HTML("Same variable (M<sub>i</sub> = x<sub>i</sub>)"), TRUE),
         checkboxInput("brk", "Break the axes", TRUE)
       ),
       column(
@@ -304,33 +300,32 @@ server <- function(input, output, session) {
     if (is.null(v) || is.na(v) || v < 1) 1L else min(as.integer(v), 20000L)
   })
 
-  ## everything that depends on the two auxiliary variables: M sets the UPS
-  ## selection probabilities, x feeds the SRS ratio estimator
+  ## everything that depends on the auxiliary variable x: it sets the UPS
+  ## selection probabilities and feeds the SRS ratio estimator
   aux <- reactive({
-    mv  <- X[[input$mvar]]
     xv  <- X[[input$xvar]]
-    psi <- mv / sum(mv)                  # per-draw selection probabilities
+    psi <- xv / sum(xv)                  # per-draw selection probabilities
     B   <- sum(yv) / sum(xv)
     pos <- psi > 0
-    list(m = mv, x = xv, psi = psi, B = B, xbar = mean(xv),
+    list(x = xv, psi = psi, B = B, xbar = mean(xv),
          ## per-draw variances, so the SE of each estimator with n draws is
          ## sqrt(fpc * V / n) for the SRS ones and sqrt(V / n) for HH
          V = c(srs = Vy, ratio = var(yv - B * xv),
                hh = sum(psi[pos] * (yv[pos] / psi[pos] - sum(yv))^2) / N^2),
-         ## horizontal axis of each view: x for SRS, M for UPSWR
+         ## horizontal axis of each view: SRS (broken at the centre) or UPS (low values squeezed)
          ax = list(
            top = list(v = xv, rg = range(xv), slope = B, name = input$xvar,
                       cut = cut_at_centre(min(xv), max(xv), mean(xv)),
                       cuty = cut_at_centre(rgy[1], rgy[2], ybarU)),
-           low = list(v = mv, rg = range(mv), slope = sum(yv) / sum(mv),
-                      name = input$mvar, cut = cut_psi_share(mv, psi),
+           low = list(v = xv, rg = range(xv), slope = B, name = input$xvar,
+                      cut = cut_psi_share(xv, psi),
                       cuty = cut_psi_share(ypl, psi))))
   })
 
   ## theoretical SEs; for the HT estimator, Hajek's approximation
   ## V = sum pi (1 - pi) (y/pi - R)^2, R = sum (1 - pi) y / sum pi (1 - pi)
   se_theory <- function(a, n) {
-    pk <- incl_prob(a$m, n)
+    pk <- incl_prob(a$x, n)
     ps <- pk > 0
     R  <- sum((1 - pk[ps]) * yv[ps]) / sum(pk[ps] * (1 - pk[ps]))
     se_ht <- sqrt(sum(pk[ps] * (1 - pk[ps]) * (yv[ps] / pk[ps] - R)^2)) / N
@@ -370,7 +365,7 @@ server <- function(input, output, session) {
            setNames(est - ZCRIT * se, paste0("lo_", EST)),
            setNames(est + ZCRIT * se, paste0("hi_", EST)),
            setNames(as.numeric(abs(est - ybarU) <= ZCRIT * se), paste0("cov_", EST)),
-           Bhat = Bhat, Bhh = mean(yv[u] / a$m[u]), Bht = ht / sum(a$m))
+           Bhat = Bhat, Bhh = mean(yv[u] / a$x[u]), Bht = ht / sum(a$x))
     list(s = s, u = u, w = w, e = e)
   }
 
@@ -380,7 +375,7 @@ server <- function(input, output, session) {
     a <- isolate(aux())
     n <- isolate(input$n)
     E <- vector("list", k)
-    pik <- incl_prob(a$m, n)
+    pik <- incl_prob(a$x, n)
     for (i in seq_len(k)) {
       d <- one_draw(a, n, pik)
       E[[i]] <- d$e
@@ -399,17 +394,8 @@ server <- function(input, output, session) {
     rv$ests <- NULL
     draw_one()
   }
-  observeEvent(list(input$n, input$mvar, input$xvar), reset_history(), ignoreInit = FALSE)
+  observeEvent(list(input$n, input$xvar), reset_history(), ignoreInit = FALSE)
 
-  ## keep M and x the same while "Same variable" is ticked: a change to either
-  ## box is copied to the other, and ticking the box copies M to x
-  sync_to <- function(id, v) {
-    if (isTRUE(input$sync) && !identical(input[[id]], v))
-      updateSelectInput(session, id, selected = v)
-  }
-  observeEvent(input$mvar, sync_to("xvar", input$mvar))
-  observeEvent(input$xvar, sync_to("mvar", input$xvar))
-  observeEvent(input$sync, sync_to("xvar", input$mvar))
   observeEvent(input$reset, reset_history())
 
   ## one sample per click; Play repeats until Pause or until the cap is reached
@@ -444,7 +430,7 @@ server <- function(input, output, session) {
     nrep <- NROW(M)
     cur  <- M[nrep, ]
     des  <- input$design
-    ups  <- des %in% c("ups", "uwo")          # views with M on the horizontal axis
+    ups  <- des %in% c("ups", "uwo")          # views with the UPS horizontal axis
     s    <- switch(des, ups = rv$s_ups, uwo = rv$s_uwo, rv$s_srs)
     xpos <- setNames(0.02 + 0.04 * (seq_along(sel) - 1), sel)   # CI bar positions
 
@@ -482,7 +468,7 @@ server <- function(input, output, session) {
     ## ---- left: population sized by selection probability, with the sample ----
     par(mar = c(4.2, 4.8, 3.0, 1.0))
     plot(NA, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE,
-         xlab = paste0(if (ups) "M: " else "x: ", h$name, unit_lab(divx)),
+         xlab = paste0("x: ", h$name, unit_lab(divx)),
          ylab = paste0("y: acres92", unit_lab(divy)),
          main = sprintf("Population and %s sample, n = %d",
                         switch(des, ups = "UPSWR", uwo = "UPSWO", "SRS"), n))
@@ -520,10 +506,10 @@ server <- function(input, output, session) {
     mask_gap(bky, 2); mask_gap(bkx, 1)
     box(); draw_axis(bky, 2, divy); draw_axis(bkx, 1, divx)
 
-    leg <- data.frame(l = c(if (ups) "size ~ psi = M / M0" else "size ~ 1/N (equal)",
+    leg <- data.frame(l = c(if (ups) "size ~ psi = x / t_x" else "size ~ 1/N (equal)",
                             "sampled y"),
                       c = c("grey55", col_pts), lt = NA, p = 16, w = NA)
-    leg <- rbind(leg, data.frame(l = if (ups) "true y = B M" else "true y = B x",
+    leg <- rbind(leg, data.frame(l = "true y = B x",
                                  c = col_true, lt = 1, p = NA, w = 1.8))
     if (des == "ups" && "hh" %in% sel) leg <- rbind(leg, data.frame(
       l = "HH slope mean(b)", c = COL[["hh"]], lt = 2, p = NA, w = 2))
@@ -596,8 +582,7 @@ The app compares ways of using a size variable $x_i$ to estimate the mean per un
 $\bar{y}_U = y/N$ (here $y_i$ is `acres92` for county $i$, and $y=\sum_{i=1}^N y_i$): at the
 **estimation** stage (SRS + ratio), or at the **design** stage with probabilities
 proportional to $x_i$, with replacement (UPSWR + Hansen--Hurwitz) or without replacement
-(UPSWO + Horvitz--Thompson). Choosing the same variable for $M_i$ and $x_i$ in the app gives exactly this
-comparison. The plain SRS average is included as a baseline. Throughout, write
+(UPSWO + Horvitz--Thompson). The plain SRS average is included as a baseline. Throughout, write
 $$
 b_i=\frac{y_i}{x_i},\qquad B=\frac{y}{t_x}=\frac{\bar{y}_U}{\bar{x}_U},\qquad w_i=\frac{x_i}{\bar{x}_U},
 $$
