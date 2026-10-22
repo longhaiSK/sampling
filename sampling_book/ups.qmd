@@ -514,31 +514,55 @@ plot(popn, phys, log = "xy",
      xlab = "Population", ylab = "Physicians")
 ```
 
-*Total physicians in the US,* $\hat{t}_{\mathrm{HH}}$:
+All three estimates come from the same quantity, the ratio $b_j^*=\mathrm{phys}_j^*/\mathrm{popn}_j^*$ of
+physicians per person of the county selected on draw $j$. To avoid tiny numbers we measure the population in
+thousands of people, so that $b_j^*$ is the number of physicians per 1,000 people. The function `upswr_est`
+takes the physicians and populations of the 100 draws, the population mean and total of $x$ (the number of
+counties is $N=3141$, so $\bar{x}_U=t_x/N$), and the `method`.
 
-```{r statepop-upswr-total}
-res_phys_total <- upswr_est(phys, popn, xbar_pop = M / 3141, tx_pop = M,
-                            method = "total", show.details = FALSE)
-res_phys_total$estimate |> format_est_gt("hh_total")
+*Physicians per capita,* $\hat{B}_{\mathrm{HH}}=\bar{b}^*$. The working table lists the ratios $b_j^*$ of
+the first draws, their deviations from $\hat{B}_{\mathrm{HH}}$, and the squared deviations, whose sum gives
+$s_{b^*}^2$:
+
+```{r statepop-upswr-ratio}
+N <- 3141   # counties in the US
+popn_k <- popn / 1000   # population in thousands
+M_k <- M / 1000
+res_phys_ratio_hh <- upswr_est(phys, popn_k, xbar_pop = M_k / N, tx_pop = M_k, method = "ratio")
+res_phys_ratio_hh$table
+res_phys_ratio_hh$estimate |> format_est_gt("hh_B")
 ```
-**Output Note:** Each draw contributes $\mathrm{phys}_i/\psi_i$, an unbiased estimate of
-the national total on its own; their average puts about
-`r format(round(res_phys_total$estimate["Est."]), big.mark = ",")` physicians in the US,
-with a 95% interval of [`r format(round(res_phys_total$estimate["ci.low"]), big.mark = ",")`,
-`r format(round(res_phys_total$estimate["ci.upp"]), big.mark = ",")`].
+**Output Note:** Each draw gives an unbiased estimate of the national number of physicians per person,
+and their average is $\hat{B}_{\mathrm{HH}}=`r round(res_phys_ratio_hh$estimate["Est."], 3)`$ physicians
+per 1,000 people, with a 95% interval of [`r round(res_phys_ratio_hh$estimate["ci.low"], 3)`,
+`r round(res_phys_ratio_hh$estimate["ci.upp"], 3)`].
 
-*Physicians per county,* $\hat{\bar{y}}_{\mathrm{HH}} = \hat{t}_{\mathrm{HH}}/N$:
+*Physicians per county,* $\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\hat{B}_{\mathrm{HH}}$, with
+$\bar{x}_U=M/N$ the average population of a county:
 
 ```{r statepop-upswr-per-county}
-N <- 3141   # counties in the US
-res_phys_county <- upswr_est(phys, popn, xbar_pop = M / N, tx_pop = M,
+res_phys_county <- upswr_est(phys, popn_k, xbar_pop = M_k / N, tx_pop = M_k,
                              method = "mean", show.details = FALSE)
 res_phys_county$estimate |> format_est_gt("hh_ybar")
 ```
-**Output Note:** This is the same estimate divided by the known $N$, so its standard error
-shrinks by the same factor and the two statements carry identical information. It averages
-over *counties*, each weighted equally, so the many small rural counties pull it down to
+**Output Note:** This is the estimate per 1,000 people times the average county population in thousands,
+$\bar{x}_U=`r round(M_k / N, 1)`$, and its standard error is multiplied by the same
+factor. It averages over *counties*, each weighted equally, so the many small rural counties pull it down to
 about `r round(res_phys_county$estimate["Est."])` physicians per county.
+
+*Total physicians in the US,* $\hat{t}_{\mathrm{HH}}=t_x\hat{B}_{\mathrm{HH}}$, with $t_x=M$ the US population (in thousands):
+
+```{r statepop-upswr-total}
+res_phys_total <- upswr_est(phys, popn_k, xbar_pop = M_k / N, tx_pop = M_k,
+                            method = "total", show.details = FALSE)
+res_phys_total$estimate |> format_est_gt("hh_total")
+```
+**Output Note:** This is the estimate per 1,000 people times the US population in thousands, so it estimates the national total
+number of physicians: about
+`r format(round(res_phys_total$estimate["Est."]), big.mark = ",")` physicians in the US,
+with a 95% interval of [`r format(round(res_phys_total$estimate["ci.low"]), big.mark = ",")`,
+`r format(round(res_phys_total$estimate["ci.upp"]), big.mark = ",")`]. The three estimates carry the same
+information: the standard errors are in the same proportion as the estimates.
 
 #### Comparison with estimates based on an SRS sample {-}
 

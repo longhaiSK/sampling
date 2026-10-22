@@ -900,6 +900,7 @@ upswr_est <- function (ydata, xdata, xbar_pop, tx_pop,
   scale <- switch (method, ratio = 1, mean = xbar_pop, total = tx_pop)
   res <- srs_est (ydata/xdata, N = Inf, estimate = "mean", show.details = show.details,
                   col_labels = list (y = "b_j^*", yhat = "\\hat B_{\\mathrm{HH}}",
+                                     dev = "b_j^*-\\hat B_{\\mathrm{HH}}",
                                      ybar = "\\hat B_{\\mathrm{HH}}", s = "s_{b^*}"),
                   title = "UPSWR Hansen-Hurwitz Estimation: Working Table")
   res$estimate <- scale * res$estimate
