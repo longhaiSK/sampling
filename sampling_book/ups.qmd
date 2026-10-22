@@ -121,7 +121,7 @@ and $q_j^*$ for the ratio of the unit selected on draw $j$. Like $u_j^*$, the $q
 value $q_i$ with probability $\psi_i=x_i/t_x$, so their mean and variance are
 $$
 E(q_j^*)=\sum_{i=1}^N\frac{x_i}{t_x}\cdot\frac{y_i}{x_i}=\frac{t}{t_x}=B,\qquad
-S_q^2=V(q_j^*)=\sum_{i=1}^N\psi_i\,(q_i-B)^2 ,
+S_{q^*}^2=V(q_j^*)=\sum_{i=1}^N\psi_i\,(q_i-B)^2 ,
 $$
 where $B=t/t_x=\bar{y}_U/\bar{x}_U$ is the population ratio. The HH estimator is the known mean
 $\bar{x}_U$ times the *mean of the ratios* in $\mathcal{R}$, and its variance is $\bar{x}_U^2$ times that
@@ -130,26 +130,28 @@ $$
 \boxed{\;
 \begin{aligned}
 \hat{\bar{y}}_{\mathrm{HH}}&=\bar{x}_U\,\bar{q}^*,\qquad
-&\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{S_q}{\sqrt{n}},\qquad
+&\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{S_{q^*}}{\sqrt{n}},\qquad
 &\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{s_q}{\sqrt{n}},\\[4pt]
 \hat{t}_{\mathrm{HH}}&=t_x\,\bar{q}^*,\qquad
-&\mathrm{SE}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{S_q}{\sqrt{n}},\qquad
+&\mathrm{SE}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{S_{q^*}}{\sqrt{n}},\qquad
 &\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{s_q}{\sqrt{n}},
 \end{aligned}\;}
 $$
-where $\hat{t}_{\mathrm{HH}}=N\hat{\bar{y}}_{\mathrm{HH}}$, and the theoretical SE uses $S_q$ while the
+where $\hat{t}_{\mathrm{HH}}=N\hat{\bar{y}}_{\mathrm{HH}}$, and the theoretical SE uses $S_{q^*}$ while the
 estimated SE replaces it by the sample standard deviation of the ratios in $\mathcal{R}$:
 $$
 \bar{q}^*=\frac{1}{n}\sum_{j=1}^n q_j^*,\qquad
 s_q^2=\frac{1}{n-1}\sum_{j=1}^n\left(q_j^*-\bar{q}^*\right)^2 .
 $$
 To compare with the ratio estimator, let $d_i=y_i-Bx_i$ be the population residuals about the line
-through the origin $y=Bx$, which satisfy $\sum_{i=1}^N d_i=0$. Since $q_i-B=d_i/x_i$,
+through the origin $y=Bx$, which satisfy $\sum_{i=1}^N d_i=0$. Since $\bar{x}_U q_i-\bar{y}_U=\bar{x}_U(q_i-B)$ and $q_i-B=d_i/x_i$,
 $$
-V(\hat{\bar{y}}_{\mathrm{HH}})=\frac{\bar{x}_U^2S_q^2}{n}
-=\frac{\bar{x}_U^2}{n}\sum_{i=1}^N\frac{x_i}{t_x}\cdot\frac{d_i^2}{x_i^2}
-=\frac{1}{nN}\sum_{i=1}^N\frac{\bar{x}_U}{x_i}\,d_i^2 .
+V(\hat{\bar{y}}_{\mathrm{HH}})=\frac{\bar{x}_U^2S_{q^*}^2}{n}
+=\frac{1}{n}\sum_{i=1}^N\frac{x_i}{t_x}\,\bar{x}_U^2(q_i-B)^2
+=\frac{1}{nN}\sum_{i=1}^N\bar{x}_U\,x_i\,(q_i-B)^2
+=\frac{1}{nN}\sum_{i=1}^N\frac{\bar{x}_U}{x_i}\,d_i^2 ,
 $$
+using $\psi_i\bar{x}_U^2=(x_i/t_x)(t_x/N)^2=\bar{x}_U\,x_i/N$ and $d_i=x_i(q_i-B)$.
 The variance is small when $y_i$ is nearly proportional to $x_i$, so that all residuals $d_i$ are small.
 
 **Comparison with the ratio estimator.** Under a simple random sample (SRS) of $n$ units without
@@ -167,7 +169,7 @@ ratio $B$, but they use $x_i$ in different ways:
 |:---|:---|:---|
 | Selection | every unit has the same chance, without replacement | unit $i$ has chance $x_i/t_x$ on every draw |
 | Estimator of $\bar{y}_U$ | $\bar{x}_U\,\dfrac{\sum y_i}{\sum x_i}$ (ratio of the sample means) | $\bar{x}_U\,\dfrac{1}{n}\sum\dfrac{y_j^*}{x_j^*}$ (mean of the ratios) |
-| Variance | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N d_i^2$ (large $n$) | $\dfrac{\bar{x}_U^2S_q^2}{n}=\dfrac{1}{nN}\sum\limits_{i=1}^N\dfrac{\bar{x}_U}{x_i}\,d_i^2$ (exact) |
+| Variance | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N d_i^2$ (large $n$) | $\dfrac{\bar{x}_U^2S_{q^*}^2}{n}=\dfrac{1}{nN}\sum\limits_{i=1}^N\dfrac{\bar{x}_U}{x_i}\,d_i^2$ (exact) |
 | Estimated SE | $\dfrac{\bar{x}_U}{\bar{x}}\sqrt{\left(1-\dfrac{n}{N}\right)\dfrac{s_e^2}{n}}$, $\ s_e^2=\dfrac{\sum(y_i-\hat{B}x_i)^2}{n-1}$ | $\bar{x}_U\,\dfrac{s_q}{\sqrt{n}}$, $\ s_q^2=\dfrac{\sum(q_j^*-\bar{q}^*)^2}{n-1}$ |
 | $x_i$ is used at | the **estimation** stage | the **design** stage |
 | Needs | $x_i$ of the sampled units and $\bar{x}_U$ | $x_i$ of all the units, to construct $\psi_i$ |
@@ -193,48 +195,82 @@ probabilities $1/N$:
 
 | Estimator | Design | One-draw variance |
 |:---|:---|:---|
-| HH, $\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\,q_j^*$ | PPS, $\psi_i=x_i/t_x$ | $\bar{x}_U^2S_q^2=\bar{x}_U^2\sum\limits_{i=1}^N\psi_i(q_i-B)^2$ |
+| HH, $\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\,q_j^*$ | PPS, $\psi_i=x_i/t_x$ | $\bar{x}_U^2S_{q^*}^2=\bar{x}_U^2\sum\limits_{i=1}^N\psi_i\,(q_i-B)^2$ |
 | Ratio, $\hat{\bar{y}}_r=\bar{x}_U\,y_i/x_i$ | SRS | $\approx S_d^2=\dfrac{1}{N}\sum\limits_{i=1}^N d_i^2$ |
 | Sample mean, $\bar{y}=y_i$ | SRS | $S_y^2=\dfrac{1}{N}\sum\limits_{i=1}^N (y_i-\bar{y}_U)^2$ |
 
-Here $S_d^2$ and $S_y^2$ use the divisor $N$ instead of $N-1$, as befits $N=\infty$. The three variances
-measure the spread of $y$ about three different centres: the sample mean about the flat line
-$\bar{y}_U$, the ratio estimator about the line $y=Bx$, and HH about the same line but with the weights
-$\psi_i$ on the squared ratio deviations, which equals $\frac1N\sum(\bar{x}_U/x_i)d_i^2$.
+The HH variance is the ordinary variance of a discrete random variable: $q_j^*$ takes the value
+$q_i=y_i/x_i$ with probability $\psi_i$, its mean is $B$, and $S_{q^*}^2$ is the $\psi$-weighted sum of
+the squared deviations $(q_i-B)^2$. The two SRS variances are of the same kind with equal weights $1/N$
+(hence the divisor $N$ instead of $N-1$, as befits $N=\infty$), applied to the residuals $d_i=y_i-Bx_i$
+and to the deviations $y_i-\bar{y}_U$. The three variances thus measure the spread of $y$ about three
+different centres: the sample mean about the flat line $\bar{y}_U$, and the ratio estimator and HH about
+the line $y=Bx$, the latter on the scale of the ratios $q_i$ and with the weights $\psi_i$. (Since
+$q_i-B=d_i/x_i$, the HH variance also equals $\frac1N\sum(\bar{x}_U/x_i)d_i^2$, as in
+@sec-ups-hh-theory.)
+
+For each population below, the first table works out $S_{q^*}^2$ term by term, and the second the sums
+of squares of the two SRS estimators. The last column of the first table, $\bar{x}_U^2\psi_i(q_i-B)^2$,
+and the columns $d_i^2/N$ and $(y_i-\bar{y}_U)^2/N$ of the second are on the same scale: each is the
+contribution of store $i$ to the one-draw variance of its estimator, so the three can be compared store by
+store, and each column sums to the variance.
 
 ```{r toy-functions}
 #| cache: false
-# Working table for the three one-draw variances
-toy_table <- function(store, x, y) {
+#| echo: false
+# HH working table: the psi-weighted squared deviations of q_i = y_i / x_i from B
+hh_table <- function(store, x, y) {
   psi <- x / sum(x)
-  B <- sum(y) / sum(x)
   q <- y / x
-  d <- y - B * x
+  B <- sum(y) / sum(x)
   tab <- data.frame(Store = store, x = x, y = y, psi = psi, q = q,
-                    wq = psi * (q - B)^2, d = d, d2 = d^2,
-                    dy = y - mean(y), dy2 = (y - mean(y))^2)
-  sums <- data.frame(Store = "**Sum**", lapply(tab[-1], sum))
-  sums$q <- NA                                       # a sum of ratios means nothing
+                    dq = q - B, dq2 = (q - B)^2, wdq2 = psi * (q - B)^2,
+                    vhh = mean(x)^2 * psi * (q - B)^2)
+  sums <- data.frame(Store = "**Sum**", x = sum(x), y = sum(y), psi = sum(psi),
+                     q = NA, dq = NA, dq2 = NA, wdq2 = sum(tab$wdq2), vhh = sum(tab$vhh))
   rbind(tab, sums)
 }
 
-show_toy_table <- function(tab) {
+show_hh_table <- function(tab) {
   options(knitr.kable.NA = "")
-  knitr::kable(tab, digits = c(0, 0, 0, 4, 4, 6, 2, 2, 2, 2),
+  knitr::kable(tab, digits = c(0, 0, 0, 4, 4, 4, 6, 7, 2),
                format.args = list(big.mark = ","),
-               col.names = c("Store", "$x_i$", "$y_i$", "$\\psi_i$", "$q_i=y_i/x_i$",
-                             "$\\psi_i(q_i-B)^2$", "$d_i=y_i-Bx_i$", "$d_i^2$",
-                             "$y_i-\\bar{y}_U$", "$(y_i-\\bar{y}_U)^2$"))
+               col.names = c("Store", "$x_i$", "$y_i$", "$\\psi_i=x_i/t_x$", "$q_i=y_i/x_i$",
+                             "$q_i-B$", "$(q_i-B)^2$", "$\\psi_i(q_i-B)^2$",
+                             "$\\bar{x}_U^2\\psi_i(q_i-B)^2$"))
 }
 
-# The three one-draw variances, from the Sum row of the working table
-toy_variances <- function(tab) {
-  N <- nrow(tab) - 1
-  xbar_U <- tab$x[N + 1] / N
-  v <- c(HH = xbar_U^2 * tab$wq[N + 1], ratio = tab$d2[N + 1] / N, mean = tab$dy2[N + 1] / N)
+# SRS working table: residuals d_i = y_i - B x_i and deviations y_i - ybar_U
+srs_table <- function(store, x, y) {
+  B <- sum(y) / sum(x)
+  d <- y - B * x
+  N <- length(x)
+  tab <- data.frame(Store = store, x = x, y = y, d = d, d2 = d^2, vr = d^2 / N,
+                    dy = y - mean(y), dy2 = (y - mean(y))^2, vm = (y - mean(y))^2 / N)
+  sums <- data.frame(Store = "**Sum**", lapply(tab[-1], sum))
+  rbind(tab, sums)
+}
+
+show_srs_table <- function(tab) {
+  knitr::kable(tab, digits = c(0, 0, 0, 2, 2, 2, 2, 2, 2),
+               format.args = list(big.mark = ","),
+               col.names = c("Store", "$x_i$", "$y_i$", "$d_i=y_i-Bx_i$", "$d_i^2$", "$d_i^2/N$",
+                             "$y_i-\\bar{y}_U$", "$(y_i-\\bar{y}_U)^2$", "$(y_i-\\bar{y}_U)^2/N$"))
+}
+
+# The three one-draw variances, from the Sum rows of the two working tables
+toy_variances <- function(hh, srs) {
+  N <- nrow(hh) - 1
+  xbar_U <- hh$x[N + 1] / N
+  S2q <- hh$wdq2[N + 1]
+  v <- c(HH = hh$vhh[N + 1], ratio = srs$vr[N + 1], mean = srs$vm[N + 1])
   data.frame(
     Estimator = c("HH (PPS)", "Ratio (SRS)", "Sample mean (SRS)"),
-    Formula = c("$\\bar{x}_U^2S_q^2$", "$S_d^2=\\sum d_i^2/N$", "$S_y^2=\\sum(y_i-\\bar{y}_U)^2/N$"),
+    Formula = c("$\\bar{x}_U^2S_{q^*}^2=\\bar{x}_U^2\\sum\\psi_i(q_i-B)^2$",
+                "$S_d^2=\\sum d_i^2/N$", "$S_y^2=\\sum(y_i-\\bar{y}_U)^2/N$"),
+    Calculation = c(sprintf("$%s^2\\times %.7f$", format(xbar_U), S2q),
+                    sprintf("$%s/%d$", format(round(srs$d2[N + 1], 2), big.mark = ","), N),
+                    sprintf("$%s/%d$", format(round(srs$dy2[N + 1], 2), big.mark = ","), N)),
     Variance = v,
     `Relative to sample mean` = v / v["mean"],
     check.names = FALSE
@@ -242,65 +278,92 @@ toy_variances <- function(tab) {
 }
 
 show_toy_variances <- function(vt) {
-  knitr::kable(vt, digits = c(0, 0, 1, 3), row.names = FALSE,
+  knitr::kable(vt, digits = c(0, 0, 0, 1, 3), row.names = FALSE,
                format.args = list(big.mark = ","))
 }
 ```
 
 **Sales proportional to floor area.** The monthly sales (thousands of dollars) are nearly proportional
-to the floor areas, as in the slides for this chapter:
+to the floor areas, as in the slides for this chapter. Here $t=300$, $\bar{y}_U=75$ and
+$B=300/1600=0.1875$, the mean of $q_j^*$.
 
 ```{r toy-good}
 #| cache: false
+#| echo: false
 store <- c("A", "B", "C", "D")
 x <- c(100, 200, 300, 1000)
 y_good <- c(11, 20, 24, 245)
-tab_good <- toy_table(store, x, y_good)
-show_toy_table(tab_good)
+hh_good <- hh_table(store, x, y_good)
+srs_good <- srs_table(store, x, y_good)
+show_hh_table(hh_good)
 ```
 
-Here $t=300$, $\bar{y}_U=75$ and $B=300/1600=0.1875$. Dividing the sums of the last columns gives the
-three one-draw variances:
+The ratios $q_i$ are close to each other (0.08 to 0.245), so every $(q_i-B)^2$ is small, and the sum of the
+column $\psi_i(q_i-B)^2$ is $S_{q^*}^2=`r round(hh_good$wdq2[5], 7)`$. For the SRS estimators:
+
+```{r toy-good-srs}
+#| cache: false
+#| echo: false
+show_srs_table(srs_good)
+```
+
+Comparing the contributions store by store, store D contributes
+`r format(round(srs_good$vm[4], 1), big.mark = ",")` to the variance of the sample mean, `r round(srs_good$vr[4], 1)` to that of the
+ratio estimator, and only `r round(hh_good$vhh[4], 1)` to that of HH. The sums of the three contribution
+columns are the one-draw variances:
 
 ```{r toy-good-var}
 #| cache: false
-var_good <- toy_variances(tab_good)
+#| echo: false
+var_good <- toy_variances(hh_good, srs_good)
 show_toy_variances(var_good)
 ```
 
 The sample mean ignores the floor areas, and its variance is dominated by store D, whose sales are far
 from $\bar{y}_U=75$. The ratio estimator measures each store against the line $y=Bx$ instead, which cuts
 the variance from `r format(var_good$Variance[3], big.mark = ",")` to
-`r round(var_good$Variance[2], 1)`. HH uses the same residuals, but weighs $d_i^2$ by $\bar{x}_U/x_i$; the
-largest residual, $d_D=57.5$, belongs to the largest store, whose weight is $400/1000=0.4$, so HH does better
-still, with `r round(var_good$Variance[1], 1)`.
+`r round(var_good$Variance[2], 1)`. HH does better still, with `r round(var_good$Variance[1], 1)`: the
+largest store D has the largest residual $d_D=57.5$, but on the scale of the ratios this is only
+$q_D-B=0.0575$, no larger than the deviations of the small stores.
 
 **Sales not related to floor area: a poor choice of $\psi_i$.** Now suppose the sales are about the same
 in all four stores, for example because the large store D is a warehouse outlet with few customers, while
-the total is still $t=300$. The floor area is then a poor size variable, but we still draw with
-$\psi_i=x_i/t_x$:
+the total is still $t=300$, so $B=0.1875$ again. The floor area is then a poor size variable, but we still
+draw with $\psi_i=x_i/t_x$:
 
 ```{r toy-bad}
 #| cache: false
+#| echo: false
 y_bad <- c(60, 80, 90, 70)
-tab_bad <- toy_table(store, x, y_bad)
-show_toy_table(tab_bad)
+hh_bad <- hh_table(store, x, y_bad)
+srs_bad <- srs_table(store, x, y_bad)
+show_hh_table(hh_bad)
+```
+
+Now the ratios range from 0.07 to 0.6. Store A, although drawn with probability only $1/16$, has
+$(q_A-B)^2=`r round(hh_bad$dq2[1], 4)`$ and contributes the largest term,
+$`r round(hh_bad$wdq2[1], 7)`$. In total $S_{q^*}^2=`r round(hh_bad$wdq2[5], 7)`$, about
+`r round(hh_bad$wdq2[5] / hh_good$wdq2[5], 1)` times the value above.
+
+```{r toy-bad-srs}
+#| cache: false
+#| echo: false
+show_srs_table(srs_bad)
 ```
 
 ```{r toy-bad-var}
 #| cache: false
-var_bad <- toy_variances(tab_bad)
+#| echo: false
+var_bad <- toy_variances(hh_bad, srs_bad)
 show_toy_variances(var_bad)
 ```
 
 The ordering is reversed. The sales hardly vary, so the sample mean has a tiny variance,
-`r round(var_bad$Variance[3], 1)`. The line $y=Bx$ fits the sales badly, so the residuals $d_i$ are large,
-and both estimators that rely on $y_i\propto x_i$ are more than
-`r floor(min(var_bad[[4]][1:2]))` times worse than the sample mean. The weights $\bar{x}_U/x_i$ do not help
-HH much here: the small stores A, B and C, which have large positive residuals, get weights $4$, $2$ and
-$4/3$, and store A, drawn only once in 16 draws, has its sales multiplied by $1/\psi_A=16$. Unequal
-probability sampling is only as good as the size variable used to construct $\psi_i$: before using PPS,
-check that $y_i$ is roughly proportional to $x_i$.
+`r round(var_bad$Variance[3], 1)`. The line $y=Bx$ fits the sales badly, so the residuals $d_i$ and the
+deviations $q_i-B$ are large, and both estimators that rely on $y_i\propto x_i$ are more than
+`r floor(min(var_bad[[5]][1:2]))` times worse than the sample mean. Unequal probability sampling is only as
+good as the size variable used to construct $\psi_i$: before using PPS, check that $y_i$ is roughly
+proportional to $x_i$.
 
 ### Example: Physicians in U.S. Counties (`statepop.csv`) {#sec-ups-statepop}
 

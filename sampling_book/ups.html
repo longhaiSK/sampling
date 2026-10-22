@@ -1371,25 +1371,26 @@ V(\hat{\bar{y}}_{\mathrm{HH}})=\frac{1}{n}\sum_{i=1}^N\psi_i\left(\frac{y_i}{N\p
 q_i=\frac{y_i}{x_i},\qquad i=1,\ldots,N,
 \]</span> and <span class="math inline">\(q_j^*\)</span> for the ratio of the unit selected on draw <span class="math inline">\(j\)</span>. Like <span class="math inline">\(u_j^*\)</span>, the <span class="math inline">\(q_j^*\)</span> are iid, taking the value <span class="math inline">\(q_i\)</span> with probability <span class="math inline">\(\psi_i=x_i/t_x\)</span>, so their mean and variance are <span class="math display">\[
 E(q_j^*)=\sum_{i=1}^N\frac{x_i}{t_x}\cdot\frac{y_i}{x_i}=\frac{t}{t_x}=B,\qquad
-S_q^2=V(q_j^*)=\sum_{i=1}^N\psi_i\,(q_i-B)^2 ,
+S_{q^*}^2=V(q_j^*)=\sum_{i=1}^N\psi_i\,(q_i-B)^2 ,
 \]</span> where <span class="math inline">\(B=t/t_x=\bar{y}_U/\bar{x}_U\)</span> is the population ratio. The HH estimator is the known mean <span class="math inline">\(\bar{x}_U\)</span> times the <em>mean of the ratios</em> in <span class="math inline">\(\mathcal{R}\)</span>, and its variance is <span class="math inline">\(\bar{x}_U^2\)</span> times that of <span class="math inline">\(\bar{q}^*\)</span>: <span class="math display">\[
 \boxed{\;
 \begin{aligned}
 \hat{\bar{y}}_{\mathrm{HH}}&amp;=\bar{x}_U\,\bar{q}^*,\qquad
-&amp;\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})&amp;=\bar{x}_U\,\frac{S_q}{\sqrt{n}},\qquad
+&amp;\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})&amp;=\bar{x}_U\,\frac{S_{q^*}}{\sqrt{n}},\qquad
 &amp;\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})&amp;=\bar{x}_U\,\frac{s_q}{\sqrt{n}},\\[4pt]
 \hat{t}_{\mathrm{HH}}&amp;=t_x\,\bar{q}^*,\qquad
-&amp;\mathrm{SE}(\hat{t}_{\mathrm{HH}})&amp;=t_x\,\frac{S_q}{\sqrt{n}},\qquad
+&amp;\mathrm{SE}(\hat{t}_{\mathrm{HH}})&amp;=t_x\,\frac{S_{q^*}}{\sqrt{n}},\qquad
 &amp;\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})&amp;=t_x\,\frac{s_q}{\sqrt{n}},
 \end{aligned}\;}
-\]</span> where <span class="math inline">\(\hat{t}_{\mathrm{HH}}=N\hat{\bar{y}}_{\mathrm{HH}}\)</span>, and the theoretical SE uses <span class="math inline">\(S_q\)</span> while the estimated SE replaces it by the sample standard deviation of the ratios in <span class="math inline">\(\mathcal{R}\)</span>: <span class="math display">\[
+\]</span> where <span class="math inline">\(\hat{t}_{\mathrm{HH}}=N\hat{\bar{y}}_{\mathrm{HH}}\)</span>, and the theoretical SE uses <span class="math inline">\(S_{q^*}\)</span> while the estimated SE replaces it by the sample standard deviation of the ratios in <span class="math inline">\(\mathcal{R}\)</span>: <span class="math display">\[
 \bar{q}^*=\frac{1}{n}\sum_{j=1}^n q_j^*,\qquad
 s_q^2=\frac{1}{n-1}\sum_{j=1}^n\left(q_j^*-\bar{q}^*\right)^2 .
-\]</span> To compare with the ratio estimator, let <span class="math inline">\(d_i=y_i-Bx_i\)</span> be the population residuals about the line through the origin <span class="math inline">\(y=Bx\)</span>, which satisfy <span class="math inline">\(\sum_{i=1}^N d_i=0\)</span>. Since <span class="math inline">\(q_i-B=d_i/x_i\)</span>, <span class="math display">\[
-V(\hat{\bar{y}}_{\mathrm{HH}})=\frac{\bar{x}_U^2S_q^2}{n}
-=\frac{\bar{x}_U^2}{n}\sum_{i=1}^N\frac{x_i}{t_x}\cdot\frac{d_i^2}{x_i^2}
-=\frac{1}{nN}\sum_{i=1}^N\frac{\bar{x}_U}{x_i}\,d_i^2 .
-\]</span> The variance is small when <span class="math inline">\(y_i\)</span> is nearly proportional to <span class="math inline">\(x_i\)</span>, so that all residuals <span class="math inline">\(d_i\)</span> are small.</p>
+\]</span> To compare with the ratio estimator, let <span class="math inline">\(d_i=y_i-Bx_i\)</span> be the population residuals about the line through the origin <span class="math inline">\(y=Bx\)</span>, which satisfy <span class="math inline">\(\sum_{i=1}^N d_i=0\)</span>. Since <span class="math inline">\(\bar{x}_U q_i-\bar{y}_U=\bar{x}_U(q_i-B)\)</span> and <span class="math inline">\(q_i-B=d_i/x_i\)</span>, <span class="math display">\[
+V(\hat{\bar{y}}_{\mathrm{HH}})=\frac{\bar{x}_U^2S_{q^*}^2}{n}
+=\frac{1}{n}\sum_{i=1}^N\frac{x_i}{t_x}\,\bar{x}_U^2(q_i-B)^2
+=\frac{1}{nN}\sum_{i=1}^N\bar{x}_U\,x_i\,(q_i-B)^2
+=\frac{1}{nN}\sum_{i=1}^N\frac{\bar{x}_U}{x_i}\,d_i^2 ,
+\]</span> using <span class="math inline">\(\psi_i\bar{x}_U^2=(x_i/t_x)(t_x/N)^2=\bar{x}_U\,x_i/N\)</span> and <span class="math inline">\(d_i=x_i(q_i-B)\)</span>. The variance is small when <span class="math inline">\(y_i\)</span> is nearly proportional to <span class="math inline">\(x_i\)</span>, so that all residuals <span class="math inline">\(d_i\)</span> are small.</p>
 <p><strong>Comparison with the ratio estimator.</strong> Under a simple random sample (SRS) of <span class="math inline">\(n\)</span> units without replacement, the ratio estimator (<a href="ratio.html#sec-ratio-theory" class="quarto-xref"><span>Section 4.3.1</span></a>) also uses <span class="math inline">\(x_i\)</span>: <span class="math display">\[
 \hat{\bar{y}}_r=\bar{x}_U\,\frac{\bar{y}}{\bar{x}}=\bar{x}_U\,\frac{\sum_{i\in\mathcal{S}}y_i}{\sum_{i\in\mathcal{S}}x_i},
 \qquad
@@ -1423,7 +1424,7 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <tr class="odd">
 <td style="text-align: left;">Variance</td>
 <td style="text-align: left;"><span class="math inline">\(\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N d_i^2\)</span> (large <span class="math inline">\(n\)</span>)</td>
-<td style="text-align: left;"><span class="math inline">\(\dfrac{\bar{x}_U^2S_q^2}{n}=\dfrac{1}{nN}\sum\limits_{i=1}^N\dfrac{\bar{x}_U}{x_i}\,d_i^2\)</span> (exact)</td>
+<td style="text-align: left;"><span class="math inline">\(\dfrac{\bar{x}_U^2S_{q^*}^2}{n}=\dfrac{1}{nN}\sum\limits_{i=1}^N\dfrac{\bar{x}_U}{x_i}\,d_i^2\)</span> (exact)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Estimated SE</td>
@@ -1469,7 +1470,7 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <tr class="odd">
 <td style="text-align: left;">HH, <span class="math inline">\(\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\,q_j^*\)</span></td>
 <td style="text-align: left;">PPS, <span class="math inline">\(\psi_i=x_i/t_x\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\bar{x}_U^2S_q^2=\bar{x}_U^2\sum\limits_{i=1}^N\psi_i(q_i-B)^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar{x}_U^2S_{q^*}^2=\bar{x}_U^2\sum\limits_{i=1}^N\psi_i\,(q_i-B)^2\)</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Ratio, <span class="math inline">\(\hat{\bar{y}}_r=\bar{x}_U\,y_i/x_i\)</span></td>
@@ -1483,89 +1484,34 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 </tr>
 </tbody>
 </table>
-<p>Here <span class="math inline">\(S_d^2\)</span> and <span class="math inline">\(S_y^2\)</span> use the divisor <span class="math inline">\(N\)</span> instead of <span class="math inline">\(N-1\)</span>, as befits <span class="math inline">\(N=\infty\)</span>. The three variances measure the spread of <span class="math inline">\(y\)</span> about three different centres: the sample mean about the flat line <span class="math inline">\(\bar{y}_U\)</span>, the ratio estimator about the line <span class="math inline">\(y=Bx\)</span>, and HH about the same line but with the weights <span class="math inline">\(\psi_i\)</span> on the squared ratio deviations, which equals <span class="math inline">\(\frac1N\sum(\bar{x}_U/x_i)d_i^2\)</span>.</p>
+<p>The HH variance is the ordinary variance of a discrete random variable: <span class="math inline">\(q_j^*\)</span> takes the value <span class="math inline">\(q_i=y_i/x_i\)</span> with probability <span class="math inline">\(\psi_i\)</span>, its mean is <span class="math inline">\(B\)</span>, and <span class="math inline">\(S_{q^*}^2\)</span> is the <span class="math inline">\(\psi\)</span>-weighted sum of the squared deviations <span class="math inline">\((q_i-B)^2\)</span>. The two SRS variances are of the same kind with equal weights <span class="math inline">\(1/N\)</span> (hence the divisor <span class="math inline">\(N\)</span> instead of <span class="math inline">\(N-1\)</span>, as befits <span class="math inline">\(N=\infty\)</span>), applied to the residuals <span class="math inline">\(d_i=y_i-Bx_i\)</span> and to the deviations <span class="math inline">\(y_i-\bar{y}_U\)</span>. The three variances thus measure the spread of <span class="math inline">\(y\)</span> about three different centres: the sample mean about the flat line <span class="math inline">\(\bar{y}_U\)</span>, and the ratio estimator and HH about the line <span class="math inline">\(y=Bx\)</span>, the latter on the scale of the ratios <span class="math inline">\(q_i\)</span> and with the weights <span class="math inline">\(\psi_i\)</span>. (Since <span class="math inline">\(q_i-B=d_i/x_i\)</span>, the HH variance also equals <span class="math inline">\(\frac1N\sum(\bar{x}_U/x_i)d_i^2\)</span>, as in <a href="#sec-ups-hh-theory" class="quarto-xref"><span>Section 6.2.1</span></a>.)</p>
+<p>For each population below, the first table works out <span class="math inline">\(S_{q^*}^2\)</span> term by term, and the second the sums of squares of the two SRS estimators. The last column of the first table, <span class="math inline">\(\bar{x}_U^2\psi_i(q_i-B)^2\)</span>, and the columns <span class="math inline">\(d_i^2/N\)</span> and <span class="math inline">\((y_i-\bar{y}_U)^2/N\)</span> of the second are on the same scale: each is the contribution of store <span class="math inline">\(i\)</span> to the one-draw variance of its estimator, so the three can be compared store by store, and each column sums to the variance.</p>
+<p><strong>Sales proportional to floor area.</strong> The monthly sales (thousands of dollars) are nearly proportional to the floor areas, as in the slides for this chapter. Here <span class="math inline">\(t=300\)</span>, <span class="math inline">\(\bar{y}_U=75\)</span> and <span class="math inline">\(B=300/1600=0.1875\)</span>, the mean of <span class="math inline">\(q_j^*\)</span>.</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Working table for the three one-draw variances</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>toy_table <span class="ot">&lt;-</span> <span class="cf">function</span>(store, x, y) {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  psi <span class="ot">&lt;-</span> x <span class="sc">/</span> <span class="fu">sum</span>(x)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  B <span class="ot">&lt;-</span> <span class="fu">sum</span>(y) <span class="sc">/</span> <span class="fu">sum</span>(x)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  q <span class="ot">&lt;-</span> y <span class="sc">/</span> x</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> y <span class="sc">-</span> B <span class="sc">*</span> x</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Store =</span> store, <span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">psi =</span> psi, <span class="at">q =</span> q,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">wq =</span> psi <span class="sc">*</span> (q <span class="sc">-</span> B)<span class="sc">^</span><span class="dv">2</span>, <span class="at">d =</span> d, <span class="at">d2 =</span> d<span class="sc">^</span><span class="dv">2</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">dy =</span> y <span class="sc">-</span> <span class="fu">mean</span>(y), <span class="at">dy2 =</span> (y <span class="sc">-</span> <span class="fu">mean</span>(y))<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  sums <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Store =</span> <span class="st">"**Sum**"</span>, <span class="fu">lapply</span>(tab[<span class="sc">-</span><span class="dv">1</span>], sum))</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  sums<span class="sc">$</span>q <span class="ot">&lt;-</span> <span class="cn">NA</span>                                       <span class="co"># a sum of ratios means nothing</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(tab, sums)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>show_toy_table <span class="ot">&lt;-</span> <span class="cf">function</span>(tab) {</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">options</span>(<span class="at">knitr.kable.NA =</span> <span class="st">""</span>)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tab, <span class="at">digits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>),</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">big.mark =</span> <span class="st">","</span>),</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Store"</span>, <span class="st">"$x_i$"</span>, <span class="st">"$y_i$"</span>, <span class="st">"$</span><span class="sc">\\</span><span class="st">psi_i$"</span>, <span class="st">"$q_i=y_i/x_i$"</span>,</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"$</span><span class="sc">\\</span><span class="st">psi_i(q_i-B)^2$"</span>, <span class="st">"$d_i=y_i-Bx_i$"</span>, <span class="st">"$d_i^2$"</span>,</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"$y_i-</span><span class="sc">\\</span><span class="st">bar{y}_U$"</span>, <span class="st">"$(y_i-</span><span class="sc">\\</span><span class="st">bar{y}_U)^2$"</span>))</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># The three one-draw variances, from the Sum row of the working table</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>toy_variances <span class="ot">&lt;-</span> <span class="cf">function</span>(tab) {</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  N <span class="ot">&lt;-</span> <span class="fu">nrow</span>(tab) <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  xbar_U <span class="ot">&lt;-</span> tab<span class="sc">$</span>x[N <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">/</span> N</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">HH =</span> xbar_U<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> tab<span class="sc">$</span>wq[N <span class="sc">+</span> <span class="dv">1</span>], <span class="at">ratio =</span> tab<span class="sc">$</span>d2[N <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">/</span> N, <span class="at">mean =</span> tab<span class="sc">$</span>dy2[N <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">/</span> N)</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">Estimator =</span> <span class="fu">c</span>(<span class="st">"HH (PPS)"</span>, <span class="st">"Ratio (SRS)"</span>, <span class="st">"Sample mean (SRS)"</span>),</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">Formula =</span> <span class="fu">c</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">bar{x}_U^2S_q^2$"</span>, <span class="st">"$S_d^2=</span><span class="sc">\\</span><span class="st">sum d_i^2/N$"</span>, <span class="st">"$S_y^2=</span><span class="sc">\\</span><span class="st">sum(y_i-</span><span class="sc">\\</span><span class="st">bar{y}_U)^2/N$"</span>),</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variance =</span> v,</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Relative to sample mean</span><span class="st">`</span> <span class="ot">=</span> v <span class="sc">/</span> v[<span class="st">"mean"</span>],</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">check.names =</span> <span class="cn">FALSE</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>show_toy_variances <span class="ot">&lt;-</span> <span class="cf">function</span>(vt) {</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(vt, <span class="at">digits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>), <span class="at">row.names =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>               <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">big.mark =</span> <span class="st">","</span>))</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<p><strong>Sales proportional to floor area.</strong> The monthly sales (thousands of dollars) are nearly proportional to the floor areas, as in the slides for this chapter:</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>store <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">1000</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y_good <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">20</span>, <span class="dv">24</span>, <span class="dv">245</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>tab_good <span class="ot">&lt;-</span> <span class="fu">toy_table</span>(store, x, y_good)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">show_toy_table</span>(tab_good)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 6%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 7%">
-<col style="width: 11%">
+<col style="width: 5%">
+<col style="width: 5%">
 <col style="width: 14%">
-<col style="width: 12%">
-<col style="width: 7%">
-<col style="width: 13%">
-<col style="width: 16%">
+<col style="width: 11%">
+<col style="width: 6%">
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 24%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Store</th>
 <th style="text-align: right;"><span class="math inline">\(x_i\)</span></th>
 <th style="text-align: right;"><span class="math inline">\(y_i\)</span></th>
-<th style="text-align: right;"><span class="math inline">\(\psi_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\psi_i=x_i/t_x\)</span></th>
 <th style="text-align: right;"><span class="math inline">\(q_i=y_i/x_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(q_i-B\)</span></th>
+<th style="text-align: right;"><span class="math inline">\((q_i-B)^2\)</span></th>
 <th style="text-align: right;"><span class="math inline">\(\psi_i(q_i-B)^2\)</span></th>
-<th style="text-align: right;"><span class="math inline">\(d_i=y_i-Bx_i\)</span></th>
-<th style="text-align: right;"><span class="math inline">\(d_i^2\)</span></th>
-<th style="text-align: right;"><span class="math inline">\(y_i-\bar{y}_U\)</span></th>
-<th style="text-align: right;"><span class="math inline">\((y_i-\bar{y}_U)^2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\bar{x}_U^2\psi_i(q_i-B)^2\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -1575,11 +1521,10 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <td style="text-align: right;">11</td>
 <td style="text-align: right;">0.0625</td>
 <td style="text-align: right;">0.110</td>
-<td style="text-align: right;">0.000375</td>
-<td style="text-align: right;">-7.75</td>
+<td style="text-align: right;">-0.0775</td>
+<td style="text-align: right;">0.006006</td>
+<td style="text-align: right;">0.0003754</td>
 <td style="text-align: right;">60.06</td>
-<td style="text-align: right;">-64</td>
-<td style="text-align: right;">4,096</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">B</td>
@@ -1587,11 +1532,10 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <td style="text-align: right;">20</td>
 <td style="text-align: right;">0.1250</td>
 <td style="text-align: right;">0.100</td>
-<td style="text-align: right;">0.000957</td>
-<td style="text-align: right;">-17.50</td>
-<td style="text-align: right;">306.25</td>
-<td style="text-align: right;">-55</td>
-<td style="text-align: right;">3,025</td>
+<td style="text-align: right;">-0.0875</td>
+<td style="text-align: right;">0.007656</td>
+<td style="text-align: right;">0.0009570</td>
+<td style="text-align: right;">153.12</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">C</td>
@@ -1599,11 +1543,10 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <td style="text-align: right;">24</td>
 <td style="text-align: right;">0.1875</td>
 <td style="text-align: right;">0.080</td>
-<td style="text-align: right;">0.002167</td>
-<td style="text-align: right;">-32.25</td>
-<td style="text-align: right;">1,040.06</td>
-<td style="text-align: right;">-51</td>
-<td style="text-align: right;">2,601</td>
+<td style="text-align: right;">-0.1075</td>
+<td style="text-align: right;">0.011556</td>
+<td style="text-align: right;">0.0021668</td>
+<td style="text-align: right;">346.69</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">D</td>
@@ -1611,11 +1554,10 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <td style="text-align: right;">245</td>
 <td style="text-align: right;">0.6250</td>
 <td style="text-align: right;">0.245</td>
-<td style="text-align: right;">0.002066</td>
-<td style="text-align: right;">57.50</td>
-<td style="text-align: right;">3,306.25</td>
-<td style="text-align: right;">170</td>
-<td style="text-align: right;">28,900</td>
+<td style="text-align: right;">0.0575</td>
+<td style="text-align: right;">0.003306</td>
+<td style="text-align: right;">0.0020664</td>
+<td style="text-align: right;">330.62</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><strong>Sum</strong></td>
@@ -1623,35 +1565,119 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <td style="text-align: right;">300</td>
 <td style="text-align: right;">1.0000</td>
 <td style="text-align: right;"></td>
-<td style="text-align: right;">0.005566</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">4,712.62</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">38,622</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.0055656</td>
+<td style="text-align: right;">890.50</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p>Here <span class="math inline">\(t=300\)</span>, <span class="math inline">\(\bar{y}_U=75\)</span> and <span class="math inline">\(B=300/1600=0.1875\)</span>. Dividing the sums of the last columns gives the three one-draw variances:</p>
+<p>The ratios <span class="math inline">\(q_i\)</span> are close to each other (0.08 to 0.245), so every <span class="math inline">\((q_i-B)^2\)</span> is small, and the sum of the column <span class="math inline">\(\psi_i(q_i-B)^2\)</span> is <span class="math inline">\(S_{q^*}^2=0.0055656\)</span>. For the SRS estimators:</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>var_good <span class="ot">&lt;-</span> <span class="fu">toy_variances</span>(tab_good)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">show_toy_variances</span>(var_good)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 21%">
-<col style="width: 38%">
-<col style="width: 10%">
-<col style="width: 28%">
+<col style="width: 7%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 13%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 14%">
+<col style="width: 17%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Store</th>
+<th style="text-align: right;"><span class="math inline">\(x_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(y_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(d_i=y_i-Bx_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(d_i^2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(d_i^2/N\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(y_i-\bar{y}_U\)</span></th>
+<th style="text-align: right;"><span class="math inline">\((y_i-\bar{y}_U)^2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\((y_i-\bar{y}_U)^2/N\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">-7.75</td>
+<td style="text-align: right;">60.06</td>
+<td style="text-align: right;">15.02</td>
+<td style="text-align: right;">-64</td>
+<td style="text-align: right;">4,096</td>
+<td style="text-align: right;">1,024.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">-17.50</td>
+<td style="text-align: right;">306.25</td>
+<td style="text-align: right;">76.56</td>
+<td style="text-align: right;">-55</td>
+<td style="text-align: right;">3,025</td>
+<td style="text-align: right;">756.25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">-32.25</td>
+<td style="text-align: right;">1,040.06</td>
+<td style="text-align: right;">260.02</td>
+<td style="text-align: right;">-51</td>
+<td style="text-align: right;">2,601</td>
+<td style="text-align: right;">650.25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">D</td>
+<td style="text-align: right;">1,000</td>
+<td style="text-align: right;">245</td>
+<td style="text-align: right;">57.50</td>
+<td style="text-align: right;">3,306.25</td>
+<td style="text-align: right;">826.56</td>
+<td style="text-align: right;">170</td>
+<td style="text-align: right;">28,900</td>
+<td style="text-align: right;">7,225.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Sum</strong></td>
+<td style="text-align: right;">1,600</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">4,712.62</td>
+<td style="text-align: right;">1,178.16</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">38,622</td>
+<td style="text-align: right;">9,655.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Comparing the contributions store by store, store D contributes 7,225 to the variance of the sample mean, 826.6 to that of the ratio estimator, and only 330.6 to that of HH. The sums of the three contribution columns are the one-draw variances:</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 41%">
+<col style="width: 18%">
+<col style="width: 6%">
+<col style="width: 18%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Estimator</th>
 <th style="text-align: left;">Formula</th>
+<th style="text-align: left;">Calculation</th>
 <th style="text-align: right;">Variance</th>
 <th style="text-align: right;">Relative to sample mean</th>
 </tr>
@@ -1659,19 +1685,22 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">HH (PPS)</td>
-<td style="text-align: left;"><span class="math inline">\(\bar{x}_U^2S_q^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar{x}_U^2S_{q^*}^2=\bar{x}_U^2\sum\psi_i(q_i-B)^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(400^2\times 0.0055656\)</span></td>
 <td style="text-align: right;">890.5</td>
 <td style="text-align: right;">0.092</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Ratio (SRS)</td>
 <td style="text-align: left;"><span class="math inline">\(S_d^2=\sum d_i^2/N\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(4,712.62/4\)</span></td>
 <td style="text-align: right;">1,178.2</td>
 <td style="text-align: right;">0.122</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Sample mean (SRS)</td>
 <td style="text-align: left;"><span class="math inline">\(S_y^2=\sum(y_i-\bar{y}_U)^2/N\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(38,622/4\)</span></td>
 <td style="text-align: right;">9,655.5</td>
 <td style="text-align: right;">1.000</td>
 </tr>
@@ -1679,41 +1708,33 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 </table>
 </div>
 </div>
-<p>The sample mean ignores the floor areas, and its variance is dominated by store D, whose sales are far from <span class="math inline">\(\bar{y}_U=75\)</span>. The ratio estimator measures each store against the line <span class="math inline">\(y=Bx\)</span> instead, which cuts the variance from 9,655.5 to 1178.2. HH uses the same residuals, but weighs <span class="math inline">\(d_i^2\)</span> by <span class="math inline">\(\bar{x}_U/x_i\)</span>; the largest residual, <span class="math inline">\(d_D=57.5\)</span>, belongs to the largest store, whose weight is <span class="math inline">\(400/1000=0.4\)</span>, so HH does better still, with 890.5.</p>
-<p><strong>Sales not related to floor area: a poor choice of <span class="math inline">\(\psi_i\)</span>.</strong> Now suppose the sales are about the same in all four stores, for example because the large store D is a warehouse outlet with few customers, while the total is still <span class="math inline">\(t=300\)</span>. The floor area is then a poor size variable, but we still draw with <span class="math inline">\(\psi_i=x_i/t_x\)</span>:</p>
+<p>The sample mean ignores the floor areas, and its variance is dominated by store D, whose sales are far from <span class="math inline">\(\bar{y}_U=75\)</span>. The ratio estimator measures each store against the line <span class="math inline">\(y=Bx\)</span> instead, which cuts the variance from 9,655.5 to 1178.2. HH does better still, with 890.5: the largest store D has the largest residual <span class="math inline">\(d_D=57.5\)</span>, but on the scale of the ratios this is only <span class="math inline">\(q_D-B=0.0575\)</span>, no larger than the deviations of the small stores.</p>
+<p><strong>Sales not related to floor area: a poor choice of <span class="math inline">\(\psi_i\)</span>.</strong> Now suppose the sales are about the same in all four stores, for example because the large store D is a warehouse outlet with few customers, while the total is still <span class="math inline">\(t=300\)</span>, so <span class="math inline">\(B=0.1875\)</span> again. The floor area is then a poor size variable, but we still draw with <span class="math inline">\(\psi_i=x_i/t_x\)</span>:</p>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>y_bad <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">60</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">70</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tab_bad <span class="ot">&lt;-</span> <span class="fu">toy_table</span>(store, x, y_bad)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">show_toy_table</span>(tab_bad)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 6%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 7%">
-<col style="width: 11%">
+<col style="width: 5%">
+<col style="width: 5%">
 <col style="width: 14%">
-<col style="width: 12%">
-<col style="width: 8%">
-<col style="width: 13%">
-<col style="width: 16%">
+<col style="width: 11%">
+<col style="width: 6%">
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 24%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Store</th>
 <th style="text-align: right;"><span class="math inline">\(x_i\)</span></th>
 <th style="text-align: right;"><span class="math inline">\(y_i\)</span></th>
-<th style="text-align: right;"><span class="math inline">\(\psi_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\psi_i=x_i/t_x\)</span></th>
 <th style="text-align: right;"><span class="math inline">\(q_i=y_i/x_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(q_i-B\)</span></th>
+<th style="text-align: right;"><span class="math inline">\((q_i-B)^2\)</span></th>
 <th style="text-align: right;"><span class="math inline">\(\psi_i(q_i-B)^2\)</span></th>
-<th style="text-align: right;"><span class="math inline">\(d_i=y_i-Bx_i\)</span></th>
-<th style="text-align: right;"><span class="math inline">\(d_i^2\)</span></th>
-<th style="text-align: right;"><span class="math inline">\(y_i-\bar{y}_U\)</span></th>
-<th style="text-align: right;"><span class="math inline">\((y_i-\bar{y}_U)^2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\bar{x}_U^2\psi_i(q_i-B)^2\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -1723,11 +1744,10 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <td style="text-align: right;">60</td>
 <td style="text-align: right;">0.0625</td>
 <td style="text-align: right;">0.60</td>
-<td style="text-align: right;">0.010635</td>
-<td style="text-align: right;">41.25</td>
+<td style="text-align: right;">0.4125</td>
+<td style="text-align: right;">0.170156</td>
+<td style="text-align: right;">0.0106348</td>
 <td style="text-align: right;">1,701.56</td>
-<td style="text-align: right;">-15</td>
-<td style="text-align: right;">225</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">B</td>
@@ -1735,11 +1755,10 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <td style="text-align: right;">80</td>
 <td style="text-align: right;">0.1250</td>
 <td style="text-align: right;">0.40</td>
-<td style="text-align: right;">0.005645</td>
-<td style="text-align: right;">42.50</td>
-<td style="text-align: right;">1,806.25</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">25</td>
+<td style="text-align: right;">0.2125</td>
+<td style="text-align: right;">0.045156</td>
+<td style="text-align: right;">0.0056445</td>
+<td style="text-align: right;">903.13</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">C</td>
@@ -1747,11 +1766,10 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <td style="text-align: right;">90</td>
 <td style="text-align: right;">0.1875</td>
 <td style="text-align: right;">0.30</td>
-<td style="text-align: right;">0.002373</td>
-<td style="text-align: right;">33.75</td>
-<td style="text-align: right;">1,139.06</td>
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">225</td>
+<td style="text-align: right;">0.1125</td>
+<td style="text-align: right;">0.012656</td>
+<td style="text-align: right;">0.0023730</td>
+<td style="text-align: right;">379.69</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">D</td>
@@ -1759,11 +1777,10 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <td style="text-align: right;">70</td>
 <td style="text-align: right;">0.6250</td>
 <td style="text-align: right;">0.07</td>
-<td style="text-align: right;">0.008629</td>
-<td style="text-align: right;">-117.50</td>
-<td style="text-align: right;">13,806.25</td>
-<td style="text-align: right;">-5</td>
-<td style="text-align: right;">25</td>
+<td style="text-align: right;">-0.1175</td>
+<td style="text-align: right;">0.013806</td>
+<td style="text-align: right;">0.0086289</td>
+<td style="text-align: right;">1,380.62</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><strong>Sum</strong></td>
@@ -1771,34 +1788,118 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <td style="text-align: right;">300</td>
 <td style="text-align: right;">1.0000</td>
 <td style="text-align: right;"></td>
-<td style="text-align: right;">0.027281</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">0.0272812</td>
+<td style="text-align: right;">4,365.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Now the ratios range from 0.07 to 0.6. Store A, although drawn with probability only <span class="math inline">\(1/16\)</span>, has <span class="math inline">\((q_A-B)^2=0.1702\)</span> and contributes the largest term, <span class="math inline">\(0.0106348\)</span>. In total <span class="math inline">\(S_{q^*}^2=0.0272812\)</span>, about 4.9 times the value above.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 13%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 14%">
+<col style="width: 17%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Store</th>
+<th style="text-align: right;"><span class="math inline">\(x_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(y_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(d_i=y_i-Bx_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(d_i^2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(d_i^2/N\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(y_i-\bar{y}_U\)</span></th>
+<th style="text-align: right;"><span class="math inline">\((y_i-\bar{y}_U)^2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\((y_i-\bar{y}_U)^2/N\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">41.25</td>
+<td style="text-align: right;">1,701.56</td>
+<td style="text-align: right;">425.39</td>
+<td style="text-align: right;">-15</td>
+<td style="text-align: right;">225</td>
+<td style="text-align: right;">56.25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">42.50</td>
+<td style="text-align: right;">1,806.25</td>
+<td style="text-align: right;">451.56</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">6.25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">33.75</td>
+<td style="text-align: right;">1,139.06</td>
+<td style="text-align: right;">284.77</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">225</td>
+<td style="text-align: right;">56.25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">D</td>
+<td style="text-align: right;">1,000</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">-117.50</td>
+<td style="text-align: right;">13,806.25</td>
+<td style="text-align: right;">3,451.56</td>
+<td style="text-align: right;">-5</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">6.25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Sum</strong></td>
+<td style="text-align: right;">1,600</td>
+<td style="text-align: right;">300</td>
 <td style="text-align: right;">0.00</td>
 <td style="text-align: right;">18,453.12</td>
+<td style="text-align: right;">4,613.28</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">500</td>
+<td style="text-align: right;">125.00</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="cell">
-<details open="" class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>var_bad <span class="ot">&lt;-</span> <span class="fu">toy_variances</span>(tab_bad)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">show_toy_variances</span>(var_bad)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 21%">
-<col style="width: 38%">
-<col style="width: 10%">
-<col style="width: 28%">
+<col style="width: 13%">
+<col style="width: 41%">
+<col style="width: 18%">
+<col style="width: 6%">
+<col style="width: 18%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Estimator</th>
 <th style="text-align: left;">Formula</th>
+<th style="text-align: left;">Calculation</th>
 <th style="text-align: right;">Variance</th>
 <th style="text-align: right;">Relative to sample mean</th>
 </tr>
@@ -1806,19 +1907,22 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">HH (PPS)</td>
-<td style="text-align: left;"><span class="math inline">\(\bar{x}_U^2S_q^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar{x}_U^2S_{q^*}^2=\bar{x}_U^2\sum\psi_i(q_i-B)^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(400^2\times 0.0272812\)</span></td>
 <td style="text-align: right;">4,365.0</td>
 <td style="text-align: right;">34.920</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Ratio (SRS)</td>
 <td style="text-align: left;"><span class="math inline">\(S_d^2=\sum d_i^2/N\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(18,453.12/4\)</span></td>
 <td style="text-align: right;">4,613.3</td>
 <td style="text-align: right;">36.906</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Sample mean (SRS)</td>
 <td style="text-align: left;"><span class="math inline">\(S_y^2=\sum(y_i-\bar{y}_U)^2/N\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(500/4\)</span></td>
 <td style="text-align: right;">125.0</td>
 <td style="text-align: right;">1.000</td>
 </tr>
@@ -1826,7 +1930,7 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 </table>
 </div>
 </div>
-<p>The ordering is reversed. The sales hardly vary, so the sample mean has a tiny variance, 125. The line <span class="math inline">\(y=Bx\)</span> fits the sales badly, so the residuals <span class="math inline">\(d_i\)</span> are large, and both estimators that rely on <span class="math inline">\(y_i\propto x_i\)</span> are more than 34 times worse than the sample mean. The weights <span class="math inline">\(\bar{x}_U/x_i\)</span> do not help HH much here: the small stores A, B and C, which have large positive residuals, get weights <span class="math inline">\(4\)</span>, <span class="math inline">\(2\)</span> and <span class="math inline">\(4/3\)</span>, and store A, drawn only once in 16 draws, has its sales multiplied by <span class="math inline">\(1/\psi_A=16\)</span>. Unequal probability sampling is only as good as the size variable used to construct <span class="math inline">\(\psi_i\)</span>: before using PPS, check that <span class="math inline">\(y_i\)</span> is roughly proportional to <span class="math inline">\(x_i\)</span>.</p>
+<p>The ordering is reversed. The sales hardly vary, so the sample mean has a tiny variance, 125. The line <span class="math inline">\(y=Bx\)</span> fits the sales badly, so the residuals <span class="math inline">\(d_i\)</span> and the deviations <span class="math inline">\(q_i-B\)</span> are large, and both estimators that rely on <span class="math inline">\(y_i\propto x_i\)</span> are more than 34 times worse than the sample mean. Unequal probability sampling is only as good as the size variable used to construct <span class="math inline">\(\psi_i\)</span>: before using PPS, check that <span class="math inline">\(y_i\)</span> is roughly proportional to <span class="math inline">\(x_i\)</span>.</p>
 </section>
 <section id="sec-ups-statepop" class="level3" data-number="6.2.3">
 <h3 data-number="6.2.3" class="anchored" data-anchor-id="sec-ups-statepop"><span class="header-section-number">6.2.3</span> Example: Physicians in U.S. Counties (<code>statepop.csv</code>)</h3>
@@ -1834,19 +1938,19 @@ S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2,
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>statepop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/statepop.csv"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Constants</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>M    <span class="ot">&lt;-</span> <span class="dv">255077536</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>popn <span class="ot">&lt;-</span> statepop<span class="sc">$</span>popn</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>psi  <span class="ot">&lt;-</span> popn <span class="sc">/</span> M</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>phys <span class="ot">&lt;-</span> statepop<span class="sc">$</span>phys</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Paged display of the raw data: printing a data frame under `df-print: paged`</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># draws one page at a time instead of a long scrolling box</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>statepop <span class="sc">|&gt;</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(state, county, popn, phys) <span class="sc">|&gt;</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">psi =</span> popn <span class="sc">/</span> M)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>statepop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/statepop.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Constants</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>M    <span class="ot">&lt;-</span> <span class="dv">255077536</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>popn <span class="ot">&lt;-</span> statepop<span class="sc">$</span>popn</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>psi  <span class="ot">&lt;-</span> popn <span class="sc">/</span> M</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>phys <span class="ot">&lt;-</span> statepop<span class="sc">$</span>phys</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Paged display of the raw data: printing a data frame under `df-print: paged`</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># draws one page at a time instead of a long scrolling box</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>statepop <span class="sc">|&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(state, county, popn, phys) <span class="sc">|&gt;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">psi =</span> popn <span class="sc">/</span> M)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="tbl-statepop-sample-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1869,9 +1973,9 @@ Table&nbsp;6.1: Sample of U.S. county population and physician counts
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(popn, phys, <span class="at">log =</span> <span class="st">"xy"</span>,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Physicians vs Population (Log Scale)"</span>,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Population"</span>, <span class="at">ylab =</span> <span class="st">"Physicians"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(popn, phys, <span class="at">log =</span> <span class="st">"xy"</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Physicians vs Population (Log Scale)"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Population"</span>, <span class="at">ylab =</span> <span class="st">"Physicians"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-statepop-phys-vs-popn" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1890,8 +1994,8 @@ Figure&nbsp;6.1: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res_phys_total <span class="ot">&lt;-</span> <span class="fu">upswr_total</span>(phys, psi, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>res_phys_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>res_phys_total <span class="ot">&lt;-</span> <span class="fu">upswr_total</span>(phys, psi, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>res_phys_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="fldvvouyhn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -2371,9 +2475,9 @@ Figure&nbsp;6.1: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">3141</span>   <span class="co"># counties in the US</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>res_phys_county <span class="ot">&lt;-</span> <span class="fu">upswr_total</span>(phys, psi, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"mean"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>res_phys_county<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">3141</span>   <span class="co"># counties in the US</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>res_phys_county <span class="ot">&lt;-</span> <span class="fu">upswr_total</span>(phys, psi, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"mean"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>res_phys_county<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="wyuprzwbwv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -2855,14 +2959,14 @@ Figure&nbsp;6.1: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read SRS sample, treating -99 as NA</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>counties <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/counties.csv"</span>, <span class="at">na.strings =</span> <span class="st">"-99"</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>totpop <span class="ot">&lt;-</span> <span class="dv">255077536</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">3141</span> <span class="co"># Total number of counties</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Naive SRS estimate for total</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>res_counties_srs <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(counties<span class="sc">$</span>physician, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>res_counties_srs<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read SRS sample, treating -99 as NA</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>counties <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/counties.csv"</span>, <span class="at">na.strings =</span> <span class="st">"-99"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>totpop <span class="ot">&lt;-</span> <span class="dv">255077536</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">3141</span> <span class="co"># Total number of counties</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Naive SRS estimate for total</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>res_counties_srs <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(counties<span class="sc">$</span>physician, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>res_counties_srs<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="ifqcvjppkp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -3338,9 +3442,9 @@ Figure&nbsp;6.1: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Ratio estimate for total using SRS data</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>res_counties_ratio <span class="ot">&lt;-</span> <span class="fu">ratio_est</span>(counties<span class="sc">$</span>physician, counties<span class="sc">$</span>totpop, <span class="at">xbarU =</span> totpop<span class="sc">/</span>N, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>res_counties_ratio<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Ratio estimate for total using SRS data</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>res_counties_ratio <span class="ot">&lt;-</span> <span class="fu">ratio_est</span>(counties<span class="sc">$</span>physician, counties<span class="sc">$</span>totpop, <span class="at">xbarU =</span> totpop<span class="sc">/</span>N, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>res_counties_ratio<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="ncfsaipnoh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -3893,7 +3997,7 @@ Figure&nbsp;6.1: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>res_counties_ratio<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>res_counties_ratio<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="lziiivpetl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -4369,9 +4473,9 @@ Figure&nbsp;6.1: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Regression estimate for total using SRS data</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>res_counties_reg <span class="ot">&lt;-</span> <span class="fu">reg_est</span>(counties<span class="sc">$</span>physician, counties<span class="sc">$</span>totpop, <span class="at">xbarU =</span> totpop<span class="sc">/</span>N, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>res_counties_reg<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Regression estimate for total using SRS data</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>res_counties_reg <span class="ot">&lt;-</span> <span class="fu">reg_est</span>(counties<span class="sc">$</span>physician, counties<span class="sc">$</span>totpop, <span class="at">xbarU =</span> totpop<span class="sc">/</span>N, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>res_counties_reg<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="wfykytdyvq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -4924,7 +5028,7 @@ Figure&nbsp;6.1: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>res_counties_reg<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"reg_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>res_counties_reg<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"reg_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="vjgkhxzdrt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -5408,57 +5512,57 @@ Figure&nbsp;6.1: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read population data</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">acres_in_thousands</span>(<span class="fu">read.csv</span>(<span class="st">"data/agpop.csv"</span>, <span class="at">na.strings =</span> <span class="st">"-99"</span>))</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(acres92), <span class="sc">!</span><span class="fu">is.na</span>(acres87))</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span>(agpop)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>total_acres92 <span class="ot">&lt;-</span> <span class="fu">sum</span>(agpop<span class="sc">$</span>acres92)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>total_acres87 <span class="ot">&lt;-</span> <span class="fu">sum</span>(agpop<span class="sc">$</span>acres87)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>acres87 <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres87</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Storage vectors for simulation</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>est_srs300 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">2000</span>)</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>est_srs300_reg_acres87 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">2000</span>)</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>est_ups300_acres87 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">2000</span>)</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>) {</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># SRS Simulation</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  srs300 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>N, <span class="at">size =</span> <span class="dv">300</span>)</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  acres92_srs300 <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres92[srs300]</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  acres87_srs300 <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres87[srs300]</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  est_srs300[i] <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(acres92_srs300, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>estimate[<span class="dv">1</span>]</span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  est_srs300_reg_acres87[i] <span class="ot">&lt;-</span> <span class="fu">reg_est</span>(acres92_srs300, acres87_srs300,</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">xbarU =</span> total_acres87<span class="sc">/</span>N, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>estimate[<span class="dv">1</span>]</span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># UPSWR Simulation (Probability proportional to acres87)</span></span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  ups300 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>N, <span class="at">size =</span> <span class="dv">300</span>, <span class="at">prob =</span> acres87, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  acres92_ups300 <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres92[ups300]</span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  psi <span class="ot">&lt;-</span> (acres87 <span class="sc">/</span> <span class="fu">sum</span>(acres87))[ups300]</span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  est_ups300_acres87[i] <span class="ot">&lt;-</span> <span class="fu">upswr_total</span>(acres92_ups300, psi, <span class="at">show.details =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>estimate[<span class="dv">1</span>]</span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read population data</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">acres_in_thousands</span>(<span class="fu">read.csv</span>(<span class="st">"data/agpop.csv"</span>, <span class="at">na.strings =</span> <span class="st">"-99"</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(acres92), <span class="sc">!</span><span class="fu">is.na</span>(acres87))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span>(agpop)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>total_acres92 <span class="ot">&lt;-</span> <span class="fu">sum</span>(agpop<span class="sc">$</span>acres92)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>total_acres87 <span class="ot">&lt;-</span> <span class="fu">sum</span>(agpop<span class="sc">$</span>acres87)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>acres87 <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres87</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Storage vectors for simulation</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>est_srs300 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">2000</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>est_srs300_reg_acres87 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">2000</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>est_ups300_acres87 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">2000</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>) {</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># SRS Simulation</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  srs300 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>N, <span class="at">size =</span> <span class="dv">300</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  acres92_srs300 <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres92[srs300]</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  acres87_srs300 <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres87[srs300]</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  est_srs300[i] <span class="ot">&lt;-</span> <span class="fu">srs_est</span>(acres92_srs300, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>estimate[<span class="dv">1</span>]</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  est_srs300_reg_acres87[i] <span class="ot">&lt;-</span> <span class="fu">reg_est</span>(acres92_srs300, acres87_srs300,</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">xbarU =</span> total_acres87<span class="sc">/</span>N, <span class="at">N =</span> N, <span class="at">estimate =</span> <span class="st">"total"</span>, <span class="at">show.details =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>estimate[<span class="dv">1</span>]</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># UPSWR Simulation (Probability proportional to acres87)</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  ups300 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>N, <span class="at">size =</span> <span class="dv">300</span>, <span class="at">prob =</span> acres87, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  acres92_ups300 <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres92[ups300]</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  psi <span class="ot">&lt;-</span> (acres87 <span class="sc">/</span> <span class="fu">sum</span>(acres87))[ups300]</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  est_ups300_acres87[i] <span class="ot">&lt;-</span> <span class="fu">upswr_total</span>(acres92_ups300, psi, <span class="at">show.details =</span> <span class="cn">FALSE</span>)<span class="sc">$</span>estimate[<span class="dv">1</span>]</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare Naive SRS, Regression SRS, and UPSWR</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">data.frame</span>(est_srs300, est_srs300_reg_acres87, est_ups300_acres87),</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Comparing SRS, SRS-Regression, and UPSWR"</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"SRS Naive"</span>, <span class="st">"SRS Regression"</span>, <span class="st">"UPSWR"</span>),</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"lightgreen"</span>, <span class="st">"salmon"</span>))</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> total_acres92, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Zoom in on the two high-precision estimators</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">data.frame</span>(est_srs300_reg_acres87, est_ups300_acres87),</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Zoomed: SRS-Regression vs. UPSWR"</span>,</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"SRS Regression"</span>, <span class="st">"UPSWR"</span>),</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightgreen"</span>, <span class="st">"salmon"</span>))</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> total_acres92, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare Naive SRS, Regression SRS, and UPSWR</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">data.frame</span>(est_srs300, est_srs300_reg_acres87, est_ups300_acres87),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Comparing SRS, SRS-Regression, and UPSWR"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"SRS Naive"</span>, <span class="st">"SRS Regression"</span>, <span class="st">"UPSWR"</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"lightgreen"</span>, <span class="st">"salmon"</span>))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> total_acres92, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Zoom in on the two high-precision estimators</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">data.frame</span>(est_srs300_reg_acres87, est_ups300_acres87),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Zoomed: SRS-Regression vs. UPSWR"</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"SRS Regression"</span>, <span class="st">"UPSWR"</span>),</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightgreen"</span>, <span class="st">"salmon"</span>))</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> total_acres92, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-upswr-sim-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -5517,20 +5621,20 @@ s_{\bar{y}}^2=\frac{1}{n-1}\sum_{i=1}^n\left(\bar{y}_i-\hat{\bar{y}}_{\mathrm{HH
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Define the raw data</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>psi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">100</span>, <span class="dv">100</span>, <span class="dv">76</span>, <span class="dv">44</span>) <span class="sc">/</span> <span class="dv">647</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>Mi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">100</span>, <span class="dv">100</span>, <span class="dv">76</span>, <span class="dv">44</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>hrs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">75</span>, <span class="dv">203</span>, <span class="dv">203</span>, <span class="dv">191</span>, <span class="dv">168</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the data cleanly</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Mi, psi, hrs) <span class="sc">|&gt;</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mi =</span> <span class="fu">md</span>(<span class="st">"$M_i$"</span>),</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">psi =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">psi_i$"</span>),</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">hrs =</span> <span class="fu">md</span>(<span class="st">"**Total Hours ($t_i$)**"</span>)</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> psi, <span class="at">decimals =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Define the raw data</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>psi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">100</span>, <span class="dv">100</span>, <span class="dv">76</span>, <span class="dv">44</span>) <span class="sc">/</span> <span class="dv">647</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>Mi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">100</span>, <span class="dv">100</span>, <span class="dv">76</span>, <span class="dv">44</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>hrs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">75</span>, <span class="dv">203</span>, <span class="dv">203</span>, <span class="dv">191</span>, <span class="dv">168</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the data cleanly</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Mi, psi, hrs) <span class="sc">|&gt;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mi =</span> <span class="fu">md</span>(<span class="st">"$M_i$"</span>),</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">psi =</span> <span class="fu">md</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">psi_i$"</span>),</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">hrs =</span> <span class="fu">md</span>(<span class="st">"**Total Hours ($t_i$)**"</span>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> psi, <span class="at">decimals =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="tbl-studyhrs-raw-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -6035,9 +6139,9 @@ Table&nbsp;6.2: Raw data: student study hours by group, with selection probabili
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hrs <span class="sc">~</span> Mi, <span class="at">main =</span> <span class="st">"Study Hours vs Number of Students"</span>,</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Students (Mi)"</span>, <span class="at">ylab =</span> <span class="st">"Study Hours (hrs)"</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(hrs <span class="sc">~</span> Mi), <span class="at">col =</span> <span class="st">"blue"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hrs <span class="sc">~</span> Mi, <span class="at">main =</span> <span class="st">"Study Hours vs Number of Students"</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Students (Mi)"</span>, <span class="at">ylab =</span> <span class="st">"Study Hours (hrs)"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(hrs <span class="sc">~</span> Mi), <span class="at">col =</span> <span class="st">"blue"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-studyhrs-vs-Mi" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -6056,8 +6160,8 @@ Figure&nbsp;6.3: Study hours vs.&nbsp;number of students, by group
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>res_hrs_total <span class="ot">&lt;-</span> <span class="fu">upswr_total</span>(<span class="at">total =</span> hrs, <span class="at">psi =</span> psi, <span class="at">show.details =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>res_hrs_total<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>res_hrs_total <span class="ot">&lt;-</span> <span class="fu">upswr_total</span>(<span class="at">total =</span> hrs, <span class="at">psi =</span> psi, <span class="at">show.details =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>res_hrs_total<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="ihqswgitpa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -6587,7 +6691,7 @@ Figure&nbsp;6.3: Study hours vs.&nbsp;number of students, by group
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>res_hrs_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>res_hrs_total<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="hamtpgsban" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -7066,8 +7170,8 @@ Figure&nbsp;6.3: Study hours vs.&nbsp;number of students, by group
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># t_HH / M, with the SE scaled down by the same factor</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>(res_hrs_total<span class="sc">$</span>estimate <span class="sc">/</span> <span class="dv">647</span>) <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># t_HH / M, with the SE scaled down by the same factor</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>(res_hrs_total<span class="sc">$</span>estimate <span class="sc">/</span> <span class="dv">647</span>) <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="huhegeocea" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -7543,9 +7647,9 @@ Figure&nbsp;6.3: Study hours vs.&nbsp;number of students, by group
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The HH ratio estimator, from the function for ratios of two HH totals</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>res_hrs_ratio <span class="ot">&lt;-</span> <span class="fu">upswr_ratio</span>(<span class="at">total =</span> hrs, <span class="at">M =</span> Mi, <span class="at">psi =</span> psi, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>res_hrs_ratio<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The HH ratio estimator, from the function for ratios of two HH totals</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>res_hrs_ratio <span class="ot">&lt;-</span> <span class="fu">upswr_ratio</span>(<span class="at">total =</span> hrs, <span class="at">M =</span> Mi, <span class="at">psi =</span> psi, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>res_hrs_ratio<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="uirkvzfbht" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -8082,7 +8186,7 @@ Figure&nbsp;6.3: Study hours vs.&nbsp;number of students, by group
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>res_hrs_ratio<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>res_hrs_ratio<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="sbbyhiyzss" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -8564,8 +8668,8 @@ Figure&nbsp;6.3: Study hours vs.&nbsp;number of students, by group
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>res_phys_ratio <span class="ot">&lt;-</span> <span class="fu">upswr_ratio</span>(phys, popn, psi, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>res_phys_ratio<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>res_phys_ratio <span class="ot">&lt;-</span> <span class="fu">upswr_ratio</span>(phys, popn, psi, <span class="at">estimate =</span> <span class="st">"mean"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>res_phys_ratio<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="tcmeaqtcef" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -9118,7 +9222,7 @@ Figure&nbsp;6.3: Study hours vs.&nbsp;number of students, by group
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>res_phys_ratio<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>res_phys_ratio<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="buetahglwt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -9617,24 +9721,24 @@ Figure&nbsp;6.3: Study hours vs.&nbsp;number of students, by group
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>studenthrs <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"data/studentshrs.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate sampling probability (cpsi) based on known total students (647)</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>studenthrs <span class="ot">&lt;-</span> studenthrs <span class="sc">|&gt;</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cpsi =</span> class_size <span class="sc">/</span> <span class="dv">647</span>)</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the 2-stage UPSWR function</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>res_hrs <span class="ot">&lt;-</span> <span class="fu">cluster_upswr_ratio</span>(</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> studenthrs,</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sid =</span> <span class="st">"sid"</span>,</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">csize =</span> <span class="st">"class_size"</span>,</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">cpsi =</span> <span class="st">"cpsi"</span>,</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">yvar =</span> <span class="st">"hrs"</span>,</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate =</span> <span class="st">"mean"</span></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the cluster-level working table</span></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>res_hrs<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>studenthrs <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"data/studentshrs.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate sampling probability (cpsi) based on known total students (647)</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>studenthrs <span class="ot">&lt;-</span> studenthrs <span class="sc">|&gt;</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cpsi =</span> class_size <span class="sc">/</span> <span class="dv">647</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the 2-stage UPSWR function</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>res_hrs <span class="ot">&lt;-</span> <span class="fu">cluster_upswr_ratio</span>(</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> studenthrs,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sid =</span> <span class="st">"sid"</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">csize =</span> <span class="st">"class_size"</span>,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">cpsi =</span> <span class="st">"cpsi"</span>,</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">yvar =</span> <span class="st">"hrs"</span>,</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate =</span> <span class="st">"mean"</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the cluster-level working table</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>res_hrs<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="ifqcvjppkp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -10174,7 +10278,7 @@ Figure&nbsp;6.3: Study hours vs.&nbsp;number of students, by group
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>res_hrs<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>res_hrs<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="dgcrwhkcnb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -10662,19 +10766,19 @@ Figure&nbsp;6.3: Study hours vs.&nbsp;number of students, by group
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>classpps <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/classpps.csv"</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>res_upswo <span class="ot">&lt;-</span> <span class="fu">cluster_upswo_ratio</span>(</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> classpps,</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cname =</span> <span class="st">"class"</span>,</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">csize =</span> <span class="st">"clssize"</span>,</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cpik =</span> <span class="st">"clssize"</span>, <span class="co"># Assuming inclusion prob is proportional to class size</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">yvar =</span> <span class="st">"hours"</span>,</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate =</span> <span class="st">"mean"</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the cluster-level working table</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>res_upswo<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>classpps <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/classpps.csv"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>res_upswo <span class="ot">&lt;-</span> <span class="fu">cluster_upswo_ratio</span>(</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> classpps,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cname =</span> <span class="st">"class"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">csize =</span> <span class="st">"clssize"</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cpik =</span> <span class="st">"clssize"</span>, <span class="co"># Assuming inclusion prob is proportional to class size</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">yvar =</span> <span class="st">"hours"</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate =</span> <span class="st">"mean"</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the cluster-level working table</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>res_upswo<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="zwulbxqyae" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -11214,7 +11318,7 @@ Figure&nbsp;6.3: Study hours vs.&nbsp;number of students, by group
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>res_upswo<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>res_upswo<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"ratio_mean"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div id="vwqdanoshk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
