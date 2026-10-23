@@ -12,9 +12,12 @@ knitr::opts_chunk$set(
   echo = FALSE,
   fig.align = "center"
 )
+library(gt)
+## the figures shared with the book chapter
+source("../sampling_book/design_plots.r")
 ```
 
-# General Terms for Cluster Sampling
+# What Is Cluster Sampling?
 
 Textbook sections:
 
@@ -38,47 +41,69 @@ population.
 
 - **Constructing a sampling frame of observation units may be difficult,
   expensive, or impossible.** We cannot list all honeybees in a region or all
-  customers of a store; we may be able to construct a list of individuals in a
-  city only via a list of housing units, but that list is time-consuming and
-  expensive to build.
+  customers of a store; a list of individuals in a city may be available only
+  through a list of housing units, which is expensive to build.
 - **The population may be widely spread out geographically, or occur in
   natural clusters** such as households or schools, and it is cheaper to
   sample clusters than to take an SRS of individuals. To survey nursing-home
   residents, it is much cheaper to sample nursing homes and interview every
-  resident there than to take an SRS of residents (which might require
-  traveling to a home to interview just one person).
+  resident there than to take an SRS of residents.
+
+## Illustration: A Two-Stage Cluster Sample
+
+```{r}
+#| label: fig-cluster-design
+#| fig-width: 9
+#| fig-height: 3.8
+#| out-width: "95%"
+plot_design_cluster()
+```
+
+Ten clusters of 40 to 160 units, sorted by their means (dashed lines). Three
+clusters are selected at random (shaded), and 20 units (red) are subsampled in
+each. The other clusters are not observed at all, so the estimate depends
+heavily on *which* clusters are chosen.
 
 ## Cluster Sampling vs. Stratified Sampling
 
-![](figures/cluster-vs-stratified.png){fig-align="center" width="90%"}
+```{r}
+#| label: fig-cluster-vs-strat
+#| fig-width: 9
+#| fig-height: 3.6
+#| out-width: "85%"
+plot_cluster_vs_strat()
+```
 
-In stratified sampling, every stratum is sampled and precision depends on
-**within-stratum** homogeneity. In cluster sampling, only *some* clusters are
-sampled and precision depends primarily on the variability **between cluster
-means**.
+- **Stratified:** an SRS from *every* stratum; precision depends on
+  **within-stratum** homogeneity.
+- **Cluster:** an SRS of *clusters*; precision depends mainly on the variability
+  **between cluster means**. Ideally each cluster is a miniature of the
+  population.
 
-## Notation for Cluster Sampling
+# Notation
 
-The universe $\mathcal U$ is the population of $N$ psus; $\mathcal S$ is the
-sample of psus, and $\mathcal S_i$ is the sample of ssus chosen from psu $i$.
-The measured quantity is
-$$
-y_{ij} = \text{measurement for the } j\text{th element (ssu) in the } i\text{th psu.}
-$$
+## The Population: Clusters of Cells
 
-In cluster sampling, $N$ is the number of psus, **not** the number of
-observation units — a departure from earlier chapters where $N$ was the
-population size in elements.
+```{r}
+#| label: fig-cluster-cells
+#| fig-width: 7.5
+#| fig-height: 4.3
+#| out-width: "62%"
+cluster_cells()
+```
+
+$y_{ij}$ = measurement on the $j$th ssu (cell) in the $i$th psu (column);
+$M_i$ = number of ssus in psu $i$ (bottom); $t_i = \sum_{j=1}^{M_i} y_{ij}$ =
+total of psu $i$ (top). **$N$ is the number of psus**, not of elements.
 
 ## psu-Level Population Quantities
 
 $$
-N = \text{number of psus}, \qquad M_i = \text{number of ssus in psu } i, \qquad
-M_0 = \sum_{i=1}^N M_i
-$$
-$$
-t_i = \sum_{j=1}^{M_i} y_{ij} \quad(\text{psu total}) \qquad
+t_i = \sum_{j=1}^{M_i} y_{ij} \quad(\text{psu total}), \qquad
 t = \sum_{i=1}^N t_i \quad(\text{population total})
+$$
+$$
+M_0 = \sum_{i=1}^N M_i \quad(\text{number of ssus in the population})
 $$
 $$
 S_t^2 = \frac{1}{N-1}\sum_{i=1}^N \Big(t_i - \frac tN\Big)^2 \quad(\text{population variance of psu totals})
@@ -87,36 +112,48 @@ $$
 ## ssu-Level Population Quantities
 
 $$
-\bar y_U = \frac{\sum_{i=1}^N\sum_{j=1}^{M_i} y_{ij}}{M_0} = \frac{t}{M_0} \quad(\text{population mean})
+\bar y_U = \frac{\sum_{i=1}^N\sum_{j=1}^{M_i} y_{ij}}{M_0} = \frac{t}{M_0} \quad(\text{population mean per ssu})
 $$
 $$
-\bar y_{iU} = \frac{\sum_{j=1}^{M_i} y_{ij}}{M_i} = \frac{t_i}{M_i} \quad(\text{population mean in psu } i)
+\bar y_{iU} = \frac{t_i}{M_i} \quad(\text{population mean in psu } i)
 $$
 $$
-S^2 = \frac{\sum_{i=1}^N\sum_{j=1}^{M_i}(y_{ij}-\bar y_U)^2}{M_0-1} \quad(\text{population variance})
+S^2 = \frac{\sum_{i=1}^N\sum_{j=1}^{M_i}(y_{ij}-\bar y_U)^2}{M_0-1}, \qquad
+S_i^2 = \frac{\sum_{j=1}^{M_i}(y_{ij}-\bar y_{iU})^2}{M_i-1}
 $$
-$$
-S_i^2 = \frac{\sum_{j=1}^{M_i}(y_{ij}-\bar y_{iU})^2}{M_i-1} \quad(\text{population variance within psu } i)
-$$
+
+## The Sample
+
+```{r}
+#| label: fig-cluster-cells-sample
+#| fig-width: 7.5
+#| fig-height: 4.6
+#| out-width: "44%"
+cluster_cells(sampled = TRUE)
+```
+
+Stage 1: an SRS $\mathcal S$ of $n$ psus (shaded). Stage 2: an SRS
+$\mathcal S_i$ of $m_i$ of the $M_i$ ssus in each sampled psu (red).
+**One-stage:** $m_i = M_i$. **Two-stage:** $m_i < M_i$.
 
 ## Sample Quantities
 
-Let $n$ = number of psus sampled, $m_i$ = number of ssus sampled from psu $i$:
+From the subsample in psu $i$:
 $$
-\bar y_i = \frac{\sum_{j\in\mathcal S_i} y_{ij}}{m_i} \quad\qquad
+\bar y_i = \frac{1}{m_i}\sum_{j\in\mathcal S_i} y_{ij}, \qquad
 \hat t_i = \sum_{j\in\mathcal S_i} \frac{M_i}{m_i}y_{ij} = M_i\bar y_i
 $$
+
+From the $n$ sampled psus:
 $$
-\hat t_{\text{unb}} = \sum_{i\in\mathcal S} \frac{N}{n}\hat t_i \quad(\text{unbiased estimator of } t)
-$$
-$$
-\bar t = \frac{\sum_{i\in\mathcal S} \hat t_i}{n}, \qquad
+\bar t = \frac{1}{n}\sum_{i\in\mathcal S} \hat t_i, \qquad
 s_t^2 = \frac{1}{n-1}\sum_{i\in\mathcal S} \big(\hat t_i - \bar t\big)^2
 $$
 
+In one-stage sampling $\hat t_i = t_i$, the true psu total.
+
 ## Sampling Weights
 
-The probability that ssu $j$ in psu $i$ is selected:
 $$
 \begin{aligned}
 P(j\text{th ssu of }i\text{th psu selected}) &= P(i\text{th psu selected})\times P(j\text{th ssu}\mid i\text{th psu}) \\[4pt]
@@ -124,52 +161,36 @@ P(j\text{th ssu of }i\text{th psu selected}) &= P(i\text{th psu selected})\times
 \end{aligned}
 $$
 
-So the sampling weight (reciprocal of the selection probability) is
+So the sampling weight is
 $$
-w_{ij} = \frac{N}{n}\cdot\frac{M_i}{m_i}, \qquad \hat t_{\text{unb}} = \sum_{i\in\mathcal S}\sum_{j\in\mathcal S_i} w_{ij}y_{ij}
+w_{ij} = \frac{N}{n}\cdot\frac{M_i}{m_i}.
 $$
 
-If psus are blocks and ssus are households, household $j$ in psu $i$
-represents $(NM_i)/(nm_i)$ households in the population.
+If psus are blocks and ssus are households, household $j$ in block $i$
+represents $NM_i/(nm_i)$ households in the population.
 
-# One-Stage Cluster Sampling
+# One-Stage Cluster Sampling with Equal Sizes
 
-## Clusters of Equal Sizes
+## Treat the psu Totals as an SRS
 
-Consider the simplest case, where every psu has the same number of ssus,
-$M_i=m_i=M$ (all ssus sampled, all clusters same size). This is uncommon in
-household surveys but does occur in agricultural and industrial sampling.
-
-Since we observe *every* ssu in each sampled psu, estimating population means
-or totals is simple: we treat the psu totals $t_i$ as the observations and
-ignore the individual elements — we effectively have an SRS of $n$ data points
-$\{t_i, i\in\mathcal S\}$.
-
-## Estimators for Clusters of Equal Sizes
-
-Apply ordinary SRS results to the psu totals $\{t_i\}$:
+Every psu has $M_i = M$ ssus, and all are observed ($m_i = M$). The psu totals
+$t_i$ are known for the sampled psus, so we have **an SRS of $n$ psu totals**
+and the SRS formulas apply:
 $$
-\bar t = \frac{\sum_{i\in\mathcal S} t_i}{n}, \qquad
-\hat t = N\bar t, \qquad
-s_t^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}\Big(t_i-\frac{\hat t}{N}\Big)^2
-$$
-$$
+\hat t = N\bar t = \frac Nn \sum_{i\in\mathcal S} t_i, \qquad
 \text{SE}(\hat t) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}}
 $$
 
-To estimate $\bar y_U$, divide the estimated total by the number of elements
-$NM$:
+To estimate $\bar y_U$, divide by the number of elements $NM$:
 $$
-\hat{\bar y} = \frac{\hat t}{NM}, \qquad
-\text{SE}(\hat{\bar y}) = \frac{1}{M}\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}} = \frac{\text{SE}(\bar t)}{M}
+\hat{\bar y} = \frac{\hat t}{NM} = \frac{\bar t}{M}, \qquad
+\text{SE}(\hat{\bar y}) = \frac{1}{M}\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}}
 $$
 
 ## Example: GPA in a Dormitory
 
-A student wants to estimate the average GPA in his dormitory. Instead of
-listing all students and taking an SRS, he notices the dorm consists of 100
-suites of 4 students each; he selects 5 suites at random and asks every
-person in those suites for their GPA:
+A dorm has $N=100$ suites of $M=4$ students. A student selects $n=5$ suites at
+random and asks every person in them for their GPA:
 
 | Suite | Person 1 | Person 2 | Person 3 | Person 4 | **Total** ($t_i$) |
 |:---:|---:|---:|---:|---:|---:|
@@ -179,14 +200,11 @@ person in those suites for their GPA:
 | 4 | 3.00 | 2.88 | 3.44 | 3.64 | **12.96** |
 | 5 | 2.68 | 1.92 | 3.28 | 3.20 | **11.08** |
 
-The psus are the suites: $N=100$, $n=5$, $M=4$.
-
 ## Example: GPA Calculations
 
 $$
 \begin{aligned}
 \hat t &= \frac{100}{5}(12.16+11.36+8.96+12.96+11.08) = 1130.4 \\[4pt]
-\bar t &= \frac{1130.4}{100} = 11.304 \\[4pt]
 s_t^2 &= \frac{1}{4}\Big[(12.16-11.304)^2+\cdots+(11.08-11.304)^2\Big] = 2.256 \\[4pt]
 \hat{\bar y} &= \frac{1130.4}{400} = 2.826 \\[4pt]
 \text{SE}(\hat{\bar y}) &= \sqrt{\Big(1-\frac{5}{100}\Big)\frac{2.256}{(5)(4)^2}} = 0.164
@@ -194,15 +212,14 @@ s_t^2 &= \frac{1}{4}\Big[(12.16-11.304)^2+\cdots+(11.08-11.304)^2\Big] = 2.256 \
 $$
 
 ::: {.callout-note}
-$V(\hat{\bar y}) \ne \big(1-\tfrac{n}{N}\big)\dfrac{s_y^2}{n}$! We *cannot* apply
-the ordinary one-stage SRS variance formula treating all $nM=20$ students as
-an SRS from the dorm — the 20 students are not an SRS of individuals, since
-whole suites are selected together (an ICC/correlation effect).
+Treating the $nM=20$ students as an SRS of the 400 students would give
+$\text{SE} = 0.112$, far too small. Whole suites are selected together, and
+students in the same suite tend to have similar GPAs.
 :::
 
 # Comparing Cluster Sampling with SRS
 
-## Population ANOVA Table (Cluster Sampling, Equal Sizes)
+## Population ANOVA Table (Equal Sizes)
 
 | Source | df | Sum of Squares |
 |:---|:---:|:---|
@@ -210,48 +227,42 @@ whole suites are selected together (an ICC/correlation effect).
 | Within psus | $N(M-1)$ | $\text{SSW} = \sum_{i=1}^N\sum_{j=1}^M (y_{ij}-\bar y_{iU})^2$ |
 | Total, about $\bar y_U$ | $NM-1$ | $\text{SSTO} = \sum_{i=1}^N\sum_{j=1}^M (y_{ij}-\bar y_U)^2 = (NM-1)S^2$ |
 
-## Cluster Sampling Variance Depends on Between-psu Variability
+$\text{MSB} = \text{SSB}/(N-1)$, $\quad\text{MSW} = \text{SSW}/(N(M-1))$.
 
-Since each psu has the same size $M$,
+## The Variance Depends on Between-psu Variability
+
+Since $t_i - \bar t_U = M(\bar y_{iU}-\bar y_U)$,
 $$
-S_t^2 = \sum_{i=1}^N \frac{(t_i-\bar t_U)^2}{N-1} = \sum_{i=1}^N \frac{M^2(\bar y_{iU}-\bar y_U)^2}{N-1} = M(\text{MSB})
-$$
-so for one-stage cluster sampling with equal-size clusters,
-$$
-V(\hat t_{\text{cluster}}) = N^2\Big(1-\frac nN\Big)\frac{M(\text{MSB})}{n}
+S_t^2 = \sum_{i=1}^N \frac{(t_i-\bar t_U)^2}{N-1} = M\cdot\text{MSB}
+\quad\Longrightarrow\quad
+V(\hat t_{\text{cluster}}) = N^2\Big(1-\frac nN\Big)\frac{M\cdot\text{MSB}}{n}
 $$
 
-If instead we took an SRS with $nM$ observations, the variance of the
-estimated total would have been
+An SRS of the same number $nM$ of elements would give
 $$
 V(\hat t_{\text{SRS}}) = (NM)^2\Big(1-\frac{nM}{NM}\Big)\frac{S^2}{nM} = N^2\Big(1-\frac nN\Big)\frac{MS^2}{n}
 $$
 
-Comparing the two: if $\text{MSB} > S^2$, cluster sampling is **less**
-efficient (has larger variance) than an SRS of the same number of elements.
+So $V(\hat t_{\text{cluster}})/V(\hat t_{\text{SRS}}) = \text{MSB}/S^2$: if
+$\text{MSB} > S^2$, cluster sampling is **less** efficient than an SRS of the
+same number of elements.
 
 ## Intraclass Correlation and Adjusted $R^2$
 
-The **intraclass correlation coefficient (ICC)** measures how similar elements
-within the same cluster are:
+**Intraclass correlation coefficient:**
+$\text{ICC} = 1 - \dfrac{M}{M-1}\cdot\dfrac{\text{SSW}}{\text{SSTO}}$
+
+**Adjusted $R^2$** (valid for unequal sizes too):
+$R_a^2 = 1 - \dfrac{\text{MSW}}{S^2}$
+
+For equal-sized clusters,
 $$
-\text{ICC} = 1 - \frac{M}{M-1}\cdot\frac{\text{SSW}}{\text{SSTO}}
+\frac{V(\hat t_{\text{cluster}})}{V(\hat t_{\text{SRS}})} = \frac{\text{MSB}}{S^2} = 1 + \frac{N(M-1)}{N-1}R_a^2 \approx 1 + (M-1)R_a^2
 $$
 
-An alternative measure, valid for unequal cluster sizes too, is the
-**adjusted $R^2$**:
-$$
-R_a^2 = 1 - \frac{\text{MSW}}{S^2}
-$$
-
-For equal-sized clusters, the increase in variance from using cluster
-sampling (instead of an SRS of the same number of elements) is
-$$
-\frac{V(\hat t_{\text{cluster}})}{V(\hat t_{\text{SRS}})} = \frac{\text{MSB}}{S^2} = 1 + \frac{N(M-1)}{N-1}R_a^2
-$$
-
-So $(M-1)R_a^2$ is (approximately) the **percentage increase** in variance
-from switching from SRS to cluster sampling.
+So $(M-1)R_a^2$ is approximately the proportional **increase** in variance from
+switching from SRS to cluster sampling. With $M=21$ and $R_a^2=0.05$, the
+variance doubles.
 
 ## Illustration: $R_a^2$ Large vs. Small
 
@@ -259,116 +270,65 @@ from switching from SRS to cluster sampling.
 #| label: fig-cluster-r2
 #| fig-width: 9
 #| fig-height: 4
-#| out-width: "90%"
-set.seed(5)
-n_each <- 10
-
-par(mfrow = c(1, 2), mar = c(3, 3.5, 2.5, 0.5))
-
-means_hi <- c(1.5, 4, 7, 9.5)
-x1 <- rep(1:4, each = n_each) + runif(4 * n_each, -0.15, 0.15)
-y1 <- rep(means_hi, each = n_each) + rnorm(4 * n_each, 0, 0.3)
-plot(x1, y1, pch = 19, col = "blue4", xaxt = "n", xlim = c(0.5, 4.5),
-     ylim = c(0, 11), xlab = "", ylab = "y",
-     main = expression(R[a]^2~"large: cluster sampling loses more"))
-axis(1, at = 1:4, labels = 1:4)
-for (h in 1:4) segments(h - 0.25, means_hi[h], h + 0.25, means_hi[h], col = "firebrick", lwd = 3)
-
-means_lo <- c(4.7, 5, 5.3, 5.1)
-x2 <- rep(1:4, each = n_each) + runif(4 * n_each, -0.15, 0.15)
-y2 <- rep(means_lo, each = n_each) + rnorm(4 * n_each, 0, 1.6)
-plot(x2, y2, pch = 19, col = "blue4", xaxt = "n", xlim = c(0.5, 4.5),
-     ylim = c(0, 11), xlab = "", ylab = "y",
-     main = expression(R[a]^2~"small: cluster sampling loses less"))
-axis(1, at = 1:4, labels = 1:4)
-for (h in 1:4) segments(h - 0.25, means_lo[h], h + 0.25, means_lo[h], col = "firebrick", lwd = 3)
+#| out-width: "82%"
+plot_cluster_r2()
 ```
 
 When cluster means differ a lot relative to within-cluster spread (left),
-sampling only a few clusters misses most of the population's variability —
-cluster sampling loses more information relative to an SRS of the same size.
+sampling only a few clusters misses most of the population's variability. This
+is the mirror image of stratification, where a large $R^2$ *helps*.
 
-# Clusters of Unequal Sizes
+# One-Stage Cluster Sampling with Unequal Sizes
 
-## Unbiased Estimation for Unequal-Size Clusters
+## The Unbiased Estimator and Its Problem
 
-The unbiased estimator of the total is calculated exactly as before:
+The unbiased estimator of the total is computed as before:
 $$
 \hat t_{\text{unb}} = \frac Nn \sum_{i\in\mathcal S} t_i, \qquad
 \text{SE}(\hat t_{\text{unb}}) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}}
 $$
 
-The key difference from equal-size clusters: the variation among the
-individual cluster totals $t_i$ is likely to be **large** when the clusters
-have very different sizes $M_i$ — a psu with many ssus tends to have a large
-total just because it has more elements, inflating $s_t^2$ and hence the
-variance of $\hat t_{\text{unb}}$, even before accounting for genuine
-differences in the $y$ values.
+But when the clusters have very different sizes $M_i$, the totals $t_i$ vary a
+lot simply because big clusters have more elements. This inflates $s_t^2$, and
+hence the variance of $\hat t_{\text{unb}}$, even before any genuine differences
+in the $y$ values.
 
-## Ratio Estimation for the ssu-Level Mean
+## The Ratio Estimator for $\bar y_U$
 
-Since $\bar y_U = t/M_0$, and $t_i$ is usually roughly proportional to $M_i$
-(bigger clusters tend to have bigger totals), estimating $\bar y_U$ is a form
-of **ratio estimation** with $y_i=t_i$ and $x_i=M_i$:
+Since $\bar y_U = t/M_0$ and $t_i$ is roughly proportional to $M_i$, estimating
+$\bar y_U$ is **ratio estimation** with $y_i = t_i$ and $x_i = M_i$:
 $$
-\hat{\bar y}_r = \frac{\hat t_{\text{unb}}}{\hat M_0} = \frac{\sum_{i\in\mathcal S} t_i}{\sum_{i\in\mathcal S} M_i} = \frac{\sum_{i\in\mathcal S} M_i\bar y_i}{\sum_{i\in\mathcal S} M_i}
+\hat{\bar y}_r = \frac{\sum_{i\in\mathcal S} t_i}{\sum_{i\in\mathcal S} M_i} = \frac{\sum_{i\in\mathcal S} M_i\bar y_i}{\sum_{i\in\mathcal S} M_i}
 $$
+$$
+\text{SE}(\hat{\bar y}_r) = \sqrt{\Big(1-\frac nN\Big)\frac{s_e^2}{n\bar M^2}}, \qquad
+s_e^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}e_i^2, \quad e_i = t_i-\hat{\bar y}_r M_i
+$$
+where $\bar M=\sum_{i\in\mathcal S}M_i/n$. The ratio estimator does not need
+$M_0$.
 
-This can be far more efficient than $\hat t_{\text{unb}}/M_0$, since it uses
-the *ratio* of totals to sizes rather than the totals alone — removing the
-size-driven variability in $t_i$ that inflates $s_t^2$.
+## Why the Ratio Estimator Is Better
 
-## Standard Error of the Ratio Estimator
-
-:::: {.columns}
-
-:::{.column style="width:50%;"}
 ```{r}
 #| label: fig-cluster-ratio
 #| fig-width: 6.5
-#| fig-height: 5
-#| out-width: "100%"
-set.seed(2)
-n <- 30
-B <- 0.6
-Mi <- runif(n, 1, 10)
-ti <- B * Mi + rnorm(n, 0, 0.4)
-Bhat <- sum(ti) / sum(Mi)
-
-par(mar = c(4, 4, 0.5, 0.5))
-plot(Mi, ti, pch = 19, xlab = expression(M[i]), ylab = expression(t[i]),
-     xlim = c(0, 10.5), ylim = c(0, 7))
-abline(0, Bhat, col = "firebrick", lwd = 2)
-segments(Mi, Bhat * Mi, Mi, ti, col = "gray50", lty = 3)
-text(9, Bhat * 9 + 0.3, expression(hat(y)[r]*M[i]), col = "firebrick")
+#| fig-height: 4.3
+#| out-width: "62%"
+plot_cluster_ratio()
 ```
-:::
 
-:::{.column style="width:50%;"}
+The unbiased estimator's SE depends on the spread of $t_i$ about the horizontal
+line $\bar t$ (blue), which is large because the sizes vary. The ratio
+estimator's SE depends only on the residuals $e_i$ about the line
+$t = \hat{\bar y}_r M$ (dotted), which are much smaller.
 
-From formula (4.10) applied with $x_i=M_i$, $y_i=t_i$, and writing
-$\hat t_{ri}=\hat{\bar y}_r M_i$ for the fitted value:
-$$
-s_r^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}(t_i-\hat t_{ri})^2
-$$
-$$
-\text{SE}(\hat{\bar y}_r) = \sqrt{\Big(1-\frac nN\Big)\frac{s_r^2}{n\bar M^2}}
-$$
-where $\bar M=\sum_{i\in\mathcal S}M_i/n$. The residuals $t_i - \hat t_{ri}$
-(dotted vertical segments) are typically far less variable than $t_i$ itself.
+## Example: Algebra Class Test Scores
 
-:::
-
-::::
-
-## Example: Algebra Class Test Scores 
-
-One-stage cluster samples are common in educational studies, since students
-are naturally clustered into classrooms or schools. From a population of 187
-high-school algebra classes, an investigator takes an SRS of $n=12$ classes and
-tests every student in them for function knowledge. As with ordinary ratio
-estimation, $\hat t_{ri}=\hat{\bar y}_r M_i$ is the fitted cluster total and
-$e_i=t_i-\hat t_{ri}$ the residual from the line $t=\hat{\bar y}_r M$:
+One-stage cluster samples are common in educational studies, since students are
+naturally clustered into classrooms. From a population of 187 high-school
+algebra classes, an investigator takes an SRS of $n=12$ classes and tests every
+student in them for function knowledge. The classes are the psus, of different
+sizes $M_i$.
 
 ## Example: Algebra Class Test Scores (Calculation) {.smaller}
 
@@ -378,7 +338,6 @@ $e_i=t_i-\hat t_{ri}$ the residual from the line $t=\hat{\bar y}_r M$:
 ```{r}
 #| label: tbl-algebra-spreadsheet
 #| message: false
-library(gt)
 algebra <- read.csv("data/algebra.csv")
 
 Mi <- tapply(algebra$Mi, algebra$class, function(x) x[1])
@@ -395,7 +354,7 @@ alg |>
   fmt_number(columns = c(ybari, ti, yhat, ei, ei2), decimals = 1) |>
   cols_label(
     Mi = md("$M_i$"), ybari = md("$\\bar y_i$"), ti = md("$t_i$"),
-    yhat = md("$\\hat t_{ri}$"), ei = md("$e_i$"), ei2 = md("$e_i^2$")
+    yhat = md("$\\hat{\\bar y}_r M_i$"), ei = md("$e_i$"), ei2 = md("$e_i^2$")
   ) |>
   grand_summary_rows(
     columns = c(Mi, ti, ei, ei2),
@@ -409,7 +368,7 @@ alg |>
 :::{.column style="width:40%; font-size: 32px;"}
 \
 
-The **Sum** row gives $\sum M_i$, $\sum t_i$, and $\sum e_i^2$ directly:
+The **Sum** row gives $\sum M_i$, $\sum t_i$, and $\sum e_i^2$:
 $$
 \begin{aligned}
 \hat{\bar y}_r &= \frac{\sum t_i}{\sum M_i} = \frac{18{,}708}{299} = 62.57 \\[4pt]
@@ -420,136 +379,85 @@ s_e^2 &= \frac{\sum e_i^2}{n-1} = \frac{194{,}827}{11} = 17{,}711.5 \\[4pt]
 $$
 :::
 ::::
-# A Toy Example: Why Unbiased Estimation Can Be Bad
-
-## Setup: Estimating Legs per Dog
-
-Consider a whimsical population of just $N=2$ "clusters" (kennels) of dogs —
-kennel $A$ with $M_A=30$ dogs, and kennel $B$ with $M_B=10$ dogs. Every dog has
-exactly 4 legs, so the true population mean is trivially
-$\bar y_U = 4$ legs/dog. We take a one-stage cluster sample of $n=1$ kennel
-(each chosen with probability $1/2$), observing all dogs in it.
-
-## Unbiased Estimation
-
-**Data Set 1: Kennel $A$ Selected**
-
-$$
-t_1 = 30\times 4 = 120, \qquad
-\hat t_{\text{unb}} = \frac{2}{1}(120) = 240, \qquad
-\hat{\bar y}_{\text{unb}} = \frac{240}{30+10} = 6
-$$
-
-**Data Set 2: Kennel $B$ Selected**
-
-$$
-t_2 = 10\times 4 = 40, \qquad
-\hat t_{\text{unb}} = \frac{2}{1}(40) = 80, \qquad
-\hat{\bar y}_{\text{unb}} = \frac{80}{30+10} = 2
-$$
-
-## $\hat{\bar y}_{\text{unb}}$ Is Unbiased but Highly Variable
-
-| $\hat{\bar y}_{\text{unb}}$ | 6 | 2 |
-|:---:|:---:|:---:|
-| Probability | $1/2$ | $1/2$ |
-
-$$
-E[\hat{\bar y}_{\text{unb}}] = 6\times\tfrac12 + 2\times\tfrac12 = 4 = \bar y_U \quad\text{(unbiased!)}
-$$
-
-But $\hat{\bar y}_{\text{unb}}$ is *never* actually equal to 4 — it is always
-off by $\pm 2$, because $V(t_i)$ is huge (kennel sizes 30 vs. 10 are very
-different), even though every single dog has exactly 4 legs.
-
-## The Ratio Estimator Fixes This
-
-For kennel $A$: $\hat{\bar y}_r = \dfrac{30\times4}{30}=4$. For kennel $B$:
-$\hat{\bar y}_r = \dfrac{10\times4}{10}=4$.
-
-Both possible samples give **exactly** $\hat{\bar y}_r=4=\bar y_U$, so
-$$
-V(\hat{\bar y}_r) = 0
-$$
-
-The ratio estimator completely cancels out the cluster-size variability that
-made $\hat{\bar y}_{\text{unb}}$ so unreliable — this is why ratio estimation
-(not unbiased estimation) is the standard approach for unequal-size clusters.
 
 # Two-Stage Cluster Sampling
 
 ## What Is Two-Stage Cluster Sampling?
 
-When sampling every ssu in a selected psu is too costly, we can subsample:
+When observing every ssu in a selected psu is too costly (and elements within a
+psu are similar), we subsample:
 
-1. Select an SRS $\mathcal S$ of $n$ psus from the population of $N$ psus.
-2. Select an SRS of $m_i$ ssus from each selected psu $i$ (this sample is
-   $\mathcal S_i$).
+1. Select an SRS $\mathcal S$ of $n$ psus from the $N$ psus.
+2. Select an SRS $\mathcal S_i$ of $m_i$ ssus from each selected psu $i$.
 
-Since we no longer observe every ssu in a sampled psu, we must **estimate**
-each psu total:
+Since we no longer observe every ssu in a sampled psu, we **estimate** each psu
+total:
 $$
 \hat t_i = \sum_{j\in\mathcal S_i} \frac{M_i}{m_i}y_{ij} = M_i\bar y_i
 $$
 
-## Unbiased Estimator of the Total
+## The Ratio Estimator
 
-$$
-\hat t_{\text{unb}} = \frac Nn \sum_{i\in\mathcal S} \hat t_i = \sum_{i\in\mathcal S}\sum_{j\in\mathcal S_i} w_{ij}y_{ij}, \qquad w_{ij} = \frac{NM_i}{nm_i}
-$$
-
-The variance now has **two** sources: variability *between* psus, and
-variability from subsampling *within* each sampled psu:
-$$
-V(\hat t_{\text{unb}}) = N^2\Big(1-\frac nN\Big)\frac{S_t^2}{n}
- + \frac Nn \sum_{i=1}^N \Big(1-\frac{m_i}{M_i}\Big)M_i^2\frac{S_i^2}{m_i}
-$$
-
-The first term is exactly the one-stage cluster variance; the second term is
-the extra cost of not observing every ssu in each sampled psu.
-
-## Ratio Estimation for Two-Stage Sampling
-
-As before, estimating $\bar y_U$ is a ratio estimation problem with
-$y_i=\hat t_i=M_i\bar y_i$ and $x_i=M_i$:
+As in one-stage sampling, $\bar y_U$ is estimated by a ratio estimator, now with
+the estimated psu totals $\hat t_i$:
 $$
 \hat{\bar y}_r = \frac{\sum_{i\in\mathcal S}\hat t_i}{\sum_{i\in\mathcal S}M_i} = \frac{\sum_{i\in\mathcal S}M_i\bar y_i}{\sum_{i\in\mathcal S}M_i}
 $$
+Its estimated variance is a weighted sum of two variances, with weights
+$1 - \frac nN$ and $\frac nN$:
 $$
-\hat V(\hat{\bar y}_r) = \frac{1}{\bar M^2}\Big(1-\frac nN\Big)\frac{s_r^2}{n}
- + \frac{1}{nN\bar M^2}\sum_{i\in\mathcal S}M_i^2\Big(1-\frac{m_i}{M_i}\Big)\frac{s_i^2}{m_i}
+\hat V(\hat{\bar y}_r) = \Big(1-\frac nN\Big)\,\hat V_{\text{ratio}} + \frac nN\,\hat V_{\text{str}},
 $$
-where $s_r^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}(M_i\bar y_i - M_i\hat{\bar y}_r)^2$.
-The second term is often negligible compared with the first.
+$$
+\hat V_{\text{ratio}} = \frac{s_e^2}{n\bar M^2}, \qquad
+\hat V_{\text{str}} = \sum_{i\in\mathcal S}\Big(\frac{M_i}{M}\Big)^2\Big(1-\frac{m_i}{M_i}\Big)\frac{s_i^2}{m_i},
+$$
+with $e_i = \hat t_i - \hat{\bar y}_r M_i$, $\;M = \sum_{i\in\mathcal S}M_i = n\bar M$,
+and $s_i^2$ the sample variance of the $m_i$ elements measured in psu $i$.
+
+## Reading the Two Pieces
+
+- $\hat V_{\text{ratio}}$ is the variance of a **ratio** estimate computed from
+  the $n$ estimated psu totals, as if the psus were drawn with replacement
+  (between-psu variability).
+- $\hat V_{\text{str}}$ is the variance of a **stratified** sample in which the
+  $n$ sampled psus are the strata, of sizes $M_i$ with $m_i$ units sampled
+  (within-psu variability).
+- The weights move from one to the other as the psu sampling fraction $n/N$
+  grows:
+    - **$N$ unknown or very large** ($n/N \to 0$): only $\hat V_{\text{ratio}}$ counts.
+    - **All psus sampled** ($n = N$): only $\hat V_{\text{str}}$ counts; the design
+      *is* stratified sampling.
+    - **One-stage** ($m_i = M_i$): $\hat V_{\text{str}} = 0$, leaving the
+      one-stage formula $\big(1-\frac nN\big)\frac{s_e^2}{n\bar M^2}$.
 
 ## Example: American Coot Egg Volumes
 
-Data from Arnold's (1991) study of egg size and volume of American Coot eggs
-in Minnedosa, Manitoba. We look at the volumes of a subsample of eggs within
-clutches (nests) having at least two eggs measured — the clutches are the
-psus, and eggs within a clutch are the ssus.
+Data from Arnold's (1991) study of the size and volume of American coot eggs in
+Minnedosa, Manitoba. The clutches (nests) are the psus and the eggs within a
+clutch are the ssus. From each of $n = 184$ clutches, two eggs were measured.
 
-## Figure: Egg Volume by Clutch
+```{r}
+#| label: fig-coots-volume
+#| fig-width: 9
+#| fig-height: 3.6
+#| out-width: "90%"
+coots <- read.csv("data/coots.csv")
+plot_coots(coots)
+```
 
-![](figures/coots-egg-volume.png){fig-align="center" width="95%"}
+Clutch means vary widely (right panel, clutches ranked by mean), but the two
+eggs *within* a clutch usually agree closely.
 
-The right panel orders clutches by their mean volume, connecting the two
-measured eggs in each clutch — there is wide variation between clutches
-(clutch means climb steadily left to right), but the two eggs *within* a
-clutch usually agree closely. This indicates eggs within the same clutch are
-much more similar than two randomly chosen eggs from different clutches.
+## Example: Coots — Spreadsheet Calculation
 
-## Example: Coots — Spreadsheet Calculation 
-
-As in the algebra example, $\hat t_{ri}=\hat{\bar y}_r M_i$ and $e_i=\hat t_i-\hat t_{ri}$
-come from the ratio line fit to $(\hat t_i, M_i)$ across all $n=184$ clutches
-(scroll for more rows):
+$\hat t_i = M_i\bar y_i$, and $e_i=\hat t_i-\hat{\bar y}_r M_i$ are the
+residuals from the ratio line, across all $n=184$ clutches (scroll for more
+rows):
 
 ```{r}
 #| label: tbl-coots-spreadsheet
 #| message: false
-coots <- read.csv("data/coots.csv")
-
 Mi <- tapply(coots$csize, coots$clutch, function(x) x[1])
 ybari <- tapply(coots$volume, coots$clutch, mean)
 cts <- data.frame(Clutch = names(Mi), Mi = as.numeric(Mi), ybari = as.numeric(ybari))
@@ -564,7 +472,7 @@ cts |>
   fmt_number(columns = c(ybari, ti, yhat, ei, ei2), decimals = 2) |>
   cols_label(
     Mi = md("$M_i$"), ybari = md("$\\bar y_i$"), ti = md("$\\hat t_i$"),
-    yhat = md("$\\hat t_{ri}$"), ei = md("$e_i$"), ei2 = md("$e_i^2$")
+    yhat = md("$\\hat{\\bar y}_r M_i$"), ei = md("$e_i$"), ei2 = md("$e_i^2$")
   ) |>
   grand_summary_rows(
     columns = c(Mi, ti, ei, ei2),
@@ -584,18 +492,14 @@ The **Sum** row gives $\sum M_i$, $\sum \hat t_i$, and $\sum e_i^2$:
 $$
 \hat{\bar y}_r = \frac{\sum \hat t_i}{\sum M_i} = \frac{4375.95}{1757} = 2.49,
 \qquad
-s_r^2 = \frac{\sum e_i^2}{n-1} = \frac{11{,}439.58}{183} = 62.51,
-$$
-$$
+s_e^2 = \frac{\sum e_i^2}{n-1} = \frac{11{,}439.58}{183} = 62.51,
 \qquad \bar M = \frac{1757}{184}=9.549
 $$
 
-Since the total number of clutches $N$ is unknown but presumably very large,
-the psu-level fpc $(1-n/N)\approx 1$, and the second (within-clutch) variance
-term is negligible relative to the first:
+The number of clutches $N$ is unknown but presumably very large, so
+$(1-n/N)\approx 1$ and the within-clutch piece is negligible:
 $$
 \text{SE}(\hat{\bar y}_r) = \frac{1}{9.549}\sqrt{\frac{62.51}{184}} = 0.061,
 \qquad
 \widehat{\text{CV}}(\hat{\bar y}_r) = \frac{0.061}{2.49} = 0.0245
 $$
-

@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.9.37">
 
   <meta name="author" content="Longhai Li">
-  <meta name="dcterms.date" content="2026-10-08">
+  <meta name="dcterms.date" content="2026-10-22">
   <title>Cluster-Slides</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -161,11 +161,11 @@ Longhai Li
 </div>
 </div>
 
-  <p class="date">2026-10-08</p>
+  <p class="date">2026-10-22</p>
 </section>
 <section>
-<section id="general-terms-for-cluster-sampling" class="title-slide slide level1 center" data-number="1">
-<h1><span class="header-section-number">1</span> General Terms for Cluster Sampling</h1>
+<section id="what-is-cluster-sampling" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> What Is Cluster Sampling?</h1>
 <p>Textbook sections:</p>
 <ul>
 <li>5.1–5.3 in Lohr</li>
@@ -180,30 +180,46 @@ Longhai Li
 <section id="why-do-we-use-cluster-sampling" class="slide level2">
 <h2>Why Do We Use Cluster Sampling?</h2>
 <ul>
-<li><strong>Constructing a sampling frame of observation units may be difficult, expensive, or impossible.</strong> We cannot list all honeybees in a region or all customers of a store; we may be able to construct a list of individuals in a city only via a list of housing units, but that list is time-consuming and expensive to build.</li>
-<li><strong>The population may be widely spread out geographically, or occur in natural clusters</strong> such as households or schools, and it is cheaper to sample clusters than to take an SRS of individuals. To survey nursing-home residents, it is much cheaper to sample nursing homes and interview every resident there than to take an SRS of residents (which might require traveling to a home to interview just one person).</li>
+<li><strong>Constructing a sampling frame of observation units may be difficult, expensive, or impossible.</strong> We cannot list all honeybees in a region or all customers of a store; a list of individuals in a city may be available only through a list of housing units, which is expensive to build.</li>
+<li><strong>The population may be widely spread out geographically, or occur in natural clusters</strong> such as households or schools, and it is cheaper to sample clusters than to take an SRS of individuals. To survey nursing-home residents, it is much cheaper to sample nursing homes and interview every resident there than to take an SRS of residents.</li>
 </ul>
+</section>
+<section id="illustration-a-two-stage-cluster-sample" class="slide level2">
+<h2>Illustration: A Two-Stage Cluster Sample</h2>
+
+<img data-src="Lec06-cluster_files/figure-revealjs/fig-cluster-design-1.png" id="fig-cluster-design" class="quarto-figure quarto-figure-center r-stretch" style="width:95.0%"><p class="caption">
+Figure&nbsp;1
+</p><p>Ten clusters of 40 to 160 units, sorted by their means (dashed lines). Three clusters are selected at random (shaded), and 20 units (red) are subsampled in each. The other clusters are not observed at all, so the estimate depends heavily on <em>which</em> clusters are chosen.</p>
 </section>
 <section id="cluster-sampling-vs.-stratified-sampling" class="slide level2">
 <h2>Cluster Sampling vs.&nbsp;Stratified Sampling</h2>
 
-<img data-src="figures/cluster-vs-stratified.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p>In stratified sampling, every stratum is sampled and precision depends on <strong>within-stratum</strong> homogeneity. In cluster sampling, only <em>some</em> clusters are sampled and precision depends primarily on the variability <strong>between cluster means</strong>.</p>
+<img data-src="Lec06-cluster_files/figure-revealjs/fig-cluster-vs-strat-1.png" id="fig-cluster-vs-strat" class="quarto-figure quarto-figure-center r-stretch" style="width:85.0%"><p class="caption">
+Figure&nbsp;2
+</p><ul>
+<li><strong>Stratified:</strong> an SRS from <em>every</em> stratum; precision depends on <strong>within-stratum</strong> homogeneity.</li>
+<li><strong>Cluster:</strong> an SRS of <em>clusters</em>; precision depends mainly on the variability <strong>between cluster means</strong>. Ideally each cluster is a miniature of the population.</li>
+</ul>
+</section></section>
+<section>
+<section id="notation" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Notation</h1>
+
 </section>
-<section id="notation-for-cluster-sampling" class="slide level2">
-<h2>Notation for Cluster Sampling</h2>
-<p>The universe <span class="math inline">\mathcal U</span> is the population of <span class="math inline">N</span> psus; <span class="math inline">\mathcal S</span> is the sample of psus, and <span class="math inline">\mathcal S_i</span> is the sample of ssus chosen from psu <span class="math inline">i</span>. The measured quantity is <span class="math display">
-y_{ij} = \text{measurement for the } j\text{th element (ssu) in the } i\text{th psu.}
-</span></p>
-<p>In cluster sampling, <span class="math inline">N</span> is the number of psus, <strong>not</strong> the number of observation units — a departure from earlier chapters where <span class="math inline">N</span> was the population size in elements.</p>
+<section id="the-population-clusters-of-cells" class="slide level2">
+<h2>The Population: Clusters of Cells</h2>
+
+<img data-src="Lec06-cluster_files/figure-revealjs/fig-cluster-cells-1.png" id="fig-cluster-cells" class="quarto-figure quarto-figure-center r-stretch" style="width:62.0%"><p class="caption">
+Figure&nbsp;3
+</p><p><span class="math inline">y_{ij}</span> = measurement on the <span class="math inline">j</span>th ssu (cell) in the <span class="math inline">i</span>th psu (column); <span class="math inline">M_i</span> = number of ssus in psu <span class="math inline">i</span> (bottom); <span class="math inline">t_i = \sum_{j=1}^{M_i} y_{ij}</span> = total of psu <span class="math inline">i</span> (top). <strong><span class="math inline">N</span> is the number of psus</strong>, not of elements.</p>
 </section>
 <section id="psu-level-population-quantities" class="slide level2">
 <h2>psu-Level Population Quantities</h2>
 <p><span class="math display">
-N = \text{number of psus}, \qquad M_i = \text{number of ssus in psu } i, \qquad
-M_0 = \sum_{i=1}^N M_i
-</span> <span class="math display">
-t_i = \sum_{j=1}^{M_i} y_{ij} \quad(\text{psu total}) \qquad
+t_i = \sum_{j=1}^{M_i} y_{ij} \quad(\text{psu total}), \qquad
 t = \sum_{i=1}^N t_i \quad(\text{population total})
+</span> <span class="math display">
+M_0 = \sum_{i=1}^N M_i \quad(\text{number of ssus in the population})
 </span> <span class="math display">
 S_t^2 = \frac{1}{N-1}\sum_{i=1}^N \Big(t_i - \frac tN\Big)^2 \quad(\text{population variance of psu totals})
 </span></p>
@@ -211,67 +227,65 @@ S_t^2 = \frac{1}{N-1}\sum_{i=1}^N \Big(t_i - \frac tN\Big)^2 \quad(\text{populat
 <section id="ssu-level-population-quantities" class="slide level2">
 <h2>ssu-Level Population Quantities</h2>
 <p><span class="math display">
-\bar y_U = \frac{\sum_{i=1}^N\sum_{j=1}^{M_i} y_{ij}}{M_0} = \frac{t}{M_0} \quad(\text{population mean})
+\bar y_U = \frac{\sum_{i=1}^N\sum_{j=1}^{M_i} y_{ij}}{M_0} = \frac{t}{M_0} \quad(\text{population mean per ssu})
 </span> <span class="math display">
-\bar y_{iU} = \frac{\sum_{j=1}^{M_i} y_{ij}}{M_i} = \frac{t_i}{M_i} \quad(\text{population mean in psu } i)
+\bar y_{iU} = \frac{t_i}{M_i} \quad(\text{population mean in psu } i)
 </span> <span class="math display">
-S^2 = \frac{\sum_{i=1}^N\sum_{j=1}^{M_i}(y_{ij}-\bar y_U)^2}{M_0-1} \quad(\text{population variance})
-</span> <span class="math display">
-S_i^2 = \frac{\sum_{j=1}^{M_i}(y_{ij}-\bar y_{iU})^2}{M_i-1} \quad(\text{population variance within psu } i)
+S^2 = \frac{\sum_{i=1}^N\sum_{j=1}^{M_i}(y_{ij}-\bar y_U)^2}{M_0-1}, \qquad
+S_i^2 = \frac{\sum_{j=1}^{M_i}(y_{ij}-\bar y_{iU})^2}{M_i-1}
 </span></p>
+</section>
+<section id="the-sample" class="slide level2">
+<h2>The Sample</h2>
+
+<img data-src="Lec06-cluster_files/figure-revealjs/fig-cluster-cells-sample-1.png" id="fig-cluster-cells-sample" class="quarto-figure quarto-figure-center r-stretch" style="width:44.0%"><p class="caption">
+Figure&nbsp;4
+</p><p>Stage 1: an SRS <span class="math inline">\mathcal S</span> of <span class="math inline">n</span> psus (shaded). Stage 2: an SRS <span class="math inline">\mathcal S_i</span> of <span class="math inline">m_i</span> of the <span class="math inline">M_i</span> ssus in each sampled psu (red). <strong>One-stage:</strong> <span class="math inline">m_i = M_i</span>. <strong>Two-stage:</strong> <span class="math inline">m_i &lt; M_i</span>.</p>
 </section>
 <section id="sample-quantities" class="slide level2">
 <h2>Sample Quantities</h2>
-<p>Let <span class="math inline">n</span> = number of psus sampled, <span class="math inline">m_i</span> = number of ssus sampled from psu <span class="math inline">i</span>: <span class="math display">
-\bar y_i = \frac{\sum_{j\in\mathcal S_i} y_{ij}}{m_i} \quad\qquad
+<p>From the subsample in psu <span class="math inline">i</span>: <span class="math display">
+\bar y_i = \frac{1}{m_i}\sum_{j\in\mathcal S_i} y_{ij}, \qquad
 \hat t_i = \sum_{j\in\mathcal S_i} \frac{M_i}{m_i}y_{ij} = M_i\bar y_i
-</span> <span class="math display">
-\hat t_{\text{unb}} = \sum_{i\in\mathcal S} \frac{N}{n}\hat t_i \quad(\text{unbiased estimator of } t)
-</span> <span class="math display">
-\bar t = \frac{\sum_{i\in\mathcal S} \hat t_i}{n}, \qquad
+</span></p>
+<p>From the <span class="math inline">n</span> sampled psus: <span class="math display">
+\bar t = \frac{1}{n}\sum_{i\in\mathcal S} \hat t_i, \qquad
 s_t^2 = \frac{1}{n-1}\sum_{i\in\mathcal S} \big(\hat t_i - \bar t\big)^2
 </span></p>
+<p>In one-stage sampling <span class="math inline">\hat t_i = t_i</span>, the true psu total.</p>
 </section>
 <section id="sampling-weights" class="slide level2">
 <h2>Sampling Weights</h2>
-<p>The probability that ssu <span class="math inline">j</span> in psu <span class="math inline">i</span> is selected: <span class="math display">
+<p><span class="math display">
 \begin{aligned}
 P(j\text{th ssu of }i\text{th psu selected}) &amp;= P(i\text{th psu selected})\times P(j\text{th ssu}\mid i\text{th psu}) \\[4pt]
 &amp;= \frac nN \cdot \frac{m_i}{M_i}
 \end{aligned}
 </span></p>
-<p>So the sampling weight (reciprocal of the selection probability) is <span class="math display">
-w_{ij} = \frac{N}{n}\cdot\frac{M_i}{m_i}, \qquad \hat t_{\text{unb}} = \sum_{i\in\mathcal S}\sum_{j\in\mathcal S_i} w_{ij}y_{ij}
+<p>So the sampling weight is <span class="math display">
+w_{ij} = \frac{N}{n}\cdot\frac{M_i}{m_i}.
 </span></p>
-<p>If psus are blocks and ssus are households, household <span class="math inline">j</span> in psu <span class="math inline">i</span> represents <span class="math inline">(NM_i)/(nm_i)</span> households in the population.</p>
+<p>If psus are blocks and ssus are households, household <span class="math inline">j</span> in block <span class="math inline">i</span> represents <span class="math inline">NM_i/(nm_i)</span> households in the population.</p>
 </section></section>
 <section>
-<section id="one-stage-cluster-sampling" class="title-slide slide level1 center" data-number="2">
-<h1><span class="header-section-number">2</span> One-Stage Cluster Sampling</h1>
+<section id="one-stage-cluster-sampling-with-equal-sizes" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> One-Stage Cluster Sampling with Equal Sizes</h1>
 
 </section>
-<section id="clusters-of-equal-sizes" class="slide level2">
-<h2>Clusters of Equal Sizes</h2>
-<p>Consider the simplest case, where every psu has the same number of ssus, <span class="math inline">M_i=m_i=M</span> (all ssus sampled, all clusters same size). This is uncommon in household surveys but does occur in agricultural and industrial sampling.</p>
-<p>Since we observe <em>every</em> ssu in each sampled psu, estimating population means or totals is simple: we treat the psu totals <span class="math inline">t_i</span> as the observations and ignore the individual elements — we effectively have an SRS of <span class="math inline">n</span> data points <span class="math inline">\{t_i, i\in\mathcal S\}</span>.</p>
-</section>
-<section id="estimators-for-clusters-of-equal-sizes" class="slide level2">
-<h2>Estimators for Clusters of Equal Sizes</h2>
-<p>Apply ordinary SRS results to the psu totals <span class="math inline">\{t_i\}</span>: <span class="math display">
-\bar t = \frac{\sum_{i\in\mathcal S} t_i}{n}, \qquad
-\hat t = N\bar t, \qquad
-s_t^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}\Big(t_i-\frac{\hat t}{N}\Big)^2
-</span> <span class="math display">
+<section id="treat-the-psu-totals-as-an-srs" class="slide level2">
+<h2>Treat the psu Totals as an SRS</h2>
+<p>Every psu has <span class="math inline">M_i = M</span> ssus, and all are observed (<span class="math inline">m_i = M</span>). The psu totals <span class="math inline">t_i</span> are known for the sampled psus, so we have <strong>an SRS of <span class="math inline">n</span> psu totals</strong> and the SRS formulas apply: <span class="math display">
+\hat t = N\bar t = \frac Nn \sum_{i\in\mathcal S} t_i, \qquad
 \text{SE}(\hat t) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}}
 </span></p>
-<p>To estimate <span class="math inline">\bar y_U</span>, divide the estimated total by the number of elements <span class="math inline">NM</span>: <span class="math display">
-\hat{\bar y} = \frac{\hat t}{NM}, \qquad
-\text{SE}(\hat{\bar y}) = \frac{1}{M}\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}} = \frac{\text{SE}(\bar t)}{M}
+<p>To estimate <span class="math inline">\bar y_U</span>, divide by the number of elements <span class="math inline">NM</span>: <span class="math display">
+\hat{\bar y} = \frac{\hat t}{NM} = \frac{\bar t}{M}, \qquad
+\text{SE}(\hat{\bar y}) = \frac{1}{M}\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}}
 </span></p>
 </section>
 <section id="example-gpa-in-a-dormitory" class="slide level2">
 <h2>Example: GPA in a Dormitory</h2>
-<p>A student wants to estimate the average GPA in his dormitory. Instead of listing all students and taking an SRS, he notices the dorm consists of 100 suites of 4 students each; he selects 5 suites at random and asks every person in those suites for their GPA:</p>
+<p>A dorm has <span class="math inline">N=100</span> suites of <span class="math inline">M=4</span> students. A student selects <span class="math inline">n=5</span> suites at random and asks every person in them for their GPA:</p>
 <table class="caption-top">
 <colgroup>
 <col style="width: 20%">
@@ -334,14 +348,12 @@ s_t^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}\Big(t_i-\frac{\hat t}{N}\Big)^2
 </tr>
 </tbody>
 </table>
-<p>The psus are the suites: <span class="math inline">N=100</span>, <span class="math inline">n=5</span>, <span class="math inline">M=4</span>.</p>
 </section>
 <section id="example-gpa-calculations" class="slide level2">
 <h2>Example: GPA Calculations</h2>
 <p><span class="math display">
 \begin{aligned}
 \hat t &amp;= \frac{100}{5}(12.16+11.36+8.96+12.96+11.08) = 1130.4 \\[4pt]
-\bar t &amp;= \frac{1130.4}{100} = 11.304 \\[4pt]
 s_t^2 &amp;= \frac{1}{4}\Big[(12.16-11.304)^2+\cdots+(11.08-11.304)^2\Big] = 2.256 \\[4pt]
 \hat{\bar y} &amp;= \frac{1130.4}{400} = 2.826 \\[4pt]
 \text{SE}(\hat{\bar y}) &amp;= \sqrt{\Big(1-\frac{5}{100}\Big)\frac{2.256}{(5)(4)^2}} = 0.164
@@ -356,18 +368,18 @@ s_t^2 &amp;= \frac{1}{4}\Big[(12.16-11.304)^2+\cdots+(11.08-11.304)^2\Big] = 2.2
 <p><strong>Note</strong></p>
 </div>
 <div class="callout-content">
-<p><span class="math inline">V(\hat{\bar y}) \ne \big(1-\tfrac{n}{N}\big)\dfrac{s_y^2}{n}</span>! We <em>cannot</em> apply the ordinary one-stage SRS variance formula treating all <span class="math inline">nM=20</span> students as an SRS from the dorm — the 20 students are not an SRS of individuals, since whole suites are selected together (an ICC/correlation effect).</p>
+<p>Treating the <span class="math inline">nM=20</span> students as an SRS of the 400 students would give <span class="math inline">\text{SE} = 0.112</span>, far too small. Whole suites are selected together, and students in the same suite tend to have similar GPAs.</p>
 </div>
 </div>
 </div>
 </section></section>
 <section>
-<section id="comparing-cluster-sampling-with-srs" class="title-slide slide level1 center" data-number="3">
-<h1><span class="header-section-number">3</span> Comparing Cluster Sampling with SRS</h1>
+<section id="comparing-cluster-sampling-with-srs" class="title-slide slide level1 center" data-number="4">
+<h1><span class="header-section-number">4</span> Comparing Cluster Sampling with SRS</h1>
 
 </section>
-<section id="population-anova-table-cluster-sampling-equal-sizes" class="slide level2">
-<h2>Population ANOVA Table (Cluster Sampling, Equal Sizes)</h2>
+<section id="population-anova-table-equal-sizes" class="slide level2">
+<h2>Population ANOVA Table (Equal Sizes)</h2>
 <table class="caption-top">
 <colgroup>
 <col style="width: 30%">
@@ -399,88 +411,68 @@ s_t^2 &amp;= \frac{1}{4}\Big[(12.16-11.304)^2+\cdots+(11.08-11.304)^2\Big] = 2.2
 </tr>
 </tbody>
 </table>
+<p><span class="math inline">\text{MSB} = \text{SSB}/(N-1)</span>, <span class="math inline">\quad\text{MSW} = \text{SSW}/(N(M-1))</span>.</p>
 </section>
-<section id="cluster-sampling-variance-depends-on-between-psu-variability" class="slide level2">
-<h2>Cluster Sampling Variance Depends on Between-psu Variability</h2>
-<p>Since each psu has the same size <span class="math inline">M</span>, <span class="math display">
-S_t^2 = \sum_{i=1}^N \frac{(t_i-\bar t_U)^2}{N-1} = \sum_{i=1}^N \frac{M^2(\bar y_{iU}-\bar y_U)^2}{N-1} = M(\text{MSB})
-</span> so for one-stage cluster sampling with equal-size clusters, <span class="math display">
-V(\hat t_{\text{cluster}}) = N^2\Big(1-\frac nN\Big)\frac{M(\text{MSB})}{n}
+<section id="the-variance-depends-on-between-psu-variability" class="slide level2">
+<h2>The Variance Depends on Between-psu Variability</h2>
+<p>Since <span class="math inline">t_i - \bar t_U = M(\bar y_{iU}-\bar y_U)</span>, <span class="math display">
+S_t^2 = \sum_{i=1}^N \frac{(t_i-\bar t_U)^2}{N-1} = M\cdot\text{MSB}
+\quad\Longrightarrow\quad
+V(\hat t_{\text{cluster}}) = N^2\Big(1-\frac nN\Big)\frac{M\cdot\text{MSB}}{n}
 </span></p>
-<p>If instead we took an SRS with <span class="math inline">nM</span> observations, the variance of the estimated total would have been <span class="math display">
+<p>An SRS of the same number <span class="math inline">nM</span> of elements would give <span class="math display">
 V(\hat t_{\text{SRS}}) = (NM)^2\Big(1-\frac{nM}{NM}\Big)\frac{S^2}{nM} = N^2\Big(1-\frac nN\Big)\frac{MS^2}{n}
 </span></p>
-<p>Comparing the two: if <span class="math inline">\text{MSB} &gt; S^2</span>, cluster sampling is <strong>less</strong> efficient (has larger variance) than an SRS of the same number of elements.</p>
+<p>So <span class="math inline">V(\hat t_{\text{cluster}})/V(\hat t_{\text{SRS}}) = \text{MSB}/S^2</span>: if <span class="math inline">\text{MSB} &gt; S^2</span>, cluster sampling is <strong>less</strong> efficient than an SRS of the same number of elements.</p>
 </section>
 <section id="intraclass-correlation-and-adjusted-r2" class="slide level2">
 <h2>Intraclass Correlation and Adjusted <span class="math inline">R^2</span></h2>
-<p>The <strong>intraclass correlation coefficient (ICC)</strong> measures how similar elements within the same cluster are: <span class="math display">
-\text{ICC} = 1 - \frac{M}{M-1}\cdot\frac{\text{SSW}}{\text{SSTO}}
+<p><strong>Intraclass correlation coefficient:</strong> <span class="math inline">\text{ICC} = 1 - \dfrac{M}{M-1}\cdot\dfrac{\text{SSW}}{\text{SSTO}}</span></p>
+<p><strong>Adjusted <span class="math inline">R^2</span></strong> (valid for unequal sizes too): <span class="math inline">R_a^2 = 1 - \dfrac{\text{MSW}}{S^2}</span></p>
+<p>For equal-sized clusters, <span class="math display">
+\frac{V(\hat t_{\text{cluster}})}{V(\hat t_{\text{SRS}})} = \frac{\text{MSB}}{S^2} = 1 + \frac{N(M-1)}{N-1}R_a^2 \approx 1 + (M-1)R_a^2
 </span></p>
-<p>An alternative measure, valid for unequal cluster sizes too, is the <strong>adjusted <span class="math inline">R^2</span></strong>: <span class="math display">
-R_a^2 = 1 - \frac{\text{MSW}}{S^2}
-</span></p>
-<p>For equal-sized clusters, the increase in variance from using cluster sampling (instead of an SRS of the same number of elements) is <span class="math display">
-\frac{V(\hat t_{\text{cluster}})}{V(\hat t_{\text{SRS}})} = \frac{\text{MSB}}{S^2} = 1 + \frac{N(M-1)}{N-1}R_a^2
-</span></p>
-<p>So <span class="math inline">(M-1)R_a^2</span> is (approximately) the <strong>percentage increase</strong> in variance from switching from SRS to cluster sampling.</p>
+<p>So <span class="math inline">(M-1)R_a^2</span> is approximately the proportional <strong>increase</strong> in variance from switching from SRS to cluster sampling. With <span class="math inline">M=21</span> and <span class="math inline">R_a^2=0.05</span>, the variance doubles.</p>
 </section>
 <section id="illustration-r_a2-large-vs.-small" class="slide level2">
 <h2>Illustration: <span class="math inline">R_a^2</span> Large vs.&nbsp;Small</h2>
 
-<img data-src="Lec06-cluster_files/figure-revealjs/fig-cluster-r2-1.png" id="fig-cluster-r2" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
-Figure&nbsp;1
-</p><p>When cluster means differ a lot relative to within-cluster spread (left), sampling only a few clusters misses most of the population’s variability — cluster sampling loses more information relative to an SRS of the same size.</p>
+<img data-src="Lec06-cluster_files/figure-revealjs/fig-cluster-r2-1.png" id="fig-cluster-r2" class="quarto-figure quarto-figure-center r-stretch" style="width:82.0%"><p class="caption">
+Figure&nbsp;5
+</p><p>When cluster means differ a lot relative to within-cluster spread (left), sampling only a few clusters misses most of the population’s variability. This is the mirror image of stratification, where a large <span class="math inline">R^2</span> <em>helps</em>.</p>
 </section></section>
 <section>
-<section id="clusters-of-unequal-sizes" class="title-slide slide level1 center" data-number="4">
-<h1><span class="header-section-number">4</span> Clusters of Unequal Sizes</h1>
+<section id="one-stage-cluster-sampling-with-unequal-sizes" class="title-slide slide level1 center" data-number="5">
+<h1><span class="header-section-number">5</span> One-Stage Cluster Sampling with Unequal Sizes</h1>
 
 </section>
-<section id="unbiased-estimation-for-unequal-size-clusters" class="slide level2">
-<h2>Unbiased Estimation for Unequal-Size Clusters</h2>
-<p>The unbiased estimator of the total is calculated exactly as before: <span class="math display">
+<section id="the-unbiased-estimator-and-its-problem" class="slide level2">
+<h2>The Unbiased Estimator and Its Problem</h2>
+<p>The unbiased estimator of the total is computed as before: <span class="math display">
 \hat t_{\text{unb}} = \frac Nn \sum_{i\in\mathcal S} t_i, \qquad
 \text{SE}(\hat t_{\text{unb}}) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}}
 </span></p>
-<p>The key difference from equal-size clusters: the variation among the individual cluster totals <span class="math inline">t_i</span> is likely to be <strong>large</strong> when the clusters have very different sizes <span class="math inline">M_i</span> — a psu with many ssus tends to have a large total just because it has more elements, inflating <span class="math inline">s_t^2</span> and hence the variance of <span class="math inline">\hat t_{\text{unb}}</span>, even before accounting for genuine differences in the <span class="math inline">y</span> values.</p>
+<p>But when the clusters have very different sizes <span class="math inline">M_i</span>, the totals <span class="math inline">t_i</span> vary a lot simply because big clusters have more elements. This inflates <span class="math inline">s_t^2</span>, and hence the variance of <span class="math inline">\hat t_{\text{unb}}</span>, even before any genuine differences in the <span class="math inline">y</span> values.</p>
 </section>
-<section id="ratio-estimation-for-the-ssu-level-mean" class="slide level2">
-<h2>Ratio Estimation for the ssu-Level Mean</h2>
-<p>Since <span class="math inline">\bar y_U = t/M_0</span>, and <span class="math inline">t_i</span> is usually roughly proportional to <span class="math inline">M_i</span> (bigger clusters tend to have bigger totals), estimating <span class="math inline">\bar y_U</span> is a form of <strong>ratio estimation</strong> with <span class="math inline">y_i=t_i</span> and <span class="math inline">x_i=M_i</span>: <span class="math display">
-\hat{\bar y}_r = \frac{\hat t_{\text{unb}}}{\hat M_0} = \frac{\sum_{i\in\mathcal S} t_i}{\sum_{i\in\mathcal S} M_i} = \frac{\sum_{i\in\mathcal S} M_i\bar y_i}{\sum_{i\in\mathcal S} M_i}
-</span></p>
-<p>This can be far more efficient than <span class="math inline">\hat t_{\text{unb}}/M_0</span>, since it uses the <em>ratio</em> of totals to sizes rather than the totals alone — removing the size-driven variability in <span class="math inline">t_i</span> that inflates <span class="math inline">s_t^2</span>.</p>
-</section>
-<section id="standard-error-of-the-ratio-estimator" class="slide level2">
-<h2>Standard Error of the Ratio Estimator</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-cluster-ratio" class="quarto-float quarto-figure quarto-figure-center" width="100%" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-cluster-ratio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="Lec06-cluster_files/figure-revealjs/fig-cluster-ratio-1.png" id="fig-cluster-ratio" class="quarto-figure quarto-figure-center" style="width:100.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-cluster-ratio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<p>From formula (4.10) applied with <span class="math inline">x_i=M_i</span>, <span class="math inline">y_i=t_i</span>, and writing <span class="math inline">\hat t_{ri}=\hat{\bar y}_r M_i</span> for the fitted value: <span class="math display">
-s_r^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}(t_i-\hat t_{ri})^2
+<section id="the-ratio-estimator-for-bar-y_u" class="slide level2">
+<h2>The Ratio Estimator for <span class="math inline">\bar y_U</span></h2>
+<p>Since <span class="math inline">\bar y_U = t/M_0</span> and <span class="math inline">t_i</span> is roughly proportional to <span class="math inline">M_i</span>, estimating <span class="math inline">\bar y_U</span> is <strong>ratio estimation</strong> with <span class="math inline">y_i = t_i</span> and <span class="math inline">x_i = M_i</span>: <span class="math display">
+\hat{\bar y}_r = \frac{\sum_{i\in\mathcal S} t_i}{\sum_{i\in\mathcal S} M_i} = \frac{\sum_{i\in\mathcal S} M_i\bar y_i}{\sum_{i\in\mathcal S} M_i}
 </span> <span class="math display">
-\text{SE}(\hat{\bar y}_r) = \sqrt{\Big(1-\frac nN\Big)\frac{s_r^2}{n\bar M^2}}
-</span> where <span class="math inline">\bar M=\sum_{i\in\mathcal S}M_i/n</span>. The residuals <span class="math inline">t_i - \hat t_{ri}</span> (dotted vertical segments) are typically far less variable than <span class="math inline">t_i</span> itself.</p>
-</div></div>
+\text{SE}(\hat{\bar y}_r) = \sqrt{\Big(1-\frac nN\Big)\frac{s_e^2}{n\bar M^2}}, \qquad
+s_e^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}e_i^2, \quad e_i = t_i-\hat{\bar y}_r M_i
+</span> where <span class="math inline">\bar M=\sum_{i\in\mathcal S}M_i/n</span>. The ratio estimator does not need <span class="math inline">M_0</span>.</p>
+</section>
+<section id="why-the-ratio-estimator-is-better" class="slide level2">
+<h2>Why the Ratio Estimator Is Better</h2>
+
+<img data-src="Lec06-cluster_files/figure-revealjs/fig-cluster-ratio-1.png" id="fig-cluster-ratio" class="quarto-figure quarto-figure-center r-stretch" style="width:62.0%"><p class="caption">
+Figure&nbsp;6
+</p><p>The unbiased estimator’s SE depends on the spread of <span class="math inline">t_i</span> about the horizontal line <span class="math inline">\bar t</span> (blue), which is large because the sizes vary. The ratio estimator’s SE depends only on the residuals <span class="math inline">e_i</span> about the line <span class="math inline">t = \hat{\bar y}_r M</span> (dotted), which are much smaller.</p>
 </section>
 <section id="example-algebra-class-test-scores" class="slide level2">
 <h2>Example: Algebra Class Test Scores</h2>
-<p>One-stage cluster samples are common in educational studies, since students are naturally clustered into classrooms or schools. From a population of 187 high-school algebra classes, an investigator takes an SRS of <span class="math inline">n=12</span> classes and tests every student in them for function knowledge. As with ordinary ratio estimation, <span class="math inline">\hat t_{ri}=\hat{\bar y}_r M_i</span> is the fitted cluster total and <span class="math inline">e_i=t_i-\hat t_{ri}</span> the residual from the line <span class="math inline">t=\hat{\bar y}_r M</span>:</p>
+<p>One-stage cluster samples are common in educational studies, since students are naturally clustered into classrooms. From a population of 187 high-school algebra classes, an investigator takes an SRS of <span class="math inline">n=12</span> classes and tests every student in them for function knowledge. The classes are the psus, of different sizes <span class="math inline">M_i</span>.</p>
 </section>
 <section id="example-algebra-class-test-scores-calculation" class="slide level2 smaller">
 <h2>Example: Algebra Class Test Scores (Calculation)</h2>
@@ -494,23 +486,23 @@ Table&nbsp;1
 </figcaption>
 <div aria-describedby="tbl-algebra-spreadsheet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="mchvmqefqz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mchvmqefqz table {
+<div id="cdjhttvecd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#cdjhttvecd table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#mchvmqefqz thead, #mchvmqefqz tbody, #mchvmqefqz tfoot, #mchvmqefqz tr, #mchvmqefqz td, #mchvmqefqz th {
+#cdjhttvecd thead, #cdjhttvecd tbody, #cdjhttvecd tfoot, #cdjhttvecd tr, #cdjhttvecd td, #cdjhttvecd th {
   border-style: none;
 }
 
-#mchvmqefqz p {
+#cdjhttvecd p {
   margin: 0;
   padding: 0;
 }
 
-#mchvmqefqz .gt_table {
+#cdjhttvecd .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -536,12 +528,12 @@ Table&nbsp;1
   border-left-color: #D3D3D3;
 }
 
-#mchvmqefqz .gt_caption {
+#cdjhttvecd .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#mchvmqefqz .gt_title {
+#cdjhttvecd .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -553,7 +545,7 @@ Table&nbsp;1
   border-bottom-width: 0;
 }
 
-#mchvmqefqz .gt_subtitle {
+#cdjhttvecd .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -565,7 +557,7 @@ Table&nbsp;1
   border-top-width: 0;
 }
 
-#mchvmqefqz .gt_heading {
+#cdjhttvecd .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -577,13 +569,13 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#mchvmqefqz .gt_bottom_border {
+#cdjhttvecd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mchvmqefqz .gt_col_headings {
+#cdjhttvecd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -598,7 +590,7 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#mchvmqefqz .gt_col_heading {
+#cdjhttvecd .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -618,7 +610,7 @@ Table&nbsp;1
   overflow-x: hidden;
 }
 
-#mchvmqefqz .gt_column_spanner_outer {
+#cdjhttvecd .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -630,15 +622,15 @@ Table&nbsp;1
   padding-right: 4px;
 }
 
-#mchvmqefqz .gt_column_spanner_outer:first-child {
+#cdjhttvecd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mchvmqefqz .gt_column_spanner_outer:last-child {
+#cdjhttvecd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mchvmqefqz .gt_column_spanner {
+#cdjhttvecd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -650,11 +642,11 @@ Table&nbsp;1
   width: 100%;
 }
 
-#mchvmqefqz .gt_spanner_row {
+#cdjhttvecd .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#mchvmqefqz .gt_group_heading {
+#cdjhttvecd .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -680,7 +672,7 @@ Table&nbsp;1
   text-align: left;
 }
 
-#mchvmqefqz .gt_empty_group_heading {
+#cdjhttvecd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -695,15 +687,15 @@ Table&nbsp;1
   vertical-align: middle;
 }
 
-#mchvmqefqz .gt_from_md > :first-child {
+#cdjhttvecd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mchvmqefqz .gt_from_md > :last-child {
+#cdjhttvecd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mchvmqefqz .gt_row {
+#cdjhttvecd .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -722,7 +714,7 @@ Table&nbsp;1
   overflow-x: hidden;
 }
 
-#mchvmqefqz .gt_stub {
+#cdjhttvecd .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -735,7 +727,7 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#mchvmqefqz .gt_stub_row_group {
+#cdjhttvecd .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -749,15 +741,15 @@ Table&nbsp;1
   vertical-align: top;
 }
 
-#mchvmqefqz .gt_row_group_first td {
+#cdjhttvecd .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mchvmqefqz .gt_row_group_first th {
+#cdjhttvecd .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#mchvmqefqz .gt_summary_row {
+#cdjhttvecd .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -767,16 +759,16 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#mchvmqefqz .gt_first_summary_row {
+#cdjhttvecd .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mchvmqefqz .gt_first_summary_row.thick {
+#cdjhttvecd .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mchvmqefqz .gt_last_summary_row {
+#cdjhttvecd .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -786,7 +778,7 @@ Table&nbsp;1
   border-bottom-color: #D3D3D3;
 }
 
-#mchvmqefqz .gt_grand_summary_row {
+#cdjhttvecd .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -796,7 +788,7 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#mchvmqefqz .gt_first_grand_summary_row {
+#cdjhttvecd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -806,7 +798,7 @@ Table&nbsp;1
   border-top-color: #D3D3D3;
 }
 
-#mchvmqefqz .gt_last_grand_summary_row_top {
+#cdjhttvecd .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -816,11 +808,11 @@ Table&nbsp;1
   border-bottom-color: #D3D3D3;
 }
 
-#mchvmqefqz .gt_striped {
+#cdjhttvecd .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mchvmqefqz .gt_table_body {
+#cdjhttvecd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -829,7 +821,7 @@ Table&nbsp;1
   border-bottom-color: #D3D3D3;
 }
 
-#mchvmqefqz .gt_footnotes {
+#cdjhttvecd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -843,7 +835,7 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#mchvmqefqz .gt_footnote {
+#cdjhttvecd .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -852,7 +844,7 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#mchvmqefqz .gt_sourcenotes {
+#cdjhttvecd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -866,7 +858,7 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#mchvmqefqz .gt_sourcenote {
+#cdjhttvecd .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -874,72 +866,72 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#mchvmqefqz .gt_left {
+#cdjhttvecd .gt_left {
   text-align: left;
 }
 
-#mchvmqefqz .gt_center {
+#cdjhttvecd .gt_center {
   text-align: center;
 }
 
-#mchvmqefqz .gt_right {
+#cdjhttvecd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mchvmqefqz .gt_font_normal {
+#cdjhttvecd .gt_font_normal {
   font-weight: normal;
 }
 
-#mchvmqefqz .gt_font_bold {
+#cdjhttvecd .gt_font_bold {
   font-weight: bold;
 }
 
-#mchvmqefqz .gt_font_italic {
+#cdjhttvecd .gt_font_italic {
   font-style: italic;
 }
 
-#mchvmqefqz .gt_super {
+#cdjhttvecd .gt_super {
   font-size: 65%;
 }
 
-#mchvmqefqz .gt_footnote_marks {
+#cdjhttvecd .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#mchvmqefqz .gt_asterisk {
+#cdjhttvecd .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mchvmqefqz .gt_indent_1 {
+#cdjhttvecd .gt_indent_1 {
   text-indent: 5px;
 }
 
-#mchvmqefqz .gt_indent_2 {
+#cdjhttvecd .gt_indent_2 {
   text-indent: 10px;
 }
 
-#mchvmqefqz .gt_indent_3 {
+#cdjhttvecd .gt_indent_3 {
   text-indent: 15px;
 }
 
-#mchvmqefqz .gt_indent_4 {
+#cdjhttvecd .gt_indent_4 {
   text-indent: 20px;
 }
 
-#mchvmqefqz .gt_indent_5 {
+#cdjhttvecd .gt_indent_5 {
   text-indent: 25px;
 }
 
-#mchvmqefqz .katex-display {
+#cdjhttvecd .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#mchvmqefqz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#cdjhttvecd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -952,7 +944,7 @@ Table&nbsp;1
 <th id="Mi" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">M_i</span></th>
 <th id="ybari" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\bar y_i</span></th>
 <th id="ti" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">t_i</span></th>
-<th id="yhat" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\hat t_{ri}</span></th>
+<th id="yhat" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\hat{\bar y}_r M_i</span></th>
 <th id="ei" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">e_i</span></th>
 <th id="ei2" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">e_i^2</span></th>
 </tr>
@@ -1100,7 +1092,7 @@ Table&nbsp;1
 </div><div class="column" style="width:40%; font-size: 32px;">
 <p><br>
 </p>
-<p>The <strong>Sum</strong> row gives <span class="math inline">\sum M_i</span>, <span class="math inline">\sum t_i</span>, and <span class="math inline">\sum e_i^2</span> directly: <span class="math display">
+<p>The <strong>Sum</strong> row gives <span class="math inline">\sum M_i</span>, <span class="math inline">\sum t_i</span>, and <span class="math inline">\sum e_i^2</span>: <span class="math display">
 \begin{aligned}
 \hat{\bar y}_r &amp;= \frac{\sum t_i}{\sum M_i} = \frac{18{,}708}{299} = 62.57 \\[4pt]
 s_e^2 &amp;= \frac{\sum e_i^2}{n-1} = \frac{194{,}827}{11} = 17{,}711.5 \\[4pt]
@@ -1111,108 +1103,56 @@ s_e^2 &amp;= \frac{\sum e_i^2}{n-1} = \frac{194{,}827}{11} = 17{,}711.5 \\[4pt]
 </div></div>
 </section></section>
 <section>
-<section id="a-toy-example-why-unbiased-estimation-can-be-bad" class="title-slide slide level1 center" data-number="5">
-<h1><span class="header-section-number">5</span> A Toy Example: Why Unbiased Estimation Can Be Bad</h1>
-
-</section>
-<section id="setup-estimating-legs-per-dog" class="slide level2">
-<h2>Setup: Estimating Legs per Dog</h2>
-<p>Consider a whimsical population of just <span class="math inline">N=2</span> “clusters” (kennels) of dogs — kennel <span class="math inline">A</span> with <span class="math inline">M_A=30</span> dogs, and kennel <span class="math inline">B</span> with <span class="math inline">M_B=10</span> dogs. Every dog has exactly 4 legs, so the true population mean is trivially <span class="math inline">\bar y_U = 4</span> legs/dog. We take a one-stage cluster sample of <span class="math inline">n=1</span> kennel (each chosen with probability <span class="math inline">1/2</span>), observing all dogs in it.</p>
-</section>
-<section id="unbiased-estimation" class="slide level2">
-<h2>Unbiased Estimation</h2>
-<p><strong>Data Set 1: Kennel <span class="math inline">A</span> Selected</strong></p>
-<p><span class="math display">
-t_1 = 30\times 4 = 120, \qquad
-\hat t_{\text{unb}} = \frac{2}{1}(120) = 240, \qquad
-\hat{\bar y}_{\text{unb}} = \frac{240}{30+10} = 6
-</span></p>
-<p><strong>Data Set 2: Kennel <span class="math inline">B</span> Selected</strong></p>
-<p><span class="math display">
-t_2 = 10\times 4 = 40, \qquad
-\hat t_{\text{unb}} = \frac{2}{1}(40) = 80, \qquad
-\hat{\bar y}_{\text{unb}} = \frac{80}{30+10} = 2
-</span></p>
-</section>
-<section id="hatbar-y_textunb-is-unbiased-but-highly-variable" class="slide level2">
-<h2><span class="math inline">\hat{\bar y}_{\text{unb}}</span> Is Unbiased but Highly Variable</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th style="text-align: center;"><span class="math inline">\hat{\bar y}_{\text{unb}}</span></th>
-<th style="text-align: center;">6</th>
-<th style="text-align: center;">2</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">Probability</td>
-<td style="text-align: center;"><span class="math inline">1/2</span></td>
-<td style="text-align: center;"><span class="math inline">1/2</span></td>
-</tr>
-</tbody>
-</table>
-<p><span class="math display">
-E[\hat{\bar y}_{\text{unb}}] = 6\times\tfrac12 + 2\times\tfrac12 = 4 = \bar y_U \quad\text{(unbiased!)}
-</span></p>
-<p>But <span class="math inline">\hat{\bar y}_{\text{unb}}</span> is <em>never</em> actually equal to 4 — it is always off by <span class="math inline">\pm 2</span>, because <span class="math inline">V(t_i)</span> is huge (kennel sizes 30 vs.&nbsp;10 are very different), even though every single dog has exactly 4 legs.</p>
-</section>
-<section id="the-ratio-estimator-fixes-this" class="slide level2">
-<h2>The Ratio Estimator Fixes This</h2>
-<p>For kennel <span class="math inline">A</span>: <span class="math inline">\hat{\bar y}_r = \dfrac{30\times4}{30}=4</span>. For kennel <span class="math inline">B</span>: <span class="math inline">\hat{\bar y}_r = \dfrac{10\times4}{10}=4</span>.</p>
-<p>Both possible samples give <strong>exactly</strong> <span class="math inline">\hat{\bar y}_r=4=\bar y_U</span>, so <span class="math display">
-V(\hat{\bar y}_r) = 0
-</span></p>
-<p>The ratio estimator completely cancels out the cluster-size variability that made <span class="math inline">\hat{\bar y}_{\text{unb}}</span> so unreliable — this is why ratio estimation (not unbiased estimation) is the standard approach for unequal-size clusters.</p>
-</section></section>
-<section>
 <section id="two-stage-cluster-sampling" class="title-slide slide level1 center" data-number="6">
 <h1><span class="header-section-number">6</span> Two-Stage Cluster Sampling</h1>
 
 </section>
 <section id="what-is-two-stage-cluster-sampling" class="slide level2">
 <h2>What Is Two-Stage Cluster Sampling?</h2>
-<p>When sampling every ssu in a selected psu is too costly, we can subsample:</p>
+<p>When observing every ssu in a selected psu is too costly (and elements within a psu are similar), we subsample:</p>
 <ol type="1">
-<li>Select an SRS <span class="math inline">\mathcal S</span> of <span class="math inline">n</span> psus from the population of <span class="math inline">N</span> psus.</li>
-<li>Select an SRS of <span class="math inline">m_i</span> ssus from each selected psu <span class="math inline">i</span> (this sample is <span class="math inline">\mathcal S_i</span>).</li>
+<li>Select an SRS <span class="math inline">\mathcal S</span> of <span class="math inline">n</span> psus from the <span class="math inline">N</span> psus.</li>
+<li>Select an SRS <span class="math inline">\mathcal S_i</span> of <span class="math inline">m_i</span> ssus from each selected psu <span class="math inline">i</span>.</li>
 </ol>
-<p>Since we no longer observe every ssu in a sampled psu, we must <strong>estimate</strong> each psu total: <span class="math display">
+<p>Since we no longer observe every ssu in a sampled psu, we <strong>estimate</strong> each psu total: <span class="math display">
 \hat t_i = \sum_{j\in\mathcal S_i} \frac{M_i}{m_i}y_{ij} = M_i\bar y_i
 </span></p>
 </section>
-<section id="unbiased-estimator-of-the-total" class="slide level2">
-<h2>Unbiased Estimator of the Total</h2>
-<p><span class="math display">
-\hat t_{\text{unb}} = \frac Nn \sum_{i\in\mathcal S} \hat t_i = \sum_{i\in\mathcal S}\sum_{j\in\mathcal S_i} w_{ij}y_{ij}, \qquad w_{ij} = \frac{NM_i}{nm_i}
-</span></p>
-<p>The variance now has <strong>two</strong> sources: variability <em>between</em> psus, and variability from subsampling <em>within</em> each sampled psu: <span class="math display">
-V(\hat t_{\text{unb}}) = N^2\Big(1-\frac nN\Big)\frac{S_t^2}{n}
-+ \frac Nn \sum_{i=1}^N \Big(1-\frac{m_i}{M_i}\Big)M_i^2\frac{S_i^2}{m_i}
-</span></p>
-<p>The first term is exactly the one-stage cluster variance; the second term is the extra cost of not observing every ssu in each sampled psu.</p>
-</section>
-<section id="ratio-estimation-for-two-stage-sampling" class="slide level2">
-<h2>Ratio Estimation for Two-Stage Sampling</h2>
-<p>As before, estimating <span class="math inline">\bar y_U</span> is a ratio estimation problem with <span class="math inline">y_i=\hat t_i=M_i\bar y_i</span> and <span class="math inline">x_i=M_i</span>: <span class="math display">
+<section id="the-ratio-estimator" class="slide level2">
+<h2>The Ratio Estimator</h2>
+<p>As in one-stage sampling, <span class="math inline">\bar y_U</span> is estimated by a ratio estimator, now with the estimated psu totals <span class="math inline">\hat t_i</span>: <span class="math display">
 \hat{\bar y}_r = \frac{\sum_{i\in\mathcal S}\hat t_i}{\sum_{i\in\mathcal S}M_i} = \frac{\sum_{i\in\mathcal S}M_i\bar y_i}{\sum_{i\in\mathcal S}M_i}
+</span> Its estimated variance is a weighted sum of two variances, with weights <span class="math inline">1 - \frac nN</span> and <span class="math inline">\frac nN</span>: <span class="math display">
+\hat V(\hat{\bar y}_r) = \Big(1-\frac nN\Big)\,\hat V_{\text{ratio}} + \frac nN\,\hat V_{\text{str}},
 </span> <span class="math display">
-\hat V(\hat{\bar y}_r) = \frac{1}{\bar M^2}\Big(1-\frac nN\Big)\frac{s_r^2}{n}
-+ \frac{1}{nN\bar M^2}\sum_{i\in\mathcal S}M_i^2\Big(1-\frac{m_i}{M_i}\Big)\frac{s_i^2}{m_i}
-</span> where <span class="math inline">s_r^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}(M_i\bar y_i - M_i\hat{\bar y}_r)^2</span>. The second term is often negligible compared with the first.</p>
+\hat V_{\text{ratio}} = \frac{s_e^2}{n\bar M^2}, \qquad
+\hat V_{\text{str}} = \sum_{i\in\mathcal S}\Big(\frac{M_i}{M}\Big)^2\Big(1-\frac{m_i}{M_i}\Big)\frac{s_i^2}{m_i},
+</span> with <span class="math inline">e_i = \hat t_i - \hat{\bar y}_r M_i</span>, <span class="math inline">\;M = \sum_{i\in\mathcal S}M_i = n\bar M</span>, and <span class="math inline">s_i^2</span> the sample variance of the <span class="math inline">m_i</span> elements measured in psu <span class="math inline">i</span>.</p>
+</section>
+<section id="reading-the-two-pieces" class="slide level2">
+<h2>Reading the Two Pieces</h2>
+<ul>
+<li><span class="math inline">\hat V_{\text{ratio}}</span> is the variance of a <strong>ratio</strong> estimate computed from the <span class="math inline">n</span> estimated psu totals, as if the psus were drawn with replacement (between-psu variability).</li>
+<li><span class="math inline">\hat V_{\text{str}}</span> is the variance of a <strong>stratified</strong> sample in which the <span class="math inline">n</span> sampled psus are the strata, of sizes <span class="math inline">M_i</span> with <span class="math inline">m_i</span> units sampled (within-psu variability).</li>
+<li>The weights move from one to the other as the psu sampling fraction <span class="math inline">n/N</span> grows:
+<ul>
+<li><strong><span class="math inline">N</span> unknown or very large</strong> (<span class="math inline">n/N \to 0</span>): only <span class="math inline">\hat V_{\text{ratio}}</span> counts.</li>
+<li><strong>All psus sampled</strong> (<span class="math inline">n = N</span>): only <span class="math inline">\hat V_{\text{str}}</span> counts; the design <em>is</em> stratified sampling.</li>
+<li><strong>One-stage</strong> (<span class="math inline">m_i = M_i</span>): <span class="math inline">\hat V_{\text{str}} = 0</span>, leaving the one-stage formula <span class="math inline">\big(1-\frac nN\big)\frac{s_e^2}{n\bar M^2}</span>.</li>
+</ul></li>
+</ul>
 </section>
 <section id="example-american-coot-egg-volumes" class="slide level2">
 <h2>Example: American Coot Egg Volumes</h2>
-<p>Data from Arnold’s (1991) study of egg size and volume of American Coot eggs in Minnedosa, Manitoba. We look at the volumes of a subsample of eggs within clutches (nests) having at least two eggs measured — the clutches are the psus, and eggs within a clutch are the ssus.</p>
-</section>
-<section id="figure-egg-volume-by-clutch" class="slide level2">
-<h2>Figure: Egg Volume by Clutch</h2>
+<p>Data from Arnold’s (1991) study of the size and volume of American coot eggs in Minnedosa, Manitoba. The clutches (nests) are the psus and the eggs within a clutch are the ssus. From each of <span class="math inline">n = 184</span> clutches, two eggs were measured.</p>
 
-<img data-src="figures/coots-egg-volume.png" class="quarto-figure quarto-figure-center r-stretch" style="width:95.0%"><p>The right panel orders clutches by their mean volume, connecting the two measured eggs in each clutch — there is wide variation between clutches (clutch means climb steadily left to right), but the two eggs <em>within</em> a clutch usually agree closely. This indicates eggs within the same clutch are much more similar than two randomly chosen eggs from different clutches.</p>
+<img data-src="Lec06-cluster_files/figure-revealjs/fig-coots-volume-1.png" id="fig-coots-volume" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
+Figure&nbsp;7
+</p><p>Clutch means vary widely (right panel, clutches ranked by mean), but the two eggs <em>within</em> a clutch usually agree closely.</p>
 </section>
 <section id="example-coots-spreadsheet-calculation" class="slide level2">
 <h2>Example: Coots — Spreadsheet Calculation</h2>
-<p>As in the algebra example, <span class="math inline">\hat t_{ri}=\hat{\bar y}_r M_i</span> and <span class="math inline">e_i=\hat t_i-\hat t_{ri}</span> come from the ratio line fit to <span class="math inline">(\hat t_i, M_i)</span> across all <span class="math inline">n=184</span> clutches (scroll for more rows):</p>
+<p><span class="math inline">\hat t_i = M_i\bar y_i</span>, and <span class="math inline">e_i=\hat t_i-\hat{\bar y}_r M_i</span> are the residuals from the ratio line, across all <span class="math inline">n=184</span> clutches (scroll for more rows):</p>
 <div class="cell" data-layout-align="center">
 <div id="tbl-coots-spreadsheet" class="cell quarto-float quarto-figure quarto-figure-center" data-layout-align="center">
 <figure class="quarto-float quarto-float-tbl">
@@ -1221,23 +1161,23 @@ Table&nbsp;2
 </figcaption>
 <div aria-describedby="tbl-coots-spreadsheet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="vpvnlcueor" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:600px;">
-<style>#vpvnlcueor table {
+<div id="ybzwjbnfpq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:600px;">
+<style>#ybzwjbnfpq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vpvnlcueor thead, #vpvnlcueor tbody, #vpvnlcueor tfoot, #vpvnlcueor tr, #vpvnlcueor td, #vpvnlcueor th {
+#ybzwjbnfpq thead, #ybzwjbnfpq tbody, #ybzwjbnfpq tfoot, #ybzwjbnfpq tr, #ybzwjbnfpq td, #ybzwjbnfpq th {
   border-style: none;
 }
 
-#vpvnlcueor p {
+#ybzwjbnfpq p {
   margin: 0;
   padding: 0;
 }
 
-#vpvnlcueor .gt_table {
+#ybzwjbnfpq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1263,12 +1203,12 @@ Table&nbsp;2
   border-left-color: #D3D3D3;
 }
 
-#vpvnlcueor .gt_caption {
+#ybzwjbnfpq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vpvnlcueor .gt_title {
+#ybzwjbnfpq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1280,7 +1220,7 @@ Table&nbsp;2
   border-bottom-width: 0;
 }
 
-#vpvnlcueor .gt_subtitle {
+#ybzwjbnfpq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1292,7 +1232,7 @@ Table&nbsp;2
   border-top-width: 0;
 }
 
-#vpvnlcueor .gt_heading {
+#ybzwjbnfpq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1304,13 +1244,13 @@ Table&nbsp;2
   border-right-color: #D3D3D3;
 }
 
-#vpvnlcueor .gt_bottom_border {
+#ybzwjbnfpq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vpvnlcueor .gt_col_headings {
+#ybzwjbnfpq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1325,7 +1265,7 @@ Table&nbsp;2
   border-right-color: #D3D3D3;
 }
 
-#vpvnlcueor .gt_col_heading {
+#ybzwjbnfpq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1345,7 +1285,7 @@ Table&nbsp;2
   overflow-x: hidden;
 }
 
-#vpvnlcueor .gt_column_spanner_outer {
+#ybzwjbnfpq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1357,15 +1297,15 @@ Table&nbsp;2
   padding-right: 4px;
 }
 
-#vpvnlcueor .gt_column_spanner_outer:first-child {
+#ybzwjbnfpq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vpvnlcueor .gt_column_spanner_outer:last-child {
+#ybzwjbnfpq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vpvnlcueor .gt_column_spanner {
+#ybzwjbnfpq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1377,11 +1317,11 @@ Table&nbsp;2
   width: 100%;
 }
 
-#vpvnlcueor .gt_spanner_row {
+#ybzwjbnfpq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vpvnlcueor .gt_group_heading {
+#ybzwjbnfpq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1407,7 +1347,7 @@ Table&nbsp;2
   text-align: left;
 }
 
-#vpvnlcueor .gt_empty_group_heading {
+#ybzwjbnfpq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1422,15 +1362,15 @@ Table&nbsp;2
   vertical-align: middle;
 }
 
-#vpvnlcueor .gt_from_md > :first-child {
+#ybzwjbnfpq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vpvnlcueor .gt_from_md > :last-child {
+#ybzwjbnfpq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vpvnlcueor .gt_row {
+#ybzwjbnfpq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1449,7 +1389,7 @@ Table&nbsp;2
   overflow-x: hidden;
 }
 
-#vpvnlcueor .gt_stub {
+#ybzwjbnfpq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1462,7 +1402,7 @@ Table&nbsp;2
   padding-right: 5px;
 }
 
-#vpvnlcueor .gt_stub_row_group {
+#ybzwjbnfpq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1476,15 +1416,15 @@ Table&nbsp;2
   vertical-align: top;
 }
 
-#vpvnlcueor .gt_row_group_first td {
+#ybzwjbnfpq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vpvnlcueor .gt_row_group_first th {
+#ybzwjbnfpq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vpvnlcueor .gt_summary_row {
+#ybzwjbnfpq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1494,16 +1434,16 @@ Table&nbsp;2
   padding-right: 5px;
 }
 
-#vpvnlcueor .gt_first_summary_row {
+#ybzwjbnfpq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vpvnlcueor .gt_first_summary_row.thick {
+#ybzwjbnfpq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vpvnlcueor .gt_last_summary_row {
+#ybzwjbnfpq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1513,7 +1453,7 @@ Table&nbsp;2
   border-bottom-color: #D3D3D3;
 }
 
-#vpvnlcueor .gt_grand_summary_row {
+#ybzwjbnfpq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1523,7 +1463,7 @@ Table&nbsp;2
   padding-right: 5px;
 }
 
-#vpvnlcueor .gt_first_grand_summary_row {
+#ybzwjbnfpq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1533,7 +1473,7 @@ Table&nbsp;2
   border-top-color: #D3D3D3;
 }
 
-#vpvnlcueor .gt_last_grand_summary_row_top {
+#ybzwjbnfpq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1543,11 +1483,11 @@ Table&nbsp;2
   border-bottom-color: #D3D3D3;
 }
 
-#vpvnlcueor .gt_striped {
+#ybzwjbnfpq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vpvnlcueor .gt_table_body {
+#ybzwjbnfpq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1556,7 +1496,7 @@ Table&nbsp;2
   border-bottom-color: #D3D3D3;
 }
 
-#vpvnlcueor .gt_footnotes {
+#ybzwjbnfpq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1570,7 +1510,7 @@ Table&nbsp;2
   border-right-color: #D3D3D3;
 }
 
-#vpvnlcueor .gt_footnote {
+#ybzwjbnfpq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1579,7 +1519,7 @@ Table&nbsp;2
   padding-right: 5px;
 }
 
-#vpvnlcueor .gt_sourcenotes {
+#ybzwjbnfpq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1593,7 +1533,7 @@ Table&nbsp;2
   border-right-color: #D3D3D3;
 }
 
-#vpvnlcueor .gt_sourcenote {
+#ybzwjbnfpq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1601,72 +1541,72 @@ Table&nbsp;2
   padding-right: 5px;
 }
 
-#vpvnlcueor .gt_left {
+#ybzwjbnfpq .gt_left {
   text-align: left;
 }
 
-#vpvnlcueor .gt_center {
+#ybzwjbnfpq .gt_center {
   text-align: center;
 }
 
-#vpvnlcueor .gt_right {
+#ybzwjbnfpq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vpvnlcueor .gt_font_normal {
+#ybzwjbnfpq .gt_font_normal {
   font-weight: normal;
 }
 
-#vpvnlcueor .gt_font_bold {
+#ybzwjbnfpq .gt_font_bold {
   font-weight: bold;
 }
 
-#vpvnlcueor .gt_font_italic {
+#ybzwjbnfpq .gt_font_italic {
   font-style: italic;
 }
 
-#vpvnlcueor .gt_super {
+#ybzwjbnfpq .gt_super {
   font-size: 65%;
 }
 
-#vpvnlcueor .gt_footnote_marks {
+#ybzwjbnfpq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vpvnlcueor .gt_asterisk {
+#ybzwjbnfpq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vpvnlcueor .gt_indent_1 {
+#ybzwjbnfpq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vpvnlcueor .gt_indent_2 {
+#ybzwjbnfpq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vpvnlcueor .gt_indent_3 {
+#ybzwjbnfpq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vpvnlcueor .gt_indent_4 {
+#ybzwjbnfpq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vpvnlcueor .gt_indent_5 {
+#ybzwjbnfpq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vpvnlcueor .katex-display {
+#ybzwjbnfpq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vpvnlcueor div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ybzwjbnfpq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1679,7 +1619,7 @@ Table&nbsp;2
 <th id="Mi" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">M_i</span></th>
 <th id="ybari" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\bar y_i</span></th>
 <th id="ti" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\hat t_i</span></th>
-<th id="yhat" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\hat t_{ri}</span></th>
+<th id="yhat" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\hat{\bar y}_r M_i</span></th>
 <th id="ei" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">e_i</span></th>
 <th id="ei2" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">e_i^2</span></th>
 </tr>
@@ -3550,11 +3490,10 @@ Table&nbsp;2
 <p>The <strong>Sum</strong> row gives <span class="math inline">\sum M_i</span>, <span class="math inline">\sum \hat t_i</span>, and <span class="math inline">\sum e_i^2</span>: <span class="math display">
 \hat{\bar y}_r = \frac{\sum \hat t_i}{\sum M_i} = \frac{4375.95}{1757} = 2.49,
 \qquad
-s_r^2 = \frac{\sum e_i^2}{n-1} = \frac{11{,}439.58}{183} = 62.51,
-</span> <span class="math display">
+s_e^2 = \frac{\sum e_i^2}{n-1} = \frac{11{,}439.58}{183} = 62.51,
 \qquad \bar M = \frac{1757}{184}=9.549
 </span></p>
-<p>Since the total number of clutches <span class="math inline">N</span> is unknown but presumably very large, the psu-level fpc <span class="math inline">(1-n/N)\approx 1</span>, and the second (within-clutch) variance term is negligible relative to the first: <span class="math display">
+<p>The number of clutches <span class="math inline">N</span> is unknown but presumably very large, so <span class="math inline">(1-n/N)\approx 1</span> and the within-clutch piece is negligible: <span class="math display">
 \text{SE}(\hat{\bar y}_r) = \frac{1}{9.549}\sqrt{\frac{62.51}{184}} = 0.061,
 \qquad
 \widehat{\text{CV}}(\hat{\bar y}_r) = \frac{0.061}{2.49} = 0.0245

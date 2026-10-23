@@ -105,3 +105,137 @@ plot_design_cluster <- function (seed = 4) with_seed (seed, {
     plot_groups (design_clus_pop, srs_within (design_clus_pop, chosen, 20), "Cluster",
                  shade = chosen)
 })
+
+## the cell diagram of the notation: clusters are columns of cells y_ij, with
+## t_i on top and M_i at the bottom; `sampled = TRUE` shades the sampled
+## clusters and highlights the subsampled cells
+cluster_cells <- function (sampled = FALSE)
+{
+    vd <- "vdots"
+    cols <- list (
+        list (rows = list (quote (y[11]), quote (y[12]), quote (y[13]), vd, quote (y[1*M[1]])),
+              top = quote (t[1]), bot = quote (M[1]), m = quote (m[1]), sel = FALSE, pick = integer (0)),
+        list (rows = list (quote (y[21]), quote (y[22]), vd, quote (y[2*M[2]])),
+              top = quote (t[2]), bot = quote (M[2]), m = quote (m[2]), sel = TRUE, pick = c (1, 4)),
+        "hdots",
+        list (rows = list (quote (y[i*1]), quote (y[i*2]), vd, quote (y[i*j]), vd, quote (y[i*M[i]])),
+              top = quote (t[i]), bot = quote (M[i]), m = quote (m[i]), sel = TRUE, pick = c (2, 4)),
+        "hdots",
+        list (rows = list (quote (y[N*1]), quote (y[N*2]), quote (y[N*3]), vd, quote (y[N*M[N]])),
+              top = quote (t[N]), bot = quote (M[N]), m = quote (m[N]), sel = FALSE, pick = integer (0))
+    )
+    w <- 1.5; gap <- 0.5; hw <- 0.8
+    widths <- sapply (cols, function (cl) if (is.character (cl)) hw else w)
+    x0 <- cumsum (c (0, head (widths, -1) + gap))
+    par (mar = c (0, 0, 0, 0))
+    plot (NA, xlim = c (-0.2, max (x0 + widths) + 0.2), ylim = c (-7.6, 1.1),
+          axes = FALSE, xlab = "", ylab = "", xaxs = "i", yaxs = "i")
+    vdots <- function (x, y) points (rep (x, 3), y + c (-0.22, 0, 0.22), pch = 16, cex = 0.45)
+    for (k in seq_along (cols))
+    {
+        cl <- cols[[k]]; x <- x0[k]
+        if (is.character (cl))
+        {
+            points (x + hw / 2 + c (-0.22, 0, 0.22), rep (-3, 3), pch = 16, cex = 0.6)
+            next
+        }
+        R <- length (cl$rows)
+        shade <- sampled && cl$sel
+        if (shade)
+            rect (x - 0.12, -R - 1.3, x + w + 0.12, 1.05, col = adjustcolor ("cyan", 0.3), border = NA)
+        for (r in seq_len (R))
+        {
+            picked <- shade && r %in% cl$pick
+            rect (x, -r, x + w, -(r - 1), border = "grey30",
+                  col = if (picked) "#FFD0D0" else "white")
+            if (identical (cl$rows[[r]], vd)) vdots (x + w / 2, -r + 0.5)
+            else text (x + w / 2, -r + 0.5, as.expression (cl$rows[r]), cex = 1.05,
+                       col = if (picked) "red3" else "black")
+        }
+        top <- if (shade) substitute (hat (T), list (T = cl$top)) else cl$top
+        text (x + w / 2, 0.55, as.expression (list (top)), cex = 1.25, col = "blue4")
+        text (x + w / 2, -R - 0.5, as.expression (list (cl$bot)), cex = 1.25, col = "darkgreen")
+        if (shade) text (x + w / 2, -R - 1.0, as.expression (list (cl$m)), cex = 1.1, col = "red3")
+    }
+}
+
+## a population of rectangular grids of cells; sampled cells are filled red
+grid_panel <- function (sizes, fill, title)
+{
+    plot (NA, xlim = c (0, 20), ylim = c (-13.2, 1.2), asp = 1, axes = FALSE, xlab = "", ylab = "")
+    text (0, 0.6, title, adj = 0, font = 2)
+    x <- 0; y <- 0; rowh <- 0
+    for (k in seq_len (nrow (sizes)))
+    {
+        nr <- sizes[k, 1]; nc <- sizes[k, 2]
+        if (x + nc > 20) { x <- 0; y <- y - rowh - 1; rowh <- 0 }
+        for (a in 1:nr) for (b in 1:nc)
+            rect (x + b - 1, y - a, x + b, y - a + 1, border = "grey30",
+                  col = if (fill[[k]][(a - 1) * nc + b]) "red" else "white")
+        x <- x + nc + 1; rowh <- max (rowh, nr)
+    }
+}
+
+## stratified versus one-stage cluster sampling on the same population of 12 groups
+plot_cluster_vs_strat <- function () with_seed (7, {
+    sizes <- matrix (c (4,5, 3,4, 4,3, 3,3,
+                        3,5, 3,3, 3,5, 2,2,
+                        3,3, 4,5, 3,3, 4,4), ncol = 2, byrow = TRUE)
+    strat <- lapply (seq_len (nrow (sizes)), function (k) {
+        K <- prod (sizes[k, ]); f <- logical (K); f[sample (K, max (1, round (K / 4)))] <- TRUE; f
+    })
+    chosen <- c (3, 6, 12)
+    clus <- lapply (seq_len (nrow (sizes)), function (k) rep (k %in% chosen, prod (sizes[k, ])))
+    par (mfrow = c (1, 2), mar = c (0.2, 0.4, 0.2, 0.4))
+    grid_panel (sizes, strat, "Stratified: an SRS from every stratum")
+    grid_panel (sizes, clus,  "Cluster: an SRS of clusters")
+})
+
+## clusters whose means differ a lot (R_a^2 large) versus random-looking clusters (R_a^2 small)
+plot_cluster_r2 <- function () with_seed (5, {
+    n_each <- 10
+    par (mfrow = c (1, 2), mar = c (3, 3.5, 2.5, 0.5))
+    panel <- function (means, sd, main)
+    {
+        x <- rep (1:4, each = n_each) + runif (4 * n_each, -0.15, 0.15)
+        y <- rep (means, each = n_each) + rnorm (4 * n_each, 0, sd)
+        plot (x, y, pch = 19, col = "blue4", xaxt = "n", xlim = c (0.5, 4.5),
+              ylim = c (0, 11), xlab = "", ylab = "y", main = main)
+        axis (1, at = 1:4, labels = paste ("cluster", 1:4))
+        for (h in 1:4) segments (h - 0.25, means[h], h + 0.25, means[h], col = "firebrick", lwd = 3)
+    }
+    panel (c (1.5, 4, 7, 9.5), 0.3, expression (R[a]^2~"large: cluster sampling loses more"))
+    panel (c (4.7, 5, 5.3, 5.1), 1.6, expression (R[a]^2~"small: cluster sampling loses less"))
+})
+
+## cluster totals t_i against sizes M_i: the horizontal line at tbar (what the
+## unbiased estimator uses) and the ratio line t = ybar_r M through the origin
+plot_cluster_ratio <- function () with_seed (2, {
+    n <- 30
+    Mi <- runif (n, 1, 10)
+    ti <- 0.6 * Mi + rnorm (n, 0, 0.4)
+    Bhat <- sum (ti) / sum (Mi)
+    par (mar = c (4, 4, 0.5, 0.5))
+    plot (Mi, ti, pch = 19, xlab = expression (M[i]), ylab = expression (t[i]),
+          xlim = c (0, 10.5), ylim = c (0, 7), las = 1)
+    abline (h = mean (ti), col = "blue4", lwd = 2, lty = 2)
+    abline (0, Bhat, col = "firebrick", lwd = 2)
+    segments (Mi, Bhat * Mi, Mi, ti, col = "gray50", lty = 3)
+    legend ("bottomright", bty = "n", lwd = 2, lty = c (2, 1), col = c ("blue4", "firebrick"),
+            legend = c (expression (bar (t) ~~ "(unbiased estimator)"),
+                        expression (t == hat (bar (y))[r] * M ~~ "(ratio estimator)")))
+})
+
+## coot egg volumes: by clutch, and with clutches ranked by their means
+plot_coots <- function (coots)
+{
+    par (mfrow = c (1, 2), mar = c (4, 4, 0.5, 0.5))
+    plot (coots$clutch, coots$volume, pch = 19, cex = 0.6,
+          xlab = "Clutch number", ylab = "Egg volume", las = 1)
+    rng <- tapply (coots$volume, coots$clutch, range)
+    lo  <- sapply (rng, `[`, 1); hi <- sapply (rng, `[`, 2)
+    ord <- order ((lo + hi) / 2)
+    plot (NA, xlim = c (1, length (ord)), ylim = range (coots$volume),
+          xlab = "Clutch ranked by mean", ylab = "Egg volume", las = 1)
+    segments (seq_along (ord), lo[ord], seq_along (ord), hi[ord], lwd = 1.5)
+}
