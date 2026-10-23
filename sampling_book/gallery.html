@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Longhai Li">
-<meta name="dcterms.date" content="2026-10-19">
+<meta name="dcterms.date" content="2026-10-22">
 
 <title>Appendix A — List of Figures, Tables, and Apps – Elements of Sampling Survey</title>
 <style>
@@ -77,6 +77,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -234,7 +263,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 19, 2026</p>
+      <p class="date">October 22, 2026</p>
     </div>
   </div>
   
@@ -272,10 +301,16 @@ ul.task-list li input[type="checkbox"] {
 <section id="strata" class="level3" data-number="A.2.3">
 <h3 data-number="A.2.3" class="anchored" data-anchor-id="strata"><span class="header-section-number">A.2.3</span> strata</h3>
 <ul>
-<li><a href="strata.html#fig-agpop-region-boxplot" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> — 1992 farm acreage by region stratum</li>
-<li><a href="strata.html#fig-agpop-region-compare-boxplot" class="quarto-xref">Figure&nbsp;<span>3.2</span></a> — Sampling distribution of the mean under SRS, proportional, and Neyman allocation (region strata, 2000 simulations)</li>
-<li><a href="strata.html#fig-agpop-acres82-boxplot" class="quarto-xref">Figure&nbsp;<span>3.3</span></a> — 1992 farm acreage by acres82 quantile stratum</li>
-<li><a href="strata.html#fig-agpop-acres82-compare-boxplot" class="quarto-xref">Figure&nbsp;<span>3.4</span></a> — Sampling distribution of the mean under SRS, proportional, and Neyman allocation (acres82 strata, 2000 simulations)</li>
+<li><a href="strata.html#fig-strata-pop" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> — A population divided into strata, with the sampled units circled</li>
+<li><a href="strata.html#fig-caribou-strata" class="quarto-xref">Figure&nbsp;<span>3.2</span></a> — The six caribou strata and their sampled units</li>
+<li><a href="strata.html#fig-ssb-ssw" class="quarto-xref">Figure&nbsp;<span>3.3</span></a> — Prediction by the overall mean (SSTO) vs.&nbsp;by the stratum means (SSW)</li>
+<li><a href="strata.html#fig-r2-compare" class="quarto-xref">Figure&nbsp;<span>3.4</span></a> — Strata with large vs.&nbsp;small <span class="math inline">\(R^2\)</span></li>
+<li><a href="strata.html#fig-p1mp" class="quarto-xref">Figure&nbsp;<span>3.5</span></a> — The variance <span class="math inline">\(p(1-p)\)</span> of a 0/1 variable</li>
+<li><a href="strata.html#fig-auxiliary" class="quarto-xref">Figure&nbsp;<span>3.6</span></a> — Strata formed by cutting an auxiliary variable</li>
+<li><a href="strata.html#fig-agpop-region-boxplot" class="quarto-xref">Figure&nbsp;<span>3.7</span></a> — 1992 farm acreage by region stratum</li>
+<li><a href="strata.html#fig-agpop-region-compare-boxplot" class="quarto-xref">Figure&nbsp;<span>3.8</span></a> — Sampling distribution of the mean under SRS, proportional, and Neyman allocation (region strata, 2000 simulations)</li>
+<li><a href="strata.html#fig-agpop-acres82-boxplot" class="quarto-xref">Figure&nbsp;<span>3.9</span></a> — 1992 farm acreage by acres82 quantile stratum</li>
+<li><a href="strata.html#fig-agpop-acres82-compare-boxplot" class="quarto-xref">Figure&nbsp;<span>3.10</span></a> — Sampling distribution of the mean under SRS, proportional, and Neyman allocation (acres82 strata, 2000 simulations)</li>
 </ul>
 </section>
 <section id="ratio" class="level3" data-number="A.2.4">
@@ -295,7 +330,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="ups" class="level3" data-number="A.2.5">
 <h3 data-number="A.2.5" class="anchored" data-anchor-id="ups"><span class="header-section-number">A.2.5</span> ups</h3>
 <ul>
-<li><a href="ups.html#fig-studyhrs-vs-Mi" class="quarto-xref">Figure&nbsp;<span>6.3</span></a> — Study hours vs.&nbsp;number of students, by group</li>
+<li><span class="quarto-unresolved-ref">?fig-studyhrs-vs-Mi</span> — Study hours vs.&nbsp;number of students, by group</li>
 <li><a href="ups.html#fig-statepop-phys-vs-popn" class="quarto-xref">Figure&nbsp;<span>6.1</span></a> — Physicians vs.&nbsp;population (log-log scale), sample of U.S. counties</li>
 <li><a href="ups.html#fig-upswr-sim-comparison" class="quarto-xref">Figure&nbsp;<span>6.2</span></a> — Estimator variance: naive SRS vs.</li>
 </ul>
@@ -344,8 +379,8 @@ ul.task-list li input[type="checkbox"] {
 <section id="ups-1" class="level3" data-number="A.3.5">
 <h3 data-number="A.3.5" class="anchored" data-anchor-id="ups-1"><span class="header-section-number">A.3.5</span> ups</h3>
 <ul>
-<li><a href="ups.html#tbl-studyhrs-raw-data" class="quarto-xref">Table&nbsp;<span>6.2</span></a> — Raw data: student study hours by group, with selection probabilities</li>
-<li><a href="ups.html#tbl-statepop-sample-data" class="quarto-xref">Table&nbsp;<span>6.1</span></a> — Sample of U.S. county population and physician counts</li>
+<li><span class="quarto-unresolved-ref">?tbl-studyhrs-raw-data</span> — Raw data: student study hours by group, with selection probabilities</li>
+<li><a href="ups.html#tbl-statepop-sample-data" class="quarto-xref">Table&nbsp;<span>6.2</span></a> — Sample of U.S. county population and physician counts</li>
 </ul>
 
 

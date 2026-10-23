@@ -1,68 +1,5 @@
 # Stratified Random Sampling
 
-## Estimation for Stratified Sampling
-
-Stratified random sampling divides a population of size $N$ into $H$ mutually exclusive strata. A simple random sample of size $n_h$ is then drawn from each stratum of size $N_h$. This design often yields higher precision than Simple Random Sampling (SRS).
-
-Write $N_h$, $n_h$ for the population and sample sizes of stratum $h$ ($\sum_h N_h = N$, $\sum_h n_h = n$),
-$\pi_h = N_h/N$ for the stratum weight, $\bar{y}_h$ and $s_h^2$ for the sample mean and
-variance in stratum $h$, and $S_h^2$ for the population variance in stratum $h$.
-
-#### 1. Stratified Population Mean Estimator {-}
-The estimated population mean is a weighted average of the sample means from each stratum:
-$$
-\overline{y}_{str} = \sum_{h=1}^H \pi_h \overline{y}_h, \qquad \pi_h = \frac{N_h}{N}.
-$$
-Because the strata are sampled independently, its variance is the weighted sum of the
-within-stratum SRS variances. Only the within-stratum variability counts;
-the differences between strata do not:
-$$
-V(\overline{y}_{str}) = \sum_{h=1}^H \pi_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{S_h^2}{n_h}.
-$$
-
-#### 2. Estimated Variance, SE, and Confidence Interval {-}
-The estimated variance replaces each $S_h^2$ by $s_h^2$, keeping the finite population correction in each stratum:
-$$
-\hat{V}(\overline{y}_{str}) = \sum_{h=1}^H v_h, \qquad
-v_h = \pi_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}, \qquad
-\mathrm{SE}(\overline{y}_{str}) = \sqrt{\hat{V}(\overline{y}_{str})},
-$$
-where $v_h$ is stratum $h$'s contribution (the $v_h$ column of the working tables below).
-An approximate $95\%$ confidence interval is $\overline{y}_{str} \pm 1.96\,\mathrm{SE}(\overline{y}_{str})$.
-
-#### 3. Estimating the Population Total {-}
-$$
-\hat{t}_{str} = N\overline{y}_{str} = \sum_{h=1}^H N_h \overline{y}_h, \qquad
-\hat{V}(\hat{t}_{str}) = N^2\,\hat{V}(\overline{y}_{str}) = \sum_{h=1}^H N_h^2 \left(1 - \frac{n_h}{N_h}\right) \frac{s_h^2}{n_h}.
-$$
-
-#### 4. Proportional Allocation {-}
-Sample sizes are allocated proportional to the size of the stratum:
-$$
-n_h = n \left( \frac{N_h}{N} \right) = n\pi_h .
-$$
-Every stratum then has the same sampling fraction $n/N$, and the variance simplifies to
-$$
-V_{prop}(\overline{y}_{str}) = \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h S_h^2 ,
-$$
-which is never larger than the SRS variance $(1 - n/N)S^2/n$, up to terms of order $1/N_h$.
-
-#### 5. Neyman (Optimal) Allocation {-}
-If surveying costs are equal across strata, Neyman allocation minimizes the variance of the estimator by sampling more heavily from larger and more highly variable strata:
-$$
-n_h = n \frac{N_h S_h}{\sum_{h=1}^H N_h S_h},
-$$
-which gives the smallest possible variance for a total sample size $n$:
-$$
-V_{opt}(\overline{y}_{str}) = \frac{1}{n}\left(\sum_{h=1}^H \pi_h S_h\right)^2 - \frac{1}{N}\sum_{h=1}^H \pi_h S_h^2 .
-$$
-In practice the $S_h$ are unknown and are replaced by estimates from a previous survey or a pilot sample.
-
-
-## Functions for Analyzing Data
-
-The estimating functions used throughout this book (including `str_est`, `str_est_data`, and `srs_est`, used below to compute the stratified mean, standard error, and confidence intervals) live in a single shared file, `samplingestimate.r`, which we source below. `str_est_data` computes these directly from a dataset, while `str_est` computes them from pre-calculated summary statistics.
-
 ```{r source-functions}
 #| echo: false
 library(latex2exp)
@@ -70,6 +7,456 @@ library(sampling)
 library(dplyr)
 source("samplingestimate.r")
 ```
+
+## What Is Stratified Sampling? {#sec-strata-intro}
+
+Suppose the variable we are interested in has different means in different
+subpopulations. Then a stratified random sample can often give more precise
+estimates of population quantities than a simple random sample of the same size.
+The word *stratify* comes from Latin words meaning "to make layers". We divide
+the population of $N$ units into $H$ subpopulations, called **strata**. The
+strata do not overlap and together they make up the whole population, so each
+sampling unit belongs to exactly one stratum. We then draw an independent
+probability sample from each stratum and pool the information to estimate
+population quantities.
+
+```{r fig-strata-pop}
+#| echo: false
+#| fig-cap: "A population divided into $H$ strata. Stratum $h$ has $N_h$ units (dots), of which $n_h$ are sampled (circled)."
+#| fig-width: 8
+#| fig-height: 4
+#| out-width: "80%"
+local({
+  set.seed(11)
+  strata_fig <- list(
+    list(xmin = 0,   xmax = 2.2, n = 6, k = 2, label = "1"),
+    list(xmin = 2.3, xmax = 4.9, n = 7, k = 2, label = "2"),
+    list(xmin = 5.0, xmax = 6.6, n = 5, k = 1, label = "3"),
+    list(xmin = 6.7, xmax = 9.4, n = 7, k = 2, label = "…"),
+    list(xmin = 9.5, xmax = 12,  n = 6, k = 2, label = "H")
+  )
+  par(mar = c(0.2, 0.2, 0.2, 0.2))
+  plot(NA, xlim = c(0, 12), ylim = c(0, 5), asp = 1,
+       xaxt = "n", yaxt = "n", xlab = "", ylab = "", bty = "o")
+  for (s in strata_fig) {
+    rect(s$xmin, 0, s$xmax, 5, border = "blue4", lwd = 1.5)
+    text((s$xmin + s$xmax) / 2, 4.6, s$label, col = "blue4", font = 2, cex = 1.8)
+    px <- runif(s$n, s$xmin + 0.3, s$xmax - 0.3)
+    py <- runif(s$n, 0.3, 3.8)
+    points(px, py, pch = 19, col = "blue4", cex = 1.1)
+    sel <- sample(s$n, s$k)
+    points(px[sel], py[sel], pch = 21, col = "firebrick", lwd = 2, cex = 2.4)
+  }
+})
+```
+
+In this chapter the sample within each stratum is a simple random sample (SRS),
+drawn without replacement. The design is then called **stratified random
+sampling**. The material corresponds to Sections 3.1–3.5 of Lohr and Sections
+5.1–5.9 of Scheaffer et al.
+
+**Example: stratifying U.S. counties by census region.** In the SRS chapter we
+sampled about 10% of the 3078 U.S. counties to estimate the average farm acreage
+per county. Here we use the four U.S. census regions as strata. To compare
+stratified sampling directly with SRS, we again sample about 10% of the counties,
+this time 10% of the counties in *each* stratum:
+
+| Stratum | Counties in stratum ($N_h$) | Counties in sample ($n_h$) |
+|:---|---:|---:|
+| Northeast | 220 | 21 |
+| North Central | 1054 | 103 |
+| South | 1382 | 135 |
+| West | 422 | 41 |
+| **Total** | **3078** | **300** |
+
+We select four separate, independent SRSs, one per stratum. Knowing which
+counties are in the sample from the Northeast tells us nothing about which
+counties are in the sample from the South. We analyze these data in
+@sec-strata-agstrat.
+
+## Estimation with Stratified Samples {#sec-strata-estimation}
+
+### Population quantities
+
+Let $y_{hj}$ be the value of unit $j$ in stratum $h$, for $j = 1, \ldots, N_h$
+and $h = 1, \ldots, H$, so that $N = \sum_{h=1}^H N_h$. The **stratum weight**
+$$
+\pi_h = \frac{N_h}{N}
+$$
+is the proportion of population units in stratum $h$, so $\sum_{h=1}^H \pi_h = 1$.
+The population quantities of each stratum, and of the whole population, are
+$$
+t_h = \sum_{j=1}^{N_h} y_{hj} \quad(\text{stratum total}), \qquad
+t = \sum_{h=1}^H t_h \quad(\text{population total}),
+$$
+$$
+\overline y_{hU} = \frac{t_h}{N_h} \quad(\text{stratum mean}), \qquad
+\overline y_U = \frac tN = \sum_{h=1}^H \pi_h\, \overline y_{hU} \quad(\text{overall mean}),
+$$
+$$
+S_h^2 = \frac{1}{N_h-1}\sum_{j=1}^{N_h}(y_{hj}-\overline y_{hU})^2 \quad(\text{stratum variance}).
+$$
+The overall mean $\overline y_U$ is the average of the stratum means, weighted by
+the stratum weights.
+
+### SRS estimators within each stratum
+
+Let $\mathcal S_h$ be the SRS of $n_h$ units drawn from stratum $h$, with total
+sample size $n = \sum_{h=1}^H n_h$. Within stratum $h$ we have an ordinary SRS, so
+we estimate the stratum quantities with the SRS formulas, applied separately to
+each stratum:
+$$
+\overline y_h = \frac{1}{n_h}\sum_{j\in\mathcal S_h} y_{hj}, \qquad
+\hat t_h = \frac{N_h}{n_h}\sum_{j\in\mathcal S_h} y_{hj} = N_h \overline y_h, \qquad
+s_h^2 = \frac{1}{n_h - 1}\sum_{j\in\mathcal S_h} (y_{hj}-\overline y_h)^2 .
+$$
+
+### Estimators for the population total and mean
+
+Adding up the estimated stratum totals gives the stratified estimator of the
+population total. Dividing it by $N$ gives the estimator of the population mean:
+$$
+\boxed{
+\hat t_{\text{str}} = \sum_{h=1}^H \hat t_h = \sum_{h=1}^H N_h \overline y_h,
+\qquad
+\overline y_{\text{str}} = \frac{\hat t_{\text{str}}}{N} = \sum_{h=1}^H \pi_h\overline y_h .}
+$$
+So $\overline y_{\text{str}}$ is a weighted average of the stratum sample means,
+with $\overline y_h$ weighted by $\pi_h = N_h/N$, the fraction of population
+units in stratum $h$. To use stratified sampling, the stratum sizes $N_h$ must
+be known.
+
+**Unbiasedness.** Since an SRS is taken in each stratum, $E[\overline y_h]=\overline y_{hU}$.
+Averaging these unbiased stratum estimates with the fixed weights $N_h/N$ keeps
+the overall estimate unbiased:
+$$
+E[\overline y_{\text{str}}]
+ = \sum_{h=1}^H \frac{N_h}{N}E[\overline y_h]
+ = \sum_{h=1}^H \frac{N_h}{N}\cdot \frac{1}{N_h}\sum_{j=1}^{N_h} y_{hj}
+ = \frac1N\sum_{h=1}^H \sum_{j=1}^{N_h}y_{hj} = \overline y_U .
+$$
+It follows that $E[\hat t_{\text{str}}] = N\,\overline y_U = t$.
+
+### Variances and standard errors
+
+The strata are sampled independently, so the $\hat t_h$ are independent and
+their variances add. Each $\hat t_h$ has the SRS variance
+$N_h^2(1-n_h/N_h)S_h^2/n_h$, so
+$$
+V(\hat t_{\text{str}}) = \sum_{h=1}^H V(\hat t_h) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)N_h^2\frac{S_h^2}{n_h},
+\qquad
+V(\overline y_{\text{str}}) = \frac{V(\hat t_{\text{str}})}{N^2} = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\pi_h^2 \frac{S_h^2}{n_h}.
+$$
+Only the variability *within* the strata enters these variances. The differences
+*between* the stratum means do not. This is the source of the gain from
+stratification: if the strata are internally homogeneous, every $S_h^2$ is small,
+even when the population as a whole is very variable.
+
+Substituting the sample variances $s_h^2$ for $S_h^2$ gives unbiased variance
+estimators, and their square roots are the standard errors:
+$$
+\boxed{
+\hat V(\overline y_{\text{str}}) = \sum_{h=1}^H v_h, \qquad
+v_h = \Big(1-\frac{n_h}{N_h}\Big)\pi_h^2\frac{s_h^2}{n_h}, \qquad
+\mathrm{SE}(\overline y_{\text{str}}) = \sqrt{\hat V(\overline y_{\text{str}})} ,}
+$$
+$$
+\hat V(\hat t_{\text{str}}) = N^2\,\hat V(\overline y_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)N_h^2\frac{s_h^2}{n_h},
+\qquad
+\mathrm{SE}(\hat t_{\text{str}}) = N\,\mathrm{SE}(\overline y_{\text{str}}).
+$$
+Here $v_h$ is the contribution of stratum $h$ to the estimated variance. It
+appears as the last column of the working tables in this chapter. Each
+stratum needs at least two sampled units, $n_h \ge 2$, so that $s_h^2$ can be
+computed.
+
+### Confidence intervals
+
+Suppose either the sample sizes within the strata are large, or the design has a
+large number of strata. Then $\overline y_{\text{str}}$ is approximately normal,
+and an approximate $100(1-\alpha)\%$ confidence interval for $\overline y_U$ is
+$$
+\overline y_{\text{str}} \pm z_{\alpha/2}\,\mathrm{SE}(\overline y_{\text{str}}).
+$$
+When $n$ is not large, it is common to replace the normal quantile by the
+quantile of a $t$ distribution with $n-H$ degrees of freedom, for example
+$\hat t_{\text{str}} \pm t_{\alpha/2,\,n-H}\,\mathrm{SE}(\hat t_{\text{str}})$
+for the total. The functions used in this book use $z_{0.025} = 1.96$.
+
+## Example: The Nelchina Caribou Herd {#sec-strata-caribou}
+
+Siniff and Skoog (1964) used stratified random sampling to estimate the size of
+the Nelchina herd of Alaska caribou in February 1962. Preliminary estimates of
+caribou density were used to divide the area of interest into six strata. Each
+stratum was divided into a grid of 4-mi$^2$ sampling units. Stratum A, for
+example, contained $N_1=400$ sampling units, of which $n_1=98$ were randomly
+selected for the survey. @fig-caribou-strata shows the layout.
+
+```{r fig-caribou-strata}
+#| echo: false
+#| fig-cap: "The six caribou strata. Each grid holds one stratum's $N_h$ sampling units; the red cells are the $n_h$ units selected at random in that stratum."
+#| fig-width: 10
+#| fig-height: 4
+#| out-width: "95%"
+local({
+  set.seed(348)
+  cs <- data.frame(
+    label = c("A", "B", "C", "D", "E", "F"),
+    N = c(400, 30, 61, 18, 70, 120),
+    n = c(98, 10, 37, 6, 39, 21)
+  )
+  cs$ncol <- ceiling(sqrt(cs$N))
+  cs$nrow <- ceiling(cs$N / cs$ncol)
+
+  gap <- 2
+  x0 <- 0
+  par(mar = c(2, 0.2, 2, 0.2))
+  plot(NA, xlim = c(0, sum(cs$ncol) + gap * (nrow(cs) - 1)),
+       ylim = c(-2, max(cs$nrow) + 2), asp = 1,
+       xaxt = "n", yaxt = "n", xlab = "", ylab = "", bty = "n")
+  for (i in seq_len(nrow(cs))) {
+    s <- cs[i, ]
+    idx <- expand.grid(col = 1:s$ncol, row = 1:s$nrow)
+    idx <- idx[order(idx$row, idx$col), ][1:s$N, ]
+    sampled <- sample(s$N, s$n)
+    cell_col <- ifelse(seq_len(s$N) %in% sampled, "firebrick", "grey85")
+    rect(x0 + idx$col - 1, idx$row - 1, x0 + idx$col, idx$row,
+         col = cell_col, border = "white", lwd = 0.3)
+    rect(x0, 0, x0 + s$ncol, s$nrow, border = "blue4", lwd = 1.5)
+    text(x0 + s$ncol / 2, s$nrow + 1, s$label, col = "blue4", font = 2, cex = 1.6)
+    text(x0 + s$ncol / 2, -1.2, paste0("N=", s$N, ", n=", s$n), cex = 0.75)
+    x0 <- x0 + s$ncol + gap
+  }
+})
+```
+
+**Spreadsheet calculation.** The survey gives the sample mean $\overline y_h$ and
+the sample variance $s_h^2$ of the caribou counts in each stratum. With
+$N = 699$, the calculation fits in a spreadsheet. The column $\pi_h \overline y_h$
+holds each stratum's contribution to $\overline y_{\text{str}}=\sum_h \pi_h\overline y_h$.
+The column $v_h = \big(1-\tfrac{n_h}{N_h}\big)\pi_h^2\tfrac{s_h^2}{n_h}$ holds its
+contribution to $\hat V(\overline y_{\text{str}}) = \sum_h v_h$:
+
+| Stratum | $N_h$ | $n_h$ | $\pi_h=N_h/N$ | $\overline y_h$ | $s_h^2$ | $\pi_h\overline y_h$ | $v_h$ |
+|:---:|---:|---:|-------:|---:|---:|---:|---:|
+| A | 400 | 98 | 0.5722 | 24.1 | 5,575 | 13.7911 | 14.0648 |
+| B | 30 | 10 | 0.0429 | 25.6 | 4,064 | 1.0987 | 0.4991 |
+| C | 61 | 37 | 0.0873 | 267.6 | 347,556 | 23.3528 | 28.1455 |
+| D | 18 | 6 | 0.0258 | 179.0 | 22,798 | 4.6094 | 1.6798 |
+| E | 70 | 39 | 0.1001 | 293.7 | 123,578 | 29.4120 | 14.0728 |
+| F | 120 | 21 | 0.1717 | 33.2 | 9,795 | 5.6996 | 11.3409 |
+| **Total** | **699** | **211** | **1.0000** | | | **77.9636** | **69.8029** |
+
+**Results.** The estimated mean number of caribou per sampling unit, and its
+standard error, are
+$$
+\overline y_{\text{str}} = 77.96, \qquad \mathrm{SE}(\overline y_{\text{str}}) = \sqrt{69.8029} = 8.35 .
+$$
+Multiplying by $N = 699$ gives the estimated total number of caribou:
+$$
+\hat t_{\text{str}} = 699(77.96) = 54{,}497, \qquad
+\mathrm{SE}(\hat t_{\text{str}}) = 699(8.35) = 5{,}840,
+$$
+and an approximate 95% confidence interval for the size of the herd is
+$$
+54{,}497 \pm 1.96(5{,}840) = [43{,}051,\ 65{,}943].
+$$
+This interval reflects only sampling error. If the field procedure for counting
+caribou tends to miss animals, the whole interval will be biased low.
+
+Strata C and E have far fewer units than stratum A, yet they contribute most of
+the estimate and much of its variance. These are the high-density strata, where
+the caribou counts are large and highly variable. We return to this point when
+we discuss optimal allocation in @sec-strata-optimal.
+
+**The same calculation in R.** The function `str_est()` from the shared file
+`samplingestimate.r` (see @sec-strata-functions) takes the stratum summaries
+$\overline y_h$, $s_h$, $n_h$ and $N_h$ and produces the same working table:
+
+```{r caribou-str-est}
+Nh <- c(A = 400, B = 30, C = 61, D = 18, E = 70, F = 120)
+nh <- c(98, 10, 37, 6, 39, 21)
+ybarh <- c(24.1, 25.6, 267.6, 179.0, 293.7, 33.2)
+s2h <- c(5575, 4064, 347556, 22798, 123578, 9795)
+
+res_caribou <- str_est(ybarh, sqrt(s2h), nh, Nh, estimate = "mean")
+res_caribou$table
+str_est(ybarh, sqrt(s2h), nh, Nh, estimate = "total")$estimate |> format_est_gt("total")
+```
+
+## Stratified Sampling for Proportions {#sec-strata-proportions}
+
+A proportion is the mean of a 0/1 variable. So we can apply the same formulas
+with $\overline y_h = \hat p_h$, the sample proportion in stratum $h$, and
+$s_h^2 = \frac{n_h}{n_h-1}\hat p_h(1-\hat p_h)$:
+$$
+\hat p_{\text{str}} = \sum_{h=1}^H \frac{N_h}{N}\hat p_h, \qquad
+\hat V(\hat p_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\Big(\frac{N_h}{N}\Big)^2\frac{\hat p_h(1-\hat p_h)}{n_h-1}.
+$$
+The total number of units with the attribute is estimated by $N\hat p_{\text{str}}$,
+with standard error $N\,\mathrm{SE}(\hat p_{\text{str}})$.
+
+**Example: ACLS survey of scholars.** The American Council of Learned Societies
+(ACLS) used a stratified random sample of the members of seven disciplinary
+societies. It studied publication patterns and the use of computers and
+libraries (Morton and Price, 1989). The membership figures $N_h$, the numbers of
+valid returns $n_h$, and the percentage of female respondents were:
+
+| Discipline | Membership ($N_h$) | Valid returns ($n_h$) | Female members (%) |
+|:---|---:|---:|---:|
+| Literature | 9,100 | 636 | 38 |
+| Classics | 1,950 | 451 | 27 |
+| Philosophy | 5,500 | 481 | 18 |
+| History | 10,850 | 611 | 19 |
+| Linguistics | 2,100 | 493 | 36 |
+| Political Science | 5,500 | 575 | 13 |
+| Sociology | 9,000 | 588 | 26 |
+| **Totals** | **44,000** | **3,835** | |
+
+We estimate the proportion of these scholars who are female, ignoring
+nonresponse for now. With $N = 44{,}000$, the spreadsheet calculation is:
+
+| Discipline | $N_h$ | $n_h$ | $\pi_h=N_h/N$ | $\hat p_h$ | $\pi_h\hat p_h$ | $v_h$ ($\times10^{-5}$) |
+|:---|---:|---:|------:|---:|---:|-----:|
+| Literature | 9,100 | 636 | 0.2068 | 0.38 | 0.0786 | 1.476 |
+| Classics | 1,950 | 451 | 0.0443 | 0.27 | 0.0120 | 0.066 |
+| Philosophy | 5,500 | 481 | 0.1250 | 0.18 | 0.0225 | 0.439 |
+| History | 10,850 | 611 | 0.2466 | 0.19 | 0.0469 | 1.448 |
+| Linguistics | 2,100 | 493 | 0.0477 | 0.36 | 0.0172 | 0.082 |
+| Political Science | 5,500 | 575 | 0.1250 | 0.13 | 0.0163 | 0.276 |
+| Sociology | 9,000 | 588 | 0.2045 | 0.26 | 0.0532 | 1.282 |
+| **Total** | **44,000** | **3,835** | **1.0000** | | **0.2465** | **5.068** |
+
+Here $v_h = \big(1-\tfrac{n_h}{N_h}\big)\pi_h^2\tfrac{\hat p_h(1-\hat p_h)}{n_h-1}$.
+Summing the columns gives
+$$
+\hat p_{\text{str}} = \frac{9100}{44{,}000}(0.38) + \cdots + \frac{9000}{44{,}000}(0.26) = 0.2465,
+\qquad
+\mathrm{SE}(\hat p_{\text{str}}) = \sqrt{5.068\times10^{-5}} = 0.0071 .
+$$
+About 24.7% of the members are estimated to be female. To estimate the total
+number of female scholars, multiply both numbers by $N = 44{,}000$. This gives
+about 10,846 women, with a standard error of about 313.
+
+In R, we pass $s_h = \sqrt{n_h\hat p_h(1-\hat p_h)/(n_h-1)}$ to `str_est()`:
+
+```{r acls-str-est}
+Nh <- c(Literature = 9100, Classics = 1950, Philosophy = 5500, History = 10850,
+        Linguistics = 2100, PoliSci = 5500, Sociology = 9000)
+nh <- c(636, 451, 481, 611, 493, 575, 588)
+ph <- c(0.38, 0.27, 0.18, 0.19, 0.36, 0.13, 0.26)
+
+sh <- sqrt(nh / (nh - 1) * ph * (1 - ph))
+round(str_est(ph, sh, nh, Nh, estimate = "mean", show.details = FALSE)$estimate, 4)
+```
+
+## Alternative Formulas for $\overline y_{\text{str}}$ {#sec-strata-alt-formulas}
+
+The estimator $\overline y_{\text{str}} = \sum_h \pi_h \overline y_h$ can be
+written in two other ways. Each one shows something about the design. The first
+compares it with the sample mean of an SRS and shows why the weights must be
+$N_h/N$. The second writes it as a weighted average over individual units, with
+each unit weighted by its sampling weight. This is the form used for survey data
+files.
+
+### Weighting by population fractions instead of sample fractions {#sec-strata-vs-srs-formulas}
+
+Suppose instead that we had taken an SRS of size $n=n_1+\cdots+n_H$ from the
+whole population. Grouping the sampled units by stratum, the sample mean is
+$$
+\overline y_{\text{SRS}} = \frac{1}{n}\sum_{(h,j)\in\mathcal S} y_{hj}
+ = \frac{n_1\overline y_1 + \cdots + n_H\overline y_H}{n}
+ = \overline y_1\frac{n_1}{n} + \cdots + \overline y_H\frac{n_H}{n},
+$$
+which we compare with the stratified estimator
+$$
+\overline y_{\text{str}} = \overline y_1\frac{N_1}{N} + \cdots + \overline y_H\frac{N_H}{N}.
+$$
+For proportions, similarly,
+$\hat p_{\text{SRS}} = \sum_{h} \frac{n_h}{n}\hat p_h$ while
+$\hat p_{\text{str}} = \sum_{h} \frac{N_h}{N}\hat p_h$.
+
+Both estimators average the stratum sample means. The difference is in the
+weights. In an SRS, the stratum sizes in the sample $n_h$ are random, so
+$\overline y_{\text{SRS}}$ weights each stratum by its *realized* sample
+fraction $n_h/n$. That fraction varies from sample to sample and can be
+distorted by nonresponse rates that differ between strata. In contrast,
+$\overline y_{\text{str}}$ uses the *known, fixed* population fraction $N_h/N$.
+These fixed weights make it unbiased for $\overline y_U$ whatever the $n_h$ are.
+When $n_h/n = N_h/N$ for every $h$ (proportional allocation,
+@sec-strata-prop), the two estimators coincide.
+
+### Weighting each unit by its sampling weight {#sec-strata-weights}
+
+Write the stratified sample as $\mathcal S = (\mathcal S_1,\ldots,\mathcal S_H)$,
+where $\mathcal S_h$ is the SRS drawn from stratum $h$. The strata are sampled
+independently, so the probability of selecting a particular sample is the
+product of the probabilities of its stratum samples:
+$$
+P(\mathcal S) = P(\mathcal S_1)\times P(\mathcal S_2)\times\cdots\times P(\mathcal S_H)
+ = \frac{1}{\binom{N_1}{n_1}}\cdot\frac{1}{\binom{N_2}{n_2}}\cdots\frac{1}{\binom{N_H}{n_H}}.
+$$
+
+For SRS we defined the sampling weight of a unit as the reciprocal of its
+inclusion probability. A unit $j$ in stratum $h$ is included with probability
+$n_h/N_h$, the sampling fraction in stratum $h$. (Do not confuse this with the
+stratum weight $\pi_h = N_h/N$.) So its sampling weight is
+$$
+w_{hj} = \frac{N_h}{n_h}.
+$$
+Unless every stratum has the same sampling fraction, units in different strata
+have different inclusion probabilities. Stratified sampling is therefore an
+example of **unequal-probability sampling**.
+
+The sampling weight can be thought of as the number of population units that a
+sampled unit represents. Within stratum $h$ all $n_h$ sampled units have the same
+weight $N_h/n_h$, so the weights add up to the stratum sizes and to the population
+size:
+$$
+\sum_{j\in\mathcal S_h} w_{hj} = n_h\cdot\frac{N_h}{n_h} = N_h,
+\qquad
+\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj} = \sum_{h=1}^H N_h = N.
+$$
+
+**Estimators in terms of the weights.** Since
+$N_h\overline y_h = \frac{N_h}{n_h}\sum_{j\in\mathcal S_h} y_{hj} = \sum_{j\in\mathcal S_h} w_{hj}\,y_{hj}$,
+the estimated total is a weighted sum over *all* sampled units, regardless of
+stratum. Since the weights sum to $N$, the estimated mean is a weighted average:
+$$
+\hat t_{\text{str}} = \sum_{h=1}^H \sum_{j\in\mathcal S_h} w_{hj}\, y_{hj},
+\qquad
+\overline y_{\text{str}} = \frac{\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}y_{hj}}{\sum_{h=1}^H\sum_{j\in\mathcal S_h} w_{hj}}.
+$$
+This is how survey data files are usually distributed: one row per sampled unit,
+with a column of sampling weights. The `weight` column of `agstrat.csv` in
+@sec-strata-agstrat is an example.
+
+For the caribou survey the weights are:
+
+| Stratum | $N_h$ | $n_h$ | $w_{hj} = N_h/n_h$ |
+|:---:|---:|---:|---:|
+| A | 400 | 98 | 4.08 |
+| B | 30 | 10 | 3.00 |
+| C | 61 | 37 | 1.65 |
+| D | 18 | 6 | 3.00 |
+| E | 70 | 39 | 1.79 |
+| F | 120 | 21 | 5.71 |
+
+The weights alone are enough for the point estimates, but not for the variances.
+Strata B and D have the same weight, so the weights do not identify which
+stratum a unit belongs to. The variance estimator needs $s_h^2$ computed
+separately within each stratum, so the data file must also record each unit's
+stratum.
+
+## Analyzing Stratified Data in R {#sec-strata-functions}
+
+The estimating functions used throughout this book live in a single shared file,
+`samplingestimate.r`, sourced at the start of this chapter. They include
+`str_est`, `str_est_data` and `srs_est`, which compute the stratified mean, its
+standard error and confidence intervals. `str_est` works from the stratum
+summaries ($\overline y_h$, $s_h$, $n_h$, $N_h$), as in the caribou example.
+`str_est_data` computes everything directly from a data set with stratum and
+weight columns.
 
 ::: {.content-visible when-format="html"}
 
@@ -88,24 +475,26 @@ cat("\n```\n")
 
 :::
 
-## Example: Analysis of "agstrat.csv" data
+### Example: Farm acreage by census region (agstrat.csv) {#sec-strata-agstrat}
 
-We will estimate the average 1992 farm acreage (`acres92`) across US counties, using geographic region (`region`) as the stratification variable.
-
-### Importing agstrat.csv data
+We now analyze the stratified sample of counties described in
+@sec-strata-intro. The goal is to estimate the average 1992 farm acreage per
+county (`acres92`, in thousands of acres), with the census region (`region`) as
+the stratification variable.
 
 ```{r tbl-agstrat-sample-data}
 #| tbl-cap: "Sample survey data for agstrat.csv, including stratum and weight"
 agstrat <- acres_in_thousands(read.csv("data/agstrat.csv"))
 head(agstrat) |> gt()
 ```
-**Output Note:** The table above shows the sample survey data, including the stratum (region) and weights for each county.
+Each row is a sampled county. The column `region` is its stratum, and `weight`
+is its sampling weight $N_h/n_h$.
 
-### Spreadsheet calculation
+#### Summarizing acres92 in each stratum {-}
 
-#### Summarizing acre92 in each stratum
-
-We first manually compute the sample size ($n_h$), standard deviation ($s_h$), and mean ($\overline{y}_h$) for each region, matching them with the known total counties in each region ($N_h$).
+We first compute the sample size ($n_h$), standard deviation ($s_h$) and mean
+($\overline{y}_h$) for each region. These are matched with the known numbers of
+counties in each region ($N_h$).
 
 ```{r tbl-agstrat-summary-by-region}
 #| tbl-cap: "Sample summary statistics for acres92 by region stratum"
@@ -115,7 +504,7 @@ ybarh <- tapply (agstrat[, "acres92"], agstrat[,"region"], mean)
 # create a vector with external information (true population size per stratum)
 Nh <- c(NC = 1054, NE = 220, S= 1382, W = 422)
 
-data.frame(Nh, nh, ybarh, sh) |> 
+data.frame(Nh, nh, ybarh, sh) |>
   gt(rownames_to_stub = TRUE) |>
   cols_label(
     Nh = md("$N_h$"),
@@ -125,91 +514,394 @@ data.frame(Nh, nh, ybarh, sh) |>
   ) |>
   fmt_number(columns = c(ybarh, sh), decimals = 2)
 ```
-**Output Note:** This displays the summary statistics per stratum. Note the significantly high variance ($s_h$) in the `r names(sh)[which.max(sh)]` region compared to the others.
+The standard deviation in the `r names(sh)[which.max(sh)]` region is much larger
+than in the other regions.
 
-#### Estimates
+#### Estimates from the stratum summaries {-}
 
-Rather than building the "spreadsheet-style" working table by hand, we call `str_est()`, whose `$table` shows the same intermediate stratum-level values ($N_h$, $n_h$, $\pi_h$, $\bar y_h$, $s_h^2$, $\pi_h\bar y_h$, $v_h$) needed for the final stratified mean and variance, with a Total row and footnotes for $\pi_h$ and $v_h$.
+The `$table` of `str_est()` is the spreadsheet working table: it shows $N_h$,
+$n_h$, $\pi_h$, $\bar y_h$, $s_h^2$, $\pi_h\bar y_h$ and $v_h$ for each stratum,
+with a Total row.
 
 ```{r agstrat-str-est-mean}
 res_str_mean <- str_est(ybarh, sh, nh, Nh, estimate = "mean")
 res_str_mean$table
 ```
-**Output Note:** The table provides a detailed breakdown of how each individual stratum contributes to the final mean and variance.
-
-Extracting `$estimate` gives our overall result.
+The table shows how each stratum contributes to the mean and to its variance.
+The `$estimate` component gives the overall result:
 
 ```{r agstrat-mean-estimate}
 res_str_mean$estimate |> format_est_gt("mean")
 ```
-**Output Note:** The overall result indicates an estimated mean of `r round(res_str_mean$estimate["Est."], 1)` thousand acres, with a 95% confidence interval of [`r round(res_str_mean$estimate["ci.low"], 1)`, `r round(res_str_mean$estimate["ci.upp"], 1)`] thousand acres.
+The estimated mean is `r round(res_str_mean$estimate["Est."], 1)` thousand acres
+per county. The 95% confidence interval is
+[`r round(res_str_mean$estimate["ci.low"], 1)`, `r round(res_str_mean$estimate["ci.upp"], 1)`]
+thousand acres.
 
-To find the population total (total acreage across all US counties), set `estimate = "total"`.
+To estimate the population total, the total farm acreage of all U.S. counties,
+set `estimate = "total"`:
 
 ```{r agstrat-str-est-total}
 ## population total estimate
 res_str_total <- str_est(ybarh, sh, nh, Nh, estimate = "total")
 res_str_total$estimate |> format_est_gt("total")
 ```
-**Output Note:** This scales the estimates up to the total area of `r format(round(res_str_total$estimate["Est."], 0), big.mark=",", scientific=FALSE)` thousand acres.
+The estimated total is `r format(round(res_str_total$estimate["Est."], 0), big.mark=",", scientific=FALSE)`
+thousand acres. Because the strata are sampled independently, its variance is
+the sum of the four estimated stratum variances $N_h^2(1-n_h/N_h)s_h^2/n_h$.
 
-### Using the function "str_est_data"
+#### Estimates directly from the data {-}
 
-Instead of pre-calculating the summary stats, this function extracts everything directly from the dataset using the pre-assigned sampling weights.
+Instead of pre-computing the stratum summaries, `str_est_data()` works directly
+from the data file, using the stratum and weight columns. Summing the weights
+within each region recovers the stratum sizes $N_h$:
 
 ```{r agstrat-weight-sum}
-## In the function "str_est_data", we can find the stratum size with the variable "weights":
 tapply(agstrat$weight, agstrat$region, sum)
 ```
-**Output Note:** This reconstructs the total population sizes ($N_h$) per region.
 
 ```{r agstrat-acres92-est}
-## if the dataset contains a variable "weight"
+## the dataset contains a variable "weight"
 res_agstrat_acres92 <- str_est_data(agstrat, y="acres92", stratum="region", weight="weight", estimate = "mean")
 res_agstrat_acres92$table
 res_agstrat_acres92$estimate |> format_est_gt("mean")
 ```
-**Output Note:** Once again, this perfectly matches the manual calculation.
+The result matches the calculation from the stratum summaries. Estimating a
+different variable only requires changing `y`. For example, the average number
+of small farms per county in 1992 is estimated as
+`r round(str_est_data(agstrat, y="smallf92", stratum="region", weight="weight", estimate = "mean", show.details = FALSE)$estimate["Est."], 1)`:
 
 ```{r agstrat-smallf92-est}
-## estimating the mean of the number of small farms in 1992
 res_agstrat_smallf92 <- str_est_data(agstrat, y="smallf92", stratum="region", weight="weight", estimate = "mean")
 res_agstrat_smallf92$table
 res_agstrat_smallf92$estimate |> format_est_gt("mean")
 ```
-**Output Note:** This demonstrates the function's flexibility: we can easily estimate a different variable (an average of `r round(res_agstrat_smallf92$estimate["Est."], 1)` small farms per county).
 
-### Comparing with SRS estimate
+#### Comparing with the SRS estimate {-}
 
-To see the benefit of stratifying, we compare our stratified estimates against a Simple Random Sample approach on the same population.
+The SRS chapter analyzed an SRS of 300 counties from the same population
+(`agsrs.csv`). How much did stratification gain?
 
 ```{r agsrs-compare-load}
 agsrs <- acres_in_thousands(read.csv("data/agsrs.csv"))
 res_agsrs_srs <- srs_est(agsrs[, "acres92"], N=3078, estimate = "mean", show.details = FALSE)
 res_agsrs_srs$estimate |> format_est_gt("mean")
 ```
-**Output Note:** The Simple Random Sample standard error is noticeably higher at `r round(res_agsrs_srs$estimate["S.E."], 1)` thousand acres.
+
+The SRS standard error is `r round(res_agsrs_srs$estimate["S.E."], 1)` thousand
+acres, compared with `r round(res_agstrat_acres92$estimate["S.E."], 1)` for the
+stratified sample. Only the West had a sample variance larger than the overall
+SRS sample variance. The sample variance in the Northeast was much smaller than
+that of the population as a whole. Observations within a stratum tend to be more
+homogeneous than observations in the population overall, and this is what
+stratification exploits. We can estimate the relative gain by the ratio of the
+estimated variances:
 
 ```{r agstrat-srs-var-ratio}
-## the ratio of estimated variance (Stratified SE / SRS SE)^2
+## ratio of estimated variances (stratified / SRS), both with n = 300
 ratio_var <- (res_agstrat_acres92$estimate["S.E."] / res_agsrs_srs$estimate["S.E."])^2
 unname(ratio_var)
 ```
-**Output Note:** The stratified variance is approximately `r round(ratio_var * 100, 1)`% of the SRS variance.
 
-```{r agstrat-srs-var-reduction}
-## percentage of reduction of variance of str estimates from that of SRS estimate
-unname(1 - ratio_var)
+The stratified variance is about `r round(ratio_var * 100, 1)`% of the SRS
+variance, a reduction of `r round((1 - ratio_var) * 100, 1)`% at no extra
+sampling cost. Suppose these were the population variances. Then a stratified
+sample of only $300 \times `r round(ratio_var, 2)` \approx `r round(300 * ratio_var)`$
+counties would match the precision of an SRS of 300. These are estimates from
+two particular samples. @sec-strata-simulation repeats the comparison over
+thousands of samples.
+
+## Efficiency of Proportional Allocation {#sec-strata-prop}
+
+So far the stratum sample sizes $n_h$ were given. How should a total sample of
+size $n$ be divided among the strata? We first study a simple benchmark,
+**proportional allocation**, which uses the same sampling fraction in every
+stratum:
+$$
+\frac{n_h}{N_h} = \frac nN \quad \text{for all } h, \qquad\text{that is,}\qquad n_h = n\,\frac{N_h}{N} = n\pi_h .
+$$
+Then every unit has the same inclusion probability $n/N$ and the same sampling
+weight $N/n$, so the sample is **self-weighting**, and $\overline y_{\text{str}}$
+equals the plain sample mean. The county sample in @sec-strata-intro, with
+about 10% of each region, is an example. Proportional allocation is not optimal
+in general (@sec-strata-optimal), but it lets us see clearly when, and by how
+much, stratification beats SRS.
+
+### Decomposition of the population variance
+
+The answer depends on how the population variance splits into a part *between*
+the strata and a part *within* them. This is the decomposition of one-way
+analysis of variance:
+
+| Source | df | Sum of squares |
+|:---|:---:|:------|
+| Between strata | $H-1$ | $\text{SSB} = \sum_{h=1}^H N_h(\overline y_{hU}-\overline y_U)^2$ |
+| Within strata | $N-H$ | $\text{SSW} = \sum_{h=1}^H (N_h-1)S_h^2 = \sum_{h=1}^H\sum_{j=1}^{N_h}(y_{hj}-\overline y_{hU})^2$ |
+| Total, about $\overline y_U$ | $N-1$ | $\text{SSTO} = (N-1)S^2 = \sum_{h=1}^H\sum_{j=1}^{N_h}(y_{hj}-\overline y_U)^2$ |
+
+$$
+\text{SSTO} = \text{SSB} + \text{SSW}.
+$$
+
+One way to see the decomposition is to view each sum of squares as the squared
+length of a vector of prediction errors. Stack all $N$ values into a vector
+$\boldsymbol y$, and consider two ways of predicting them:
+$$
+\begin{array}{c|ccc|c|ccc}
+ & & \text{stratum } 1 & & \cdots & & \text{stratum } H & \\ \hline
+\boldsymbol y^\top & y_{11} & \cdots & y_{1N_1} & \cdots & y_{H1} & \cdots & y_{HN_H}\\
+\hat{\boldsymbol y}_0^\top & \overline y_U & \cdots & \overline y_U & \cdots & \overline y_U & \cdots & \overline y_U\\
+\hat{\boldsymbol y}_1^\top & \overline y_{1U} & \cdots & \overline y_{1U} & \cdots & \overline y_{HU} & \cdots & \overline y_{HU}
+\end{array}
+$$
+The prediction $\hat{\boldsymbol y}_0$ ignores the strata and predicts every unit
+by the overall mean. The prediction $\hat{\boldsymbol y}_1$ predicts each unit by
+its stratum mean. Then
+$$
+\text{SSTO} = \|\boldsymbol y-\hat{\boldsymbol y}_0\|^2,\qquad
+\text{SSW} = \|\boldsymbol y-\hat{\boldsymbol y}_1\|^2,\qquad
+\text{SSB} = \|\hat{\boldsymbol y}_1-\hat{\boldsymbol y}_0\|^2 .
+$$
+Since $\boldsymbol y-\hat{\boldsymbol y}_0 = (\boldsymbol y-\hat{\boldsymbol y}_1) + (\hat{\boldsymbol y}_1-\hat{\boldsymbol y}_0)$,
+and the two pieces are orthogonal, the Pythagorean theorem gives
+$\text{SSTO} = \text{SSW} + \text{SSB}$. The pieces are orthogonal because, within
+each stratum, the deviations $y_{hj}-\overline y_{hU}$ sum to zero while
+$\overline y_{hU}-\overline y_U$ is constant. @fig-ssb-ssw illustrates the two
+predictions.
+
+```{r fig-ssb-ssw}
+#| echo: false
+#| fig-cap: "Left: predicting every unit by the overall mean (green dashed line); the squared errors (grey) sum to SSTO. Right: predicting each unit by its stratum mean (red segments); the squared errors sum to SSW. The difference SSTO − SSW is SSB."
+#| fig-width: 10
+#| fig-height: 4.2
+#| out-width: "100%"
+local({
+  set.seed(21)
+  means <- c(2.2, 5, 9.0)
+  n_each <- 12
+  x <- rep(1:3, each = n_each) + runif(3 * n_each, -0.34, 0.34)
+  y <- rep(means, each = n_each) + rnorm(3 * n_each, 0, 0.5)
+  grand_mean <- mean(y)
+  grp <- rep(1:3, each = n_each)
+  means <- tapply(y, grp, mean)
+
+  base_plot <- function(main) {
+    plot(x, y, type = "n", xlim = c(0.5, 3.8), ylim = c(0, 12),
+         xaxt = "n", xlab = "Stratum", ylab = "y", cex.lab = 1.2, main = main)
+    axis(1, at = 1:3, labels = c("1", "2", "3"))
+  }
+
+  par(mfrow = c(1, 2), mar = c(4, 4, 2, 0.5), mgp = c(2.5, 1, 0))
+
+  base_plot("Prediction with overall mean")
+  segments(x, grand_mean, x, y, col = "grey55", lwd = 1.5)
+  points(x, y, pch = 19, col = "blue4")
+  abline(h = grand_mean, col = "darkgreen", lwd = 2, lty = 2)
+  text(3.7, grand_mean - 0.4, expression(bar(y)[U]), col = "darkgreen")
+  legend("topleft", bty = "n", lwd = 2, col = "grey55",
+         legend = "SSTO: observation vs. overall mean")
+
+  base_plot("Prediction with stratum means")
+  segments(x, means[grp], x, y, col = "grey55", lwd = 1.5)
+  points(x, y, pch = 19, col = "blue4")
+  for (h in 1:3) {
+    segments(h - 0.4, means[h], h + 0.4, means[h], col = "firebrick", lwd = 3)
+  }
+  abline(h = grand_mean, col = "darkgreen", lwd = 2, lty = 2)
+  text(3.7, grand_mean - 0.4, expression(bar(y)[U]), col = "darkgreen")
+  text(3.7, means[3], expression(bar(y)[HU]), col = "firebrick")
+  legend("topleft", bty = "n", lwd = 2, col = "grey55",
+         legend = "SSW: observation vs. stratum mean")
+})
 ```
-**Output Note:** Stratification by region reduced the variance by `r round((1 - ratio_var) * 100, 1)`%. This is a substantial gain in precision for no extra sampling cost.
 
-## Allocation of stratum sample size
+### The coefficient of determination $R^2$
 
-Deciding how to distribute the total sample $n$ among the strata significantly impacts the precision of the estimator.
+The share of the total variation that is between strata is the **coefficient
+of determination**
+$$
+R^2 = \frac{\text{SSB}}{\text{SSTO}} = 1-\frac{\text{SSW}}{\text{SSTO}} .
+$$
+$R^2$ generalizes the squared Pearson correlation coefficient. It measures how
+strongly a response $y$ is related to one or more predictors. Here the predictor
+is "stratum membership", and $R^2$ is the proportion of the variance in $y$
+explained by the strata. It is the $R^2$ of a regression of $y$ on the stratum
+indicators, as in the ANOVA fits of @sec-strata-simulation. When the stratum
+means differ widely relative to the spread within each stratum, $R^2$ is large
+(@fig-r2-compare, left). When the stratum means are nearly equal, $R^2$ is small
+(right).
 
-### Analyzing seals.csv collected with stratified sampling
+```{r fig-r2-compare}
+#| echo: false
+#| fig-cap: "Strata with widely separated means (left, $R^2$ large) and with nearly equal means (right, $R^2$ small). Red segments are the stratum means."
+#| fig-width: 9
+#| fig-height: 4
+#| out-width: "90%"
+local({
+  set.seed(7)
+  n_each <- 15
+  par(mfrow = c(1, 2), mar = c(3, 3.5, 2, 0.5))
 
-This dataset investigates ringed seal holes in different zones. The researchers used Proportional Allocation, taking 20% of the areas in each zone.
+  means_hi <- c(2, 5, 8)
+  x1 <- rep(1:3, each = n_each) + runif(3 * n_each, -0.15, 0.15)
+  y1 <- rep(means_hi, each = n_each) + rnorm(3 * n_each, 0, 0.35)
+  plot(x1, y1, pch = 19, col = "blue4", xaxt = "n", xlim = c(0.5, 3.5),
+       ylim = c(0, 10), xlab = "", ylab = "y", main = expression(R^2~"large"))
+  axis(1, at = 1:3, labels = c("1", "2", "3"))
+  for (h in 1:3) segments(h - 0.25, means_hi[h], h + 0.25, means_hi[h], col = "firebrick", lwd = 3)
+
+  means_lo <- c(4.6, 5, 5.4)
+  x2 <- rep(1:3, each = n_each) + runif(3 * n_each, -0.15, 0.15)
+  y2 <- rep(means_lo, each = n_each) + rnorm(3 * n_each, 0, 1.4)
+  plot(x2, y2, pch = 19, col = "blue4", xaxt = "n", xlim = c(0.5, 3.5),
+       ylim = c(0, 10), xlab = "", ylab = "y", main = expression(R^2~"small"))
+  axis(1, at = 1:3, labels = c("1", "2", "3"))
+  for (h in 1:3) segments(h - 0.25, means_lo[h], h + 0.25, means_lo[h], col = "firebrick", lwd = 3)
+})
+```
+
+### Comparing the variances of proportional allocation and SRS
+
+Under proportional allocation, $1 - n_h/N_h = 1-n/N$ and $N_h^2/n_h = (N/n)N_h$
+for every stratum. So the variance of $\hat t_{\text{str}}$ becomes
+$$
+V_{\text{prop}}(\hat t_{\text{str}}) = \Big(1-\frac nN\Big)\frac Nn \sum_{h=1}^H N_h S_h^2
+ = \Big(1-\frac nN\Big)\frac Nn\left(\text{SSW} + \sum_{h=1}^H S_h^2\right),
+$$
+using $\sum_h N_hS_h^2 = \sum_h (N_h-1)S_h^2 + \sum_h S_h^2$. Equivalently, for the mean,
+$$
+V_{\text{prop}}(\overline y_{\text{str}}) = \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h S_h^2 ,
+$$
+a weighted average of the within-stratum variances in place of the overall $S^2$.
+For an SRS of the same size $n$, since $(N-1)S^2 = \text{SSTO} = \text{SSW}+\text{SSB}$,
+$$
+V_{\text{SRS}}(\hat t) = \Big(1-\frac nN\Big)\frac{N^2 S^2}{n}
+ = \Big(1-\frac nN\Big)\frac{N}{n}\cdot\frac{N}{N-1}\,(\text{SSW}+\text{SSB}).
+$$
+
+**When does stratification help?** Comparing the two expressions,
+$V_{\text{prop}} < V_{\text{SRS}}$ exactly when
+$(N-1)\big(\text{SSW} + \sum_h S_h^2\big) < N(\text{SSW}+\text{SSB})$. Substituting
+$\text{SSW} = \sum_h(N_h-1)S_h^2$ and simplifying, the condition becomes
+$$
+\text{SSB} > \sum_{h=1}^H \Big(1-\frac{N_h}{N}\Big)S_h^2 .
+$$
+This almost always holds. SSB is a sum of $N$ squared deviations, one for each
+unit in the population. The right side has only $H$ terms, typically far fewer.
+Proportional allocation can lose to SRS only when the stratum means are
+almost identical, and even then the loss is negligible. In practice
+stratification with proportional allocation is never worse than SRS, up to terms
+of order $1/N_h$.
+
+**How much does it help?** Dropping the small terms $\sum_h S_h^2$ and
+$N/(N-1)$, the ratio of the variances is
+$$
+\frac{V_{\text{prop}}(\hat t_{\text{str}})}{V_{\text{SRS}}(\hat t)}
+ \approx \frac{\text{SSW}+\sum_h S_h^2}{\text{SSW}+\text{SSB}} \approx \frac{\text{SSW}}{\text{SSTO}} = 1 - R^2,
+$$
+so that
+$$
+\text{percentage of variance reduction} \approx \frac{\text{SSB}}{\text{SSTO}} = R^2_{y\mid\text{strata}},
+$$
+the proportion of the variance of $y$ explained by stratum membership. The
+better the strata separate the values of $y$, the larger the gain. We verify
+this relation by simulation in @sec-strata-simulation.
+
+## Optimal Allocation {#sec-strata-optimal}
+
+### The cost function
+
+The aim of optimal allocation is to gain the most information for the least
+cost. Let $C$ be the total cost of the survey, $c_0$ the overhead cost, and $c_h$
+the cost of sampling one unit in stratum $h$:
+$$
+C = c_0 + \sum_{h=1}^H c_h n_h .
+$$
+We want to choose $n_1,\ldots,n_H$ to minimize $V(\overline y_{\text{str}})$ for a
+fixed total cost $C$, or, equivalently, to minimize $C$ for a fixed variance.
+
+### Derivation
+
+Expanding the fpc, the variance separates into a part that depends on the $n_h$
+and a part that does not:
+$$
+V(\overline y_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\frac{N_h^2}{N^2}\frac{S_h^2}{n_h}
+ = \sum_{h=1}^H \frac{N_h^2S_h^2}{N^2}\cdot\frac1{n_h} \;-\; \underbrace{\sum_{h=1}^H \frac{N_hS_h^2}{N^2}}_{\text{free of } n_h}.
+$$
+We minimize the first sum subject to $c_0+\sum_h c_hn_h = C$, using the Lagrangian
+$$
+L(n_1,\ldots,n_H,\lambda) = \sum_{h=1}^H \frac{N_h^2S_h^2}{N^2 n_h} + \lambda\Big(c_0+\sum_{h=1}^H c_hn_h - C\Big).
+$$
+Setting $\partial L/\partial n_h = 0$ gives
+$$
+-\frac{N_h^2S_h^2}{N^2n_h^2} + \lambda c_h = 0
+\quad\Longrightarrow\quad
+n_h = \frac{1}{N\sqrt\lambda}\cdot\frac{N_hS_h}{\sqrt{c_h}} .
+$$
+Summing over $h$ gives $n = \frac{1}{N\sqrt\lambda}\sum_{l} N_lS_l/\sqrt{c_l}$.
+Dividing $n_h$ by $n$ eliminates $\lambda$.
+
+### The optimal allocation
+
+The optimal $n_h$ is proportional to $N_hS_h/\sqrt{c_h}$:
+$$
+\boxed{
+n_h = \left(\frac{N_hS_h/\sqrt{c_h}}{\sum_{l=1}^H N_lS_l/\sqrt{c_l}}\right)n,
+\qquad n_h \propto \frac{N_hS_h}{\sqrt{c_h}} .}
+$$
+The total $n$ itself follows from the budget, or from a target variance. The
+formula says to sample more heavily in a stratum when:
+
+- the stratum is a large part of the population ($N_h$ large);
+- the stratum is more variable ($S_h$ large); or
+- sampling in the stratum is cheap ($c_h$ small).
+
+Two special cases are important. If the costs are equal, $c_1=\cdots=c_H$, then
+$n_h\propto N_hS_h$. This is **Neyman allocation**:
+$$
+n_h = n \frac{N_h S_h}{\sum_{l=1}^H N_l S_l},
+$$
+which gives the smallest possible variance for a total sample size $n$:
+$$
+V_{\text{opt}}(\overline{y}_{\text{str}}) = \frac{1}{n}\left(\sum_{h=1}^H \pi_h S_h\right)^2 - \frac{1}{N}\sum_{h=1}^H \pi_h S_h^2 .
+$$
+If, in addition, the stratum standard deviations are equal, $S_1=\cdots=S_H$, then
+$n_h\propto N_h$, which is proportional allocation. Neyman allocation improves
+on proportional allocation exactly when the $S_h$ differ across strata.
+
+In practice the $S_h$ are unknown when the survey is designed. They are replaced
+by estimates from a previous survey or a pilot sample, or by rough guesses. The
+allocation is fairly robust to such guesses: moderately wrong values of $S_h$
+still give a variance close to the optimum.
+
+### Example: Neyman allocation for the caribou survey
+
+To plan the caribou survey of @sec-strata-caribou, the investigators used rough
+estimates of the caribou counts as a proxy for $S_h$, with a total sample size
+of $n=225$:
+
+| Stratum | $N_h$ | $s_h$ | $N_hs_h$ | $n_h$ (Neyman) | Sample size used |
+|:---:|--:|-----:|-----:|----:|----:|
+| A | 400 | 3,000 | 1,200,000 | 96.26 | 98 |
+| B | 30 | 2,000 | 60,000 | 4.81 | 10 |
+| C | 61 | 9,000 | 549,000 | 44.04 | 37 |
+| D | 18 | 2,000 | 36,000 | 2.89 | 6 |
+| E | 70 | 12,000 | 840,000 | 67.38 | 39 |
+| F | 120 | 1,000 | 120,000 | 9.63 | 21 |
+| **Total** | **699** | | **2,805,000** | **225** | **211** |
+
+For example, stratum E gets $225 \times 840{,}000/2{,}805{,}000 = 67.38$ units. It
+has only 10% of the population units, but it was expected to be the most
+variable. The investigators wanted the sampling fraction to be at least $1/3$ in
+the smaller strata, so they used the Neyman values only as a guideline. The
+small strata B, D and F received more units than Neyman allocation suggests,
+and stratum E received fewer.
+
+### Example: Seal holes (seals.csv)
+
+This dataset comes from a survey of ringed seal breathing holes in three zones.
+The researchers used proportional allocation, sampling 20% of the areas in each
+zone.
 
 ```{r seals-load}
 ## load data
@@ -224,16 +916,19 @@ Nh <- c(68, 84, 48)
 res_seals <- str_est(ybarh, sh, nh, Nh, estimate = "mean")
 res_seals$table
 ```
-**Output Note:** Zone `r names(sh)[which.max(sh)]` has the highest standard deviation ($s_h \approx `r round(max(sh), 1)`$), indicating a high degree of variability in seal density in that region.
+Zone `r names(sh)[which.max(sh)]` has the largest standard deviation
+($s_h \approx `r round(max(sh), 1)`$), so seal density varies most there.
 
 ```{r seals-mean-estimate}
 res_seals$estimate |> format_est_gt("mean")
 ```
-**Output Note:** This provides the estimated mean number of seal holes per square kilometer (`r round(res_seals$estimate["Est."], 1)`).
+The estimated mean number of seal holes per area is
+`r round(res_seals$estimate["Est."], 1)`.
 
-### Neyman allocation of stratum sample size
-
-Because Zone 3 was highly variable, we could have achieved a lower overall variance if we had sampled it more heavily. Neyman allocation formally calculates this optimal distribution.
+Zone 3 was the most variable, so sampling it more heavily would have lowered the
+variance. Treating the sample $s_h$ as estimates of $S_h$, and assuming equal
+costs, we can compute the allocation proportions $L_h = n_h/n$ that a future
+survey should use:
 
 ```{r tbl-seals-neyman-allocation}
 #| tbl-cap: "Neyman-optimal allocation proportions for the seals survey zones"
@@ -245,20 +940,119 @@ NhShDCh <- Nh * Sh / sqrt(Ch)
 ## the optimal allocation proportion (Lh) for estimating the population total or mean:
 Lh <- NhShDCh / sum(NhShDCh)
 
-data.frame(Ch, Nh, Sh, NhShDCh, Lh) |> 
-  gt(rownames_to_stub = TRUE) |> 
+data.frame(Ch, Nh, Sh, NhShDCh, Lh) |>
+  gt(rownames_to_stub = TRUE) |>
   cols_label(NhShDCh = md("$N_h S_h / \\sqrt{C_h}$"), Lh = md("$L_h$ (Prop)"), Ch=md("$C_h$"), Sh=md("$S_h$"), Nh=md("$N_h$")) |>
   fmt_number(columns = c(Sh, NhShDCh, Lh), decimals = 3)
 ```
-**Output Note:** This displays the optimal allocation proportions ($L_h$). Even though Zone 2 is a larger area ($N_h=84$), Zone 3's high variance means we should allocate the largest share (`r round(Lh["3"] * 100, 0)`%) of our sampling effort there.
+Zone 2 has more areas ($N_h=84$), but Zone 3's high variability means it should
+receive the largest share of the sampling effort, about
+`r round(Lh["3"] * 100, 0)`%. Under proportional allocation it received only
+$48/200 = 24\%$.
 
-## Simulation to Study the Efficiency of Stratified Sampling with Different Allocation
+### Example: Optimal allocation for polls
 
-We will use the full `agpop.csv` dataset (acting as our true population) to run 2000 repeated samples. We will compare SRS, Proportional (P2S), and Optimal (Neyman) allocations.
+For estimating a proportion, $S_h^2 \approx p_h(1-p_h)$. As a function of $p$,
+$p(1-p)$ is a quadratic maximized at $p=1/2$ (@fig-p1mp). Election regions
+where support is near 50%, the "swing states", contribute the most variance per
+unit sampled. Optimal allocation therefore gives them relatively larger samples.
+The curve is flat near its maximum: $p(1-p)$ is 0.21 at $p = 0.3$ and still 0.25
+at $p = 0.5$. So Neyman allocation for proportions differs much from
+proportional allocation only when some $p_h$ are close to 0 or 1.
 
-### Using "Region" to Stratify
+```{r fig-p1mp}
+#| echo: false
+#| fig-cap: "The variance of a 0/1 variable, $p(1-p)$, is largest at $p = 0.5$."
+#| fig-width: 6
+#| fig-height: 3
+#| out-width: "60%"
+par(mar = c(4, 4.5, 0.5, 0.5))
+curve(x * (1 - x), from = 0, to = 1, lwd = 2.5, col = "blue4",
+      xlab = "p", ylab = "p(1 - p)", ylim = c(0, 0.3), las = 1, cex.lab = 1.2)
+segments(0.5, 0, 0.5, 0.25, lty = 2, col = "firebrick")
+points(0.5, 0.25, pch = 19, col = "firebrick")
+text(0.5, 0.25, "max 0.25 at p = 0.5", pos = 3, col = "firebrick")
+```
 
-#### Read Population Data
+### Example: Dollar stratification
+
+**Dollar stratification** is common in accounting audits. The recorded book
+amounts are used to stratify the population. For example, stratum 1 might be all
+loans over \$1 million, stratum 2 the loans between \$500,000 and \$999,999, and
+so on, down to loans under \$10,000. Optimal allocation is very efficient here.
+$S_h$ is much larger in the strata with large loan amounts, so optimal
+allocation gives those strata a much higher sampling fraction. Often the top
+stratum is sampled completely ($n_h = N_h$). This makes sense: an error in a
+\$3,000,000 loan is likely to contribute far more to the total audited
+discrepancy than an error in a \$3,000 loan.
+
+## Choosing Stratification Variables {#sec-strata-choice}
+
+Stratification is most efficient when the stratum means differ widely. Then SSB
+is large and the variability within the strata is small. Ideally we would
+stratify by the values of $y$ itself. But $y$ is unknown before sampling, so we
+look instead for an **auxiliary variable** $x$ that is known for every unit in
+the population and is highly correlated with $y$. Cutting the range of $x$ into
+intervals then produces strata whose distributions of $y$ differ
+(@fig-auxiliary).
+
+```{r fig-auxiliary}
+#| echo: false
+#| fig-cap: "Cutting an auxiliary variable $x$ at its terciles (left, dashed lines) produces strata with visibly different distributions of $y$ (right)."
+#| fig-width: 9
+#| fig-height: 4.2
+#| out-width: "90%"
+local({
+  set.seed(4)
+  n <- 60
+  x <- runif(n, 0, 10)
+  y <- 2 * x + rnorm(n, 0, 3)
+  cuts <- quantile(x, probs = c(1/3, 2/3))
+  strat <- cut(x, breaks = c(-Inf, cuts, Inf), labels = c("1", "2", "3"))
+
+  par(mfrow = c(1, 2), mar = c(4, 4, 1, 0.5))
+  plot(x, y, pch = 19, col = "blue4", xlab = "x", ylab = "y")
+  abline(lm(y ~ x), col = "firebrick", lwd = 2)
+  abline(v = cuts, col = "darkgreen", lty = 2, lwd = 2)
+  text(cuts, rep(max(y), 2), c("St 1|2", "St 2|3"), col = "darkgreen", pos = 2, cex = 0.8)
+
+  boxplot(y ~ strat, col = "lightblue", xlab = "Stratum", ylab = "y")
+})
+```
+
+Some examples:
+
+- To estimate total business expenditure on advertising, we would like the
+  businesses that spend the most on advertising in stratum 1, the next highest
+  spenders in stratum 2, and so on. We might stratify by the number of employees
+  or the size of the business, and by the type of product or service.
+- For farm income, we might use farm size as the stratification variable, since
+  we expect larger farms to have higher incomes.
+- For the county farm data, the acreage in an earlier census (`acres82`) is
+  known for every county and is much more strongly related to `acres92` than the
+  region is. @sec-strata-simulation shows how much this matters.
+
+Stratified sampling also has limitations:
+
+- **It requires information before sampling.** We need the stratum membership of
+  every unit and the stratum sizes $N_h$. For optimal allocation we also need
+  rough values of $S_h$.
+- **One survey usually measures many variables.** A stratification variable that
+  works well for one $y$ may work poorly for another. A variable highly
+  correlated with one outcome may be nearly uncorrelated with another outcome
+  measured in the same survey. Proportional allocation is a safe compromise,
+  since it never does materially worse than SRS for any variable. An allocation
+  that is optimal for one variable can be inefficient for others.
+
+## Simulation: Efficiency of Stratification and Allocation {#sec-strata-simulation}
+
+We now check the theory by simulation. The full `agpop.csv` dataset serves as
+the population. We draw 2000 repeated samples of $n = 300$ counties under three
+designs, SRS, proportional allocation (P2S) and Neyman allocation, and compare
+the spread of the resulting estimates of $\overline y_U$. We do this twice, with
+two different stratification variables.
+
+### Stratifying by region
 
 ```{r agpop-region-load}
 agpop <- acres_in_thousands(read.csv("data/agpop.csv"))
@@ -266,15 +1060,16 @@ agpop <- agpop[!is.na(agpop$acres92), ] ## remove those counties with na
 N <- nrow(agpop)
 ```
 
-#### Define Stratum Variable
-
 ```{r agpop-region-stratum}
 agpop$stratum <- agpop$region
 ## reorder agpop for the ease of using strata of "sampling" (very important)
 agpop <- agpop[order(agpop$stratum), ]
 ```
 
-A stratification variable is most effective when it strongly explains the variance in the target variable. We check this via ANOVA and R-squared.
+@sec-strata-prop showed that the variance reduction under
+proportional allocation is about $R^2$, the proportion of the variance of $y$
+explained by the strata. We compute it with a one-way ANOVA of `acres92` on the
+strata.
 
 ```{r fig-agpop-region-boxplot}
 #| fig-cap: "1992 farm acreage by region stratum"
@@ -288,13 +1083,19 @@ lm_region_gt <- format_lm_gt(lm_region)
 lm_region_gt$fit
 r_squared_region <- summary(lm_region)$r.squared
 ```
-**Output Note:** The R-squared is `r round(r_squared_region, 3)`. The region variable only explains about `r round(r_squared_region * 100, 1)`% of the variance in acreage, which is helpful but not extremely strong.
+The R-squared is `r round(r_squared_region, 3)`. Region explains only about
+`r round(r_squared_region * 100, 1)`% of the variance in acreage. That is
+helpful, but not strong.
 
-#### Stratified Sampling with P2S allocation (Single Run)
+#### A single stratified sample with proportional allocation {-}
+
+The function `strata()` from the **sampling** package draws an SRS of the given
+size in each stratum. The data must be sorted by stratum. The sampling weights
+are the reciprocals of the inclusion probabilities it returns.
 
 ```{r agpop-region-p2s-single}
 # doing one stratified sampling
-Nh <- tapply(1:nrow(agpop), agpop$stratum, length) 
+Nh <- tapply(1:nrow(agpop), agpop$stratum, length)
 nh <- round(Nh/sum(Nh)*300)
 
 ## doing stratified sampling
@@ -307,12 +1108,11 @@ agstrat$weight <- 1/strsample$Prob
 str_est_data(agstrat, "acres92", "stratum", "weight", estimate = "mean")$estimate |>
   format_est_gt("mean")
 ```
-**Output Note:** This provides a single point estimate for demonstration.
 
-#### Repeat stratified sampling with P2S allocation 2000 times
+#### Repeating proportional allocation 2000 times {-}
 
 ```{r agpop-region-p2s-sim, cache=TRUE}
-Nh <- tapply(1:nrow(agpop), agpop$stratum, length) 
+Nh <- tapply(1:nrow(agpop), agpop$stratum, length)
 nh <- round(Nh/sum(Nh)*300) ## make sure the order matches Nh
 
 nres <- 2000
@@ -325,19 +1125,23 @@ for (i in 1:nres) {
 }
 ```
 
-#### Repeat stratified sampling with optimal allocation 2000 times
+#### Repeating Neyman allocation 2000 times {-}
+
+In a simulation the population $S_h$ are known, so we can use the exact Neyman
+allocation:
 
 ```{r tbl-agpop-region-neyman-allocation}
 #| tbl-cap: "Population sizes and Neyman-optimal sample sizes by region stratum"
-Nh <- tapply(agpop$acres92, agpop$stratum, length) 
+Nh <- tapply(agpop$acres92, agpop$stratum, length)
 Sh <- tapply(agpop$acres92, agpop$stratum, sd)
 nh_opt <- round((Nh*Sh)/sum(Nh*Sh) * 300)
 
-data.frame(Nh, Sh, nh_opt) |> 
-  gt(rownames_to_stub = TRUE) |> 
+data.frame(Nh, Sh, nh_opt) |>
+  gt(rownames_to_stub = TRUE) |>
   fmt_number(columns = Sh, decimals = 2)
 ```
-**Output Note:** This table compares the population sizes to the optimal sample sizes. Notice that the West region (high variance) gets a disproportionately larger sample under Neyman allocation.
+The West, with the largest $S_h$, receives a disproportionately large sample
+under Neyman allocation.
 
 ```{r agpop-region-neyman-sim, cache=TRUE}
 nres <- 2000
@@ -350,7 +1154,7 @@ for (i in 1:nres) {
 }
 ```
 
-#### Repeat simple random sampling 2000 times
+#### Repeating SRS 2000 times {-}
 
 ```{r agpop-region-srs-sim, cache=TRUE}
 nres <- 2000
@@ -362,19 +1166,18 @@ for (i in 1:nres) {
 }
 ```
 
-#### Compare the efficiency of different methods
+#### Comparing the three designs {-}
 
 ```{r fig-agpop-region-compare-boxplot}
 #| fig-cap: "Sampling distribution of the mean under SRS, proportional, and Neyman allocation (region strata, 2000 simulations)"
 sim_results_str_region <- data.frame(
-  "SRS" = srs_simulated[,1], 
-  "Prop2size" = str_p2s_simulated[,1], 
+  "SRS" = srs_simulated[,1],
+  "Prop2size" = str_p2s_simulated[,1],
   "Neyman" = str_neyman_simulated[,1]
 )
 boxplot(sim_results_str_region)
 abline(h = mean(agpop$acres92), col = "red")
 ```
-**Output Note:** The plot visually demonstrates that Neyman allocation has the tightest spread around the true mean (the red line).
 
 ```{r tbl-agpop-region-compare-methods}
 #| tbl-cap: "Simulated mean, variance, and variance reduction by allocation method (region strata)"
@@ -384,37 +1187,40 @@ sim_var_relative <- sim_var / sim_var[1]
 sim_var_reduction <- 1 - sim_var_relative
 
 data.frame(
-  "Mean" = sim_means, 
-  "Variance" = sim_var, 
-  "Relative Variance" = sim_var_relative, 
-  "Percentage of Variance Reduction" = sim_var_reduction, 
+  "Mean" = sim_means,
+  "Variance" = sim_var,
+  "Relative Variance" = sim_var_relative,
+  "Percentage of Variance Reduction" = sim_var_reduction,
   check.names = FALSE
-) |> 
-  gt(rownames_to_stub = TRUE) |> 
-  fmt_number(columns = c(Mean, Variance), decimals = 1) |> 
-  fmt_percent(columns = c(`Percentage of Variance Reduction`), decimals = 2) |> 
+) |>
+  gt(rownames_to_stub = TRUE) |>
+  fmt_number(columns = c(Mean, Variance), decimals = 1) |>
+  fmt_percent(columns = c(`Percentage of Variance Reduction`), decimals = 2) |>
   fmt_number(columns = c(`Relative Variance`), decimals = 3)
 ```
-**Output Note:** The table summarizes the simulation. Proportional allocation reduces variance by `r round(sim_var_reduction["Prop2size"] * 100, 1)`%, while Neyman allocation reduces it by `r round(sim_var_reduction["Neyman"] * 100, 1)`% compared to Simple Random Sampling.
+All three designs are centred on the true mean (the red line). Proportional
+allocation reduces the variance by
+`r round(sim_var_reduction["Prop2size"] * 100, 1)`% compared with SRS, close to
+$R^2 = `r round(r_squared_region, 3)`$ as the theory predicts. Neyman allocation
+reduces it by `r round(sim_var_reduction["Neyman"] * 100, 1)`%, because the
+regions differ greatly in their standard deviations $S_h$.
 
-### Using "acres82" to Define Strata
+### Stratifying by acres82
 
-What if we stratify by a variable highly correlated with our target, like the acreage from a decade prior (`acres82`)?
-
-#### Read Population Data
+Now we stratify by a variable that is highly correlated with the target: the
+farm acreage of each county a decade earlier (`acres82`).
 
 ```{r agpop-acres82-load}
 agpop <- acres_in_thousands(read.csv("data/agpop.csv"))
 ## acres82 is the stratifier here, so drop the counties missing either variable
-agpop <- agpop[!is.na(agpop$acres92) & !is.na(agpop$acres82), ] 
+agpop <- agpop[!is.na(agpop$acres92) & !is.na(agpop$acres82), ]
 N <- nrow(agpop)
 ```
 
-#### Define Stratum Variable with Quantiles of "acres82"
-We convert the continuous `acres82` variable into four categorical strata by cutting
-it at the 25th, 75th and 95th percentiles. The cut is deliberately uneven: the top
-5% of counties, where the acreages run away, get a stratum of their own, which is
-what makes the stratification so effective below.
+We convert the continuous `acres82` into four strata by cutting it at its 25th,
+75th and 95th percentiles. The cut is deliberately uneven. The top 5% of
+counties, where the acreages run away, get a stratum of their own, as in dollar
+stratification. This is what makes the stratification so effective below.
 
 ```{r agpop-acres82-stratum}
 agpop$stratum <- cut(agpop$acres82,
@@ -423,8 +1229,6 @@ agpop$stratum <- cut(agpop$acres82,
 levels(agpop$stratum) <- paste0("acres82", c("Q1", "Q2", "Q3", "Q4"))
 agpop <- agpop[order(agpop$stratum), ]
 ```
-
-Let's check the explanatory power of this new stratification variable.
 
 ```{r fig-agpop-acres82-boxplot}
 #| fig-cap: "1992 farm acreage by acres82 quantile stratum"
@@ -437,12 +1241,14 @@ lm_acres82_gt <- format_lm_gt(lm_acres82)
 lm_acres82_gt$fit
 r_squared_acres82 <- summary(lm_acres82)$r.squared
 ```
-**Output Note:** The R-squared is `r round(r_squared_acres82, 3)`. The past acreage explains `r round(r_squared_acres82 * 100, 1)`% of the variance in 1992 acreage, making this a vastly superior stratification variable.
+The R-squared is now `r round(r_squared_acres82, 3)`: the earlier acreage
+explains `r round(r_squared_acres82 * 100, 1)`% of the variance in 1992
+acreage. This makes it a far better stratification variable than region.
 
-#### Stratified sampling with P2S allocation
+#### Repeating proportional allocation 2000 times {-}
 
 ```{r agpop-acres82-p2s-sim, cache=TRUE}
-Nh <- tapply(1:nrow(agpop), agpop$stratum, length) 
+Nh <- tapply(1:nrow(agpop), agpop$stratum, length)
 nh <- round(Nh/sum(Nh)*300)
 
 nres <- 2000
@@ -455,10 +1261,10 @@ for (i in 1:nres) {
 }
 ```
 
-#### Repeat stratified sampling with optimal allocation 2000 times
+#### Repeating Neyman allocation 2000 times {-}
 
 ```{r agpop-acres82-neyman-sim, cache=TRUE}
-Nh <- tapply(1:nrow(agpop), agpop$stratum, length) 
+Nh <- tapply(1:nrow(agpop), agpop$stratum, length)
 Sh <- tapply(agpop$acres92, agpop$stratum, sd)
 nh_opt <- round((Nh*Sh)/sum(Nh*Sh) * 300)
 
@@ -472,7 +1278,7 @@ for (i in 1:nres) {
 }
 ```
 
-#### Repeat simple random sampling 2000 times
+#### Repeating SRS 2000 times {-}
 
 ```{r agpop-acres82-srs-sim, cache=TRUE}
 nres <- 2000
@@ -484,19 +1290,18 @@ for (i in 1:nres) {
 }
 ```
 
-#### Compare the efficiency of different methods
+#### Comparing the three designs {-}
 
 ```{r fig-agpop-acres82-compare-boxplot}
 #| fig-cap: "Sampling distribution of the mean under SRS, proportional, and Neyman allocation (acres82 strata, 2000 simulations)"
 sim_results_str_acres82 <- data.frame(
-  "SRS" = srs_simulated[,1], 
-  "Prop2size" = str_p2s_simulated[,1], 
+  "SRS" = srs_simulated[,1],
+  "Prop2size" = str_p2s_simulated[,1],
   "Neyman" = str_neyman_simulated[,1]
 )
 boxplot(sim_results_str_acres82)
 abline(h = mean(agpop$acres92), col = "red")
 ```
-**Output Note:** The boxplot visually highlights a massive reduction in variance compared to SRS, especially for the Neyman allocation.
 
 ```{r tbl-agpop-acres82-compare-methods}
 #| tbl-cap: "Simulated mean, variance, and variance reduction by allocation method (acres82 strata)"
@@ -506,18 +1311,24 @@ sim_var_relative <- sim_var / sim_var[1]
 sim_var_reduction <- 1 - sim_var_relative
 
 data.frame(
-  "Mean" = sim_means, 
-  "Variance" = sim_var, 
-  "Relative Variance" = sim_var_relative, 
-  "Percentage of Variance Reduction" = sim_var_reduction, 
+  "Mean" = sim_means,
+  "Variance" = sim_var,
+  "Relative Variance" = sim_var_relative,
+  "Percentage of Variance Reduction" = sim_var_reduction,
   check.names = FALSE
-) |> 
-  gt(rownames_to_stub = TRUE) |> 
-  fmt_number(columns = c(Mean, Variance), decimals = 1) |> 
-  fmt_percent(columns = c(`Percentage of Variance Reduction`), decimals = 2) |> 
+) |>
+  gt(rownames_to_stub = TRUE) |>
+  fmt_number(columns = c(Mean, Variance), decimals = 1) |>
+  fmt_percent(columns = c(`Percentage of Variance Reduction`), decimals = 2) |>
   fmt_number(columns = c(`Relative Variance`), decimals = 3)
 ```
-**Output Note:** The table shows dramatic results: Proportional allocation reduces variance by `r round(sim_var_reduction["Prop2size"] * 100, 1)`%, and Neyman allocation reduces it by `r round(sim_var_reduction["Neyman"] * 100, 1)`%. Stratifying by a highly correlated variable is immensely powerful.
+The results are dramatic. Proportional allocation reduces the variance by
+`r round(sim_var_reduction["Prop2size"] * 100, 1)`%, again close to
+$R^2 = `r round(r_squared_acres82, 3)`$. Neyman allocation reduces it by
+`r round(sim_var_reduction["Neyman"] * 100, 1)`%. The top stratum is both small
+and highly variable, so Neyman allocation samples it heavily, just as dollar
+stratification samples the largest loans. Stratifying by a variable that is
+highly correlated with $y$ is very powerful.
 
 ## Interactive Demonstration: Stratification by `acres82` or `region` {#sec-app-stratification}
 
