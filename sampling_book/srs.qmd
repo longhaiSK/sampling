@@ -9,9 +9,11 @@ execute:
 ---
 
 ```{r source-functions}
+#| cache: false
 #| echo: false
 library(dplyr)
 source("samplingestimate.r")
+source("design_plots.r")
 ```
 
 Simple random sampling is the simplest probability sampling design, and the
@@ -47,6 +49,21 @@ sample(1:N, size = n)
 ```
 
 returns the labels of $n$ distinct units chosen in this way.
+
+@fig-srs-design illustrates an SRS of $n = 60$ from a synthetic population of
+$N = 1000$ units. The design uses no information about the units other than their
+labels, so the sampled units (red) are scattered at random over the population,
+and their values cover its whole range.
+
+```{r fig-srs-design}
+#| cache: false
+#| echo: false
+#| fig-cap: "A simple random sample of $n = 60$ (red) from a synthetic population of $N = 1000$ units, listed in an arbitrary order. The dashed line is the population mean."
+#| fig-width: 8
+#| fig-height: 3.5
+#| out-width: "85%"
+plot_design_srs()
+```
 
 ### Inclusion probabilities
 

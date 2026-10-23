@@ -9,7 +9,7 @@
 <meta name="author" content="Longhai Li">
 <meta name="dcterms.date" content="2026-10-22">
 
-<title>6&nbsp; Unequal Probability Sampling – Elements of Sampling Survey</title>
+<title>7&nbsp; Unequal Probability Sampling – Elements of Sampling Survey</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -155,7 +155,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ups.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ups.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -191,38 +191,44 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Sampling Survey</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./introR.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./srs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./strata.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ratio.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cluster.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ups.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -254,36 +260,36 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#functions-and-packages" id="toc-functions-and-packages" class="nav-link active" data-scroll-target="#functions-and-packages"><span class="header-section-number">6.1</span> Functions and Packages</a></li>
-  <li><a href="#sec-ups-hh" id="toc-sec-ups-hh" class="nav-link" data-scroll-target="#sec-ups-hh"><span class="header-section-number">6.2</span> The Hansen–Hurwitz Estimator</a>
+  <li><a href="#functions-and-packages" id="toc-functions-and-packages" class="nav-link active" data-scroll-target="#functions-and-packages"><span class="header-section-number">7.1</span> Functions and Packages</a></li>
+  <li><a href="#sec-ups-hh" id="toc-sec-ups-hh" class="nav-link" data-scroll-target="#sec-ups-hh"><span class="header-section-number">7.2</span> The Hansen–Hurwitz Estimator</a>
   <ul>
-  <li><a href="#sec-ups-hh-theory" id="toc-sec-ups-hh-theory" class="nav-link" data-scroll-target="#sec-ups-hh-theory"><span class="header-section-number">6.2.1</span> Theory</a></li>
-  <li><a href="#sec-ups-compare" id="toc-sec-ups-compare" class="nav-link" data-scroll-target="#sec-ups-compare"><span class="header-section-number">6.2.2</span> Comparison of the HH, Ratio, and Average Estimators of <span class="math inline">\(B\)</span></a></li>
-  <li><a href="#sec-ups-toy" id="toc-sec-ups-toy" class="nav-link" data-scroll-target="#sec-ups-toy"><span class="header-section-number">6.2.3</span> Toy Example: Four Supermarkets</a></li>
-  <li><a href="#sec-ups-toy-sample" id="toc-sec-ups-toy-sample" class="nav-link" data-scroll-target="#sec-ups-toy-sample"><span class="header-section-number">6.2.4</span> Computation Example: Revenue from AI Token Usage</a></li>
-  <li><a href="#sec-ups-statepop" id="toc-sec-ups-statepop" class="nav-link" data-scroll-target="#sec-ups-statepop"><span class="header-section-number">6.2.5</span> Example: Physicians in U.S. Counties (<code>statepop.csv</code>)</a>
+  <li><a href="#sec-ups-hh-theory" id="toc-sec-ups-hh-theory" class="nav-link" data-scroll-target="#sec-ups-hh-theory"><span class="header-section-number">7.2.1</span> Theory</a></li>
+  <li><a href="#sec-ups-compare" id="toc-sec-ups-compare" class="nav-link" data-scroll-target="#sec-ups-compare"><span class="header-section-number">7.2.2</span> Comparison of the HH, Ratio, and Average Estimators of <span class="math inline">\(B\)</span></a></li>
+  <li><a href="#sec-ups-toy" id="toc-sec-ups-toy" class="nav-link" data-scroll-target="#sec-ups-toy"><span class="header-section-number">7.2.3</span> Toy Example: Four Supermarkets</a></li>
+  <li><a href="#sec-ups-toy-sample" id="toc-sec-ups-toy-sample" class="nav-link" data-scroll-target="#sec-ups-toy-sample"><span class="header-section-number">7.2.4</span> Computation Example: Revenue from AI Token Usage</a></li>
+  <li><a href="#sec-ups-statepop" id="toc-sec-ups-statepop" class="nav-link" data-scroll-target="#sec-ups-statepop"><span class="header-section-number">7.2.5</span> Example: Physicians in U.S. Counties (<code>statepop.csv</code>)</a>
   <ul class="collapse">
   <li><a href="#comparison-with-estimates-based-on-an-srs-sample" id="toc-comparison-with-estimates-based-on-an-srs-sample" class="nav-link" data-scroll-target="#comparison-with-estimates-based-on-an-srs-sample">Comparison with estimates based on an SRS sample</a></li>
   </ul></li>
-  <li><a href="#sec-ups-sim" id="toc-sec-ups-sim" class="nav-link" data-scroll-target="#sec-ups-sim"><span class="header-section-number">6.2.6</span> Simulation Study using <code>agpop</code> Data</a></li>
-  <li><a href="#sec-ups-app" id="toc-sec-ups-app" class="nav-link" data-scroll-target="#sec-ups-app"><span class="header-section-number">6.2.7</span> Shinylive App Comparing SRS and UPSWR</a></li>
+  <li><a href="#sec-ups-sim" id="toc-sec-ups-sim" class="nav-link" data-scroll-target="#sec-ups-sim"><span class="header-section-number">7.2.6</span> Simulation Study using <code>agpop</code> Data</a></li>
+  <li><a href="#sec-ups-app" id="toc-sec-ups-app" class="nav-link" data-scroll-target="#sec-ups-app"><span class="header-section-number">7.2.7</span> Shinylive App Comparing SRS and UPSWR</a></li>
   </ul></li>
-  <li><a href="#sec-ups-cluster" id="toc-sec-ups-cluster" class="nav-link" data-scroll-target="#sec-ups-cluster"><span class="header-section-number">6.3</span> One-Stage Cluster Sampling with PPS</a>
+  <li><a href="#sec-ups-cluster" id="toc-sec-ups-cluster" class="nav-link" data-scroll-target="#sec-ups-cluster"><span class="header-section-number">7.3</span> One-Stage Cluster Sampling with PPS</a>
   <ul>
-  <li><a href="#sec-ups-cluster-theory" id="toc-sec-ups-cluster-theory" class="nav-link" data-scroll-target="#sec-ups-cluster-theory"><span class="header-section-number">6.3.1</span> Theory</a></li>
-  <li><a href="#sec-ups-cluster-example" id="toc-sec-ups-cluster-example" class="nav-link" data-scroll-target="#sec-ups-cluster-example"><span class="header-section-number">6.3.2</span> Example: Falls in Long-Term Care Homes</a></li>
+  <li><a href="#sec-ups-cluster-theory" id="toc-sec-ups-cluster-theory" class="nav-link" data-scroll-target="#sec-ups-cluster-theory"><span class="header-section-number">7.3.1</span> Theory</a></li>
+  <li><a href="#sec-ups-cluster-example" id="toc-sec-ups-cluster-example" class="nav-link" data-scroll-target="#sec-ups-cluster-example"><span class="header-section-number">7.3.2</span> Example: Falls in Long-Term Care Homes</a></li>
   </ul></li>
-  <li><a href="#sec-ups-twostage" id="toc-sec-ups-twostage" class="nav-link" data-scroll-target="#sec-ups-twostage"><span class="header-section-number">6.4</span> Two-Stage Cluster Sampling with PPS</a>
+  <li><a href="#sec-ups-twostage" id="toc-sec-ups-twostage" class="nav-link" data-scroll-target="#sec-ups-twostage"><span class="header-section-number">7.4</span> Two-Stage Cluster Sampling with PPS</a>
   <ul>
-  <li><a href="#sec-ups-twostage-theory" id="toc-sec-ups-twostage-theory" class="nav-link" data-scroll-target="#sec-ups-twostage-theory"><span class="header-section-number">6.4.1</span> Theory</a></li>
-  <li><a href="#sec-ups-twostage-example" id="toc-sec-ups-twostage-example" class="nav-link" data-scroll-target="#sec-ups-twostage-example"><span class="header-section-number">6.4.2</span> Example: Falls in Long-Term Care Homes, Two Stages</a></li>
+  <li><a href="#sec-ups-twostage-theory" id="toc-sec-ups-twostage-theory" class="nav-link" data-scroll-target="#sec-ups-twostage-theory"><span class="header-section-number">7.4.1</span> Theory</a></li>
+  <li><a href="#sec-ups-twostage-example" id="toc-sec-ups-twostage-example" class="nav-link" data-scroll-target="#sec-ups-twostage-example"><span class="header-section-number">7.4.2</span> Example: Falls in Long-Term Care Homes, Two Stages</a></li>
   </ul></li>
-  <li><a href="#sec-ups-wo" id="toc-sec-ups-wo" class="nav-link" data-scroll-target="#sec-ups-wo"><span class="header-section-number">6.5</span> UPS Without Replacement</a>
+  <li><a href="#sec-ups-wo" id="toc-sec-ups-wo" class="nav-link" data-scroll-target="#sec-ups-wo"><span class="header-section-number">7.5</span> UPS Without Replacement</a>
   <ul>
-  <li><a href="#sec-ups-wo-theory" id="toc-sec-ups-wo-theory" class="nav-link" data-scroll-target="#sec-ups-wo-theory"><span class="header-section-number">6.5.1</span> Review of UPSWR and the Horvitz–Thompson Estimator</a></li>
-  <li><a href="#sec-ups-wo-example" id="toc-sec-ups-wo-example" class="nav-link" data-scroll-target="#sec-ups-wo-example"><span class="header-section-number">6.5.2</span> Example: Acres of Farmland in Counties (<code>agpop.csv</code>)</a></li>
+  <li><a href="#sec-ups-wo-theory" id="toc-sec-ups-wo-theory" class="nav-link" data-scroll-target="#sec-ups-wo-theory"><span class="header-section-number">7.5.1</span> Review of UPSWR and the Horvitz–Thompson Estimator</a></li>
+  <li><a href="#sec-ups-wo-example" id="toc-sec-ups-wo-example" class="nav-link" data-scroll-target="#sec-ups-wo-example"><span class="header-section-number">7.5.2</span> Example: Acres of Farmland in Counties (<code>agpop.csv</code>)</a></li>
   </ul></li>
-  <li><a href="#sec-ups-when" id="toc-sec-ups-when" class="nav-link" data-scroll-target="#sec-ups-when"><span class="header-section-number">6.6</span> When to Use Unequal Probability Sampling</a></li>
+  <li><a href="#sec-ups-when" id="toc-sec-ups-when" class="nav-link" data-scroll-target="#sec-ups-when"><span class="header-section-number">7.6</span> When to Use Unequal Probability Sampling</a></li>
   </ul>
 </nav>
 </nav>
@@ -296,7 +302,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></h1>
 </div>
 
 
@@ -327,13 +333,13 @@ window.Quarto = {
 
 <p>Unequal probability sampling (UPS) selects units with different probabilities, usually in proportion to a <strong>size variable</strong> known for every unit in the population. Large units contribute more to a total, so we give them a larger chance of being selected, and correct for this in the estimator. This chapter builds UPS in three steps, each a special case or an extension of the previous one:</p>
 <ol type="1">
-<li><strong>The Hansen–Hurwitz (HH) estimator</strong>: the selection probabilities <span class="math inline">\(\psi_i\)</span> are built from an auxiliary variable <span class="math inline">\(x_i\)</span>, and we estimate the total or mean of <span class="math inline">\(y_i\)</span> (<a href="#sec-ups-hh" class="quarto-xref"><span>Section 6.2</span></a>).</li>
-<li><strong>One-stage cluster sampling</strong>: the units are clusters (psus), <span class="math inline">\(y_i\)</span> is the cluster total <span class="math inline">\(t_i\)</span>, and <span class="math inline">\(x_i\)</span> is the cluster size <span class="math inline">\(M_i\)</span> (<a href="#sec-ups-cluster" class="quarto-xref"><span>Section 6.3</span></a>).</li>
-<li><strong>Two-stage cluster sampling</strong>: the cluster total <span class="math inline">\(t_i\)</span> is not observed, but estimated from a subsample of the cluster (<a href="#sec-ups-twostage" class="quarto-xref"><span>Section 6.4</span></a>).</li>
+<li><strong>The Hansen–Hurwitz (HH) estimator</strong>: the selection probabilities <span class="math inline">\(\psi_i\)</span> are built from an auxiliary variable <span class="math inline">\(x_i\)</span>, and we estimate the total or mean of <span class="math inline">\(y_i\)</span> (<a href="#sec-ups-hh" class="quarto-xref"><span>Section 7.2</span></a>).</li>
+<li><strong>One-stage cluster sampling</strong>: the units are clusters (psus), <span class="math inline">\(y_i\)</span> is the cluster total <span class="math inline">\(t_i\)</span>, and <span class="math inline">\(x_i\)</span> is the cluster size <span class="math inline">\(M_i\)</span> (<a href="#sec-ups-cluster" class="quarto-xref"><span>Section 7.3</span></a>).</li>
+<li><strong>Two-stage cluster sampling</strong>: the cluster total <span class="math inline">\(t_i\)</span> is not observed, but estimated from a subsample of the cluster (<a href="#sec-ups-twostage" class="quarto-xref"><span>Section 7.4</span></a>).</li>
 </ol>
-<p>Sampling <strong>with replacement</strong> (UPSWR) is used throughout, since it makes the variance easy to estimate: we make <span class="math inline">\(n\)</span> independent draws, and on each draw unit <span class="math inline">\(i\)</span> is selected with probability <span class="math inline">\(\psi_i\)</span>, where <span class="math inline">\(\sum_{i=1}^N\psi_i=1\)</span>. A unit may be selected more than once, and it then appears in the sample once per draw. Sampling without replacement is briefly discussed at the end (<a href="#sec-ups-wo" class="quarto-xref"><span>Section 6.5</span></a>).</p>
-<section id="functions-and-packages" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="functions-and-packages"><span class="header-section-number">6.1</span> Functions and Packages</h2>
+<p>Sampling <strong>with replacement</strong> (UPSWR) is used throughout, since it makes the variance easy to estimate: we make <span class="math inline">\(n\)</span> independent draws, and on each draw unit <span class="math inline">\(i\)</span> is selected with probability <span class="math inline">\(\psi_i\)</span>, where <span class="math inline">\(\sum_{i=1}^N\psi_i=1\)</span>. A unit may be selected more than once, and it then appears in the sample once per draw. Sampling without replacement is briefly discussed at the end (<a href="#sec-ups-wo" class="quarto-xref"><span>Section 7.5</span></a>).</p>
+<section id="functions-and-packages" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="functions-and-packages"><span class="header-section-number">7.1</span> Functions and Packages</h2>
 <p>The estimating functions used throughout this book (including <code>ratio_est</code>, <code>reg_est</code>, <code>srs_est</code>, <code>upswr_est</code>, <code>upswr_total</code>, <code>upswr_ratio</code>, <code>cluster_upswr_ratio</code>, <code>cluster_upswo_ratio</code>, and the <code>format_est_gt</code> table-formatting helper used below) live in a single shared file, <code>samplingestimate.r</code>, which we source below.</p>
 <details>
 <summary>
@@ -1393,10 +1399,10 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <span id="cb1-1052"><a href="#cb1-1052" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </section>
-<section id="sec-ups-hh" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="sec-ups-hh"><span class="header-section-number">6.2</span> The Hansen–Hurwitz Estimator</h2>
-<section id="sec-ups-hh-theory" class="level3" data-number="6.2.1">
-<h3 data-number="6.2.1" class="anchored" data-anchor-id="sec-ups-hh-theory"><span class="header-section-number">6.2.1</span> Theory</h3>
+<section id="sec-ups-hh" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="sec-ups-hh"><span class="header-section-number">7.2</span> The Hansen–Hurwitz Estimator</h2>
+<section id="sec-ups-hh-theory" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="sec-ups-hh-theory"><span class="header-section-number">7.2.1</span> Theory</h3>
 <p>The population has <span class="math inline">\(N\)</span> units. Unit <span class="math inline">\(i\)</span> has a study value <span class="math inline">\(y_i\)</span>, with population total <span class="math inline">\(t=\sum_{i=1}^N y_i\)</span> and mean <span class="math inline">\(\bar{y}_U=t/N\)</span>, and an auxiliary variable <span class="math inline">\(x_i&gt;0\)</span> whose total <span class="math inline">\(t_x=\sum_{i=1}^N x_i\)</span> is known. If <span class="math inline">\(y_i\)</span> is roughly proportional to <span class="math inline">\(x_i\)</span> (for example, the number of physicians of a county and its population), we construct the selection probabilities from <span class="math inline">\(x_i\)</span>: <span class="math display">\[
 \psi_i=\frac{x_i}{t_x}.
 \]</span></p>
@@ -1470,11 +1476,11 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(b_j^*-\bar{b}^*\right)^2 .
 \]</span> In the more general notation of unequal probability sampling, <span class="math inline">\(y_j^*/\psi_j^*=t_x\,b_j^*\)</span> is the estimate of the total from draw <span class="math inline">\(j\)</span>, so <span class="math inline">\(\hat{t}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n y_j^*/\psi_j^*\)</span>. This form works for any <span class="math inline">\(\psi_i\)</span>, not only for <span class="math inline">\(\psi_i=x_i/t_x\)</span>, and is what the function <code>upswr_total</code> computes; for <span class="math inline">\(\psi_i=x_i/t_x\)</span>, the function <code>upswr_est</code> works directly with the ratios <span class="math inline">\(b_j^*\)</span>.</p>
 <p><strong>Variance of the mean and total.</strong> The variances of <span class="math inline">\(\hat{\bar{y}}_{\mathrm{HH}}\)</span> and <span class="math inline">\(\hat{t}_{\mathrm{HH}}\)</span> are <span class="math inline">\(\bar{x}_U^2\)</span> and <span class="math inline">\(t_x^2\)</span> times <span class="math inline">\(V(\hat{B}_{\mathrm{HH}})\)</span>. The variance is small when all the ratios <span class="math inline">\(b_i\)</span> are close to <span class="math inline">\(B\)</span>, that is, when <span class="math inline">\(y_i\)</span> is nearly proportional to <span class="math inline">\(x_i\)</span>.</p>
 </section>
-<section id="sec-ups-compare" class="level3" data-number="6.2.2">
-<h3 data-number="6.2.2" class="anchored" data-anchor-id="sec-ups-compare"><span class="header-section-number">6.2.2</span> Comparison of the HH, Ratio, and Average Estimators of <span class="math inline">\(B\)</span></h3>
+<section id="sec-ups-compare" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="sec-ups-compare"><span class="header-section-number">7.2.2</span> Comparison of the HH, Ratio, and Average Estimators of <span class="math inline">\(B\)</span></h3>
 <p>The ratio estimator and the sample average are used with a simple random sample (SRS) <span class="math inline">\(\mathcal{S}\)</span> of <span class="math inline">\(n\)</span> units without replacement. Let <span class="math inline">\(w^x_i=x_i/\bar{x}_U\)</span> be the size of unit <span class="math inline">\(i\)</span> relative to the average, and <span class="math inline">\(d_i=y_i-Bx_i=x_i(b_i-B)\)</span> the residuals about the line through the origin <span class="math inline">\(y=Bx\)</span>. Each estimator is also an estimator of <span class="math inline">\(B\)</span>, which is then multiplied by <span class="math inline">\(\bar{x}_U\)</span> or <span class="math inline">\(t_x\)</span>.</p>
 <ul>
-<li><p>The <strong>ratio estimator</strong> (<a href="ratio.html#sec-ratio-theory" class="quarto-xref"><span>Section 4.3.1</span></a>) estimates <span class="math inline">\(\bar{y}_U\)</span> by <span class="math inline">\(\bar{x}_U\,\bar{y}/\bar{x}\)</span>. Since <span class="math inline">\(y_i=x_ib_i\)</span>, <span class="math display">\[
+<li><p>The <strong>ratio estimator</strong> (<a href="ratio.html#sec-ratio-theory" class="quarto-xref"><span>Section 5.3.1</span></a>) estimates <span class="math inline">\(\bar{y}_U\)</span> by <span class="math inline">\(\bar{x}_U\,\bar{y}/\bar{x}\)</span>. Since <span class="math inline">\(y_i=x_ib_i\)</span>, <span class="math display">\[
 \hat{B}_r=\frac{\bar{y}}{\bar{x}}=\frac{\sum_{i\in\mathcal{S}}y_i}{\sum_{i\in\mathcal{S}}x_i}
 =\frac{\sum_{i\in\mathcal{S}}x_i\,b_i}{\sum_{i\in\mathcal{S}}x_i},
 \]</span> the mean of the sampled <span class="math inline">\(b_i\)</span> weighted by <span class="math inline">\(x_i\)</span> (weights adding up to one), and <span class="math inline">\(\hat{\bar{y}}_r=\bar{x}_U\hat{B}_r\)</span>, <span class="math inline">\(\hat{t}_r=t_x\hat{B}_r\)</span>.</p></li>
@@ -1484,11 +1490,11 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(b_j^*-\bar{b}^*\right)^2 .
 \hat{B}_{\mathrm{avg}}=\frac{\bar{y}}{\bar{x}_U}=\frac{1}{n}\sum_{i\in\mathcal{S}}w^x_i\,b_i ,
 \]</span> the mean of the sampled <span class="math inline">\(b_i\)</span> with weights <span class="math inline">\(w^x_i\)</span> that do not add up to one, and <span class="math inline">\(\hat{t}_{\mathrm{avg}}=t_x\hat{B}_{\mathrm{avg}}\)</span>.</p></li>
 </ul>
-<p><a href="#tbl-ups-compare" class="quarto-xref">Table&nbsp;<span>6.1</span></a> compares them with the HH estimator <span class="math inline">\(\hat{B}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n b_j^*\)</span>. Their variances follow from the variances of <span class="math inline">\(\bar{y}\)</span> and <span class="math inline">\(\hat{\bar{y}}_r\)</span> for SRS divided by <span class="math inline">\(\bar{x}_U^2\)</span>, using <span class="math inline">\(w^x_ib_i-B=(y_i-\bar{y}_U)/\bar{x}_U\)</span> and <span class="math inline">\(w^x_i(b_i-B)=d_i/\bar{x}_U\)</span> (the ratio estimator’s variance is the large-<span class="math inline">\(n\)</span> approximation), and from the HH variance of the theory section.</p>
+<p><a href="#tbl-ups-compare" class="quarto-xref">Table&nbsp;<span>7.1</span></a> compares them with the HH estimator <span class="math inline">\(\hat{B}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n b_j^*\)</span>. Their variances follow from the variances of <span class="math inline">\(\bar{y}\)</span> and <span class="math inline">\(\hat{\bar{y}}_r\)</span> for SRS divided by <span class="math inline">\(\bar{x}_U^2\)</span>, using <span class="math inline">\(w^x_ib_i-B=(y_i-\bar{y}_U)/\bar{x}_U\)</span> and <span class="math inline">\(w^x_i(b_i-B)=d_i/\bar{x}_U\)</span> (the ratio estimator’s variance is the large-<span class="math inline">\(n\)</span> approximation), and from the HH variance of the theory section.</p>
 <div id="tbl-ups-compare" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ups-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.1: Estimators of <span class="math inline">\(B=t/t_x\)</span> from SRS and UPSWR samples of <span class="math inline">\(n\)</span> units.
+Table&nbsp;7.1: Estimators of <span class="math inline">\(B=t/t_x\)</span> from SRS and UPSWR samples of <span class="math inline">\(n\)</span> units.
 </figcaption>
 <div aria-describedby="tbl-ups-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -1571,8 +1577,8 @@ Table&nbsp;6.1: Estimators of <span class="math inline">\(B=t/t_x\)</span> from 
 </table>
 <p>The ratio estimator and HH use the same ratios and the same centre <span class="math inline">\(B\)</span>, so their terms differ only in one factor: <span class="math inline">\((w^x_i)^2\)</span> for the ratio estimator, <span class="math inline">\(w^x_i\)</span> for HH. HH multiplies the term of the ratio estimator by <span class="math inline">\(1/w^x_i=\bar{x}_U/x_i\)</span>. A unit larger than average (<span class="math inline">\(w^x_i&gt;1\)</span>) is <strong>downweighted</strong> under HH, and a smaller one is upweighted. The reason is that HH gives equal weights to the draws because the large units are already drawn more often, whereas the ratio estimator must give the large units larger weights <span class="math inline">\(x_i\)</span> to compensate for the equal chances. UPSWR therefore wins when the large residuals <span class="math inline">\(d_i\)</span> belong to the large units, that is, when the spread of <span class="math inline">\(y_i\)</span> about the line grows with <span class="math inline">\(x_i\)</span>, as it does for county acreages. When the spread of <span class="math inline">\(y_i\)</span> is the same for all <span class="math inline">\(x_i\)</span> (so that <span class="math inline">\(b_i-B\propto1/x_i\)</span>), the SRS ratio estimator does better. When <span class="math inline">\(y_i\)</span> is not related to <span class="math inline">\(x_i\)</span> at all, all the <span class="math inline">\(b_i-B\)</span> are large and both estimators can be worse than the plain sample average. The next section illustrates these cases.</p>
 </section>
-<section id="sec-ups-toy" class="level3" data-number="6.2.3">
-<h3 data-number="6.2.3" class="anchored" data-anchor-id="sec-ups-toy"><span class="header-section-number">6.2.3</span> Toy Example: Four Supermarkets</h3>
+<section id="sec-ups-toy" class="level3" data-number="7.2.3">
+<h3 data-number="7.2.3" class="anchored" data-anchor-id="sec-ups-toy"><span class="header-section-number">7.2.3</span> Toy Example: Four Supermarkets</h3>
 <p>A town has four supermarkets, with floor areas <span class="math inline">\(x_i\)</span> from <span class="math inline">\(100\,\text{m}^2\)</span> to <span class="math inline">\(1000\,\text{m}^2\)</span>, so <span class="math inline">\(t_x=1600\)</span>, <span class="math inline">\(\bar{x}_U=400\)</span> and <span class="math inline">\(w^x_i=x_i/\bar{x}_U=0.25,\,0.5,\,0.75,\,2.5\)</span>. We want to estimate the monthly sales per square metre <span class="math inline">\(B=\bar{y}_U/\bar{x}_U\)</span>, from the ratios <span class="math inline">\(b_i=y_i/x_i\)</span> of the stores (the mean and the total of sales follow by multiplying by <span class="math inline">\(\bar{x}_U\)</span> and <span class="math inline">\(t_x\)</span>). The data for the first population (the sales, in thousands of dollars per month, are nearly proportional to the floor areas) are:</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -1632,7 +1638,7 @@ Table&nbsp;6.1: Estimators of <span class="math inline">\(B=t/t_x\)</span> from 
 </table>
 </div>
 </div>
-<p>To compare the three estimators of <span class="math inline">\(B\)</span> in <a href="#sec-ups-compare" class="quarto-xref"><span>Section 6.2.2</span></a>, we work out their variances for a <strong>single draw</strong> (<span class="math inline">\(n=1\)</span>); for <span class="math inline">\(n\)</span> draws, each is divided by <span class="math inline">\(n\)</span>. For the two SRS estimators we take <span class="math inline">\(N=\infty\)</span>, that is, we ignore the finite population correction, so a single draw has the variance of one value drawn with equal probabilities <span class="math inline">\(1/N\)</span> (hence the divisor <span class="math inline">\(N\)</span> rather than <span class="math inline">\(N-1\)</span>). The one-draw variance of each estimator is <span class="math inline">\(\frac1N\)</span> times the sum over the stores of its squared term:</p>
+<p>To compare the three estimators of <span class="math inline">\(B\)</span> in <a href="#sec-ups-compare" class="quarto-xref"><span>Section 7.2.2</span></a>, we work out their variances for a <strong>single draw</strong> (<span class="math inline">\(n=1\)</span>); for <span class="math inline">\(n\)</span> draws, each is divided by <span class="math inline">\(n\)</span>. For the two SRS estimators we take <span class="math inline">\(N=\infty\)</span>, that is, we ignore the finite population correction, so a single draw has the variance of one value drawn with equal probabilities <span class="math inline">\(1/N\)</span> (hence the divisor <span class="math inline">\(N\)</span> rather than <span class="math inline">\(N-1\)</span>). The one-draw variance of each estimator is <span class="math inline">\(\frac1N\)</span> times the sum over the stores of its squared term:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1944,8 +1950,8 @@ Table&nbsp;6.1: Estimators of <span class="math inline">\(B=t/t_x\)</span> from 
 </div>
 <p>The ordering is reversed. The sales hardly vary, so the sample average has a tiny variance, 0.000781. The line <span class="math inline">\(y=Bx\)</span> fits the sales badly, so all the deviations <span class="math inline">\(b_i-B\)</span> are large, and the ratio estimator and HH, with variances 0.0288 and 0.0273, are more than 34 times worse than the sample average. Dividing by <span class="math inline">\(w^x_i\)</span> helps little: it downweights the large negative deviation of store D, but upweights the positive deviations of the small stores, by <span class="math inline">\(4\)</span> for store A. Unequal probability sampling is only as good as the size variable used to construct <span class="math inline">\(\psi_i\)</span>: before using PPS, check that <span class="math inline">\(y_i\)</span> is roughly proportional to <span class="math inline">\(x_i\)</span>.</p>
 </section>
-<section id="sec-ups-toy-sample" class="level3" data-number="6.2.4">
-<h3 data-number="6.2.4" class="anchored" data-anchor-id="sec-ups-toy-sample"><span class="header-section-number">6.2.4</span> Computation Example: Revenue from AI Token Usage</h3>
+<section id="sec-ups-toy-sample" class="level3" data-number="7.2.4">
+<h3 data-number="7.2.4" class="anchored" data-anchor-id="sec-ups-toy-sample"><span class="header-section-number">7.2.4</span> Computation Example: Revenue from AI Token Usage</h3>
 <p>An AI company has <span class="math inline">\(N=6\)</span> enterprise customers. From its usage logs it knows, for every customer, the number of tokens <span class="math inline">\(x_i\)</span> (in millions) the customer processed last month, but the revenue <span class="math inline">\(y_i\)</span> (in thousands of dollars) that the customer generated has to be audited from the billing records, which is costly. Revenue is roughly proportional to token usage, so we draw <span class="math inline">\(n=5\)</span> customers with replacement, with probabilities <span class="math inline">\(\psi_i=x_i/t_x\)</span> proportional to the tokens, and estimate the revenue per million tokens <span class="math inline">\(B\)</span>, the mean revenue per customer <span class="math inline">\(\bar{y}_U\)</span>, and the total revenue <span class="math inline">\(t\)</span>.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -2129,7 +2135,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
 =16.667\times0.10508=1.75,\qquad
 \widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=t_x\,\frac{s_{b^*}}{\sqrt{n}}=100\times0.10508=10.5.
 \]</span> For comparison, the theoretical standard error is <span class="math inline">\(\mathrm{SE}(\hat{B}_{\mathrm{HH}})=\sqrt{S_{b^*}^2/n}=\sqrt{0.05015/5}=0.10015\)</span>, that is, <span class="math inline">\(\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})=1.67\)</span>. The estimate <span class="math inline">\(81.53\)</span> is <span class="math inline">\(0.17\)</span> estimated standard errors below <span class="math inline">\(\bar{y}_U=81.83\)</span>.</p>
-<p>The same HH estimates from the shared function <code>upswr_est</code> (<a href="#sec-ups-statepop" class="quarto-xref"><span>Section 6.2.5</span></a> uses it for real data), which takes the <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> values of the draws and the population mean and total of <span class="math inline">\(x\)</span>:</p>
+<p>The same HH estimates from the shared function <code>upswr_est</code> (<a href="#sec-ups-statepop" class="quarto-xref"><span>Section 7.2.5</span></a> uses it for real data), which takes the <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> values of the draws and the population mean and total of <span class="math inline">\(x\)</span>:</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -3564,14 +3570,14 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
 </div>
 </div>
 </section>
-<section id="sec-ups-statepop" class="level3" data-number="6.2.5">
-<h3 data-number="6.2.5" class="anchored" data-anchor-id="sec-ups-statepop"><span class="header-section-number">6.2.5</span> Example: Physicians in U.S. Counties (<code>statepop.csv</code>)</h3>
+<section id="sec-ups-statepop" class="level3" data-number="7.2.5">
+<h3 data-number="7.2.5" class="anchored" data-anchor-id="sec-ups-statepop"><span class="header-section-number">7.2.5</span> Example: Physicians in U.S. Counties (<code>statepop.csv</code>)</h3>
 <p>The file <code>statepop.csv</code> contains data from an unequal-probability sample of 100 U.S. counties. Counties were chosen with probabilities proportional to their populations, <span class="math inline">\(\psi_i=x_i/t_x\)</span> with <span class="math inline">\(x_i\)</span> the population of county <span class="math inline">\(i\)</span> and <span class="math inline">\(t_x=255{,}077{,}536\)</span> the population of the US. We want to estimate the total number of physicians <span class="math inline">\(t\)</span> in the US. Because sampling was done <strong>with replacement</strong>, large counties like Los Angeles occur multiple times in the sample.</p>
 <div class="cell">
 <div id="tbl-statepop-sample-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-statepop-sample-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.2: Sample of U.S. county population and physician counts
+Table&nbsp;7.2: Sample of U.S. county population and physician counts
 </figcaption>
 <div aria-describedby="tbl-statepop-sample-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -3594,7 +3600,7 @@ Table&nbsp;6.2: Sample of U.S. county population and physician counts
 <img src="ups_files/figure-html/fig-statepop-phys-vs-popn-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-statepop-phys-vs-popn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.1: Physicians vs.&nbsp;population (log-log scale), sample of U.S. counties
+Figure&nbsp;7.1: Physicians vs.&nbsp;population (log-log scale), sample of U.S. counties
 </figcaption>
 </figure>
 </div>
@@ -8149,7 +8155,7 @@ Figure&nbsp;6.1: Physicians vs.&nbsp;population (log-log scale), sample of U.S. 
 <div id="tbl-statepop-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-statepop-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.3: Estimates of the total number of physicians in the US (true value 532,638)
+Table&nbsp;7.3: Estimates of the total number of physicians in the US (true value 532,638)
 </figcaption>
 <div aria-describedby="tbl-statepop-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -8215,8 +8221,8 @@ Table&nbsp;6.3: Estimates of the total number of physicians in the US (true valu
 <p>The naive SRS total ignores the county sizes: it is far too large, with a huge SE. The ratio and regression estimators use the county populations at the estimation stage and have much smaller SEs, and HH, which uses them at the design stage, has the smallest SE and the smallest error here, even though its sample is of the same size, 100 counties.</p>
 </section>
 </section>
-<section id="sec-ups-sim" class="level3" data-number="6.2.6">
-<h3 data-number="6.2.6" class="anchored" data-anchor-id="sec-ups-sim"><span class="header-section-number">6.2.6</span> Simulation Study using <code>agpop</code> Data</h3>
+<section id="sec-ups-sim" class="level3" data-number="7.2.6">
+<h3 data-number="7.2.6" class="anchored" data-anchor-id="sec-ups-sim"><span class="header-section-number">7.2.6</span> Simulation Study using <code>agpop</code> Data</h3>
 <p>Let’s simulate 2000 random samples of 300 counties to see how UPSWR, with <span class="math inline">\(\psi_i\)</span> proportional to the acres in 1987 (<span class="math inline">\(x_i\)</span>), empirically compares to SRS for estimating the total acres in 1992 (<span class="math inline">\(y_i\)</span>).</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -8266,7 +8272,7 @@ Table&nbsp;6.3: Estimates of the total number of physicians in the US (true valu
 <img src="ups_files/figure-html/fig-upswr-sim-comparison-1.png" class="img-fluid figure-img" width="768">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-upswr-sim-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.2: Estimator distribution: naive SRS vs.&nbsp;SRS ratio vs.&nbsp;SRS regression vs.&nbsp;UPSWR (2000 simulations), full and zoomed views. The legend gives the variance of each estimator and its <span class="math inline">\(R^2\)</span> relative to the naive SRS average.
+Figure&nbsp;7.2: Estimator distribution: naive SRS vs.&nbsp;SRS ratio vs.&nbsp;SRS regression vs.&nbsp;UPSWR (2000 simulations), full and zoomed views. The legend gives the variance of each estimator and its <span class="math inline">\(R^2\)</span> relative to the naive SRS average.
 </figcaption>
 </figure>
 </div>
@@ -8274,21 +8280,21 @@ Figure&nbsp;6.2: Estimator distribution: naive SRS vs.&nbsp;SRS ratio vs.&nbsp;S
 </div>
 <p><strong>Output Note:</strong> The red line represents the true total acreage, and the line inside each violin is the median. The naive SRS estimator has massive variance. The SRS ratio and regression estimators, which use the 1987 acres at the estimation stage, and UPSWR, which uses them at the design stage, drastically reduce the variance, centering tightly around the true mean; the <span class="math inline">\(R^2\)</span> in the legend is the proportion of the variance of the naive SRS average that each method removes.</p>
 </section>
-<section id="sec-ups-app" class="level3" data-number="6.2.7">
-<h3 data-number="6.2.7" class="anchored" data-anchor-id="sec-ups-app"><span class="header-section-number">6.2.7</span> Shinylive App Comparing SRS and UPSWR</h3>
-<p>The same simulation runs as a standalone app: <a href="../shinylives_sampling/app-ups.html" target="_blank">SRS (average and ratio) with UPSWR (Hansen–Hurwitz) and UPSWO (Horvitz–Thompson)</a>. It opens in a new tab, together with its documentation and the full <a href="../shinylives_sampling/index.html" target="_blank">list of apps</a>. Its “Variance reduction vs.&nbsp;SRS average” legend reports the variances of the ratio, HH and HT estimators, simulated and theoretical, relative to the plain SRS average, and illustrates the comparison of the variances in <a href="#sec-ups-compare" class="quarto-xref"><span>Section 6.2.2</span></a>. The app describes all the estimators through the ratios <span class="math inline">\(b_i\)</span>, and for the UPSWO estimator it shows the coverage of the confidence intervals based on the Hájek and the with-replacement variance estimators (<a href="#sec-ups-wo" class="quarto-xref"><span>Section 6.5</span></a>).</p>
+<section id="sec-ups-app" class="level3" data-number="7.2.7">
+<h3 data-number="7.2.7" class="anchored" data-anchor-id="sec-ups-app"><span class="header-section-number">7.2.7</span> Shinylive App Comparing SRS and UPSWR</h3>
+<p>The same simulation runs as a standalone app: <a href="../shinylives_sampling/app-ups.html" target="_blank">SRS (average and ratio) with UPSWR (Hansen–Hurwitz) and UPSWO (Horvitz–Thompson)</a>. It opens in a new tab, together with its documentation and the full <a href="../shinylives_sampling/index.html" target="_blank">list of apps</a>. Its “Variance reduction vs.&nbsp;SRS average” legend reports the variances of the ratio, HH and HT estimators, simulated and theoretical, relative to the plain SRS average, and illustrates the comparison of the variances in <a href="#sec-ups-compare" class="quarto-xref"><span>Section 7.2.2</span></a>. The app describes all the estimators through the ratios <span class="math inline">\(b_i\)</span>, and for the UPSWO estimator it shows the coverage of the confidence intervals based on the Hájek and the with-replacement variance estimators (<a href="#sec-ups-wo" class="quarto-xref"><span>Section 7.5</span></a>).</p>
 </section>
 </section>
-<section id="sec-ups-cluster" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="sec-ups-cluster"><span class="header-section-number">6.3</span> One-Stage Cluster Sampling with PPS</h2>
-<section id="sec-ups-cluster-theory" class="level3" data-number="6.3.1">
-<h3 data-number="6.3.1" class="anchored" data-anchor-id="sec-ups-cluster-theory"><span class="header-section-number">6.3.1</span> Theory</h3>
-<p>In cluster sampling, the units of the HH estimator are <strong>clusters</strong> (primary sampling units, psus), and the study value of unit <span class="math inline">\(i\)</span> is the <strong>cluster total</strong> <span class="math inline">\(t_i=\sum_{j=1}^{M_i}y_{ij}\)</span>. In a one-stage design, every element (secondary sampling unit, ssu) of a selected cluster is observed, so <span class="math inline">\(t_i\)</span> is known for the sampled clusters. The auxiliary variable is the <strong>cluster size</strong> <span class="math inline">\(M_i\)</span>, known for all clusters. So the notation of <a href="#sec-ups-hh-theory" class="quarto-xref"><span>Section 6.2.1</span></a> changes as <span class="math display">\[
+<section id="sec-ups-cluster" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="sec-ups-cluster"><span class="header-section-number">7.3</span> One-Stage Cluster Sampling with PPS</h2>
+<section id="sec-ups-cluster-theory" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="sec-ups-cluster-theory"><span class="header-section-number">7.3.1</span> Theory</h3>
+<p>In cluster sampling, the units of the HH estimator are <strong>clusters</strong> (primary sampling units, psus), and the study value of unit <span class="math inline">\(i\)</span> is the <strong>cluster total</strong> <span class="math inline">\(t_i=\sum_{j=1}^{M_i}y_{ij}\)</span>. In a one-stage design, every element (secondary sampling unit, ssu) of a selected cluster is observed, so <span class="math inline">\(t_i\)</span> is known for the sampled clusters. The auxiliary variable is the <strong>cluster size</strong> <span class="math inline">\(M_i\)</span>, known for all clusters. So the notation of <a href="#sec-ups-hh-theory" class="quarto-xref"><span>Section 7.2.1</span></a> changes as <span class="math display">\[
 y_i \to t_i,\qquad x_i\to M_i,\qquad t_x\to M_0=\sum_{i=1}^N M_i,\qquad \bar{x}_U\to\bar{M}_U=\frac{M_0}{N},
 \qquad \psi_i=\frac{M_i}{M_0}.
 \]</span> The ratio of cluster <span class="math inline">\(i\)</span> is <span class="math display">\[
 b_i=\frac{t_i}{M_i}=\bar{y}_i ,
-\]</span> the <strong>mean per element (ssu-level mean)</strong> of cluster <span class="math inline">\(i\)</span>, and <span class="math inline">\(B=t/M_0\)</span> is the mean per element of the whole population, which we denote also by <span class="math inline">\(\bar{y}_U\)</span>. Let <span class="math inline">\(b_j^*=\bar{y}_j^*\)</span> be the mean per element of the cluster selected on draw <span class="math inline">\(j\)</span>. Then everything in <a href="#sec-ups-hh-theory" class="quarto-xref"><span>Section 6.2.1</span></a> applies:</p>
+\]</span> the <strong>mean per element (ssu-level mean)</strong> of cluster <span class="math inline">\(i\)</span>, and <span class="math inline">\(B=t/M_0\)</span> is the mean per element of the whole population, which we denote also by <span class="math inline">\(\bar{y}_U\)</span>. Let <span class="math inline">\(b_j^*=\bar{y}_j^*\)</span> be the mean per element of the cluster selected on draw <span class="math inline">\(j\)</span>. Then everything in <a href="#sec-ups-hh-theory" class="quarto-xref"><span>Section 7.2.1</span></a> applies:</p>
 <p><span class="math display">\[
 \boxed{\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
 \widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}},\qquad
@@ -8328,14 +8334,14 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{b}^*\right)^2 .
 </table>
 <p>The estimator is most precise when the cluster means <span class="math inline">\(\bar{y}_i\)</span> vary little, that is, when <span class="math inline">\(t_i\)</span> is nearly proportional to <span class="math inline">\(M_i\)</span>. Note that this differs from the ratio estimator <span class="math inline">\(\sum_{i\in\mathcal{S}}t_i/\sum_{i\in\mathcal{S}}M_i\)</span> of cluster sampling with a simple random sample of clusters: here the cluster sizes have been used at the design stage, so a plain average replaces the ratio.</p>
 </section>
-<section id="sec-ups-cluster-example" class="level3" data-number="6.3.2">
-<h3 data-number="6.3.2" class="anchored" data-anchor-id="sec-ups-cluster-example"><span class="header-section-number">6.3.2</span> Example: Falls in Long-Term Care Homes</h3>
+<section id="sec-ups-cluster-example" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="sec-ups-cluster-example"><span class="header-section-number">7.3.2</span> Example: Falls in Long-Term Care Homes</h3>
 <p>A health authority wants to estimate the number of falls over the past year of the residents of its <span class="math inline">\(N=40\)</span> long-term care homes. From the registry it knows the number of residents <span class="math inline">\(M_i\)</span> of every home, and <span class="math inline">\(M_0=3{,}000\)</span> residents in total, so <span class="math inline">\(\bar{M}_U=M_0/N=75\)</span> residents per home. Visiting a home to review the incident reports of all its residents is costly, so <span class="math inline">\(n=8\)</span> draws of homes are made with replacement with probabilities <span class="math inline">\(\psi_i=M_i/M_0\)</span> proportional to the number of residents. The sample is a one-stage cluster sample: every resident of a selected home is reviewed, and <span class="math inline">\(t_i\)</span> is the number of falls in home <span class="math inline">\(i\)</span>. (The data are made up for illustration.) Home H12 was drawn twice; a repeated draw is kept as a separate observation, and since all its residents are reviewed, it has the same <span class="math inline">\(t_i\)</span>:</p>
 <div class="cell">
 <div id="tbl-falls-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-falls-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.4: Falls in the sampled long-term care homes, <span class="math inline">\(n=8\)</span> draws
+Table&nbsp;7.4: Falls in the sampled long-term care homes, <span class="math inline">\(n=8\)</span> draws
 </figcaption>
 <div aria-describedby="tbl-falls-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -10414,27 +10420,27 @@ Table&nbsp;6.4: Falls in the sampled long-term care homes, <span class="math inl
 <p><strong>Output Note:</strong> The estimated number of falls per resident is <span class="math inline">\(\hat{B}_{\mathrm{HH}}=0.846\)</span> (SE 0.037), the plain average of the eight cluster means in the working table. A typical home has <span class="math inline">\(\bar{M}_U\hat{B}_{\mathrm{HH}}=63.5\)</span> falls per year (SE 2.7), and the 40 homes together have about <span class="math inline">\(M_0\hat{B}_{\mathrm{HH}}=2,538\)</span> falls (SE 110, 95% interval [2,278, 2,798]). The three statements carry the same information: the estimates and the standard errors are in the same proportion.</p>
 </section>
 </section>
-<section id="sec-ups-twostage" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="sec-ups-twostage"><span class="header-section-number">6.4</span> Two-Stage Cluster Sampling with PPS</h2>
-<section id="sec-ups-twostage-theory" class="level3" data-number="6.4.1">
-<h3 data-number="6.4.1" class="anchored" data-anchor-id="sec-ups-twostage-theory"><span class="header-section-number">6.4.1</span> Theory</h3>
-<p>In a two-stage design, we select <span class="math inline">\(n\)</span> clusters with replacement with probabilities <span class="math inline">\(\psi_i=M_i/M_0\)</span>, and then take a simple random sample of <span class="math inline">\(m_i\)</span> elements from the <span class="math inline">\(M_i\)</span> elements of the cluster <strong>on every draw</strong>. The cluster total <span class="math inline">\(t_i\)</span> is no longer observed, so we cannot compute the cluster mean <span class="math inline">\(b_i=t_i/M_i\)</span> of <a href="#sec-ups-cluster-theory" class="quarto-xref"><span>Section 6.3.1</span></a>. We estimate it from the subsample, <span class="math display">\[
+<section id="sec-ups-twostage" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="sec-ups-twostage"><span class="header-section-number">7.4</span> Two-Stage Cluster Sampling with PPS</h2>
+<section id="sec-ups-twostage-theory" class="level3" data-number="7.4.1">
+<h3 data-number="7.4.1" class="anchored" data-anchor-id="sec-ups-twostage-theory"><span class="header-section-number">7.4.1</span> Theory</h3>
+<p>In a two-stage design, we select <span class="math inline">\(n\)</span> clusters with replacement with probabilities <span class="math inline">\(\psi_i=M_i/M_0\)</span>, and then take a simple random sample of <span class="math inline">\(m_i\)</span> elements from the <span class="math inline">\(M_i\)</span> elements of the cluster <strong>on every draw</strong>. The cluster total <span class="math inline">\(t_i\)</span> is no longer observed, so we cannot compute the cluster mean <span class="math inline">\(b_i=t_i/M_i\)</span> of <a href="#sec-ups-cluster-theory" class="quarto-xref"><span>Section 7.3.1</span></a>. We estimate it from the subsample, <span class="math display">\[
 \bar{y}_i=\frac{1}{m_i}\sum_{j=1}^{m_i}y_{ij},\qquad \hat{t}_i=M_i\,\bar{y}_i ,
 \]</span> where <span class="math inline">\(\bar{y}_i\)</span> is the mean of the <em>subsample</em>. The one-stage formulas carry over with the subsample mean <span class="math inline">\(\bar{y}_j^*\)</span> of draw <span class="math inline">\(j\)</span> in place of the cluster mean <span class="math inline">\(b_j^*\)</span>: <span class="math display">\[
 \boxed{\hat{B}_{\mathrm{HH}}=\bar{y}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
 \widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
 s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{y}^*\right)^2 ,
-\]</span> and the estimates of the mean per element, the mean per cluster and the total are <span class="math inline">\(\hat{B}_{\mathrm{HH}}\)</span>, <span class="math inline">\(\bar{M}_U\hat{B}_{\mathrm{HH}}\)</span> and <span class="math inline">\(M_0\hat{B}_{\mathrm{HH}}\)</span>, with their SEs multiplied by the same constants, as in the table of <a href="#sec-ups-cluster-theory" class="quarto-xref"><span>Section 6.3.1</span></a>. Equivalently, each draw estimates the total by <span class="math inline">\(\hat{t}_j^*/\psi_j^*=M_0\,\bar{y}_j^*\)</span>.</p>
+\]</span> and the estimates of the mean per element, the mean per cluster and the total are <span class="math inline">\(\hat{B}_{\mathrm{HH}}\)</span>, <span class="math inline">\(\bar{M}_U\hat{B}_{\mathrm{HH}}\)</span> and <span class="math inline">\(M_0\hat{B}_{\mathrm{HH}}\)</span>, with their SEs multiplied by the same constants, as in the table of <a href="#sec-ups-cluster-theory" class="quarto-xref"><span>Section 7.3.1</span></a>. Equivalently, each draw estimates the total by <span class="math inline">\(\hat{t}_j^*/\psi_j^*=M_0\,\bar{y}_j^*\)</span>.</p>
 <p>There are two differences from the one-stage case. First, a cluster that is drawn twice is subsampled <strong>independently</strong> on each draw, so the two draws give different subsample means <span class="math inline">\(\bar{y}_j^*\)</span>, and both are kept as separate observations. Second, <strong>no second-stage formula is needed for the standard error.</strong> The <span class="math inline">\(n\)</span> draws are independent, and the values <span class="math inline">\(\bar{y}_j^*\)</span> differ between draws for two reasons, the choice of the clusters and the choice of the elements within them. The sample variance <span class="math inline">\(s_{\bar{y}^*}^2\)</span> of the values <span class="math inline">\(\bar{y}_j^*\)</span> captures both, so the variance of the two-stage estimator is computed in exactly the same way as that of the one-stage estimator. This is a major simplification compared with two-stage SRS of clusters, where the variance has a between-cluster and a within-cluster piece. Of course, a larger subsample <span class="math inline">\(m_i\)</span> makes <span class="math inline">\(\bar{y}_i\)</span> closer to <span class="math inline">\(t_i/M_i\)</span> and reduces the variance, but it does so through <span class="math inline">\(s_{\bar{y}^*}^2\)</span>.</p>
 </section>
-<section id="sec-ups-twostage-example" class="level3" data-number="6.4.2">
-<h3 data-number="6.4.2" class="anchored" data-anchor-id="sec-ups-twostage-example"><span class="header-section-number">6.4.2</span> Example: Falls in Long-Term Care Homes, Two Stages</h3>
-<p>Suppose the health authority of <a href="#sec-ups-cluster-example" class="quarto-xref"><span>Section 6.3.2</span></a> cannot afford to review all the residents of a selected home. On each of the same <span class="math inline">\(n=8\)</span> draws of homes, with probabilities <span class="math inline">\(\psi_i=M_i/M_0\)</span>, a simple random sample of <span class="math inline">\(m_i\)</span> residents is drawn, and the number of falls of each sampled resident over the past year is recorded. The data below are made up for illustration. Home H12 was drawn twice, and the two subsamples were drawn independently, so the two draws have different subsample means. The table gives the total number of falls of the <span class="math inline">\(m_j^*\)</span> sampled residents, their mean <span class="math inline">\(\bar{y}_j^*\)</span>, and the estimated total of the home <span class="math inline">\(\hat{t}_j^*=M_j^*\bar{y}_j^*\)</span>:</p>
+<section id="sec-ups-twostage-example" class="level3" data-number="7.4.2">
+<h3 data-number="7.4.2" class="anchored" data-anchor-id="sec-ups-twostage-example"><span class="header-section-number">7.4.2</span> Example: Falls in Long-Term Care Homes, Two Stages</h3>
+<p>Suppose the health authority of <a href="#sec-ups-cluster-example" class="quarto-xref"><span>Section 7.3.2</span></a> cannot afford to review all the residents of a selected home. On each of the same <span class="math inline">\(n=8\)</span> draws of homes, with probabilities <span class="math inline">\(\psi_i=M_i/M_0\)</span>, a simple random sample of <span class="math inline">\(m_i\)</span> residents is drawn, and the number of falls of each sampled resident over the past year is recorded. The data below are made up for illustration. Home H12 was drawn twice, and the two subsamples were drawn independently, so the two draws have different subsample means. The table gives the total number of falls of the <span class="math inline">\(m_j^*\)</span> sampled residents, their mean <span class="math inline">\(\bar{y}_j^*\)</span>, and the estimated total of the home <span class="math inline">\(\hat{t}_j^*=M_j^*\bar{y}_j^*\)</span>:</p>
 <div class="cell">
 <div id="tbl-falls2-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-falls2-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.5: Two-stage sample of long-term care homes, <span class="math inline">\(n=8\)</span> draws
+Table&nbsp;7.5: Two-stage sample of long-term care homes, <span class="math inline">\(n=8\)</span> draws
 </figcaption>
 <div aria-describedby="tbl-falls2-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -12533,15 +12539,15 @@ Table&nbsp;6.5: Two-stage sample of long-term care homes, <span class="math inli
 <p><strong>Output Note:</strong> The estimated number of falls per resident is <span class="math inline">\(\hat{B}_{\mathrm{HH}}=0.846\)</span> (SE 0.042), the plain average of the eight subsample means. A typical home has 63.4 falls per year (SE 3.2), and the 40 homes together have about 2,538 falls (SE 127). The standard error is computed exactly as in the one-stage example, from the eight values <span class="math inline">\(\bar{y}_j^*\)</span> alone. Here it is a little larger than the one-stage SE of 0.037, as expected, since the subsample means carry the extra sampling noise of the second stage (for home H12, the two draws gave <span class="math inline">\(\bar{y}=0.95\)</span> and <span class="math inline">\(0.80\)</span>); in a single sample this is not guaranteed.</p>
 </section>
 </section>
-<section id="sec-ups-wo" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="sec-ups-wo"><span class="header-section-number">6.5</span> UPS Without Replacement</h2>
-<section id="sec-ups-wo-theory" class="level3" data-number="6.5.1">
-<h3 data-number="6.5.1" class="anchored" data-anchor-id="sec-ups-wo-theory"><span class="header-section-number">6.5.1</span> Review of UPSWR and the Horvitz–Thompson Estimator</h3>
+<section id="sec-ups-wo" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="sec-ups-wo"><span class="header-section-number">7.5</span> UPS Without Replacement</h2>
+<section id="sec-ups-wo-theory" class="level3" data-number="7.5.1">
+<h3 data-number="7.5.1" class="anchored" data-anchor-id="sec-ups-wo-theory"><span class="header-section-number">7.5.1</span> Review of UPSWR and the Horvitz–Thompson Estimator</h3>
 <p><strong>Review of UPSWR in terms of <span class="math inline">\(\psi_i\)</span>.</strong> With replacement, each of the <span class="math inline">\(n\)</span> draws selects unit <span class="math inline">\(i\)</span> with probability <span class="math inline">\(\psi_i\)</span>, and draw <span class="math inline">\(j\)</span> gives the unbiased estimate <span class="math inline">\(y_j^*/\psi_j^*\)</span> of the total <span class="math inline">\(t\)</span>, since <span class="math inline">\(E(y_j^*/\psi_j^*)=\sum_i\psi_i\,y_i/\psi_i=t\)</span>. The HH estimator averages the <span class="math inline">\(n\)</span> estimates, <span class="math display">\[
 \hat{t}_{\mathrm{HH}}=\frac{1}{n}\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
 \widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt{n}},\qquad
 s_u^2=\frac{1}{n-1}\sum_{j=1}^n\left(\frac{y_j^*}{\psi_j^*}-\hat{t}_{\mathrm{HH}}\right)^2 ,
-\]</span> where the SE is easy because the <span class="math inline">\(n\)</span> estimates are iid. With <span class="math inline">\(\psi_i=x_i/t_x\)</span>, <span class="math inline">\(\frac{y_j^*}{\psi_j^*}=t_x\,b_j^*\)</span>, which gives the estimator <span class="math inline">\(\hat{t}_{\mathrm{HH}}=t_x\bar{b}^*\)</span> of <a href="#sec-ups-hh-theory" class="quarto-xref"><span>Section 6.2.1</span></a>. The drawback of UPSWR is that a large unit can be drawn several times, which is wasteful.</p>
+\]</span> where the SE is easy because the <span class="math inline">\(n\)</span> estimates are iid. With <span class="math inline">\(\psi_i=x_i/t_x\)</span>, <span class="math inline">\(\frac{y_j^*}{\psi_j^*}=t_x\,b_j^*\)</span>, which gives the estimator <span class="math inline">\(\hat{t}_{\mathrm{HH}}=t_x\bar{b}^*\)</span> of <a href="#sec-ups-hh-theory" class="quarto-xref"><span>Section 7.2.1</span></a>. The drawback of UPSWR is that a large unit can be drawn several times, which is wasteful.</p>
 <p><strong>Without replacement.</strong> Now <span class="math inline">\(n\)</span> <strong>distinct</strong> units are selected, and the design is described by the <strong>inclusion probabilities</strong> <span class="math display">\[
 \pi_i=P(\text{unit } i\in\mathcal{S}),\qquad \sum_{i=1}^N\pi_i=n ,
 \]</span> for a sample of fixed size <span class="math inline">\(n\)</span>. For a size variable <span class="math inline">\(x_i\)</span>, we take <span class="math inline">\(\pi_i=n\,x_i/t_x\)</span> (inclusion probability proportional to size, <span class="math inline">\(\pi\)</span>ps), which is <span class="math inline">\(n\psi_i\)</span> for <span class="math inline">\(\psi_i=x_i/t_x\)</span>. A unit with <span class="math inline">\(n\,x_i/t_x&gt;1\)</span> is included with certainty, <span class="math inline">\(\pi_i=1\)</span>, and the other probabilities are recomputed from the remaining units.</p>
@@ -12552,7 +12558,7 @@ E(\hat{t}_{\mathrm{HT}})=\sum_{i=1}^N\frac{y_i}{\pi_i}\,E(I_i)=\sum_{i=1}^N\frac
 \]</span> This needs only <span class="math inline">\(\pi_i&gt;0\)</span> for all units. The estimator of the mean per unit is <span class="math inline">\(\hat{t}_{\mathrm{HT}}/N\)</span>. When the inclusion probabilities are proportional to a size variable <span class="math inline">\(x_i\)</span>, <span class="math inline">\(\pi_i=n\,x_i/t_x\)</span>, the estimator of the ratio <span class="math inline">\(B=t/t_x\)</span> is, as for UPSWR, the HT total divided by <span class="math inline">\(t_x\)</span>, <span class="math display">\[
 \hat{B}_{\mathrm{HT}}=\frac{\hat{t}_{\mathrm{HT}}}{t_x}=\frac{1}{t_x}\sum_{i\in\mathcal{S}}\frac{y_i}{\pi_i}
 =\frac{1}{n}\sum_{i\in\mathcal{S}}\frac{y_i}{x_i}=\frac{1}{n}\sum_{i\in\mathcal{S}}b_i ,
-\]</span> the plain average of the ratios <span class="math inline">\(b_i=y_i/x_i\)</span> of the <span class="math inline">\(n\)</span> sampled units, with <span class="math inline">\(\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HT}})=\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HT}})/t_x\)</span>. In cluster sampling, <span class="math inline">\(y_i=t_i\)</span> and <span class="math inline">\(x_i=M_i\)</span>, so that <span class="math inline">\(\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/M_0\)</span> is the mean per element (<a href="#sec-ups-cluster-theory" class="quarto-xref"><span>Section 6.3.1</span></a>).</p>
+\]</span> the plain average of the ratios <span class="math inline">\(b_i=y_i/x_i\)</span> of the <span class="math inline">\(n\)</span> sampled units, with <span class="math inline">\(\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HT}})=\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HT}})/t_x\)</span>. In cluster sampling, <span class="math inline">\(y_i=t_i\)</span> and <span class="math inline">\(x_i=M_i\)</span>, so that <span class="math inline">\(\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/M_0\)</span> is the mean per element (<a href="#sec-ups-cluster-theory" class="quarto-xref"><span>Section 7.3.1</span></a>).</p>
 <p><strong>Variances.</strong> For a fixed sample size, with the joint inclusion probabilities <span class="math inline">\(\pi_{ij}=P(i,j\in\mathcal{S})\)</span>, <span class="math display">\[
 V(\hat{t}_{\mathrm{HT}})=\frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N(\pi_i\pi_j-\pi_{ij})
 \left(\frac{y_i}{\pi_i}-\frac{y_j}{\pi_j}\right)^2
@@ -12573,8 +12579,8 @@ A=\frac{\sum_{i\in\mathcal{S}}(1-\pi_i)\,y_i/\pi_i}{\sum_{i\in\mathcal{S}}(1-\pi
 </ul>
 <p>For the mean per unit, divide the estimate and the SE by <span class="math inline">\(N\)</span>; for the ratio <span class="math inline">\(\hat{B}_{\mathrm{HT}}\)</span>, divide by <span class="math inline">\(t_x\)</span>.</p>
 </section>
-<section id="sec-ups-wo-example" class="level3" data-number="6.5.2">
-<h3 data-number="6.5.2" class="anchored" data-anchor-id="sec-ups-wo-example"><span class="header-section-number">6.5.2</span> Example: Acres of Farmland in Counties (<code>agpop.csv</code>)</h3>
+<section id="sec-ups-wo-example" class="level3" data-number="7.5.2">
+<h3 data-number="7.5.2" class="anchored" data-anchor-id="sec-ups-wo-example"><span class="header-section-number">7.5.2</span> Example: Acres of Farmland in Counties (<code>agpop.csv</code>)</h3>
 <p>We draw a sample of <span class="math inline">\(n=100\)</span> of the counties of <code>agpop</code> without replacement, with inclusion probabilities <span class="math inline">\(\pi_i=100\,x_i/t_x\)</span> proportional to the acres in 1987 (<span class="math inline">\(x_i\)</span>), and estimate the mean acres of farmland in 1992 (<span class="math inline">\(y_i\)</span>) per county. (The few counties with no farmland in 1987 cannot be selected and are left out.) The sample is drawn by maximum entropy sampling, a fixed-size design with these inclusion probabilities, from the R package <code>sampling</code>; a county with <span class="math inline">\(100x_i/t_x&gt;1\)</span> would be included with certainty (none is here).</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -12628,7 +12634,7 @@ A=\frac{\sum_{i\in\mathcal{S}}(1-\pi_i)\,y_i/\pi_i}{\sum_{i\in\mathcal{S}}(1-\pi
 <img src="ups_files/figure-html/fig-wo-variances-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wo-variances-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.3: Estimated variances of the HT mean in 2000 repeated samples: Hájek and with-replacement approximations. The red line is the Monte Carlo estimate of the true variance, the variance of the 2000 HT estimates.
+Figure&nbsp;7.3: Estimated variances of the HT mean in 2000 repeated samples: Hájek and with-replacement approximations. The red line is the Monte Carlo estimate of the true variance, the variance of the 2000 HT estimates.
 </figcaption>
 </figure>
 </div>
@@ -12642,7 +12648,7 @@ Figure&nbsp;6.3: Estimated variances of the HT mean in 2000 repeated samples: H�
 <img src="ups_files/figure-html/fig-wo-mean-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wo-mean-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.4: HT estimates of the mean acres per county in 2000 repeated samples. The red line is the true mean; the coverage rates of the 95% confidence intervals with the Hájek and the with-replacement variance estimates are given in the subtitle.
+Figure&nbsp;7.4: HT estimates of the mean acres per county in 2000 repeated samples. The red line is the true mean; the coverage rates of the 95% confidence intervals with the Hájek and the with-replacement variance estimates are given in the subtitle.
 </figcaption>
 </figure>
 </div>
@@ -12652,7 +12658,7 @@ Figure&nbsp;6.4: HT estimates of the mean acres per county in 2000 repeated samp
 <div id="tbl-wo-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-wo-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.6: Estimates of the mean acres of farmland in 1992 per county from one sample of 100 counties drawn without replacement
+Table&nbsp;7.6: Estimates of the mean acres of farmland in 1992 per county from one sample of 100 counties drawn without replacement
 </figcaption>
 <div aria-describedby="tbl-wo-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -12690,8 +12696,8 @@ Table&nbsp;6.6: Estimates of the mean acres of farmland in 1992 per county from 
 <p><strong>Output Note:</strong> The true mean is 310.1 thousand acres per county. The plain sample mean, 834.3, is far off because it gives every sampled county the same weight, although the large counties had a larger chance of being selected; the HT estimate 315.8 corrects for that. The Hájek and with-replacement SEs are 1.98 and 2.06. Over the 2000 repeated samples the true standard error of the HT mean is 2.37, and the average estimated SEs are 2.33 for the Hájek approximation and 2.43 for the with-replacement approximation, which is a little too large, as expected. The violin plots show the whole distribution of the two estimated variances, with the true variance (the variance of the 2000 HT estimates) as a red line: both are centred close to it, the with-replacement one slightly above. The HT estimates of the mean are centred at the true mean, as unbiasedness implies. The 95% confidence intervals, estimate <span class="math inline">\(\pm\)</span> <span class="math inline">\(t_{n-1}\)</span> SE, cover the true mean in 94.7% of the samples with the Hájek variance and in 95.5% with the with-replacement variance; the latter is a little above the nominal 95% because its variance is too large. The ratio of the total acres in 1992 to that in 1987 is <span class="math inline">\(\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/t_x=0.998\)</span> (SE 0.006, Hájek).</p>
 </section>
 </section>
-<section id="sec-ups-when" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="sec-ups-when"><span class="header-section-number">6.6</span> When to Use Unequal Probability Sampling</h2>
+<section id="sec-ups-when" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="sec-ups-when"><span class="header-section-number">7.6</span> When to Use Unequal Probability Sampling</h2>
 <div class="callout callout-style-default callout-warning callout-titled" title="Remark: UPS is risky unless y is tied to the size variable">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -12702,9 +12708,9 @@ Table&nbsp;6.6: Estimates of the mean acres of farmland in 1992 per county from 
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The gain from unequal probability sampling depends entirely on how close the ratios <span class="math inline">\(b_i=y_i/x_i\)</span> are to a constant, that is, on <span class="math inline">\(y_i\)</span> being roughly proportional to the size variable <span class="math inline">\(x_i\)</span> used for <span class="math inline">\(\psi_i\)</span> or <span class="math inline">\(\pi_i\)</span>. Then the variance in <a href="#tbl-ups-compare" class="quarto-xref">Table&nbsp;<span>6.1</span></a> is small, as for the county acreages. Otherwise,</p>
+<p>The gain from unequal probability sampling depends entirely on how close the ratios <span class="math inline">\(b_i=y_i/x_i\)</span> are to a constant, that is, on <span class="math inline">\(y_i\)</span> being roughly proportional to the size variable <span class="math inline">\(x_i\)</span> used for <span class="math inline">\(\psi_i\)</span> or <span class="math inline">\(\pi_i\)</span>. Then the variance in <a href="#tbl-ups-compare" class="quarto-xref">Table&nbsp;<span>7.1</span></a> is small, as for the county acreages. Otherwise,</p>
 <ul>
-<li>the estimate can be <strong>much worse than a plain SRS average</strong>, as in the second population of <a href="#sec-ups-toy" class="quarto-xref"><span>Section 6.2.3</span></a>, where the sales are unrelated to the floor area;</li>
+<li>the estimate can be <strong>much worse than a plain SRS average</strong>, as in the second population of <a href="#sec-ups-toy" class="quarto-xref"><span>Section 7.2.3</span></a>, where the sales are unrelated to the floor area;</li>
 <li>a unit with a small <span class="math inline">\(x_i\)</span> but a large <span class="math inline">\(y_i\)</span> gets a very large weight <span class="math inline">\(1/\psi_i\)</span> (or <span class="math inline">\(1/\pi_i\)</span>) when it is selected, so the estimates are unstable, and the sample variance of the <span class="math inline">\(b_j^*\)</span> that estimates the SE tends to be too small, so that the intervals under-cover.</li>
 </ul>
 <p>UPS is therefore used mostly when the size is a good proxy of what is measured: selecting the clusters of a multi-stage survey with probabilities proportional to their number of households or students, auditing by the monetary value of the items, or surveying establishments by their employment. When the size is only loosely related to <span class="math inline">\(y_i\)</span>, use simple random or stratified sampling, with a ratio or regression estimator if <span class="math inline">\(x_i\)</span> is known, which is much safer than using <span class="math inline">\(x_i\)</span> at the design stage.</p>

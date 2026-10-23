@@ -9,7 +9,7 @@
 <meta name="author" content="Longhai Li">
 <meta name="dcterms.date" content="2026-10-22">
 
-<title>2&nbsp; Simple Random Sampling – Elements of Sampling Survey</title>
+<title>3&nbsp; Simple Random Sampling – Elements of Sampling Survey</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -155,7 +155,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./srs.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./srs.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -191,38 +191,44 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Sampling Survey</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./introR.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./srs.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./strata.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ratio.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cluster.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ups.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -254,48 +260,48 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-srs-design" id="toc-sec-srs-design" class="nav-link active" data-scroll-target="#sec-srs-design"><span class="header-section-number">2.1</span> SRS and SRSWR</a>
+  <li><a href="#sec-srs-design" id="toc-sec-srs-design" class="nav-link active" data-scroll-target="#sec-srs-design"><span class="header-section-number">3.1</span> SRS and SRSWR</a>
   <ul>
-  <li><a href="#inclusion-probabilities" id="toc-inclusion-probabilities" class="nav-link" data-scroll-target="#inclusion-probabilities"><span class="header-section-number">2.1.1</span> Inclusion probabilities</a></li>
+  <li><a href="#inclusion-probabilities" id="toc-inclusion-probabilities" class="nav-link" data-scroll-target="#inclusion-probabilities"><span class="header-section-number">3.1.1</span> Inclusion probabilities</a></li>
   </ul></li>
-  <li><a href="#sec-srs-formulas" id="toc-sec-srs-formulas" class="nav-link" data-scroll-target="#sec-srs-formulas"><span class="header-section-number">2.2</span> Estimators for Simple Random Sampling</a>
+  <li><a href="#sec-srs-formulas" id="toc-sec-srs-formulas" class="nav-link" data-scroll-target="#sec-srs-formulas"><span class="header-section-number">3.2</span> Estimators for Simple Random Sampling</a>
   <ul>
-  <li><a href="#estimating-the-population-mean" id="toc-estimating-the-population-mean" class="nav-link" data-scroll-target="#estimating-the-population-mean"><span class="header-section-number">2.2.1</span> Estimating the population mean</a></li>
-  <li><a href="#estimating-the-population-total" id="toc-estimating-the-population-total" class="nav-link" data-scroll-target="#estimating-the-population-total"><span class="header-section-number">2.2.2</span> Estimating the population total</a></li>
-  <li><a href="#coefficient-of-variation" id="toc-coefficient-of-variation" class="nav-link" data-scroll-target="#coefficient-of-variation"><span class="header-section-number">2.2.3</span> Coefficient of variation</a></li>
-  <li><a href="#estimating-a-proportion" id="toc-estimating-a-proportion" class="nav-link" data-scroll-target="#estimating-a-proportion"><span class="header-section-number">2.2.4</span> Estimating a proportion</a></li>
+  <li><a href="#estimating-the-population-mean" id="toc-estimating-the-population-mean" class="nav-link" data-scroll-target="#estimating-the-population-mean"><span class="header-section-number">3.2.1</span> Estimating the population mean</a></li>
+  <li><a href="#estimating-the-population-total" id="toc-estimating-the-population-total" class="nav-link" data-scroll-target="#estimating-the-population-total"><span class="header-section-number">3.2.2</span> Estimating the population total</a></li>
+  <li><a href="#coefficient-of-variation" id="toc-coefficient-of-variation" class="nav-link" data-scroll-target="#coefficient-of-variation"><span class="header-section-number">3.2.3</span> Coefficient of variation</a></li>
+  <li><a href="#estimating-a-proportion" id="toc-estimating-a-proportion" class="nav-link" data-scroll-target="#estimating-a-proportion"><span class="header-section-number">3.2.4</span> Estimating a proportion</a></li>
   </ul></li>
-  <li><a href="#sec-srs-agsrs" id="toc-sec-srs-agsrs" class="nav-link" data-scroll-target="#sec-srs-agsrs"><span class="header-section-number">2.3</span> Example: The Census of Agriculture</a>
+  <li><a href="#sec-srs-agsrs" id="toc-sec-srs-agsrs" class="nav-link" data-scroll-target="#sec-srs-agsrs"><span class="header-section-number">3.3</span> Example: The Census of Agriculture</a>
   <ul>
-  <li><a href="#step-by-step-calculation" id="toc-step-by-step-calculation" class="nav-link" data-scroll-target="#step-by-step-calculation"><span class="header-section-number">2.3.1</span> Step-by-step calculation</a></li>
-  <li><a href="#a-function-for-repeated-use" id="toc-a-function-for-repeated-use" class="nav-link" data-scroll-target="#a-function-for-repeated-use"><span class="header-section-number">2.3.2</span> A function for repeated use</a></li>
-  <li><a href="#comparing-with-the-true-values" id="toc-comparing-with-the-true-values" class="nav-link" data-scroll-target="#comparing-with-the-true-values"><span class="header-section-number">2.3.3</span> Comparing with the true values</a></li>
+  <li><a href="#step-by-step-calculation" id="toc-step-by-step-calculation" class="nav-link" data-scroll-target="#step-by-step-calculation"><span class="header-section-number">3.3.1</span> Step-by-step calculation</a></li>
+  <li><a href="#a-function-for-repeated-use" id="toc-a-function-for-repeated-use" class="nav-link" data-scroll-target="#a-function-for-repeated-use"><span class="header-section-number">3.3.2</span> A function for repeated use</a></li>
+  <li><a href="#comparing-with-the-true-values" id="toc-comparing-with-the-true-values" class="nav-link" data-scroll-target="#comparing-with-the-true-values"><span class="header-section-number">3.3.3</span> Comparing with the true values</a></li>
   </ul></li>
-  <li><a href="#sec-srs-ci" id="toc-sec-srs-ci" class="nav-link" data-scroll-target="#sec-srs-ci"><span class="header-section-number">2.4</span> Confidence Intervals</a>
+  <li><a href="#sec-srs-ci" id="toc-sec-srs-ci" class="nav-link" data-scroll-target="#sec-srs-ci"><span class="header-section-number">3.4</span> Confidence Intervals</a>
   <ul>
-  <li><a href="#normality-of-the-sample-mean" id="toc-normality-of-the-sample-mean" class="nav-link" data-scroll-target="#normality-of-the-sample-mean"><span class="header-section-number">2.4.1</span> Normality of the sample mean</a></li>
-  <li><a href="#how-large-must-n-be-for-normality" id="toc-how-large-must-n-be-for-normality" class="nav-link" data-scroll-target="#how-large-must-n-be-for-normality"><span class="header-section-number">2.4.2</span> How large must <span class="math inline">\(n\)</span> be for normality?</a></li>
+  <li><a href="#normality-of-the-sample-mean" id="toc-normality-of-the-sample-mean" class="nav-link" data-scroll-target="#normality-of-the-sample-mean"><span class="header-section-number">3.4.1</span> Normality of the sample mean</a></li>
+  <li><a href="#how-large-must-n-be-for-normality" id="toc-how-large-must-n-be-for-normality" class="nav-link" data-scroll-target="#how-large-must-n-be-for-normality"><span class="header-section-number">3.4.2</span> How large must <span class="math inline">\(n\)</span> be for normality?</a></li>
   </ul></li>
-  <li><a href="#sec-srs-sample-size" id="toc-sec-srs-sample-size" class="nav-link" data-scroll-target="#sec-srs-sample-size"><span class="header-section-number">2.5</span> Choosing the Sample Size</a>
+  <li><a href="#sec-srs-sample-size" id="toc-sec-srs-sample-size" class="nav-link" data-scroll-target="#sec-srs-sample-size"><span class="header-section-number">3.5</span> Choosing the Sample Size</a>
   <ul>
-  <li><a href="#specifying-the-tolerable-error" id="toc-specifying-the-tolerable-error" class="nav-link" data-scroll-target="#specifying-the-tolerable-error"><span class="header-section-number">2.5.1</span> Specifying the tolerable error</a></li>
-  <li><a href="#solving-for-n" id="toc-solving-for-n" class="nav-link" data-scroll-target="#solving-for-n"><span class="header-section-number">2.5.2</span> Solving for <span class="math inline">\(n\)</span></a></li>
+  <li><a href="#specifying-the-tolerable-error" id="toc-specifying-the-tolerable-error" class="nav-link" data-scroll-target="#specifying-the-tolerable-error"><span class="header-section-number">3.5.1</span> Specifying the tolerable error</a></li>
+  <li><a href="#solving-for-n" id="toc-solving-for-n" class="nav-link" data-scroll-target="#solving-for-n"><span class="header-section-number">3.5.2</span> Solving for <span class="math inline">\(n\)</span></a></li>
   </ul></li>
-  <li><a href="#sec-srs-randomization" id="toc-sec-srs-randomization" class="nav-link" data-scroll-target="#sec-srs-randomization"><span class="header-section-number">2.6</span> Randomization Theory for SRS</a>
+  <li><a href="#sec-srs-randomization" id="toc-sec-srs-randomization" class="nav-link" data-scroll-target="#sec-srs-randomization"><span class="header-section-number">3.6</span> Randomization Theory for SRS</a>
   <ul>
-  <li><a href="#moments-of-z_i" id="toc-moments-of-z_i" class="nav-link" data-scroll-target="#moments-of-z_i"><span class="header-section-number">2.6.1</span> Moments of <span class="math inline">\(Z_i\)</span></a></li>
-  <li><a href="#unbiasedness-of-bar-y" id="toc-unbiasedness-of-bar-y" class="nav-link" data-scroll-target="#unbiasedness-of-bar-y"><span class="header-section-number">2.6.2</span> Unbiasedness of <span class="math inline">\(\bar y\)</span></a></li>
-  <li><a href="#variance-of-bar-y" id="toc-variance-of-bar-y" class="nav-link" data-scroll-target="#variance-of-bar-y"><span class="header-section-number">2.6.3</span> Variance of <span class="math inline">\(\bar y\)</span></a></li>
-  <li><a href="#unbiasedness-of-s2" id="toc-unbiasedness-of-s2" class="nav-link" data-scroll-target="#unbiasedness-of-s2"><span class="header-section-number">2.6.4</span> Unbiasedness of <span class="math inline">\(s^2\)</span></a></li>
+  <li><a href="#moments-of-z_i" id="toc-moments-of-z_i" class="nav-link" data-scroll-target="#moments-of-z_i"><span class="header-section-number">3.6.1</span> Moments of <span class="math inline">\(Z_i\)</span></a></li>
+  <li><a href="#unbiasedness-of-bar-y" id="toc-unbiasedness-of-bar-y" class="nav-link" data-scroll-target="#unbiasedness-of-bar-y"><span class="header-section-number">3.6.2</span> Unbiasedness of <span class="math inline">\(\bar y\)</span></a></li>
+  <li><a href="#variance-of-bar-y" id="toc-variance-of-bar-y" class="nav-link" data-scroll-target="#variance-of-bar-y"><span class="header-section-number">3.6.3</span> Variance of <span class="math inline">\(\bar y\)</span></a></li>
+  <li><a href="#unbiasedness-of-s2" id="toc-unbiasedness-of-s2" class="nav-link" data-scroll-target="#unbiasedness-of-s2"><span class="header-section-number">3.6.4</span> Unbiasedness of <span class="math inline">\(s^2\)</span></a></li>
   </ul></li>
-  <li><a href="#sec-srs-simulation" id="toc-sec-srs-simulation" class="nav-link" data-scroll-target="#sec-srs-simulation"><span class="header-section-number">2.7</span> A Simulation Demonstration of SRS Inference</a>
+  <li><a href="#sec-srs-simulation" id="toc-sec-srs-simulation" class="nav-link" data-scroll-target="#sec-srs-simulation"><span class="header-section-number">3.7</span> A Simulation Demonstration of SRS Inference</a>
   <ul>
-  <li><a href="#true-values" id="toc-true-values" class="nav-link" data-scroll-target="#true-values"><span class="header-section-number">2.7.1</span> True values</a></li>
-  <li><a href="#one-srs" id="toc-one-srs" class="nav-link" data-scroll-target="#one-srs"><span class="header-section-number">2.7.2</span> One SRS</a></li>
-  <li><a href="#repeating-srs-5000-times" id="toc-repeating-srs-5000-times" class="nav-link" data-scroll-target="#repeating-srs-5000-times"><span class="header-section-number">2.7.3</span> Repeating SRS 5000 times</a></li>
-  <li><a href="#empirical-coverage-rate-of-cis" id="toc-empirical-coverage-rate-of-cis" class="nav-link" data-scroll-target="#empirical-coverage-rate-of-cis"><span class="header-section-number">2.7.4</span> Empirical coverage rate of CIs</a></li>
+  <li><a href="#true-values" id="toc-true-values" class="nav-link" data-scroll-target="#true-values"><span class="header-section-number">3.7.1</span> True values</a></li>
+  <li><a href="#one-srs" id="toc-one-srs" class="nav-link" data-scroll-target="#one-srs"><span class="header-section-number">3.7.2</span> One SRS</a></li>
+  <li><a href="#repeating-srs-5000-times" id="toc-repeating-srs-5000-times" class="nav-link" data-scroll-target="#repeating-srs-5000-times"><span class="header-section-number">3.7.3</span> Repeating SRS 5000 times</a></li>
+  <li><a href="#empirical-coverage-rate-of-cis" id="toc-empirical-coverage-rate-of-cis" class="nav-link" data-scroll-target="#empirical-coverage-rate-of-cis"><span class="header-section-number">3.7.4</span> Empirical coverage rate of CIs</a></li>
   </ul></li>
-  <li><a href="#sec-app-srs" id="toc-sec-app-srs" class="nav-link" data-scroll-target="#sec-app-srs"><span class="header-section-number">2.8</span> Shinylive App for Illustrating SRS Theory</a></li>
+  <li><a href="#sec-app-srs" id="toc-sec-app-srs" class="nav-link" data-scroll-target="#sec-app-srs"><span class="header-section-number">3.8</span> Shinylive App for Illustrating SRS Theory</a></li>
   </ul>
 </nav>
 </nav>
@@ -308,7 +314,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></h1>
 </div>
 
 
@@ -338,8 +344,8 @@ window.Quarto = {
 
 
 <p>Simple random sampling is the simplest probability sampling design, and the building block for all the designs in later chapters. A stratified sample is an SRS within each stratum; a cluster sample is an SRS of clusters. This chapter defines the design, derives its estimators and their standard errors, shows how to build confidence intervals and choose the sample size, and checks the theory by simulation. The material corresponds to Sections 2.3–2.6 and 2.8 of Lohr and Sections 4.1–4.5 of Scheaffer et al.</p>
-<section id="sec-srs-design" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="sec-srs-design"><span class="header-section-number">2.1</span> SRS and SRSWR</h2>
+<section id="sec-srs-design" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="sec-srs-design"><span class="header-section-number">3.1</span> SRS and SRSWR</h2>
 <p>There are two versions of simple random sampling.</p>
 <p>A <strong>simple random sample with replacement (SRSWR)</strong> of size <span class="math inline">\(n\)</span> from a population of <span class="math inline">\(N\)</span> units can be thought of as <span class="math inline">\(n\)</span> independent draws of one unit, each unit having probability <span class="math inline">\(1/N\)</span> on every draw. The same unit can be drawn more than once.</p>
 <p>A <strong>simple random sample without replacement (SRS)</strong> of size <span class="math inline">\(n\)</span> is selected so that every possible subset of <span class="math inline">\(n\)</span> distinct units in the population has the same probability of being the sample. There are <span class="math inline">\(\binom{N}{n}\)</span> such subsets, so <span class="math display">\[
@@ -352,40 +358,55 @@ P(\mathcal S) = \frac{1}{\binom{N}{n}} = \frac{n!\,(N-n)!}{N!}
 </details>
 </div>
 <p>returns the labels of <span class="math inline">\(n\)</span> distinct units chosen in this way.</p>
-<section id="inclusion-probabilities" class="level3" data-number="2.1.1">
-<h3 data-number="2.1.1" class="anchored" data-anchor-id="inclusion-probabilities"><span class="header-section-number">2.1.1</span> Inclusion probabilities</h3>
+<p><a href="#fig-srs-design" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> illustrates an SRS of <span class="math inline">\(n = 60\)</span> from a synthetic population of <span class="math inline">\(N = 1000\)</span> units. The design uses no information about the units other than their labels, so the sampled units (red) are scattered at random over the population, and their values cover its whole range.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-srs-design" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-srs-design-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="srs_files/figure-html/fig-srs-design-1.png" class="img-fluid figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-srs-design-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: A simple random sample of <span class="math inline">\(n = 60\)</span> (red) from a synthetic population of <span class="math inline">\(N = 1000\)</span> units, listed in an arbitrary order. The dashed line is the population mean.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="inclusion-probabilities" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="inclusion-probabilities"><span class="header-section-number">3.1.1</span> Inclusion probabilities</h3>
 <p>To study which units end up in the sample, define the sample-membership indicator <span class="math display">\[
 Z_i = \begin{cases} 1 &amp; \text{if unit } i \text{ is in the sample,} \\ 0 &amp; \text{otherwise.} \end{cases}
 \]</span> The probability <span class="math inline">\(\pi_i = P(Z_i = 1)\)</span> is the <strong>inclusion probability</strong> of unit <span class="math inline">\(i\)</span>. If unit <span class="math inline">\(i\)</span> is in the sample, the other <span class="math inline">\(n-1\)</span> sampled units must come from the remaining <span class="math inline">\(N-1\)</span> units, so <span class="math display">\[
 \pi_i = P(Z_i=1) = \frac{\text{number of samples including unit } i}{\text{number of possible samples}}
 = \frac{\binom{N-1}{n-1}}{\binom{N}{n}} = \frac{n}{N}.
-\]</span> Every unit has the same chance <span class="math inline">\(n/N\)</span> of being in the sample. The indicators <span class="math inline">\(Z_1, \ldots, Z_N\)</span> are the only random quantities in design-based inference; we use them in <a href="#sec-srs-randomization" class="quarto-xref"><span>Section 2.6</span></a> to prove the properties of the estimators.</p>
+\]</span> Every unit has the same chance <span class="math inline">\(n/N\)</span> of being in the sample. The indicators <span class="math inline">\(Z_1, \ldots, Z_N\)</span> are the only random quantities in design-based inference; we use them in <a href="#sec-srs-randomization" class="quarto-xref"><span>Section 3.6</span></a> to prove the properties of the estimators.</p>
 </section>
 </section>
-<section id="sec-srs-formulas" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="sec-srs-formulas"><span class="header-section-number">2.2</span> Estimators for Simple Random Sampling</h2>
+<section id="sec-srs-formulas" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="sec-srs-formulas"><span class="header-section-number">3.2</span> Estimators for Simple Random Sampling</h2>
 <p>Write <span class="math inline">\(y_i\)</span> for the value of unit <span class="math inline">\(i\)</span> in the population <span class="math inline">\(U = \{1, \ldots, N\}\)</span>, and <span class="math display">\[
 \bar{y}_U = \frac{1}{N}\sum_{i=1}^N y_i, \qquad
 t = \sum_{i=1}^N y_i = N\bar{y}_U, \qquad
 S^2 = \frac{1}{N-1}\sum_{i=1}^N (y_i - \bar{y}_U)^2
 \]</span> for the population mean, total and variance. These are fixed, unknown numbers.</p>
-<section id="estimating-the-population-mean" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="estimating-the-population-mean"><span class="header-section-number">2.2.1</span> Estimating the population mean</h3>
+<section id="estimating-the-population-mean" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="estimating-the-population-mean"><span class="header-section-number">3.2.1</span> Estimating the population mean</h3>
 <p>The natural estimator of <span class="math inline">\(\bar y_U\)</span> is the sample mean, and the natural estimator of <span class="math inline">\(S^2\)</span> is the sample variance: <span class="math display">\[
 \bar y = \frac1n \sum_{i \in \mathcal S} y_i = \frac1n \sum_{i=1}^N Z_i y_i,
 \qquad
 s^2 = \frac{1}{n-1}\sum_{i\in\mathcal S} (y_i - \bar y)^2 .
 \]</span> The sample mean is unbiased for <span class="math inline">\(\bar y_U\)</span>, and its variance is <span class="math display">\[
 V(\bar{y}) = \left(1 - \frac{n}{N}\right)\frac{S^2}{n}
-\]</span> (both are proved in <a href="#sec-srs-randomization" class="quarto-xref"><span>Section 2.6</span></a>). This is the familiar <span class="math inline">\(S^2/n\)</span> of independent sampling, multiplied by the factor <span class="math inline">\(1 - n/N\)</span>, the <strong>finite population correction</strong> (fpc). Sampling without replacement removes units from the pool, so the sample covers more of the population than independent draws would, and the variance is smaller. When the sampling fraction <span class="math inline">\(n/N\)</span> is small, the fpc is close to <span class="math inline">\(1\)</span> and can be ignored. When <span class="math inline">\(n = N\)</span>, the sample is a census and <span class="math inline">\(V(\bar y) = 0\)</span>.</p>
-<p>Since <span class="math inline">\(s^2\)</span> is unbiased for <span class="math inline">\(S^2\)</span> (also proved in <a href="#sec-srs-randomization" class="quarto-xref"><span>Section 2.6</span></a>), replacing <span class="math inline">\(S^2\)</span> by <span class="math inline">\(s^2\)</span> gives an unbiased estimator of the variance. Its square root is the <strong>standard error</strong>: <span class="math display">\[
+\]</span> (both are proved in <a href="#sec-srs-randomization" class="quarto-xref"><span>Section 3.6</span></a>). This is the familiar <span class="math inline">\(S^2/n\)</span> of independent sampling, multiplied by the factor <span class="math inline">\(1 - n/N\)</span>, the <strong>finite population correction</strong> (fpc). Sampling without replacement removes units from the pool, so the sample covers more of the population than independent draws would, and the variance is smaller. When the sampling fraction <span class="math inline">\(n/N\)</span> is small, the fpc is close to <span class="math inline">\(1\)</span> and can be ignored. When <span class="math inline">\(n = N\)</span>, the sample is a census and <span class="math inline">\(V(\bar y) = 0\)</span>.</p>
+<p>Since <span class="math inline">\(s^2\)</span> is unbiased for <span class="math inline">\(S^2\)</span> (also proved in <a href="#sec-srs-randomization" class="quarto-xref"><span>Section 3.6</span></a>), replacing <span class="math inline">\(S^2\)</span> by <span class="math inline">\(s^2\)</span> gives an unbiased estimator of the variance. Its square root is the <strong>standard error</strong>: <span class="math display">\[
 \boxed{
 \hat{V}(\bar{y}) = \left(1 - \frac{n}{N}\right)\frac{s^2}{n}, \qquad
 \mathrm{SE}(\bar y) = \sqrt{\Big(1-\frac nN\Big)\frac{s^2}{n}} .}
 \]</span></p>
 </section>
-<section id="estimating-the-population-total" class="level3" data-number="2.2.2">
-<h3 data-number="2.2.2" class="anchored" data-anchor-id="estimating-the-population-total"><span class="header-section-number">2.2.2</span> Estimating the population total</h3>
+<section id="estimating-the-population-total" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="estimating-the-population-total"><span class="header-section-number">3.2.2</span> Estimating the population total</h3>
 <p>Since <span class="math inline">\(t = N\bar y_U\)</span>, the total is estimated by scaling up the sample mean: <span class="math display">\[
 \boxed{
 \hat{t} = N\bar{y}, \qquad
@@ -396,8 +417,8 @@ V(\bar{y}) = \left(1 - \frac{n}{N}\right)\frac{S^2}{n}
 \hat t = \sum_{i\in\mathcal S} w_i y_i = \sum_{i\in\mathcal S} \frac{N}{n} y_i .
 \]</span> Each sampled unit “represents” <span class="math inline">\(N/n\)</span> units of the population: itself and <span class="math inline">\(N/n - 1\)</span> unsampled ones. In an SRS all weights are equal; in later chapters (stratified, cluster and unequal-probability sampling) they are not, but the weighted-sum form of <span class="math inline">\(\hat t\)</span> carries over.</p>
 </section>
-<section id="coefficient-of-variation" class="level3" data-number="2.2.3">
-<h3 data-number="2.2.3" class="anchored" data-anchor-id="coefficient-of-variation"><span class="header-section-number">2.2.3</span> Coefficient of variation</h3>
+<section id="coefficient-of-variation" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="coefficient-of-variation"><span class="header-section-number">3.2.3</span> Coefficient of variation</h3>
 <p>The standard error is in the units of <span class="math inline">\(y\)</span>. A scale-free measure of precision is the <strong>coefficient of variation</strong> (CV), defined when <span class="math inline">\(\bar y_U \ne 0\)</span>: <span class="math display">\[
 \mathrm{CV}(\bar y) = \frac{\sqrt{V(\bar y)}}{E(\bar y)}
 = \sqrt{1-\frac nN}\ \frac{S}{\sqrt n\, \bar y_{U}},
@@ -405,8 +426,8 @@ V(\bar{y}) = \left(1 - \frac{n}{N}\right)\frac{S^2}{n}
 \widehat{\mathrm{CV}}(\bar y) = \frac{\mathrm{SE}(\bar y)}{\bar y} .
 \]</span> Because <span class="math inline">\(\hat t = N\bar y\)</span>, the factor <span class="math inline">\(N\)</span> cancels and <span class="math inline">\(\mathrm{CV}(\hat t) = \mathrm{CV}(\bar y)\)</span>. A CV of 0.05 means the standard error is 5% of the estimate, whatever the units of measurement.</p>
 </section>
-<section id="estimating-a-proportion" class="level3" data-number="2.2.4">
-<h3 data-number="2.2.4" class="anchored" data-anchor-id="estimating-a-proportion"><span class="header-section-number">2.2.4</span> Estimating a proportion</h3>
+<section id="estimating-a-proportion" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4" class="anchored" data-anchor-id="estimating-a-proportion"><span class="header-section-number">3.2.4</span> Estimating a proportion</h3>
 <p>Estimating a proportion is a special case of estimating a mean. Define <span class="math inline">\(y_i=1\)</span> if unit <span class="math inline">\(i\)</span> has the characteristic of interest and <span class="math inline">\(y_i=0\)</span> otherwise. Then the population proportion and the sample proportion are <span class="math display">\[
 p = \frac{1}{N}\sum_{i=1}^N y_i = \bar y_{U}, \qquad
 \hat p = \frac1n\sum_{i\in\mathcal S} y_i = \bar y ,
@@ -420,13 +441,13 @@ V(\hat p) = \Big(\frac{N-n}{N-1}\Big)\frac{p(1-p)}{n},
 \]</span> The number of units with the characteristic, <span class="math inline">\(Np\)</span>, is estimated by <span class="math inline">\(N\hat p\)</span> with standard error <span class="math inline">\(N\,\mathrm{SE}(\hat p)\)</span>.</p>
 </section>
 </section>
-<section id="sec-srs-agsrs" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="sec-srs-agsrs"><span class="header-section-number">2.3</span> Example: The Census of Agriculture</h2>
+<section id="sec-srs-agsrs" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="sec-srs-agsrs"><span class="header-section-number">3.3</span> Example: The Census of Agriculture</h2>
 <p>The U.S. government conducts a Census of Agriculture every five years. It collects data on all farms (any place producing $1000 or more of agricultural products) in the 50 states, for each of the <span class="math inline">\(N=3078\)</span> counties and county-equivalents. The file <code>agpop.csv</code> contains the 1982, 1987 and 1992 farm data for the whole population. An SRS of <span class="math inline">\(n=300\)</span> counties was selected with computer-generated random numbers and saved as <code>agsrs.csv</code>. We use it to estimate the mean and total of <code>acres92</code>, the number of acres devoted to farms in 1992, and the proportion of counties with fewer than 200,000 acres in farms.</p>
 <p>Throughout the agriculture examples in this book, county acreages are expressed in <strong>thousands of acres</strong>. The raw figures run into the millions, and every mean, variance and total reads far more easily on that scale. The helper <code>acres_in_thousands()</code> performs the conversion as the data are read.</p>
-<section id="step-by-step-calculation" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="step-by-step-calculation"><span class="header-section-number">2.3.1</span> Step-by-step calculation</h3>
-<p>We first compute the estimates directly from the formulas of <a href="#sec-srs-formulas" class="quarto-xref"><span>Section 2.2</span></a>.</p>
+<section id="step-by-step-calculation" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="step-by-step-calculation"><span class="header-section-number">3.3.1</span> Step-by-step calculation</h3>
+<p>We first compute the estimates directly from the formulas of <a href="#sec-srs-formulas" class="quarto-xref"><span>Section 3.2</span></a>.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -484,7 +505,7 @@ V(\hat p) = \Big(\frac{N-n}{N-1}\Big)\frac{p(1-p)}{n},
 = \frac{\mathrm{SE}(\bar y)}{\bar y}
 = \frac{18.898}{297.897} = 0.0634,
 \]</span> so the standard error is about 6.3% of the estimate.</p>
-<p>The data are highly skewed (<a href="#fig-agsrs-acres92-hist" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>): most counties have fewer than 500 thousand acres in farms, but some have more than 1.5 million. For such data the mean is pulled up by the long right tail, and we should also report the <strong>median</strong>, which is 196.7 thousand acres here, well below the mean.</p>
+<p>The data are highly skewed (<a href="#fig-agsrs-acres92-hist" class="quarto-xref">Figure&nbsp;<span>3.2</span></a>): most counties have fewer than 500 thousand acres in farms, but some have more than 1.5 million. For such data the mean is pulled up by the long right tail, and we should also report the <strong>median</strong>, which is 196.7 thousand acres here, well below the mean.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -501,7 +522,7 @@ V(\hat p) = \Big(\frac{N-n}{N-1}\Big)\frac{p(1-p)}{n},
 <img src="srs_files/figure-html/fig-agsrs-acres92-hist-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agsrs-acres92-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.1: Farm acreage in 1992 (thousands of acres) for the SRS of 300 counties. The distribution is strongly skewed to the right.
+Figure&nbsp;3.2: Farm acreage in 1992 (thousands of acres) for the SRS of 300 counties. The distribution is strongly skewed to the right.
 </figcaption>
 </figure>
 </div>
@@ -511,8 +532,8 @@ Figure&nbsp;2.1: Farm acreage in 1992 (thousands of acres) for the SRS of 300 co
 \mathrm{SE}(\hat p) = \sqrt{\Big(1-\frac{300}{3078}\Big)\frac{(0.51)(0.49)}{299}} = 0.0275 .
 \]</span></p>
 </section>
-<section id="a-function-for-repeated-use" class="level3" data-number="2.3.2">
-<h3 data-number="2.3.2" class="anchored" data-anchor-id="a-function-for-repeated-use"><span class="header-section-number">2.3.2</span> A function for repeated use</h3>
+<section id="a-function-for-repeated-use" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="a-function-for-repeated-use"><span class="header-section-number">3.3.2</span> A function for repeated use</h3>
 <p>The same calculation is needed again and again, so we wrap it in a function. To avoid repeating code in every chapter, all estimating functions (and their <code>gt</code> table formatting helpers) live in a single shared file, <code>samplingestimate.r</code>, sourced at the start of this chapter. The SRS function is <code>srs_est()</code>.</p>
 <details>
 <summary>
@@ -3964,8 +3985,8 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 </div>
 </div>
 </section>
-<section id="comparing-with-the-true-values" class="level3" data-number="2.3.3">
-<h3 data-number="2.3.3" class="anchored" data-anchor-id="comparing-with-the-true-values"><span class="header-section-number">2.3.3</span> Comparing with the true values</h3>
+<section id="comparing-with-the-true-values" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="comparing-with-the-true-values"><span class="header-section-number">3.3.3</span> Comparing with the true values</h3>
 <p>Because the census file <code>agpop.csv</code> contains the whole population, we can check how close the SRS estimates came to the true values. (In a real survey these are, of course, unknown.)</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -4005,11 +4026,11 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 <p>All the true values lie inside the 95% confidence intervals computed above.</p>
 </section>
 </section>
-<section id="sec-srs-ci" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="sec-srs-ci"><span class="header-section-number">2.4</span> Confidence Intervals</h2>
+<section id="sec-srs-ci" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="sec-srs-ci"><span class="header-section-number">3.4</span> Confidence Intervals</h2>
 <p>A confidence interval (CI) indicates the accuracy of an estimate. A 95% CI is often explained heuristically: if we took samples from the population over and over again, and constructed a CI by our procedure for each possible sample, we would expect 95% of the resulting intervals to include the true value of the population quantity. In design-based inference this is literally what the probability refers to: the population is fixed and the randomness is over the <span class="math inline">\(\binom{N}{n}\)</span> possible samples.</p>
-<section id="normality-of-the-sample-mean" class="level3" data-number="2.4.1">
-<h3 data-number="2.4.1" class="anchored" data-anchor-id="normality-of-the-sample-mean"><span class="header-section-number">2.4.1</span> Normality of the sample mean</h3>
+<section id="normality-of-the-sample-mean" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="normality-of-the-sample-mean"><span class="header-section-number">3.4.1</span> Normality of the sample mean</h3>
 <p>In an SRS without replacement the observations are not independent, so the ordinary central limit theorem does not apply directly. A finite-population version is due to Hájek (1960): if certain technical conditions hold and <span class="math inline">\(n\)</span>, <span class="math inline">\(N\)</span> and <span class="math inline">\(N-n\)</span> are all “sufficiently large”, then the sampling distribution of <span class="math display">\[
 \frac{\bar y - \bar y_{U}}{\sqrt{\big(1-\tfrac nN\big)}\, \tfrac{S}{\sqrt n}}
 \]</span> is approximately standard normal. Replacing <span class="math inline">\(S\)</span> by <span class="math inline">\(s\)</span> gives the standard error, and approximate <span class="math inline">\(100(1-\alpha)\%\)</span> CIs for the mean, total and proportion are <span class="math display">\[
@@ -4023,10 +4044,10 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 \text{total: } [802,454,\ 1,031,400] \text{ thousand acres},
 \]</span> <span class="math display">\[
 \text{proportion: } 0.51 \pm 1.968(0.0275) = [0.456,\ 0.564],
-\]</span> matching the output of <code>srs_est()</code> in <a href="#sec-srs-agsrs" class="quarto-xref"><span>Section 2.3</span></a>.</p>
+\]</span> matching the output of <code>srs_est()</code> in <a href="#sec-srs-agsrs" class="quarto-xref"><span>Section 3.3</span></a>.</p>
 </section>
-<section id="how-large-must-n-be-for-normality" class="level3" data-number="2.4.2">
-<h3 data-number="2.4.2" class="anchored" data-anchor-id="how-large-must-n-be-for-normality"><span class="header-section-number">2.4.2</span> How large must <span class="math inline">\(n\)</span> be for normality?</h3>
+<section id="how-large-must-n-be-for-normality" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="how-large-must-n-be-for-normality"><span class="header-section-number">3.4.2</span> How large must <span class="math inline">\(n\)</span> be for normality?</h3>
 <p>The normal approximation needs a larger sample when the population is skewed, as acreage is. Sugden, Smith and Jones (2000) extend Cochran’s rule and recommend the minimum sample size <span class="math display">\[
 n_{\min} = 28 + 25\left(\frac{\sum_{i=1}^N (y_i-\bar y_{U})^3}{N S^3}\right)^{\!2},
 \]</span> where the quantity in parentheses is the <strong>skewness</strong> of the population. The more skewed the population, the larger the sample required.</p>
@@ -4044,14 +4065,14 @@ n_{\min} = 28 + 25\left(\frac{\sum_{i=1}^N (y_i-\bar y_{U})^3}{N S^3}\right)^{\!
 </div>
 <p>For the agriculture data we substitute the sample quantities: <span class="math inline">\(s = 344.55\)</span> and <span class="math inline">\(\sum_{i\in\mathcal S}(y_i-\bar y)^3/n = 1.0504 \times 10^{8}\)</span> (in thousands of acres), giving a skewness of 2.57 and <span class="math display">\[
 n_{\min} = 28 + 25(2.568)^2 \approx 193 .
-\]</span> Our sample of <span class="math inline">\(n=300\)</span> exceeds <span class="math inline">\(n_{\min}\)</span>, so it appears large enough for the sampling distribution of <span class="math inline">\(\bar y\)</span> to be approximately normal. The simulation in <a href="#sec-srs-simulation" class="quarto-xref"><span>Section 2.7</span></a> confirms this.</p>
+\]</span> Our sample of <span class="math inline">\(n=300\)</span> exceeds <span class="math inline">\(n_{\min}\)</span>, so it appears large enough for the sampling distribution of <span class="math inline">\(\bar y\)</span> to be approximately normal. The simulation in <a href="#sec-srs-simulation" class="quarto-xref"><span>Section 3.7</span></a> confirms this.</p>
 </section>
 </section>
-<section id="sec-srs-sample-size" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="sec-srs-sample-size"><span class="header-section-number">2.5</span> Choosing the Sample Size</h2>
+<section id="sec-srs-sample-size" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="sec-srs-sample-size"><span class="header-section-number">3.5</span> Choosing the Sample Size</h2>
 <p>Before a survey is carried out we must decide how large the sample should be. The answer depends on how precise the estimate must be.</p>
-<section id="specifying-the-tolerable-error" class="level3" data-number="2.5.1">
-<h3 data-number="2.5.1" class="anchored" data-anchor-id="specifying-the-tolerable-error"><span class="header-section-number">2.5.1</span> Specifying the tolerable error</h3>
+<section id="specifying-the-tolerable-error" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="specifying-the-tolerable-error"><span class="header-section-number">3.5.1</span> Specifying the tolerable error</h3>
 <p>The desired precision is often expressed in absolute terms, <span class="math display">\[
 P(|\bar y - \bar y_{U}| \le e) = 1-\alpha ,
 \]</span> where <span class="math inline">\(e\)</span> is the <strong>margin of error</strong>. For many surveys of people that measure a proportion, <span class="math inline">\(e=0.03\)</span> and <span class="math inline">\(\alpha=0.05\)</span>. Alternatively, precision can be specified in relative terms, which controls the CV: <span class="math display">\[
@@ -4059,8 +4080,8 @@ P\left(\left|\frac{\bar y - \bar y_{U}}{\bar y_{U}}\right| \le r\right) = 1-\alp
 \qquad\text{that is,}\qquad e = r \, \bar y_{U} .
 \]</span> For example, if <span class="math inline">\(\bar y_{U} \approx 180\)</span> thousand and <span class="math inline">\(r=0.1\)</span>, then <span class="math inline">\(e=18\)</span> thousand.</p>
 </section>
-<section id="solving-for-n" class="level3" data-number="2.5.2">
-<h3 data-number="2.5.2" class="anchored" data-anchor-id="solving-for-n"><span class="header-section-number">2.5.2</span> Solving for <span class="math inline">\(n\)</span></h3>
+<section id="solving-for-n" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="solving-for-n"><span class="header-section-number">3.5.2</span> Solving for <span class="math inline">\(n\)</span></h3>
 <p>Using the normal approximation, the margin of error is <span class="math inline">\(z_{\alpha/2}\,\mathrm{SD}(\bar y)\)</span>, so we need <span class="math inline">\(n\)</span> with <span class="math display">\[
 e = z_{\alpha/2}\sqrt{\Big(1-\frac nN\Big)\frac{S^2}{n}} .
 \]</span> Solving in two steps is convenient. First find the sample size <span class="math inline">\(n_0\)</span> we would need for an infinite population (no fpc): <span class="math display">\[
@@ -4109,14 +4130,14 @@ n = \frac{288}{1+288/3078} \approx 263 .
 </div>
 </section>
 </section>
-<section id="sec-srs-randomization" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="sec-srs-randomization"><span class="header-section-number">2.6</span> Randomization Theory for SRS</h2>
+<section id="sec-srs-randomization" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="sec-srs-randomization"><span class="header-section-number">3.6</span> Randomization Theory for SRS</h2>
 <p>We now prove the properties of <span class="math inline">\(\bar y\)</span> and <span class="math inline">\(s^2\)</span> used above. In the <strong>randomization theory</strong> (design-based) approach, the values <span class="math inline">\(y_1, \ldots, y_N\)</span> are fixed but unknown numbers. The only random variables are the indicators <span class="math inline">\(Z_1, \ldots, Z_N\)</span> that record which units are in the sample: <span class="math display">\[
 \bar y = \sum_{i\in\mathcal S} \frac{y_i}{n} = \sum_{i=1}^N Z_i \frac{y_i}{n} .
 \]</span> All the randomness in <span class="math inline">\(\bar y\)</span> comes from <span class="math inline">\(Z_1,\ldots,Z_N\)</span>.</p>
-<section id="moments-of-z_i" class="level3" data-number="2.6.1">
-<h3 data-number="2.6.1" class="anchored" data-anchor-id="moments-of-z_i"><span class="header-section-number">2.6.1</span> Moments of <span class="math inline">\(Z_i\)</span></h3>
-<p>Each <span class="math inline">\(Z_i\)</span> is a Bernoulli random variable with <span class="math inline">\(P(Z_i=1) = \pi_i = n/N\)</span> (<a href="#sec-srs-design" class="quarto-xref"><span>Section 2.1</span></a>). Since <span class="math inline">\(Z_i^2 = Z_i\)</span>, <span class="math display">\[
+<section id="moments-of-z_i" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="moments-of-z_i"><span class="header-section-number">3.6.1</span> Moments of <span class="math inline">\(Z_i\)</span></h3>
+<p>Each <span class="math inline">\(Z_i\)</span> is a Bernoulli random variable with <span class="math inline">\(P(Z_i=1) = \pi_i = n/N\)</span> (<a href="#sec-srs-design" class="quarto-xref"><span>Section 3.1</span></a>). Since <span class="math inline">\(Z_i^2 = Z_i\)</span>, <span class="math display">\[
 E[Z_i] = E[Z_i^2] = \frac nN, \qquad
 V(Z_i) = \frac nN - \Big(\frac nN\Big)^2 = \frac nN\Big(1-\frac nN\Big).
 \]</span> The <span class="math inline">\(Z_i\)</span> are not independent, because the sample size is fixed: if unit <span class="math inline">\(i\)</span> is in the sample, there is one less place for the other units. For <span class="math inline">\(i\ne j\)</span>, given that unit <span class="math inline">\(i\)</span> is sampled, the remaining <span class="math inline">\(n-1\)</span> units are an SRS from the other <span class="math inline">\(N-1\)</span>, so <span class="math display">\[
@@ -4127,16 +4148,16 @@ E[Z_iZ_j] = P(Z_j=1\mid Z_i=1)\,P(Z_i=1) = \frac{n-1}{N-1}\cdot\frac nN ,
 = -\frac{1}{N-1}\Big(1-\frac nN\Big)\frac nN .
 \]</span> This <strong>negative</strong> covariance is the source of the finite population correction.</p>
 </section>
-<section id="unbiasedness-of-bar-y" class="level3" data-number="2.6.2">
-<h3 data-number="2.6.2" class="anchored" data-anchor-id="unbiasedness-of-bar-y"><span class="header-section-number">2.6.2</span> Unbiasedness of <span class="math inline">\(\bar y\)</span></h3>
+<section id="unbiasedness-of-bar-y" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="unbiasedness-of-bar-y"><span class="header-section-number">3.6.2</span> Unbiasedness of <span class="math inline">\(\bar y\)</span></h3>
 <p>By linearity of expectation, <span class="math display">\[
 E[\bar y] = \sum_{i=1}^N E[Z_i]\frac{y_i}{n}
 = \sum_{i=1}^N \frac{n}{N}\cdot\frac{y_i}{n}
 = \frac1N \sum_{i=1}^N y_i = \bar y_{U}.
 \]</span> So <span class="math inline">\(\bar y\)</span> is an <strong>unbiased</strong> estimator of <span class="math inline">\(\bar y_{U}\)</span>, and <span class="math inline">\(\hat t = N\bar y\)</span> is unbiased for <span class="math inline">\(t\)</span>.</p>
 </section>
-<section id="variance-of-bar-y" class="level3" data-number="2.6.3">
-<h3 data-number="2.6.3" class="anchored" data-anchor-id="variance-of-bar-y"><span class="header-section-number">2.6.3</span> Variance of <span class="math inline">\(\bar y\)</span></h3>
+<section id="variance-of-bar-y" class="level3" data-number="3.6.3">
+<h3 data-number="3.6.3" class="anchored" data-anchor-id="variance-of-bar-y"><span class="header-section-number">3.6.3</span> Variance of <span class="math inline">\(\bar y\)</span></h3>
 <p>Expanding the variance of a sum, <span class="math display">\[
 V(\bar y) = \frac{1}{n^2}\left[\sum_{i=1}^N y_i^2\, V(Z_i) + \sum_{i=1}^N\sum_{j\ne i} y_i y_j\,\mathrm{Cov}(Z_i,Z_j)\right]
 = \frac{1}{n^2}\,\frac nN\Big(1-\frac nN\Big)\left[\sum_{i=1}^N y_i^2 - \frac{1}{N-1}\sum_{i=1}^N\sum_{j\ne i} y_i y_j\right].
@@ -4147,8 +4168,8 @@ V(\bar y) = \frac{1}{n^2}\left[\sum_{i=1}^N y_i^2\, V(Z_i) + \sum_{i=1}^N\sum_{j
 V(\bar y) = \frac{1}{n^2}\,\frac nN\Big(1-\frac nN\Big) N S^2 = \Big(1-\frac nN\Big)\frac{S^2}{n}.
 \]</span> Without the negative covariances, the result would be <span class="math inline">\(\frac{N-1}{N}\cdot\frac{S^2}{n}\)</span> (the SRSWR variance). The covariance terms produce the factor <span class="math inline">\(1 - n/N\)</span>.</p>
 </section>
-<section id="unbiasedness-of-s2" class="level3" data-number="2.6.4">
-<h3 data-number="2.6.4" class="anchored" data-anchor-id="unbiasedness-of-s2"><span class="header-section-number">2.6.4</span> Unbiasedness of <span class="math inline">\(s^2\)</span></h3>
+<section id="unbiasedness-of-s2" class="level3" data-number="3.6.4">
+<h3 data-number="3.6.4" class="anchored" data-anchor-id="unbiasedness-of-s2"><span class="header-section-number">3.6.4</span> Unbiasedness of <span class="math inline">\(s^2\)</span></h3>
 <p>Adding and subtracting <span class="math inline">\(\bar y_U\)</span> inside the sum of squares gives the identity <span class="math display">\[
 \sum_{i\in\mathcal S}(y_i-\bar y)^2 = \sum_{i\in\mathcal S}(y_i-\bar y_{U})^2 - n(\bar y - \bar y_U)^2 .
 \]</span> Take expectations. For the first term, <span class="math inline">\(E\big[\sum_{i=1}^N Z_i(y_i-\bar y_U)^2\big] = \frac nN (N-1)S^2\)</span>; for the second, <span class="math inline">\(E[n(\bar y - \bar y_U)^2] = nV(\bar y) = (1-\frac nN)S^2\)</span>. Hence <span class="math display">\[
@@ -4157,8 +4178,8 @@ E\left[\sum_{i\in\mathcal S}(y_i-\bar y)^2\right]
 \]</span> and therefore <span class="math inline">\(E[s^2] = S^2\)</span>. It follows that <span class="math inline">\(\hat V(\bar y) = (1-\frac nN)\frac{s^2}{n}\)</span> is unbiased for <span class="math inline">\(V(\bar y)\)</span>. (The standard error, its square root, is slightly biased, as a square root always is, but this is ignored in practice.)</p>
 </section>
 </section>
-<section id="sec-srs-simulation" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="sec-srs-simulation"><span class="header-section-number">2.7</span> A Simulation Demonstration of SRS Inference</h2>
+<section id="sec-srs-simulation" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="sec-srs-simulation"><span class="header-section-number">3.7</span> A Simulation Demonstration of SRS Inference</h2>
 <p>The theory says that <span class="math inline">\(\bar y\)</span> is unbiased, that its standard deviation is <span class="math inline">\(\sqrt{1-n/N}\,S/\sqrt n\)</span>, that it is approximately normal for <span class="math inline">\(n = 300\)</span>, and that the 95% CIs cover <span class="math inline">\(\bar y_U\)</span> about 95% of the time. Because <code>agpop.csv</code> contains the whole population, we can check all four claims by drawing many samples from it.</p>
 <div class="cell">
 <details class="code-fold">
@@ -4169,8 +4190,8 @@ E\left[\sum_{i\in\mathcal S}(y_i-\bar y)^2\right]
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">subset</span>( agpop, <span class="sc">!</span><span class="fu">is.na</span> (acres92))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<section id="true-values" class="level3" data-number="2.7.1">
-<h3 data-number="2.7.1" class="anchored" data-anchor-id="true-values"><span class="header-section-number">2.7.1</span> True values</h3>
+<section id="true-values" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="true-values"><span class="header-section-number">3.7.1</span> True values</h3>
 <p>We fix the sample size and compute the true population mean and the true standard deviation of <span class="math inline">\(\bar y\)</span> from the population <span class="math inline">\(S\)</span>: <span class="math display">\[
 \mathrm{SD}(\bar{y}) = \sqrt{1 - \frac{n}{N}} \left(\frac{S}{\sqrt{n}}\right).
 \]</span></p>
@@ -4203,8 +4224,8 @@ E\left[\sum_{i\in\mathcal S}(y_i-\bar y)^2\right]
 </div>
 </div>
 </section>
-<section id="one-srs" class="level3" data-number="2.7.2">
-<h3 data-number="2.7.2" class="anchored" data-anchor-id="one-srs"><span class="header-section-number">2.7.2</span> One SRS</h3>
+<section id="one-srs" class="level3" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="one-srs"><span class="header-section-number">3.7.2</span> One SRS</h3>
 <p>A single random sample of <span class="math inline">\(n=300\)</span>, analyzed with <code>srs_est()</code>, is one instance of survey inference:</p>
 <div class="cell">
 <details class="code-fold">
@@ -4702,8 +4723,8 @@ E\left[\sum_{i\in\mathcal S}(y_i-\bar y)^2\right]
 </div>
 </div>
 </section>
-<section id="repeating-srs-5000-times" class="level3" data-number="2.7.3">
-<h3 data-number="2.7.3" class="anchored" data-anchor-id="repeating-srs-5000-times"><span class="header-section-number">2.7.3</span> Repeating SRS 5000 times</h3>
+<section id="repeating-srs-5000-times" class="level3" data-number="3.7.3">
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="repeating-srs-5000-times"><span class="header-section-number">3.7.3</span> Repeating SRS 5000 times</h3>
 <p>We now draw 5000 independent samples and store the estimates from each. (We use <code>show.details = FALSE</code> and keep only <code>$estimate</code>, so the loop skips building 5000 working tables.)</p>
 <div class="cell">
 <details class="code-fold">
@@ -4783,16 +4804,16 @@ E\left[\sum_{i\in\mathcal S}(y_i-\bar y)^2\right]
 <img src="srs_files/figure-html/fig-srs-simulation-distribution-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-srs-simulation-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.2: Population distribution and sampling distribution of the SRS sample mean over 5000 repeated samples (n = 300)
+Figure&nbsp;3.3: Population distribution and sampling distribution of the SRS sample mean over 5000 repeated samples (n = 300)
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The blue curves are kernel density estimates. The population density (top left) is strongly skewed to the right, with a long tail of very large counties. The kernel density of the 5000 sample means (top right) is nearly symmetric and almost coincides with the normal density <span class="math inline">\(N\big(\bar y_U,\ \mathrm{SD}(\bar y)^2\big)\)</span> predicted by the theory (red dashed curve); the QQ plot (bottom left) is close to a straight line, with only a slight bend in the upper tail left over from the skewness. So the sampling distribution of <span class="math inline">\(\bar y\)</span> is close to normal, as Hájek’s theorem and the <span class="math inline">\(n_{\min}\)</span> check of <a href="#sec-srs-ci" class="quarto-xref"><span>Section 2.4</span></a> suggest. The average of the 5000 estimates, 308.96, is close to <span class="math inline">\(\bar y_U = 308.58\)</span> (unbiasedness), and their standard deviation, 23.27, is close to the theoretical value 23.32.</p>
+<p>The blue curves are kernel density estimates. The population density (top left) is strongly skewed to the right, with a long tail of very large counties. The kernel density of the 5000 sample means (top right) is nearly symmetric and almost coincides with the normal density <span class="math inline">\(N\big(\bar y_U,\ \mathrm{SD}(\bar y)^2\big)\)</span> predicted by the theory (red dashed curve); the QQ plot (bottom left) is close to a straight line, with only a slight bend in the upper tail left over from the skewness. So the sampling distribution of <span class="math inline">\(\bar y\)</span> is close to normal, as Hájek’s theorem and the <span class="math inline">\(n_{\min}\)</span> check of <a href="#sec-srs-ci" class="quarto-xref"><span>Section 3.4</span></a> suggest. The average of the 5000 estimates, 308.96, is close to <span class="math inline">\(\bar y_U = 308.58\)</span> (unbiasedness), and their standard deviation, 23.27, is close to the theoretical value 23.32.</p>
 </section>
-<section id="empirical-coverage-rate-of-cis" class="level3" data-number="2.7.4">
-<h3 data-number="2.7.4" class="anchored" data-anchor-id="empirical-coverage-rate-of-cis"><span class="header-section-number">2.7.4</span> Empirical coverage rate of CIs</h3>
+<section id="empirical-coverage-rate-of-cis" class="level3" data-number="3.7.4">
+<h3 data-number="3.7.4" class="anchored" data-anchor-id="empirical-coverage-rate-of-cis"><span class="header-section-number">3.7.4</span> Empirical coverage rate of CIs</h3>
 <p>Finally we check whether the 95% CIs cover the true mean about 95% of the time.</p>
 <div class="cell">
 <details class="code-fold">
@@ -4841,17 +4862,17 @@ Figure&nbsp;2.2: Population distribution and sampling distribution of the SRS sa
 <img src="srs_files/figure-html/fig-srs-coverage-intervals-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-srs-coverage-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.3: First 100 simulated 95% confidence intervals for the SRS sample mean, with coverage failures highlighted
+Figure&nbsp;3.4: First 100 simulated 95% confidence intervals for the SRS sample mean, with coverage failures highlighted
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The empirical coverage rate is 0.937, close to the nominal 0.95. (With a skewed population the coverage of the <span class="math inline">\(t\)</span> interval tends to fall slightly short of nominal.) The intervals that miss (in red) are exactly the “5% of samples” in the heuristic interpretation of <a href="#sec-srs-ci" class="quarto-xref"><span>Section 2.4</span></a>.</p>
+<p>The empirical coverage rate is 0.937, close to the nominal 0.95. (With a skewed population the coverage of the <span class="math inline">\(t\)</span> interval tends to fall slightly short of nominal.) The intervals that miss (in red) are exactly the “5% of samples” in the heuristic interpretation of <a href="#sec-srs-ci" class="quarto-xref"><span>Section 3.4</span></a>.</p>
 </section>
 </section>
-<section id="sec-app-srs" class="level2" data-number="2.8">
-<h2 data-number="2.8" class="anchored" data-anchor-id="sec-app-srs"><span class="header-section-number">2.8</span> Shinylive App for Illustrating SRS Theory</h2>
+<section id="sec-app-srs" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="sec-app-srs"><span class="header-section-number">3.8</span> Shinylive App for Illustrating SRS Theory</h2>
 <p>The simulation for this section runs as a standalone app: <a href="../shinylives_sampling/app-srs.html" target="_blank">Simple random sampling</a>. It draws samples one at a time and builds up the sampling distribution and the coverage rate interactively, for any sample size and confidence level. It opens in a new tab, together with its documentation and the full <a href="../shinylives_sampling/index.html" target="_blank">list of apps</a>.</p>
 
 

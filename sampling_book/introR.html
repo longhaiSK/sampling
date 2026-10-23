@@ -9,7 +9,7 @@
 <meta name="author" content="Longhai Li">
 <meta name="dcterms.date" content="2026-10-08">
 
-<title>1&nbsp; Data Analysis with R – Elements of Sampling Survey</title>
+<title>2&nbsp; Data Analysis with R – Elements of Sampling Survey</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -155,7 +155,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./introR.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./introR.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -191,38 +191,44 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Sampling Survey</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./introR.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./srs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./strata.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ratio.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cluster.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ups.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -254,30 +260,30 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#foundations" id="toc-foundations" class="nav-link active" data-scroll-target="#foundations"><span class="header-section-number">1.1</span> Foundations</a>
+  <li><a href="#foundations" id="toc-foundations" class="nav-link active" data-scroll-target="#foundations"><span class="header-section-number">2.1</span> Foundations</a>
   <ul>
-  <li><a href="#basic-r-objects" id="toc-basic-r-objects" class="nav-link" data-scroll-target="#basic-r-objects"><span class="header-section-number">1.1.1</span> Basic R objects</a></li>
+  <li><a href="#basic-r-objects" id="toc-basic-r-objects" class="nav-link" data-scroll-target="#basic-r-objects"><span class="header-section-number">2.1.1</span> Basic R objects</a></li>
   </ul></li>
-  <li><a href="#importing-a-dataset" id="toc-importing-a-dataset" class="nav-link" data-scroll-target="#importing-a-dataset"><span class="header-section-number">1.2</span> Importing a dataset</a>
+  <li><a href="#importing-a-dataset" id="toc-importing-a-dataset" class="nav-link" data-scroll-target="#importing-a-dataset"><span class="header-section-number">2.2</span> Importing a dataset</a>
   <ul>
-  <li><a href="#displaying-the-full-dataset" id="toc-displaying-the-full-dataset" class="nav-link" data-scroll-target="#displaying-the-full-dataset"><span class="header-section-number">1.2.1</span> Displaying the full dataset</a></li>
-  <li><a href="#simple-summaries" id="toc-simple-summaries" class="nav-link" data-scroll-target="#simple-summaries"><span class="header-section-number">1.2.2</span> Simple summaries</a></li>
+  <li><a href="#displaying-the-full-dataset" id="toc-displaying-the-full-dataset" class="nav-link" data-scroll-target="#displaying-the-full-dataset"><span class="header-section-number">2.2.1</span> Displaying the full dataset</a></li>
+  <li><a href="#simple-summaries" id="toc-simple-summaries" class="nav-link" data-scroll-target="#simple-summaries"><span class="header-section-number">2.2.2</span> Simple summaries</a></li>
   </ul></li>
-  <li><a href="#the-native-pipe" id="toc-the-native-pipe" class="nav-link" data-scroll-target="#the-native-pipe"><span class="header-section-number">1.3</span> The native pipe</a></li>
-  <li><a href="#data-manipulation-with-dplyr" id="toc-data-manipulation-with-dplyr" class="nav-link" data-scroll-target="#data-manipulation-with-dplyr"><span class="header-section-number">1.4</span> Data manipulation with dplyr</a></li>
-  <li><a href="#tables-with-gt" id="toc-tables-with-gt" class="nav-link" data-scroll-target="#tables-with-gt"><span class="header-section-number">1.5</span> Tables with gt</a>
+  <li><a href="#the-native-pipe" id="toc-the-native-pipe" class="nav-link" data-scroll-target="#the-native-pipe"><span class="header-section-number">2.3</span> The native pipe</a></li>
+  <li><a href="#data-manipulation-with-dplyr" id="toc-data-manipulation-with-dplyr" class="nav-link" data-scroll-target="#data-manipulation-with-dplyr"><span class="header-section-number">2.4</span> Data manipulation with dplyr</a></li>
+  <li><a href="#tables-with-gt" id="toc-tables-with-gt" class="nav-link" data-scroll-target="#tables-with-gt"><span class="header-section-number">2.5</span> Tables with gt</a>
   <ul>
-  <li><a href="#spanning-headers-grouped-by-statistic" id="toc-spanning-headers-grouped-by-statistic" class="nav-link" data-scroll-target="#spanning-headers-grouped-by-statistic"><span class="header-section-number">1.5.1</span> Spanning headers grouped by statistic</a></li>
-  <li><a href="#spanning-headers-grouped-by-variable" id="toc-spanning-headers-grouped-by-variable" class="nav-link" data-scroll-target="#spanning-headers-grouped-by-variable"><span class="header-section-number">1.5.2</span> Spanning headers grouped by variable</a></li>
-  <li><a href="#automatic-summary-tables-with-gtsummary" id="toc-automatic-summary-tables-with-gtsummary" class="nav-link" data-scroll-target="#automatic-summary-tables-with-gtsummary"><span class="header-section-number">1.5.3</span> Automatic summary tables with gtsummary</a></li>
+  <li><a href="#spanning-headers-grouped-by-statistic" id="toc-spanning-headers-grouped-by-statistic" class="nav-link" data-scroll-target="#spanning-headers-grouped-by-statistic"><span class="header-section-number">2.5.1</span> Spanning headers grouped by statistic</a></li>
+  <li><a href="#spanning-headers-grouped-by-variable" id="toc-spanning-headers-grouped-by-variable" class="nav-link" data-scroll-target="#spanning-headers-grouped-by-variable"><span class="header-section-number">2.5.2</span> Spanning headers grouped by variable</a></li>
+  <li><a href="#automatic-summary-tables-with-gtsummary" id="toc-automatic-summary-tables-with-gtsummary" class="nav-link" data-scroll-target="#automatic-summary-tables-with-gtsummary"><span class="header-section-number">2.5.3</span> Automatic summary tables with gtsummary</a></li>
   </ul></li>
-  <li><a href="#graphics" id="toc-graphics" class="nav-link" data-scroll-target="#graphics"><span class="header-section-number">1.6</span> Graphics</a>
+  <li><a href="#graphics" id="toc-graphics" class="nav-link" data-scroll-target="#graphics"><span class="header-section-number">2.6</span> Graphics</a>
   <ul>
-  <li><a href="#base-r-graphics" id="toc-base-r-graphics" class="nav-link" data-scroll-target="#base-r-graphics"><span class="header-section-number">1.6.1</span> Base R graphics</a></li>
-  <li><a href="#saving-and-re-inserting-an-external-plot" id="toc-saving-and-re-inserting-an-external-plot" class="nav-link" data-scroll-target="#saving-and-re-inserting-an-external-plot"><span class="header-section-number">1.6.2</span> Saving and re-inserting an external plot</a></li>
-  <li><a href="#advanced-visualization-with-ggplot2" id="toc-advanced-visualization-with-ggplot2" class="nav-link" data-scroll-target="#advanced-visualization-with-ggplot2"><span class="header-section-number">1.6.3</span> Advanced visualization with ggplot2</a></li>
+  <li><a href="#base-r-graphics" id="toc-base-r-graphics" class="nav-link" data-scroll-target="#base-r-graphics"><span class="header-section-number">2.6.1</span> Base R graphics</a></li>
+  <li><a href="#saving-and-re-inserting-an-external-plot" id="toc-saving-and-re-inserting-an-external-plot" class="nav-link" data-scroll-target="#saving-and-re-inserting-an-external-plot"><span class="header-section-number">2.6.2</span> Saving and re-inserting an external plot</a></li>
+  <li><a href="#advanced-visualization-with-ggplot2" id="toc-advanced-visualization-with-ggplot2" class="nav-link" data-scroll-target="#advanced-visualization-with-ggplot2"><span class="header-section-number">2.6.3</span> Advanced visualization with ggplot2</a></li>
   </ul></li>
-  <li><a href="#writing-your-own-function" id="toc-writing-your-own-function" class="nav-link" data-scroll-target="#writing-your-own-function"><span class="header-section-number">1.7</span> Writing your own function</a></li>
+  <li><a href="#writing-your-own-function" id="toc-writing-your-own-function" class="nav-link" data-scroll-target="#writing-your-own-function"><span class="header-section-number">2.7</span> Writing your own function</a></li>
   </ul>
 </nav>
 </nav>
@@ -290,7 +296,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></h1>
 <p class="subtitle lead">Modern workflows with the native pipe, dplyr, gt, and ggplot2</p>
 </div>
 
@@ -330,10 +336,10 @@ window.Quarto = {
 </details>
 </div>
 <p>All packages are loaded once in a hidden <code>setup</code> chunk, and <code>message</code>/<code>warning</code> suppression is set globally in the YAML header rather than repeated on every chunk.</p>
-<section id="foundations" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="foundations"><span class="header-section-number">1.1</span> Foundations</h2>
-<section id="basic-r-objects" class="level3" data-number="1.1.1">
-<h3 data-number="1.1.1" class="anchored" data-anchor-id="basic-r-objects"><span class="header-section-number">1.1.1</span> Basic R objects</h3>
+<section id="foundations" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="foundations"><span class="header-section-number">2.1</span> Foundations</h2>
+<section id="basic-r-objects" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="basic-r-objects"><span class="header-section-number">2.1.1</span> Basic R objects</h3>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -449,8 +455,8 @@ window.Quarto = {
 <p>The column of names is called <code>student</code> rather than <code>names</code>, so that the base function <code>names()</code> is not masked.</p>
 </section>
 </section>
-<section id="importing-a-dataset" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="importing-a-dataset"><span class="header-section-number">1.2</span> Importing a dataset</h2>
+<section id="importing-a-dataset" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="importing-a-dataset"><span class="header-section-number">2.2</span> Importing a dataset</h2>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -477,8 +483,8 @@ window.Quarto = {
 </div>
 </div>
 <p>Because <code>na.strings = "-99"</code> is applied at import, every <code>-99</code> is already <code>NA</code> in <code>agpop</code>. All later filtering therefore uses <code>is.na()</code>; comparisons such as <code>acres92 != -99</code> no longer identify the missing values.</p>
-<section id="displaying-the-full-dataset" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="displaying-the-full-dataset"><span class="header-section-number">1.2.1</span> Displaying the full dataset</h3>
+<section id="displaying-the-full-dataset" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="displaying-the-full-dataset"><span class="header-section-number">2.2.1</span> Displaying the full dataset</h3>
 <p>Printing several thousand rows into an HTML document consumes vertical space and slows the browser. With <code>df-print: paged</code> (set under <code>format: html</code> in the YAML header), a printed data frame appears as a paged table: all rows are embedded as one lightweight data blob, and only the current page is drawn. Static targets such as Typst or PDF have no pager, so only the first rows are shown there.</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -494,8 +500,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="simple-summaries" class="level3" data-number="1.2.2">
-<h3 data-number="1.2.2" class="anchored" data-anchor-id="simple-summaries"><span class="header-section-number">1.2.2</span> Simple summaries</h3>
+<section id="simple-summaries" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="simple-summaries"><span class="header-section-number">2.2.2</span> Simple summaries</h3>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -514,8 +520,8 @@ window.Quarto = {
 </div>
 </section>
 </section>
-<section id="the-native-pipe" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="the-native-pipe"><span class="header-section-number">1.3</span> The native pipe</h2>
+<section id="the-native-pipe" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="the-native-pipe"><span class="header-section-number">2.3</span> The native pipe</h2>
 <p>The native pipe <code>|&gt;</code> takes the value on its left and passes it as the <strong>first argument</strong> to the function on its right, so <code>x |&gt; f()</code> is another way of writing <code>f(x)</code>. Pipes chain, so the output of one step feeds the next.</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -618,8 +624,8 @@ Coefficients:
 </div>
 </div>
 </section>
-<section id="data-manipulation-with-dplyr" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="data-manipulation-with-dplyr"><span class="header-section-number">1.4</span> Data manipulation with dplyr</h2>
+<section id="data-manipulation-with-dplyr" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="data-manipulation-with-dplyr"><span class="header-section-number">2.4</span> Data manipulation with dplyr</h2>
 <p><code>dplyr</code> verbs take a data frame as their first argument, which makes them natural pipe targets.</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -702,11 +708,11 @@ Coefficients:
 </div>
 <p>Restricting to complete cases with <code>if_all(..., ~ !is.na(.x))</code> makes the means and variances comparable across variables, since each is computed on the same set of counties.</p>
 </section>
-<section id="tables-with-gt" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="tables-with-gt"><span class="header-section-number">1.5</span> Tables with gt</h2>
+<section id="tables-with-gt" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="tables-with-gt"><span class="header-section-number">2.5</span> Tables with gt</h2>
 <p><code>gt()</code> writes every row as styled HTML, even inside a scrolling container, so a full-size dataset enlarges the file and slows rendering. Reduce the data first (e.g.&nbsp;with <code>slice_head()</code> or a <code>summarize()</code> step); for browsing raw data, the paged display in the import section is the better tool.</p>
-<section id="spanning-headers-grouped-by-statistic" class="level3" data-number="1.5.1">
-<h3 data-number="1.5.1" class="anchored" data-anchor-id="spanning-headers-grouped-by-statistic"><span class="header-section-number">1.5.1</span> Spanning headers grouped by statistic</h3>
+<section id="spanning-headers-grouped-by-statistic" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="spanning-headers-grouped-by-statistic"><span class="header-section-number">2.5.1</span> Spanning headers grouped by statistic</h3>
 <p><code>tab_spanner()</code> groups columns under a shared header. Here the means are grouped together and the variances are grouped together.</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -739,7 +745,7 @@ Coefficients:
 <div id="tbl-region-summary-by-statistic" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-region-summary-by-statistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.1: Regional summary of five variables, grouped by statistic
+Table&nbsp;2.1: Regional summary of five variables, grouped by statistic
 </figcaption>
 <div aria-describedby="tbl-region-summary-by-statistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1300,8 +1306,8 @@ Table&nbsp;1.1: Regional summary of five variables, grouped by statistic
 </div>
 <p>The <code>$...$</code> labels are typeset by the HTML math engine after the table is written into the page; they are not processed by <code>gt</code> itself, and will appear as literal dollar signs in the Typst output. For a target-independent version, replace them with plain text or Unicode labels.</p>
 </section>
-<section id="spanning-headers-grouped-by-variable" class="level3" data-number="1.5.2">
-<h3 data-number="1.5.2" class="anchored" data-anchor-id="spanning-headers-grouped-by-variable"><span class="header-section-number">1.5.2</span> Spanning headers grouped by variable</h3>
+<section id="spanning-headers-grouped-by-variable" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="spanning-headers-grouped-by-variable"><span class="header-section-number">2.5.2</span> Spanning headers grouped by variable</h3>
 <p>Reordering the columns with <code>select()</code> puts each variable’s mean and variance side by side under one spanner.</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -1341,7 +1347,7 @@ Table&nbsp;1.1: Regional summary of five variables, grouped by statistic
 <div id="tbl-region-summary-by-variable" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-region-summary-by-variable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.2: Regional summary of five variables, grouped by variable
+Table&nbsp;2.2: Regional summary of five variables, grouped by variable
 </figcaption>
 <div aria-describedby="tbl-region-summary-by-variable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1911,8 +1917,8 @@ Table&nbsp;1.2: Regional summary of five variables, grouped by variable
 </div>
 <p>Both tables report identical numbers; only the grouping differs. Grouping by variable eases comparison of a variable’s mean against its variance, whereas grouping by statistic eases comparison of means across variables.</p>
 </section>
-<section id="automatic-summary-tables-with-gtsummary" class="level3" data-number="1.5.3">
-<h3 data-number="1.5.3" class="anchored" data-anchor-id="automatic-summary-tables-with-gtsummary"><span class="header-section-number">1.5.3</span> Automatic summary tables with gtsummary</h3>
+<section id="automatic-summary-tables-with-gtsummary" class="level3" data-number="2.5.3">
+<h3 data-number="2.5.3" class="anchored" data-anchor-id="automatic-summary-tables-with-gtsummary"><span class="header-section-number">2.5.3</span> Automatic summary tables with gtsummary</h3>
 <p><code>gtsummary::tbl_summary()</code> produces a descriptive table directly from the raw data, without a <code>summarize()</code> step.</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -1927,7 +1933,7 @@ Table&nbsp;1.2: Regional summary of five variables, grouped by variable
 <div id="tbl-gtsummary-region" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-gtsummary-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.3: Automatic descriptive summary of agpop variables by region
+Table&nbsp;2.3: Automatic descriptive summary of agpop variables by region
 </figcaption>
 <div aria-describedby="tbl-gtsummary-region-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -2461,10 +2467,10 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 </div>
 </section>
 </section>
-<section id="graphics" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="graphics"><span class="header-section-number">1.6</span> Graphics</h2>
-<section id="base-r-graphics" class="level3" data-number="1.6.1">
-<h3 data-number="1.6.1" class="anchored" data-anchor-id="base-r-graphics"><span class="header-section-number">1.6.1</span> Base R graphics</h3>
+<section id="graphics" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="graphics"><span class="header-section-number">2.6</span> Graphics</h2>
+<section id="base-r-graphics" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="base-r-graphics"><span class="header-section-number">2.6.1</span> Base R graphics</h3>
 <p>Base R is convenient for quick diagnostic plots.</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -2478,7 +2484,7 @@ N = 422<span class="gt_footnote_marks" style="white-space:nowrap;font-style:ital
 <img src="introR_files/figure-html/fig-agpop-acres92-hist-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agpop-acres92-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.1: Histogram of 1992 farm acreage
+Figure&nbsp;2.1: Histogram of 1992 farm acreage
 </figcaption>
 </figure>
 </div>
@@ -2499,15 +2505,15 @@ Figure&nbsp;1.1: Histogram of 1992 farm acreage
 <img src="introR_files/figure-html/fig-agpop-acres-scatter-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agpop-acres-scatter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.2: 1992 vs.&nbsp;1987 farm acreage, with the 1:1 line
+Figure&nbsp;2.2: 1992 vs.&nbsp;1987 farm acreage, with the 1:1 line
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="saving-and-re-inserting-an-external-plot" class="level3" data-number="1.6.2">
-<h3 data-number="1.6.2" class="anchored" data-anchor-id="saving-and-re-inserting-an-external-plot"><span class="header-section-number">1.6.2</span> Saving and re-inserting an external plot</h3>
+<section id="saving-and-re-inserting-an-external-plot" class="level3" data-number="2.6.2">
+<h3 data-number="2.6.2" class="anchored" data-anchor-id="saving-and-re-inserting-an-external-plot"><span class="header-section-number">2.6.2</span> Saving and re-inserting an external plot</h3>
 <p>A high-resolution figure for a journal or a slide deck can be written straight to disk: open a graphics device (<code>png()</code>, <code>pdf()</code>, <code>jpeg()</code>), run the plotting code, then close the device with <code>dev.off()</code>. When <code>res</code> is raised, <code>width</code> and <code>height</code> must be given in inches so the figure does not shrink.</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -2538,15 +2544,15 @@ Figure&nbsp;1.2: 1992 vs.&nbsp;1987 farm acreage, with the 1:1 line
 <img src="figures/agpop_scatter_highres.png" class="img-fluid figure-img" width="900">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agpop-scatter-highres-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.3: The saved high-resolution PNG, re-inserted
+Figure&nbsp;2.3: The saved high-resolution PNG, re-inserted
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="advanced-visualization-with-ggplot2" class="level3" data-number="1.6.3">
-<h3 data-number="1.6.3" class="anchored" data-anchor-id="advanced-visualization-with-ggplot2"><span class="header-section-number">1.6.3</span> Advanced visualization with ggplot2</h3>
+<section id="advanced-visualization-with-ggplot2" class="level3" data-number="2.6.3">
+<h3 data-number="2.6.3" class="anchored" data-anchor-id="advanced-visualization-with-ggplot2"><span class="header-section-number">2.6.3</span> Advanced visualization with ggplot2</h3>
 <p><code>ggplot2</code> provides a grammar of graphics for layered displays. Below, a histogram of log-transformed 1992 acreage carries both an empirical density curve and a fitted normal curve.</p>
 <div class="cell">
 <details open="" class="code-fold">
@@ -2582,7 +2588,7 @@ Figure&nbsp;1.3: The saved high-resolution PNG, re-inserted
 <img src="introR_files/figure-html/fig-log-acres-hist-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-log-acres-hist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.4: Distribution of log(acres92): histogram with empirical density and normal fit
+Figure&nbsp;2.4: Distribution of log(acres92): histogram with empirical density and normal fit
 </figcaption>
 </figure>
 </div>
@@ -2591,8 +2597,8 @@ Figure&nbsp;1.4: Distribution of log(acres92): histogram with empirical density 
 <p>Mapping the histogram to <code>after_stat(density)</code> puts it on the same vertical scale as the two curves, so the three layers are directly comparable.</p>
 </section>
 </section>
-<section id="writing-your-own-function" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="writing-your-own-function"><span class="header-section-number">1.7</span> Writing your own function</h2>
+<section id="writing-your-own-function" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="writing-your-own-function"><span class="header-section-number">2.7</span> Writing your own function</h2>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -2638,7 +2644,7 @@ Figure&nbsp;1.4: Distribution of log(acres92): histogram with empirical density 
 <div id="tbl-means-custom-vs-builtin" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-means-custom-vs-builtin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.4: Comparing column means: custom function vs.&nbsp;base R colMeans()
+Table&nbsp;2.4: Comparing column means: custom function vs.&nbsp;base R colMeans()
 </figcaption>
 <div aria-describedby="tbl-means-custom-vs-builtin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">

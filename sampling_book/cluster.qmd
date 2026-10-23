@@ -4,6 +4,31 @@
 
 Cluster sampling divides the population into $N$ clusters, out of which a simple random sample of $n$ clusters is selected. This design is highly practical when a sampling frame of individual elements is unavailable, or when individuals are geographically grouped.
 
+@fig-cluster-design illustrates a two-stage cluster sample from a synthetic
+population of $N = 10$ clusters of different sizes, from $M_i = 40$ to $160$
+units, sorted by their means.
+Three clusters are selected by SRS (shaded), and an SRS of $m_i = 20$ units is
+taken in each. Only the selected clusters are observed. When the cluster means
+differ, as here, the estimate depends heavily on *which* clusters happen to be
+chosen, and a cluster sample is usually less precise than an SRS of the same
+number of units.
+
+```{r design-plots}
+#| cache: false
+#| echo: false
+source("design_plots.r")
+```
+
+```{r fig-cluster-design}
+#| cache: false
+#| echo: false
+#| fig-cap: "A two-stage cluster sample from a synthetic population of 10 clusters of 40 to 160 units, sorted by their means (dashed lines). Three clusters are selected at random (shaded), and 20 units (red) are subsampled in each; the other clusters are not observed at all."
+#| fig-width: 8
+#| fig-height: 3.5
+#| out-width: "85%"
+plot_design_cluster()
+```
+
 #### 1. One-Stage Cluster Sampling {-}
 In a one-stage design, every element $M_i$ within the sampled cluster $i$ is surveyed. 
 

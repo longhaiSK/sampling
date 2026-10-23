@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Longhai Li">
+<meta name="dcterms.date" content="2026-10-22">
+
+<title>1&nbsp; Introduction to Sampling Survey – Elements of Sampling Survey</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./favicon.svg" rel="icon" type="image/svg+xml">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-f79c7fb6db380d32be398468f2fb58cf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-a7b5894d5a4c39c6aa3484761f021c1f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/custombook-1.0.0/num_eq.js"></script>
+<script src="site_libs/quarto-contrib/custombook-1.0.0/merge-toc.js"></script>
+<link href="site_libs/quarto-contrib/custombook-1.0.0/bookstyles.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Sampling Survey</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Elements of Sampling Survey</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/longhaiSK/sampling" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Table of Contents</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Sampling Survey</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introR.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./srs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./strata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ratio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cluster.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ups.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">List of Figures, Tables, and Apps</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Estimating Functions Source Code</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-intro-hite" id="toc-sec-intro-hite" class="nav-link active" data-scroll-target="#sec-intro-hite"><span class="header-section-number">1.1</span> A Bad Sampling Example</a></li>
+  <li><a href="#sec-intro-elements" id="toc-sec-intro-elements" class="nav-link" data-scroll-target="#sec-intro-elements"><span class="header-section-number">1.2</span> Elements of Sampling Problems</a>
+  <ul>
+  <li><a href="#basic-definitions" id="toc-basic-definitions" class="nav-link" data-scroll-target="#basic-definitions"><span class="header-section-number">1.2.1</span> Basic definitions</a></li>
+  <li><a href="#target-and-sampled-populations" id="toc-target-and-sampled-populations" class="nav-link" data-scroll-target="#target-and-sampled-populations"><span class="header-section-number">1.2.2</span> Target and sampled populations</a></li>
+  </ul></li>
+  <li><a href="#sec-intro-selection-bias" id="toc-sec-intro-selection-bias" class="nav-link" data-scroll-target="#sec-intro-selection-bias"><span class="header-section-number">1.3</span> Selection Bias</a></li>
+  <li><a href="#sec-intro-measurement-error" id="toc-sec-intro-measurement-error" class="nav-link" data-scroll-target="#sec-intro-measurement-error"><span class="header-section-number">1.4</span> Measurement Error</a></li>
+  <li><a href="#sec-intro-errors" id="toc-sec-intro-errors" class="nav-link" data-scroll-target="#sec-intro-errors"><span class="header-section-number">1.5</span> Sampling and Nonsampling Errors</a>
+  <ul>
+  <li><a href="#why-sample-at-all" id="toc-why-sample-at-all" class="nav-link" data-scroll-target="#why-sample-at-all"><span class="header-section-number">1.5.1</span> Why sample at all?</a></li>
+  </ul></li>
+  <li><a href="#sec-intro-designs" id="toc-sec-intro-designs" class="nav-link" data-scroll-target="#sec-intro-designs"><span class="header-section-number">1.6</span> Types of Probability Samples</a></li>
+  <li><a href="#sec-intro-framework" id="toc-sec-intro-framework" class="nav-link" data-scroll-target="#sec-intro-framework"><span class="header-section-number">1.7</span> A Framework for Probability Sampling</a>
+  <ul>
+  <li><a href="#the-population-and-its-samples" id="toc-the-population-and-its-samples" class="nav-link" data-scroll-target="#the-population-and-its-samples"><span class="header-section-number">1.7.1</span> The population and its samples</a></li>
+  <li><a href="#probability-sampling" id="toc-probability-sampling" class="nav-link" data-scroll-target="#probability-sampling"><span class="header-section-number">1.7.2</span> Probability sampling</a></li>
+  <li><a href="#the-values-y_i" id="toc-the-values-y_i" class="nav-link" data-scroll-target="#the-values-y_i"><span class="header-section-number">1.7.3</span> The values <span class="math inline">\(y_i\)</span></a></li>
+  <li><a href="#inclusion-probabilities-and-sampling-weights" id="toc-inclusion-probabilities-and-sampling-weights" class="nav-link" data-scroll-target="#inclusion-probabilities-and-sampling-weights"><span class="header-section-number">1.7.4</span> Inclusion probabilities and sampling weights</a></li>
+  <li><a href="#population-quantities" id="toc-population-quantities" class="nav-link" data-scroll-target="#population-quantities"><span class="header-section-number">1.7.5</span> Population quantities</a></li>
+  <li><a href="#statistics-and-sampling-distributions" id="toc-statistics-and-sampling-distributions" class="nav-link" data-scroll-target="#statistics-and-sampling-distributions"><span class="header-section-number">1.7.6</span> Statistics and sampling distributions</a></li>
+  <li><a href="#bias-variance-and-mean-squared-error" id="toc-bias-variance-and-mean-squared-error" class="nav-link" data-scroll-target="#bias-variance-and-mean-squared-error"><span class="header-section-number">1.7.7</span> Bias, variance and mean squared error</a></li>
+  <li><a href="#unbiased-precise-and-accurate" id="toc-unbiased-precise-and-accurate" class="nav-link" data-scroll-target="#unbiased-precise-and-accurate"><span class="header-section-number">1.7.8</span> Unbiased, precise and accurate</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">1.7.9</span> Summary</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content column-page-right" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Sampling Survey</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-right">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p><a href="https://longhaisk.github.io/">Longhai Li</a> </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 22, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>A sample survey collects information about a population by measuring only part of it. This chapter introduces the main ideas. We start with a survey that went badly wrong, then define the basic terms, describe the errors that can spoil a survey, and sketch the main designs studied in the rest of the book. The second half sets up the framework of probability sampling that all later chapters use: samples and their probabilities, inclusion probabilities and sampling weights, population quantities, sampling distributions, and bias, variance and mean squared error. The material corresponds to Chapter 1 and Section 2.2 of Lohr, and Chapters 2 and 3.1–3.4 of Scheaffer et al.</p>
+<section id="sec-intro-hite" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="sec-intro-hite"><span class="header-section-number">1.1</span> A Bad Sampling Example</h2>
+<p>Shere Hite’s book <em>Women and Love: A Cultural Revolution in Progress</em> (1987) reported a number of widely quoted results:</p>
+<ul>
+<li>84% of women are “not satisfied emotionally with their relationships” (p.&nbsp;804);</li>
+<li>70% of all women “married five or more years are having sex outside of their marriages” (p.&nbsp;856);</li>
+<li>95% of women “report forms of emotional and psychological harassment from men with whom they are in love relationships” (p.&nbsp;810);</li>
+<li>84% of women report forms of condescension from the men in their love relationships (p.&nbsp;809).</li>
+</ul>
+<p>The book was widely criticized in newspaper and magazine articles throughout the United States. The <em>Time</em> magazine cover story “Back Off, Buddy” (October 12, 1987) called the conclusions of the study “dubious” and “of limited value”. The problem was not the arithmetic but the way the data were collected:</p>
+<ul>
+<li><strong>The sample was self-selected.</strong> The recipients of the questionnaire decided whether they would be in the sample. Hite mailed 100,000 questionnaires and only 4.5% were returned.</li>
+<li><strong>The questionnaires went to particular groups</strong>, such as professional women’s groups, counseling centers, church societies and senior citizens’ centers, whose members may hold views different from those of other women in the United States.</li>
+<li><strong>The questionnaire was very long.</strong> It had 127 essay questions, most with several parts. Who will tend to return such a survey? Probably women with strong feelings about the subject, who may differ systematically from those who did not reply.</li>
+<li><strong>Many questions were vague</strong> (what counts as “love”?), which makes the percentages hard to interpret.</li>
+<li><strong>Many questions were leading</strong>, suggesting to the respondent which answer to give.</li>
+</ul>
+<p>A large number of responses (4,500) did not make up for any of these problems. The rest of this chapter names the problems precisely, and the rest of the book shows how a properly designed probability sample avoids the first two.</p>
+</section>
+<section id="sec-intro-elements" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-intro-elements"><span class="header-section-number">1.2</span> Elements of Sampling Problems</h2>
+<section id="basic-definitions" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="basic-definitions"><span class="header-section-number">1.2.1</span> Basic definitions</h3>
+<ul>
+<li><strong>Observation unit.</strong> An object on which a measurement is taken; also called an <strong>element</strong>. In studies of human populations, the observation units are often individuals.</li>
+<li><strong>Target population.</strong> The complete collection of observations we want to study. Defining the target population is often harder than it seems. Should a political poll target all adults eligible to vote, all registered voters, or everyone who voted in the last election?</li>
+<li><strong>Sample.</strong> A subset of a population.</li>
+<li><strong>Sampled population.</strong> The collection of all possible observation units that might have been chosen in the sample: the population from which the sample was actually taken.</li>
+<li><strong>Sampling unit.</strong> A unit that can be selected for a sample. We may want to study individuals but have no list of them. Instead we select households, which are then the sampling units, while the individuals remain the observation units.</li>
+<li><strong>Sampling frame.</strong> A list, map or other specification of the sampling units from which the sample may be selected, for example a list of telephone numbers, street addresses or farms.</li>
+</ul>
+</section>
+<section id="target-and-sampled-populations" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="target-and-sampled-populations"><span class="header-section-number">1.2.2</span> Target and sampled populations</h3>
+<p>In an ideal survey the sampled population equals the target population. This ideal is rarely met (<a href="#fig-target-sampled" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>). Some members of the target population are not in the sampling frame. Some who are in the frame cannot be reached, refuse to respond, or are not capable of responding. And the frame may contain units that are not eligible for the survey at all.</p>
+<div id="fig-target-sampled" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-target-sampled-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/target-sampled-population.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-target-sampled-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Target population, sampling frame population and sampled population. The sampled population is only the part of the target population that is in the frame and can and will respond.
+</figcaption>
+</figure>
+</div>
+<p>In the Hite study the element was an individual woman and the target population was all adult U.S. women. The sampled population, however, was women who belonged to the organizations that received questionnaires <em>and</em> who would complete and return them.</p>
+</section>
+</section>
+<section id="sec-intro-selection-bias" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-intro-selection-bias"><span class="header-section-number">1.3</span> Selection Bias</h2>
+<p><strong>Selection bias</strong> occurs when part of the target population is not in the sampled population or, more generally, when some population units are sampled at a different rate than intended by the investigator. A <strong>sample of convenience</strong> is often biased, because the units that are easiest to select, or most likely to respond, are usually not representative of the harder-to-select or nonresponding units. For example:</p>
+<ul>
+<li>A convenience sample of adolescents used to study communication about AIDS probably overestimated how much parents and teenagers talk about it. Adolescents willing to talk to investigators are also more likely to talk to other authority figures, such as their parents.</li>
+<li><strong>Misspecifying the target population.</strong> Polls before the 1994 Arizona gubernatorial primary predicted that Eddie Basha would trail by 9 or more points; he won with 37% of the vote. The polls targeted people who had voted in past primaries and missed the new rural voters who supported Basha.</li>
+</ul>
+<p>Selection bias has several common sources.</p>
+<p><strong>Undercoverage</strong> is the failure to include all of the target population in the sampling frame. The U.S. Behavioral Risk Factor Surveillance System, a telephone survey, misses households without telephones and for many years missed households with only cell phones. Coverage varies by region and by income, so undercoverage can bias the estimates.</p>
+<p><strong>Overcoverage</strong> is the inclusion in the sampling frame of units that are not in the target population, for example when interviewers include respondents under 18 in a radio survey meant for adults only.</p>
+<p><strong>Nonresponse</strong> is the failure to obtain responses from all of the units chosen for the sample. It distorts the results even when the other sources of selection bias are minimized. Nonrespondents often differ in critical ways from respondents, but the extent of the difference is usually unknown. Some published surveys have response rates as low as 10%. It is difficult to generalize from such a survey when 90% of the sample could not be reached or refused to take part.</p>
+</section>
+<section id="sec-intro-measurement-error" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-intro-measurement-error"><span class="header-section-number">1.4</span> Measurement Error</h2>
+<p>When a response differs from the true value, <strong>measurement error</strong> has occurred. <strong>Measurement bias</strong> occurs when the responses tend to differ from the truth in one direction. Like selection bias, measurement bias must be considered and minimized at the design stage; no amount of data analysis can remove it afterwards. Some sources of measurement error:</p>
+<ul>
+<li><strong>People do not always tell the truth.</strong> Farmers receiving food aid may underreport their crop yields, hoping to receive more aid.</li>
+<li><strong>People do not always understand the questions.</strong> A 1993 Roper poll found that 25% of Americans did not believe the Holocaust had happened. The question used a confusing double negative. When it was reworded, only 1% thought it “possible” that the Holocaust never happened.</li>
+<li><strong>People forget.</strong> In the U.S. National Crime Victimization Survey (NCVS), respondents asked about crimes in the last six months sometimes include events from further back. This is called <strong>telescoping</strong>.</li>
+</ul>
+<p>Careful questionnaire design reduces measurement error:</p>
+<ul>
+<li><strong>Always test the questions</strong> on a small group before the survey is carried out.</li>
+<li><strong>Keep the questions simple and clear.</strong> Belson (1981) tested the question “What <em>proportion</em> of your evening viewing time do you spend watching news programmes?” on 53 people. Only 14 interpreted “proportion” correctly, as a percentage, part or fraction.</li>
+<li><strong>Use specific questions instead of general ones.</strong> Instead of asking “Did anyone attack you in the last six months?”, the NCVS asks a detailed series of questions: “With any weapon, for instance a gun or knife”, “With anything like a baseball bat, frying pan, scissors, or stick”, and so on.</li>
+</ul>
+</section>
+<section id="sec-intro-errors" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="sec-intro-errors"><span class="header-section-number">1.5</span> Sampling and Nonsampling Errors</h2>
+<p><strong>Sampling error</strong> results from taking one sample instead of examining the whole population. A different sample would likely give a different result. Sampling error is what a poll’s “margin of error” describes, and because it comes from the random selection of the sample, it can be quantified in probabilistic terms. Most of this book is about measuring and reducing it.</p>
+<p><strong>Nonsampling errors</strong>, such as selection bias and measurement error, cannot be attributed to sample-to-sample variability. They are often far larger than the sampling error. A survey may proudly report a margin of error of 3% based on a 30% response rate, while ignoring the large selection bias that such a response rate may cause.</p>
+<section id="why-sample-at-all" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" class="anchored" data-anchor-id="why-sample-at-all"><span class="header-section-number">1.5.1</span> Why sample at all?</h3>
+<p>If samples have errors, why not always take a census of the whole population?</p>
+<ul>
+<li><strong>Cost.</strong> A sample provides reliable information at far less cost than a census, and with a probability sample the sampling error can be quantified. Some measurements are destructive (for example, pulverizing a cookie to measure its fat content), so a census is not even possible.</li>
+<li><strong>Speed.</strong> Data from a sample can be collected and processed more quickly, so the estimates are timely. An unemployment rate for 2005 published in 2015 would be useless.</li>
+<li><strong>Accuracy.</strong> Estimates from a sample can be <em>more</em> accurate than those from a census. A census requires a large administrative effort with many data collectors, while a smaller operation allows the investigators to be more careful and to reduce nonsampling errors.</li>
+</ul>
+</section>
+</section>
+<section id="sec-intro-designs" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="sec-intro-designs"><span class="header-section-number">1.6</span> Types of Probability Samples</h2>
+<p>In a <strong>probability sample</strong>, every unit in the population has a known, positive chance of being selected, and the sample is chosen by a random mechanism. This removes selection bias due to the investigator’s choices, and it makes it possible to quantify the sampling error. Here are the main designs; each has its own chapter later in the book.</p>
+<p>To compare the designs we use synthetic populations of <span class="math inline">\(N = 1000\)</span> units, with the <span class="math inline">\(y\)</span>-values drawn from exponential distributions. The population for SRS and stratified sampling (<a href="#fig-intro-srs" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> and <a href="#fig-intro-stratified" class="quarto-xref">Figure&nbsp;<span>1.3</span></a>) consists of four strata of sizes 400, 300, 200 and 100 whose means differ a lot: each is an exponential distribution with mean 1.5, shifted by 0, 4, 8 and 12 respectively. The population for cluster sampling (<a href="#fig-intro-cluster" class="quarto-xref">Figure&nbsp;<span>1.4</span></a>) consists of ten clusters whose sizes range from 40 to 160 units, exponential with means from 2 to 8. Each design selects <span class="math inline">\(n = 60\)</span> units, shown in red; the unselected units are grey.</p>
+<p><strong>Simple random sampling.</strong> A <strong>simple random sample (SRS)</strong> is the simplest probability sample. An SRS of size <span class="math inline">\(n\)</span> is taken when every possible subset of <span class="math inline">\(n\)</span> units in the population has the same chance of being the sample. The design uses no information about the groups: in <a href="#fig-intro-srs" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> the 1000 units are listed in an arbitrary order, and 60 of them are chosen at random. By chance, a group may be over- or under-represented, and the sample values range over the whole spread of the population.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-intro-srs" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-intro-srs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="intro_files/figure-html/fig-intro-srs-1.png" class="img-fluid figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-intro-srs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: A simple random sample of <span class="math inline">\(n = 60\)</span> (red) from a population of <span class="math inline">\(N = 1000\)</span> units, listed in an arbitrary order. The dashed line is the population mean.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Stratified random sampling.</strong> In a <strong>stratified random sample</strong>, the population is divided into subgroups called <strong>strata</strong>, and an SRS is selected independently from each stratum. Strata are often subgroups of interest, such as provinces, terrain types or firm sizes. In <a href="#fig-intro-stratified" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> the same 1000 units are arranged by stratum, with the strata sorted by their means (dashed lines). The sample is allocated in proportion to the stratum sizes, <span class="math inline">\(60 \times N_h/1000\)</span>, so 24, 18, 12 and 6 units are drawn from the four strata. Every stratum is represented in the sample in a fixed proportion. Stratification often increases precision, because units within a stratum tend to be more similar than units selected at random from the whole population. Here the stratum means are far apart while the spread within each stratum is small, so the differences between the strata, which make up most of the variation in <a href="#fig-intro-srs" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>, no longer contribute to the sampling error.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-intro-stratified" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-intro-stratified-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="intro_files/figure-html/fig-intro-stratified-1.png" class="img-fluid figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-intro-stratified-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.3: A stratified random sample from the same population: the four strata are sorted by their means (dashed lines), and SRSs of 24, 18, 12 and 6 units (red) are drawn from the strata of sizes 400, 300, 200 and 100.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Cluster sampling.</strong> In a <strong>cluster sample</strong>, the observation units are grouped into larger sampling units called <strong>clusters</strong>. For example, to survey Lutheran church members in Minneapolis without a list of all members, we could take an SRS of churches (the clusters) and then subsample members within each selected church (the observation units). In <a href="#fig-intro-cluster" class="quarto-xref">Figure&nbsp;<span>1.4</span></a> the population consists of ten clusters of different sizes, from 40 to 160 units, sorted by their means. Three clusters are selected at random (shaded), and 20 units are subsampled in each. This is convenient, since only three clusters need to be visited, but the seven clusters that are not selected contribute nothing to the sample. When the cluster means differ, the estimate depends heavily on <em>which</em> clusters happen to be chosen. Members of the same church may likewise be more similar to each other than a random sample of Lutherans would be. A cluster sample therefore often provides less information than an SRS of the same size, and the gain in convenience must be weighed against the loss in precision.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-intro-cluster" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-intro-cluster-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="intro_files/figure-html/fig-intro-cluster-1.png" class="img-fluid figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-intro-cluster-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.4: A cluster sample from a population of ten clusters of 40 to 160 units, sorted by their means (dashed lines). Three clusters are selected at random (shaded), and 20 units (red) are subsampled in each; the other clusters are not observed at all.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Later chapters add two more ingredients: estimators that use <strong>auxiliary information</strong> (ratio and regression estimation), and designs that select units with <strong>unequal probabilities</strong>, typically proportional to a measure of size.</p>
+</section>
+<section id="sec-intro-framework" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="sec-intro-framework"><span class="header-section-number">1.7</span> A Framework for Probability Sampling</h2>
+<p>We now make the idea of a probability sample precise. The key concepts are the population, the sample, the probabilities of the samples, the inclusion probabilities, and the bias, variance and mean squared error of an estimator.</p>
+<section id="the-population-and-its-samples" class="level3" data-number="1.7.1">
+<h3 data-number="1.7.1" class="anchored" data-anchor-id="the-population-and-its-samples"><span class="header-section-number">1.7.1</span> The population and its samples</h3>
+<p>The finite <strong>population</strong>, or <strong>universe</strong>, of <span class="math inline">\(N\)</span> units is denoted by the index set <span class="math display">\[
+\mathcal{U} = \{1, 2, \ldots, N\}.
+\]</span> Out of this population we can choose various <strong>samples</strong>, which are subsets of <span class="math inline">\(\mathcal{U}\)</span>. The sample actually chosen is denoted <span class="math inline">\(\mathcal{S}\)</span>; it consists of <span class="math inline">\(n\)</span> of the units in <span class="math inline">\(\mathcal U\)</span>.</p>
+<p>For example, suppose <span class="math inline">\(\mathcal{U} = \{1,2,3,4\}\)</span>, so <span class="math inline">\(N=4\)</span>. There are <span class="math inline">\(\binom42 = 6\)</span> different samples of size <span class="math inline">\(n=2\)</span>: <span class="math display">\[
+\mathcal{S}_1=\{1,2\},\quad \mathcal{S}_2=\{1,3\},\quad \mathcal{S}_3=\{1,4\},\quad
+\mathcal{S}_4=\{2,3\},\quad \mathcal{S}_5=\{2,4\},\quad \mathcal{S}_6=\{3,4\}.
+\]</span></p>
+</section>
+<section id="probability-sampling" class="level3" data-number="1.7.2">
+<h3 data-number="1.7.2" class="anchored" data-anchor-id="probability-sampling"><span class="header-section-number">1.7.2</span> Probability sampling</h3>
+<p>In <strong>probability sampling</strong>, each possible sample <span class="math inline">\(\mathcal{S}\)</span> has a known probability <span class="math inline">\(P(\mathcal{S})\)</span> of being chosen, and the probabilities of all possible samples sum to 1. The collection of these probabilities is the <strong>sampling design</strong>. One possible design for a sample of size 2 from <span class="math inline">\(\mathcal{U}=\{1,2,3,4\}\)</span> is <span class="math display">\[
+P(\mathcal{S}_1)=\tfrac13,\quad P(\mathcal{S}_4)=\tfrac16,\quad P(\mathcal{S}_6)=\tfrac12,
+\quad P(\mathcal{S}_2)=P(\mathcal{S}_3)=P(\mathcal{S}_5)=0 .
+\]</span> The probabilities are known <strong>before</strong> the sample is drawn. One way to carry out this design is to put six balls in a box, two labeled 1, one labeled 4 and three labeled 6, draw one ball at random, and take the sample <span class="math inline">\(\mathcal S_i\)</span> whose label is drawn. An SRS is the special design in which all six samples have probability <span class="math inline">\(1/6\)</span>.</p>
+</section>
+<section id="the-values-y_i" class="level3" data-number="1.7.3">
+<h3 data-number="1.7.3" class="anchored" data-anchor-id="the-values-y_i"><span class="header-section-number">1.7.3</span> The values <span class="math inline">\(y_i\)</span></h3>
+<p>Let <span class="math inline">\(y_i\)</span> be a characteristic of the <span class="math inline">\(i\)</span>th unit in the population, such as the corn yield of farm <span class="math inline">\(i\)</span>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(i\)</span></th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;"><span class="math inline">\(\cdots\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(N\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(y_i\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(y_1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(y_2\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(y_3\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\cdots\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(y_N\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>We treat each <span class="math inline">\(y_i\)</span> as a <strong>fixed</strong> quantity. If farm 723 is in the sample, its corn yield <span class="math inline">\(y_{723}\)</span> is known exactly; if it is not, <span class="math inline">\(y_{723}\)</span> is unknown but still fixed. The only randomness is in <em>which</em> units are selected. This is the <strong>design-based</strong> (or randomization) approach, followed by Lohr and by this book. (Scheaffer et al.&nbsp;use <span class="math inline">\(Y_i\)</span> for a random variable and <span class="math inline">\(y_i\)</span> for its value.)</p>
+</section>
+<section id="inclusion-probabilities-and-sampling-weights" class="level3" data-number="1.7.4">
+<h3 data-number="1.7.4" class="anchored" data-anchor-id="inclusion-probabilities-and-sampling-weights"><span class="header-section-number">1.7.4</span> Inclusion probabilities and sampling weights</h3>
+<p>Once a sampling design is chosen, each unit in the population has a known probability of appearing in the sample, its <strong>inclusion probability</strong> <span id="eq-include"><span class="math display">\[
+\pi_i = P(\text{unit } i \text{ is in the sample}) = \sum_{\mathcal S \ni i} P(\mathcal S),
+\tag{1.1}\]</span></span> the sum of the probabilities of all possible samples that contain unit <span class="math inline">\(i\)</span>. In probability sampling all the <span class="math inline">\(\pi_i\)</span> are known before the survey starts, and we assume <span class="math inline">\(\pi_i &gt; 0\)</span> for every unit, so that every unit has a chance to be observed.</p>
+<p>For the design above, unit 1 belongs only to <span class="math inline">\(\mathcal S_1 = \{1,2\}\)</span> among the samples with positive probability, so <span class="math display">\[
+\pi_1 = P(\{1,2\}) = \tfrac13, \qquad
+\pi_2 = P(\{1,2\})+P(\{2,3\}) = \tfrac13+\tfrac16=\tfrac12,
+\]</span> <span class="math display">\[
+\pi_3 = P(\{2,3\})+P(\{3,4\}) = \tfrac16+\tfrac12=\tfrac23, \qquad
+\pi_4 = P(\{3,4\}) = \tfrac12 .
+\]</span> The inclusion probabilities do not sum to 1. They sum to 2, because every sample contains <span class="math inline">\(n = 2\)</span> units; in general <span class="math inline">\(\sum_{i=1}^N \pi_i = n\)</span> for a design with fixed sample size <span class="math inline">\(n\)</span>.</p>
+<p>The <strong>sampling weight</strong> of unit <span class="math inline">\(i\)</span> is <span class="math inline">\(w_i = 1/\pi_i\)</span>. It can be thought of as the number of population units that a sampled unit represents. For many sampling designs, the estimator of the population total can be written as <span class="math display">\[
+\hat t = \sum_{i \in \mathcal{S}} w_i \, y_i = \sum_{i \in \mathcal{S}} \frac{y_i}{\pi_i}.
+\]</span> For an SRS, <span class="math inline">\(\pi_i = n/N\)</span> and <span class="math inline">\(w_i = N/n\)</span> for every unit; for the other designs in this book, the weights differ between units.</p>
+</section>
+<section id="population-quantities" class="level3" data-number="1.7.5">
+<h3 data-number="1.7.5" class="anchored" data-anchor-id="population-quantities"><span class="header-section-number">1.7.5</span> Population quantities</h3>
+<p>The quantities we want to estimate are characteristics of the fixed values <span class="math inline">\(y_1, \ldots, y_N\)</span>: <span class="math display">\[
+\textbf{total: } t = \sum_{i=1}^N y_i, \qquad
+\textbf{mean: } \bar y_{U} = \frac{t}{N},
+\]</span> <span class="math display">\[
+\textbf{variance: } S^2 = \frac{1}{N-1}\sum_{i=1}^N (y_i-\bar y_{U})^2, \qquad
+\textbf{standard deviation: } S = \sqrt{S^2}.
+\]</span> Scheaffer et al.&nbsp;instead use <span class="math inline">\(\sigma^2 = \frac1N \sum_{i=1}^N (y_i - \bar y_{U})^2\)</span>, dividing by <span class="math inline">\(N\)</span> rather than <span class="math inline">\(N-1\)</span>. The two differ only by the factor <span class="math inline">\((N-1)/N\)</span>.</p>
+<p><strong>Example: a population proportion.</strong> Let <span class="math inline">\(y_i = 1\)</span> if unit <span class="math inline">\(i\)</span> has some attribute and <span class="math inline">\(y_i = 0\)</span> otherwise:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(i\)</span></th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(y_i\)</span></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+<p>Then the total is the number of units with the attribute and the mean is the population proportion: <span class="math display">\[
+t = 1+0+0+0+1 = 2, \qquad
+\bar y_{U} = \frac{2}{5} = 0.4,
+\]</span> <span class="math display">\[
+S^2 = \frac{1}{5-1}\Big((1-0.4)^2\times 2 + (0-0.4)^2\times 3\Big) = 0.3 .
+\]</span> For a 0/1 variable, <span class="math inline">\(S^2 = \frac{N}{N-1}\,p(1-p)\)</span> with <span class="math inline">\(p = \bar y_U\)</span>; here <span class="math inline">\(\frac54(0.4)(0.6) = 0.3\)</span>. As <span class="math inline">\(N\)</span> grows, <span class="math inline">\(S^2 \to p(1-p)\)</span>.</p>
+<p><strong>Example: number of devices per household.</strong> A population of <span class="math inline">\(N = 4\)</span> households has the following numbers of devices:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(i\)</span></th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(y_i\)</span></td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">6</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[
+t = 2+4+4+6 = 16, \qquad
+\bar y_{U} = \frac{16}{4} = 4, \qquad
+S^2 = \frac{(2-4)^2+(4-4)^2+(4-4)^2+(6-4)^2}{4-1} = \frac{8}{3}.
+\]</span></p>
+</section>
+<section id="statistics-and-sampling-distributions" class="level3" data-number="1.7.6">
+<h3 data-number="1.7.6" class="anchored" data-anchor-id="statistics-and-sampling-distributions"><span class="header-section-number">1.7.6</span> Statistics and sampling distributions</h3>
+<p>A <strong>statistic</strong> is a function of the observations in the sample, used to estimate a population quantity. Since the sample is random, so is the statistic. Its <strong>sampling distribution</strong> is its distribution under repeated sampling: the values it takes over all possible samples, with the probabilities <span class="math inline">\(P(\mathcal S)\)</span> of those samples.</p>
+<p>For example, to estimate the total <span class="math inline">\(t\)</span> we may use the sample mean scaled up by the population size, <span class="math display">\[
+\bar y = \frac{1}{n}\sum_{i\in\mathcal{S}} y_i, \qquad \hat t = N\bar y .
+\]</span> Take the devices population (<span class="math inline">\(\bar y_U = 4\)</span>, <span class="math inline">\(t = 16\)</span>) with the sampling design of the previous sections. For each of the six possible samples of size 2 we can compute <span class="math inline">\(\bar y\)</span>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(\mathcal S\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\{1,2\}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\{1,3\}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\{1,4\}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\{2,3\}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\{2,4\}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\{3,4\}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">values</td>
+<td style="text-align: center;">2, 4</td>
+<td style="text-align: center;">2, 4</td>
+<td style="text-align: center;">2, 6</td>
+<td style="text-align: center;">4, 4</td>
+<td style="text-align: center;">4, 6</td>
+<td style="text-align: center;">4, 6</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(P(\mathcal S)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1/3\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1/6\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1/2\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\bar y\)</span></td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">5</td>
+</tr>
+</tbody>
+</table>
+<p>Collecting the samples that give the same value of <span class="math inline">\(\bar y\)</span>, and adding their probabilities, gives the <strong>sampling distribution of <span class="math inline">\(\bar y\)</span></strong> (<a href="#fig-intro-sampdist" class="quarto-xref">Figure&nbsp;<span>1.5</span></a>):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(k\)</span></th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(P(\bar y = k)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1/3\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1/6\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1/2\)</span></td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-intro-sampdist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-intro-sampdist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="intro_files/figure-html/fig-intro-sampdist-1.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-intro-sampdist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.5: Sampling distribution of <span class="math inline">\(\bar y\)</span> for the devices population under the design <span class="math inline">\(P(\{1,2\}) = 1/3\)</span>, <span class="math inline">\(P(\{2,3\}) = 1/6\)</span>, <span class="math inline">\(P(\{3,4\}) = 1/2\)</span>. The mean of the distribution, <span class="math inline">\(E(\bar y) = 25/6\)</span>, is not the population mean <span class="math inline">\(\bar y_U = 4\)</span>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="bias-variance-and-mean-squared-error" class="level3" data-number="1.7.7">
+<h3 data-number="1.7.7" class="anchored" data-anchor-id="bias-variance-and-mean-squared-error"><span class="header-section-number">1.7.7</span> Bias, variance and mean squared error</h3>
+<p>The sampling distribution tells us how good an estimator <span class="math inline">\(\hat\theta\)</span> of a population quantity <span class="math inline">\(\theta\)</span> is. Three summaries are used: <span class="math display">\[
+\text{Bias}(\hat\theta) = E(\hat\theta) - \theta, \qquad
+V(\hat\theta) = E\big[(\hat\theta - E(\hat\theta))^2\big], \qquad
+\text{MSE}(\hat\theta) = E\big[(\hat\theta - \theta)^2\big].
+\]</span> The variance measures the spread of the estimates around their own mean; the MSE measures their spread around the true value.</p>
+<p>For <span class="math inline">\(\bar y\)</span> in the example, <span class="math display">\[
+E(\bar y) = 3\times\tfrac13 + 4\times\tfrac16 + 5\times\tfrac12 = \frac{25}{6},
+\qquad
+\text{Bias}(\bar y) = \frac{25}{6} - 4 = \frac16 ,
+\]</span> <span class="math display">\[
+V(\bar y) = \Big(3-\tfrac{25}{6}\Big)^2\tfrac13 + \Big(4-\tfrac{25}{6}\Big)^2\tfrac16
+   + \Big(5-\tfrac{25}{6}\Big)^2\tfrac12 = \frac{29}{36} \approx 0.8056,
+\]</span> <span class="math display">\[
+\text{MSE}(\bar y) = (3-4)^2\cdot\tfrac13 + (4-4)^2\cdot\tfrac16 + (5-4)^2\cdot\tfrac12 = \frac56 \approx 0.8333 .
+\]</span> The estimator is biased under this design. The design favours the sample <span class="math inline">\(\{3,4\}\)</span>, which contains the household with 6 devices, so <span class="math inline">\(\bar y\)</span> tends to be too large. Correspondingly <span class="math inline">\(\hat t = 4\bar y\)</span> has <span class="math inline">\(E(\hat t) = 50/3 \approx 16.67\)</span>, a bias of <span class="math inline">\(2/3\)</span> for <span class="math inline">\(t = 16\)</span>.</p>
+<p><strong>MSE = Bias² + Variance.</strong> Adding and subtracting <span class="math inline">\(E(\hat\theta)\)</span>, <span class="math display">\[
+\text{MSE}(\hat\theta)
+= E\Big[\big(\hat\theta - E(\hat\theta)\big) + \big(E(\hat\theta) - \theta\big)\Big]^2
+= V(\hat\theta) + \big(\text{Bias}(\hat\theta)\big)^2 ,
+\]</span> because the cross term <span class="math inline">\(2\,\text{Bias}(\hat\theta)\,E\big[\hat\theta - E(\hat\theta)\big]\)</span> is zero. In the example, <span class="math inline">\((1/6)^2 + 29/36 = 1/36 + 29/36 = 30/36 = 5/6\)</span>, which agrees with the direct calculation. In particular, when <span class="math inline">\(\hat\theta\)</span> is unbiased, <span class="math inline">\(\text{MSE}(\hat\theta) = V(\hat\theta)\)</span>.</p>
+<p><strong>The same population under SRS.</strong> If instead all six samples have probability <span class="math inline">\(1/6\)</span> (an SRS), the six values of <span class="math inline">\(\bar y\)</span> are <span class="math inline">\(3, 3, 4, 4, 5, 5\)</span>, so <span class="math inline">\(E(\bar y) = 4 = \bar y_U\)</span>: the estimator is now unbiased. Its variance is <span class="math inline">\(\frac16(1+1+0+0+1+1) = \frac23\)</span>, which agrees with the SRS formula <span class="math inline">\(\big(1-\frac nN\big)\frac{S^2}{n} = \frac12\cdot\frac{8/3}{2} = \frac23\)</span> of <a href="srs.html#sec-srs-formulas" class="quarto-xref"><span>Section 3.2</span></a>. The short R enumeration below checks both designs.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">6</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">combn</span>(<span class="dv">4</span>, <span class="dv">2</span>)                        <span class="co"># the 6 possible samples, one per column</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>ybar <span class="ot">&lt;-</span> <span class="fu">apply</span>(samples, <span class="dv">2</span>, <span class="cf">function</span>(s) <span class="fu">mean</span>(y[s]))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>designs <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="at">unequal =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">SRS     =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">t</span>(<span class="fu">apply</span>(designs, <span class="dv">1</span>, <span class="cf">function</span>(P) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  E <span class="ot">&lt;-</span> <span class="fu">sum</span>(P <span class="sc">*</span> ybar)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">E =</span> E, <span class="at">Bias =</span> E <span class="sc">-</span> <span class="fu">mean</span>(y), <span class="at">V =</span> <span class="fu">sum</span>(P <span class="sc">*</span> (ybar <span class="sc">-</span> E)<span class="sc">^</span><span class="dv">2</span>), <span class="at">MSE =</span> <span class="fu">sum</span>(P <span class="sc">*</span> (ybar <span class="sc">-</span> <span class="fu">mean</span>(y))<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>})), <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>             E   Bias      V    MSE
+unequal 4.1667 0.1667 0.8056 0.8333
+SRS     4.0000 0.0000 0.6667 0.6667</code></pre>
+</div>
+</div>
+</section>
+<section id="unbiased-precise-and-accurate" class="level3" data-number="1.7.8">
+<h3 data-number="1.7.8" class="anchored" data-anchor-id="unbiased-precise-and-accurate"><span class="header-section-number">1.7.8</span> Unbiased, precise and accurate</h3>
+<p>An estimator <span class="math inline">\(\hat t\)</span> of <span class="math inline">\(t\)</span> is</p>
+<ul>
+<li><strong>unbiased</strong> if <span class="math inline">\(E(\hat t) = t\)</span>;</li>
+<li><strong>precise</strong> if <span class="math inline">\(V(\hat t) = E\big[(\hat t - E[\hat t])^2\big]\)</span> is small;</li>
+<li><strong>accurate</strong> if <span class="math inline">\(\text{MSE}(\hat t) = E\big[(\hat t - t)^2\big]\)</span> is small.</li>
+</ul>
+<p>Precision measures how close the estimates from different samples are to <em>each other</em>; accuracy measures how close they are to the <em>truth</em>. A badly biased estimator may be very precise but will not be accurate. <a href="#fig-archers" class="quarto-xref">Figure&nbsp;<span>1.6</span></a> shows the three cases as archers aiming at the centre of a target: archer A is unbiased but imprecise, archer B is precise but biased, and archer C is both unbiased and precise, and therefore accurate. Selection bias and measurement bias make a survey like archer B: increasing the sample size makes the estimates more precise, but no closer to the truth.</p>
+<div id="fig-archers" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-archers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/archers.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-archers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.6: Unbiased but imprecise (A), precise but biased (B), and accurate (C).
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="summary" class="level3" data-number="1.7.9">
+<h3 data-number="1.7.9" class="anchored" data-anchor-id="summary"><span class="header-section-number">1.7.9</span> Summary</h3>
+<p>The finite population <span class="math inline">\(\mathcal U\)</span> consists of the units <span class="math inline">\(\{1,2,\ldots,N\}\)</span>, with values <span class="math inline">\(\{y_1,y_2,\ldots,y_N\}\)</span>. We select a sample <span class="math inline">\(\mathcal S\)</span> of <span class="math inline">\(n\)</span> units from <span class="math inline">\(\mathcal U\)</span> using the selection probabilities that define the sampling design. The <span class="math inline">\(y_i\)</span> are fixed but unknown quantities, unknown unless unit <span class="math inline">\(i\)</span> happens to appear in the sample. All statements about the bias, variance and MSE of an estimator refer to its distribution over the possible samples. The following chapters work out these properties for each design, starting with simple random sampling in <a href="srs.html#sec-srs-design" class="quarto-xref"><span>Section 3.1</span></a>.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

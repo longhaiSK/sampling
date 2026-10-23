@@ -9,7 +9,7 @@
 <meta name="author" content="Longhai Li">
 <meta name="dcterms.date" content="2026-10-19">
 
-<title>4&nbsp; Ratio and Regression Estimation – Elements of Sampling Survey</title>
+<title>5&nbsp; Ratio and Regression Estimation – Elements of Sampling Survey</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -155,7 +155,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ratio.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ratio.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -191,38 +191,44 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Sampling Survey</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./introR.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Analysis with R</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./srs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Simple Random Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./strata.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Stratified Random Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ratio.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./cluster.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Cluster Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ups.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unequal Probability Sampling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -254,84 +260,84 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-ratio-formulas" id="toc-sec-ratio-formulas" class="nav-link active" data-scroll-target="#sec-ratio-formulas"><span class="header-section-number">4.1</span> Introduction</a></li>
-  <li><a href="#functions-and-packages-for-analyzing-data" id="toc-functions-and-packages-for-analyzing-data" class="nav-link" data-scroll-target="#functions-and-packages-for-analyzing-data"><span class="header-section-number">4.2</span> Functions and packages for Analyzing Data</a>
+  <li><a href="#sec-ratio-formulas" id="toc-sec-ratio-formulas" class="nav-link active" data-scroll-target="#sec-ratio-formulas"><span class="header-section-number">5.1</span> Introduction</a></li>
+  <li><a href="#functions-and-packages-for-analyzing-data" id="toc-functions-and-packages-for-analyzing-data" class="nav-link" data-scroll-target="#functions-and-packages-for-analyzing-data"><span class="header-section-number">5.2</span> Functions and packages for Analyzing Data</a>
   <ul>
-  <li><a href="#general-functions-for-ratio-and-regression-estimation" id="toc-general-functions-for-ratio-and-regression-estimation" class="nav-link" data-scroll-target="#general-functions-for-ratio-and-regression-estimation"><span class="header-section-number">4.2.1</span> General functions for ratio and regression estimation</a></li>
+  <li><a href="#general-functions-for-ratio-and-regression-estimation" id="toc-general-functions-for-ratio-and-regression-estimation" class="nav-link" data-scroll-target="#general-functions-for-ratio-and-regression-estimation"><span class="header-section-number">5.2.1</span> General functions for ratio and regression estimation</a></li>
   </ul></li>
-  <li><a href="#ratio-estimation" id="toc-ratio-estimation" class="nav-link" data-scroll-target="#ratio-estimation"><span class="header-section-number">4.3</span> Ratio Estimation</a>
+  <li><a href="#ratio-estimation" id="toc-ratio-estimation" class="nav-link" data-scroll-target="#ratio-estimation"><span class="header-section-number">5.3</span> Ratio Estimation</a>
   <ul>
-  <li><a href="#sec-ratio-theory" id="toc-sec-ratio-theory" class="nav-link" data-scroll-target="#sec-ratio-theory"><span class="header-section-number">4.3.1</span> Theory</a>
+  <li><a href="#sec-ratio-theory" id="toc-sec-ratio-theory" class="nav-link" data-scroll-target="#sec-ratio-theory"><span class="header-section-number">5.3.1</span> Theory</a>
   <ul class="collapse">
-  <li><a href="#the-ratio-estimator" id="toc-the-ratio-estimator" class="nav-link" data-scroll-target="#the-ratio-estimator"><span class="header-section-number">4.3.1.1</span> The ratio estimator</a></li>
-  <li><a href="#where-ratio-estimation-is-used" id="toc-where-ratio-estimation-is-used" class="nav-link" data-scroll-target="#where-ratio-estimation-is-used"><span class="header-section-number">4.3.1.2</span> Where ratio estimation is used</a></li>
-  <li><a href="#standard-error-of-the-ratio-estimator" id="toc-standard-error-of-the-ratio-estimator" class="nav-link" data-scroll-target="#standard-error-of-the-ratio-estimator"><span class="header-section-number">4.3.1.3</span> Standard error of the ratio estimator</a></li>
-  <li><a href="#when-does-ratio-estimation-help" id="toc-when-does-ratio-estimation-help" class="nav-link" data-scroll-target="#when-does-ratio-estimation-help"><span class="header-section-number">4.3.1.4</span> When does ratio estimation help?</a></li>
+  <li><a href="#the-ratio-estimator" id="toc-the-ratio-estimator" class="nav-link" data-scroll-target="#the-ratio-estimator"><span class="header-section-number">5.3.1.1</span> The ratio estimator</a></li>
+  <li><a href="#where-ratio-estimation-is-used" id="toc-where-ratio-estimation-is-used" class="nav-link" data-scroll-target="#where-ratio-estimation-is-used"><span class="header-section-number">5.3.1.2</span> Where ratio estimation is used</a></li>
+  <li><a href="#standard-error-of-the-ratio-estimator" id="toc-standard-error-of-the-ratio-estimator" class="nav-link" data-scroll-target="#standard-error-of-the-ratio-estimator"><span class="header-section-number">5.3.1.3</span> Standard error of the ratio estimator</a></li>
+  <li><a href="#when-does-ratio-estimation-help" id="toc-when-does-ratio-estimation-help" class="nav-link" data-scroll-target="#when-does-ratio-estimation-help"><span class="header-section-number">5.3.1.4</span> When does ratio estimation help?</a></li>
   </ul></li>
-  <li><a href="#example-population-of-france-by-hand" id="toc-example-population-of-france-by-hand" class="nav-link" data-scroll-target="#example-population-of-france-by-hand"><span class="header-section-number">4.3.2</span> Example: Population of France (by hand)</a></li>
-  <li><a href="#example-cherry-trees-cherry.csv" id="toc-example-cherry-trees-cherry.csv" class="nav-link" data-scroll-target="#example-cherry-trees-cherry.csv"><span class="header-section-number">4.3.3</span> Example: Cherry Trees (cherry.csv)</a>
+  <li><a href="#example-population-of-france-by-hand" id="toc-example-population-of-france-by-hand" class="nav-link" data-scroll-target="#example-population-of-france-by-hand"><span class="header-section-number">5.3.2</span> Example: Population of France (by hand)</a></li>
+  <li><a href="#example-cherry-trees-cherry.csv" id="toc-example-cherry-trees-cherry.csv" class="nav-link" data-scroll-target="#example-cherry-trees-cherry.csv"><span class="header-section-number">5.3.3</span> Example: Cherry Trees (cherry.csv)</a>
   <ul class="collapse">
-  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data"><span class="header-section-number">4.3.3.1</span> Importing data</a></li>
-  <li><a href="#srs-estimate" id="toc-srs-estimate" class="nav-link" data-scroll-target="#srs-estimate"><span class="header-section-number">4.3.3.2</span> SRS estimate</a></li>
-  <li><a href="#ratio-estimation-using-the-function" id="toc-ratio-estimation-using-the-function" class="nav-link" data-scroll-target="#ratio-estimation-using-the-function"><span class="header-section-number">4.3.3.3</span> Ratio Estimation Using the Function</a></li>
+  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data"><span class="header-section-number">5.3.3.1</span> Importing data</a></li>
+  <li><a href="#srs-estimate" id="toc-srs-estimate" class="nav-link" data-scroll-target="#srs-estimate"><span class="header-section-number">5.3.3.2</span> SRS estimate</a></li>
+  <li><a href="#ratio-estimation-using-the-function" id="toc-ratio-estimation-using-the-function" class="nav-link" data-scroll-target="#ratio-estimation-using-the-function"><span class="header-section-number">5.3.3.3</span> Ratio Estimation Using the Function</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#regression-estimation" id="toc-regression-estimation" class="nav-link" data-scroll-target="#regression-estimation"><span class="header-section-number">4.4</span> Regression Estimation</a>
+  <li><a href="#regression-estimation" id="toc-regression-estimation" class="nav-link" data-scroll-target="#regression-estimation"><span class="header-section-number">5.4</span> Regression Estimation</a>
   <ul>
-  <li><a href="#sec-regression-theory" id="toc-sec-regression-theory" class="nav-link" data-scroll-target="#sec-regression-theory"><span class="header-section-number">4.4.1</span> Theory</a>
+  <li><a href="#sec-regression-theory" id="toc-sec-regression-theory" class="nav-link" data-scroll-target="#sec-regression-theory"><span class="header-section-number">5.4.1</span> Theory</a>
   <ul class="collapse">
-  <li><a href="#the-linear-model-and-the-least-squares-fit" id="toc-the-linear-model-and-the-least-squares-fit" class="nav-link" data-scroll-target="#the-linear-model-and-the-least-squares-fit"><span class="header-section-number">4.4.1.1</span> The linear model and the least-squares fit</a></li>
-  <li><a href="#the-regression-estimator" id="toc-the-regression-estimator" class="nav-link" data-scroll-target="#the-regression-estimator"><span class="header-section-number">4.4.1.2</span> The regression estimator</a></li>
-  <li><a href="#standard-error-of-the-regression-estimator" id="toc-standard-error-of-the-regression-estimator" class="nav-link" data-scroll-target="#standard-error-of-the-regression-estimator"><span class="header-section-number">4.4.1.3</span> Standard error of the regression estimator</a></li>
+  <li><a href="#the-linear-model-and-the-least-squares-fit" id="toc-the-linear-model-and-the-least-squares-fit" class="nav-link" data-scroll-target="#the-linear-model-and-the-least-squares-fit"><span class="header-section-number">5.4.1.1</span> The linear model and the least-squares fit</a></li>
+  <li><a href="#the-regression-estimator" id="toc-the-regression-estimator" class="nav-link" data-scroll-target="#the-regression-estimator"><span class="header-section-number">5.4.1.2</span> The regression estimator</a></li>
+  <li><a href="#standard-error-of-the-regression-estimator" id="toc-standard-error-of-the-regression-estimator" class="nav-link" data-scroll-target="#standard-error-of-the-regression-estimator"><span class="header-section-number">5.4.1.3</span> Standard error of the regression estimator</a></li>
   </ul></li>
-  <li><a href="#example-cherry-trees-cherry.csv-1" id="toc-example-cherry-trees-cherry.csv-1" class="nav-link" data-scroll-target="#example-cherry-trees-cherry.csv-1"><span class="header-section-number">4.4.2</span> Example: Cherry Trees (cherry.csv)</a>
+  <li><a href="#example-cherry-trees-cherry.csv-1" id="toc-example-cherry-trees-cherry.csv-1" class="nav-link" data-scroll-target="#example-cherry-trees-cherry.csv-1"><span class="header-section-number">5.4.2</span> Example: Cherry Trees (cherry.csv)</a>
   <ul class="collapse">
-  <li><a href="#importing-data-1" id="toc-importing-data-1" class="nav-link" data-scroll-target="#importing-data-1"><span class="header-section-number">4.4.2.1</span> Importing data</a></li>
-  <li><a href="#regression-estimation-using-the-function" id="toc-regression-estimation-using-the-function" class="nav-link" data-scroll-target="#regression-estimation-using-the-function"><span class="header-section-number">4.4.2.2</span> Regression Estimation Using the Function</a></li>
+  <li><a href="#importing-data-1" id="toc-importing-data-1" class="nav-link" data-scroll-target="#importing-data-1"><span class="header-section-number">5.4.2.1</span> Importing data</a></li>
+  <li><a href="#regression-estimation-using-the-function" id="toc-regression-estimation-using-the-function" class="nav-link" data-scroll-target="#regression-estimation-using-the-function"><span class="header-section-number">5.4.2.2</span> Regression Estimation Using the Function</a></li>
   </ul></li>
-  <li><a href="#example-photo-counts-of-dead-trees" id="toc-example-photo-counts-of-dead-trees" class="nav-link" data-scroll-target="#example-photo-counts-of-dead-trees"><span class="header-section-number">4.4.3</span> Example: Photo Counts of Dead Trees</a></li>
-  <li><a href="#shinylive-app-illustrating-ratio-estimation-and-regression-estimation" id="toc-shinylive-app-illustrating-ratio-estimation-and-regression-estimation" class="nav-link" data-scroll-target="#shinylive-app-illustrating-ratio-estimation-and-regression-estimation"><span class="header-section-number">4.4.4</span> Shinylive App Illustrating Ratio Estimation and Regression Estimation</a></li>
+  <li><a href="#example-photo-counts-of-dead-trees" id="toc-example-photo-counts-of-dead-trees" class="nav-link" data-scroll-target="#example-photo-counts-of-dead-trees"><span class="header-section-number">5.4.3</span> Example: Photo Counts of Dead Trees</a></li>
+  <li><a href="#shinylive-app-illustrating-ratio-estimation-and-regression-estimation" id="toc-shinylive-app-illustrating-ratio-estimation-and-regression-estimation" class="nav-link" data-scroll-target="#shinylive-app-illustrating-ratio-estimation-and-regression-estimation"><span class="header-section-number">5.4.4</span> Shinylive App Illustrating Ratio Estimation and Regression Estimation</a></li>
   </ul></li>
-  <li><a href="#post-stratification" id="toc-post-stratification" class="nav-link" data-scroll-target="#post-stratification"><span class="header-section-number">4.5</span> Post-stratification</a>
+  <li><a href="#post-stratification" id="toc-post-stratification" class="nav-link" data-scroll-target="#post-stratification"><span class="header-section-number">5.5</span> Post-stratification</a>
   <ul>
-  <li><a href="#sec-poststrat-theory" id="toc-sec-poststrat-theory" class="nav-link" data-scroll-target="#sec-poststrat-theory"><span class="header-section-number">4.5.1</span> Theory</a>
+  <li><a href="#sec-poststrat-theory" id="toc-sec-poststrat-theory" class="nav-link" data-scroll-target="#sec-poststrat-theory"><span class="header-section-number">5.5.1</span> Theory</a>
   <ul class="collapse">
-  <li><a href="#the-post-stratified-estimator" id="toc-the-post-stratified-estimator" class="nav-link" data-scroll-target="#the-post-stratified-estimator"><span class="header-section-number">4.5.1.1</span> The post-stratified estimator</a></li>
-  <li><a href="#variance-of-the-post-stratified-mean" id="toc-variance-of-the-post-stratified-mean" class="nav-link" data-scroll-target="#variance-of-the-post-stratified-mean"><span class="header-section-number">4.5.1.2</span> Variance of the post-stratified mean</a></li>
-  <li><a href="#sec-poststrat-regression" id="toc-sec-poststrat-regression" class="nav-link" data-scroll-target="#sec-poststrat-regression"><span class="header-section-number">4.5.1.3</span> Post-stratification as a regression estimator</a></li>
+  <li><a href="#the-post-stratified-estimator" id="toc-the-post-stratified-estimator" class="nav-link" data-scroll-target="#the-post-stratified-estimator"><span class="header-section-number">5.5.1.1</span> The post-stratified estimator</a></li>
+  <li><a href="#variance-of-the-post-stratified-mean" id="toc-variance-of-the-post-stratified-mean" class="nav-link" data-scroll-target="#variance-of-the-post-stratified-mean"><span class="header-section-number">5.5.1.2</span> Variance of the post-stratified mean</a></li>
+  <li><a href="#sec-poststrat-regression" id="toc-sec-poststrat-regression" class="nav-link" data-scroll-target="#sec-poststrat-regression"><span class="header-section-number">5.5.1.3</span> Post-stratification as a regression estimator</a></li>
   </ul></li>
-  <li><a href="#example-a-nurses-survey-by-hand" id="toc-example-a-nurses-survey-by-hand" class="nav-link" data-scroll-target="#example-a-nurses-survey-by-hand"><span class="header-section-number">4.5.2</span> Example: A Nurses Survey (by hand)</a></li>
-  <li><a href="#example-agsrs_syn.csv" id="toc-example-agsrs_syn.csv" class="nav-link" data-scroll-target="#example-agsrs_syn.csv"><span class="header-section-number">4.5.3</span> Example: agsrs_syn.csv</a>
+  <li><a href="#example-a-nurses-survey-by-hand" id="toc-example-a-nurses-survey-by-hand" class="nav-link" data-scroll-target="#example-a-nurses-survey-by-hand"><span class="header-section-number">5.5.2</span> Example: A Nurses Survey (by hand)</a></li>
+  <li><a href="#example-agsrs_syn.csv" id="toc-example-agsrs_syn.csv" class="nav-link" data-scroll-target="#example-agsrs_syn.csv"><span class="header-section-number">5.5.3</span> Example: agsrs_syn.csv</a>
   <ul class="collapse">
-  <li><a href="#by-region" id="toc-by-region" class="nav-link" data-scroll-target="#by-region"><span class="header-section-number">4.5.3.1</span> By Region</a></li>
-  <li><a href="#by-quantile-groups-of-acres87" id="toc-by-quantile-groups-of-acres87" class="nav-link" data-scroll-target="#by-quantile-groups-of-acres87"><span class="header-section-number">4.5.3.2</span> By Quantile Groups of <code>acres87</code></a></li>
+  <li><a href="#by-region" id="toc-by-region" class="nav-link" data-scroll-target="#by-region"><span class="header-section-number">5.5.3.1</span> By Region</a></li>
+  <li><a href="#by-quantile-groups-of-acres87" id="toc-by-quantile-groups-of-acres87" class="nav-link" data-scroll-target="#by-quantile-groups-of-acres87"><span class="header-section-number">5.5.3.2</span> By Quantile Groups of <code>acres87</code></a></li>
   </ul></li>
-  <li><a href="#comparing-the-two-post-stratifications" id="toc-comparing-the-two-post-stratifications" class="nav-link" data-scroll-target="#comparing-the-two-post-stratifications"><span class="header-section-number">4.5.4</span> Comparing the Two Post-stratifications</a></li>
-  <li><a href="#sec-poststrat-app" id="toc-sec-poststrat-app" class="nav-link" data-scroll-target="#sec-poststrat-app"><span class="header-section-number">4.5.5</span> Interactive Demonstration: Post-stratifying a Simple Random Sample</a></li>
+  <li><a href="#comparing-the-two-post-stratifications" id="toc-comparing-the-two-post-stratifications" class="nav-link" data-scroll-target="#comparing-the-two-post-stratifications"><span class="header-section-number">5.5.4</span> Comparing the Two Post-stratifications</a></li>
+  <li><a href="#sec-poststrat-app" id="toc-sec-poststrat-app" class="nav-link" data-scroll-target="#sec-poststrat-app"><span class="header-section-number">5.5.5</span> Interactive Demonstration: Post-stratifying a Simple Random Sample</a></li>
   </ul></li>
-  <li><a href="#domain-estimation" id="toc-domain-estimation" class="nav-link" data-scroll-target="#domain-estimation"><span class="header-section-number">4.6</span> Domain Estimation</a>
+  <li><a href="#domain-estimation" id="toc-domain-estimation" class="nav-link" data-scroll-target="#domain-estimation"><span class="header-section-number">5.6</span> Domain Estimation</a>
   <ul>
-  <li><a href="#sec-domain-theory" id="toc-sec-domain-theory" class="nav-link" data-scroll-target="#sec-domain-theory"><span class="header-section-number">4.6.1</span> Theory</a>
+  <li><a href="#sec-domain-theory" id="toc-sec-domain-theory" class="nav-link" data-scroll-target="#sec-domain-theory"><span class="header-section-number">5.6.1</span> Theory</a>
   <ul class="collapse">
-  <li><a href="#domains" id="toc-domains" class="nav-link" data-scroll-target="#domains"><span class="header-section-number">4.6.1.1</span> Domains</a></li>
-  <li><a href="#domain-means-are-ratio-estimates" id="toc-domain-means-are-ratio-estimates" class="nav-link" data-scroll-target="#domain-means-are-ratio-estimates"><span class="header-section-number">4.6.1.2</span> Domain means are ratio estimates</a></li>
-  <li><a href="#standard-error-of-a-domain-mean" id="toc-standard-error-of-a-domain-mean" class="nav-link" data-scroll-target="#standard-error-of-a-domain-mean"><span class="header-section-number">4.6.1.3</span> Standard error of a domain mean</a></li>
-  <li><a href="#estimating-a-domain-total" id="toc-estimating-a-domain-total" class="nav-link" data-scroll-target="#estimating-a-domain-total"><span class="header-section-number">4.6.1.4</span> Estimating a domain total</a></li>
+  <li><a href="#domains" id="toc-domains" class="nav-link" data-scroll-target="#domains"><span class="header-section-number">5.6.1.1</span> Domains</a></li>
+  <li><a href="#domain-means-are-ratio-estimates" id="toc-domain-means-are-ratio-estimates" class="nav-link" data-scroll-target="#domain-means-are-ratio-estimates"><span class="header-section-number">5.6.1.2</span> Domain means are ratio estimates</a></li>
+  <li><a href="#standard-error-of-a-domain-mean" id="toc-standard-error-of-a-domain-mean" class="nav-link" data-scroll-target="#standard-error-of-a-domain-mean"><span class="header-section-number">5.6.1.3</span> Standard error of a domain mean</a></li>
+  <li><a href="#estimating-a-domain-total" id="toc-estimating-a-domain-total" class="nav-link" data-scroll-target="#estimating-a-domain-total"><span class="header-section-number">5.6.1.4</span> Estimating a domain total</a></li>
   </ul></li>
-  <li><a href="#example-agsrs.csv" id="toc-example-agsrs.csv" class="nav-link" data-scroll-target="#example-agsrs.csv"><span class="header-section-number">4.6.2</span> Example: agsrs.csv</a>
+  <li><a href="#example-agsrs.csv" id="toc-example-agsrs.csv" class="nav-link" data-scroll-target="#example-agsrs.csv"><span class="header-section-number">5.6.2</span> Example: agsrs.csv</a>
   <ul class="collapse">
-  <li><a href="#estimating-domain-means" id="toc-estimating-domain-means" class="nav-link" data-scroll-target="#estimating-domain-means"><span class="header-section-number">4.6.2.1</span> Estimating Domain Means</a></li>
+  <li><a href="#estimating-domain-means" id="toc-estimating-domain-means" class="nav-link" data-scroll-target="#estimating-domain-means"><span class="header-section-number">5.6.2.1</span> Estimating Domain Means</a></li>
   </ul></li>
-  <li><a href="#example-teacher-aspirations-teacher-data" id="toc-example-teacher-aspirations-teacher-data" class="nav-link" data-scroll-target="#example-teacher-aspirations-teacher-data"><span class="header-section-number">4.6.3</span> Example: Teacher Aspirations (teacher data)</a>
+  <li><a href="#example-teacher-aspirations-teacher-data" id="toc-example-teacher-aspirations-teacher-data" class="nav-link" data-scroll-target="#example-teacher-aspirations-teacher-data"><span class="header-section-number">5.6.3</span> Example: Teacher Aspirations (teacher data)</a>
   <ul class="collapse">
-  <li><a href="#importing-data-and-calculating-contingency-table" id="toc-importing-data-and-calculating-contingency-table" class="nav-link" data-scroll-target="#importing-data-and-calculating-contingency-table"><span class="header-section-number">4.6.3.1</span> Importing Data and Calculating Contingency Table</a></li>
-  <li><a href="#estimating-domain-means-1" id="toc-estimating-domain-means-1" class="nav-link" data-scroll-target="#estimating-domain-means-1"><span class="header-section-number">4.6.3.2</span> Estimating Domain Means</a></li>
+  <li><a href="#importing-data-and-calculating-contingency-table" id="toc-importing-data-and-calculating-contingency-table" class="nav-link" data-scroll-target="#importing-data-and-calculating-contingency-table"><span class="header-section-number">5.6.3.1</span> Importing Data and Calculating Contingency Table</a></li>
+  <li><a href="#estimating-domain-means-1" id="toc-estimating-domain-means-1" class="nav-link" data-scroll-target="#estimating-domain-means-1"><span class="header-section-number">5.6.3.2</span> Estimating Domain Means</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#simulation-study-with-agpop.csv" id="toc-simulation-study-with-agpop.csv" class="nav-link" data-scroll-target="#simulation-study-with-agpop.csv"><span class="header-section-number">4.7</span> Simulation study with agpop.csv</a>
+  <li><a href="#simulation-study-with-agpop.csv" id="toc-simulation-study-with-agpop.csv" class="nav-link" data-scroll-target="#simulation-study-with-agpop.csv"><span class="header-section-number">5.7</span> Simulation study with agpop.csv</a>
   <ul>
-  <li><a href="#information-of-population-data" id="toc-information-of-population-data" class="nav-link" data-scroll-target="#information-of-population-data"><span class="header-section-number">4.7.1</span> Information of population data</a></li>
-  <li><a href="#simulation-studies" id="toc-simulation-studies" class="nav-link" data-scroll-target="#simulation-studies"><span class="header-section-number">4.7.2</span> Simulation Studies</a></li>
+  <li><a href="#information-of-population-data" id="toc-information-of-population-data" class="nav-link" data-scroll-target="#information-of-population-data"><span class="header-section-number">5.7.1</span> Information of population data</a></li>
+  <li><a href="#simulation-studies" id="toc-simulation-studies" class="nav-link" data-scroll-target="#simulation-studies"><span class="header-section-number">5.7.2</span> Simulation Studies</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -345,7 +351,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Ratio and Regression Estimation</span></h1>
 </div>
 
 
@@ -374,17 +380,17 @@ window.Quarto = {
 </header>
 
 
-<section id="sec-ratio-formulas" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="sec-ratio-formulas"><span class="header-section-number">4.1</span> Introduction</h2>
+<section id="sec-ratio-formulas" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="sec-ratio-formulas"><span class="header-section-number">5.1</span> Introduction</h2>
 <p>When auxiliary information (a variable <span class="math inline">\(x\)</span>) is highly correlated with our target variable of interest (<span class="math inline">\(y\)</span>), we can use <strong>ratio</strong> or <strong>regression</strong> estimation to improve precision without increasing the sample size. We can also use auxiliary population structures to adjust our estimates after the fact via <strong>post-stratification</strong>, or estimate means for specific sub-populations (<strong>domains</strong>).</p>
 <p>Throughout, <span class="math inline">\((x_i, y_i)\)</span>, <span class="math inline">\(i = 1, \ldots, n\)</span>, is an SRS of size <span class="math inline">\(n\)</span> from a population of <span class="math inline">\(N\)</span> units, and <span class="math inline">\(\bar x_U\)</span> (equivalently <span class="math inline">\(t_x = N\bar x_U\)</span>) is known. Each topic below has the same layout: a <em>theory</em> part that states the estimator, explains where it comes from and gives its standard error, followed by worked examples with data.</p>
 <p>The topics are less separate than they look. The ratio, regression and post-stratified estimators each fill in a prediction <span class="math inline">\(\hat y_i\)</span> for every unit of the population and average them; they differ only in the auxiliary information used to form <span class="math inline">\(\hat y_i\)</span>, and a domain mean is itself a ratio estimator. The regression and post-stratification sections make this explicit, and the post-stratification section ends with a table that puts the estimators side by side.</p>
 </section>
-<section id="functions-and-packages-for-analyzing-data" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="functions-and-packages-for-analyzing-data"><span class="header-section-number">4.2</span> Functions and packages for Analyzing Data</h2>
+<section id="functions-and-packages-for-analyzing-data" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="functions-and-packages-for-analyzing-data"><span class="header-section-number">5.2</span> Functions and packages for Analyzing Data</h2>
 <p>We begin by loading the necessary libraries, including <code>gt</code> for formatting mathematical tables, and defining our custom functions for Ratio, Regression, Domain, and Post-stratified estimation. We also define a versatile <code>gt</code> helper to render our estimation outputs cleanly.</p>
-<section id="general-functions-for-ratio-and-regression-estimation" class="level3" data-number="4.2.1">
-<h3 data-number="4.2.1" class="anchored" data-anchor-id="general-functions-for-ratio-and-regression-estimation"><span class="header-section-number">4.2.1</span> General functions for ratio and regression estimation</h3>
+<section id="general-functions-for-ratio-and-regression-estimation" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="general-functions-for-ratio-and-regression-estimation"><span class="header-section-number">5.2.1</span> General functions for ratio and regression estimation</h3>
 <p>The estimating functions used throughout this book (including <code>reg_est</code>, <code>ratio_est</code>, <code>domain_est</code>, <code>srs_est</code>, and the <code>format_est_gt</code> table-formatting helper used below) live in a single shared file, <code>samplingestimate.r</code>, which we source below.</p>
 <p>For post-stratification, we reuse the shared <code>str_est()</code> stratified estimator, but we plug in the expected sample sizes <span class="math inline">\(n_h = n \times \frac{N_h}{N}\)</span> instead of the actual observed random <span class="math inline">\(n_h\)</span>.</p>
 <details>
@@ -1360,12 +1366,12 @@ Show the shared estimating functions (<code>samplingestimate.r</code>)
 </details>
 </section>
 </section>
-<section id="ratio-estimation" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="ratio-estimation"><span class="header-section-number">4.3</span> Ratio Estimation</h2>
-<section id="sec-ratio-theory" class="level3" data-number="4.3.1">
-<h3 data-number="4.3.1" class="anchored" data-anchor-id="sec-ratio-theory"><span class="header-section-number">4.3.1</span> Theory</h3>
-<section id="the-ratio-estimator" class="level4" data-number="4.3.1.1">
-<h4 data-number="4.3.1.1" class="anchored" data-anchor-id="the-ratio-estimator"><span class="header-section-number">4.3.1.1</span> The ratio estimator</h4>
+<section id="ratio-estimation" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="ratio-estimation"><span class="header-section-number">5.3</span> Ratio Estimation</h2>
+<section id="sec-ratio-theory" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="sec-ratio-theory"><span class="header-section-number">5.3.1</span> Theory</h3>
+<section id="the-ratio-estimator" class="level4" data-number="5.3.1.1">
+<h4 data-number="5.3.1.1" class="anchored" data-anchor-id="the-ratio-estimator"><span class="header-section-number">5.3.1.1</span> The ratio estimator</h4>
 <p>For ratio estimation to apply, two quantities <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_i\)</span> must be measured on each sample unit; <span class="math inline">\(x_i\)</span> is often called an <strong>auxiliary variable</strong> or <strong>subsidiary variable</strong>. In the population of size <span class="math inline">\(N\)</span>, <span class="math display">\[
 t_y = \sum_{i=1}^N y_i, \qquad t_x = \sum_{i=1}^N x_i,
 \]</span> and their ratio is <span class="math display">\[
@@ -1383,7 +1389,7 @@ B = \frac{t_y}{t_x} = \frac{\bar y_U}{\bar x_U}, \qquad \text{so that} \qquad \b
 \qquad
 \hat{\bar y}_r = \frac1N\sum_{i=1}^N \hat y_i = \hat B\, \bar x_U .
 \]</span></p>
-<p><a href="#fig-ratio-concept" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> shows this for a small population. The grey points are the population, whose <span class="math inline">\(x_i\)</span> are known, and the green circles are an ordinary SRS. The red line <span class="math inline">\(\hat y = \hat B x\)</span> is fitted from the sample, and the red points are the fitted values for every unit.</p>
+<p><a href="#fig-ratio-concept" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> shows this for a small population. The grey points are the population, whose <span class="math inline">\(x_i\)</span> are known, and the green circles are an ordinary SRS. The red line <span class="math inline">\(\hat y = \hat B x\)</span> is fitted from the sample, and the red points are the fitted values for every unit.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1435,7 +1441,7 @@ B = \frac{t_y}{t_x} = \frac{\bar y_U}{\bar x_U}, \qquad \text{so that} \qquad \b
 <img src="ratio_files/figure-html/fig-ratio-concept-1.png" class="img-fluid figure-img" style="width:70.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ratio-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.1: Illustration of the benefits of ratio estimation. Grey: the population. Green circles: an SRS. Red: the line fitted from the sample and the fitted values for every unit.
+Figure&nbsp;5.1: Illustration of the benefits of ratio estimation. Grey: the population. Green circles: an SRS. Red: the line fitted from the sample and the fitted values for every unit.
 </figcaption>
 </figure>
 </div>
@@ -1443,8 +1449,8 @@ Figure&nbsp;4.1: Illustration of the benefits of ratio estimation. Grey: the pop
 </div>
 <p>This sample happens to have <span class="math inline">\(\bar x &gt; \bar x_U\)</span>, so the naive <span class="math inline">\(\bar y\)</span> (green) lands well above <span class="math inline">\(\bar y_U\)</span>. The ratio estimator corrects for that through the known <span class="math inline">\(\bar x_U\)</span>: it is the height of the red line at <span class="math inline">\(x = \bar x_U\)</span>, so <span class="math inline">\(\hat{\bar y}_r\)</span> (red) is close to <span class="math inline">\(\bar y_U\)</span> (black). Averaged over samples both are (essentially) unbiased, but <span class="math inline">\(\hat{\bar y}_r\)</span> varies far less.</p>
 </section>
-<section id="where-ratio-estimation-is-used" class="level4" data-number="4.3.1.2">
-<h4 data-number="4.3.1.2" class="anchored" data-anchor-id="where-ratio-estimation-is-used"><span class="header-section-number">4.3.1.2</span> Where ratio estimation is used</h4>
+<section id="where-ratio-estimation-is-used" class="level4" data-number="5.3.1.2">
+<h4 data-number="5.3.1.2" class="anchored" data-anchor-id="where-ratio-estimation-is-used"><span class="header-section-number">5.3.1.2</span> Where ratio estimation is used</h4>
 <p>Ordinary SRS estimation of a mean or proportion is a special case of ratio estimation, obtained by setting <span class="math inline">\(x_i = 1\)</span> for every unit: then <span class="math inline">\(\bar x_U = \bar x = 1\)</span>, <span class="math inline">\(t_x = N\)</span>, <span class="math inline">\(B = \bar y_U\)</span> and <span class="math inline">\(\hat B = \bar y\)</span>, so <span class="math inline">\(\hat{\bar y}_r = \bar y\)</span> (including <span class="math inline">\(\hat p\)</span>) and <span class="math inline">\(\hat t_{yr} = N\bar y\)</span>.</p>
 <p>Genuine ratio estimation needs an <span class="math inline">\(x\)</span> whose population total is known more easily than that of <span class="math inline">\(y\)</span>. Three typical situations:</p>
 <ul>
@@ -1453,8 +1459,8 @@ Figure&nbsp;4.1: Illustration of the benefits of ratio estimation. Grey: the pop
 <li><strong>The same quantity at an earlier time.</strong> When the same quantity is measured at different times, an earlier measurement often makes an excellent auxiliary variable. If the 1987 acreage of every county is known but 1992 acreage is observed only for a sample of counties, let <span class="math inline">\(y_i\)</span> be the 1992 farm acreage and <span class="math inline">\(x_i\)</span> the 1987 farm acreage. This is the example used in the simulation study at the end of this chapter.</li>
 </ul>
 </section>
-<section id="standard-error-of-the-ratio-estimator" class="level4" data-number="4.3.1.3">
-<h4 data-number="4.3.1.3" class="anchored" data-anchor-id="standard-error-of-the-ratio-estimator"><span class="header-section-number">4.3.1.3</span> Standard error of the ratio estimator</h4>
+<section id="standard-error-of-the-ratio-estimator" class="level4" data-number="5.3.1.3">
+<h4 data-number="5.3.1.3" class="anchored" data-anchor-id="standard-error-of-the-ratio-estimator"><span class="header-section-number">5.3.1.3</span> Standard error of the ratio estimator</h4>
 <p>In large samples the bias of <span class="math inline">\(\hat{\bar y}_r\)</span> is negligible relative to its variance, so <span class="math inline">\(\text{MSE}(\hat{\bar y}_r) \approx V(\hat{\bar y}_r)\)</span>. To understand the variance, look at the estimation error, <span class="math display">\[
 \hat{\bar y}_r - \bar y_U = \frac{\bar y}{\bar x}\bar x_U - B\bar x_U = \frac{\bar x_U}{\bar x}\left(\bar y - B\bar x\right),
 \]</span> where the second form comes from factoring out <span class="math inline">\(\bar x_U/\bar x\)</span>. Define the <strong>population residual</strong> of each element as its deviation from the true population line, <span class="math display">\[
@@ -1475,8 +1481,8 @@ e_i = y_i - \hat B x_i, \qquad s_e^2 = \frac{1}{n-1}\sum_{i=1}^n e_i^2 .
 \]</span> For samples that are large enough (typically <span class="math inline">\(n &gt; 30\)</span>) the sampling distributions are approximately normal, and approximate 95% intervals are <span class="math inline">\(\hat B \pm t_{0.975,\,n-1}\,\text{SE}(\hat B)\)</span> for the ratio, and the same form for the mean and the total.</p>
 <p>The sample residual <span class="math inline">\(e_i\)</span> is the vertical distance from the point <span class="math inline">\((x_i, y_i)\)</span> to the fitted line through the origin, <span class="math inline">\(y = \hat B x\)</span>. No centring appears in <span class="math inline">\(s_e^2\)</span> because <span class="math inline">\(\hat B = \bar y/\bar x\)</span> forces <span class="math inline">\(\sum_i e_i = \sum_i y_i - \hat B\sum_i x_i = 0\)</span> exactly, so the residuals already average to zero; the divisor is <span class="math inline">\(n-1\)</span> for the one parameter <span class="math inline">\(\hat B\)</span> estimated from the sample. Compare the variance with the SRS one, <span class="math inline">\(\left(1-\frac nN\right)s_y^2/n\)</span>: ratio estimation replaces the scatter of <span class="math inline">\(y\)</span> about <span class="math inline">\(\bar y\)</span> by the scatter about the line. That is the whole source of the gain, and the whole risk, since an <span class="math inline">\(x\)</span> that predicts <span class="math inline">\(y\)</span> poorly gives <span class="math inline">\(s_e^2 &gt; s_y^2\)</span> and a <em>less</em> precise estimate than the plain sample mean.</p>
 </section>
-<section id="when-does-ratio-estimation-help" class="level4" data-number="4.3.1.4">
-<h4 data-number="4.3.1.4" class="anchored" data-anchor-id="when-does-ratio-estimation-help"><span class="header-section-number">4.3.1.4</span> When does ratio estimation help?</h4>
+<section id="when-does-ratio-estimation-help" class="level4" data-number="5.3.1.4">
+<h4 data-number="5.3.1.4" class="anchored" data-anchor-id="when-does-ratio-estimation-help"><span class="header-section-number">5.3.1.4</span> When does ratio estimation help?</h4>
 <p>Let <span class="math inline">\(R\)</span> be the population Pearson correlation of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, <span class="math display">\[
 R = \frac{\sum_{i=1}^N (x_i - \bar x_U)(y_i - \bar y_U)}{(N-1)S_xS_y}.
 \]</span> Comparing <span class="math inline">\(\text{MSE}(\hat{\bar y}_r)\)</span> with <span class="math inline">\(\text{MSE}(\bar y) = \left(1 - \frac nN\right)S_y^2/n\)</span> shows that <span class="math display">\[
@@ -1491,8 +1497,8 @@ R \ge \frac{B S_x}{2 S_y} = \frac{\text{CV}(x)}{2\,\text{CV}(y)} .
 \]</span> This is not exactly the <span class="math inline">\(R^2\)</span> of fitting the linear model <span class="math inline">\(y = Bx\)</span>, because <span class="math inline">\(\hat B\)</span> is not a least-squares estimate of <span class="math inline">\(B\)</span>, but it carries similar information about how much variance ratio estimation removes.</p>
 </section>
 </section>
-<section id="example-population-of-france-by-hand" class="level3" data-number="4.3.2">
-<h3 data-number="4.3.2" class="anchored" data-anchor-id="example-population-of-france-by-hand"><span class="header-section-number">4.3.2</span> Example: Population of France (by hand)</h3>
+<section id="example-population-of-france-by-hand" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="example-population-of-france-by-hand"><span class="header-section-number">5.3.2</span> Example: Population of France (by hand)</h3>
 <p>This toy version of the France population example demonstrates the mechanics of ratio estimation, using a sample of <span class="math inline">\(n = 5\)</span> out of <span class="math inline">\(N = 8\)</span> communes. We observe <span class="math inline">\(x_i\)</span> = registered births and <span class="math inline">\(y_i\)</span> = residents, both in thousands:</p>
 <table class="caption-top table">
 <colgroup>
@@ -1578,11 +1584,11 @@ s_e^2 = \frac{\sum e_i^2}{n-1} = \frac{1496}{4} = 374 .
 \text{SE}(\hat t_{yr}) = \sqrt{\left(1 - \frac58\right)\left(\frac{40}{3}\right)^2\frac{374}{5}} = 70.616 \text{ (thousand)},
 \]</span> so a 95% confidence interval for the total population is <span class="math inline">\(1200 \pm 1.96(70.616) = [1061.6,\ 1338.4]\)</span> thousand, that is, <strong>[1.062, 1.338] million</strong> residents. For the slope, <span class="math inline">\(\text{SE}(\hat B) = \sqrt{\left(1 - \frac58\right)\frac{374}{5\cdot 3^2}} = 1.765\)</span>.</p>
 </section>
-<section id="example-cherry-trees-cherry.csv" class="level3" data-number="4.3.3">
-<h3 data-number="4.3.3" class="anchored" data-anchor-id="example-cherry-trees-cherry.csv"><span class="header-section-number">4.3.3</span> Example: Cherry Trees (cherry.csv)</h3>
+<section id="example-cherry-trees-cherry.csv" class="level3" data-number="5.3.3">
+<h3 data-number="5.3.3" class="anchored" data-anchor-id="example-cherry-trees-cherry.csv"><span class="header-section-number">5.3.3</span> Example: Cherry Trees (cherry.csv)</h3>
 <p>We want to estimate the volume of wood in cherry trees using their diameter as an auxiliary variable.</p>
-<section id="importing-data" class="level4" data-number="4.3.3.1">
-<h4 data-number="4.3.3.1" class="anchored" data-anchor-id="importing-data"><span class="header-section-number">4.3.3.1</span> Importing data</h4>
+<section id="importing-data" class="level4" data-number="5.3.3.1">
+<h4 data-number="5.3.3.1" class="anchored" data-anchor-id="importing-data"><span class="header-section-number">5.3.3.1</span> Importing data</h4>
 <p>First, let’s load the data and verify that a strong linear relationship passing near the origin exists between volume and diameter.</p>
 <div class="cell">
 <details class="code-fold">
@@ -1593,7 +1599,7 @@ s_e^2 = \frac{\sum e_i^2}{n-1} = \frac{1496}{4} = 374 .
 <div id="tbl-cherry-sample-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cherry-sample-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4.1: Sample data: cherry tree volume and diameter
+Table&nbsp;5.1: Sample data: cherry tree volume and diameter
 </figcaption>
 <div aria-describedby="tbl-cherry-sample-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -2108,7 +2114,7 @@ Table&nbsp;4.1: Sample data: cherry tree volume and diameter
 <img src="ratio_files/figure-html/fig-cherry-volume-diameter-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cherry-volume-diameter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter
+Figure&nbsp;5.2: Cherry tree volume vs.&nbsp;diameter
 </figcaption>
 </figure>
 </div>
@@ -2130,8 +2136,8 @@ Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter
 </div>
 <p><strong>Output Note:</strong> The plot and the linear model output (which forces a 0 intercept) confirm a very strong relationship, making this a prime candidate for Ratio estimation.</p>
 </section>
-<section id="srs-estimate" class="level4" data-number="4.3.3.2">
-<h4 data-number="4.3.3.2" class="anchored" data-anchor-id="srs-estimate"><span class="header-section-number">4.3.3.2</span> SRS estimate</h4>
+<section id="srs-estimate" class="level4" data-number="5.3.3.2">
+<h4 data-number="5.3.3.2" class="anchored" data-anchor-id="srs-estimate"><span class="header-section-number">5.3.3.2</span> SRS estimate</h4>
 <p>To establish a baseline, we first estimate the mean and total volume using standard Simple Random Sampling (ignoring the auxiliary variable).</p>
 <div class="cell">
 <details class="code-fold">
@@ -3096,8 +3102,8 @@ Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter
 </div>
 <p><strong>Output Note:</strong> Under SRS, the standard error for the mean volume is 2.94.</p>
 </section>
-<section id="ratio-estimation-using-the-function" class="level4" data-number="4.3.3.3">
-<h4 data-number="4.3.3.3" class="anchored" data-anchor-id="ratio-estimation-using-the-function"><span class="header-section-number">4.3.3.3</span> Ratio Estimation Using the Function</h4>
+<section id="ratio-estimation-using-the-function" class="level4" data-number="5.3.3.3">
+<h4 data-number="5.3.3.3" class="anchored" data-anchor-id="ratio-estimation-using-the-function"><span class="header-section-number">5.3.3.3</span> Ratio Estimation Using the Function</h4>
 <p>We calculate the ratio <span class="math inline">\(\hat{B} = \overline{y}/\overline{x}\)</span>; the function’s <code>$table</code> shows the row-level working values <span class="math inline">\(x_i\)</span>, <span class="math inline">\(y_i\)</span>, fitted <span class="math inline">\(\hat{y}_i = \hat{B}x_i\)</span>, residuals <span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>, and <span class="math inline">\(e_i^2\)</span> (with a Sum row and a footnote giving <span class="math inline">\(\hat B\)</span> and <span class="math inline">\(s_e^2\)</span>), so we no longer need to build this table by hand.</p>
 <div class="cell">
 <details class="code-fold">
@@ -3673,7 +3679,7 @@ Figure&nbsp;4.2: Cherry tree volume vs.&nbsp;diameter
 <img src="ratio_files/figure-html/fig-cherry-ratio-fit-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cherry-ratio-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.3: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
+Figure&nbsp;5.3: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 </figcaption>
 </figure>
 </div>
@@ -4160,8 +4166,8 @@ Figure&nbsp;4.3: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 </div>
 </div>
 <p><strong>Output Note:</strong> The ratio <span class="math inline">\(\hat{B}\)</span> is estimated at 2.277 with a standard error of 0.1308.</p>
-<section id="estimating-the-mean-volume-of-wood" class="level5" data-number="4.3.3.3.1">
-<h5 data-number="4.3.3.3.1" class="anchored" data-anchor-id="estimating-the-mean-volume-of-wood"><span class="header-section-number">4.3.3.3.1</span> Estimating the mean volume of wood</h5>
+<section id="estimating-the-mean-volume-of-wood" class="level5" data-number="5.3.3.3.1">
+<h5 data-number="5.3.3.3.1" class="anchored" data-anchor-id="estimating-the-mean-volume-of-wood"><span class="header-section-number">5.3.3.3.1</span> Estimating the mean volume of wood</h5>
 <p>If we know the true total of the population diameters is 41,835, we can derive the population mean diameter <span class="math inline">\(\overline{x}_{\text{U}}\)</span> and pass it as <code>xbarU</code> with <code>estimate = "mean"</code>.</p>
 <div class="cell">
 <details class="code-fold">
@@ -5198,8 +5204,8 @@ Figure&nbsp;4.3: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 </div>
 </div>
 </section>
-<section id="estimating-the-total-volume-of-wood" class="level5" data-number="4.3.3.3.2">
-<h5 data-number="4.3.3.3.2" class="anchored" data-anchor-id="estimating-the-total-volume-of-wood"><span class="header-section-number">4.3.3.3.2</span> Estimating the total volume of wood</h5>
+<section id="estimating-the-total-volume-of-wood" class="level5" data-number="5.3.3.3.2">
+<h5 data-number="5.3.3.3.2" class="anchored" data-anchor-id="estimating-the-total-volume-of-wood"><span class="header-section-number">5.3.3.3.2</span> Estimating the total volume of wood</h5>
 <p>Using <code>estimate = "total"</code> with the known population total diameter gives the estimated population total volume directly.</p>
 <div class="cell">
 <details class="code-fold">
@@ -6237,8 +6243,8 @@ Figure&nbsp;4.3: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 </div>
 </div>
 </section>
-<section id="percentage-of-variance-reduction" class="level5" data-number="4.3.3.3.3">
-<h5 data-number="4.3.3.3.3" class="anchored" data-anchor-id="percentage-of-variance-reduction"><span class="header-section-number">4.3.3.3.3</span> Percentage of Variance Reduction</h5>
+<section id="percentage-of-variance-reduction" class="level5" data-number="5.3.3.3.3">
+<h5 data-number="5.3.3.3.3" class="anchored" data-anchor-id="percentage-of-variance-reduction"><span class="header-section-number">5.3.3.3.3</span> Percentage of Variance Reduction</h5>
 <p>How much did ratio estimation help compared to ignoring the auxiliary variable?</p>
 <div class="cell">
 <details class="code-fold">
@@ -6255,12 +6261,12 @@ Figure&nbsp;4.3: Cherry tree volume vs.&nbsp;diameter with the fitted ratio line
 </section>
 </section>
 </section>
-<section id="regression-estimation" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="regression-estimation"><span class="header-section-number">4.4</span> Regression Estimation</h2>
-<section id="sec-regression-theory" class="level3" data-number="4.4.1">
-<h3 data-number="4.4.1" class="anchored" data-anchor-id="sec-regression-theory"><span class="header-section-number">4.4.1</span> Theory</h3>
-<section id="the-linear-model-and-the-least-squares-fit" class="level4" data-number="4.4.1.1">
-<h4 data-number="4.4.1.1" class="anchored" data-anchor-id="the-linear-model-and-the-least-squares-fit"><span class="header-section-number">4.4.1.1</span> The linear model and the least-squares fit</h4>
+<section id="regression-estimation" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="regression-estimation"><span class="header-section-number">5.4</span> Regression Estimation</h2>
+<section id="sec-regression-theory" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="sec-regression-theory"><span class="header-section-number">5.4.1</span> Theory</h3>
+<section id="the-linear-model-and-the-least-squares-fit" class="level4" data-number="5.4.1.1">
+<h4 data-number="5.4.1.1" class="anchored" data-anchor-id="the-linear-model-and-the-least-squares-fit"><span class="header-section-number">5.4.1.1</span> The linear model and the least-squares fit</h4>
 <p>Ratio estimation works best if the data are well fit by a straight line <em>through the origin</em>, with spread growing with <span class="math inline">\(x\)</span>. Sometimes data instead appear evenly scattered about a straight line that does <strong>not</strong> go through the origin, so that the usual straight-line regression model applies, <span class="math display">\[
 y = B_0 + B_1 x .
 \]</span> In ratio estimation <span class="math inline">\(y_i = Bx_i + d_i\)</span> with residual spread growing with <span class="math inline">\(x\)</span>; in regression estimation <span class="math inline">\(y_i = B_0 + B_1x_i + d_i\)</span> with roughly constant spread.</p>
@@ -6270,8 +6276,8 @@ y = B_0 + B_1 x .
 \hat B_0 = \bar y - \hat B_1\bar x ,
 \]</span> where <span class="math inline">\(r\)</span> is the sample Pearson correlation coefficient of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
 </section>
-<section id="the-regression-estimator" class="level4" data-number="4.4.1.2">
-<h4 data-number="4.4.1.2" class="anchored" data-anchor-id="the-regression-estimator"><span class="header-section-number">4.4.1.2</span> The regression estimator</h4>
+<section id="the-regression-estimator" class="level4" data-number="5.4.1.2">
+<h4 data-number="5.4.1.2" class="anchored" data-anchor-id="the-regression-estimator"><span class="header-section-number">5.4.1.2</span> The regression estimator</h4>
 <p>Assuming <span class="math inline">\(\bar x_U\)</span> (or <span class="math inline">\(t_x\)</span>) is known, the regression estimator of the mean is the fitted line evaluated at <span class="math inline">\(\bar x_U\)</span>: <span class="math display">\[
 \hat{\bar y}_{reg} = \hat B_0 + \hat B_1\bar x_U = \bar y + \hat B_1\left(\bar x_U - \bar x\right),
 \qquad
@@ -6279,7 +6285,7 @@ y = B_0 + B_1 x .
 \]</span> Equivalently, averaging the fitted value <span class="math inline">\(\hat y_i = \hat B_0 + \hat B_1 x_i\)</span> over <em>every</em> population unit gives the same estimator, <span class="math display">\[
 \hat{\bar y}_{reg} = \frac1N\sum_{i=1}^N\left(\hat B_0 + \hat B_1 x_i\right) = \hat B_0 + \hat B_1\bar x_U .
 \]</span> This is a natural generalization of the ratio estimator <span class="math inline">\(\hat{\bar y}_r = \frac1N\sum_{i=1}^N\hat B x_i\)</span>.</p>
-<p><a href="#fig-reg-concept" class="quarto-xref">Figure&nbsp;<span>4.4</span></a> illustrates it. The grey points are the population and the green circles an ordinary SRS. The red line is fitted from the sample, <span class="math inline">\(\hat y_i = \hat B_0 + \hat B_1x_i\)</span> for every unit, and the regression estimate is the average of the red points.</p>
+<p><a href="#fig-reg-concept" class="quarto-xref">Figure&nbsp;<span>5.4</span></a> illustrates it. The grey points are the population and the green circles an ordinary SRS. The red line is fitted from the sample, <span class="math inline">\(\hat y_i = \hat B_0 + \hat B_1x_i\)</span> for every unit, and the regression estimate is the average of the red points.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -6336,7 +6342,7 @@ y = B_0 + B_1 x .
 <img src="ratio_files/figure-html/fig-reg-concept-1.png" class="img-fluid figure-img" style="width:70.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reg-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.4: Illustration of the benefits of regression estimation. Grey: the population. Green circles: an SRS. Red: the line fitted from the sample and the fitted values for every unit.
+Figure&nbsp;5.4: Illustration of the benefits of regression estimation. Grey: the population. Green circles: an SRS. Red: the line fitted from the sample and the fitted values for every unit.
 </figcaption>
 </figure>
 </div>
@@ -6344,8 +6350,8 @@ Figure&nbsp;4.4: Illustration of the benefits of regression estimation. Grey: th
 </div>
 <p>The sampled <span class="math inline">\(x\)</span>’s average above <span class="math inline">\(\bar x_U\)</span>, so the naive <span class="math inline">\(\bar y\)</span> (green) sits above <span class="math inline">\(\bar y_U\)</span>; the regression estimator shifts the fit back to <span class="math inline">\(\bar x_U\)</span> and lands on target, <span class="math inline">\(\hat{\bar y}_{reg}\)</span> (red) <span class="math inline">\(\approx \bar y_U\)</span> (black). Both are essentially unbiased over repeated samples, but <span class="math inline">\(\hat{\bar y}_{reg}\)</span> is much less variable.</p>
 </section>
-<section id="standard-error-of-the-regression-estimator" class="level4" data-number="4.4.1.3">
-<h4 data-number="4.4.1.3" class="anchored" data-anchor-id="standard-error-of-the-regression-estimator"><span class="header-section-number">4.4.1.3</span> Standard error of the regression estimator</h4>
+<section id="standard-error-of-the-regression-estimator" class="level4" data-number="5.4.1.3">
+<h4 data-number="5.4.1.3" class="anchored" data-anchor-id="standard-error-of-the-regression-estimator"><span class="header-section-number">5.4.1.3</span> Standard error of the regression estimator</h4>
 <p>Let <span class="math inline">\(e_i = y_i - (\hat B_0 + \hat B_1 x_i)\)</span> be the regression residuals. The estimated variance uses the residual mean square of the regression, <span class="math display">\[
 \hat V(\hat{\bar y}_{reg}) = \left(1 - \frac nN\right)\frac{s_e^2}{n},
 \qquad
@@ -6356,11 +6362,11 @@ s_e^2 = \frac{1}{n-2}\sum_{i=1}^n\left(y_i - \hat B_0 - \hat B_1 x_i\right)^2 ,
 <p>The divisor is now <span class="math inline">\(n - 2\)</span>, since both <span class="math inline">\(\hat B_0\)</span> and <span class="math inline">\(\hat B_1\)</span> are estimated. For the same data <span class="math inline">\(\sum_i e_i^2\)</span> can only be smaller here than under the ratio fit (the ratio line is the special case <span class="math inline">\(\hat B_0 = 0\)</span>), so the regression estimator is the safer of the two whenever the relationship misses the origin, at the cost of one degree of freedom. Note also that the factor <span class="math inline">\((\bar x_U/\bar x)^2\)</span> is absent: the fitted line is evaluated at <span class="math inline">\(\bar x_U\)</span> directly, so no correction for <span class="math inline">\(\bar x \neq \bar x_U\)</span> is needed.</p>
 </section>
 </section>
-<section id="example-cherry-trees-cherry.csv-1" class="level3" data-number="4.4.2">
-<h3 data-number="4.4.2" class="anchored" data-anchor-id="example-cherry-trees-cherry.csv-1"><span class="header-section-number">4.4.2</span> Example: Cherry Trees (cherry.csv)</h3>
+<section id="example-cherry-trees-cherry.csv-1" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="example-cherry-trees-cherry.csv-1"><span class="header-section-number">5.4.2</span> Example: Cherry Trees (cherry.csv)</h3>
 <p>When the relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> doesn’t pass exactly through the origin, we use Regression Estimation.</p>
-<section id="importing-data-1" class="level4" data-number="4.4.2.1">
-<h4 data-number="4.4.2.1" class="anchored" data-anchor-id="importing-data-1"><span class="header-section-number">4.4.2.1</span> Importing data</h4>
+<section id="importing-data-1" class="level4" data-number="5.4.2.1">
+<h4 data-number="5.4.2.1" class="anchored" data-anchor-id="importing-data-1"><span class="header-section-number">5.4.2.1</span> Importing data</h4>
 <p>We read the cherry data again. The known population total diameter, <span class="math inline">\(t_x = 41{,}835\)</span>, over the <span class="math inline">\(N = 2967\)</span> trees gives the population mean diameter <span class="math inline">\(\bar x_U\)</span> needed by the regression estimator.</p>
 <div class="cell">
 <details class="code-fold">
@@ -6374,10 +6380,10 @@ s_e^2 = \frac{1}{n-2}\sum_{i=1}^n\left(y_i - \hat B_0 - \hat B_1 x_i\right)^2 ,
 </details>
 </div>
 </section>
-<section id="regression-estimation-using-the-function" class="level4" data-number="4.4.2.2">
-<h4 data-number="4.4.2.2" class="anchored" data-anchor-id="regression-estimation-using-the-function"><span class="header-section-number">4.4.2.2</span> Regression Estimation Using the Function</h4>
-<section id="fitting-a-linear-regression-model" class="level5" data-number="4.4.2.2.1">
-<h5 data-number="4.4.2.2.1" class="anchored" data-anchor-id="fitting-a-linear-regression-model"><span class="header-section-number">4.4.2.2.1</span> Fitting a linear regression model</h5>
+<section id="regression-estimation-using-the-function" class="level4" data-number="5.4.2.2">
+<h4 data-number="5.4.2.2" class="anchored" data-anchor-id="regression-estimation-using-the-function"><span class="header-section-number">5.4.2.2</span> Regression Estimation Using the Function</h4>
+<section id="fitting-a-linear-regression-model" class="level5" data-number="5.4.2.2.1">
+<h5 data-number="5.4.2.2.1" class="anchored" data-anchor-id="fitting-a-linear-regression-model"><span class="header-section-number">5.4.2.2.1</span> Fitting a linear regression model</h5>
 <p>First fit the ordinary least squares line of volume on diameter. This gives <span class="math inline">\(\hat B_0\)</span> and <span class="math inline">\(\hat B_1\)</span>, together with the usual fit summary, and shows how well a straight line describes the data.</p>
 <div class="cell">
 <details class="code-fold">
@@ -7367,7 +7373,7 @@ s_e^2 = \frac{1}{n-2}\sum_{i=1}^n\left(y_i - \hat B_0 - \hat B_1 x_i\right)^2 ,
 <img src="ratio_files/figure-html/fig-cherry-regression-fit-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cherry-regression-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression line
+Figure&nbsp;5.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression line
 </figcaption>
 </figure>
 </div>
@@ -7931,8 +7937,8 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 </div>
 </div>
 </section>
-<section id="estimate-the-mean" class="level5" data-number="4.4.2.2.2">
-<h5 data-number="4.4.2.2.2" class="anchored" data-anchor-id="estimate-the-mean"><span class="header-section-number">4.4.2.2.2</span> Estimate the mean</h5>
+<section id="estimate-the-mean" class="level5" data-number="5.4.2.2.2">
+<h5 data-number="5.4.2.2.2" class="anchored" data-anchor-id="estimate-the-mean"><span class="header-section-number">5.4.2.2.2</span> Estimate the mean</h5>
 <p>We compute the regression estimate <span class="math inline">\(\overline{y}_{reg}\)</span> by passing <code>xbarU</code> with <code>estimate = "mean"</code>.</p>
 <div class="cell">
 <details class="code-fold">
@@ -8969,8 +8975,8 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 </div>
 <p><strong>Output Note:</strong> The Regression estimate for the mean volume is 34.486 with a standard error of 0.7597.</p>
 </section>
-<section id="estimate-the-total" class="level5" data-number="4.4.2.2.3">
-<h5 data-number="4.4.2.2.3" class="anchored" data-anchor-id="estimate-the-total"><span class="header-section-number">4.4.2.2.3</span> Estimate the total</h5>
+<section id="estimate-the-total" class="level5" data-number="5.4.2.2.3">
+<h5 data-number="5.4.2.2.3" class="anchored" data-anchor-id="estimate-the-total"><span class="header-section-number">5.4.2.2.3</span> Estimate the total</h5>
 <p>The estimate of the total follows by passing <code>estimate = "total"</code>, which multiplies the estimated mean and its standard error by <span class="math inline">\(N\)</span>.</p>
 <div class="cell">
 <details class="code-fold">
@@ -9452,8 +9458,8 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 </div>
 </div>
 </section>
-<section id="percentage-of-variance-reduction-1" class="level5" data-number="4.4.2.2.4">
-<h5 data-number="4.4.2.2.4" class="anchored" data-anchor-id="percentage-of-variance-reduction-1"><span class="header-section-number">4.4.2.2.4</span> Percentage of Variance Reduction</h5>
+<section id="percentage-of-variance-reduction-1" class="level5" data-number="5.4.2.2.4">
+<h5 data-number="5.4.2.2.4" class="anchored" data-anchor-id="percentage-of-variance-reduction-1"><span class="header-section-number">5.4.2.2.4</span> Percentage of Variance Reduction</h5>
 <p>As for the ratio estimator, we compare the standard error of the regression estimate with that of the SRS estimate:</p>
 <div class="cell">
 <details class="code-fold">
@@ -9470,8 +9476,8 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 </section>
 </section>
 </section>
-<section id="example-photo-counts-of-dead-trees" class="level3" data-number="4.4.3">
-<h3 data-number="4.4.3" class="anchored" data-anchor-id="example-photo-counts-of-dead-trees"><span class="header-section-number">4.4.3</span> Example: Photo Counts of Dead Trees</h3>
+<section id="example-photo-counts-of-dead-trees" class="level3" data-number="5.4.3">
+<h3 data-number="5.4.3" class="anchored" data-anchor-id="example-photo-counts-of-dead-trees"><span class="header-section-number">5.4.3</span> Example: Photo Counts of Dead Trees</h3>
 <p>Aerial photographs are a cheap way to survey a large area (for example a caribou herd), but they tend to <strong>undercount</strong> animals that are hidden from view overhead. A more expensive, intensive ground count on a subsample of plots gives accurate counts that can calibrate the photo counts. Let <span class="math inline">\(x_i\)</span> be the photo count and <span class="math inline">\(y_i\)</span> the field count on plot <span class="math inline">\(i\)</span>. Fitting a ratio or a regression line on the subsample of plots that have both counts lets us correct the total photo count of the <em>entire</em> surveyed area, for example <span class="math inline">\(\hat t_{yr} = \hat B\,t_x\)</span>, for the systematic undercounting bias.</p>
 <p>To estimate the number of dead trees in an area, we divide the area into 100 square plots and count dead trees on photographs. We select an SRS of 25 plots for exact field counts. We know the true mean photo count is 11.3.</p>
 <p>The photo counts and the field counts of the 25 sampled plots are entered below, and a straight line of field counts on photo counts is fitted.</p>
@@ -10468,7 +10474,7 @@ Figure&nbsp;4.5: Cherry tree volume vs.&nbsp;diameter with the fitted regression
 <img src="ratio_files/figure-html/fig-deadtrees-regression-fit-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-deadtrees-regression-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.6: Field counts vs.&nbsp;photo counts of dead trees with the fitted regression line
+Figure&nbsp;5.6: Field counts vs.&nbsp;photo counts of dead trees with the fitted regression line
 </figcaption>
 </figure>
 </div>
@@ -13508,17 +13514,17 @@ Figure&nbsp;4.6: Field counts vs.&nbsp;photo counts of dead trees with the fitte
 <p>Because the intercept of the true line is non-zero, the <strong>Regression estimator</strong> provides the most precise estimate in this scenario.</p>
 </section>
 </section>
-<section id="shinylive-app-illustrating-ratio-estimation-and-regression-estimation" class="level3" data-number="4.4.4">
-<h3 data-number="4.4.4" class="anchored" data-anchor-id="shinylive-app-illustrating-ratio-estimation-and-regression-estimation"><span class="header-section-number">4.4.4</span> Shinylive App Illustrating Ratio Estimation and Regression Estimation</h3>
+<section id="shinylive-app-illustrating-ratio-estimation-and-regression-estimation" class="level3" data-number="5.4.4">
+<h3 data-number="5.4.4" class="anchored" data-anchor-id="shinylive-app-illustrating-ratio-estimation-and-regression-estimation"><span class="header-section-number">5.4.4</span> Shinylive App Illustrating Ratio Estimation and Regression Estimation</h3>
 <p>The simulation for this section runs as a standalone app: <a href="../shinylives_sampling/app-ratio.html" target="_blank">Ratio Estimation and Regression Estimation</a>. It opens in a new tab, together with its documentation and the full <a href="../shinylives_sampling/index.html" target="_blank">list of apps</a>.</p>
 </section>
 </section>
-<section id="post-stratification" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="post-stratification"><span class="header-section-number">4.5</span> Post-stratification</h2>
-<section id="sec-poststrat-theory" class="level3" data-number="4.5.1">
-<h3 data-number="4.5.1" class="anchored" data-anchor-id="sec-poststrat-theory"><span class="header-section-number">4.5.1</span> Theory</h3>
-<section id="the-post-stratified-estimator" class="level4" data-number="4.5.1.1">
-<h4 data-number="4.5.1.1" class="anchored" data-anchor-id="the-post-stratified-estimator"><span class="header-section-number">4.5.1.1</span> The post-stratified estimator</h4>
+<section id="post-stratification" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="post-stratification"><span class="header-section-number">5.5</span> Post-stratification</h2>
+<section id="sec-poststrat-theory" class="level3" data-number="5.5.1">
+<h3 data-number="5.5.1" class="anchored" data-anchor-id="sec-poststrat-theory"><span class="header-section-number">5.5.1</span> Theory</h3>
+<section id="the-post-stratified-estimator" class="level4" data-number="5.5.1.1">
+<h4 data-number="5.5.1.1" class="anchored" data-anchor-id="the-post-stratified-estimator"><span class="header-section-number">5.5.1.1</span> The post-stratified estimator</h4>
 <p>Sometimes a unit’s stratum is unknown until <em>after</em> sampling, for instance a person’s gender before the interview. We cannot then stratify in advance, but if the true population sizes <span class="math inline">\(N_h\)</span> of the <span class="math inline">\(H\)</span> groups are known from another source, we can still take an SRS, sort the units into groups afterwards, and weight each group mean by its <em>known</em> population share <span class="math inline">\(\pi_h = N_h/N\)</span>, as in stratified sampling: <span class="math display">\[
 \bar y_{post} = \sum_{h=1}^H \pi_h\,\bar y_h,
 \qquad
@@ -13529,7 +13535,7 @@ Figure&nbsp;4.6: Field counts vs.&nbsp;photo counts of dead trees with the fitte
 \qquad
 \hat{\bar y}_{post} = \sum_{h=1}^H \pi_h\,\bar y_h .
 \]</span></p>
-<p><a href="#fig-poststrat-concept" class="quarto-xref">Figure&nbsp;<span>4.7</span></a> illustrates the benefit. The grey points are the population, split into post-strata A to D (the width of each block is <span class="math inline">\(N_h\)</span>). The green circles are an ordinary SRS of <span class="math inline">\(n = 25\)</span>; the realized <span class="math inline">\(n_h = (5, 5, 6, 9)\)</span> do <em>not</em> match the population shares <span class="math inline">\(\pi_h = (.36, .14, .21, .29)\)</span>, and they never do, since <span class="math inline">\(n_h\)</span> is random. The red segments are the predictions <span class="math inline">\(\hat y_i = \bar y_h\)</span> in each stratum, whose weighted average is <span class="math inline">\(\hat{\bar y}_{post}\)</span>.</p>
+<p><a href="#fig-poststrat-concept" class="quarto-xref">Figure&nbsp;<span>5.7</span></a> illustrates the benefit. The grey points are the population, split into post-strata A to D (the width of each block is <span class="math inline">\(N_h\)</span>). The green circles are an ordinary SRS of <span class="math inline">\(n = 25\)</span>; the realized <span class="math inline">\(n_h = (5, 5, 6, 9)\)</span> do <em>not</em> match the population shares <span class="math inline">\(\pi_h = (.36, .14, .21, .29)\)</span>, and they never do, since <span class="math inline">\(n_h\)</span> is random. The red segments are the predictions <span class="math inline">\(\hat y_i = \bar y_h\)</span> in each stratum, whose weighted average is <span class="math inline">\(\hat{\bar y}_{post}\)</span>.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -13592,7 +13598,7 @@ Figure&nbsp;4.6: Field counts vs.&nbsp;photo counts of dead trees with the fitte
 <img src="ratio_files/figure-html/fig-poststrat-concept-1.png" class="img-fluid figure-img" style="width:70.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-poststrat-concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.7: Illustration of the benefits of post-stratification.
+Figure&nbsp;5.7: Illustration of the benefits of post-stratification.
 </figcaption>
 </figure>
 </div>
@@ -13600,8 +13606,8 @@ Figure&nbsp;4.7: Illustration of the benefits of post-stratification.
 </div>
 <p>This sample is light on A and heavy on D, so the naive <span class="math inline">\(\bar y\)</span> (green) is pulled up; reweighting by the known <span class="math inline">\(\pi_h\)</span> undoes it, and <span class="math inline">\(\hat{\bar y}_{post}\)</span> (red) is close to <span class="math inline">\(\bar y_U\)</span> (black). It is this reweighting, repeated over samples, that cuts the variance.</p>
 </section>
-<section id="variance-of-the-post-stratified-mean" class="level4" data-number="4.5.1.2">
-<h4 data-number="4.5.1.2" class="anchored" data-anchor-id="variance-of-the-post-stratified-mean"><span class="header-section-number">4.5.1.2</span> Variance of the post-stratified mean</h4>
+<section id="variance-of-the-post-stratified-mean" class="level4" data-number="5.5.1.2">
+<h4 data-number="5.5.1.2" class="anchored" data-anchor-id="variance-of-the-post-stratified-mean"><span class="header-section-number">5.5.1.2</span> Variance of the post-stratified mean</h4>
 <p>The observed group sizes <span class="math inline">\(n_h\)</span> are random, so for the variance we substitute their expected values under SRS, the proportional sample sizes <span class="math display">\[
 n_h^{post} = n\,\frac{N_h}{N} = n\pi_h ,
 \]</span> into the stratified variance formula. Every group then has sampling fraction <span class="math inline">\(n_h^{post}/N_h = n/N\)</span>, so the finite population correction is the same in all groups and the variance simplifies: <span class="math display">\[
@@ -13609,9 +13615,9 @@ n_h^{post} = n\,\frac{N_h}{N} = n\pi_h ,
 = \left(1 - \frac nN\right)\frac1n\sum_{h=1}^H \pi_h s_h^2 ,
 \]</span> the variance of proportional stratified sampling: the SRS variance with <span class="math inline">\(s^2\)</span> replaced by the weighted average of the within-group variances. Also <span class="math inline">\(\hat V(\hat t_{post}) = N^2\hat V(\bar y_{post})\)</span>. Here <span class="math inline">\(n_h\)</span>, <span class="math inline">\(\bar y_h\)</span> and <span class="math inline">\(s_h^2\)</span> are the count, mean and variance of the units the sample happened to place in group <span class="math inline">\(h\)</span>, so every group needs <span class="math inline">\(n_h \geq 2\)</span> for <span class="math inline">\(s_h^2\)</span> to exist. Substituting <span class="math inline">\(n_h^{post}\)</span> treats the <span class="math inline">\(n_h\)</span> as fixed at <span class="math inline">\(n\pi_h\)</span>; carrying their randomness adds a second-order term <span class="math inline">\(\frac{1}{n^2}\sum_h(1 - \pi_h)s_h^2\)</span>, negligible unless some <span class="math inline">\(n_h\)</span> are small.</p>
 </section>
-<section id="sec-poststrat-regression" class="level4" data-number="4.5.1.3">
-<h4 data-number="4.5.1.3" class="anchored" data-anchor-id="sec-poststrat-regression"><span class="header-section-number">4.5.1.3</span> Post-stratification as a regression estimator</h4>
-<p>Post-stratification is not a separate technique: it is the regression estimator of <a href="#sec-regression-theory" class="quarto-xref"><span>Section 4.4.1</span></a> with the <strong>group indicators</strong> as the auxiliary variables. Take the <span class="math inline">\(H\)</span> dummies <span class="math inline">\(x_{ih} = \mathbf 1\{i \in \text{group } h\}\)</span> and fit without an intercept. Then</p>
+<section id="sec-poststrat-regression" class="level4" data-number="5.5.1.3">
+<h4 data-number="5.5.1.3" class="anchored" data-anchor-id="sec-poststrat-regression"><span class="header-section-number">5.5.1.3</span> Post-stratification as a regression estimator</h4>
+<p>Post-stratification is not a separate technique: it is the regression estimator of <a href="#sec-regression-theory" class="quarto-xref"><span>Section 5.4.1</span></a> with the <strong>group indicators</strong> as the auxiliary variables. Take the <span class="math inline">\(H\)</span> dummies <span class="math inline">\(x_{ih} = \mathbf 1\{i \in \text{group } h\}\)</span> and fit without an intercept. Then</p>
 <ul>
 <li>the fitted coefficients are the group means, <span class="math inline">\(\hat B_h = \bar y_h\)</span>;</li>
 <li>the population means of those dummies are the known weights, <span class="math inline">\(\bar x_{U,h} = N_h/N = \pi_h\)</span>;</li>
@@ -13673,8 +13679,8 @@ s_e^2 = \frac{1}{n-H}\sum_h\sum_{i \in h}\left(y_i - \bar y_h\right)^2 = \sum_h 
 <p>Domain estimation, treated next, stands slightly apart: there the divisor is the random <span class="math inline">\(n_d\)</span> rather than the full <span class="math inline">\(n\)</span>, because only the units falling in the domain carry information about it.</p>
 </section>
 </section>
-<section id="example-a-nurses-survey-by-hand" class="level3" data-number="4.5.2">
-<h3 data-number="4.5.2" class="anchored" data-anchor-id="example-a-nurses-survey-by-hand"><span class="header-section-number">4.5.2</span> Example: A Nurses Survey (by hand)</h3>
+<section id="example-a-nurses-survey-by-hand" class="level3" data-number="5.5.2">
+<h3 data-number="5.5.2" class="anchored" data-anchor-id="example-a-nurses-survey-by-hand"><span class="header-section-number">5.5.2</span> Example: A Nurses Survey (by hand)</h3>
 <p>A survey of <span class="math inline">\(N = 10{,}000\)</span> people, half women and half men, takes an SRS of <span class="math inline">\(n = 400\)</span> and asks whether they want to become a nurse. The sample has three times as many women as men, though the population is 50/50:</p>
 <table class="caption-top table">
 <thead>
@@ -13767,11 +13773,11 @@ s_e^2 = \frac{1}{n-H}\sum_h\sum_{i \in h}\left(y_i - \bar y_h\right)^2 = \sum_h 
 \hat V(\hat p_{post}) = \left(1 - \frac nN\right)\frac1n\sum_h\pi_hs_h^2 = \frac{0.96}{400}(0.1709) = 0.000410 .
 \]</span> So <span class="math inline">\(\text{SE}(\hat p_{post}) = \sqrt{0.000410} = 0.0203\)</span> and an approximate 95% interval is <span class="math inline">\(0.300 \pm 1.96(0.0203) = [0.260,\ 0.340]\)</span>. Treating the data as an unstratified SRS gives <span class="math inline">\(\hat p_{SRS} = 0.4\)</span> with <span class="math inline">\(\text{SE} = \sqrt{\left(1 - \frac{400}{10000}\right)\frac{(0.4)(0.6)}{399}} \approx 0.0240\)</span>. Post-stratification is both unbiased and more precise, since it removes the between-sex variability from the standard error.</p>
 </section>
-<section id="example-agsrs_syn.csv" class="level3" data-number="4.5.3">
-<h3 data-number="4.5.3" class="anchored" data-anchor-id="example-agsrs_syn.csv"><span class="header-section-number">4.5.3</span> Example: agsrs_syn.csv</h3>
+<section id="example-agsrs_syn.csv" class="level3" data-number="5.5.3">
+<h3 data-number="5.5.3" class="anchored" data-anchor-id="example-agsrs_syn.csv"><span class="header-section-number">5.5.3</span> Example: agsrs_syn.csv</h3>
 <p>Any variable known for <strong>every</strong> unit of the population can be used to post-stratify an SRS. We use <code>agsrs_syn.csv</code>, a simple random sample of <span class="math inline">\(n=300\)</span> counties drawn without replacement from the population in <code>agpop.csv</code> (the script <code>data/make_agsrs_syn.R</code> shows how), and compare two post-stratifiers: the census <strong>region</strong>, and <strong>quantile groups of <code>acres87</code></strong> (the 1987 acreage, as in the post-stratification app). The population is the <span class="math inline">\(N=3041\)</span> counties with no missing value in <code>acres92</code>, <code>acres87</code>, <code>acres82</code> or <code>farms92</code>.</p>
-<section id="by-region" class="level4" data-number="4.5.3.1">
-<h4 data-number="4.5.3.1" class="anchored" data-anchor-id="by-region"><span class="header-section-number">4.5.3.1</span> By Region</h4>
+<section id="by-region" class="level4" data-number="5.5.3.1">
+<h4 data-number="5.5.3.1" class="anchored" data-anchor-id="by-region"><span class="header-section-number">5.5.3.1</span> By Region</h4>
 <p>If we know the true regional population sizes (<span class="math inline">\(N_h\)</span>), we can post-stratify our SRS data.</p>
 <p>The population is read from <code>agpop.csv</code>, keeping the counties with no missing value, and the sample from <code>agsrs_syn.csv</code>; acreages are converted to thousands of acres.</p>
 <div class="cell">
@@ -13827,7 +13833,7 @@ s_e^2 = \frac{1}{n-H}\sum_h\sum_{i \in h}\left(y_i - \bar y_h\right)^2 = \sum_h 
 <div id="tbl-agsrs-poststrat-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-agsrs-poststrat-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4.2: Observed vs.&nbsp;population stratum proportions and post-stratified sample sizes
+Table&nbsp;5.2: Observed vs.&nbsp;population stratum proportions and post-stratified sample sizes
 </figcaption>
 <div aria-describedby="tbl-agsrs-poststrat-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -15858,7 +15864,7 @@ Table&nbsp;4.2: Observed vs.&nbsp;population stratum proportions and post-strati
 </div>
 </div>
 <p><strong>Output Note:</strong> The post-stratified estimate gives a Standard Error of 17.8, which is more precise than the unadjusted SRS standard error of 20.4.</p>
-<p>The same standard error follows from the short-cut formula <span class="math inline">\(\hat V = \left(1-\frac nN\right)\frac1n\sum_h\pi_h s_h^2\)</span> of <a href="#sec-poststrat-theory" class="quarto-xref"><span>Section 4.5.1</span></a>, which needs only the population shares <span class="math inline">\(\pi_h\)</span> and the group variances, not the working sample sizes. The working table lists <span class="math inline">\(\bar y_h\)</span>, <span class="math inline">\(s_h^2\)</span> and <span class="math inline">\(\pi_h\)</span>, and the two working columns <span class="math inline">\(\pi_h\bar y_h\)</span> and <span class="math inline">\(\pi_h s_h^2\)</span>, whose totals are <span class="math inline">\(\bar y_{post}\)</span> and <span class="math inline">\(\sum_h\pi_hs_h^2\)</span>:</p>
+<p>The same standard error follows from the short-cut formula <span class="math inline">\(\hat V = \left(1-\frac nN\right)\frac1n\sum_h\pi_h s_h^2\)</span> of <a href="#sec-poststrat-theory" class="quarto-xref"><span>Section 5.5.1</span></a>, which needs only the population shares <span class="math inline">\(\pi_h\)</span> and the group variances, not the working sample sizes. The working table lists <span class="math inline">\(\bar y_h\)</span>, <span class="math inline">\(s_h^2\)</span> and <span class="math inline">\(\pi_h\)</span>, and the two working columns <span class="math inline">\(\pi_h\bar y_h\)</span> and <span class="math inline">\(\pi_h s_h^2\)</span>, whose totals are <span class="math inline">\(\bar y_{post}\)</span> and <span class="math inline">\(\sum_h\pi_hs_h^2\)</span>:</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -15887,7 +15893,7 @@ Table&nbsp;4.2: Observed vs.&nbsp;population stratum proportions and post-strati
 <div id="tbl-agsrs-poststrat-shortcut" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-agsrs-poststrat-shortcut-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4.3: Short-cut formula working table: post-stratification by region
+Table&nbsp;5.3: Short-cut formula working table: post-stratification by region
 </figcaption>
 <div aria-describedby="tbl-agsrs-poststrat-shortcut-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -16433,8 +16439,8 @@ Table&nbsp;4.3: Short-cut formula working table: post-stratification by region
 </div>
 </div>
 </section>
-<section id="by-quantile-groups-of-acres87" class="level4" data-number="4.5.3.2">
-<h4 data-number="4.5.3.2" class="anchored" data-anchor-id="by-quantile-groups-of-acres87"><span class="header-section-number">4.5.3.2</span> By Quantile Groups of <code>acres87</code></h4>
+<section id="by-quantile-groups-of-acres87" class="level4" data-number="5.5.3.2">
+<h4 data-number="5.5.3.2" class="anchored" data-anchor-id="by-quantile-groups-of-acres87"><span class="header-section-number">5.5.3.2</span> By Quantile Groups of <code>acres87</code></h4>
 <p>The 1987 acreage is recorded for every county, so the population can be cut into groups by its quantiles. As in the app, the cut points are the 25th, 75th and 95th percentiles of the population <code>acres87</code>, giving four groups <span class="math inline">\(Q_1,\ldots,Q_4\)</span> of very different sizes.</p>
 <div class="cell">
 <details class="code-fold">
@@ -16492,7 +16498,7 @@ Table&nbsp;4.3: Short-cut formula working table: post-stratification by region
 <div id="tbl-agsrs-quantile-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-agsrs-quantile-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4.4: Observed vs.&nbsp;population quantile-group proportions and post-stratified sample sizes (acres87 groups)
+Table&nbsp;5.4: Observed vs.&nbsp;population quantile-group proportions and post-stratified sample sizes (acres87 groups)
 </figcaption>
 <div aria-describedby="tbl-agsrs-quantile-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -17508,7 +17514,7 @@ Table&nbsp;4.4: Observed vs.&nbsp;population quantile-group proportions and post
 <div id="tbl-agsrs-quantile-shortcut" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-agsrs-quantile-shortcut-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4.5: Short-cut formula working table: post-stratification by acres87 quantile groups
+Table&nbsp;5.5: Short-cut formula working table: post-stratification by acres87 quantile groups
 </figcaption>
 <div aria-describedby="tbl-agsrs-quantile-shortcut-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -18055,8 +18061,8 @@ Table&nbsp;4.5: Short-cut formula working table: post-stratification by acres87 
 </div>
 </section>
 </section>
-<section id="comparing-the-two-post-stratifications" class="level3" data-number="4.5.4">
-<h3 data-number="4.5.4" class="anchored" data-anchor-id="comparing-the-two-post-stratifications"><span class="header-section-number">4.5.4</span> Comparing the Two Post-stratifications</h3>
+<section id="comparing-the-two-post-stratifications" class="level3" data-number="5.5.4">
+<h3 data-number="5.5.4" class="anchored" data-anchor-id="comparing-the-two-post-stratifications"><span class="header-section-number">5.5.4</span> Comparing the Two Post-stratifications</h3>
 <p>Finally we put the three estimates, the unadjusted SRS and the two post-stratified ones, side by side.</p>
 <div class="cell">
 <details class="code-fold">
@@ -18075,7 +18081,7 @@ Table&nbsp;4.5: Short-cut formula working table: post-stratification by acres87 
 <div id="tbl-agsrs-poststrat-compare" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-agsrs-poststrat-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4.6: Estimates of the mean acres92 and their standard errors: SRS, post-stratified by region, and post-stratified by acres87 quantile groups
+Table&nbsp;5.6: Estimates of the mean acres92 and their standard errors: SRS, post-stratified by region, and post-stratified by acres87 quantile groups
 </figcaption>
 <div aria-describedby="tbl-agsrs-poststrat-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -18565,24 +18571,24 @@ Table&nbsp;4.6: Estimates of the mean acres92 and their standard errors: SRS, po
 <p><strong>Output Note:</strong> Both post-stratifications reduce the standard error of the SRS estimate, because the groups differ in mean acreage. The <code>acres87</code> groups reduce it much more than the regions, since the 1987 acreage is strongly related to the 1992 acreage, so the groups are far more homogeneous in <code>acres92</code>. A good post-stratifier is a variable that is known for the whole population and strongly related to <span class="math inline">\(y\)</span>.</p>
 <p>All three estimates are close to the population mean of <code>acres92</code>, 309.9, and their 95% intervals cover it.</p>
 </section>
-<section id="sec-poststrat-app" class="level3" data-number="4.5.5">
-<h3 data-number="4.5.5" class="anchored" data-anchor-id="sec-poststrat-app"><span class="header-section-number">4.5.5</span> Interactive Demonstration: Post-stratifying a Simple Random Sample</h3>
+<section id="sec-poststrat-app" class="level3" data-number="5.5.5">
+<h3 data-number="5.5.5" class="anchored" data-anchor-id="sec-poststrat-app"><span class="header-section-number">5.5.5</span> Interactive Demonstration: Post-stratifying a Simple Random Sample</h3>
 <p>The simulation for this section runs as a standalone app: <a href="../shinylives_sampling/app-poststrat.html" target="_blank">Post-stratification of a Simple Random Sample</a>. It opens in a new tab, together with its documentation and the full <a href="../shinylives_sampling/index.html" target="_blank">list of apps</a>.</p>
 </section>
 </section>
-<section id="domain-estimation" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="domain-estimation"><span class="header-section-number">4.6</span> Domain Estimation</h2>
-<section id="sec-domain-theory" class="level3" data-number="4.6.1">
-<h3 data-number="4.6.1" class="anchored" data-anchor-id="sec-domain-theory"><span class="header-section-number">4.6.1</span> Theory</h3>
-<section id="domains" class="level4" data-number="4.6.1.1">
-<h4 data-number="4.6.1.1" class="anchored" data-anchor-id="domains"><span class="header-section-number">4.6.1.1</span> Domains</h4>
+<section id="domain-estimation" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="domain-estimation"><span class="header-section-number">5.6</span> Domain Estimation</h2>
+<section id="sec-domain-theory" class="level3" data-number="5.6.1">
+<h3 data-number="5.6.1" class="anchored" data-anchor-id="sec-domain-theory"><span class="header-section-number">5.6.1</span> Theory</h3>
+<section id="domains" class="level4" data-number="5.6.1.1">
+<h4 data-number="5.6.1.1" class="anchored" data-anchor-id="domains"><span class="header-section-number">5.6.1.1</span> Domains</h4>
 <p>Suppose there are <span class="math inline">\(D\)</span> <strong>domains</strong>, subpopulations of interest determined only <em>after</em> sampling, such as men and women. Let <span class="math inline">\(\mathcal U_d\)</span> be the population units in domain <span class="math inline">\(d\)</span> and <span class="math inline">\(\mathcal S_d\)</span> the sampled units in domain <span class="math inline">\(d\)</span>, with <span class="math inline">\(N_d = |\mathcal U_d|\)</span> and <span class="math inline">\(n_d = |\mathcal S_d|\)</span>. We might want the mean salary for men and for women separately, but we do not know a person’s gender before selecting them, so we cannot stratify by domain in advance. Instead we estimate each domain’s mean or total after sampling, by splitting the sample by domain ID.</p>
 <p>The domain sample size <span class="math inline">\(n_d\)</span> is a random variable: a different SRS would very likely give a different <span class="math inline">\(n_d\)</span>. The domain mean is <span class="math display">\[
 \bar y_d = \frac{1}{n_d}\sum_{i \in \mathcal S_d} y_i ,
 \]</span> which <em>looks</em> like an ordinary sample mean, but the randomness of <span class="math inline">\(n_d\)</span> is the source of the extra uncertainty.</p>
 </section>
-<section id="domain-means-are-ratio-estimates" class="level4" data-number="4.6.1.2">
-<h4 data-number="4.6.1.2" class="anchored" data-anchor-id="domain-means-are-ratio-estimates"><span class="header-section-number">4.6.1.2</span> Domain means are ratio estimates</h4>
+<section id="domain-means-are-ratio-estimates" class="level4" data-number="5.6.1.2">
+<h4 data-number="5.6.1.2" class="anchored" data-anchor-id="domain-means-are-ratio-estimates"><span class="header-section-number">5.6.1.2</span> Domain means are ratio estimates</h4>
 <p>Define <span class="math display">\[
 x_i = \begin{cases}1 &amp; i \in \mathcal U_d\\ 0 &amp; i \notin \mathcal U_d\end{cases}
 \qquad
@@ -18591,8 +18597,8 @@ u_i = y_ix_i = \begin{cases}y_i &amp; i \in \mathcal U_d\\ 0 &amp; i \notin \mat
 \bar y_d = \hat B = \frac{\bar u}{\bar x} = \frac{\hat t_u}{\hat t_x} = \frac{\sum_{i \in \mathcal S_d} y_i}{n_d} .
 \]</span> Domain mean estimation is therefore a special case of ratio estimation, with <span class="math inline">\(\sum_{i=1}^n u_i/\sum_{i=1}^n x_i\)</span> as the ratio. This is exactly why it is a ratio estimator and not a simple mean.</p>
 </section>
-<section id="standard-error-of-a-domain-mean" class="level4" data-number="4.6.1.3">
-<h4 data-number="4.6.1.3" class="anchored" data-anchor-id="standard-error-of-a-domain-mean"><span class="header-section-number">4.6.1.3</span> Standard error of a domain mean</h4>
+<section id="standard-error-of-a-domain-mean" class="level4" data-number="5.6.1.3">
+<h4 data-number="5.6.1.3" class="anchored" data-anchor-id="standard-error-of-a-domain-mean"><span class="header-section-number">5.6.1.3</span> Standard error of a domain mean</h4>
 <p>Applying the formula for <span class="math inline">\(\hat V(\hat B)\)</span> with <span class="math inline">\(x_i\)</span> and <span class="math inline">\(u_i\)</span> as defined above gives <span class="math display">\[
 \hat V(\bar y_d) = \left(1 - \frac nN\right)\frac{s_d^2}{n_d},
 \qquad
@@ -18600,8 +18606,8 @@ s_d^2 = \frac{1}{n_d - 1}\sum_{i \in \mathcal S_d}\left(y_i - \bar y_d\right)^2 
 \]</span> where <span class="math inline">\(S_d\)</span> is the set of sampled units in domain <span class="math inline">\(d\)</span>, <span class="math inline">\(n\)</span> is the overall sample size, <span class="math inline">\(N\)</span> is the population size, and <span class="math inline">\(s_d^2\)</span> is the sample variance of the <span class="math inline">\(y_i\)</span> within domain <span class="math inline">\(d\)</span>. (Exactly, the variance is <span class="math inline">\(\left(1 - \frac nN\right)\frac{n}{n_d^2}\frac{(n_d - 1)s_d^2}{n-1}\)</span>, which is approximately the expression above.) Ninety-five percent intervals use <span class="math inline">\(t_{0.975,\,n_d - 1}\)</span>.</p>
 <p>This is <strong>not</strong> the same as naively applying SRS <em>within</em> domain <span class="math inline">\(d\)</span>, as if <span class="math inline">\(n_d\)</span> were fixed, which would use <span class="math inline">\(\left(1 - \frac{n_d}{N_d}\right)\)</span> in place of <span class="math inline">\(\left(1 - \frac nN\right)\)</span>. Only the finite population correction differs: the <strong>overall</strong> rate (correct, since <span class="math inline">\(n_d\)</span> is random) versus the <strong>domain</strong> rate (wrong). They agree only when <span class="math inline">\(n_d/N_d \approx n/N\)</span>. The fpc uses the overall sampling fraction <span class="math inline">\(n/N\)</span> also because the domain’s population size <span class="math inline">\(N_d\)</span> is usually unknown.</p>
 </section>
-<section id="estimating-a-domain-total" class="level4" data-number="4.6.1.4">
-<h4 data-number="4.6.1.4" class="anchored" data-anchor-id="estimating-a-domain-total"><span class="header-section-number">4.6.1.4</span> Estimating a domain total</h4>
+<section id="estimating-a-domain-total" class="level4" data-number="5.6.1.4">
+<h4 data-number="5.6.1.4" class="anchored" data-anchor-id="estimating-a-domain-total"><span class="header-section-number">5.6.1.4</span> Estimating a domain total</h4>
 <ul>
 <li>If <span class="math inline">\(N_d\)</span> is <strong>known</strong>: <span class="math inline">\(\hat t_{yd} = \bar y_d \times N_d\)</span>, with <span class="math inline">\(\text{SE}(\hat t_{yd}) = \text{SE}(\bar y_d) \times N_d\)</span>.</li>
 <li>If <span class="math inline">\(N_d\)</span> is <strong>unknown</strong>: estimate it first, <span class="math inline">\(\hat N_d = N\,n_d/n\)</span>, and use <span class="math inline">\(\hat t_{yd} = \bar y_d \times \hat N_d = N\bar u\)</span>, with <span class="math display">\[
@@ -18610,10 +18616,10 @@ s_d^2 = \frac{1}{n_d - 1}\sum_{i \in \mathcal S_d}\left(y_i - \bar y_d\right)^2 
 </ul>
 </section>
 </section>
-<section id="example-agsrs.csv" class="level3" data-number="4.6.2">
-<h3 data-number="4.6.2" class="anchored" data-anchor-id="example-agsrs.csv"><span class="header-section-number">4.6.2</span> Example: agsrs.csv</h3>
-<section id="estimating-domain-means" class="level4" data-number="4.6.2.1">
-<h4 data-number="4.6.2.1" class="anchored" data-anchor-id="estimating-domain-means"><span class="header-section-number">4.6.2.1</span> Estimating Domain Means</h4>
+<section id="example-agsrs.csv" class="level3" data-number="5.6.2">
+<h3 data-number="5.6.2" class="anchored" data-anchor-id="example-agsrs.csv"><span class="header-section-number">5.6.2</span> Example: agsrs.csv</h3>
+<section id="estimating-domain-means" class="level4" data-number="5.6.2.1">
+<h4 data-number="5.6.2.1" class="anchored" data-anchor-id="estimating-domain-means"><span class="header-section-number">5.6.2.1</span> Estimating Domain Means</h4>
 <p>When estimating the mean for a specific subgroup (like a region), the sample size in that subgroup (<span class="math inline">\(n_d\)</span>) is a random variable, which increases our uncertainty.</p>
 <div class="cell">
 <details class="code-fold">
@@ -19640,10 +19646,10 @@ s_d^2 = \frac{1}{n_d - 1}\sum_{i \in \mathcal S_d}\left(y_i - \bar y_d\right)^2 
 <p><strong>Output Note:</strong> Comparing the two tables, you can see the correct <code>domain_mean</code> Standard Errors are larger, appropriately penalizing us for the uncertainty in how many counties from each region randomly fell into our sample.</p>
 </section>
 </section>
-<section id="example-teacher-aspirations-teacher-data" class="level3" data-number="4.6.3">
-<h3 data-number="4.6.3" class="anchored" data-anchor-id="example-teacher-aspirations-teacher-data"><span class="header-section-number">4.6.3</span> Example: Teacher Aspirations (teacher data)</h3>
-<section id="importing-data-and-calculating-contingency-table" class="level4" data-number="4.6.3.1">
-<h4 data-number="4.6.3.1" class="anchored" data-anchor-id="importing-data-and-calculating-contingency-table"><span class="header-section-number">4.6.3.1</span> Importing Data and Calculating Contingency Table</h4>
+<section id="example-teacher-aspirations-teacher-data" class="level3" data-number="5.6.3">
+<h3 data-number="5.6.3" class="anchored" data-anchor-id="example-teacher-aspirations-teacher-data"><span class="header-section-number">5.6.3</span> Example: Teacher Aspirations (teacher data)</h3>
+<section id="importing-data-and-calculating-contingency-table" class="level4" data-number="5.6.3.1">
+<h4 data-number="5.6.3.1" class="anchored" data-anchor-id="importing-data-and-calculating-contingency-table"><span class="header-section-number">5.6.3.1</span> Importing Data and Calculating Contingency Table</h4>
 <p>The teacher data record, for each student, the gender and whether they want to become a teacher. We tabulate the two variables and compute the proportion within each gender, the two domains.</p>
 <div class="cell">
 <details class="code-fold">
@@ -19681,8 +19687,8 @@ gender    0    1
 </div>
 </div>
 </section>
-<section id="estimating-domain-means-1" class="level4" data-number="4.6.3.2">
-<h4 data-number="4.6.3.2" class="anchored" data-anchor-id="estimating-domain-means-1"><span class="header-section-number">4.6.3.2</span> Estimating Domain Means</h4>
+<section id="estimating-domain-means-1" class="level4" data-number="5.6.3.2">
+<h4 data-number="5.6.3.2" class="anchored" data-anchor-id="estimating-domain-means-1"><span class="header-section-number">5.6.3.2</span> Estimating Domain Means</h4>
 <p>Treating gender as a domain, with known sizes <span class="math inline">\(N_d\)</span> of 3000 and 1000 out of <span class="math inline">\(N = 4000\)</span>, <code>domain_est()</code> estimates each domain mean using the overall sampling fraction <span class="math inline">\(n/N\)</span> in the variance.</p>
 <div class="cell">
 <details class="code-fold">
@@ -20181,11 +20187,11 @@ gender    0    1
 </section>
 </section>
 </section>
-<section id="simulation-study-with-agpop.csv" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="simulation-study-with-agpop.csv"><span class="header-section-number">4.7</span> Simulation study with agpop.csv</h2>
+<section id="simulation-study-with-agpop.csv" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="simulation-study-with-agpop.csv"><span class="header-section-number">5.7</span> Simulation study with agpop.csv</h2>
 <p>Let’s test this practically by drawing 2000 random samples and seeing how SRS and Ratio estimators behave under repeated sampling.</p>
-<section id="information-of-population-data" class="level3" data-number="4.7.1">
-<h3 data-number="4.7.1" class="anchored" data-anchor-id="information-of-population-data"><span class="header-section-number">4.7.1</span> Information of population data</h3>
+<section id="information-of-population-data" class="level3" data-number="5.7.1">
+<h3 data-number="5.7.1" class="anchored" data-anchor-id="information-of-population-data"><span class="header-section-number">5.7.1</span> Information of population data</h3>
 <p>We read the population, drop the counties missing <code>acres92</code> or <code>acres87</code>, and compute the true total <span class="math inline">\(t_y\)</span> of 1992 acreage, the known total <span class="math inline">\(t_x\)</span> of 1987 acreage and the true ratio <span class="math inline">\(B = t_y/t_x\)</span> (acreages in thousands).</p>
 <div class="cell">
 <details class="code-fold">
@@ -20220,7 +20226,7 @@ gender    0    1
 <img src="ratio_files/figure-html/fig-agpop-acres8792-ratio-line-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agpop-acres8792-ratio-line-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.8: 1992 vs.&nbsp;1987 county acreage with the true ratio line
+Figure&nbsp;5.8: 1992 vs.&nbsp;1987 county acreage with the true ratio line
 </figcaption>
 </figure>
 </div>
@@ -21211,8 +21217,8 @@ Figure&nbsp;4.8: 1992 vs.&nbsp;1987 county acreage with the true ratio line
 </div>
 <p><strong>Output Note:</strong> Past acreage (1987) strongly predicts current acreage (1992). The theoretically expected variance reduction is roughly 99.2%.</p>
 </section>
-<section id="simulation-studies" class="level3" data-number="4.7.2">
-<h3 data-number="4.7.2" class="anchored" data-anchor-id="simulation-studies"><span class="header-section-number">4.7.2</span> Simulation Studies</h3>
+<section id="simulation-studies" class="level3" data-number="5.7.2">
+<h3 data-number="5.7.2" class="anchored" data-anchor-id="simulation-studies"><span class="header-section-number">5.7.2</span> Simulation Studies</h3>
 <p>Each of the 2000 simulations draws an SRS of <span class="math inline">\(n = 300\)</span> counties and computes two estimates of the total 1992 acreage: the SRS estimate <span class="math inline">\(N\bar y\)</span> and the ratio estimate <span class="math inline">\(\hat B\,t_x\)</span>. The boxplot compares their sampling distributions around the true total (red line).</p>
 <div class="cell">
 <details class="code-fold">
@@ -21242,7 +21248,7 @@ Figure&nbsp;4.8: 1992 vs.&nbsp;1987 county acreage with the true ratio line
 <img src="ratio_files/figure-html/fig-agpop-ratio-simulation-boxplot-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agpop-ratio-simulation-boxplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.9: Estimator variance under repeated sampling: SRS vs.&nbsp;ratio estimator (2000 simulations)
+Figure&nbsp;5.9: Estimator variance under repeated sampling: SRS vs.&nbsp;ratio estimator (2000 simulations)
 </figcaption>
 </figure>
 </div>
@@ -21270,7 +21276,7 @@ Figure&nbsp;4.9: Estimator variance under repeated sampling: SRS vs.&nbsp;ratio 
 <div id="tbl-agpop-ratio-variance-reduction" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-agpop-ratio-variance-reduction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4.7: Simulated variance and variance reduction: ratio estimator vs.&nbsp;SRS
+Table&nbsp;5.7: Simulated variance and variance reduction: ratio estimator vs.&nbsp;SRS
 </figcaption>
 <div aria-describedby="tbl-agpop-ratio-variance-reduction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">

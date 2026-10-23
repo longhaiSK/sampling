@@ -1,11 +1,13 @@
 # Stratified Random Sampling
 
 ```{r source-functions}
+#| cache: false
 #| echo: false
 library(latex2exp)
 library(sampling)
 library(dplyr)
 source("samplingestimate.r")
+source("design_plots.r")
 ```
 
 ## What Is Stratified Sampling? {#sec-strata-intro}
@@ -20,34 +22,23 @@ sampling unit belongs to exactly one stratum. We then draw an independent
 probability sample from each stratum and pool the information to estimate
 population quantities.
 
+@fig-strata-pop illustrates the design on a synthetic population of
+$N = 1000$ units in $H = 4$ strata of sizes $N_h = 400, 300, 200$ and $100$, sorted by
+their means. The sample of $n = 60$ is allocated in proportion to the stratum
+sizes, $n_h = 60 N_h/N = 24, 18, 12$ and $6$, and an SRS of $n_h$ units is drawn
+in each stratum, so every stratum is represented in the sample. Because the stratum means are far apart while the spread within each
+stratum is small, most of the variation in the population lies *between* the
+strata, and this part of the variation does not affect the stratified estimator
+(@sec-strata-estimation).
+
 ```{r fig-strata-pop}
+#| cache: false
 #| echo: false
-#| fig-cap: "A population divided into $H$ strata. Stratum $h$ has $N_h$ units (dots), of which $n_h$ are sampled (circled)."
+#| fig-cap: "A stratified random sample from a synthetic population of $N = 1000$ units in $H = 4$ strata of sizes $N_h = 400, 300, 200, 100$, sorted by their means (dashed lines). An SRS of $n_h = 24, 18, 12, 6$ units (red) is drawn in each stratum (proportional allocation)."
 #| fig-width: 8
-#| fig-height: 4
-#| out-width: "80%"
-local({
-  set.seed(11)
-  strata_fig <- list(
-    list(xmin = 0,   xmax = 2.2, n = 6, k = 2, label = "1"),
-    list(xmin = 2.3, xmax = 4.9, n = 7, k = 2, label = "2"),
-    list(xmin = 5.0, xmax = 6.6, n = 5, k = 1, label = "3"),
-    list(xmin = 6.7, xmax = 9.4, n = 7, k = 2, label = "…"),
-    list(xmin = 9.5, xmax = 12,  n = 6, k = 2, label = "H")
-  )
-  par(mar = c(0.2, 0.2, 0.2, 0.2))
-  plot(NA, xlim = c(0, 12), ylim = c(0, 5), asp = 1,
-       xaxt = "n", yaxt = "n", xlab = "", ylab = "", bty = "o")
-  for (s in strata_fig) {
-    rect(s$xmin, 0, s$xmax, 5, border = "blue4", lwd = 1.5)
-    text((s$xmin + s$xmax) / 2, 4.6, s$label, col = "blue4", font = 2, cex = 1.8)
-    px <- runif(s$n, s$xmin + 0.3, s$xmax - 0.3)
-    py <- runif(s$n, 0.3, 3.8)
-    points(px, py, pch = 19, col = "blue4", cex = 1.1)
-    sel <- sample(s$n, s$k)
-    points(px[sel], py[sel], pch = 21, col = "firebrick", lwd = 2, cex = 2.4)
-  }
-})
+#| fig-height: 3.5
+#| out-width: "85%"
+plot_design_strata()
 ```
 
 In this chapter the sample within each stratum is a simple random sample (SRS),
