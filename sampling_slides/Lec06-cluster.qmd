@@ -298,14 +298,19 @@ in the $y$ values.
 Since $\bar y_U = t/M_0$ and $t_i$ is roughly proportional to $M_i$, estimating
 $\bar y_U$ is **ratio estimation** with $y_i = t_i$ and $x_i = M_i$:
 $$
-\hat{\bar y}_r = \frac{\sum_{i\in\mathcal S} t_i}{\sum_{i\in\mathcal S} M_i} = \frac{\sum_{i\in\mathcal S} M_i\bar y_i}{\sum_{i\in\mathcal S} M_i}
+\hat{\bar y}_r = \frac{\sum_{i\in\mathcal S} t_i}{\sum_{i\in\mathcal S} M_i} = \sum_{i\in\mathcal S} \frac{M_i}{\sum_{k\in\mathcal S} M_k}\,\bar y_i
 $$
 $$
-\text{SE}(\hat{\bar y}_r) = \sqrt{\Big(1-\frac nN\Big)\frac{s_e^2}{n\bar M^2}}, \qquad
+\text{SE}(\hat{\bar y}_r) = \frac{1}{\bar M}\sqrt{\Big(1-\frac nN\Big)\frac{s_e^2}{n}}, \qquad
 s_e^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}e_i^2, \quad e_i = t_i-\hat{\bar y}_r M_i
 $$
-where $\bar M=\sum_{i\in\mathcal S}M_i/n$. The ratio estimator does not need
-$M_0$.
+where $\bar M=\sum_{i\in\mathcal S}M_i/n$ is the average sampled cluster size ($M_0$ is not needed).
+
+- $\hat{\bar y}_r$ is a **weighted mean of the cluster means** $\bar y_i$
+  (the ssu-level means), with weights proportional to the cluster sizes $M_i$.
+- $s_e^2$ is on the scale of the cluster **totals**: $\sqrt{(1-\frac nN)s_e^2/n}$
+  is the SE for the mean total per cluster, $\bar t$. For the mean per **ssu**,
+  we divide by the average cluster size $\bar M$.
 
 ## Why the Ratio Estimator Is Better
 
@@ -493,7 +498,9 @@ $$
 \hat{\bar y}_r = \frac{\sum \hat t_i}{\sum M_i} = \frac{4375.95}{1757} = 2.49,
 \qquad
 s_e^2 = \frac{\sum e_i^2}{n-1} = \frac{11{,}439.58}{183} = 62.51,
-\qquad \bar M = \frac{1757}{184}=9.549
+$$
+$$
+\bar M = \frac{1757}{184}=9.549
 $$
 
 The number of clutches $N$ is unknown but presumably very large, so

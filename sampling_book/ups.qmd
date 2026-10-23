@@ -460,10 +460,12 @@ $$
 
 **Step 4: the estimated standard errors.**
 $$
-\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}}=`r round(se_B, 5)`,\qquad
-\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\bar{x}_U\,\frac{s_{b^*}}{\sqrt{n}}
-=`r round(xbar_U, 3)`\times`r round(se_B, 5)`=`r round(se_ybar, 2)`,\qquad
-\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=t_x\,\frac{s_{b^*}}{\sqrt{n}}=`r t_x`\times`r round(se_B, 5)`=`r round(se_t, 1)`.
+\begin{aligned}
+\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})&=\frac{s_{b^*}}{\sqrt{n}}=`r round(se_B, 5)`,\\
+\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})&=\bar{x}_U\,\frac{s_{b^*}}{\sqrt{n}}
+=`r round(xbar_U, 3)`\times`r round(se_B, 5)`=`r round(se_ybar, 2)`,\\
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{s_{b^*}}{\sqrt{n}}=`r t_x`\times`r round(se_B, 5)`=`r round(se_t, 1)`.
+\end{aligned}
 $$
 For comparison, the theoretical standard error is
 $\mathrm{SE}(\hat{B}_{\mathrm{HH}})=\sqrt{S_{b^*}^2/n}=\sqrt{`r round(V_B, 6)`/5}=`r round(sqrt(V_B / n), 5)`$,

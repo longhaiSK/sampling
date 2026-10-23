@@ -281,8 +281,8 @@ A proportion is the mean of a 0/1 variable. So we can apply the same formulas
 with $\overline y_h = \hat p_h$, the sample proportion in stratum $h$, and
 $s_h^2 = \frac{n_h}{n_h-1}\hat p_h(1-\hat p_h)$:
 $$
-\hat p_{\text{str}} = \sum_{h=1}^H \frac{N_h}{N}\hat p_h, \qquad
-\hat V(\hat p_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\Big(\frac{N_h}{N}\Big)^2\frac{\hat p_h(1-\hat p_h)}{n_h-1}.
+\boxed{\hat p_{\text{str}} = \sum_{h=1}^H \frac{N_h}{N}\hat p_h, \qquad
+\hat V(\hat p_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\Big(\frac{N_h}{N}\Big)^2\frac{\hat p_h(1-\hat p_h)}{n_h-1}}.
 $$
 The total number of units with the attribute is estimated by $N\hat p_{\text{str}}$,
 with standard error $N\,\mathrm{SE}(\hat p_{\text{str}})$.
@@ -761,7 +761,7 @@ V_{\text{prop}}(\hat t_{\text{str}}) = \Big(1-\frac nN\Big)\frac Nn \sum_{h=1}^H
 $$
 using $\sum_h N_hS_h^2 = \sum_h (N_h-1)S_h^2 + \sum_h S_h^2$. Equivalently, for the mean,
 $$
-V_{\text{prop}}(\overline y_{\text{str}}) = \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h S_h^2 ,
+\boxed{V_{\text{prop}}(\overline y_{\text{str}}) = \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h S_h^2},
 $$
 a weighted average of the within-stratum variances in place of the overall $S^2$.
 For an SRS of the same size $n$, since $(N-1)S^2 = \text{SSTO} = \text{SSW}+\text{SSB}$,
@@ -792,7 +792,7 @@ $$
 $$
 so that
 $$
-\text{percentage of variance reduction} \approx \frac{\text{SSB}}{\text{SSTO}} = R^2_{y\mid\text{strata}},
+\boxed{\text{percentage of variance reduction} \approx \frac{\text{SSB}}{\text{SSTO}} = R^2_{y\mid\text{strata}}},
 $$
 the proportion of the variance of $y$ explained by stratum membership. The
 better the strata separate the values of $y$, the larger the gain. We verify
@@ -850,11 +850,11 @@ formula says to sample more heavily in a stratum when:
 Two special cases are important. If the costs are equal, $c_1=\cdots=c_H$, then
 $n_h\propto N_hS_h$. This is **Neyman allocation**:
 $$
-n_h = n \frac{N_h S_h}{\sum_{l=1}^H N_l S_l},
+\boxed{n_h = n \frac{N_h S_h}{\sum_{l=1}^H N_l S_l}},
 $$
 which gives the smallest possible variance for a total sample size $n$:
 $$
-V_{\text{opt}}(\overline{y}_{\text{str}}) = \frac{1}{n}\left(\sum_{h=1}^H \pi_h S_h\right)^2 - \frac{1}{N}\sum_{h=1}^H \pi_h S_h^2 .
+\boxed{V_{\text{opt}}(\overline{y}_{\text{str}}) = \frac{1}{n}\left(\sum_{h=1}^H \pi_h S_h\right)^2 - \frac{1}{N}\sum_{h=1}^H \pi_h S_h^2}.
 $$
 If, in addition, the stratum standard deviations are equal, $S_1=\cdots=S_H$, then
 $n_h\propto N_h$, which is proportional allocation. Neyman allocation improves

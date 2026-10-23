@@ -182,13 +182,16 @@ If samples have errors, why not always take a census of the whole population?
   collectors, while a smaller operation allows the investigators to be more
   careful and to reduce nonsampling errors.
 
-## Types of Probability Samples {#sec-intro-designs}
+## Overview of Probability Sampling and Estimation Techniques {#sec-intro-designs}
 
 In a **probability sample**, every unit in the population has a known, positive
 chance of being selected, and the sample is chosen by a random mechanism. This
 removes selection bias due to the investigator's choices, and it makes it
-possible to quantify the sampling error. Here are the main designs; each has its
-own chapter later in the book.
+possible to quantify the sampling error. This section previews the techniques
+studied in the rest of the book: three basic designs for drawing the sample
+(simple random, stratified and cluster sampling), estimators that use auxiliary
+information (ratio and regression estimation), and designs with unequal
+selection probabilities. Each has its own chapter later in the book.
 
 To compare the designs we use synthetic populations of $N = 1000$ units, with
 the $y$-values drawn from exponential distributions. The population for SRS and
@@ -270,9 +273,56 @@ the loss in precision.
 plot_design_cluster()
 ```
 
-Later chapters add two more ingredients: estimators that use **auxiliary
-information** (ratio and regression estimation), and designs that select units
-with **unequal probabilities**, typically proportional to a measure of size.
+**Using auxiliary information: ratio and regression estimation.** Often we
+know, for every unit in the population, an **auxiliary variable** $x_i$ that is
+related to $y_i$: last year's value of $y$, the size of a farm, the floor area of
+a store. Ratio and regression estimation take an ordinary sample but use the
+known $x_i$ at the *estimation* stage. In @fig-intro-ratio, $y$ is roughly
+proportional to $x$. From an SRS (green circles) we estimate the slope
+$\hat B = \bar y/\bar x$ of the line $y = Bx$ (red), and use it to predict $y$ for
+every unit of the population from its known $x_i$ (red points). The **ratio
+estimate** $\hat{\bar y}_r = \hat B\,\bar x_U$ is the average of these
+predictions. In this sample the green units happen to have large $x$, so the
+sample mean $\bar y$ is too high. The ratio estimate corrects for this through
+the known $\bar x_U$ and lands close to $\bar y_U$. **Regression estimation** does
+the same with a fitted line $y = B_0 + B_1x$ that need not pass through the
+origin. Both are studied in @sec-ratio-formulas and the sections that follow.
+
+```{r fig-intro-ratio}
+#| cache: false
+#| echo: false
+#| fig-cap: "Ratio estimation. Grey: the population, whose $x_i$ are all known. Green circles: an SRS. Red: the line $y = \\hat B x$ fitted from the sample and the predicted value $\\hat B x_i$ of every unit. Left margin: the population mean $\\bar y_U$ (black), the sample mean $\\bar y$ (green) and the ratio estimate $\\hat{\\bar y}_r$, the mean of the red points."
+#| fig-width: 6.5
+#| fig-height: 5
+#| out-width: "65%"
+plot_ratio_concept()
+```
+
+**Unequal probability sampling.** Auxiliary information can also be used at the
+*design* stage. In **unequal probability sampling (UPS)**, units are selected with
+different probabilities, usually proportional to a measure of size $x_i$ that is
+expected to be roughly proportional to $y_i$. Large units, which contribute most
+to the population total, are then more likely to be in the sample. In
+@fig-intro-ups the units of @fig-intro-srs are drawn again, each with a size
+measure $x_i$ equal to $y_i$ multiplied by a random error, and the point sizes
+show the inclusion probabilities $\pi_i \propto x_i$. A sample of 60 units (red)
+is drawn with these probabilities. Most of the sampled units have large $y$, so
+the plain sample mean would be far too high. Each unit must instead be weighted
+by its sampling weight $w_i = 1/\pi_i$ (@sec-intro-framework), which gives the
+many small units their due. When $x_i$ is nearly proportional to $y_i$, the
+weighted estimator $\sum_{i\in\mathcal S} y_i/\pi_i$ of the total is very precise,
+because $y_i/\pi_i$ is nearly the same for every unit. UPS is studied in
+@sec-ups-hh and the sections that follow.
+
+```{r fig-intro-ups}
+#| cache: false
+#| echo: false
+#| fig-cap: "Unequal probability sampling from the population of @fig-intro-srs. Each unit's inclusion probability is proportional to a size measure $x_i$ equal to $y_i$ times a random error; point sizes show the probabilities. The $n = 60$ sampled units (red) are mostly large ones. The dashed line is the population mean."
+#| fig-width: 8
+#| fig-height: 3.5
+#| out-width: "85%"
+plot_design_ups()
+```
 
 ## A Framework for Probability Sampling {#sec-intro-framework}
 
@@ -408,7 +458,9 @@ households has the following numbers of devices:
 
 $$
 t = 2+4+4+6 = 16, \qquad
-\bar y_{U} = \frac{16}{4} = 4, \qquad
+\bar y_{U} = \frac{16}{4} = 4,
+$$
+$$
 S^2 = \frac{(2-4)^2+(4-4)^2+(4-4)^2+(6-4)^2}{4-1} = \frac{8}{3}.
 $$
 

@@ -12,16 +12,18 @@ knitr::opts_chunk$set(
   echo = FALSE,
   fig.align = "center"
 )
-
-# draw a simple checkmark (avoids relying on a unicode glyph being in the font)
-draw_check <- function(cx, cy, size = 0.3, col = "red", lwd = 3) {
-  lines(c(cx - size, cx - size * 0.3, cx + size),
-        c(cy, cy - size * 0.6, cy + size * 0.9),
-        col = col, lwd = lwd, lend = 1)
-}
+## the design figures shared with the book
+source("../sampling_book/design_plots.r")
 ```
 
 # A Bad Sampling Example
+
+Reading suggestions:
+
+- Lohr, Ch 1 and Section 2.2
+- Scheaffer et al., Ch 2 and Sections 3.1--3.4
+
+## A Bad Sampling Example
 
 Shere Hite's book *Women and Love: A Cultural Revolution in Progress* (1987) had a
 number of widely quoted results:
@@ -35,7 +37,7 @@ The book was widely criticized in newspaper and magazine articles throughout the
 United States. The *Time* magazine cover story "Back Off, Buddy" (October 12, 1987)
 called the conclusions of Hite's study "dubious" and "of limited value."
 
-## A Bad Sampling Example (cont'd)
+## What Went Wrong?
 
 - The sample was **self-selected**—recipients of questionnaires decided whether they
   would be in the sample or not. Hite mailed 100,000 questionnaires; only 4.5% were
@@ -48,129 +50,7 @@ called the conclusions of Hite's study "dubious" and "of limited value."
 - Many questions are vague (e.g., "love"), making percentages hard to interpret.
 - Many questions are leading, suggesting to the respondent which response to give.
 
-## Type of Probability Sampling
-
-A **simple random sample (SRS)** is the simplest form of probability sample. An SRS
-of size $n$ is taken when every possible subset of $n$ units in the population has
-the same chance of being the sample.
-
-```{r}
-#| label: fig-srs
-#| fig-width: 6
-#| fig-height: 3
-#| out-width: "55%"
-set.seed(42)
-n <- 25L
-k <- 5L
-x <- runif(n, 0.5, 9.5)
-y <- runif(n, 0.5, 4.5)
-sel <- sample(n, k)
-
-par(mar = c(0.2, 0.2, 0.2, 0.2))
-plot(NA, xlim = c(0, 10), ylim = c(0, 5), asp = 1,
-     xaxt = "n", yaxt = "n", xlab = "", ylab = "", bty = "o")
-points(x, y, pch = 19, col = "firebrick", cex = 1.3)
-points(x[sel], y[sel], pch = 21, col = "blue", lwd = 2, cex = 3)
-```
-
-## Stratified Random Sampling
-
-In a **stratified random sample**, the population is divided into subgroups called
-**strata**. An SRS is selected independently from each stratum. Strata are often
-subgroups of interest—regions of a country, terrain types, or firm sizes.
-Stratification often increases precision because elements within a stratum tend to
-be more similar than randomly selected elements from the whole population.
-
-```{r}
-#| label: fig-stratified
-#| fig-width: 7.5
-#| fig-height: 4.4
-#| out-width: "60%"
-set.seed(5)
-
-strata <- list(
-  list(name = "ON", xmin = 0, xmax = 3,  ymin = 3.5, ymax = 7,   n = 6, k = 2),
-  list(name = "BC", xmin = 3, xmax = 6,  ymin = 3.5, ymax = 7,   n = 6, k = 1),
-  list(name = "AB", xmin = 6, xmax = 9,  ymin = 3.5, ymax = 7,   n = 6, k = 2),
-  list(name = "SK", xmin = 9, xmax = 12, ymin = 3.5, ymax = 7,   n = 5, k = 1),
-  list(name = "QC", xmin = 0, xmax = 4,  ymin = 0,   ymax = 3.5, n = 7, k = 2),
-  list(name = "MB", xmin = 4, xmax = 8,  ymin = 0,   ymax = 3.5, n = 6, k = 2),
-  list(name = "NB", xmin = 8, xmax = 12, ymin = 0,   ymax = 3.5, n = 5, k = 1)
-)
-
-par(mar = c(0.2, 0.2, 0.2, 0.2))
-plot(NA, xlim = c(0, 12), ylim = c(0, 7), asp = 1,
-     xaxt = "n", yaxt = "n", xlab = "", ylab = "", bty = "o")
-
-for (s in strata) {
-  rect(s$xmin, s$ymin, s$xmax, s$ymax, border = "blue4", lwd = 1.5)
-  text((s$xmin + s$xmax) / 2, s$ymax - 0.5, s$name,
-       col = "blue4", font = 2, cex = 1.6)
-
-  px <- runif(s$n, s$xmin + 0.4, s$xmax - 0.4)
-  py <- runif(s$n, s$ymin + 0.4, s$ymax - 1.0)
-  points(px, py, pch = 19, col = "blue4", cex = 1.1)
-
-  sel <- sample(s$n, s$k)
-  points(px[sel], py[sel], pch = 21, col = "firebrick", lwd = 2, cex = 2.6)
-}
-```
-
-## Cluster Sampling
-
-In a **cluster sample**, observation units are aggregated into larger sampling
-units called **clusters**.
-
-Example: to survey Lutheran church members in Minneapolis without a list of all
-members, take an SRS of churches (clusters), then subsample members within each
-selected church (observation units). This is convenient, but members of the same
-church may be more similar to each other than a random sample of Lutherans, so a
-cluster sample may provide less information than an SRS of the same size.
-
-```{r}
-#| label: fig-cluster
-#| fig-width: 9
-#| fig-height: 5
-#| out-width: "85%"
-set.seed(3)
-
-clusters <- list(
-  list(xmin = 0,    xmax = 2,    ymin = 0,    ymax = 4.2, n = 7, k = 3, selected = TRUE),
-  list(xmin = 3.2,  xmax = 4.7,  ymin = 0.5,  ymax = 3.6, n = 4, k = 0, selected = FALSE),
-  list(xmin = 6.2,  xmax = 7.9,  ymin = -0.6, ymax = 5.2, n = 6, k = 3, selected = TRUE),
-  list(xmin = 11.2, xmax = 12.7, ymin = 0.7,  ymax = 3.7, n = 4, k = 2, selected = TRUE)
-)
-
-par(mar = c(2, 0.2, 0.2, 0.2))
-plot(NA, xlim = c(-0.3, 13), ylim = c(-2, 5.5), asp = 1,
-     xaxt = "n", yaxt = "n", xlab = "", ylab = "", bty = "n")
-
-for (cl in clusters) {
-  rect(cl$xmin, cl$ymin, cl$xmax, cl$ymax, border = "blue4", lwd = 1.5)
-
-  px <- runif(cl$n, cl$xmin + 0.25, cl$xmax - 0.25)
-  py <- runif(cl$n, cl$ymin + 0.3, cl$ymax - 0.3)
-  points(px, py, pch = 19, col = "blue4", cex = 1.1)
-
-  if (cl$k > 0) {
-    sel <- sample(cl$n, cl$k)
-    points(px[sel], py[sel], pch = 21, col = "darkorange3", lwd = 2, cex = 2.4)
-  }
-  if (cl$selected) {
-    draw_check((cl$xmin + cl$xmax) / 2, cl$ymin - 0.8, size = 0.3)
-  }
-}
-
-# ellipsis indicating more (unselected) clusters
-segments(8.6, 2.3, 10.6, 2.3, lty = 2, lwd = 1.5, col = "blue4")
-```
-
 # Elements of Sampling Problems
-
-Reading suggestions:
-
-- Lohr, Ch 1
-- Scheaffer et al., Ch 2
 
 ## Basic Definitions
 
@@ -303,3 +183,330 @@ while ignoring tremendous selection bias.
 - Sample-based estimates can be **more accurate** than a census, since a smaller
   operation allows investigators to be more careful; a full census requires a
   large administrative effort involving many data collectors.
+
+# Overview of Probability Sampling and Estimation
+
+In a **probability sample**, every unit has a known, positive chance of being
+selected, and the sample is chosen by a random mechanism. The illustrations use
+synthetic populations of $N = 1000$ units; each design selects $n = 60$ units (red).
+
+## Simple Random Sampling
+
+A **simple random sample (SRS)** of size $n$ is taken when every possible subset of
+$n$ units in the population has the same chance of being the sample.
+
+```{r}
+#| label: fig-intro-srs
+#| fig-width: 9
+#| fig-height: 3.8
+#| out-width: "95%"
+plot_design_srs()
+```
+
+The units are listed in an arbitrary order; the dashed line is the population mean.
+
+## Stratified Random Sampling
+
+The population is divided into **strata**, and an SRS is selected independently
+from each stratum. Stratification often increases precision because elements
+within a stratum tend to be more similar than elements of the whole population.
+
+```{r}
+#| label: fig-intro-stratified
+#| fig-width: 9
+#| fig-height: 3.8
+#| out-width: "90%"
+plot_design_strata()
+```
+
+Strata of sizes 400, 300, 200, 100, sorted by their means; $n_h = 24, 18, 12, 6$
+(proportional allocation).
+
+## Cluster Sampling
+
+Observation units are grouped into larger sampling units called **clusters**; an
+SRS of clusters is selected, and units are observed (or subsampled) within them.
+E.g., take an SRS of churches, then survey members within the selected churches.
+
+```{r}
+#| label: fig-intro-cluster
+#| fig-width: 9
+#| fig-height: 3.8
+#| out-width: "90%"
+plot_design_cluster()
+```
+
+Three of ten clusters are selected (shaded) and 20 units are subsampled in each.
+Cluster sampling is convenient, but often less precise than an SRS of the same size.
+
+# A Framework for Probability Sampling
+
+Concepts: Population, Sample, Sampling Probability, Inclusion Probability, Bias,
+Variance, MSE
+
+## The Population and Its Samples
+
+The finite **population**, or **universe**, of $N$ units is denoted by the index set
+$$\mathcal{U} = \{1, 2, \ldots, N\}.$$
+
+Out of this population we can choose various **samples**, which are subsets of
+$\mathcal{U}$. The particular sample chosen is denoted $\mathcal{S}$, a subset
+consisting of $n$ of the units in $\mathcal{U}$.
+
+**Example:** suppose $\mathcal{U} = \{1,2,3,4\}$ ($N=4$). Six different samples of
+size $n=2$ could be chosen:
+$$
+\mathcal{S}_1=\{1,2\}\quad \mathcal{S}_2=\{1,3\}\quad \mathcal{S}_3=\{1,4\}\quad
+\mathcal{S}_4=\{2,3\}\quad \mathcal{S}_5=\{2,4\}\quad \mathcal{S}_6=\{3,4\}
+$$
+
+## Probability Sampling
+
+In probability sampling, each possible sample $\mathcal{S}$ from the population has
+a known probability $P(\mathcal{S})$ of being chosen, and the probabilities of the
+possible samples sum to 1.
+
+One possible design for a probability sample of size 2 from $\mathcal{U}=\{1,2,3,4\}$:
+$$
+P(\mathcal{S}_1)=\tfrac13,\quad P(\mathcal{S}_4)=\tfrac16,\quad P(\mathcal{S}_6)=\tfrac12,
+\quad P(\mathcal{S}_2)=P(\mathcal{S}_3)=P(\mathcal{S}_5)=0
+$$
+
+These probabilities are known **before** the sample is drawn. One way to realize
+this design: place six labeled balls in a box — two labeled 1, one labeled 4, and
+three labeled 6 — then draw one ball at random; whichever label is drawn gives the
+sample $\mathcal{S}_i$. An SRS gives all six samples probability $1/6$.
+
+## Notation for the Values $y_i$
+
+Let $y_i$ be a characteristic associated with the $i$th unit in the population. We
+treat $y_i$ as a **fixed** quantity: if farm 723 is in the sample, the corn yield
+$y_{723}$ is known exactly.
+
+| $i$   | 1     | 2     | 3     | $\cdots$ | $N$   |
+|:-----:|:-----:|:-----:|:-----:|:--------:|:-----:|
+| $y_i$ | $y_1$ | $y_2$ | $y_3$ | $\cdots$ | $y_N$ |
+
+::: {.callout-note}
+$y_i$ is **not** a random variable in Lohr's book. In Scheaffer's book, $y_i$ is
+used for the population *value* and $Y_i$ is a random variable.
+:::
+
+## Inclusion Probability and Sampling Weight
+
+Once we have chosen a sample design, each unit in the population has a known
+probability of appearing in the selected sample:
+$$
+\pi_i = P(\text{unit } i \text{ in sample}) = \sum_{\mathcal S \ni i} P(\mathcal S),
+$$
+the sum of the probabilities of all possible samples that contain unit $i$. In
+probability sampling, all $\pi_i$ are known before the survey commences, and we
+assume $\pi_i > 0$ for every unit in the population.
+
+**Sampling weight:** $w_i = 1/\pi_i$. For many sampling schemes, the population
+total estimator can be written as
+$$
+\hat t = \sum_{i \in \mathcal{S}} w_i \, y_i = \sum_{i \in \mathcal{S}} \frac{y_i}{\pi_i}.
+$$
+
+## Example: Inclusion Probabilities
+
+For $\mathcal{U}=\{1,2,3,4\}$, $N=4$, $n=2$, with the sample design above:
+
+| $\mathcal{S}_i$ | $\{1,2\}$ | $\{2,3\}$ | $\{1,3\}$ | $\{2,4\}$ | $\{1,4\}$ | $\{3,4\}$ |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| $P(\mathcal{S}_i)$ | $1/3$ | $1/6$ | $0$ | $0$ | $0$ | $1/2$ |
+
+$$
+\pi_1 = P(\{1,2\}) = \tfrac13, \qquad
+\pi_2 = P(\{1,2\})+P(\{2,3\}) = \tfrac13+\tfrac16=\tfrac12,
+$$
+$$
+\pi_3 = P(\{2,3\})+P(\{3,4\}) = \tfrac16+\tfrac12=\tfrac23, \qquad
+\pi_4 = P(\{3,4\}) = \tfrac12 .
+$$
+
+Note $\sum_{i=1}^4 \pi_i = 2 = n$, not 1: each sample contains $n=2$ units.
+
+## Population Quantities: Total, Mean, Variance
+
+$$
+\textbf{Total:}\quad t = \sum_{i=1}^N y_i
+\qquad
+\textbf{Mean:}\quad \bar y_{U} = \frac{t}{N} = \frac{\sum_{i=1}^N y_i}{N}
+$$
+
+$$
+\textbf{Variance:}\quad S^2 = \frac{1}{N-1}\sum_{i=1}^N (y_i-\bar y_{U})^2
+\qquad
+\textbf{Standard deviation:}\quad S = \sqrt{S^2}
+$$
+
+::: {.callout-note}
+In Scheaffer's book, $\displaystyle \sigma^2 = \frac1N \sum_{i=1}^N (y_i - \bar y_{U})^2$
+(divides by $N$, not $N-1$).
+:::
+
+## Example: A Population Proportion
+
+| $i$   | 1 | 2 | 3 | 4 | 5 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| $y_i$ | 1 | 0 | 0 | 0 | 1 |
+
+$$
+t = \sum_{i=1}^5 y_i = 1+0+0+0+1 = 2
+\qquad
+\bar y_{U} = \frac{2}{5} = 40\% \ \text{(population proportion)}
+$$
+$$
+S^2 = \frac{1}{5-1}\Big((1-0.4)^2\times 2 + (0-0.4)^2\times 3\Big) = 0.3
+$$
+
+::: {.callout-note}
+For a 0/1 population, $S^2 = \frac{N}{N-1}p(1-p) = \frac54(0.4)(0.6) = 0.3$,
+which tends to $p(1-p)$ as $N$ becomes large.
+:::
+
+## Example: Number of Devices per Household
+
+| $i$   | 1 | 2 | 3 | 4 |
+|:---:|:---:|:---:|:---:|:---:|
+| $y_i$ | 2 | 4 | 4 | 6 |
+
+$$
+t = \sum_{i=1}^4 y_i = 2+4+4+6 = 16
+\qquad
+\bar y_{U} = \frac{16}{4} = 4
+$$
+$$
+S^2 = \frac{1}{4-1}\Big((2-4)^2+(4-4)^2+(4-4)^2+(6-4)^2\Big) = \frac{8}{3}
+$$
+
+## Statistic and Sampling Distribution
+
+**Statistic**\
+A statistic is a function of the observations in a sample, used for estimating a
+population quantity.
+
+**Sampling distribution**\
+The sampling distribution is the distribution of a statistic under repeated
+sampling.
+
+**Example:** to estimate $t$ we may use $\hat t = N\bar y$, with
+$\bar y = \frac1n\sum_{i\in\mathcal S} y_i$. For the devices population ($n=2$,
+$N=4$), $\hat t = 4\bar y$; the true values are $\bar y_U = 4$ and $t = 16$.
+
+## Example: Sampling Distribution of $\bar y$
+
+All six possible samples of size 2 from $\{y_1,\ldots,y_4\}=\{2,4,4,6\}$:
+
+| $\mathcal S_i$ | $\{1,2\}$ | $\{1,3\}$ | $\{1,4\}$ | $\{2,3\}$ | $\{2,4\}$ | $\{3,4\}$ |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| values | 2, 4 | 2, 4 | 2, 6 | 4, 4 | 4, 6 | 4, 6 |
+| $P(\mathcal S_i)$ | $1/3$ | $0$ | $0$ | $1/6$ | $0$ | $1/2$ |
+| $\bar y$ | 3 | 3 | 4 | 4 | 5 | 5 |
+
+Collecting equal values of $\bar y$ gives the **sampling distribution of $\bar y$**:
+
+| $k$ | 3 | 4 | 5 |
+|:---:|:---:|:---:|:---:|
+| $P(\bar y = k)$ | $1/3$ | $1/6$ | $1/2$ |
+
+## Plot of the Sampling Distribution
+
+```{r}
+#| label: fig-sampdist
+#| fig-width: 6.5
+#| fig-height: 4
+#| out-width: "75%"
+k <- c(3, 4, 5)
+p <- c(1/3, 1/6, 1/2)
+Eybar <- sum(k * p)     # E(ybar)
+yU <- 4                 # population mean, ybar_U
+
+par(mar = c(4, 4, 1, 1))
+plot(NA, xlim = c(2.5, 5.5), ylim = c(0, 0.6),
+     xlab = expression(bar(y)), ylab = expression(P(bar(y) == k)),
+     xaxt = "n", cex.lab = 1.3)
+axis(1, at = k)
+segments(k, 0, k, p, lwd = 3, col = "black")
+points(k, p, pch = 19, cex = 1.4)
+
+abline(v = yU, col = "red", lwd = 2, lty = 2)
+text(yU, 0.58, expression(bar(y)[U]), col = "red", pos = 2)
+
+abline(v = Eybar, col = "blue", lwd = 2, lty = 2)
+text(Eybar, 0.52, expression(E(bar(y))), col = "blue", pos = 4)
+```
+
+## Bias, Variance and MSE of $\bar y$
+
+$$
+\begin{aligned}
+E(\bar y) &= 3\times\tfrac13 + 4\times\tfrac16 + 5\times\tfrac12 = \frac{25}{6} \\[4pt]
+\text{Bias}(\bar y) &= E(\bar y) - \bar y_{U} = \frac{25}{6} - 4 = \frac16 \\[4pt]
+V(\bar y) &= E\big[(\bar y - E(\bar y))^2\big] \\
+ &= \Big(3-\tfrac{25}{6}\Big)^2\tfrac13 + \Big(4-\tfrac{25}{6}\Big)^2\tfrac16
+   + \Big(5-\tfrac{25}{6}\Big)^2\tfrac12 = \frac{29}{36} \approx 0.806 \\[4pt]
+\text{MSE}(\bar y) &= E\big[(\bar y - \bar y_{U})^2\big] \\
+ &= (3-4)^2\cdot\tfrac13 + (4-4)^2\cdot\tfrac16 + (5-4)^2\cdot\tfrac12 = \frac56 \approx 0.833
+\end{aligned}
+$$
+
+The design favours $\{3,4\}$, which contains the household with 6 devices, so
+$\bar y$ tends to be too large.
+
+## MSE = Bias$^2$ + Variance
+
+Adding and subtracting $E(\hat\theta)$:
+$$
+\text{MSE}(\hat\theta) = E\Big[\big(\hat\theta - E(\hat\theta)\big) + \big(E(\hat\theta) - \theta\big)\Big]^2
+ = V(\hat\theta) + \big(\text{Bias}(\hat\theta)\big)^2 ,
+$$
+since the cross term has expectation zero.
+
+**Check with our example:**
+$$
+\text{Bias}(\bar y)^2 + V(\bar y) = \Big(\frac16\Big)^2 + \frac{29}{36} = \frac{30}{36} = \frac56 = \text{MSE}(\bar y) \checkmark
+$$
+
+When $\hat\theta$ is unbiased, $\text{MSE}(\hat\theta) = V(\hat\theta)$.
+
+## The Same Population under SRS
+
+If all six samples have probability $1/6$ (an SRS), the six values of $\bar y$
+are $3, 3, 4, 4, 5, 5$:
+$$
+E(\bar y) = 4 = \bar y_U \quad \text{(unbiased)}, \qquad
+V(\bar y) = \tfrac16(1+1+0+0+1+1) = \tfrac23 .
+$$
+
+This agrees with the SRS variance formula (next lecture):
+$$
+V(\bar y) = \Big(1-\frac nN\Big)\frac{S^2}{n} = \frac12\cdot\frac{8/3}{2} = \frac23 .
+$$
+
+## Unbiased, Precise, and Accurate
+
+An estimator $\hat t$ of $t$ is:
+
+- **unbiased** if $E(\hat t) = t$
+- **precise** if $V(\hat t) = E\big[(\hat t - E[\hat t])^2\big]$ is small
+- **accurate** if $\text{MSE}(\hat t) = E\big[(\hat t - t)^2\big]$ is small
+
+A badly biased estimator may be precise but will not be accurate: accuracy (MSE)
+is how close the estimate is to the truth, while precision (variance) measures how
+close estimates from different samples are to *each other*.
+
+![](figures/archers.png){fig-align="center" width="95%"}
+
+## Summary
+
+The finite population $\mathcal U$ consists of units $\{1,2,\ldots,N\}$ with
+measured values $\{y_1,y_2,\ldots,y_N\}$. We select a sample $\mathcal S$ of $n$
+units from $\mathcal U$ using the probabilities of selection that define the
+sampling design.
+
+The $y_i$'s are fixed but unknown quantities — unknown unless that unit happens to
+appear in our sample $\mathcal S$. Bias, variance and MSE all refer to the
+distribution of an estimator over the possible samples.

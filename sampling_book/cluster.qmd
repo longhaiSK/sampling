@@ -109,7 +109,9 @@ cluster_cells()
 The **psu-level** quantities are the cluster totals and their spread:
 $$
 t_i = \sum_{j=1}^{M_i} y_{ij} \quad(\text{total in psu } i), \qquad
-t = \sum_{i=1}^N t_i \quad(\text{population total}), \qquad
+t = \sum_{i=1}^N t_i \quad(\text{population total}),
+$$
+$$
 M_0 = \sum_{i=1}^N M_i \quad(\text{number of ssus}),
 $$
 $$
@@ -123,7 +125,8 @@ $$
 $$
 $$
 S^2 = \frac{1}{M_0-1}\sum_{i=1}^N\sum_{j=1}^{M_i}(y_{ij}-\bar y_U)^2 \quad(\text{population variance}),
-\qquad
+$$
+$$
 S_i^2 = \frac{1}{M_i-1}\sum_{j=1}^{M_i}(y_{ij}-\bar y_{iU})^2 \quad(\text{variance within psu } i).
 $$
 Here $\bar y_U$, the mean per element, is usually the quantity of interest, and

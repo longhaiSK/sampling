@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Longhai Li">
-<meta name="dcterms.date" content="2026-10-22">
+<meta name="dcterms.date" content="2026-10-23">
 
 <title>4&nbsp; Stratified Random Sampling – Elements of Sampling Survey</title>
 <style>
@@ -351,7 +351,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 22, 2026</p>
+      <p class="date">October 23, 2026</p>
     </div>
   </div>
   
@@ -1660,8 +1660,8 @@ Figure&nbsp;4.2: The six caribou strata. Each grid holds one stratum’s <span c
 <section id="sec-strata-proportions" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="sec-strata-proportions"><span class="header-section-number">4.4</span> Stratified Sampling for Proportions</h2>
 <p>A proportion is the mean of a 0/1 variable. So we can apply the same formulas with <span class="math inline">\(\overline y_h = \hat p_h\)</span>, the sample proportion in stratum <span class="math inline">\(h\)</span>, and <span class="math inline">\(s_h^2 = \frac{n_h}{n_h-1}\hat p_h(1-\hat p_h)\)</span>: <span class="math display">\[
-\hat p_{\text{str}} = \sum_{h=1}^H \frac{N_h}{N}\hat p_h, \qquad
-\hat V(\hat p_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\Big(\frac{N_h}{N}\Big)^2\frac{\hat p_h(1-\hat p_h)}{n_h-1}.
+\boxed{\hat p_{\text{str}} = \sum_{h=1}^H \frac{N_h}{N}\hat p_h, \qquad
+\hat V(\hat p_{\text{str}}) = \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\Big(\frac{N_h}{N}\Big)^2\frac{\hat p_h(1-\hat p_h)}{n_h-1}}.
 \]</span> The total number of units with the attribute is estimated by <span class="math inline">\(N\hat p_{\text{str}}\)</span>, with standard error <span class="math inline">\(N\,\mathrm{SE}(\hat p_{\text{str}})\)</span>.</p>
 <p><strong>Example: ACLS survey of scholars.</strong> The American Council of Learned Societies (ACLS) used a stratified random sample of the members of seven disciplinary societies. It studied publication patterns and the use of computers and libraries (Morton and Price, 1989). The membership figures <span class="math inline">\(N_h\)</span>, the numbers of valid returns <span class="math inline">\(n_h\)</span>, and the percentage of female respondents were:</p>
 <table class="caption-top table">
@@ -8303,7 +8303,7 @@ Figure&nbsp;4.4: Strata with widely separated means (left, <span class="math inl
 V_{\text{prop}}(\hat t_{\text{str}}) = \Big(1-\frac nN\Big)\frac Nn \sum_{h=1}^H N_h S_h^2
 = \Big(1-\frac nN\Big)\frac Nn\left(\text{SSW} + \sum_{h=1}^H S_h^2\right),
 \]</span> using <span class="math inline">\(\sum_h N_hS_h^2 = \sum_h (N_h-1)S_h^2 + \sum_h S_h^2\)</span>. Equivalently, for the mean, <span class="math display">\[
-V_{\text{prop}}(\overline y_{\text{str}}) = \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h S_h^2 ,
+\boxed{V_{\text{prop}}(\overline y_{\text{str}}) = \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h S_h^2},
 \]</span> a weighted average of the within-stratum variances in place of the overall <span class="math inline">\(S^2\)</span>. For an SRS of the same size <span class="math inline">\(n\)</span>, since <span class="math inline">\((N-1)S^2 = \text{SSTO} = \text{SSW}+\text{SSB}\)</span>, <span class="math display">\[
 V_{\text{SRS}}(\hat t) = \Big(1-\frac nN\Big)\frac{N^2 S^2}{n}
 = \Big(1-\frac nN\Big)\frac{N}{n}\cdot\frac{N}{N-1}\,(\text{SSW}+\text{SSB}).
@@ -8315,7 +8315,7 @@ V_{\text{SRS}}(\hat t) = \Big(1-\frac nN\Big)\frac{N^2 S^2}{n}
 \frac{V_{\text{prop}}(\hat t_{\text{str}})}{V_{\text{SRS}}(\hat t)}
 \approx \frac{\text{SSW}+\sum_h S_h^2}{\text{SSW}+\text{SSB}} \approx \frac{\text{SSW}}{\text{SSTO}} = 1 - R^2,
 \]</span> so that <span class="math display">\[
-\text{percentage of variance reduction} \approx \frac{\text{SSB}}{\text{SSTO}} = R^2_{y\mid\text{strata}},
+\boxed{\text{percentage of variance reduction} \approx \frac{\text{SSB}}{\text{SSTO}} = R^2_{y\mid\text{strata}}},
 \]</span> the proportion of the variance of <span class="math inline">\(y\)</span> explained by stratum membership. The better the strata separate the values of <span class="math inline">\(y\)</span>, the larger the gain. We verify this relation by simulation in <a href="#sec-strata-simulation" class="quarto-xref"><span>Section 4.10</span></a>.</p>
 </section>
 </section>
@@ -8353,9 +8353,9 @@ n_h = \left(\frac{N_hS_h/\sqrt{c_h}}{\sum_{l=1}^H N_lS_l/\sqrt{c_l}}\right)n,
 <li>sampling in the stratum is cheap (<span class="math inline">\(c_h\)</span> small).</li>
 </ul>
 <p>Two special cases are important. If the costs are equal, <span class="math inline">\(c_1=\cdots=c_H\)</span>, then <span class="math inline">\(n_h\propto N_hS_h\)</span>. This is <strong>Neyman allocation</strong>: <span class="math display">\[
-n_h = n \frac{N_h S_h}{\sum_{l=1}^H N_l S_l},
+\boxed{n_h = n \frac{N_h S_h}{\sum_{l=1}^H N_l S_l}},
 \]</span> which gives the smallest possible variance for a total sample size <span class="math inline">\(n\)</span>: <span class="math display">\[
-V_{\text{opt}}(\overline{y}_{\text{str}}) = \frac{1}{n}\left(\sum_{h=1}^H \pi_h S_h\right)^2 - \frac{1}{N}\sum_{h=1}^H \pi_h S_h^2 .
+\boxed{V_{\text{opt}}(\overline{y}_{\text{str}}) = \frac{1}{n}\left(\sum_{h=1}^H \pi_h S_h\right)^2 - \frac{1}{N}\sum_{h=1}^H \pi_h S_h^2}.
 \]</span> If, in addition, the stratum standard deviations are equal, <span class="math inline">\(S_1=\cdots=S_H\)</span>, then <span class="math inline">\(n_h\propto N_h\)</span>, which is proportional allocation. Neyman allocation improves on proportional allocation exactly when the <span class="math inline">\(S_h\)</span> differ across strata.</p>
 <p>In practice the <span class="math inline">\(S_h\)</span> are unknown when the survey is designed. They are replaced by estimates from a previous survey or a pilot sample, or by rough guesses. The allocation is fairly robust to such guesses: moderately wrong values of <span class="math inline">\(S_h\)</span> still give a variance close to the optimum.</p>
 </section>

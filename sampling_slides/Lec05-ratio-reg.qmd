@@ -12,6 +12,9 @@ knitr::opts_chunk$set(
   echo = FALSE,
   fig.align = "center"
 )
+library(gt)
+## the figures shared with the book chapter
+source("../sampling_book/design_plots.r")
 ```
 
 # Ratio Estimation
@@ -65,44 +68,7 @@ variable $x$ in advance.
 #| fig-width: 6.5
 #| fig-height: 5
 #| out-width: "95%"
-set.seed(2046)
-N <- 40
-B_true <- 0.55
-x <- runif(N, 0.5, 10)
-y <- B_true * x + rnorm(N, 0, 0.20 * sqrt(x))
-
-xbar_U <- mean(x)
-ybar_U <- mean(y)
-
-n <- 8
-sel <- sample(N, n)               # an ordinary SRS, spread across x
-Bhat <- sum(y[sel]) / sum(x[sel]) # ratio estimate, computed from the sample only
-
-yhat <- Bhat * x                  # fitted value for every unit in the population
-ybar_ratio <- mean(yhat)          # = Bhat * xbar_U (the ratio estimate)
-ybar_srs <- mean(y[sel])          # naive sample mean, ignoring x
-
-par(mar = c(4, 4, 0.5, 0.5))
-plot(x, y, pch = 19, col = "grey50", xlab = "x", ylab = "y",
-     xlim = c(0, 10.5), ylim = c(0, 7))
-
-abline(0, Bhat, col = "firebrick", lwd = 2)
-text(7.0, Bhat * 7.0 + 0.55, expression(y == hat(B) * x), col = "firebrick")
-
-points(x[sel], y[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
-points(x, yhat, pch = 19, col = "firebrick", cex = 0.9)
-
-abline(h = ybar_U, col = "black", lty = 3)
-abline(h = ybar_ratio, col = "firebrick", lty = 3)
-abline(h = ybar_srs, col = "darkgreen", lty = 3)
-
-points(0, ybar_U, pch = 19, col = "black", cex = 2)
-points(0, ybar_ratio, pch = 19, col = "firebrick", cex = 1.6)
-points(0, ybar_srs, pch = 19, col = "darkgreen", cex = 1.6)
-
-text(0.2, ybar_U, expression(bar(y)[U]), col = "black", adj = c(0, -0.7), font = 2)
-text(0.2, ybar_ratio, expression(hat(bar(y))[r]), col = "firebrick", adj = c(0, 1.4), font = 2)
-text(0.2, ybar_srs, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), font = 2)
+plot_ratio_concept()
 ```
 
 :::
@@ -233,7 +199,18 @@ than the true $\bar x_U$.
 
 ## Figure: Acreage 1992 vs. 1987
 
-![](figures/acreage-scatter.png){fig-align="center" width="70%"}
+```{r}
+#| label: fig-acreage-scatter
+#| fig-width: 6
+#| fig-height: 4.2
+#| out-width: "55%"
+agsrs <- read.csv("data/agsrs.csv")
+Bhat_ag <- mean(agsrs$acres92) / mean(agsrs$acres87)
+par(mar = c(4, 4.5, 0.5, 0.5))
+plot(agsrs$acres87 / 1000, agsrs$acres92 / 1000, pch = 19, col = adjustcolor("grey30", 0.6), las = 1,
+     xlab = "Farm acreage 1987 (thousands)", ylab = "Farm acreage 1992 (thousands)")
+abline(0, Bhat_ag, col = "firebrick", lwd = 2)
+```
 
 The line goes through the origin with slope $\hat B=0.9866$. Note that the
 variability about the line **increases with $x$** — this pattern (variance
@@ -315,21 +292,7 @@ $$\hat B = \frac{\sum y_i}{\sum x_i} = \frac{450}{15} = 30 \qquad s_e^2 = \frac{
 #| fig-width: 5
 #| fig-height: 4.5
 #| out-width: "100%"
-x <- c(1, 2, 3, 4, 5)
-y <- c(18, 78, 62, 132, 160)
-Bhat <- sum(y) / sum(x)
-yhat <- Bhat * x
-e <- y - yhat
-
-par(mar = c(4, 4, 0.5, 0.5))
-plot(x, y, pch = 19, cex = 1.4, xlab = "x: registered births (000s)", ylab = "y: residents (000s)",
-     xlim = c(0, 6), ylim = c(0, 180))
-abline(0, Bhat, col = "firebrick", lwd = 2)
-segments(x, y, x, yhat, col = "grey40", lty = 2)
-points(x, yhat, pch = 21, col = "firebrick", bg = "white", cex = 1.2)
-text(x + 0.15, (y + yhat) / 2, sprintf("e=%d", e), cex = 0.8, adj = 0)
-text(5.3, Bhat * 5.3, expression(y == hat(B) * x), col = "firebrick", adj = 0)
-
+plot_france_toy()
 ```
 
 :::
@@ -357,6 +320,52 @@ A 95% Confidence Interval for the total population size: $1200 \pm 1.96(70.616) 
 
 
 $$\text{SE}(\hat B) = \sqrt{\Big(1-\frac{5}{8}\Big)\frac{374}{5\cdot 3^2}} = 1.765$$
+
+## Example: Cherry Trees
+
+```{r}
+cherry <- read.csv("../sampling_book/data/cherry.csv")
+N_ch <- 2967; tx_ch <- 41835; xbarU_ch <- tx_ch / N_ch
+yc <- cherry$volume; xc <- cherry$diameter; n_ch <- length(yc)
+B_ch <- sum(yc) / sum(xc); se2_ch <- sum((yc - B_ch * xc)^2) / (n_ch - 1)
+est_ch_r <- B_ch * xbarU_ch
+se_ch_r <- sqrt((1 - n_ch / N_ch) * (xbarU_ch / mean(xc))^2 * se2_ch / n_ch)
+se_ch_srs <- sqrt((1 - n_ch / N_ch) * var(yc) / n_ch)
+```
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+#| label: fig-cherry
+#| fig-width: 5
+#| fig-height: 4.5
+#| out-width: "100%"
+par(mar = c(4, 4, 0.5, 0.5))
+plot(xc, yc, pch = 19, xlab = "diameter", ylab = "volume", xlim = c(0, max(xc)), ylim = c(0, max(yc)))
+abline(0, B_ch, col = "firebrick", lwd = 2)
+```
+:::
+
+::: {.column width="50%"}
+Volume of wood ($y$) and diameter ($x$) for an SRS of $n=`r n_ch`$ of the
+$N=2967$ trees; the total diameter $t_x=41{,}835$ is known.
+
+$$
+\hat B = \frac{\bar y}{\bar x} = `r round(B_ch, 4)`
+$$
+$$
+\hat{\bar y}_r = \hat B\,\bar x_U = `r round(est_ch_r, 3)`
+$$
+$$
+\text{SE}(\hat{\bar y}_r) = `r round(se_ch_r, 3)` \quad\text{vs.}\quad
+\text{SE}(\bar y) = `r round(se_ch_srs, 3)`
+$$
+
+Variance reduction: `r round(100 * (1 - (se_ch_r / se_ch_srs)^2), 1)`%.
+:::
+
+::::
 
 # Efficiency of Ratio Estimation
 
@@ -393,6 +402,49 @@ because $\hat B$ is not a least-squares estimate of $B$; however, it carries
 similar information about how much variance ratio estimation removes.
 :::
 
+## Simulation: Ratio vs. SRS for Farm Acreage
+
+```{r}
+agpop <- read.csv("data/agpop.csv")
+agpop <- agpop[agpop$acres92 >= 0 & agpop$acres87 >= 0, ]
+agpop$acres92 <- agpop$acres92 / 1000; agpop$acres87 <- agpop$acres87 / 1000
+Np <- nrow(agpop); tyU <- sum(agpop$acres92); txU <- sum(agpop$acres87); Bp <- tyU / txU
+set.seed(348)
+sims <- t(replicate(2000, {
+  s <- sample(Np, 300)
+  c(SRS = Np * mean(agpop$acres92[s]),
+    Ratio = mean(agpop$acres92[s]) / mean(agpop$acres87[s]) * txU)
+}))
+v <- apply(sims, 2, var)
+exp_red <- 1 - var(agpop$acres92 - Bp * agpop$acres87) / var(agpop$acres92)
+```
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+#| label: fig-ratio-sim
+#| fig-width: 5
+#| fig-height: 4.5
+#| out-width: "100%"
+par(mar = c(3, 4.5, 0.5, 0.5))
+boxplot(sims / 1000, ylab = "Estimated total (million acres)", las = 1)
+abline(h = tyU / 1000, col = "red", lwd = 2)
+```
+:::
+
+::: {.column width="50%"}
+2000 SRSs of $n=300$ counties from `agpop.csv`; for each, the SRS estimate
+$N\bar y$ and the ratio estimate $\hat B\,t_x$ of the total 1992 acreage, with
+$x$ = 1987 acreage. Red line: the true total.
+
+- Simulated variance ratio: $V(\hat t_{yr})/V(N\bar y) = `r round(v[2] / v[1], 4)`$
+- Variance reduction: `r round(100 * (1 - v[2] / v[1]), 1)`%
+- Predicted by $1 - S_d^2/S_y^2$: `r round(100 * exp_red, 1)`%
+:::
+
+::::
+
 # Regression Estimation
 
 ## Linear Model
@@ -412,26 +464,7 @@ $$
 #| fig-width: 9
 #| fig-height: 4.5
 #| out-width: "90%"
-set.seed(9)
-n <- 40
-x <- runif(n, 1, 10)
-
-par(mfrow = c(1, 2), mar = c(4, 4, 2, 0.5))
-
-B <- 0.5
-y1 <- B * x + rnorm(n, 0, 0.4 * sqrt(x))
-plot(x, y1, pch = 19, xlab = "x", ylab = "y", xlim = c(0, 10.5), ylim = c(-1, 6),
-     main = "Ratio Estimation")
-abline(0, B, col = "firebrick", lwd = 2)
-text(8.5, B * 8.5 + 0.6, expression(y == B*x), col = "firebrick")
-
-B0 <- 1.5
-B1 <- 0.35
-y2 <- B0 + B1 * x + rnorm(n, 0, 0.6)
-plot(x, y2, pch = 19, xlab = "x", ylab = "y", xlim = c(0, 10.5), ylim = c(-1, 6),
-     main = "Regression Estimation")
-abline(B0, B1, col = "firebrick", lwd = 2)
-text(8.5, B0 + B1 * 8.5 + 0.6, expression(y == B[0]+B[1]*x), col = "firebrick")
+plot_ratio_vs_reg()
 ```
 
 In ratio estimation, $y_i = Bx_i + d_i$ with residual spread growing with $x$;
@@ -478,49 +511,7 @@ $\hat t_{y,\text{reg}} = N\hat{\bar y}_{\text{reg}} = N\hat B_0 + \hat B_1 t_x$.
 #| fig-width: 6.5
 #| fig-height: 5
 #| out-width: "95%"
-set.seed(498)
-N <- 40
-B0 <- 1.5
-B1 <- 0.35
-x <- runif(N, 1, 10)
-y <- B0 + B1 * x + rnorm(N, 0, 0.30)
-
-xbar_U <- mean(x)
-ybar_U <- mean(y)
-
-n <- 8
-sel <- sample(N, n)               # an ordinary SRS, spread across x
-xs <- x[sel]
-ys <- y[sel]
-B1hat <- sum((xs - mean(xs)) * (ys - mean(ys))) / sum((xs - mean(xs))^2)
-B0hat <- mean(ys) - B1hat * mean(xs)  # least squares fit, from the sample only
-
-yhat <- B0hat + B1hat * x         # fitted value for every unit in the population
-ybar_reg <- mean(yhat)            # = B0hat + B1hat * xbar_U (the regression estimate)
-ybar_srs <- mean(ys)              # naive sample mean, ignoring x
-
-par(mar = c(4, 4, 0.5, 0.5))
-plot(x, y, pch = 19, col = "grey50", xlab = "x", ylab = "y",
-     xlim = c(0, 10.5), ylim = c(0, 6.5))
-
-abline(B0hat, B1hat, col = "firebrick", lwd = 2)
-text(10.4, B0hat + B1hat * 10.4 - 1.25, expression(y == hat(B)[0] + hat(B)[1] * x),
-     col = "firebrick", adj = c(1, 0))
-
-points(x[sel], y[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
-points(x, yhat, pch = 19, col = "firebrick", cex = 0.9)
-
-abline(h = ybar_U, col = "black", lty = 3)
-abline(h = ybar_reg, col = "firebrick", lty = 3)
-abline(h = ybar_srs, col = "darkgreen", lty = 3)
-
-points(0, ybar_U, pch = 19, col = "black", cex = 2)
-points(0, ybar_reg, pch = 19, col = "firebrick", cex = 1.6)
-points(0, ybar_srs, pch = 19, col = "darkgreen", cex = 1.6)
-
-text(0.2, ybar_U, expression(bar(y)[U]), col = "black", adj = c(0, -0.7), font = 2)
-text(0.2, ybar_reg, expression(hat(bar(y))[reg]), col = "firebrick", adj = c(0, 1.4), font = 2)
-text(0.2, ybar_srs, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), font = 2)
+plot_reg_concept()
 ```
 
 :::
@@ -670,6 +661,33 @@ The ratio estimator, $\hat B\bar x_U=`r round(Bhat, 4)`(11.3)$, barely improves
 on SRS, since the line through the origin fits poorly here. Because the true
 intercept is not zero, the **regression** estimator is the most precise.
 
+## Example: Cherry Trees, Regression Estimate
+
+```{r}
+fit_ch <- lm(yc ~ xc)
+se2_reg_ch <- sum(resid(fit_ch)^2) / (n_ch - 2)
+est_ch_reg <- coef(fit_ch)[[1]] + coef(fit_ch)[[2]] * xbarU_ch
+se_ch_reg <- sqrt((1 - n_ch / N_ch) * se2_reg_ch / n_ch)
+```
+
+For the cherry trees, the least-squares line is
+$\hat y = `r round(coef(fit_ch)[[1]], 3)` `r ifelse(coef(fit_ch)[[2]] < 0, '-', '+')` `r round(abs(coef(fit_ch)[[2]]), 3)`\,x$, and
+$$
+\hat{\bar y}_{\text{reg}} = \hat B_0 + \hat B_1\bar x_U = `r round(est_ch_reg, 3)`, \qquad
+\text{SE}(\hat{\bar y}_{\text{reg}}) = \sqrt{\Big(1-\frac nN\Big)\frac{s_e^2}{n}} = `r round(se_ch_reg, 3)` .
+$$
+
+| Estimator | Estimate of $\bar y_U$ | SE |
+|:---|---:|---:|
+| SRS | `r round(mean(yc), 3)` | `r round(se_ch_srs, 3)` |
+| Ratio | `r round(est_ch_r, 3)` | `r round(se_ch_r, 3)` |
+| Regression | `r round(est_ch_reg, 3)` | `r round(se_ch_reg, 3)` |
+
+The fitted intercept is far from zero, so the line through the origin fits
+poorly and the **regression** estimator is far more precise: variance reduction
+`r round(100 * (1 - (se_ch_reg / se_ch_srs)^2), 1)`% versus
+`r round(100 * (1 - (se_ch_r / se_ch_srs)^2), 1)`% for ratio.
+
 # Post-Stratification
 
 ## An Example
@@ -721,55 +739,7 @@ right stratum mean, weighted by the correct $N_h$.
 #| fig-width: 6.5
 #| fig-height: 5
 #| out-width: "95%"
-set.seed(3268)
-Nh <- c(50, 20, 30, 40)      # population sizes per post-stratum
-mu_h <- c(1, 4, 7, 10)       # true stratum means, exaggerated and ascending
-labs <- c("A", "B", "C", "D")
-N <- sum(Nh)
-H <- length(Nh)
-n <- 25
-sdy <- 0.9
-
-# index plot: sequential index across the population, grouped contiguously by
-# stratum -- so each stratum's width on the x-axis is exactly its Nh
-y_pop <- unlist(lapply(1:H, function(h) mu_h[h] + rnorm(Nh[h], 0, sdy)))
-strat_id <- rep(1:H, Nh)
-boundaries <- cumsum(Nh)
-starts <- c(0, boundaries[-H])
-x_pop <- unlist(lapply(1:H, function(h) starts[h] + seq_len(Nh[h])))
-ybar_U <- mean(y_pop)                    # true population mean
-
-sel <- sample(N, n)                      # an ordinary SRS from the whole population
-nh <- tabulate(strat_id[sel], H)         # post-stratum sample sizes: random, not proportional
-ybar_h <- sapply(1:H, function(h) mean(y_pop[sel][strat_id[sel] == h]))
-
-ybar_naive <- mean(y_pop[sel])           # pooled sample mean, ignoring strata
-ybar_post <- sum(ybar_h * Nh / N)        # post-stratified estimate
-
-par(mar = c(3, 4, 0.5, 0.5))
-plot(x_pop, y_pop, pch = 19, col = "grey50", xlab = "", ylab = "y",
-     xlim = c(-12, N), ylim = c(-2, 13), xaxt = "n")
-
-abline(v = boundaries[-H], col = "grey70")           # separate the groups
-mid <- (starts + boundaries) / 2
-axis(1, at = mid, labels = labs, tick = FALSE)
-
-points(x_pop[sel], y_pop[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
-
-for (h in 1:H)                                       # sample mean of each post-stratum
-  segments(starts[h], ybar_h[h], boundaries[h], ybar_h[h], col = "firebrick", lwd = 3)
-
-abline(h = ybar_U, col = "black", lty = 3)
-abline(h = ybar_post, col = "firebrick", lty = 3)
-abline(h = ybar_naive, col = "darkgreen", lty = 3)
-
-points(-11, ybar_U, pch = 19, col = "black", cex = 2, xpd = NA)
-points(-11, ybar_post, pch = 19, col = "firebrick", cex = 1.6, xpd = NA)
-points(-11, ybar_naive, pch = 19, col = "darkgreen", cex = 1.6, xpd = NA)
-
-text(-10, ybar_U, expression(bar(y)[U]), col = "black", adj = c(0, -0.7), font = 2)
-text(-10, ybar_post, expression(hat(bar(y))[post]), col = "firebrick", adj = c(0, 1.4), font = 2)
-text(-10, ybar_naive, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), font = 2)
+plot_poststrat_concept()
 ```
 
 :::
@@ -1098,6 +1068,30 @@ The two SEs differ only in the fpc: naive is bigger where $d$ happened to be
 ($n_d/N_d>n/N$: S, W). The correct formula ignores this sampling luck and
 always uses the overall rate $n/N$.
 
+## Example: Teacher Aspirations by Gender
+
+```{r}
+teacher <- read.csv("../sampling_book/data/college_teacher.csv")
+n_t <- nrow(teacher); N_t <- 4000
+dom <- do.call(rbind, lapply(1:2, function(g) {
+  yy <- teacher$teacher[teacher$gender == g]
+  nd <- length(yy); p <- mean(yy)
+  data.frame(Domain = c("Female", "Male")[g], nd = nd, p = p,
+             SE = sqrt((1 - n_t / N_t) * var(yy) / nd))
+}))
+```
+
+A survey of $n=`r n_t`$ students from $N=4000$ (3000 female, 1000 male) asks
+whether they want to become a teacher. Gender is a **domain**: it is known only
+after sampling, so each $n_d$ is random.
+
+| Domain | $n_d$ | $\hat p_d$ | $\text{SE}=\sqrt{(1-\frac nN)\frac{s_d^2}{n_d}}$ |
+|:---|---:|---:|---:|
+| Female | `r dom$nd[1]` | `r round(dom$p[1], 3)` | `r round(dom$SE[1], 3)` |
+| Male | `r dom$nd[2]` | `r round(dom$p[2], 3)` | `r round(dom$SE[2], 3)` |
+
+Each SE uses the **overall** sampling fraction $n/N$, not $n_d/N_d$.
+
 # Predictions with Machine Learning Models
 
 ## Illustration: A Flexible Curve Instead of a Line
@@ -1112,53 +1106,7 @@ always uses the overall rate $n/N$.
 #| fig-width: 6.5
 #| fig-height: 5
 #| out-width: "95%"
-set.seed(37)
-N <- 40
-f <- function(x) 2 + 2.5 * sin(0.8 * x) + 0.35 * x   # true, nonlinear E[y|x]
-x <- runif(N, 0.5, 10)
-y <- f(x) + rnorm(N, 0, 0.3)
-
-ybar_U <- mean(y)
-
-n <- 15
-sel <- sample(N, n)                     # an ordinary SRS, spread across x
-df <- data.frame(xx = x[sel], yy = y[sel])
-
-fit_curve <- loess(yy ~ xx, data = df, span = 0.9,
-                    control = loess.control(surface = "direct")) # "ML" model
-fit_lm <- lm(yy ~ xx, data = df)                                  # linear model
-
-xg <- seq(0.3, 10.2, length.out = 200)
-curve_g <- predict(fit_curve, newdata = data.frame(xx = xg))
-lm_g <- predict(fit_lm, newdata = data.frame(xx = xg))
-
-yhat <- predict(fit_curve, newdata = data.frame(xx = x)) # fitted value, every unit
-ybar_ml <- mean(yhat)                   # model-based (ML) estimate
-ybar_srs <- mean(y[sel])                # naive sample mean
-
-par(mar = c(4, 4, 0.5, 0.5))
-plot(x, y, pch = 19, col = "grey50", xlab = "x", ylab = "y",
-     xlim = c(0, 10.5), ylim = c(0, 8))
-
-lines(xg, lm_g, col = "steelblue", lwd = 2, lty = 2)
-lines(xg, curve_g, col = "firebrick", lwd = 2)
-text(9.0, tail(curve_g, 1) + 0.5, "ML curve", col = "firebrick")
-text(9.0, tail(lm_g, 1) - 0.5, "linear fit", col = "steelblue")
-
-points(x[sel], y[sel], pch = 21, col = "darkgreen", lwd = 2, cex = 2.2)
-points(x, yhat, pch = 19, col = "firebrick", cex = 0.9)
-
-abline(h = ybar_U, col = "black", lty = 3)
-abline(h = ybar_ml, col = "firebrick", lty = 3)
-abline(h = ybar_srs, col = "darkgreen", lty = 3)
-
-points(0, ybar_U, pch = 19, col = "black", cex = 2)
-points(0, ybar_ml, pch = 19, col = "firebrick", cex = 1.6)
-points(0, ybar_srs, pch = 19, col = "darkgreen", cex = 1.6)
-
-text(0.2, ybar_U, expression(bar(y)[U]), col = "black", adj = c(0, -0.7), font = 2)
-text(0.2, ybar_ml, expression(hat(bar(y))[ML]), col = "firebrick", adj = c(0, 1.4), font = 2)
-text(0.2, ybar_srs, expression(bar(y)), col = "darkgreen", adj = c(0, -0.7), font = 2)
+plot_ml_concept()
 ```
 
 :::

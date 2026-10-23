@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.9.37">
 
   <meta name="author" content="Longhai Li">
-  <meta name="dcterms.date" content="2026-10-08">
+  <meta name="dcterms.date" content="2026-10-23">
   <title>IntroSampling-Slides</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -161,11 +161,19 @@ Longhai Li
 </div>
 </div>
 
-  <p class="date">2026-10-08</p>
+  <p class="date">2026-10-23</p>
 </section>
 <section>
 <section id="a-bad-sampling-example" class="title-slide slide level1 center" data-number="1">
 <h1><span class="header-section-number">1</span> A Bad Sampling Example</h1>
+<p>Reading suggestions:</p>
+<ul>
+<li>Lohr, Ch 1 and Section 2.2</li>
+<li>Scheaffer et al., Ch 2 and Sections 3.1–3.4</li>
+</ul>
+</section>
+<section id="a-bad-sampling-example-1" class="slide level2">
+<h2>A Bad Sampling Example</h2>
 <p>Shere Hite’s book <em>Women and Love: A Cultural Revolution in Progress</em> (1987) had a number of widely quoted results:</p>
 <ul>
 <li>84% of women are “not satisfied emotionally with their relationships” (p.&nbsp;804).</li>
@@ -175,8 +183,8 @@ Longhai Li
 </ul>
 <p>The book was widely criticized in newspaper and magazine articles throughout the United States. The <em>Time</em> magazine cover story “Back Off, Buddy” (October 12, 1987) called the conclusions of Hite’s study “dubious” and “of limited value.”</p>
 </section>
-<section id="a-bad-sampling-example-contd" class="slide level2">
-<h2>A Bad Sampling Example (cont’d)</h2>
+<section id="what-went-wrong" class="slide level2">
+<h2>What Went Wrong?</h2>
 <ul>
 <li>The sample was <strong>self-selected</strong>—recipients of questionnaires decided whether they would be in the sample or not. Hite mailed 100,000 questionnaires; only 4.5% were returned.</li>
 <li>Questionnaires were mailed to organizations such as professional women’s groups, counseling centers, church societies, and senior citizens’ centers—groups whose viewpoints may differ from other women in the United States.</li>
@@ -184,37 +192,11 @@ Longhai Li
 <li>Many questions are vague (e.g., “love”), making percentages hard to interpret.</li>
 <li>Many questions are leading, suggesting to the respondent which response to give.</li>
 </ul>
-</section>
-<section id="type-of-probability-sampling" class="slide level2">
-<h2>Type of Probability Sampling</h2>
-<p>A <strong>simple random sample (SRS)</strong> is the simplest form of probability sample. An SRS of size <span class="math inline">n</span> is taken when every possible subset of <span class="math inline">n</span> units in the population has the same chance of being the sample.</p>
-
-<img data-src="Lec01-sampling_survey_files/figure-revealjs/fig-srs-1.png" id="fig-srs" class="quarto-figure quarto-figure-center r-stretch" style="width:55.0%"><p class="caption">
-Figure&nbsp;1
-</p></section>
-<section id="stratified-random-sampling" class="slide level2">
-<h2>Stratified Random Sampling</h2>
-<p>In a <strong>stratified random sample</strong>, the population is divided into subgroups called <strong>strata</strong>. An SRS is selected independently from each stratum. Strata are often subgroups of interest—regions of a country, terrain types, or firm sizes. Stratification often increases precision because elements within a stratum tend to be more similar than randomly selected elements from the whole population.</p>
-
-<img data-src="Lec01-sampling_survey_files/figure-revealjs/fig-stratified-1.png" id="fig-stratified" class="quarto-figure quarto-figure-center r-stretch" style="width:60.0%"><p class="caption">
-Figure&nbsp;2
-</p></section>
-<section id="cluster-sampling" class="slide level2">
-<h2>Cluster Sampling</h2>
-<p>In a <strong>cluster sample</strong>, observation units are aggregated into larger sampling units called <strong>clusters</strong>.</p>
-<p>Example: to survey Lutheran church members in Minneapolis without a list of all members, take an SRS of churches (clusters), then subsample members within each selected church (observation units). This is convenient, but members of the same church may be more similar to each other than a random sample of Lutherans, so a cluster sample may provide less information than an SRS of the same size.</p>
-
-<img data-src="Lec01-sampling_survey_files/figure-revealjs/fig-cluster-1.png" id="fig-cluster" class="quarto-figure quarto-figure-center r-stretch" style="width:85.0%"><p class="caption">
-Figure&nbsp;3
-</p></section></section>
+</section></section>
 <section>
 <section id="elements-of-sampling-problems" class="title-slide slide level1 center" data-number="2">
 <h1><span class="header-section-number">2</span> Elements of Sampling Problems</h1>
-<p>Reading suggestions:</p>
-<ul>
-<li>Lohr, Ch 1</li>
-<li>Scheaffer et al., Ch 2</li>
-</ul>
+
 </section>
 <section id="basic-definitions" class="slide level2">
 <h2>Basic Definitions</h2>
@@ -291,6 +273,392 @@ Figure&nbsp;3
 <li>Data can be collected more quickly, allowing timely estimates (an unemployment rate for 2005 published in 2015 is useless).</li>
 <li>Sample-based estimates can be <strong>more accurate</strong> than a census, since a smaller operation allows investigators to be more careful; a full census requires a large administrative effort involving many data collectors.</li>
 </ul>
+</section></section>
+<section>
+<section id="overview-of-probability-sampling-and-estimation" class="title-slide slide level1 center" data-number="6">
+<h1><span class="header-section-number">6</span> Overview of Probability Sampling and Estimation</h1>
+<p>In a <strong>probability sample</strong>, every unit has a known, positive chance of being selected, and the sample is chosen by a random mechanism. The illustrations use synthetic populations of <span class="math inline">N = 1000</span> units; each design selects <span class="math inline">n = 60</span> units (red).</p>
+</section>
+<section id="simple-random-sampling" class="slide level2">
+<h2>Simple Random Sampling</h2>
+<p>A <strong>simple random sample (SRS)</strong> of size <span class="math inline">n</span> is taken when every possible subset of <span class="math inline">n</span> units in the population has the same chance of being the sample.</p>
+
+<img data-src="Lec01-sampling_survey_files/figure-revealjs/fig-intro-srs-1.png" id="fig-intro-srs" class="quarto-figure quarto-figure-center r-stretch" style="width:95.0%"><p class="caption">
+Figure&nbsp;1
+</p><p>The units are listed in an arbitrary order; the dashed line is the population mean.</p>
+</section>
+<section id="stratified-random-sampling" class="slide level2">
+<h2>Stratified Random Sampling</h2>
+<p>The population is divided into <strong>strata</strong>, and an SRS is selected independently from each stratum. Stratification often increases precision because elements within a stratum tend to be more similar than elements of the whole population.</p>
+
+<img data-src="Lec01-sampling_survey_files/figure-revealjs/fig-intro-stratified-1.png" id="fig-intro-stratified" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
+Figure&nbsp;2
+</p><p>Strata of sizes 400, 300, 200, 100, sorted by their means; <span class="math inline">n_h = 24, 18, 12, 6</span> (proportional allocation).</p>
+</section>
+<section id="cluster-sampling" class="slide level2">
+<h2>Cluster Sampling</h2>
+<p>Observation units are grouped into larger sampling units called <strong>clusters</strong>; an SRS of clusters is selected, and units are observed (or subsampled) within them. E.g., take an SRS of churches, then survey members within the selected churches.</p>
+
+<img data-src="Lec01-sampling_survey_files/figure-revealjs/fig-intro-cluster-1.png" id="fig-intro-cluster" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p class="caption">
+Figure&nbsp;3
+</p><p>Three of ten clusters are selected (shaded) and 20 units are subsampled in each. Cluster sampling is convenient, but often less precise than an SRS of the same size.</p>
+</section></section>
+<section>
+<section id="a-framework-for-probability-sampling" class="title-slide slide level1 center" data-number="7">
+<h1><span class="header-section-number">7</span> A Framework for Probability Sampling</h1>
+<p>Concepts: Population, Sample, Sampling Probability, Inclusion Probability, Bias, Variance, MSE</p>
+</section>
+<section id="the-population-and-its-samples" class="slide level2">
+<h2>The Population and Its Samples</h2>
+<p>The finite <strong>population</strong>, or <strong>universe</strong>, of <span class="math inline">N</span> units is denoted by the index set <span class="math display">\mathcal{U} = \{1, 2, \ldots, N\}.</span></p>
+<p>Out of this population we can choose various <strong>samples</strong>, which are subsets of <span class="math inline">\mathcal{U}</span>. The particular sample chosen is denoted <span class="math inline">\mathcal{S}</span>, a subset consisting of <span class="math inline">n</span> of the units in <span class="math inline">\mathcal{U}</span>.</p>
+<p><strong>Example:</strong> suppose <span class="math inline">\mathcal{U} = \{1,2,3,4\}</span> (<span class="math inline">N=4</span>). Six different samples of size <span class="math inline">n=2</span> could be chosen: <span class="math display">
+\mathcal{S}_1=\{1,2\}\quad \mathcal{S}_2=\{1,3\}\quad \mathcal{S}_3=\{1,4\}\quad
+\mathcal{S}_4=\{2,3\}\quad \mathcal{S}_5=\{2,4\}\quad \mathcal{S}_6=\{3,4\}
+</span></p>
+</section>
+<section id="probability-sampling" class="slide level2">
+<h2>Probability Sampling</h2>
+<p>In probability sampling, each possible sample <span class="math inline">\mathcal{S}</span> from the population has a known probability <span class="math inline">P(\mathcal{S})</span> of being chosen, and the probabilities of the possible samples sum to 1.</p>
+<p>One possible design for a probability sample of size 2 from <span class="math inline">\mathcal{U}=\{1,2,3,4\}</span>: <span class="math display">
+P(\mathcal{S}_1)=\tfrac13,\quad P(\mathcal{S}_4)=\tfrac16,\quad P(\mathcal{S}_6)=\tfrac12,
+\quad P(\mathcal{S}_2)=P(\mathcal{S}_3)=P(\mathcal{S}_5)=0
+</span></p>
+<p>These probabilities are known <strong>before</strong> the sample is drawn. One way to realize this design: place six labeled balls in a box — two labeled 1, one labeled 4, and three labeled 6 — then draw one ball at random; whichever label is drawn gives the sample <span class="math inline">\mathcal{S}_i</span>. An SRS gives all six samples probability <span class="math inline">1/6</span>.</p>
+</section>
+<section id="notation-for-the-values-y_i" class="slide level2">
+<h2>Notation for the Values <span class="math inline">y_i</span></h2>
+<p>Let <span class="math inline">y_i</span> be a characteristic associated with the <span class="math inline">i</span>th unit in the population. We treat <span class="math inline">y_i</span> as a <strong>fixed</strong> quantity: if farm 723 is in the sample, the corn yield <span class="math inline">y_{723}</span> is known exactly.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">i</span></th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;"><span class="math inline">\cdots</span></th>
+<th style="text-align: center;"><span class="math inline">N</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">y_i</span></td>
+<td style="text-align: center;"><span class="math inline">y_1</span></td>
+<td style="text-align: center;"><span class="math inline">y_2</span></td>
+<td style="text-align: center;"><span class="math inline">y_3</span></td>
+<td style="text-align: center;"><span class="math inline">\cdots</span></td>
+<td style="text-align: center;"><span class="math inline">y_N</span></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="math inline">y_i</span> is <strong>not</strong> a random variable in Lohr’s book. In Scheaffer’s book, <span class="math inline">y_i</span> is used for the population <em>value</em> and <span class="math inline">Y_i</span> is a random variable.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="inclusion-probability-and-sampling-weight" class="slide level2">
+<h2>Inclusion Probability and Sampling Weight</h2>
+<p>Once we have chosen a sample design, each unit in the population has a known probability of appearing in the selected sample: <span class="math display">
+\pi_i = P(\text{unit } i \text{ in sample}) = \sum_{\mathcal S \ni i} P(\mathcal S),
+</span> the sum of the probabilities of all possible samples that contain unit <span class="math inline">i</span>. In probability sampling, all <span class="math inline">\pi_i</span> are known before the survey commences, and we assume <span class="math inline">\pi_i &gt; 0</span> for every unit in the population.</p>
+<p><strong>Sampling weight:</strong> <span class="math inline">w_i = 1/\pi_i</span>. For many sampling schemes, the population total estimator can be written as <span class="math display">
+\hat t = \sum_{i \in \mathcal{S}} w_i \, y_i = \sum_{i \in \mathcal{S}} \frac{y_i}{\pi_i}.
+</span></p>
+</section>
+<section id="example-inclusion-probabilities" class="slide level2">
+<h2>Example: Inclusion Probabilities</h2>
+<p>For <span class="math inline">\mathcal{U}=\{1,2,3,4\}</span>, <span class="math inline">N=4</span>, <span class="math inline">n=2</span>, with the sample design above:</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\mathcal{S}_i</span></th>
+<th style="text-align: center;"><span class="math inline">\{1,2\}</span></th>
+<th style="text-align: center;"><span class="math inline">\{2,3\}</span></th>
+<th style="text-align: center;"><span class="math inline">\{1,3\}</span></th>
+<th style="text-align: center;"><span class="math inline">\{2,4\}</span></th>
+<th style="text-align: center;"><span class="math inline">\{1,4\}</span></th>
+<th style="text-align: center;"><span class="math inline">\{3,4\}</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">P(\mathcal{S}_i)</span></td>
+<td style="text-align: center;"><span class="math inline">1/3</span></td>
+<td style="text-align: center;"><span class="math inline">1/6</span></td>
+<td style="text-align: center;"><span class="math inline">0</span></td>
+<td style="text-align: center;"><span class="math inline">0</span></td>
+<td style="text-align: center;"><span class="math inline">0</span></td>
+<td style="text-align: center;"><span class="math inline">1/2</span></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">
+\pi_1 = P(\{1,2\}) = \tfrac13, \qquad
+\pi_2 = P(\{1,2\})+P(\{2,3\}) = \tfrac13+\tfrac16=\tfrac12,
+</span> <span class="math display">
+\pi_3 = P(\{2,3\})+P(\{3,4\}) = \tfrac16+\tfrac12=\tfrac23, \qquad
+\pi_4 = P(\{3,4\}) = \tfrac12 .
+</span></p>
+<p>Note <span class="math inline">\sum_{i=1}^4 \pi_i = 2 = n</span>, not 1: each sample contains <span class="math inline">n=2</span> units.</p>
+</section>
+<section id="population-quantities-total-mean-variance" class="slide level2">
+<h2>Population Quantities: Total, Mean, Variance</h2>
+<p><span class="math display">
+\textbf{Total:}\quad t = \sum_{i=1}^N y_i
+\qquad
+\textbf{Mean:}\quad \bar y_{U} = \frac{t}{N} = \frac{\sum_{i=1}^N y_i}{N}
+</span></p>
+<p><span class="math display">
+\textbf{Variance:}\quad S^2 = \frac{1}{N-1}\sum_{i=1}^N (y_i-\bar y_{U})^2
+\qquad
+\textbf{Standard deviation:}\quad S = \sqrt{S^2}
+</span></p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>In Scheaffer’s book, <span class="math inline">\displaystyle \sigma^2 = \frac1N \sum_{i=1}^N (y_i - \bar y_{U})^2</span> (divides by <span class="math inline">N</span>, not <span class="math inline">N-1</span>).</p>
+</div>
+</div>
+</div>
+</section>
+<section id="example-a-population-proportion" class="slide level2">
+<h2>Example: A Population Proportion</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">i</span></th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">y_i</span></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">
+t = \sum_{i=1}^5 y_i = 1+0+0+0+1 = 2
+\qquad
+\bar y_{U} = \frac{2}{5} = 40\% \ \text{(population proportion)}
+</span> <span class="math display">
+S^2 = \frac{1}{5-1}\Big((1-0.4)^2\times 2 + (0-0.4)^2\times 3\Big) = 0.3
+</span></p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>For a 0/1 population, <span class="math inline">S^2 = \frac{N}{N-1}p(1-p) = \frac54(0.4)(0.6) = 0.3</span>, which tends to <span class="math inline">p(1-p)</span> as <span class="math inline">N</span> becomes large.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="example-number-of-devices-per-household" class="slide level2">
+<h2>Example: Number of Devices per Household</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">i</span></th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">y_i</span></td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">6</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">
+t = \sum_{i=1}^4 y_i = 2+4+4+6 = 16
+\qquad
+\bar y_{U} = \frac{16}{4} = 4
+</span> <span class="math display">
+S^2 = \frac{1}{4-1}\Big((2-4)^2+(4-4)^2+(4-4)^2+(6-4)^2\Big) = \frac{8}{3}
+</span></p>
+</section>
+<section id="statistic-and-sampling-distribution" class="slide level2">
+<h2>Statistic and Sampling Distribution</h2>
+<p><strong>Statistic</strong><br>
+A statistic is a function of the observations in a sample, used for estimating a population quantity.</p>
+<p><strong>Sampling distribution</strong><br>
+The sampling distribution is the distribution of a statistic under repeated sampling.</p>
+<p><strong>Example:</strong> to estimate <span class="math inline">t</span> we may use <span class="math inline">\hat t = N\bar y</span>, with <span class="math inline">\bar y = \frac1n\sum_{i\in\mathcal S} y_i</span>. For the devices population (<span class="math inline">n=2</span>, <span class="math inline">N=4</span>), <span class="math inline">\hat t = 4\bar y</span>; the true values are <span class="math inline">\bar y_U = 4</span> and <span class="math inline">t = 16</span>.</p>
+</section>
+<section id="example-sampling-distribution-of-bar-y" class="slide level2">
+<h2>Example: Sampling Distribution of <span class="math inline">\bar y</span></h2>
+<p>All six possible samples of size 2 from <span class="math inline">\{y_1,\ldots,y_4\}=\{2,4,4,6\}</span>:</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\mathcal S_i</span></th>
+<th style="text-align: center;"><span class="math inline">\{1,2\}</span></th>
+<th style="text-align: center;"><span class="math inline">\{1,3\}</span></th>
+<th style="text-align: center;"><span class="math inline">\{1,4\}</span></th>
+<th style="text-align: center;"><span class="math inline">\{2,3\}</span></th>
+<th style="text-align: center;"><span class="math inline">\{2,4\}</span></th>
+<th style="text-align: center;"><span class="math inline">\{3,4\}</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">values</td>
+<td style="text-align: center;">2, 4</td>
+<td style="text-align: center;">2, 4</td>
+<td style="text-align: center;">2, 6</td>
+<td style="text-align: center;">4, 4</td>
+<td style="text-align: center;">4, 6</td>
+<td style="text-align: center;">4, 6</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">P(\mathcal S_i)</span></td>
+<td style="text-align: center;"><span class="math inline">1/3</span></td>
+<td style="text-align: center;"><span class="math inline">0</span></td>
+<td style="text-align: center;"><span class="math inline">0</span></td>
+<td style="text-align: center;"><span class="math inline">1/6</span></td>
+<td style="text-align: center;"><span class="math inline">0</span></td>
+<td style="text-align: center;"><span class="math inline">1/2</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\bar y</span></td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">5</td>
+</tr>
+</tbody>
+</table>
+<p>Collecting equal values of <span class="math inline">\bar y</span> gives the <strong>sampling distribution of <span class="math inline">\bar y</span></strong>:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">k</span></th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+<th style="text-align: center;">5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">P(\bar y = k)</span></td>
+<td style="text-align: center;"><span class="math inline">1/3</span></td>
+<td style="text-align: center;"><span class="math inline">1/6</span></td>
+<td style="text-align: center;"><span class="math inline">1/2</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="plot-of-the-sampling-distribution" class="slide level2">
+<h2>Plot of the Sampling Distribution</h2>
+
+<img data-src="Lec01-sampling_survey_files/figure-revealjs/fig-sampdist-1.png" id="fig-sampdist" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"><p class="caption">
+Figure&nbsp;4
+</p></section>
+<section id="bias-variance-and-mse-of-bar-y" class="slide level2">
+<h2>Bias, Variance and MSE of <span class="math inline">\bar y</span></h2>
+<p><span class="math display">
+\begin{aligned}
+E(\bar y) &amp;= 3\times\tfrac13 + 4\times\tfrac16 + 5\times\tfrac12 = \frac{25}{6} \\[4pt]
+\text{Bias}(\bar y) &amp;= E(\bar y) - \bar y_{U} = \frac{25}{6} - 4 = \frac16 \\[4pt]
+V(\bar y) &amp;= E\big[(\bar y - E(\bar y))^2\big] \\
+&amp;= \Big(3-\tfrac{25}{6}\Big)^2\tfrac13 + \Big(4-\tfrac{25}{6}\Big)^2\tfrac16
+   + \Big(5-\tfrac{25}{6}\Big)^2\tfrac12 = \frac{29}{36} \approx 0.806 \\[4pt]
+\text{MSE}(\bar y) &amp;= E\big[(\bar y - \bar y_{U})^2\big] \\
+&amp;= (3-4)^2\cdot\tfrac13 + (4-4)^2\cdot\tfrac16 + (5-4)^2\cdot\tfrac12 = \frac56 \approx 0.833
+\end{aligned}
+</span></p>
+<p>The design favours <span class="math inline">\{3,4\}</span>, which contains the household with 6 devices, so <span class="math inline">\bar y</span> tends to be too large.</p>
+</section>
+<section id="mse-bias2-variance" class="slide level2">
+<h2>MSE = Bias<span class="math inline">^2</span> + Variance</h2>
+<p>Adding and subtracting <span class="math inline">E(\hat\theta)</span>: <span class="math display">
+\text{MSE}(\hat\theta) = E\Big[\big(\hat\theta - E(\hat\theta)\big) + \big(E(\hat\theta) - \theta\big)\Big]^2
+= V(\hat\theta) + \big(\text{Bias}(\hat\theta)\big)^2 ,
+</span> since the cross term has expectation zero.</p>
+<p><strong>Check with our example:</strong> <span class="math display">
+\text{Bias}(\bar y)^2 + V(\bar y) = \Big(\frac16\Big)^2 + \frac{29}{36} = \frac{30}{36} = \frac56 = \text{MSE}(\bar y) \checkmark
+</span></p>
+<p>When <span class="math inline">\hat\theta</span> is unbiased, <span class="math inline">\text{MSE}(\hat\theta) = V(\hat\theta)</span>.</p>
+</section>
+<section id="the-same-population-under-srs" class="slide level2">
+<h2>The Same Population under SRS</h2>
+<p>If all six samples have probability <span class="math inline">1/6</span> (an SRS), the six values of <span class="math inline">\bar y</span> are <span class="math inline">3, 3, 4, 4, 5, 5</span>: <span class="math display">
+E(\bar y) = 4 = \bar y_U \quad \text{(unbiased)}, \qquad
+V(\bar y) = \tfrac16(1+1+0+0+1+1) = \tfrac23 .
+</span></p>
+<p>This agrees with the SRS variance formula (next lecture): <span class="math display">
+V(\bar y) = \Big(1-\frac nN\Big)\frac{S^2}{n} = \frac12\cdot\frac{8/3}{2} = \frac23 .
+</span></p>
+</section>
+<section id="unbiased-precise-and-accurate" class="slide level2">
+<h2>Unbiased, Precise, and Accurate</h2>
+<p>An estimator <span class="math inline">\hat t</span> of <span class="math inline">t</span> is:</p>
+<ul>
+<li><strong>unbiased</strong> if <span class="math inline">E(\hat t) = t</span></li>
+<li><strong>precise</strong> if <span class="math inline">V(\hat t) = E\big[(\hat t - E[\hat t])^2\big]</span> is small</li>
+<li><strong>accurate</strong> if <span class="math inline">\text{MSE}(\hat t) = E\big[(\hat t - t)^2\big]</span> is small</li>
+</ul>
+<p>A badly biased estimator may be precise but will not be accurate: accuracy (MSE) is how close the estimate is to the truth, while precision (variance) measures how close estimates from different samples are to <em>each other</em>.</p>
+
+<img data-src="figures/archers.png" class="quarto-figure quarto-figure-center r-stretch" style="width:95.0%"></section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
+<p>The finite population <span class="math inline">\mathcal U</span> consists of units <span class="math inline">\{1,2,\ldots,N\}</span> with measured values <span class="math inline">\{y_1,y_2,\ldots,y_N\}</span>. We select a sample <span class="math inline">\mathcal S</span> of <span class="math inline">n</span> units from <span class="math inline">\mathcal U</span> using the probabilities of selection that define the sampling design.</p>
+<p>The <span class="math inline">y_i</span>’s are fixed but unknown quantities — unknown unless that unit happens to appear in our sample <span class="math inline">\mathcal S</span>. Bias, variance and MSE all refer to the distribution of an estimator over the possible samples.</p>
 
 </section></section>
     </div>

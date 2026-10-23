@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Longhai Li">
-<meta name="dcterms.date" content="2026-10-22">
+<meta name="dcterms.date" content="2026-10-23">
 
 <title>1&nbsp; Introduction to Sampling Survey – Elements of Sampling Survey</title>
 <style>
@@ -272,7 +272,7 @@ window.Quarto = {
   <ul>
   <li><a href="#why-sample-at-all" id="toc-why-sample-at-all" class="nav-link" data-scroll-target="#why-sample-at-all"><span class="header-section-number">1.5.1</span> Why sample at all?</a></li>
   </ul></li>
-  <li><a href="#sec-intro-designs" id="toc-sec-intro-designs" class="nav-link" data-scroll-target="#sec-intro-designs"><span class="header-section-number">1.6</span> Types of Probability Samples</a></li>
+  <li><a href="#sec-intro-designs" id="toc-sec-intro-designs" class="nav-link" data-scroll-target="#sec-intro-designs"><span class="header-section-number">1.6</span> Overview of Probability Sampling and Estimation Techniques</a></li>
   <li><a href="#sec-intro-framework" id="toc-sec-intro-framework" class="nav-link" data-scroll-target="#sec-intro-framework"><span class="header-section-number">1.7</span> A Framework for Probability Sampling</a>
   <ul>
   <li><a href="#the-population-and-its-samples" id="toc-the-population-and-its-samples" class="nav-link" data-scroll-target="#the-population-and-its-samples"><span class="header-section-number">1.7.1</span> The population and its samples</a></li>
@@ -314,7 +314,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 22, 2026</p>
+      <p class="date">October 23, 2026</p>
     </div>
   </div>
   
@@ -417,8 +417,8 @@ Figure&nbsp;1.1: Target population, sampling frame population and sampled popula
 </section>
 </section>
 <section id="sec-intro-designs" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="sec-intro-designs"><span class="header-section-number">1.6</span> Types of Probability Samples</h2>
-<p>In a <strong>probability sample</strong>, every unit in the population has a known, positive chance of being selected, and the sample is chosen by a random mechanism. This removes selection bias due to the investigator’s choices, and it makes it possible to quantify the sampling error. Here are the main designs; each has its own chapter later in the book.</p>
+<h2 data-number="1.6" class="anchored" data-anchor-id="sec-intro-designs"><span class="header-section-number">1.6</span> Overview of Probability Sampling and Estimation Techniques</h2>
+<p>In a <strong>probability sample</strong>, every unit in the population has a known, positive chance of being selected, and the sample is chosen by a random mechanism. This removes selection bias due to the investigator’s choices, and it makes it possible to quantify the sampling error. This section previews the techniques studied in the rest of the book: three basic designs for drawing the sample (simple random, stratified and cluster sampling), estimators that use auxiliary information (ratio and regression estimation), and designs with unequal selection probabilities. Each has its own chapter later in the book.</p>
 <p>To compare the designs we use synthetic populations of <span class="math inline">\(N = 1000\)</span> units, with the <span class="math inline">\(y\)</span>-values drawn from exponential distributions. The population for SRS and stratified sampling (<a href="#fig-intro-srs" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> and <a href="#fig-intro-stratified" class="quarto-xref">Figure&nbsp;<span>1.3</span></a>) consists of four strata of sizes 400, 300, 200 and 100 whose means differ a lot: each is an exponential distribution with mean 1.5, shifted by 0, 4, 8 and 12 respectively. The population for cluster sampling (<a href="#fig-intro-cluster" class="quarto-xref">Figure&nbsp;<span>1.4</span></a>) consists of ten clusters whose sizes range from 40 to 160 units, exponential with means from 2 to 8. Each design selects <span class="math inline">\(n = 60\)</span> units, shown in red; the unselected units are grey.</p>
 <p><strong>Simple random sampling.</strong> A <strong>simple random sample (SRS)</strong> is the simplest probability sample. An SRS of size <span class="math inline">\(n\)</span> is taken when every possible subset of <span class="math inline">\(n\)</span> units in the population has the same chance of being the sample. The design uses no information about the groups: in <a href="#fig-intro-srs" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> the 1000 units are listed in an arbitrary order, and 60 of them are chosen at random. By chance, a group may be over- or under-represented, and the sample values range over the whole spread of the population.</p>
 <div class="cell">
@@ -465,7 +465,36 @@ Figure&nbsp;1.4: A cluster sample from a population of ten clusters of 40 to 160
 </div>
 </div>
 </div>
-<p>Later chapters add two more ingredients: estimators that use <strong>auxiliary information</strong> (ratio and regression estimation), and designs that select units with <strong>unequal probabilities</strong>, typically proportional to a measure of size.</p>
+<p><strong>Using auxiliary information: ratio and regression estimation.</strong> Often we know, for every unit in the population, an <strong>auxiliary variable</strong> <span class="math inline">\(x_i\)</span> that is related to <span class="math inline">\(y_i\)</span>: last year’s value of <span class="math inline">\(y\)</span>, the size of a farm, the floor area of a store. Ratio and regression estimation take an ordinary sample but use the known <span class="math inline">\(x_i\)</span> at the <em>estimation</em> stage. In <a href="#fig-intro-ratio" class="quarto-xref">Figure&nbsp;<span>1.5</span></a>, <span class="math inline">\(y\)</span> is roughly proportional to <span class="math inline">\(x\)</span>. From an SRS (green circles) we estimate the slope <span class="math inline">\(\hat B = \bar y/\bar x\)</span> of the line <span class="math inline">\(y = Bx\)</span> (red), and use it to predict <span class="math inline">\(y\)</span> for every unit of the population from its known <span class="math inline">\(x_i\)</span> (red points). The <strong>ratio estimate</strong> <span class="math inline">\(\hat{\bar y}_r = \hat B\,\bar x_U\)</span> is the average of these predictions. In this sample the green units happen to have large <span class="math inline">\(x\)</span>, so the sample mean <span class="math inline">\(\bar y\)</span> is too high. The ratio estimate corrects for this through the known <span class="math inline">\(\bar x_U\)</span> and lands close to <span class="math inline">\(\bar y_U\)</span>. <strong>Regression estimation</strong> does the same with a fitted line <span class="math inline">\(y = B_0 + B_1x\)</span> that need not pass through the origin. Both are studied in <a href="ratio.html#sec-ratio-formulas" class="quarto-xref"><span>Section 5.1</span></a> and the sections that follow.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-intro-ratio" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-intro-ratio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="intro_files/figure-html/fig-intro-ratio-1.png" class="img-fluid figure-img" style="width:65.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-intro-ratio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.5: Ratio estimation. Grey: the population, whose <span class="math inline">\(x_i\)</span> are all known. Green circles: an SRS. Red: the line <span class="math inline">\(y = \hat B x\)</span> fitted from the sample and the predicted value <span class="math inline">\(\hat B x_i\)</span> of every unit. Left margin: the population mean <span class="math inline">\(\bar y_U\)</span> (black), the sample mean <span class="math inline">\(\bar y\)</span> (green) and the ratio estimate <span class="math inline">\(\hat{\bar y}_r\)</span>, the mean of the red points.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Unequal probability sampling.</strong> Auxiliary information can also be used at the <em>design</em> stage. In <strong>unequal probability sampling (UPS)</strong>, units are selected with different probabilities, usually proportional to a measure of size <span class="math inline">\(x_i\)</span> that is expected to be roughly proportional to <span class="math inline">\(y_i\)</span>. Large units, which contribute most to the population total, are then more likely to be in the sample. In <a href="#fig-intro-ups" class="quarto-xref">Figure&nbsp;<span>1.6</span></a> the units of <a href="#fig-intro-srs" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> are drawn again, each with a size measure <span class="math inline">\(x_i\)</span> equal to <span class="math inline">\(y_i\)</span> multiplied by a random error, and the point sizes show the inclusion probabilities <span class="math inline">\(\pi_i \propto x_i\)</span>. A sample of 60 units (red) is drawn with these probabilities. Most of the sampled units have large <span class="math inline">\(y\)</span>, so the plain sample mean would be far too high. Each unit must instead be weighted by its sampling weight <span class="math inline">\(w_i = 1/\pi_i\)</span> (<a href="#sec-intro-framework" class="quarto-xref"><span>Section 1.7</span></a>), which gives the many small units their due. When <span class="math inline">\(x_i\)</span> is nearly proportional to <span class="math inline">\(y_i\)</span>, the weighted estimator <span class="math inline">\(\sum_{i\in\mathcal S} y_i/\pi_i\)</span> of the total is very precise, because <span class="math inline">\(y_i/\pi_i\)</span> is nearly the same for every unit. UPS is studied in <a href="ups.html#sec-ups-hh" class="quarto-xref"><span>Section 7.2</span></a> and the sections that follow.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-intro-ups" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-intro-ups-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="intro_files/figure-html/fig-intro-ups-1.png" class="img-fluid figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-intro-ups-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.6: Unequal probability sampling from the population of <a href="#fig-intro-srs" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>. Each unit’s inclusion probability is proportional to a size measure <span class="math inline">\(x_i\)</span> equal to <span class="math inline">\(y_i\)</span> times a random error; point sizes show the probabilities. The <span class="math inline">\(n = 60\)</span> sampled units (red) are mostly large ones. The dashed line is the population mean.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="sec-intro-framework" class="level2" data-number="1.7">
 <h2 data-number="1.7" class="anchored" data-anchor-id="sec-intro-framework"><span class="header-section-number">1.7</span> A Framework for Probability Sampling</h2>
@@ -591,7 +620,8 @@ S^2 = \frac{1}{5-1}\Big((1-0.4)^2\times 2 + (0-0.4)^2\times 3\Big) = 0.3 .
 </table>
 <p><span class="math display">\[
 t = 2+4+4+6 = 16, \qquad
-\bar y_{U} = \frac{16}{4} = 4, \qquad
+\bar y_{U} = \frac{16}{4} = 4,
+\]</span> <span class="math display">\[
 S^2 = \frac{(2-4)^2+(4-4)^2+(4-4)^2+(6-4)^2}{4-1} = \frac{8}{3}.
 \]</span></p>
 </section>
@@ -652,7 +682,7 @@ S^2 = \frac{(2-4)^2+(4-4)^2+(4-4)^2+(6-4)^2}{4-1} = \frac{8}{3}.
 </tr>
 </tbody>
 </table>
-<p>Collecting the samples that give the same value of <span class="math inline">\(\bar y\)</span>, and adding their probabilities, gives the <strong>sampling distribution of <span class="math inline">\(\bar y\)</span></strong> (<a href="#fig-intro-sampdist" class="quarto-xref">Figure&nbsp;<span>1.5</span></a>):</p>
+<p>Collecting the samples that give the same value of <span class="math inline">\(\bar y\)</span>, and adding their probabilities, gives the <strong>sampling distribution of <span class="math inline">\(\bar y\)</span></strong> (<a href="#fig-intro-sampdist" class="quarto-xref">Figure&nbsp;<span>1.7</span></a>):</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -679,7 +709,7 @@ S^2 = \frac{(2-4)^2+(4-4)^2+(4-4)^2+(6-4)^2}{4-1} = \frac{8}{3}.
 <img src="intro_files/figure-html/fig-intro-sampdist-1.png" class="img-fluid figure-img" style="width:70.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-intro-sampdist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.5: Sampling distribution of <span class="math inline">\(\bar y\)</span> for the devices population under the design <span class="math inline">\(P(\{1,2\}) = 1/3\)</span>, <span class="math inline">\(P(\{2,3\}) = 1/6\)</span>, <span class="math inline">\(P(\{3,4\}) = 1/2\)</span>. The mean of the distribution, <span class="math inline">\(E(\bar y) = 25/6\)</span>, is not the population mean <span class="math inline">\(\bar y_U = 4\)</span>.
+Figure&nbsp;1.7: Sampling distribution of <span class="math inline">\(\bar y\)</span> for the devices population under the design <span class="math inline">\(P(\{1,2\}) = 1/3\)</span>, <span class="math inline">\(P(\{2,3\}) = 1/6\)</span>, <span class="math inline">\(P(\{3,4\}) = 1/2\)</span>. The mean of the distribution, <span class="math inline">\(E(\bar y) = 25/6\)</span>, is not the population mean <span class="math inline">\(\bar y_U = 4\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -737,14 +767,14 @@ SRS     4.0000 0.0000 0.6667 0.6667</code></pre>
 <li><strong>precise</strong> if <span class="math inline">\(V(\hat t) = E\big[(\hat t - E[\hat t])^2\big]\)</span> is small;</li>
 <li><strong>accurate</strong> if <span class="math inline">\(\text{MSE}(\hat t) = E\big[(\hat t - t)^2\big]\)</span> is small.</li>
 </ul>
-<p>Precision measures how close the estimates from different samples are to <em>each other</em>; accuracy measures how close they are to the <em>truth</em>. A badly biased estimator may be very precise but will not be accurate. <a href="#fig-archers" class="quarto-xref">Figure&nbsp;<span>1.6</span></a> shows the three cases as archers aiming at the centre of a target: archer A is unbiased but imprecise, archer B is precise but biased, and archer C is both unbiased and precise, and therefore accurate. Selection bias and measurement bias make a survey like archer B: increasing the sample size makes the estimates more precise, but no closer to the truth.</p>
+<p>Precision measures how close the estimates from different samples are to <em>each other</em>; accuracy measures how close they are to the <em>truth</em>. A badly biased estimator may be very precise but will not be accurate. <a href="#fig-archers" class="quarto-xref">Figure&nbsp;<span>1.8</span></a> shows the three cases as archers aiming at the centre of a target: archer A is unbiased but imprecise, archer B is precise but biased, and archer C is both unbiased and precise, and therefore accurate. Selection bias and measurement bias make a survey like archer B: increasing the sample size makes the estimates more precise, but no closer to the truth.</p>
 <div id="fig-archers" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-archers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/archers.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-archers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.6: Unbiased but imprecise (A), precise but biased (B), and accurate (C).
+Figure&nbsp;1.8: Unbiased but imprecise (A), precise but biased (B), and accurate (C).
 </figcaption>
 </figure>
 </div>

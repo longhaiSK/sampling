@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Longhai Li">
-<meta name="dcterms.date" content="2026-10-22">
+<meta name="dcterms.date" content="2026-10-23">
 
 <title>3&nbsp; Simple Random Sampling – Elements of Sampling Survey</title>
 <style>
@@ -331,7 +331,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 22, 2026</p>
+      <p class="date">October 23, 2026</p>
     </div>
   </div>
   
@@ -4159,8 +4159,10 @@ E[\bar y] = \sum_{i=1}^N E[Z_i]\frac{y_i}{n}
 <section id="variance-of-bar-y" class="level3" data-number="3.6.3">
 <h3 data-number="3.6.3" class="anchored" data-anchor-id="variance-of-bar-y"><span class="header-section-number">3.6.3</span> Variance of <span class="math inline">\(\bar y\)</span></h3>
 <p>Expanding the variance of a sum, <span class="math display">\[
-V(\bar y) = \frac{1}{n^2}\left[\sum_{i=1}^N y_i^2\, V(Z_i) + \sum_{i=1}^N\sum_{j\ne i} y_i y_j\,\mathrm{Cov}(Z_i,Z_j)\right]
-= \frac{1}{n^2}\,\frac nN\Big(1-\frac nN\Big)\left[\sum_{i=1}^N y_i^2 - \frac{1}{N-1}\sum_{i=1}^N\sum_{j\ne i} y_i y_j\right].
+\begin{aligned}
+V(\bar y) &amp;= \frac{1}{n^2}\left[\sum_{i=1}^N y_i^2\, V(Z_i) + \sum_{i=1}^N\sum_{j\ne i} y_i y_j\,\mathrm{Cov}(Z_i,Z_j)\right] \\
+&amp;= \frac{1}{n^2}\,\frac nN\Big(1-\frac nN\Big)\left[\sum_{i=1}^N y_i^2 - \frac{1}{N-1}\sum_{i=1}^N\sum_{j\ne i} y_i y_j\right].
+\end{aligned}
 \]</span> Using <span class="math inline">\(\sum_i\sum_{j\ne i} y_iy_j = \big(\sum_i y_i\big)^2 - \sum_i y_i^2\)</span>, the term in brackets is <span class="math display">\[
 \frac{N\sum_{i} y_i^2 - \big(\sum_{i} y_i\big)^2}{N-1}
 = \frac{N\sum_i (y_i - \bar y_U)^2}{N-1} = N S^2 .
