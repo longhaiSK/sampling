@@ -26,7 +26,7 @@ Theory and applications of sampling from finite populations. Includes: simple ra
 ## Course Materials
 
 
-1. [HTML Book for Detailed R Demonstration](sampling_book/){target="_blank"} [[PDF]](sampling_book/Elements-of-Sampling-Survey.pdf){target="_blank"}
+1. [HTML Book for Detailed R Demonstration](sampling_book/){target="_blank"}; [[PDF]](sampling_book/Elements-of-Sampling-Survey.pdf){target="_blank"}
 
 2. [HTML Slides](sampling_slides/){target="_blank"}
 
