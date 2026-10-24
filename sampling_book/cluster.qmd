@@ -6,6 +6,7 @@
 library(dplyr)
 source("samplingestimate.r")
 source("design_plots.r")
+source("book_helpers.r")
 ```
 
 ## What Is Cluster Sampling? {#sec-cluster-intro}
@@ -430,11 +431,9 @@ classes are the psus, of different sizes $M_i$, and the students are the ssus.
 #| tbl-cap: "Raw data: algebra classes (sample)"
 algebra <- read.csv("data/algebra.csv")
 
-algebra |>
-  gt() |>
+book_table(algebra) |>
   tab_header(title = "Raw Data: Algebra Classes") |>
-  cols_label(Mi = html("M<sub>i</sub>")) |>
-  opt_interactive(use_pagination = TRUE, page_size_default = 10)
+  cols_label(Mi = md("*M*~i~"))
 ```
 
 The function `cluster_ratio()` (from `samplingestimate.r`) aggregates the data to
@@ -564,9 +563,7 @@ sizes $M_i$ are known.
 ```{r tbl-coots-raw-data}
 #| tbl-cap: "Raw data: coot egg clutches (sample)"
 coots <- read.csv("data/coots.csv")
-coots |>
-  gt() |>
-  opt_interactive(use_pagination = TRUE, page_size_default = 10)
+book_table(coots)
 ```
 
 @fig-coots-volume displays the data. The left panel plots the two egg volumes of

@@ -1140,11 +1140,9 @@ E[\hat{\bar y}_{\text{unb}}] = 6\times\tfrac12 + 2\times\tfrac12 = 4 = \bar y_U 
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>algebra <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/algebra.csv"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>algebra <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Raw Data: Algebra Classes"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">Mi =</span> <span class="fu">html</span>(<span class="st">"M&lt;sub&gt;i&lt;/sub&gt;"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_interactive</span>(<span class="at">use_pagination =</span> <span class="cn">TRUE</span>, <span class="at">page_size_default =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">book_table</span>(algebra) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Raw Data: Algebra Classes"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">Mi =</span> <span class="fu">md</span>(<span class="st">"*M*~i~"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="tbl-algebra-raw-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1153,23 +1151,23 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
 </figcaption>
 <div aria-describedby="tbl-algebra-raw-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="mpbbykywcm" class=".gt_table" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mpbbykywcm table {
+<div id="dpqkmlwwra" class=".gt_table" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dpqkmlwwra table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#mpbbykywcm thead, #mpbbykywcm tbody, #mpbbykywcm tfoot, #mpbbykywcm tr, #mpbbykywcm td, #mpbbykywcm th {
+#dpqkmlwwra thead, #dpqkmlwwra tbody, #dpqkmlwwra tfoot, #dpqkmlwwra tr, #dpqkmlwwra td, #dpqkmlwwra th {
   border-style: none;
 }
 
-#mpbbykywcm p {
+#dpqkmlwwra p {
   margin: 0;
   padding: 0;
 }
 
-#mpbbykywcm .gt_table {
+#dpqkmlwwra .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1195,12 +1193,12 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   border-left-color: #D3D3D3;
 }
 
-#mpbbykywcm .gt_caption {
+#dpqkmlwwra .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#mpbbykywcm .gt_title {
+#dpqkmlwwra .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1212,7 +1210,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   border-bottom-width: 0;
 }
 
-#mpbbykywcm .gt_subtitle {
+#dpqkmlwwra .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1224,7 +1222,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   border-top-width: 0;
 }
 
-#mpbbykywcm .gt_heading {
+#dpqkmlwwra .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1236,13 +1234,13 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   border-right-color: #D3D3D3;
 }
 
-#mpbbykywcm .gt_bottom_border {
+#dpqkmlwwra .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mpbbykywcm .gt_col_headings {
+#dpqkmlwwra .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1257,7 +1255,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   border-right-color: #D3D3D3;
 }
 
-#mpbbykywcm .gt_col_heading {
+#dpqkmlwwra .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1277,7 +1275,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   overflow-x: hidden;
 }
 
-#mpbbykywcm .gt_column_spanner_outer {
+#dpqkmlwwra .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1289,15 +1287,15 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   padding-right: 4px;
 }
 
-#mpbbykywcm .gt_column_spanner_outer:first-child {
+#dpqkmlwwra .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mpbbykywcm .gt_column_spanner_outer:last-child {
+#dpqkmlwwra .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mpbbykywcm .gt_column_spanner {
+#dpqkmlwwra .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1309,11 +1307,11 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   width: 100%;
 }
 
-#mpbbykywcm .gt_spanner_row {
+#dpqkmlwwra .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#mpbbykywcm .gt_group_heading {
+#dpqkmlwwra .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1339,7 +1337,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   text-align: left;
 }
 
-#mpbbykywcm .gt_empty_group_heading {
+#dpqkmlwwra .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1354,15 +1352,15 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   vertical-align: middle;
 }
 
-#mpbbykywcm .gt_from_md > :first-child {
+#dpqkmlwwra .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mpbbykywcm .gt_from_md > :last-child {
+#dpqkmlwwra .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mpbbykywcm .gt_row {
+#dpqkmlwwra .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1381,7 +1379,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   overflow-x: hidden;
 }
 
-#mpbbykywcm .gt_stub {
+#dpqkmlwwra .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1394,7 +1392,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   padding-right: 5px;
 }
 
-#mpbbykywcm .gt_stub_row_group {
+#dpqkmlwwra .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1408,15 +1406,15 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   vertical-align: top;
 }
 
-#mpbbykywcm .gt_row_group_first td {
+#dpqkmlwwra .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mpbbykywcm .gt_row_group_first th {
+#dpqkmlwwra .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#mpbbykywcm .gt_summary_row {
+#dpqkmlwwra .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1426,16 +1424,16 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   padding-right: 5px;
 }
 
-#mpbbykywcm .gt_first_summary_row {
+#dpqkmlwwra .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mpbbykywcm .gt_first_summary_row.thick {
+#dpqkmlwwra .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mpbbykywcm .gt_last_summary_row {
+#dpqkmlwwra .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1445,7 +1443,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   border-bottom-color: #D3D3D3;
 }
 
-#mpbbykywcm .gt_grand_summary_row {
+#dpqkmlwwra .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1455,7 +1453,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   padding-right: 5px;
 }
 
-#mpbbykywcm .gt_first_grand_summary_row {
+#dpqkmlwwra .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1465,7 +1463,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   border-top-color: #D3D3D3;
 }
 
-#mpbbykywcm .gt_last_grand_summary_row_top {
+#dpqkmlwwra .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1475,11 +1473,11 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   border-bottom-color: #D3D3D3;
 }
 
-#mpbbykywcm .gt_striped {
+#dpqkmlwwra .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mpbbykywcm .gt_table_body {
+#dpqkmlwwra .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1488,7 +1486,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   border-bottom-color: #D3D3D3;
 }
 
-#mpbbykywcm .gt_footnotes {
+#dpqkmlwwra .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1502,7 +1500,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   border-right-color: #D3D3D3;
 }
 
-#mpbbykywcm .gt_footnote {
+#dpqkmlwwra .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1511,7 +1509,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   padding-right: 5px;
 }
 
-#mpbbykywcm .gt_sourcenotes {
+#dpqkmlwwra .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1525,7 +1523,7 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   border-right-color: #D3D3D3;
 }
 
-#mpbbykywcm .gt_sourcenote {
+#dpqkmlwwra .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1533,72 +1531,72 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
   padding-right: 5px;
 }
 
-#mpbbykywcm .gt_left {
+#dpqkmlwwra .gt_left {
   text-align: left;
 }
 
-#mpbbykywcm .gt_center {
+#dpqkmlwwra .gt_center {
   text-align: center;
 }
 
-#mpbbykywcm .gt_right {
+#dpqkmlwwra .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mpbbykywcm .gt_font_normal {
+#dpqkmlwwra .gt_font_normal {
   font-weight: normal;
 }
 
-#mpbbykywcm .gt_font_bold {
+#dpqkmlwwra .gt_font_bold {
   font-weight: bold;
 }
 
-#mpbbykywcm .gt_font_italic {
+#dpqkmlwwra .gt_font_italic {
   font-style: italic;
 }
 
-#mpbbykywcm .gt_super {
+#dpqkmlwwra .gt_super {
   font-size: 65%;
 }
 
-#mpbbykywcm .gt_footnote_marks {
+#dpqkmlwwra .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#mpbbykywcm .gt_asterisk {
+#dpqkmlwwra .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mpbbykywcm .gt_indent_1 {
+#dpqkmlwwra .gt_indent_1 {
   text-indent: 5px;
 }
 
-#mpbbykywcm .gt_indent_2 {
+#dpqkmlwwra .gt_indent_2 {
   text-indent: 10px;
 }
 
-#mpbbykywcm .gt_indent_3 {
+#dpqkmlwwra .gt_indent_3 {
   text-indent: 15px;
 }
 
-#mpbbykywcm .gt_indent_4 {
+#dpqkmlwwra .gt_indent_4 {
   text-indent: 20px;
 }
 
-#mpbbykywcm .gt_indent_5 {
+#dpqkmlwwra .gt_indent_5 {
   text-indent: 25px;
 }
 
-#mpbbykywcm .katex-display {
+#dpqkmlwwra .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#mpbbykywcm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#dpqkmlwwra div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1606,8 +1604,8 @@ Table&nbsp;6.1: Raw data: algebra classes (sample)
 <div class="gt_heading gt_title gt_font_normal" style="text-size:bigger;">Raw Data: Algebra Classes</div>
 <div class="gt_heading gt_subtitle "></div>
 </div>
-<div id="mpbbykywcm" class="reactable html-widget" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="mpbbykywcm">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"class":[23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108],"Mi":[20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26],"score":[57,90,56,57,46,55,62,66,78,76,57,84,27,70,49,82,52,82,59,25,57,34,68,99,24,83,40,98,90,50,60,64,58,100,68,52,77,69,64,64,73,46,44,95,28,65,41,66,79,24,77,60,37,26,74,58,65,76,92,59,51,87,45,40,51,100,46,68,40,40,54,84,51,75,34,53,46,53,82,58,63,64,49,34,54,62,78,55,54,89,46,67,49,67,32,50,55,78,51,65,52,44,72,52,82,65,55,65,57,65,50,19,60,69,40,37,49,48,65,60,76,87,57,57,62,51,55,55,62,60,59,65,60,78,64,52,59,51,67,79,75,67,62,69,63,27,70,57,86,100,41,74,66,54,75,76,62,58,34,42,49,49,71,49,88,46,82,57,34,64,54,47,69,63,72,35,43,58,22,82,99,88,52,61,44,98,70,59,92,72,49,76,77,79,84,65,88,55,100,65,84,87,71,47,70,66,69,91,88,61,44,100,28,28,63,100,51,34,49,100,43,48,52,70,69,49,31,99,43,57,69,73,43,71,81,74,81,49,63,85,75,73,85,57,77,51,61,65,72,14,82,69,86,82,73,65,74,61,73,68,77,50,55,69,42,55,67,94,76,38,28,43,43,54,72,84,68,72,31,75,81,51,57,62,57,71,55,58,52,79,43,81,70,64,69,100,74,89,77]},"columns":[{"id":"class","name":"class","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"Mi","name":"M<sub>i<\/sub>","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"score","name":"score","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"}],"defaultPageSize":10,"showPageSizeOptions":false,"pageSizeOptions":[10,25,50,100],"paginationType":"numbers","showPagination":true,"showPageInfo":true,"minRows":1,"height":"auto","theme":{"color":"#333333","backgroundColor":"#FFFFFF","stripedColor":"rgba(128,128,128,0.05)","style":{"font-family":"system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif","fontSize":"16px"},"tableStyle":{"borderTopStyle":"solid","borderTopWidth":"2px","borderTopColor":"#D3D3D3"},"headerStyle":{"fontWeight":"normal","backgroundColor":"transparent","borderBottomStyle":"solid","borderBottomWidth":"2px","borderBottomColor":"#D3D3D3"},"groupHeaderStyle":{"fontWeight":"normal","backgroundColor":"transparent","borderBottomStyle":"solid","borderBottomWidth":"2px","borderBottomColor":"#D3D3D3"},"cellStyle":{"fontWeight":"normal"}},"elementId":"mpbbykywcm","dataKey":"39bcabf58a791971145b2a3fbe93d6d5"},"children":[]},"class":"reactR_markup"},"evals":["tag.attribs.columns.0.style","tag.attribs.columns.1.style","tag.attribs.columns.2.style"],"jsHooks":[]}</script>
+<div id="dpqkmlwwra" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="dpqkmlwwra">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"class":[23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,41,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,46,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108,108],"Mi":[20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26],"score":[57,90,56,57,46,55,62,66,78,76,57,84,27,70,49,82,52,82,59,25,57,34,68,99,24,83,40,98,90,50,60,64,58,100,68,52,77,69,64,64,73,46,44,95,28,65,41,66,79,24,77,60,37,26,74,58,65,76,92,59,51,87,45,40,51,100,46,68,40,40,54,84,51,75,34,53,46,53,82,58,63,64,49,34,54,62,78,55,54,89,46,67,49,67,32,50,55,78,51,65,52,44,72,52,82,65,55,65,57,65,50,19,60,69,40,37,49,48,65,60,76,87,57,57,62,51,55,55,62,60,59,65,60,78,64,52,59,51,67,79,75,67,62,69,63,27,70,57,86,100,41,74,66,54,75,76,62,58,34,42,49,49,71,49,88,46,82,57,34,64,54,47,69,63,72,35,43,58,22,82,99,88,52,61,44,98,70,59,92,72,49,76,77,79,84,65,88,55,100,65,84,87,71,47,70,66,69,91,88,61,44,100,28,28,63,100,51,34,49,100,43,48,52,70,69,49,31,99,43,57,69,73,43,71,81,74,81,49,63,85,75,73,85,57,77,51,61,65,72,14,82,69,86,82,73,65,74,61,73,68,77,50,55,69,42,55,67,94,76,38,28,43,43,54,72,84,68,72,31,75,81,51,57,62,57,71,55,58,52,79,43,81,70,64,69,100,74,89,77]},"columns":[{"id":"class","name":"class","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"Mi","name":"<span data-qmd-base64=\"Kk0qfml+\"><span class='gt_from_md'><em>M<\/em><sub>i<\/sub><\/span><\/span>","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"score","name":"score","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"}],"defaultPageSize":10,"showPageSizeOptions":false,"pageSizeOptions":[10,25,50,100],"paginationType":"numbers","showPagination":true,"showPageInfo":true,"minRows":1,"height":"auto","theme":{"color":"#333333","backgroundColor":"#FFFFFF","stripedColor":"rgba(128,128,128,0.05)","style":{"font-family":"system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif","fontSize":"16px"},"tableStyle":{"borderTopStyle":"solid","borderTopWidth":"2px","borderTopColor":"#D3D3D3"},"headerStyle":{"fontWeight":"normal","backgroundColor":"transparent","borderBottomStyle":"solid","borderBottomWidth":"2px","borderBottomColor":"#D3D3D3"},"groupHeaderStyle":{"fontWeight":"normal","backgroundColor":"transparent","borderBottomStyle":"solid","borderBottomWidth":"2px","borderBottomColor":"#D3D3D3"},"cellStyle":{"fontWeight":"normal"}},"elementId":"dpqkmlwwra","dataKey":"75dca9b49c7c8f61cd088d68e14541db"},"children":[]},"class":"reactR_markup"},"evals":["tag.attribs.columns.0.style","tag.attribs.columns.1.style","tag.attribs.columns.2.style"],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
@@ -2725,9 +2723,7 @@ V(\hat t_{\text{unb}}) = \underbrace{N^2\Big(1-\frac nN\Big)\frac{S_t^2}{n}}_{\t
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>coots <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/coots.csv"</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>coots <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_interactive</span>(<span class="at">use_pagination =</span> <span class="cn">TRUE</span>, <span class="at">page_size_default =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">book_table</span>(coots)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="tbl-coots-raw-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">

@@ -28,6 +28,7 @@ library(dplyr)
 library(latex2exp)
 library(gt)
 source("samplingestimate.r")
+source("book_helpers.r")
 ```
 
 ::: {.content-visible when-format="html"}
@@ -501,11 +502,12 @@ popn <- statepop$popn
 psi  <- popn / M
 phys <- statepop$phys
 
-# Paged display of the raw data: printing a data frame under `df-print: paged`
-# draws one page at a time instead of a long scrolling box
+# Paged display of the raw data (a 10-row snapshot in the PDF book)
 statepop |>
   select(state, county, popn, phys) |>
-  mutate(psi = popn / M)
+  mutate(psi = popn / M) |>
+  book_table() |>
+  fmt_scientific(psi, decimals = 3)
 ```
 
 The number of physicians is roughly proportional to the population, which is why this is a good size variable:

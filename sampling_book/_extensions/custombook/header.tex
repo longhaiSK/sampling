@@ -180,3 +180,32 @@
   top=5pt, bottom=5pt,
   breakable
 }
+
+% --- Code and printed output ---
+% Wrap long source lines instead of running past the margin, and set code a
+% size smaller and printed R output two sizes smaller, so that wide data frames
+% (printed at width 110, see _quarto.yml) fit on one line.
+% (\AtBeginDocument: Pandoc defines Highlighting after the header includes.)
+\usepackage{fvextra}
+\AtBeginDocument{%
+  \RecustomVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},breaklines,breakanywhere,fontsize=\small}%
+  \RecustomVerbatimEnvironment{verbatim}{Verbatim}{breaklines,breakanywhere,fontsize=\scriptsize}%
+}
+
+% --- Fit gt tables to the text width ---
+% gt sets its tables as \begin{tabular*}{width}{@{\extracolsep{\fill}}spec}, with
+% fixed column widths that can add up to more than the line; gt-latex.lua
+% rewrites them as \begin{gtfit}{width}{spec}. A table that fits is set at gt's
+% width as before; a wider one is set at its natural width, and scaled down to
+% the line width if needed.
+\usepackage{environ}
+\usepackage{adjustbox}
+\newsavebox{\gtfitbox}
+\NewEnviron{gtfit}[2]{%
+  \sbox{\gtfitbox}{\begin{tabular}{#2}\BODY\end{tabular}}%
+  \ifdim\wd\gtfitbox>#1\relax
+    \adjustbox{max width=\linewidth}{\usebox{\gtfitbox}}%
+  \else
+    \begin{tabular*}{#1}{@{\extracolsep{\fill}}#2}\BODY\end{tabular*}%
+  \fi
+  \par}% end the line, so that gt's footnotes start below the table
