@@ -1,0 +1,257 @@
+# List of Important Formulas {#sec-formulas}
+
+This appendix collects the boxed formulas of the chapters, together with the few
+companion formulas they rely on, sorted by topic. Each topic starts with its
+notation; the link after each formula leads to the section where it is derived.
+All designs draw units **without replacement** unless stated otherwise (UPSWR
+draws with replacement).
+
+## General Notation
+
+| Symbol | Meaning |
+|:---|:---|
+| $N$, $n$ | number of units in the population $\mathcal U$ and in the sample $\mathcal S$ |
+| $y_i$ | value of the study variable for unit $i$ |
+| $t = \sum_{i=1}^N y_i$, $\ \bar y_U = t/N$ | population total and population mean |
+| $S^2 = \frac{1}{N-1}\sum_{i=1}^N (y_i-\bar y_U)^2$ | population variance |
+| $\bar y = \frac1n\sum_{i\in\mathcal S} y_i$, $\ s^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}(y_i-\bar y)^2$ | sample mean and sample variance |
+| $1 - n/N$ | finite population correction (fpc) |
+| $\hat V(\cdot)$, $\ \mathrm{SE}(\cdot) = \sqrt{\hat V(\cdot)}$ | estimated variance and standard error |
+| $z_{\alpha/2}$, $\ t_{\alpha/2,\,df}$ | upper $\alpha/2$ quantiles of the standard normal and the $t$ distribution |
+
+**Confidence interval.** For any estimator $\hat\theta$ in this list, an approximate
+$100(1-\alpha)\%$ confidence interval is
+$$
+\boxed{\hat\theta \pm t_{\alpha/2,\,df}\,\mathrm{SE}(\hat\theta)}
+$$
+with $df = n-1$ for an SRS ($n - H$ for $H$ strata); for large samples $z_{\alpha/2}$
+may replace $t_{\alpha/2,\,df}$ (@sec-srs-ci).
+
+## Simple Random Sampling
+
+*Notation:* $\hat p$ is the sample proportion of a 0/1 variable; $e$ is the
+margin of error.
+
+**Mean** (@sec-srs-formulas):
+$$
+\boxed{
+\hat{V}(\bar{y}) = \left(1 - \frac{n}{N}\right)\frac{s^2}{n}, \qquad
+\mathrm{SE}(\bar y) = \sqrt{\Big(1-\frac nN\Big)\frac{s^2}{n}}}
+$$
+
+**Total** (@sec-srs-formulas):
+$$
+\boxed{
+\hat{t} = N\bar{y}, \qquad
+\hat{V}(\hat{t}) = N^2\left(1 - \frac{n}{N}\right)\frac{s^2}{n}, \qquad
+\mathrm{SE}(\hat{t}) = N\,\mathrm{SE}(\bar{y})}
+$$
+
+**Proportion** (@sec-srs-formulas); the number of units with the characteristic is estimated by $N\hat p$ with SE $N\,\mathrm{SE}(\hat p)$:
+$$
+\boxed{\hat V(\hat p) = \Big(1-\frac nN\Big)\frac{\hat p (1-\hat p)}{n-1}}
+$$
+
+**Sample size** for margin of error $e$ at level $1-\alpha$, with $n_0 = (z_{\alpha/2}S/e)^2$ (@sec-srs-sample-size):
+$$
+\boxed{n = \frac{n_0}{1+n_0/N} = \frac{z_{\alpha/2}^2 S^2}{e^2 + z_{\alpha/2}^2 S^2/N}}
+$$
+
+## Stratified Random Sampling
+
+*Notation:* stratum $h = 1,\ldots,H$ has $N_h$ units, of which $n_h$ are sampled by
+SRS; $\pi_h = N_h/N$ is the stratum weight; $\overline y_h$, $s_h^2$ and $\hat p_h$ are
+the sample mean, variance and proportion in stratum $h$; $S_h^2$ is the population
+variance in stratum $h$; $c_h$ is the cost of sampling one unit in stratum $h$.
+
+**Estimators of the total and the mean** (@sec-strata-estimation):
+$$
+\boxed{
+\hat t_{\text{str}} = \sum_{h=1}^H N_h \overline y_h,
+\qquad
+\overline y_{\text{str}} = \frac{\hat t_{\text{str}}}{N} = \sum_{h=1}^H \pi_h\overline y_h}
+$$
+
+**Variance and SE** ($v_h$ is the contribution of stratum $h$; $\hat V(\hat t_{\text{str}}) = N^2\hat V(\overline y_{\text{str}})$) (@sec-strata-estimation):
+$$
+\boxed{
+\hat V(\overline y_{\text{str}}) = \sum_{h=1}^H v_h, \qquad
+v_h = \Big(1-\frac{n_h}{N_h}\Big)\pi_h^2\frac{s_h^2}{n_h}, \qquad
+\mathrm{SE}(\overline y_{\text{str}}) = \sqrt{\hat V(\overline y_{\text{str}})}}
+$$
+
+**Proportion** (@sec-strata-proportions):
+$$
+\boxed{\begin{aligned}
+\hat p_{\text{str}} &= \sum_{h=1}^H \frac{N_h}{N}\hat p_h, \\
+\hat V(\hat p_{\text{str}}) &= \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\Big(\frac{N_h}{N}\Big)^2\frac{\hat p_h(1-\hat p_h)}{n_h-1}
+\end{aligned}}
+$$
+
+**Proportional allocation** $n_h = n\pi_h$ (@sec-strata-prop):
+$$
+\boxed{V_{\text{prop}}(\overline y_{\text{str}}) = \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h S_h^2}
+$$
+
+**Gain over SRS** under proportional allocation; SSB and SSTO are the between-strata and total sums of squares of the population (@sec-strata-prop):
+$$
+\boxed{\text{percentage of variance reduction} \approx \frac{\text{SSB}}{\text{SSTO}} = R^2_{y\mid\text{strata}}}
+$$
+
+**Optimal allocation** for a fixed cost (@sec-strata-optimal):
+$$
+\boxed{
+n_h = \left(\frac{N_hS_h/\sqrt{c_h}}{\sum_{l=1}^H N_lS_l/\sqrt{c_l}}\right)n,
+\qquad n_h \propto \frac{N_hS_h}{\sqrt{c_h}}}
+$$
+
+**Neyman allocation** (equal costs $c_h$) and its variance (@sec-strata-optimal):
+$$
+\boxed{n_h = n \frac{N_h S_h}{\sum_{l=1}^H N_l S_l}}, \qquad
+\boxed{V_{\text{opt}}(\overline{y}_{\text{str}}) = \frac{1}{n}\left(\sum_{h=1}^H \pi_h S_h\right)^2 - \frac{1}{N}\sum_{h=1}^H \pi_h S_h^2}
+$$
+
+## Ratio and Regression Estimation
+
+*Notation:* SRS of $n$ pairs $(x_i, y_i)$; the auxiliary variable $x$ has known
+population total $t_x$ and mean $\bar x_U = t_x/N$; $\bar x$, $\bar y$ are the sample
+means; $\hat t_y = N\bar y$, $\hat t_x = N\bar x$.
+
+**Ratio estimators** (@sec-ratio-theory):
+$$
+\boxed{\hat B = \frac{\bar y}{\bar x} = \frac{\sum_{i=1}^n y_i}{\sum_{i=1}^n x_i} = \frac{\hat t_y}{\hat t_x},
+\qquad
+\hat t_{yr} = \hat B\, t_x = N\,\hat{\bar y}_r,
+\qquad
+\hat{\bar y}_r = \hat B\, \bar x_U}
+$$
+
+**Ratio variances**, with residuals $e_i = y_i - \hat B x_i$ and $s_e^2 = \frac{1}{n-1}\sum_{i=1}^n e_i^2$ (@sec-ratio-theory):
+$$
+\boxed{\begin{aligned}
+\hat V(\hat B) &= \frac{1}{\bar x^2}\left(1 - \frac nN\right)\frac{s_e^2}{n}, \\
+\hat V(\hat{\bar y}_r) &= \bar x_U^2\,\hat V(\hat B) = \left(\frac{\bar x_U}{\bar x}\right)^2\left(1 - \frac nN\right)\frac{s_e^2}{n}, \\
+\hat V(\hat t_{yr}) &= N^2\,\hat V(\hat{\bar y}_r)
+\end{aligned}}
+$$
+
+**Regression estimators**, with the least-squares fit $\hat B_1 = \sum(x_i-\bar x)(y_i-\bar y)/\sum(x_i-\bar x)^2$ and $\hat B_0 = \bar y - \hat B_1\bar x$ (@sec-regression-theory):
+$$
+\boxed{\hat{\bar y}_{reg} = \hat B_0 + \hat B_1\bar x_U = \bar y + \hat B_1\left(\bar x_U - \bar x\right),
+\qquad
+\hat t_{reg} = N\hat{\bar y}_{reg} = N\hat B_0 + \hat B_1 t_x}
+$$
+
+**Regression variance** (@sec-regression-theory):
+$$
+\boxed{\hat V(\hat{\bar y}_{reg}) = \left(1 - \frac nN\right)\frac{s_e^2}{n},
+\qquad
+s_e^2 = \frac{1}{n-2}\sum_{i=1}^n\left(y_i - \hat B_0 - \hat B_1 x_i\right)^2}
+$$
+
+**Post-stratification**: an SRS sorted afterwards into $H$ groups of known sizes $N_h$, $\pi_h = N_h/N$; $\bar y_h$ and $s_h^2$ are the mean and variance of the sampled units in group $h$, and $n_h^{post} = n\pi_h$ is its expected sample size (@sec-poststrat-theory):
+$$
+\boxed{\bar y_{post} = \sum_{h=1}^H \pi_h\,\bar y_h,
+\qquad
+\hat t_{post} = N\bar y_{post}}
+$$
+$$
+\boxed{\hat V(\bar y_{post}) = \sum_{h=1}^H \pi_h^2\left(1 - \frac{n_h^{post}}{N_h}\right)\frac{s_h^2}{n_h^{post}}
+= \left(1 - \frac nN\right)\frac1n\sum_{h=1}^H \pi_h s_h^2}
+$$
+
+**Domain mean**: the $n_d$ sampled units $\mathcal S_d$ that fall in domain $d$ have mean $\bar y_d$ (@sec-domain-theory):
+$$
+\boxed{\hat V(\bar y_d) = \left(1 - \frac nN\right)\frac{s_d^2}{n_d},
+\qquad
+s_d^2 = \frac{1}{n_d - 1}\sum_{i \in \mathcal S_d}\left(y_i - \bar y_d\right)^2}
+$$
+
+**Prediction estimator** with a fitted model $\hat y_i = \hat m(x_i)$ for every population unit (@sec-ml-prediction):
+$$
+\boxed{\hat{\bar y}_{\text{pred}} = \frac1N\sum_{i=1}^N \hat y_i, \qquad
+\hat t_{y,\text{pred}} = \sum_{i=1}^N \hat y_i}
+$$
+
+## Cluster Sampling
+
+*Notation:* an SRS $\mathcal S$ of $n$ of the $N$ clusters (psus); cluster $i$ has
+$M_i$ elements (ssus), total $t_i$ and mean $\bar y_i$; $M_0 = \sum_{i=1}^N M_i$;
+$\bar M = \frac1n\sum_{i\in\mathcal S}M_i$ is the average size of the sampled
+clusters; $s_t^2$ is the sample variance of the $t_i$. In two-stage sampling
+$m_i$ of the $M_i$ elements are subsampled, with mean $\bar y_i$ and variance
+$s_i^2$, and $\hat t_i = M_i\bar y_i$.
+
+**One stage, equal sizes** $M_i = M$: an SRS of cluster totals (@sec-cluster-equal):
+$$
+\boxed{\hat t = \frac Nn\sum_{i\in\mathcal S} t_i, \qquad
+\mathrm{SE}(\hat t) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}}, \qquad
+\hat{\bar y} = \frac{\hat t}{NM}}
+$$
+
+**One stage, unequal sizes: ratio estimator of the mean per element** (@sec-cluster-unequal):
+$$
+\boxed{
+\hat{\bar y}_r = \frac{\sum_{i\in\mathcal S} t_i}{\sum_{i\in\mathcal S} M_i} = \frac{\sum_{i\in\mathcal S} M_i\bar y_i}{\sum_{i\in\mathcal S} M_i}}
+$$
+$$
+\boxed{
+\mathrm{SE}(\hat{\bar y}_r) = \sqrt{\Big(1-\frac nN\Big)\frac{s_e^2}{n\bar M^2}}, \qquad
+s_e^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}e_i^2, \qquad e_i = t_i-\hat{\bar y}_r M_i}
+$$
+
+**Two stages: ratio estimator** (@sec-cluster-two-stage):
+$$
+\boxed{
+\hat{\bar y}_r = \frac{\sum_{i\in\mathcal S}\hat t_i}{\sum_{i\in\mathcal S}M_i} = \frac{\sum_{i\in\mathcal S}M_i\bar y_i}{\sum_{i\in\mathcal S}M_i}}
+$$
+
+**Two stages: variance**, a ratio piece plus $n/N$ times a stratified piece, with $e_i = \hat t_i - \hat{\bar y}_r M_i$ and $M = n\bar M$ (@sec-cluster-two-stage):
+$$
+\boxed{\begin{aligned}
+\hat V(\hat{\bar y}_r) &= \hat V_{\text{ratio}} + \frac nN\,\hat V_{\text{str}}, \\
+\hat V_{\text{ratio}} &= \Big(1-\frac nN\Big)\frac{s_e^2}{n\bar M^2}, \qquad
+\hat V_{\text{str}} = \sum_{i\in\mathcal S}\Big(\frac{M_i}{M}\Big)^2\Big(1-\frac{m_i}{M_i}\Big)\frac{s_i^2}{m_i}
+\end{aligned}}
+$$
+
+## Unequal Probability Sampling
+
+*Notation:* $n$ independent draws **with replacement** (UPSWR); on each draw, unit
+$i$ is selected with probability $\psi_i = x_i/t_x$ for a size variable $x_i$; the
+unit selected on draw $j$ has ratio $b_j^* = y_j^*/x_j^*$; $B = t/t_x$.
+
+**Hansen--Hurwitz (HH) estimator of $B$** (@sec-ups-hh-theory):
+$$
+\boxed{\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{n}\sum_{j=1}^n b_j^*}, \qquad
+\boxed{\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}}},\qquad
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(b_j^*-\bar{b}^*\right)^2
+$$
+
+**HH mean and total**: multiply the estimate and its SE by $\bar x_U$ or $t_x$ (@sec-ups-hh-theory):
+$$
+\boxed{
+\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\,\bar{b}^*,\quad
+\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\bar{x}_U\,\frac{s_{b^*}}{\sqrt{n}},\qquad
+\hat{t}_{\mathrm{HH}}=t_x\,\bar{b}^*,\quad
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=t_x\,\frac{s_{b^*}}{\sqrt{n}}}
+$$
+
+**One-stage cluster sampling with PPS**: $y_i \to t_i$, $x_i \to M_i$, $\psi_i = M_i/M_0$; the ratio of the cluster on draw $j$ is its mean per element $\bar y_j^*$ (@sec-ups-cluster-theory):
+$$
+\boxed{\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}},\qquad
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{b}^*\right)^2
+$$
+
+**Two-stage cluster sampling with PPS**: $\bar y_j^*$ is now the mean of the $m_j$ elements subsampled on draw $j$; the mean per cluster and the total are $\bar M_U\hat B_{\mathrm{HH}}$ and $M_0\hat B_{\mathrm{HH}}$, with SEs scaled the same way (@sec-ups-twostage-theory):
+$$
+\boxed{\hat{B}_{\mathrm{HH}}=\bar{y}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
+s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{y}^*\right)^2
+$$
+
+**Horvitz--Thompson (HT) estimator**: without replacement, with inclusion probabilities $\pi_i = P(i\in\mathcal S)$, for example $\pi_i = n x_i/t_x$ (@sec-ups-wo-theory):
+$$
+\boxed{\hat{t}_{\mathrm{HT}}=\sum_{i\in\mathcal{S}}\frac{y_i}{\pi_i}}
+$$

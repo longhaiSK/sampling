@@ -2561,6 +2561,9 @@ functions (and their \texttt{gt} table formatting helpers) live in a
 single shared file, \texttt{samplingestimate.r}, sourced at the start of
 this chapter. The SRS function is \texttt{srs\_est()}.
 
+The full source of \texttt{samplingestimate.r} is listed in
+Appendix~\ref{sec-estimating-functions}.
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{agsrs }\OtherTok{\textless{}{-}} \FunctionTok{acres\_in\_thousands}\NormalTok{ (}\FunctionTok{read.csv}\NormalTok{ (}\StringTok{"data/agsrs.csv"}\NormalTok{))}
@@ -3879,6 +3882,9 @@ and confidence intervals. \texttt{str\_est} works from the stratum
 summaries (\(\overline y_h\), \(s_h\), \(n_h\), \(N_h\)), as in the
 caribou example. \texttt{str\_est\_data} computes everything directly
 from a data set with stratum and weight columns.
+
+The full source of \texttt{samplingestimate.r} is listed in
+Appendix~\ref{sec-estimating-functions}.
 
 \subsection{Example: Farm acreage by census region
 (agstrat.csv)}\label{sec-strata-agstrat}
@@ -5343,6 +5349,9 @@ For post-stratification, we reuse the shared \texttt{str\_est()}
 stratified estimator, but we plug in the expected sample sizes
 \(n_h = n \times \frac{N_h}{N}\) instead of the actual observed random
 \(n_h\).
+
+The full source of \texttt{samplingestimate.r} is listed in
+Appendix~\ref{sec-estimating-functions}.
 
 \section{Ratio Estimation}\label{ratio-estimation}
 
@@ -9169,12 +9178,16 @@ replacement is briefly discussed at the end (Section~\ref{sec-ups-wo}).
 
 \section{Functions and Packages}\label{functions-and-packages}
 
-The estimating functions used throughout this book (including
-\texttt{ratio\_est}, \texttt{reg\_est}, \texttt{srs\_est},
-\texttt{upswr\_est}, \texttt{upswr\_total}, \texttt{upswr\_ratio},
-\texttt{cluster\_upswr\_ratio}, \texttt{cluster\_upswo\_ratio}, and the
-\texttt{format\_est\_gt} table-formatting helper used below) live in a
-single shared file, \texttt{samplingestimate.r}, which we source below.
+The estimating functions used throughout this book (in this chapter
+\texttt{upswr\_est} and \texttt{upswr\_total} for sampling with
+replacement, \texttt{upswo\_est} for sampling without replacement,
+\texttt{srs\_est}, \texttt{ratio\_est} and \texttt{reg\_est} for
+comparison, and the \texttt{format\_est\_gt} table-formatting helper)
+live in a single shared file, \texttt{samplingestimate.r}, which we
+source below.
+
+The full source of \texttt{samplingestimate.r} is listed in
+Appendix~\ref{sec-estimating-functions}.
 
 \section{The Hansen--Hurwitz Estimator}\label{sec-ups-hh}
 
@@ -11086,6 +11099,304 @@ the design stage.
 \addcontentsline{toc}{part}{Appendices}
 \appendix
 
+\chapter{List of Important Formulas}\label{sec-formulas}
+
+This appendix collects the boxed formulas of the chapters, together with
+the few companion formulas they rely on, sorted by topic. Each topic
+starts with its notation; the link after each formula leads to the
+section where it is derived. All designs draw units \textbf{without
+replacement} unless stated otherwise (UPSWR draws with replacement).
+
+\section{General Notation}\label{general-notation}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Symbol
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Meaning
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(N\), \(n\) & number of units in the population \(\mathcal U\) and in
+the sample \(\mathcal S\) \\
+\(y_i\) & value of the study variable for unit \(i\) \\
+\(t = \sum_{i=1}^N y_i\), \(\ \bar y_U = t/N\) & population total and
+population mean \\
+\(S^2 = \frac{1}{N-1}\sum_{i=1}^N (y_i-\bar y_U)^2\) & population
+variance \\
+\(\bar y = \frac1n\sum_{i\in\mathcal S} y_i\),
+\(\ s^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}(y_i-\bar y)^2\) & sample
+mean and sample variance \\
+\(1 - n/N\) & finite population correction (fpc) \\
+\(\hat V(\cdot)\), \(\ \mathrm{SE}(\cdot) = \sqrt{\hat V(\cdot)}\) &
+estimated variance and standard error \\
+\(z_{\alpha/2}\), \(\ t_{\alpha/2,\,df}\) & upper \(\alpha/2\) quantiles
+of the standard normal and the \(t\) distribution \\
+\end{longtable}
+}
+
+\textbf{Confidence interval.} For any estimator \(\hat\theta\) in this
+list, an approximate \(100(1-\alpha)\%\) confidence interval is \[
+\boxed{\hat\theta \pm t_{\alpha/2,\,df}\,\mathrm{SE}(\hat\theta)}
+\] with \(df = n-1\) for an SRS (\(n - H\) for \(H\) strata); for large
+samples \(z_{\alpha/2}\) may replace \(t_{\alpha/2,\,df}\)
+(Section~\ref{sec-srs-ci}).
+
+\section{Simple Random Sampling}\label{simple-random-sampling-1}
+
+\emph{Notation:} \(\hat p\) is the sample proportion of a 0/1 variable;
+\(e\) is the margin of error.
+
+\textbf{Mean} (Section~\ref{sec-srs-formulas}): \[
+\boxed{
+\hat{V}(\bar{y}) = \left(1 - \frac{n}{N}\right)\frac{s^2}{n}, \qquad
+\mathrm{SE}(\bar y) = \sqrt{\Big(1-\frac nN\Big)\frac{s^2}{n}}}
+\]
+
+\textbf{Total} (Section~\ref{sec-srs-formulas}): \[
+\boxed{
+\hat{t} = N\bar{y}, \qquad
+\hat{V}(\hat{t}) = N^2\left(1 - \frac{n}{N}\right)\frac{s^2}{n}, \qquad
+\mathrm{SE}(\hat{t}) = N\,\mathrm{SE}(\bar{y})}
+\]
+
+\textbf{Proportion} (Section~\ref{sec-srs-formulas}); the number of
+units with the characteristic is estimated by \(N\hat p\) with SE
+\(N\,\mathrm{SE}(\hat p)\): \[
+\boxed{\hat V(\hat p) = \Big(1-\frac nN\Big)\frac{\hat p (1-\hat p)}{n-1}}
+\]
+
+\textbf{Sample size} for margin of error \(e\) at level \(1-\alpha\),
+with \(n_0 = (z_{\alpha/2}S/e)^2\) (Section~\ref{sec-srs-sample-size}):
+\[
+\boxed{n = \frac{n_0}{1+n_0/N} = \frac{z_{\alpha/2}^2 S^2}{e^2 + z_{\alpha/2}^2 S^2/N}}
+\]
+
+\section{Stratified Random Sampling}\label{stratified-random-sampling-1}
+
+\emph{Notation:} stratum \(h = 1,\ldots,H\) has \(N_h\) units, of which
+\(n_h\) are sampled by SRS; \(\pi_h = N_h/N\) is the stratum weight;
+\(\overline y_h\), \(s_h^2\) and \(\hat p_h\) are the sample mean,
+variance and proportion in stratum \(h\); \(S_h^2\) is the population
+variance in stratum \(h\); \(c_h\) is the cost of sampling one unit in
+stratum \(h\).
+
+\textbf{Estimators of the total and the mean}
+(Section~\ref{sec-strata-estimation}): \[
+\boxed{
+\hat t_{\text{str}} = \sum_{h=1}^H N_h \overline y_h,
+\qquad
+\overline y_{\text{str}} = \frac{\hat t_{\text{str}}}{N} = \sum_{h=1}^H \pi_h\overline y_h}
+\]
+
+\textbf{Variance and SE} (\(v_h\) is the contribution of stratum \(h\);
+\(\hat V(\hat t_{\text{str}}) = N^2\hat V(\overline y_{\text{str}})\))
+(Section~\ref{sec-strata-estimation}): \[
+\boxed{
+\hat V(\overline y_{\text{str}}) = \sum_{h=1}^H v_h, \qquad
+v_h = \Big(1-\frac{n_h}{N_h}\Big)\pi_h^2\frac{s_h^2}{n_h}, \qquad
+\mathrm{SE}(\overline y_{\text{str}}) = \sqrt{\hat V(\overline y_{\text{str}})}}
+\]
+
+\textbf{Proportion} (Section~\ref{sec-strata-proportions}): \[
+\boxed{\begin{aligned}
+\hat p_{\text{str}} &= \sum_{h=1}^H \frac{N_h}{N}\hat p_h, \\
+\hat V(\hat p_{\text{str}}) &= \sum_{h=1}^H \Big(1-\frac{n_h}{N_h}\Big)\Big(\frac{N_h}{N}\Big)^2\frac{\hat p_h(1-\hat p_h)}{n_h-1}
+\end{aligned}}
+\]
+
+\textbf{Proportional allocation} \(n_h = n\pi_h\)
+(Section~\ref{sec-strata-prop}): \[
+\boxed{V_{\text{prop}}(\overline y_{\text{str}}) = \left(1 - \frac{n}{N}\right)\frac{1}{n}\sum_{h=1}^H \pi_h S_h^2}
+\]
+
+\textbf{Gain over SRS} under proportional allocation; SSB and SSTO are
+the between-strata and total sums of squares of the population
+(Section~\ref{sec-strata-prop}): \[
+\boxed{\text{percentage of variance reduction} \approx \frac{\text{SSB}}{\text{SSTO}} = R^2_{y\mid\text{strata}}}
+\]
+
+\textbf{Optimal allocation} for a fixed cost
+(Section~\ref{sec-strata-optimal}): \[
+\boxed{
+n_h = \left(\frac{N_hS_h/\sqrt{c_h}}{\sum_{l=1}^H N_lS_l/\sqrt{c_l}}\right)n,
+\qquad n_h \propto \frac{N_hS_h}{\sqrt{c_h}}}
+\]
+
+\textbf{Neyman allocation} (equal costs \(c_h\)) and its variance
+(Section~\ref{sec-strata-optimal}): \[
+\boxed{n_h = n \frac{N_h S_h}{\sum_{l=1}^H N_l S_l}}, \qquad
+\boxed{V_{\text{opt}}(\overline{y}_{\text{str}}) = \frac{1}{n}\left(\sum_{h=1}^H \pi_h S_h\right)^2 - \frac{1}{N}\sum_{h=1}^H \pi_h S_h^2}
+\]
+
+\section{Ratio and Regression
+Estimation}\label{ratio-and-regression-estimation-1}
+
+\emph{Notation:} SRS of \(n\) pairs \((x_i, y_i)\); the auxiliary
+variable \(x\) has known population total \(t_x\) and mean
+\(\bar x_U = t_x/N\); \(\bar x\), \(\bar y\) are the sample means;
+\(\hat t_y = N\bar y\), \(\hat t_x = N\bar x\).
+
+\textbf{Ratio estimators} (Section~\ref{sec-ratio-theory}): \[
+\boxed{\hat B = \frac{\bar y}{\bar x} = \frac{\sum_{i=1}^n y_i}{\sum_{i=1}^n x_i} = \frac{\hat t_y}{\hat t_x},
+\qquad
+\hat t_{yr} = \hat B\, t_x = N\,\hat{\bar y}_r,
+\qquad
+\hat{\bar y}_r = \hat B\, \bar x_U}
+\]
+
+\textbf{Ratio variances}, with residuals \(e_i = y_i - \hat B x_i\) and
+\(s_e^2 = \frac{1}{n-1}\sum_{i=1}^n e_i^2\)
+(Section~\ref{sec-ratio-theory}): \[
+\boxed{\begin{aligned}
+\hat V(\hat B) &= \frac{1}{\bar x^2}\left(1 - \frac nN\right)\frac{s_e^2}{n}, \\
+\hat V(\hat{\bar y}_r) &= \bar x_U^2\,\hat V(\hat B) = \left(\frac{\bar x_U}{\bar x}\right)^2\left(1 - \frac nN\right)\frac{s_e^2}{n}, \\
+\hat V(\hat t_{yr}) &= N^2\,\hat V(\hat{\bar y}_r)
+\end{aligned}}
+\]
+
+\textbf{Regression estimators}, with the least-squares fit
+\(\hat B_1 = \sum(x_i-\bar x)(y_i-\bar y)/\sum(x_i-\bar x)^2\) and
+\(\hat B_0 = \bar y - \hat B_1\bar x\)
+(Section~\ref{sec-regression-theory}): \[
+\boxed{\hat{\bar y}_{reg} = \hat B_0 + \hat B_1\bar x_U = \bar y + \hat B_1\left(\bar x_U - \bar x\right),
+\qquad
+\hat t_{reg} = N\hat{\bar y}_{reg} = N\hat B_0 + \hat B_1 t_x}
+\]
+
+\textbf{Regression variance} (Section~\ref{sec-regression-theory}): \[
+\boxed{\hat V(\hat{\bar y}_{reg}) = \left(1 - \frac nN\right)\frac{s_e^2}{n},
+\qquad
+s_e^2 = \frac{1}{n-2}\sum_{i=1}^n\left(y_i - \hat B_0 - \hat B_1 x_i\right)^2}
+\]
+
+\textbf{Post-stratification}: an SRS sorted afterwards into \(H\) groups
+of known sizes \(N_h\), \(\pi_h = N_h/N\); \(\bar y_h\) and \(s_h^2\)
+are the mean and variance of the sampled units in group \(h\), and
+\(n_h^{post} = n\pi_h\) is its expected sample size
+(Section~\ref{sec-poststrat-theory}): \[
+\boxed{\bar y_{post} = \sum_{h=1}^H \pi_h\,\bar y_h,
+\qquad
+\hat t_{post} = N\bar y_{post}}
+\] \[
+\boxed{\hat V(\bar y_{post}) = \sum_{h=1}^H \pi_h^2\left(1 - \frac{n_h^{post}}{N_h}\right)\frac{s_h^2}{n_h^{post}}
+= \left(1 - \frac nN\right)\frac1n\sum_{h=1}^H \pi_h s_h^2}
+\]
+
+\textbf{Domain mean}: the \(n_d\) sampled units \(\mathcal S_d\) that
+fall in domain \(d\) have mean \(\bar y_d\)
+(Section~\ref{sec-domain-theory}): \[
+\boxed{\hat V(\bar y_d) = \left(1 - \frac nN\right)\frac{s_d^2}{n_d},
+\qquad
+s_d^2 = \frac{1}{n_d - 1}\sum_{i \in \mathcal S_d}\left(y_i - \bar y_d\right)^2}
+\]
+
+\textbf{Prediction estimator} with a fitted model
+\(\hat y_i = \hat m(x_i)\) for every population unit
+(Section~\ref{sec-ml-prediction}): \[
+\boxed{\hat{\bar y}_{\text{pred}} = \frac1N\sum_{i=1}^N \hat y_i, \qquad
+\hat t_{y,\text{pred}} = \sum_{i=1}^N \hat y_i}
+\]
+
+\section{Cluster Sampling}\label{cluster-sampling-1}
+
+\emph{Notation:} an SRS \(\mathcal S\) of \(n\) of the \(N\) clusters
+(psus); cluster \(i\) has \(M_i\) elements (ssus), total \(t_i\) and
+mean \(\bar y_i\); \(M_0 = \sum_{i=1}^N M_i\);
+\(\bar M = \frac1n\sum_{i\in\mathcal S}M_i\) is the average size of the
+sampled clusters; \(s_t^2\) is the sample variance of the \(t_i\). In
+two-stage sampling \(m_i\) of the \(M_i\) elements are subsampled, with
+mean \(\bar y_i\) and variance \(s_i^2\), and
+\(\hat t_i = M_i\bar y_i\).
+
+\textbf{One stage, equal sizes} \(M_i = M\): an SRS of cluster totals
+(Section~\ref{sec-cluster-equal}): \[
+\boxed{\hat t = \frac Nn\sum_{i\in\mathcal S} t_i, \qquad
+\mathrm{SE}(\hat t) = N\sqrt{\Big(1-\frac nN\Big)\frac{s_t^2}{n}}, \qquad
+\hat{\bar y} = \frac{\hat t}{NM}}
+\]
+
+\textbf{One stage, unequal sizes: ratio estimator of the mean per
+element} (Section~\ref{sec-cluster-unequal}): \[
+\boxed{
+\hat{\bar y}_r = \frac{\sum_{i\in\mathcal S} t_i}{\sum_{i\in\mathcal S} M_i} = \frac{\sum_{i\in\mathcal S} M_i\bar y_i}{\sum_{i\in\mathcal S} M_i}}
+\] \[
+\boxed{
+\mathrm{SE}(\hat{\bar y}_r) = \sqrt{\Big(1-\frac nN\Big)\frac{s_e^2}{n\bar M^2}}, \qquad
+s_e^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}e_i^2, \qquad e_i = t_i-\hat{\bar y}_r M_i}
+\]
+
+\textbf{Two stages: ratio estimator}
+(Section~\ref{sec-cluster-two-stage}): \[
+\boxed{
+\hat{\bar y}_r = \frac{\sum_{i\in\mathcal S}\hat t_i}{\sum_{i\in\mathcal S}M_i} = \frac{\sum_{i\in\mathcal S}M_i\bar y_i}{\sum_{i\in\mathcal S}M_i}}
+\]
+
+\textbf{Two stages: variance}, a ratio piece plus \(n/N\) times a
+stratified piece, with \(e_i = \hat t_i - \hat{\bar y}_r M_i\) and
+\(M = n\bar M\) (Section~\ref{sec-cluster-two-stage}): \[
+\boxed{\begin{aligned}
+\hat V(\hat{\bar y}_r) &= \hat V_{\text{ratio}} + \frac nN\,\hat V_{\text{str}}, \\
+\hat V_{\text{ratio}} &= \Big(1-\frac nN\Big)\frac{s_e^2}{n\bar M^2}, \qquad
+\hat V_{\text{str}} = \sum_{i\in\mathcal S}\Big(\frac{M_i}{M}\Big)^2\Big(1-\frac{m_i}{M_i}\Big)\frac{s_i^2}{m_i}
+\end{aligned}}
+\]
+
+\section{Unequal Probability
+Sampling}\label{unequal-probability-sampling-1}
+
+\emph{Notation:} \(n\) independent draws \textbf{with replacement}
+(UPSWR); on each draw, unit \(i\) is selected with probability
+\(\psi_i = x_i/t_x\) for a size variable \(x_i\); the unit selected on
+draw \(j\) has ratio \(b_j^* = y_j^*/x_j^*\); \(B = t/t_x\).
+
+\textbf{Hansen--Hurwitz (HH) estimator of \(B\)}
+(Section~\ref{sec-ups-hh-theory}): \[
+\boxed{\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{n}\sum_{j=1}^n b_j^*}, \qquad
+\boxed{\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}}},\qquad
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(b_j^*-\bar{b}^*\right)^2
+\]
+
+\textbf{HH mean and total}: multiply the estimate and its SE by
+\(\bar x_U\) or \(t_x\) (Section~\ref{sec-ups-hh-theory}): \[
+\boxed{
+\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\,\bar{b}^*,\quad
+\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\bar{x}_U\,\frac{s_{b^*}}{\sqrt{n}},\qquad
+\hat{t}_{\mathrm{HH}}=t_x\,\bar{b}^*,\quad
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=t_x\,\frac{s_{b^*}}{\sqrt{n}}}
+\]
+
+\textbf{One-stage cluster sampling with PPS}: \(y_i \to t_i\),
+\(x_i \to M_i\), \(\psi_i = M_i/M_0\); the ratio of the cluster on draw
+\(j\) is its mean per element \(\bar y_j^*\)
+(Section~\ref{sec-ups-cluster-theory}): \[
+\boxed{\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}},\qquad
+s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{b}^*\right)^2
+\]
+
+\textbf{Two-stage cluster sampling with PPS}: \(\bar y_j^*\) is now the
+mean of the \(m_j\) elements subsampled on draw \(j\); the mean per
+cluster and the total are \(\bar M_U\hat B_{\mathrm{HH}}\) and
+\(M_0\hat B_{\mathrm{HH}}\), with SEs scaled the same way
+(Section~\ref{sec-ups-twostage-theory}): \[
+\boxed{\hat{B}_{\mathrm{HH}}=\bar{y}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
+s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{y}^*\right)^2
+\]
+
+\textbf{Horvitz--Thompson (HT) estimator}: without replacement, with
+inclusion probabilities \(\pi_i = P(i\in\mathcal S)\), for example
+\(\pi_i = n x_i/t_x\) (Section~\ref{sec-ups-wo-theory}): \[
+\boxed{\hat{t}_{\mathrm{HT}}=\sum_{i\in\mathcal{S}}\frac{y_i}{\pi_i}}
+\]
+
 \chapter{List of Figures, Tables, and
 Apps}\label{list-of-figures-tables-and-apps}
 
@@ -11145,7 +11456,7 @@ Survey}\label{introduction-to-sampling-survey-1}
   histogram with empirical density and normal fit
 \end{itemize}
 
-\subsection{Simple Random Sampling}\label{simple-random-sampling-1}
+\subsection{Simple Random Sampling}\label{simple-random-sampling-2}
 
 \begin{itemize}
 \tightlist
@@ -11369,7 +11680,7 @@ Survey}\label{introduction-to-sampling-survey-1}
 \end{itemize}
 
 \chapter{Estimating Functions Source
-Code}\label{estimating-functions-source-code}
+Code}\label{sec-estimating-functions}
 
 The R functions used throughout this book to compute point estimates,
 standard errors, and confidence intervals --- along with their
@@ -11468,7 +11779,7 @@ source is listed below for reference.
 
 \CommentTok{\# Helper function to format estimation outputs with appropriate mathematical headers}
 \NormalTok{format\_est\_gt }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(est\_data, }\AttributeTok{est\_type =} \FunctionTok{c}\NormalTok{(}\StringTok{"mean"}\NormalTok{, }\StringTok{"total"}\NormalTok{, }\StringTok{"ratio"}\NormalTok{, }\StringTok{"reg\_mean"}\NormalTok{, }\StringTok{"reg\_total"}\NormalTok{, }\StringTok{"ratio\_mean"}\NormalTok{, }\StringTok{"domain\_mean"}\NormalTok{,}
-                                                 \StringTok{"hh\_total"}\NormalTok{, }\StringTok{"hh\_mean"}\NormalTok{, }\StringTok{"hh\_ratio\_mean"}\NormalTok{, }\StringTok{"hh\_B"}\NormalTok{, }\StringTok{"hh\_ybar"}\NormalTok{)) \{}
+                                                 \StringTok{"hh\_total"}\NormalTok{, }\StringTok{"hh\_B"}\NormalTok{, }\StringTok{"hh\_ybar"}\NormalTok{)) \{}
 \NormalTok{  est\_type }\OtherTok{\textless{}{-}} \FunctionTok{match.arg}\NormalTok{(est\_type)}
 
 \NormalTok{  sym\_map }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
@@ -11479,13 +11790,9 @@ source is listed below for reference.
     \StringTok{"reg\_total"}   \OtherTok{=} \FunctionTok{c}\NormalTok{(}\AttributeTok{est =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{t\}\_\{reg\}$"}\NormalTok{,   }\AttributeTok{se =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{t\}\_\{reg\})$"}\NormalTok{),}
     \StringTok{"ratio\_mean"}  \OtherTok{=} \FunctionTok{c}\NormalTok{(}\AttributeTok{est =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{y\}\_\{r\}$"}\NormalTok{,     }\AttributeTok{se =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{y\}\_\{r\})$"}\NormalTok{),}
     \StringTok{"domain\_mean"} \OtherTok{=} \FunctionTok{c}\NormalTok{(}\AttributeTok{est =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{y\}\_\{d\}$"}\NormalTok{,     }\AttributeTok{se =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{y\}\_\{d\})$"}\NormalTok{),}
-    \DocumentationTok{\#\# UPSWR (Hansen{-}Hurwitz): total, mean per unit, and ratio (mean per element)}
+    \DocumentationTok{\#\# UPSWR (Hansen{-}Hurwitz) total}
     \StringTok{"hh\_total"}      \OtherTok{=} \FunctionTok{c}\NormalTok{(}\AttributeTok{est =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{t\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}$"}\NormalTok{,}
                         \AttributeTok{se  =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{t\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\})$"}\NormalTok{),}
-    \StringTok{"hh\_mean"}       \OtherTok{=} \FunctionTok{c}\NormalTok{(}\AttributeTok{est =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{t\}\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}$"}\NormalTok{,}
-                        \AttributeTok{se  =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{t\}\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\})$"}\NormalTok{),}
-    \StringTok{"hh\_ratio\_mean"} \OtherTok{=} \FunctionTok{c}\NormalTok{(}\AttributeTok{est =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{y\}\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\},r\}$"}\NormalTok{,}
-                        \AttributeTok{se  =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{y\}\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\},r\})$"}\NormalTok{),}
     \DocumentationTok{\#\# UPSWR with psi\_i = x\_i / t\_x (upswr\_est): ratio B, mean of y per unit}
     \StringTok{"hh\_B"}          \OtherTok{=} \FunctionTok{c}\NormalTok{(}\AttributeTok{est =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{B\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}$"}\NormalTok{,}
                         \AttributeTok{se  =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{B\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\})$"}\NormalTok{),}
@@ -11697,7 +12004,7 @@ source is listed below for reference.
 \DocumentationTok{\#\#                  footnote showing Bhat and s\_e\^{}2; NULL otherwise}
 \DocumentationTok{\#\# col\_labels {-}{-}{-} named list (y, x, yhat) of RAW latex for those}
 \DocumentationTok{\#\#                working{-}table columns, so this function can be reused}
-\DocumentationTok{\#\#                (e.g. by cluster\_ratio(), upswr\_ratio()) with}
+\DocumentationTok{\#\#                (e.g. by cluster\_ratio()) with}
 \DocumentationTok{\#\#                context{-}appropriate labels}
 \DocumentationTok{\#\# extra\_col {-}{-}{-} optional column spec, or list of column specs, adding}
 \DocumentationTok{\#\#               RAW{-}latex{-}labelled columns of per{-}unit \textasciigrave{}values\textasciigrave{} right before}
@@ -12343,93 +12650,6 @@ source is listed below for reference.
 \NormalTok{  se }\OtherTok{\textless{}{-}}\NormalTok{ scale }\SpecialCharTok{*} \FunctionTok{sqrt}\NormalTok{ (}\FunctionTok{ht\_var}\NormalTok{ (ydata, pik, variance))}
 \NormalTok{  mem }\OtherTok{\textless{}{-}} \FunctionTok{qt}\NormalTok{ (}\FloatTok{0.975}\NormalTok{, }\AttributeTok{df =}\NormalTok{ n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ se}
   \FunctionTok{c}\NormalTok{ (}\AttributeTok{Est. =}\NormalTok{ est, }\AttributeTok{S.E. =}\NormalTok{ se, }\AttributeTok{ci.low =}\NormalTok{ est }\SpecialCharTok{{-}}\NormalTok{ mem, }\AttributeTok{ci.upp =}\NormalTok{ est }\SpecialCharTok{+}\NormalTok{ mem)}
-\NormalTok{\}}
-
-\DocumentationTok{\#\# Ratio estimation for datasets collected with UPS with Replacement.}
-\DocumentationTok{\#\# estimate {-}{-}{-} "mean" (default) or "model" both return the raw ratio}
-\DocumentationTok{\#\#              Bhat = sum(t\_i/psi\_i)/sum(M\_i/psi\_i) {-}{-}{-} that raw B IS the}
-\DocumentationTok{\#\#              population MEAN per element; "total" returns the population}
-\DocumentationTok{\#\#              TOTAL of y, Bhat*Mtotal\_U (requires Mtotal\_U, the population}
-\DocumentationTok{\#\#              total of the size variable)}
-\NormalTok{upswr\_ratio }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{ (total, M, psi, }\AttributeTok{N =} \ConstantTok{Inf}\NormalTok{, }\AttributeTok{estimate =} \FunctionTok{c}\NormalTok{ (}\StringTok{"mean"}\NormalTok{, }\StringTok{"total"}\NormalTok{, }\StringTok{"model"}\NormalTok{),}
-                          \AttributeTok{show.details =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{Mtotal\_U =} \ConstantTok{NULL}\NormalTok{)}
-\NormalTok{\{}
-\NormalTok{  estimate }\OtherTok{\textless{}{-}} \FunctionTok{match.arg}\NormalTok{ (estimate)}
-
-  \ControlFlowTok{if}\NormalTok{ (estimate }\SpecialCharTok{==} \StringTok{"total"}\NormalTok{)}
-\NormalTok{  \{}
-      \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.null}\NormalTok{ (Mtotal\_U))}
-          \FunctionTok{stop}\NormalTok{ (}\StringTok{"Mtotal\_U (population total of the size variable) is required when estimate = }\SpecialCharTok{\textbackslash{}"}\StringTok{total}\SpecialCharTok{\textbackslash{}"}\StringTok{"}\NormalTok{)}
-      \FunctionTok{ratio\_est}\NormalTok{ (total}\SpecialCharTok{/}\NormalTok{psi, M}\SpecialCharTok{/}\NormalTok{psi, }\AttributeTok{xbarU =}\NormalTok{ Mtotal\_U, }\AttributeTok{N =}\NormalTok{ N, }\AttributeTok{estimate =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{show.details =}\NormalTok{ show.details,}
-                 \AttributeTok{col\_labels =} \FunctionTok{list}\NormalTok{ (}\AttributeTok{y =} \StringTok{"t\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{psi\_i"}\NormalTok{, }\AttributeTok{x =} \StringTok{"M\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{psi\_i"}\NormalTok{, }\AttributeTok{yhat =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat B}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{,M\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{psi\_i"}\NormalTok{))}
-\NormalTok{  \}}
-  \ControlFlowTok{else}
-\NormalTok{  \{}
-      \FunctionTok{ratio\_est}\NormalTok{ (total}\SpecialCharTok{/}\NormalTok{psi, M}\SpecialCharTok{/}\NormalTok{psi, }\AttributeTok{N =}\NormalTok{ N, }\AttributeTok{estimate =} \StringTok{"model"}\NormalTok{, }\AttributeTok{show.details =}\NormalTok{ show.details,}
-                 \AttributeTok{col\_labels =} \FunctionTok{list}\NormalTok{ (}\AttributeTok{y =} \StringTok{"t\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{psi\_i"}\NormalTok{, }\AttributeTok{x =} \StringTok{"M\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{psi\_i"}\NormalTok{, }\AttributeTok{yhat =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat B}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{,M\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{psi\_i"}\NormalTok{))}
-\NormalTok{  \}}
-\NormalTok{\}}
-
-\DocumentationTok{\#\# Cluster UPS with Replacement: aggregates to the cluster level (ybari, Mi,}
-\DocumentationTok{\#\# psi per sampled cluster), then delegates to upswr\_ratio(), so the}
-\DocumentationTok{\#\# working table and estimate/total logic are shared with the base function.}
-\DocumentationTok{\#\# data {-}{-}{-} data frame holding the sample}
-\DocumentationTok{\#\# sid {-}{-}{-} variable recording cluster (psu) identity}
-\DocumentationTok{\#\# csize {-}{-}{-} variable recording cluster (psu) population size}
-\DocumentationTok{\#\# cpsi {-}{-}{-} variable recording the cluster\textquotesingle{}s selection probability psi\_i}
-\DocumentationTok{\#\# yvar {-}{-}{-} variable of interest (element level)}
-\DocumentationTok{\#\# estimate, Mtotal\_U {-}{-}{-} see upswr\_ratio()}
-\NormalTok{cluster\_upswr\_ratio }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{ (data, sid, csize, cpsi, yvar, }\AttributeTok{N =} \ConstantTok{Inf}\NormalTok{,}
-                                  \AttributeTok{estimate =} \FunctionTok{c}\NormalTok{ (}\StringTok{"mean"}\NormalTok{, }\StringTok{"total"}\NormalTok{, }\StringTok{"model"}\NormalTok{),}
-                                  \AttributeTok{show.details =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{Mtotal\_U =} \ConstantTok{NULL}\NormalTok{)}
-\NormalTok{\{}
-\NormalTok{    estimate }\OtherTok{\textless{}{-}} \FunctionTok{match.arg}\NormalTok{ (estimate)}
-
-\NormalTok{    clust }\OtherTok{\textless{}{-}}\NormalTok{ data[, sid]}
-\NormalTok{    ydata }\OtherTok{\textless{}{-}}\NormalTok{ data[, yvar]}
-
-\NormalTok{    ybari }\OtherTok{\textless{}{-}} \FunctionTok{tapply}\NormalTok{ (ydata, clust, mean)}
-\NormalTok{    Mi }\OtherTok{\textless{}{-}} \FunctionTok{tapply}\NormalTok{ (data[,csize], clust, }\ControlFlowTok{function}\NormalTok{ (x) x[}\DecValTok{1}\NormalTok{])}
-\NormalTok{    psi }\OtherTok{\textless{}{-}} \FunctionTok{tapply}\NormalTok{ (data[,cpsi], clust, }\ControlFlowTok{function}\NormalTok{ (x) x[}\DecValTok{1}\NormalTok{])}
-\NormalTok{    t\_hat\_cls }\OtherTok{\textless{}{-}}\NormalTok{ ybari }\SpecialCharTok{*}\NormalTok{ Mi}
-
-    \FunctionTok{upswr\_ratio}\NormalTok{ (t\_hat\_cls, Mi, psi, }\AttributeTok{N =}\NormalTok{ N, }\AttributeTok{estimate =}\NormalTok{ estimate,}
-                 \AttributeTok{show.details =}\NormalTok{ show.details, }\AttributeTok{Mtotal\_U =}\NormalTok{ Mtotal\_U)}
-\NormalTok{\}}
-
-\DocumentationTok{\#\# Cluster UPS without Replacement: same idea as cluster\_upswr\_ratio(),}
-\DocumentationTok{\#\# but dividing by the cluster\textquotesingle{}s inclusion probability pik instead of psi.}
-\DocumentationTok{\#\# data {-}{-}{-} data frame holding the sample}
-\DocumentationTok{\#\# cname {-}{-}{-} variable recording cluster identity}
-\DocumentationTok{\#\# csize {-}{-}{-} variable recording cluster population size}
-\DocumentationTok{\#\# cpik {-}{-}{-} variable recording the cluster\textquotesingle{}s inclusion probability pi\_k}
-\DocumentationTok{\#\# yvar {-}{-}{-} variable of interest (element level)}
-\NormalTok{cluster\_upswo\_ratio }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{ (data, cname, csize, cpik, yvar, }\AttributeTok{N =} \ConstantTok{Inf}\NormalTok{,}
-                                  \AttributeTok{estimate =} \FunctionTok{c}\NormalTok{ (}\StringTok{"mean"}\NormalTok{, }\StringTok{"total"}\NormalTok{, }\StringTok{"model"}\NormalTok{),}
-                                  \AttributeTok{show.details =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{Mtotal\_U =} \ConstantTok{NULL}\NormalTok{)}
-\NormalTok{\{}
-\NormalTok{  estimate }\OtherTok{\textless{}{-}} \FunctionTok{match.arg}\NormalTok{ (estimate)}
-
-\NormalTok{  clust }\OtherTok{\textless{}{-}}\NormalTok{ data[, cname]}
-\NormalTok{  ydata }\OtherTok{\textless{}{-}}\NormalTok{ data[, yvar]}
-
-\NormalTok{  ybari }\OtherTok{\textless{}{-}} \FunctionTok{tapply}\NormalTok{ (ydata, clust, mean)}
-\NormalTok{  Mi }\OtherTok{\textless{}{-}} \FunctionTok{tapply}\NormalTok{ (data[,csize], clust, }\ControlFlowTok{function}\NormalTok{ (x) x[}\DecValTok{1}\NormalTok{])}
-\NormalTok{  pik }\OtherTok{\textless{}{-}} \FunctionTok{tapply}\NormalTok{ (data[,cpik], clust, }\ControlFlowTok{function}\NormalTok{ (x) x[}\DecValTok{1}\NormalTok{])}
-\NormalTok{  t\_hat\_cls }\OtherTok{\textless{}{-}}\NormalTok{ ybari }\SpecialCharTok{*}\NormalTok{ Mi}
-
-  \ControlFlowTok{if}\NormalTok{ (estimate }\SpecialCharTok{==} \StringTok{"total"}\NormalTok{)}
-\NormalTok{  \{}
-      \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.null}\NormalTok{ (Mtotal\_U))}
-          \FunctionTok{stop}\NormalTok{ (}\StringTok{"Mtotal\_U (population total of the size variable) is required when estimate = }\SpecialCharTok{\textbackslash{}"}\StringTok{total}\SpecialCharTok{\textbackslash{}"}\StringTok{"}\NormalTok{)}
-      \FunctionTok{ratio\_est}\NormalTok{ (t\_hat\_cls}\SpecialCharTok{/}\NormalTok{pik, Mi}\SpecialCharTok{/}\NormalTok{pik, }\AttributeTok{xbarU =}\NormalTok{ Mtotal\_U, }\AttributeTok{N =}\NormalTok{ N, }\AttributeTok{estimate =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{show.details =}\NormalTok{ show.details,}
-                 \AttributeTok{col\_labels =} \FunctionTok{list}\NormalTok{ (}\AttributeTok{y =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat t\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{pi\_i"}\NormalTok{, }\AttributeTok{x =} \StringTok{"M\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{pi\_i"}\NormalTok{, }\AttributeTok{yhat =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat B}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{,M\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{pi\_i"}\NormalTok{))}
-\NormalTok{  \}}
-  \ControlFlowTok{else}
-\NormalTok{  \{}
-      \FunctionTok{ratio\_est}\NormalTok{ (t\_hat\_cls}\SpecialCharTok{/}\NormalTok{pik, Mi}\SpecialCharTok{/}\NormalTok{pik, }\AttributeTok{N =}\NormalTok{ N, }\AttributeTok{estimate =} \StringTok{"model"}\NormalTok{, }\AttributeTok{show.details =}\NormalTok{ show.details,}
-                 \AttributeTok{col\_labels =} \FunctionTok{list}\NormalTok{ (}\AttributeTok{y =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat t\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{pi\_i"}\NormalTok{, }\AttributeTok{x =} \StringTok{"M\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{pi\_i"}\NormalTok{, }\AttributeTok{yhat =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat B}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{,M\_i/}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{pi\_i"}\NormalTok{))}
-\NormalTok{  \}}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}

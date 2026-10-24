@@ -278,22 +278,7 @@ avoid repeating code in every chapter, all estimating functions (and their `gt`
 table formatting helpers) live in a single shared file, `samplingestimate.r`,
 sourced at the start of this chapter. The SRS function is `srs_est()`.
 
-::: {.content-visible when-format="html"}
-
-<details>
-<summary>Show the shared estimating functions (`samplingestimate.r`)</summary>
-
-```{r print-functions}
-#| echo: false
-#| results: asis
-cat("```r\n")
-cat(readLines("samplingestimate.r"), sep = "\n")
-cat("\n```\n")
-```
-
-</details>
-
-:::
+The full source of `samplingestimate.r` is listed in @sec-estimating-functions.
 
 ```{r agsrs-load}
 agsrs <- acres_in_thousands (read.csv ("data/agsrs.csv"))

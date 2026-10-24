@@ -19,7 +19,7 @@ per draw. Sampling without replacement is briefly discussed at the end (@sec-ups
 
 ## Functions and Packages
 
-The estimating functions used throughout this book (including `ratio_est`, `reg_est`, `srs_est`, `upswr_est`, `upswr_total`, `upswr_ratio`, `cluster_upswr_ratio`, `cluster_upswo_ratio`, and the `format_est_gt` table-formatting helper used below) live in a single shared file, `samplingestimate.r`, which we source below.
+The estimating functions used throughout this book (in this chapter `upswr_est` and `upswr_total` for sampling with replacement, `upswo_est` for sampling without replacement, `srs_est`, `ratio_est` and `reg_est` for comparison, and the `format_est_gt` table-formatting helper) live in a single shared file, `samplingestimate.r`, which we source below.
 
 ```{r source-functions, message=FALSE, warning=FALSE}
 #| echo: false
@@ -31,22 +31,7 @@ source("samplingestimate.r")
 source("book_helpers.r")
 ```
 
-::: {.content-visible when-format="html"}
-
-<details>
-<summary>Show the shared estimating functions (`samplingestimate.r`)</summary>
-
-```{r print-functions}
-#| echo: false
-#| results: asis
-cat("```r\n")
-cat(readLines("samplingestimate.r"), sep = "\n")
-cat("\n```\n")
-```
-
-</details>
-
-:::
+The full source of `samplingestimate.r` is listed in @sec-estimating-functions.
 
 ## The Hansen--Hurwitz Estimator {#sec-ups-hh}
 

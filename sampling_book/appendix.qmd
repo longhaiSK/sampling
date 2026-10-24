@@ -1,13 +1,17 @@
-# Estimating Functions Source Code
+---
+# not frozen: the listing is re-read from samplingestimate.r at every render
+freeze: false
+---
 
+# Estimating Functions Source Code {#sec-estimating-functions}
 
 The R functions used throughout this book to compute point estimates, standard errors, and confidence intervals --- along with their `gt`-table formatting helpers --- are defined in a single shared file, `samplingestimate.r`, which every chapter sources. Its full source is listed below for reference.
 
 ```{r}
 #| echo: false
+#| cache: false
 #| results: asis
 cat("```r\n")
 cat(readLines("samplingestimate.r"), sep = "\n")
 cat("\n```\n")
 ```
-

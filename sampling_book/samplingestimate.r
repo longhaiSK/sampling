@@ -87,7 +87,7 @@ truncate_working <- function (working, id_col, head_n = 6)
 
 # Helper function to format estimation outputs with appropriate mathematical headers
 format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_mean", "reg_total", "ratio_mean", "domain_mean",
-                                                 "hh_total", "hh_mean", "hh_ratio_mean", "hh_B", "hh_ybar")) {
+                                                 "hh_total", "hh_B", "hh_ybar")) {
   est_type <- match.arg(est_type)
 
   sym_map <- list(
@@ -98,13 +98,9 @@ format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_
     "reg_total"   = c(est = "$\\hat{t}_{reg}$",   se = "$\\mathrm{SE}(\\hat{t}_{reg})$"),
     "ratio_mean"  = c(est = "$\\bar{y}_{r}$",     se = "$\\mathrm{SE}(\\bar{y}_{r})$"),
     "domain_mean" = c(est = "$\\bar{y}_{d}$",     se = "$\\mathrm{SE}(\\bar{y}_{d})$"),
-    ## UPSWR (Hansen-Hurwitz): total, mean per unit, and ratio (mean per element)
+    ## UPSWR (Hansen-Hurwitz) total
     "hh_total"      = c(est = "$\\hat{t}_{\\mathrm{HH}}$",
                         se  = "$\\mathrm{SE}(\\hat{t}_{\\mathrm{HH}})$"),
-    "hh_mean"       = c(est = "$\\hat{\\bar{t}}_{\\mathrm{HH}}$",
-                        se  = "$\\mathrm{SE}(\\hat{\\bar{t}}_{\\mathrm{HH}})$"),
-    "hh_ratio_mean" = c(est = "$\\hat{\\bar{y}}_{\\mathrm{HH},r}$",
-                        se  = "$\\mathrm{SE}(\\hat{\\bar{y}}_{\\mathrm{HH},r})$"),
     ## UPSWR with psi_i = x_i / t_x (upswr_est): ratio B, mean of y per unit
     "hh_B"          = c(est = "$\\hat{B}_{\\mathrm{HH}}$",
                         se  = "$\\mathrm{SE}(\\hat{B}_{\\mathrm{HH}})$"),
@@ -316,7 +312,7 @@ srs_est <- function (sdata, N = Inf, estimate = c ("mean", "total"),
 ##                  footnote showing Bhat and s_e^2; NULL otherwise
 ## col_labels --- named list (y, x, yhat) of RAW latex for those
 ##                working-table columns, so this function can be reused
-##                (e.g. by cluster_ratio(), upswr_ratio()) with
+##                (e.g. by cluster_ratio()) with
 ##                context-appropriate labels
 ## extra_col --- optional column spec, or list of column specs, adding
 ##               RAW-latex-labelled columns of per-unit `values` right before
@@ -962,91 +958,4 @@ upswo_est <- function (ydata, pik, N, tx_pop = NULL,
   se <- scale * sqrt (ht_var (ydata, pik, variance))
   mem <- qt (0.975, df = n - 1) * se
   c (Est. = est, S.E. = se, ci.low = est - mem, ci.upp = est + mem)
-}
-
-## Ratio estimation for datasets collected with UPS with Replacement.
-## estimate --- "mean" (default) or "model" both return the raw ratio
-##              Bhat = sum(t_i/psi_i)/sum(M_i/psi_i) --- that raw B IS the
-##              population MEAN per element; "total" returns the population
-##              TOTAL of y, Bhat*Mtotal_U (requires Mtotal_U, the population
-##              total of the size variable)
-upswr_ratio <- function (total, M, psi, N = Inf, estimate = c ("mean", "total", "model"),
-                          show.details = TRUE, Mtotal_U = NULL)
-{
-  estimate <- match.arg (estimate)
-
-  if (estimate == "total")
-  {
-      if (is.null (Mtotal_U))
-          stop ("Mtotal_U (population total of the size variable) is required when estimate = \"total\"")
-      ratio_est (total/psi, M/psi, xbarU = Mtotal_U, N = N, estimate = "mean", show.details = show.details,
-                 col_labels = list (y = "t_i/\\psi_i", x = "M_i/\\psi_i", yhat = "\\hat B\\,M_i/\\psi_i"))
-  }
-  else
-  {
-      ratio_est (total/psi, M/psi, N = N, estimate = "model", show.details = show.details,
-                 col_labels = list (y = "t_i/\\psi_i", x = "M_i/\\psi_i", yhat = "\\hat B\\,M_i/\\psi_i"))
-  }
-}
-
-## Cluster UPS with Replacement: aggregates to the cluster level (ybari, Mi,
-## psi per sampled cluster), then delegates to upswr_ratio(), so the
-## working table and estimate/total logic are shared with the base function.
-## data --- data frame holding the sample
-## sid --- variable recording cluster (psu) identity
-## csize --- variable recording cluster (psu) population size
-## cpsi --- variable recording the cluster's selection probability psi_i
-## yvar --- variable of interest (element level)
-## estimate, Mtotal_U --- see upswr_ratio()
-cluster_upswr_ratio <- function (data, sid, csize, cpsi, yvar, N = Inf,
-                                  estimate = c ("mean", "total", "model"),
-                                  show.details = TRUE, Mtotal_U = NULL)
-{
-    estimate <- match.arg (estimate)
-
-    clust <- data[, sid]
-    ydata <- data[, yvar]
-
-    ybari <- tapply (ydata, clust, mean)
-    Mi <- tapply (data[,csize], clust, function (x) x[1])
-    psi <- tapply (data[,cpsi], clust, function (x) x[1])
-    t_hat_cls <- ybari * Mi
-
-    upswr_ratio (t_hat_cls, Mi, psi, N = N, estimate = estimate,
-                 show.details = show.details, Mtotal_U = Mtotal_U)
-}
-
-## Cluster UPS without Replacement: same idea as cluster_upswr_ratio(),
-## but dividing by the cluster's inclusion probability pik instead of psi.
-## data --- data frame holding the sample
-## cname --- variable recording cluster identity
-## csize --- variable recording cluster population size
-## cpik --- variable recording the cluster's inclusion probability pi_k
-## yvar --- variable of interest (element level)
-cluster_upswo_ratio <- function (data, cname, csize, cpik, yvar, N = Inf,
-                                  estimate = c ("mean", "total", "model"),
-                                  show.details = TRUE, Mtotal_U = NULL)
-{
-  estimate <- match.arg (estimate)
-
-  clust <- data[, cname]
-  ydata <- data[, yvar]
-
-  ybari <- tapply (ydata, clust, mean)
-  Mi <- tapply (data[,csize], clust, function (x) x[1])
-  pik <- tapply (data[,cpik], clust, function (x) x[1])
-  t_hat_cls <- ybari * Mi
-
-  if (estimate == "total")
-  {
-      if (is.null (Mtotal_U))
-          stop ("Mtotal_U (population total of the size variable) is required when estimate = \"total\"")
-      ratio_est (t_hat_cls/pik, Mi/pik, xbarU = Mtotal_U, N = N, estimate = "mean", show.details = show.details,
-                 col_labels = list (y = "\\hat t_i/\\pi_i", x = "M_i/\\pi_i", yhat = "\\hat B\\,M_i/\\pi_i"))
-  }
-  else
-  {
-      ratio_est (t_hat_cls/pik, Mi/pik, N = N, estimate = "model", show.details = show.details,
-                 col_labels = list (y = "\\hat t_i/\\pi_i", x = "M_i/\\pi_i", yhat = "\\hat B\\,M_i/\\pi_i"))
-  }
 }
