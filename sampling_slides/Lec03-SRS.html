@@ -15,7 +15,7 @@
   <meta name="generator" content="quarto-1.9.37">
 
   <meta name="author" content="Longhai Li">
-  <meta name="dcterms.date" content="2026-10-08">
+  <meta name="dcterms.date" content="2026-10-27">
   <title>SRS-Slides</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -232,7 +232,7 @@ Longhai Li
 </div>
 </div>
 
-  <p class="date">2026-10-08</p>
+  <p class="date">2026-10-27</p>
 </section>
 <section>
 <section id="simple-random-sampling" class="title-slide slide level1 center" data-number="1">
@@ -419,213 +419,237 @@ s^2 = \frac{1}{n-1}\sum_{i\in\mathcal S}(y_i-\hat p)^2 = \frac{n}{n-1}\,\hat p(1
 <span id="cb4-7"><a href=""></a>## file: app.R</span>
 <span id="cb4-8"><a href=""></a>library(shiny)</span>
 <span id="cb4-9"><a href=""></a></span>
-<span id="cb4-10"><a href=""></a>data_url &lt;- "https://raw.githubusercontent.com/longhaiSK/sampling/main/sampling_book/acres92.csv"</span>
-<span id="cb4-11"><a href=""></a>download.file(data_url, "acres92.csv")</span>
-<span id="cb4-12"><a href=""></a>pop   &lt;- read.csv("acres92.csv")$acres92</span>
-<span id="cb4-13"><a href=""></a>N     &lt;- length(pop)</span>
-<span id="cb4-14"><a href=""></a>ybarU &lt;- mean(pop)</span>
-<span id="cb4-15"><a href=""></a>S     &lt;- sd(pop)</span>
-<span id="cb4-16"><a href=""></a></span>
-<span id="cb4-17"><a href=""></a>## ---- broken x-axis for the population panel --------------------------------</span>
-<span id="cb4-18"><a href=""></a>## The drawn region is [0, 2 * ybarU]: the visible scale [0, cut] plus a</span>
-<span id="cb4-19"><a href=""></a>## compressed lane holding the right tail. That total width puts the population</span>
-<span id="cb4-20"><a href=""></a>## mean exactly at the midpoint, matching the histogram panel below.</span>
-<span id="cb4-21"><a href=""></a>lane_frac &lt;- 0.10</span>
-<span id="cb4-22"><a href=""></a>cut       &lt;- 2 * ybarU / (1 + lane_frac)</span>
-<span id="cb4-23"><a href=""></a>lane_w    &lt;- lane_frac * cut</span>
-<span id="cb4-24"><a href=""></a>xmax_top  &lt;- cut + lane_w                      # == 2 * ybarU</span>
-<span id="cb4-25"><a href=""></a></span>
-<span id="cb4-26"><a href=""></a>tail_id &lt;- which(pop &gt; cut)</span>
-<span id="cb4-27"><a href=""></a>n_tail  &lt;- length(tail_id)</span>
-<span id="cb4-28"><a href=""></a>px      &lt;- pop                                 # plotting positions</span>
-<span id="cb4-29"><a href=""></a>if (n_tail &gt; 0) {</span>
-<span id="cb4-30"><a href=""></a>  r &lt;- rank(pop[tail_id], ties.method = "first") / (n_tail + 1)</span>
-<span id="cb4-31"><a href=""></a>  px[tail_id] &lt;- cut + lane_w * (0.10 + 0.80 * r)</span>
+<span id="cb4-10"><a href=""></a>### renderPlot replacement: Safari 27 (WebKit) cannot hold the call stack of</span>
+<span id="cb4-11"><a href=""></a>### shiny::renderPlot in webR ("Maximum call stack size exceeded"), so draw with</span>
+<span id="cb4-12"><a href=""></a>### renderImage instead, which nests about 45 fewer R calls</span>
+<span id="cb4-13"><a href=""></a>renderPlot &lt;- function(expr, width = "auto", height = "auto", res = 72, ...,</span>
+<span id="cb4-14"><a href=""></a>                       env = parent.frame(), quoted = FALSE) {</span>
+<span id="cb4-15"><a href=""></a>    func &lt;- shiny::exprToFunction(expr, env, quoted)</span>
+<span id="cb4-16"><a href=""></a>    shiny::renderImage({</span>
+<span id="cb4-17"><a href=""></a>        info &lt;- shiny::getCurrentOutputInfo()</span>
+<span id="cb4-18"><a href=""></a>        w  &lt;- if (is.numeric(width))  width  else info$width()</span>
+<span id="cb4-19"><a href=""></a>        h  &lt;- if (is.numeric(height)) height else info$height()</span>
+<span id="cb4-20"><a href=""></a>        shiny::req(w &gt; 0, h &gt; 0)</span>
+<span id="cb4-21"><a href=""></a>        pr &lt;- shiny::getDefaultReactiveDomain()$clientData$pixelratio</span>
+<span id="cb4-22"><a href=""></a>        if (is.null(pr)) pr &lt;- 1</span>
+<span id="cb4-23"><a href=""></a>        f   &lt;- tempfile(fileext = ".png")</span>
+<span id="cb4-24"><a href=""></a>        dev &lt;- shiny:::startPNG(f, w * pr, h * pr, res = res * pr)</span>
+<span id="cb4-25"><a href=""></a>        on.exit(grDevices::dev.off(dev), add = TRUE)</span>
+<span id="cb4-26"><a href=""></a>        grDevices::dev.control(displaylist = "enable")</span>
+<span id="cb4-27"><a href=""></a>        v &lt;- withVisible(func())</span>
+<span id="cb4-28"><a href=""></a>        if (v$visible) print(v$value)</span>
+<span id="cb4-29"><a href=""></a>        list(src = f, contentType = "image/png", width = w, height = h,</span>
+<span id="cb4-30"><a href=""></a>             coordmap = shiny:::getCoordmap(v$value, w * pr, h * pr, res * pr))</span>
+<span id="cb4-31"><a href=""></a>    }, deleteFile = TRUE)</span>
 <span id="cb4-32"><a href=""></a>}</span>
 <span id="cb4-33"><a href=""></a></span>
-<span id="cb4-34"><a href=""></a># fixed jitter band for the rug of raw population values</span>
-<span id="cb4-35"><a href=""></a>set.seed(42)</span>
-<span id="cb4-36"><a href=""></a>rug_y &lt;- runif(N, -0.42, -0.08)</span>
-<span id="cb4-37"><a href=""></a></span>
-<span id="cb4-38"><a href=""></a>dens   &lt;- density(pop, from = 0, to = cut)</span>
-<span id="cb4-39"><a href=""></a>dens_y &lt;- dens$y / max(dens$y)</span>
+<span id="cb4-34"><a href=""></a>data_url &lt;- "https://raw.githubusercontent.com/longhaiSK/sampling/main/sampling_book/acres92.csv"</span>
+<span id="cb4-35"><a href=""></a>download.file(data_url, "acres92.csv")</span>
+<span id="cb4-36"><a href=""></a>pop   &lt;- read.csv("acres92.csv")$acres92</span>
+<span id="cb4-37"><a href=""></a>N     &lt;- length(pop)</span>
+<span id="cb4-38"><a href=""></a>ybarU &lt;- mean(pop)</span>
+<span id="cb4-39"><a href=""></a>S     &lt;- sd(pop)</span>
 <span id="cb4-40"><a href=""></a></span>
-<span id="cb4-41"><a href=""></a>## ---- fixed window for the sampling distribution ----------------------------</span>
-<span id="cb4-42"><a href=""></a>se100  &lt;- sqrt(1 - 100 / N) * S / sqrt(100)</span>
-<span id="cb4-43"><a href=""></a>half   &lt;- 5 * se100</span>
-<span id="cb4-44"><a href=""></a>xlim_b &lt;- ybarU + c(-1, 1) * half</span>
-<span id="cb4-45"><a href=""></a></span>
-<span id="cb4-46"><a href=""></a>MAR &lt;- c(4.5, 4.5, 3, 1.5)   # identical in both panels, so the scales align</span>
-<span id="cb4-47"><a href=""></a></span>
-<span id="cb4-48"><a href=""></a>ui &lt;- fluidPage(</span>
-<span id="cb4-49"><a href=""></a>  titlePanel("Simple random sampling: sampling distribution and CI coverage"),</span>
-<span id="cb4-50"><a href=""></a>  sidebarLayout(</span>
-<span id="cb4-51"><a href=""></a>    sidebarPanel(</span>
-<span id="cb4-52"><a href=""></a>      width = 3,</span>
-<span id="cb4-53"><a href=""></a>      sliderInput("n", "Sample size (n)", min = 10, max = 1000, value = 300, step = 10),</span>
-<span id="cb4-54"><a href=""></a>      sliderInput("conf", "Confidence level", min = 0.80, max = 0.99, value = 0.95, step = 0.01),</span>
-<span id="cb4-55"><a href=""></a>      actionButton("draw", "Draw new sample", class = "btn-primary", width = "100%"),</span>
-<span id="cb4-56"><a href=""></a>      br(), br(),</span>
-<span id="cb4-57"><a href=""></a>      fluidRow(</span>
-<span id="cb4-58"><a href=""></a>        column(6, actionButton("play", "Play", class = "btn-success", width = "100%")),</span>
-<span id="cb4-59"><a href=""></a>        column(6, actionButton("stop", "Stop", class = "btn-danger",  width = "100%"))</span>
-<span id="cb4-60"><a href=""></a>      ),</span>
-<span id="cb4-61"><a href=""></a>      br(),</span>
-<span id="cb4-62"><a href=""></a>      sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),</span>
-<span id="cb4-63"><a href=""></a>      numericInput("nrep", "Stop after this many samples",</span>
-<span id="cb4-64"><a href=""></a>                   value = 500, min = 10, max = 20000, step = 50),</span>
-<span id="cb4-65"><a href=""></a>      actionButton("reset", "Reset", width = "100%")</span>
-<span id="cb4-66"><a href=""></a>    ),</span>
-<span id="cb4-67"><a href=""></a>    mainPanel(</span>
-<span id="cb4-68"><a href=""></a>      width = 9,</span>
-<span id="cb4-69"><a href=""></a>      plotOutput("popPlot",  height = "340px"),</span>
-<span id="cb4-70"><a href=""></a>      plotOutput("histPlot", height = "360px")</span>
-<span id="cb4-71"><a href=""></a>    )</span>
-<span id="cb4-72"><a href=""></a>  )</span>
-<span id="cb4-73"><a href=""></a>)</span>
-<span id="cb4-74"><a href=""></a></span>
-<span id="cb4-75"><a href=""></a>server &lt;- function(input, output, session) {</span>
-<span id="cb4-76"><a href=""></a></span>
-<span id="cb4-77"><a href=""></a>  rv &lt;- reactiveValues(</span>
-<span id="cb4-78"><a href=""></a>    idx = NULL, mean = NULL, ci = NULL, covered = NULL,</span>
-<span id="cb4-79"><a href=""></a>    means = numeric(0), hits = logical(0)</span>
-<span id="cb4-80"><a href=""></a>  )</span>
-<span id="cb4-81"><a href=""></a>  running &lt;- reactiveVal(FALSE)</span>
-<span id="cb4-82"><a href=""></a></span>
-<span id="cb4-83"><a href=""></a>  # guard against a blank or absurd entry in the numeric box</span>
-<span id="cb4-84"><a href=""></a>  nrep &lt;- reactive({</span>
-<span id="cb4-85"><a href=""></a>    v &lt;- input$nrep</span>
-<span id="cb4-86"><a href=""></a>    if (is.null(v) || is.na(v) || v &lt; 1) 1L else min(as.integer(v), 20000L)</span>
-<span id="cb4-87"><a href=""></a>  })</span>
-<span id="cb4-88"><a href=""></a></span>
-<span id="cb4-89"><a href=""></a>  draw_one &lt;- function() {</span>
-<span id="cb4-90"><a href=""></a>    n    &lt;- isolate(input$n)</span>
-<span id="cb4-91"><a href=""></a>    conf &lt;- isolate(input$conf)</span>
-<span id="cb4-92"><a href=""></a>    idx  &lt;- sample(N, n)</span>
-<span id="cb4-93"><a href=""></a>    s    &lt;- pop[idx]</span>
-<span id="cb4-94"><a href=""></a>    m    &lt;- mean(s)</span>
-<span id="cb4-95"><a href=""></a>    se   &lt;- sqrt(1 - n / N) * sd(s) / sqrt(n)</span>
-<span id="cb4-96"><a href=""></a>    me   &lt;- qt(1 - (1 - conf) / 2, df = n - 1) * se</span>
-<span id="cb4-97"><a href=""></a></span>
-<span id="cb4-98"><a href=""></a>    rv$idx     &lt;- idx</span>
-<span id="cb4-99"><a href=""></a>    rv$mean    &lt;- m</span>
-<span id="cb4-100"><a href=""></a>    rv$ci      &lt;- c(m - me, m + me)</span>
-<span id="cb4-101"><a href=""></a>    rv$covered &lt;- (m - me) &lt;= ybarU &amp;&amp; ybarU &lt;= (m + me)</span>
-<span id="cb4-102"><a href=""></a>    rv$means   &lt;- c(rv$means, m)</span>
-<span id="cb4-103"><a href=""></a>    rv$hits    &lt;- c(rv$hits, rv$covered)</span>
-<span id="cb4-104"><a href=""></a>  }</span>
-<span id="cb4-105"><a href=""></a></span>
-<span id="cb4-106"><a href=""></a>  # one sample per click; Play repeats until Stop or until the cap is reached</span>
-<span id="cb4-107"><a href=""></a>  observeEvent(input$draw, { running(FALSE); draw_one() })</span>
-<span id="cb4-108"><a href=""></a>  observeEvent(input$play, running(TRUE))</span>
-<span id="cb4-109"><a href=""></a>  observeEvent(input$stop, running(FALSE))</span>
-<span id="cb4-110"><a href=""></a></span>
-<span id="cb4-111"><a href=""></a>  observe({</span>
-<span id="cb4-112"><a href=""></a>    if (!isTRUE(running())) return()</span>
-<span id="cb4-113"><a href=""></a>    if (length(isolate(rv$means)) &gt;= isolate(nrep())) {</span>
-<span id="cb4-114"><a href=""></a>      running(FALSE)</span>
-<span id="cb4-115"><a href=""></a>      return()</span>
-<span id="cb4-116"><a href=""></a>    }</span>
-<span id="cb4-117"><a href=""></a>    invalidateLater(1000 / isolate(input$speed), session)</span>
-<span id="cb4-118"><a href=""></a>    isolate(draw_one())</span>
-<span id="cb4-119"><a href=""></a>  })</span>
-<span id="cb4-120"><a href=""></a></span>
-<span id="cb4-121"><a href=""></a>  # Reset clears the accumulated means and halts any run in progress</span>
-<span id="cb4-122"><a href=""></a>  reset_history &lt;- function() {</span>
-<span id="cb4-123"><a href=""></a>    running(FALSE)</span>
-<span id="cb4-124"><a href=""></a>    rv$idx &lt;- NULL; rv$mean &lt;- NULL; rv$ci &lt;- NULL; rv$covered &lt;- NULL</span>
-<span id="cb4-125"><a href=""></a>    rv$means &lt;- numeric(0); rv$hits &lt;- logical(0)</span>
-<span id="cb4-126"><a href=""></a>  }</span>
-<span id="cb4-127"><a href=""></a>  observeEvent(input$reset, reset_history())</span>
-<span id="cb4-128"><a href=""></a>  observeEvent(input$n,     reset_history())</span>
-<span id="cb4-129"><a href=""></a>  observeEvent(input$conf,  reset_history())</span>
-<span id="cb4-130"><a href=""></a></span>
-<span id="cb4-131"><a href=""></a>  fmt &lt;- function(x) format(round(x), big.mark = ",")</span>
-<span id="cb4-132"><a href=""></a></span>
-<span id="cb4-133"><a href=""></a>  output$popPlot &lt;- renderPlot({</span>
-<span id="cb4-134"><a href=""></a>    par(mar = MAR, xaxs = "i")</span>
-<span id="cb4-135"><a href=""></a>    plot(dens$x, dens_y, type = "l", col = "grey40", lwd = 2,</span>
-<span id="cb4-136"><a href=""></a>         xlim = c(0, xmax_top), ylim = c(-0.62, 1.15),</span>
-<span id="cb4-137"><a href=""></a>         xlab = "acres92", ylab = "", xaxt = "n", yaxt = "n", bty = "n",</span>
-<span id="cb4-138"><a href=""></a>         main = "Population distribution with the current SRS sample")</span>
-<span id="cb4-139"><a href=""></a></span>
-<span id="cb4-140"><a href=""></a>    # raw values, jittered; tail units sit in the compressed lane</span>
-<span id="cb4-141"><a href=""></a>    points(px, rug_y, pch = 16, cex = 0.5, col = adjustcolor("grey60", 0.5))</span>
-<span id="cb4-142"><a href=""></a>    if (!is.null(rv$idx))</span>
-<span id="cb4-143"><a href=""></a>      points(px[rv$idx], rug_y[rv$idx], pch = 16, cex = 0.6,</span>
-<span id="cb4-144"><a href=""></a>             col = adjustcolor("red", 0.85))</span>
-<span id="cb4-145"><a href=""></a></span>
-<span id="cb4-146"><a href=""></a>    # axis up to the cut, then the break marker and the lane</span>
-<span id="cb4-147"><a href=""></a>    at &lt;- pretty(c(0, cut), 6); at &lt;- at[at &lt;= cut]</span>
-<span id="cb4-148"><a href=""></a>    axis(1, at = at, labels = format(at, big.mark = ",", trim = TRUE))</span>
-<span id="cb4-149"><a href=""></a>    segments(cut, -0.62, cut, 1.05, col = "grey75", lty = 3)</span>
-<span id="cb4-150"><a href=""></a>    text(cut, -0.70, "//", col = "grey40", cex = 1.3, xpd = NA)</span>
-<span id="cb4-151"><a href=""></a>    text(cut + lane_w / 2, -0.70,</span>
-<span id="cb4-152"><a href=""></a>         sprintf("&gt; %s\n(%d counties)", fmt(cut), n_tail),</span>
-<span id="cb4-153"><a href=""></a>         col = "grey40", cex = 0.75, xpd = NA)</span>
+<span id="cb4-41"><a href=""></a>## ---- broken x-axis for the population panel --------------------------------</span>
+<span id="cb4-42"><a href=""></a>## The drawn region is [0, 2 * ybarU]: the visible scale [0, cut] plus a</span>
+<span id="cb4-43"><a href=""></a>## compressed lane holding the right tail. That total width puts the population</span>
+<span id="cb4-44"><a href=""></a>## mean exactly at the midpoint, matching the histogram panel below.</span>
+<span id="cb4-45"><a href=""></a>lane_frac &lt;- 0.10</span>
+<span id="cb4-46"><a href=""></a>cut       &lt;- 2 * ybarU / (1 + lane_frac)</span>
+<span id="cb4-47"><a href=""></a>lane_w    &lt;- lane_frac * cut</span>
+<span id="cb4-48"><a href=""></a>xmax_top  &lt;- cut + lane_w                      # == 2 * ybarU</span>
+<span id="cb4-49"><a href=""></a></span>
+<span id="cb4-50"><a href=""></a>tail_id &lt;- which(pop &gt; cut)</span>
+<span id="cb4-51"><a href=""></a>n_tail  &lt;- length(tail_id)</span>
+<span id="cb4-52"><a href=""></a>px      &lt;- pop                                 # plotting positions</span>
+<span id="cb4-53"><a href=""></a>if (n_tail &gt; 0) {</span>
+<span id="cb4-54"><a href=""></a>  r &lt;- rank(pop[tail_id], ties.method = "first") / (n_tail + 1)</span>
+<span id="cb4-55"><a href=""></a>  px[tail_id] &lt;- cut + lane_w * (0.10 + 0.80 * r)</span>
+<span id="cb4-56"><a href=""></a>}</span>
+<span id="cb4-57"><a href=""></a></span>
+<span id="cb4-58"><a href=""></a># fixed jitter band for the rug of raw population values</span>
+<span id="cb4-59"><a href=""></a>set.seed(42)</span>
+<span id="cb4-60"><a href=""></a>rug_y &lt;- runif(N, -0.42, -0.08)</span>
+<span id="cb4-61"><a href=""></a></span>
+<span id="cb4-62"><a href=""></a>dens   &lt;- density(pop, from = 0, to = cut)</span>
+<span id="cb4-63"><a href=""></a>dens_y &lt;- dens$y / max(dens$y)</span>
+<span id="cb4-64"><a href=""></a></span>
+<span id="cb4-65"><a href=""></a>## ---- fixed window for the sampling distribution ----------------------------</span>
+<span id="cb4-66"><a href=""></a>se100  &lt;- sqrt(1 - 100 / N) * S / sqrt(100)</span>
+<span id="cb4-67"><a href=""></a>half   &lt;- 5 * se100</span>
+<span id="cb4-68"><a href=""></a>xlim_b &lt;- ybarU + c(-1, 1) * half</span>
+<span id="cb4-69"><a href=""></a></span>
+<span id="cb4-70"><a href=""></a>MAR &lt;- c(4.5, 4.5, 3, 1.5)   # identical in both panels, so the scales align</span>
+<span id="cb4-71"><a href=""></a></span>
+<span id="cb4-72"><a href=""></a>ui &lt;- fluidPage(</span>
+<span id="cb4-73"><a href=""></a>  titlePanel("Simple random sampling: sampling distribution and CI coverage"),</span>
+<span id="cb4-74"><a href=""></a>  sidebarLayout(</span>
+<span id="cb4-75"><a href=""></a>    sidebarPanel(</span>
+<span id="cb4-76"><a href=""></a>      width = 3,</span>
+<span id="cb4-77"><a href=""></a>      sliderInput("n", "Sample size (n)", min = 10, max = 1000, value = 300, step = 10),</span>
+<span id="cb4-78"><a href=""></a>      sliderInput("conf", "Confidence level", min = 0.80, max = 0.99, value = 0.95, step = 0.01),</span>
+<span id="cb4-79"><a href=""></a>      actionButton("draw", "Draw new sample", class = "btn-primary", width = "100%"),</span>
+<span id="cb4-80"><a href=""></a>      br(), br(),</span>
+<span id="cb4-81"><a href=""></a>      fluidRow(</span>
+<span id="cb4-82"><a href=""></a>        column(6, actionButton("play", "Play", class = "btn-success", width = "100%")),</span>
+<span id="cb4-83"><a href=""></a>        column(6, actionButton("stop", "Stop", class = "btn-danger",  width = "100%"))</span>
+<span id="cb4-84"><a href=""></a>      ),</span>
+<span id="cb4-85"><a href=""></a>      br(),</span>
+<span id="cb4-86"><a href=""></a>      sliderInput("speed", "Samples per second", min = 1, max = 10, value = 3, step = 1),</span>
+<span id="cb4-87"><a href=""></a>      numericInput("nrep", "Stop after this many samples",</span>
+<span id="cb4-88"><a href=""></a>                   value = 500, min = 10, max = 20000, step = 50),</span>
+<span id="cb4-89"><a href=""></a>      actionButton("reset", "Reset", width = "100%")</span>
+<span id="cb4-90"><a href=""></a>    ),</span>
+<span id="cb4-91"><a href=""></a>    mainPanel(</span>
+<span id="cb4-92"><a href=""></a>      width = 9,</span>
+<span id="cb4-93"><a href=""></a>      plotOutput("popPlot",  height = "340px"),</span>
+<span id="cb4-94"><a href=""></a>      plotOutput("histPlot", height = "360px")</span>
+<span id="cb4-95"><a href=""></a>    )</span>
+<span id="cb4-96"><a href=""></a>  )</span>
+<span id="cb4-97"><a href=""></a>)</span>
+<span id="cb4-98"><a href=""></a></span>
+<span id="cb4-99"><a href=""></a>server &lt;- function(input, output, session) {</span>
+<span id="cb4-100"><a href=""></a></span>
+<span id="cb4-101"><a href=""></a>  rv &lt;- reactiveValues(</span>
+<span id="cb4-102"><a href=""></a>    idx = NULL, mean = NULL, ci = NULL, covered = NULL,</span>
+<span id="cb4-103"><a href=""></a>    means = numeric(0), hits = logical(0)</span>
+<span id="cb4-104"><a href=""></a>  )</span>
+<span id="cb4-105"><a href=""></a>  running &lt;- reactiveVal(FALSE)</span>
+<span id="cb4-106"><a href=""></a></span>
+<span id="cb4-107"><a href=""></a>  # guard against a blank or absurd entry in the numeric box</span>
+<span id="cb4-108"><a href=""></a>  nrep &lt;- reactive({</span>
+<span id="cb4-109"><a href=""></a>    v &lt;- input$nrep</span>
+<span id="cb4-110"><a href=""></a>    if (is.null(v) || is.na(v) || v &lt; 1) 1L else min(as.integer(v), 20000L)</span>
+<span id="cb4-111"><a href=""></a>  })</span>
+<span id="cb4-112"><a href=""></a></span>
+<span id="cb4-113"><a href=""></a>  draw_one &lt;- function() {</span>
+<span id="cb4-114"><a href=""></a>    n    &lt;- isolate(input$n)</span>
+<span id="cb4-115"><a href=""></a>    conf &lt;- isolate(input$conf)</span>
+<span id="cb4-116"><a href=""></a>    idx  &lt;- sample(N, n)</span>
+<span id="cb4-117"><a href=""></a>    s    &lt;- pop[idx]</span>
+<span id="cb4-118"><a href=""></a>    m    &lt;- mean(s)</span>
+<span id="cb4-119"><a href=""></a>    se   &lt;- sqrt(1 - n / N) * sd(s) / sqrt(n)</span>
+<span id="cb4-120"><a href=""></a>    me   &lt;- qt(1 - (1 - conf) / 2, df = n - 1) * se</span>
+<span id="cb4-121"><a href=""></a></span>
+<span id="cb4-122"><a href=""></a>    rv$idx     &lt;- idx</span>
+<span id="cb4-123"><a href=""></a>    rv$mean    &lt;- m</span>
+<span id="cb4-124"><a href=""></a>    rv$ci      &lt;- c(m - me, m + me)</span>
+<span id="cb4-125"><a href=""></a>    rv$covered &lt;- (m - me) &lt;= ybarU &amp;&amp; ybarU &lt;= (m + me)</span>
+<span id="cb4-126"><a href=""></a>    rv$means   &lt;- c(rv$means, m)</span>
+<span id="cb4-127"><a href=""></a>    rv$hits    &lt;- c(rv$hits, rv$covered)</span>
+<span id="cb4-128"><a href=""></a>  }</span>
+<span id="cb4-129"><a href=""></a></span>
+<span id="cb4-130"><a href=""></a>  # one sample per click; Play repeats until Stop or until the cap is reached</span>
+<span id="cb4-131"><a href=""></a>  observeEvent(input$draw, { running(FALSE); draw_one() })</span>
+<span id="cb4-132"><a href=""></a>  observeEvent(input$play, running(TRUE))</span>
+<span id="cb4-133"><a href=""></a>  observeEvent(input$stop, running(FALSE))</span>
+<span id="cb4-134"><a href=""></a></span>
+<span id="cb4-135"><a href=""></a>  observe({</span>
+<span id="cb4-136"><a href=""></a>    if (!isTRUE(running())) return()</span>
+<span id="cb4-137"><a href=""></a>    if (length(isolate(rv$means)) &gt;= isolate(nrep())) {</span>
+<span id="cb4-138"><a href=""></a>      running(FALSE)</span>
+<span id="cb4-139"><a href=""></a>      return()</span>
+<span id="cb4-140"><a href=""></a>    }</span>
+<span id="cb4-141"><a href=""></a>    invalidateLater(1000 / isolate(input$speed), session)</span>
+<span id="cb4-142"><a href=""></a>    isolate(draw_one())</span>
+<span id="cb4-143"><a href=""></a>  })</span>
+<span id="cb4-144"><a href=""></a></span>
+<span id="cb4-145"><a href=""></a>  # Reset clears the accumulated means and halts any run in progress</span>
+<span id="cb4-146"><a href=""></a>  reset_history &lt;- function() {</span>
+<span id="cb4-147"><a href=""></a>    running(FALSE)</span>
+<span id="cb4-148"><a href=""></a>    rv$idx &lt;- NULL; rv$mean &lt;- NULL; rv$ci &lt;- NULL; rv$covered &lt;- NULL</span>
+<span id="cb4-149"><a href=""></a>    rv$means &lt;- numeric(0); rv$hits &lt;- logical(0)</span>
+<span id="cb4-150"><a href=""></a>  }</span>
+<span id="cb4-151"><a href=""></a>  observeEvent(input$reset, reset_history())</span>
+<span id="cb4-152"><a href=""></a>  observeEvent(input$n,     reset_history())</span>
+<span id="cb4-153"><a href=""></a>  observeEvent(input$conf,  reset_history())</span>
 <span id="cb4-154"><a href=""></a></span>
-<span id="cb4-155"><a href=""></a>    # current sample mean and interval</span>
-<span id="cb4-156"><a href=""></a>    if (!is.null(rv$mean)) {</span>
-<span id="cb4-157"><a href=""></a>      segments(rv$ci[1], -0.55, rv$ci[2], -0.55, col = "blue", lwd = 3)</span>
-<span id="cb4-158"><a href=""></a>      points(rv$mean, -0.55, pch = 19, cex = 1.3, col = "blue")</span>
-<span id="cb4-159"><a href=""></a>    }</span>
-<span id="cb4-160"><a href=""></a>    abline(v = ybarU, col = "black", lwd = 2, lty = 2)</span>
-<span id="cb4-161"><a href=""></a></span>
-<span id="cb4-162"><a href=""></a>    legend("topright", bty = "n", inset = c(0.12, 0),</span>
-<span id="cb4-163"><a href=""></a>           legend = c("Population", "Current sample", "Sample mean and CI", "True mean"),</span>
-<span id="cb4-164"><a href=""></a>           col = c("grey60", "red", "blue", "black"),</span>
-<span id="cb4-165"><a href=""></a>           pch = c(16, 16, 19, NA), lty = c(NA, NA, NA, 2))</span>
-<span id="cb4-166"><a href=""></a>  })</span>
-<span id="cb4-167"><a href=""></a></span>
-<span id="cb4-168"><a href=""></a>  output$histPlot &lt;- renderPlot({</span>
-<span id="cb4-169"><a href=""></a>    par(mar = MAR, xaxs = "i")</span>
-<span id="cb4-170"><a href=""></a></span>
-<span id="cb4-171"><a href=""></a>    if (length(rv$means) == 0) {</span>
-<span id="cb4-172"><a href=""></a>      plot(1, type = "n", xlim = xlim_b, ylim = c(0, 1), bty = "n", yaxt = "n",</span>
-<span id="cb4-173"><a href=""></a>           xlab = "Sample mean of acres92", ylab = "",</span>
-<span id="cb4-174"><a href=""></a>           main = "Sampling distribution of the sample mean")</span>
-<span id="cb4-175"><a href=""></a>      abline(v = ybarU, col = "black", lwd = 2, lty = 2)</span>
-<span id="cb4-176"><a href=""></a>      text(ybarU, 0.5, "Click 'Draw new sample' or 'Play' to begin", col = "grey50")</span>
-<span id="cb4-177"><a href=""></a>      return(invisible())</span>
-<span id="cb4-178"><a href=""></a>    }</span>
-<span id="cb4-179"><a href=""></a></span>
-<span id="cb4-180"><a href=""></a>    # fixed bin width; breaks extended to cover means outside the fixed window</span>
-<span id="cb4-181"><a href=""></a>    bw &lt;- 2 * half / 40</span>
-<span id="cb4-182"><a href=""></a>    lo &lt;- min(xlim_b[1], min(rv$means)) - bw</span>
-<span id="cb4-183"><a href=""></a>    hi &lt;- max(xlim_b[2], max(rv$means)) + bw</span>
-<span id="cb4-184"><a href=""></a>    h  &lt;- hist(rv$means, breaks = seq(lo, hi, by = bw), plot = FALSE)</span>
+<span id="cb4-155"><a href=""></a>  fmt &lt;- function(x) format(round(x), big.mark = ",")</span>
+<span id="cb4-156"><a href=""></a></span>
+<span id="cb4-157"><a href=""></a>  output$popPlot &lt;- renderPlot({</span>
+<span id="cb4-158"><a href=""></a>    par(mar = MAR, xaxs = "i")</span>
+<span id="cb4-159"><a href=""></a>    plot(dens$x, dens_y, type = "l", col = "grey40", lwd = 2,</span>
+<span id="cb4-160"><a href=""></a>         xlim = c(0, xmax_top), ylim = c(-0.62, 1.15),</span>
+<span id="cb4-161"><a href=""></a>         xlab = "acres92", ylab = "", xaxt = "n", yaxt = "n", bty = "n",</span>
+<span id="cb4-162"><a href=""></a>         main = "Population distribution with the current SRS sample")</span>
+<span id="cb4-163"><a href=""></a></span>
+<span id="cb4-164"><a href=""></a>    # raw values, jittered; tail units sit in the compressed lane</span>
+<span id="cb4-165"><a href=""></a>    points(px, rug_y, pch = 16, cex = 0.5, col = adjustcolor("grey60", 0.5))</span>
+<span id="cb4-166"><a href=""></a>    if (!is.null(rv$idx))</span>
+<span id="cb4-167"><a href=""></a>      points(px[rv$idx], rug_y[rv$idx], pch = 16, cex = 0.6,</span>
+<span id="cb4-168"><a href=""></a>             col = adjustcolor("red", 0.85))</span>
+<span id="cb4-169"><a href=""></a></span>
+<span id="cb4-170"><a href=""></a>    # axis up to the cut, then the break marker and the lane</span>
+<span id="cb4-171"><a href=""></a>    at &lt;- pretty(c(0, cut), 6); at &lt;- at[at &lt;= cut]</span>
+<span id="cb4-172"><a href=""></a>    axis(1, at = at, labels = format(at, big.mark = ",", trim = TRUE))</span>
+<span id="cb4-173"><a href=""></a>    segments(cut, -0.62, cut, 1.05, col = "grey75", lty = 3)</span>
+<span id="cb4-174"><a href=""></a>    text(cut, -0.70, "//", col = "grey40", cex = 1.3, xpd = NA)</span>
+<span id="cb4-175"><a href=""></a>    text(cut + lane_w / 2, -0.70,</span>
+<span id="cb4-176"><a href=""></a>         sprintf("&gt; %s\n(%d counties)", fmt(cut), n_tail),</span>
+<span id="cb4-177"><a href=""></a>         col = "grey40", cex = 0.75, xpd = NA)</span>
+<span id="cb4-178"><a href=""></a></span>
+<span id="cb4-179"><a href=""></a>    # current sample mean and interval</span>
+<span id="cb4-180"><a href=""></a>    if (!is.null(rv$mean)) {</span>
+<span id="cb4-181"><a href=""></a>      segments(rv$ci[1], -0.55, rv$ci[2], -0.55, col = "blue", lwd = 3)</span>
+<span id="cb4-182"><a href=""></a>      points(rv$mean, -0.55, pch = 19, cex = 1.3, col = "blue")</span>
+<span id="cb4-183"><a href=""></a>    }</span>
+<span id="cb4-184"><a href=""></a>    abline(v = ybarU, col = "black", lwd = 2, lty = 2)</span>
 <span id="cb4-185"><a href=""></a></span>
-<span id="cb4-186"><a href=""></a>    vis &lt;- h$counts[h$mids &gt;= xlim_b[1] &amp; h$mids &lt;= xlim_b[2]]</span>
-<span id="cb4-187"><a href=""></a>    top &lt;- max(c(vis, 1))</span>
-<span id="cb4-188"><a href=""></a></span>
-<span id="cb4-189"><a href=""></a>    plot(h, col = "skyblue", border = "white",</span>
-<span id="cb4-190"><a href=""></a>         xlim = xlim_b, ylim = c(0, top * 1.30),</span>
-<span id="cb4-191"><a href=""></a>         xlab = "Sample mean of acres92", ylab = "Frequency",</span>
-<span id="cb4-192"><a href=""></a>         main = "Sampling distribution of the sample mean")</span>
-<span id="cb4-193"><a href=""></a>    abline(v = ybarU, col = "black", lwd = 2, lty = 2)</span>
+<span id="cb4-186"><a href=""></a>    legend("topright", bty = "n", inset = c(0.12, 0),</span>
+<span id="cb4-187"><a href=""></a>           legend = c("Population", "Current sample", "Sample mean and CI", "True mean"),</span>
+<span id="cb4-188"><a href=""></a>           col = c("grey60", "red", "blue", "black"),</span>
+<span id="cb4-189"><a href=""></a>           pch = c(16, 16, 19, NA), lty = c(NA, NA, NA, 2))</span>
+<span id="cb4-190"><a href=""></a>  })</span>
+<span id="cb4-191"><a href=""></a></span>
+<span id="cb4-192"><a href=""></a>  output$histPlot &lt;- renderPlot({</span>
+<span id="cb4-193"><a href=""></a>    par(mar = MAR, xaxs = "i")</span>
 <span id="cb4-194"><a href=""></a></span>
-<span id="cb4-195"><a href=""></a>    # transient interval, for the current sample only</span>
-<span id="cb4-196"><a href=""></a>    ci_col &lt;- if (rv$covered) "forestgreen" else "red"</span>
-<span id="cb4-197"><a href=""></a>    y      &lt;- top * 0.9</span>
-<span id="cb4-198"><a href=""></a>    segments(rv$ci[1], y, rv$ci[2], y, col = ci_col, lwd = 3)</span>
-<span id="cb4-199"><a href=""></a>    segments(rv$ci, y - top * 0.045, rv$ci, y + top * 0.045, col = ci_col, lwd = 3)</span>
-<span id="cb4-200"><a href=""></a>    points(rv$mean, y, pch = 19, cex = 1.3, col = ci_col)</span>
-<span id="cb4-201"><a href=""></a></span>
-<span id="cb4-202"><a href=""></a>    outside &lt;- sum(rv$means &lt; xlim_b[1] | rv$means &gt; xlim_b[2])</span>
-<span id="cb4-203"><a href=""></a>    leg &lt;- c(</span>
-<span id="cb4-204"><a href=""></a>      sprintf("True mean = %s", fmt(ybarU)),</span>
-<span id="cb4-205"><a href=""></a>      sprintf("Samples drawn = %d of %d", length(rv$means), nrep()),</span>
-<span id="cb4-206"><a href=""></a>      sprintf("Empirical coverage = %.1f%% (nominal %.0f%%)",</span>
-<span id="cb4-207"><a href=""></a>              100 * mean(rv$hits), 100 * input$conf),</span>
-<span id="cb4-208"><a href=""></a>      sprintf("Misses = %d of %d", sum(!rv$hits), length(rv$hits))</span>
-<span id="cb4-209"><a href=""></a>    )</span>
-<span id="cb4-210"><a href=""></a>    if (outside &gt; 0)</span>
-<span id="cb4-211"><a href=""></a>      leg &lt;- c(leg, sprintf("%d mean(s) beyond the axis", outside))</span>
-<span id="cb4-212"><a href=""></a>    legend("topleft", bty = "n", cex = 0.95, legend = leg)</span>
-<span id="cb4-213"><a href=""></a>  })</span>
-<span id="cb4-214"><a href=""></a>}</span>
-<span id="cb4-215"><a href=""></a></span>
-<span id="cb4-216"><a href=""></a>shinyApp(ui, server)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-195"><a href=""></a>    if (length(rv$means) == 0) {</span>
+<span id="cb4-196"><a href=""></a>      plot(1, type = "n", xlim = xlim_b, ylim = c(0, 1), bty = "n", yaxt = "n",</span>
+<span id="cb4-197"><a href=""></a>           xlab = "Sample mean of acres92", ylab = "",</span>
+<span id="cb4-198"><a href=""></a>           main = "Sampling distribution of the sample mean")</span>
+<span id="cb4-199"><a href=""></a>      abline(v = ybarU, col = "black", lwd = 2, lty = 2)</span>
+<span id="cb4-200"><a href=""></a>      text(ybarU, 0.5, "Click 'Draw new sample' or 'Play' to begin", col = "grey50")</span>
+<span id="cb4-201"><a href=""></a>      return(invisible())</span>
+<span id="cb4-202"><a href=""></a>    }</span>
+<span id="cb4-203"><a href=""></a></span>
+<span id="cb4-204"><a href=""></a>    # fixed bin width; breaks extended to cover means outside the fixed window</span>
+<span id="cb4-205"><a href=""></a>    bw &lt;- 2 * half / 40</span>
+<span id="cb4-206"><a href=""></a>    lo &lt;- min(xlim_b[1], min(rv$means)) - bw</span>
+<span id="cb4-207"><a href=""></a>    hi &lt;- max(xlim_b[2], max(rv$means)) + bw</span>
+<span id="cb4-208"><a href=""></a>    h  &lt;- hist(rv$means, breaks = seq(lo, hi, by = bw), plot = FALSE)</span>
+<span id="cb4-209"><a href=""></a></span>
+<span id="cb4-210"><a href=""></a>    vis &lt;- h$counts[h$mids &gt;= xlim_b[1] &amp; h$mids &lt;= xlim_b[2]]</span>
+<span id="cb4-211"><a href=""></a>    top &lt;- max(c(vis, 1))</span>
+<span id="cb4-212"><a href=""></a></span>
+<span id="cb4-213"><a href=""></a>    plot(h, col = "skyblue", border = "white",</span>
+<span id="cb4-214"><a href=""></a>         xlim = xlim_b, ylim = c(0, top * 1.30),</span>
+<span id="cb4-215"><a href=""></a>         xlab = "Sample mean of acres92", ylab = "Frequency",</span>
+<span id="cb4-216"><a href=""></a>         main = "Sampling distribution of the sample mean")</span>
+<span id="cb4-217"><a href=""></a>    abline(v = ybarU, col = "black", lwd = 2, lty = 2)</span>
+<span id="cb4-218"><a href=""></a></span>
+<span id="cb4-219"><a href=""></a>    # transient interval, for the current sample only</span>
+<span id="cb4-220"><a href=""></a>    ci_col &lt;- if (rv$covered) "forestgreen" else "red"</span>
+<span id="cb4-221"><a href=""></a>    y      &lt;- top * 0.9</span>
+<span id="cb4-222"><a href=""></a>    segments(rv$ci[1], y, rv$ci[2], y, col = ci_col, lwd = 3)</span>
+<span id="cb4-223"><a href=""></a>    segments(rv$ci, y - top * 0.045, rv$ci, y + top * 0.045, col = ci_col, lwd = 3)</span>
+<span id="cb4-224"><a href=""></a>    points(rv$mean, y, pch = 19, cex = 1.3, col = ci_col)</span>
+<span id="cb4-225"><a href=""></a></span>
+<span id="cb4-226"><a href=""></a>    outside &lt;- sum(rv$means &lt; xlim_b[1] | rv$means &gt; xlim_b[2])</span>
+<span id="cb4-227"><a href=""></a>    leg &lt;- c(</span>
+<span id="cb4-228"><a href=""></a>      sprintf("True mean = %s", fmt(ybarU)),</span>
+<span id="cb4-229"><a href=""></a>      sprintf("Samples drawn = %d of %d", length(rv$means), nrep()),</span>
+<span id="cb4-230"><a href=""></a>      sprintf("Empirical coverage = %.1f%% (nominal %.0f%%)",</span>
+<span id="cb4-231"><a href=""></a>              100 * mean(rv$hits), 100 * input$conf),</span>
+<span id="cb4-232"><a href=""></a>      sprintf("Misses = %d of %d", sum(!rv$hits), length(rv$hits))</span>
+<span id="cb4-233"><a href=""></a>    )</span>
+<span id="cb4-234"><a href=""></a>    if (outside &gt; 0)</span>
+<span id="cb4-235"><a href=""></a>      leg &lt;- c(leg, sprintf("%d mean(s) beyond the axis", outside))</span>
+<span id="cb4-236"><a href=""></a>    legend("topleft", bty = "n", cex = 0.95, legend = leg)</span>
+<span id="cb4-237"><a href=""></a>  })</span>
+<span id="cb4-238"><a href=""></a>}</span>
+<span id="cb4-239"><a href=""></a></span>
+<span id="cb4-240"><a href=""></a>shinyApp(ui, server)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="example-cis-for-agsrs.csv" class="slide level2">
 <h2>Example: CIs for <code>agsrs.csv</code></h2>
