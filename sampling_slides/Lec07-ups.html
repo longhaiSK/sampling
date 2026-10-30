@@ -1432,6 +1432,10 @@ A=\frac{\sum_{\mathcal S}(1-\pi_i)u_i}{\sum_{\mathcal S}(1-\pi_i)}</span></li>
           });
         };
         install();
+        // The plugin leaves the notes canvas scale at 1 until the first window resize, so
+        // pen strokes would be stored in screen pixels and later "shrink" on replay. Make it
+        // compute the proper scale right away.
+        setTimeout(() => window.dispatchEvent(new Event('resize')), 600);
         // picking a pen or the sponge from the palette ends eraser mode
         const leave = (e) => {
           if (active && e.target.closest && e.target.closest('.palette') && !e.target.closest('[data-stroke-eraser]')) setActive(false);
@@ -1491,7 +1495,8 @@ A=\frac{\sum_{\mathcal S}(1-\pi_i)u_i}{\sum_{\mathcal S}(1-\pi_i)}</span></li>
 
         // Delete the topmost stroke within HIT of the point. Returns true if one was removed.
         const eraseAt = (id, pageX, pageY) => {
-          if (!work) work = JSON.parse(plugin().getData());
+          // re-read the plugin's storage unless a replay is pending (its edits are not committed yet)
+          if (!pending || !work) work = JSON.parse(plugin().getData());
           const entry = slideEntry(work, id);
           if (!entry) return false;
           duration = entry.duration || 0;
