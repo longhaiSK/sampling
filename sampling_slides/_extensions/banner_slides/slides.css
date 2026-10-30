@@ -82,6 +82,7 @@
 @media (max-width: 800px) {
   #custom-chalkboard-btn svg,
   #custom-notes-btn svg,
+  #custom-stroke-eraser-btn svg,
   #custom-refresh-btn svg {
     width: 18px !important;
     height: 18px !important;
@@ -139,4 +140,9 @@ body.hide-debug .reveal .slides section:not(#title-slide):not(.title-slide):not(
   margin: 0 0 30px 0 !important;
   padding: 0 !important;
   width: 100% !important;
+}
+
+/* Stroke eraser: crosshair over the plugin's drawing canvases while the tool is on */
+body.stroke-eraser-on canvas[data-chalkboard] {
+  cursor: crosshair !important;
 }

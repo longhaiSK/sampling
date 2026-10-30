@@ -18,6 +18,14 @@
   </svg>
 </div>
 
+<!-- Stroke Eraser Button -->
+<div id="custom-stroke-eraser-btn" class="custom-slide-button" title="Stroke eraser (click or drag over a pen stroke to delete it)" style="top: 165px; left: 10px;">
+  <svg viewBox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 20H9l-5.3-5.3a1.5 1.5 0 0 1 0-2.1L13.4 2.9a1.5 1.5 0 0 1 2.1 0l5.6 5.6a1.5 1.5 0 0 1 0 2.1L12 19.7"></path>
+    <line x1="7.5" y1="9" x2="16" y2="17.5"></line>
+  </svg>
+</div>
+
 <!-- Refresh Button -->
 <div id="custom-refresh-btn" class="custom-slide-button" title="Refresh Page">
   <svg viewBox="0 0 24 24" width="25" height="25" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -96,5 +104,144 @@
       }
     });
     menuObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  });
+</script>
+
+<!-- --- STROKE ERASER (object eraser for the chalkboard plugin) ---
+     The plugin only has a sponge (area eraser) and keeps each pen stroke as a
+     run of 'draw' segment events per slide. While this tool is on we swallow
+     the pointer events aimed at the plugin's canvases, find the stroke under
+     the pointer, delete its events from the plugin's storage, and hand the
+     edited storage back through the plugin's own 'received'/'init' message
+     (the same path used for remote synchronisation), which replays the slide. -->
+<script>
+  window.addEventListener('load', () => {
+    const btn = document.getElementById('custom-stroke-eraser-btn');
+    if (!btn) return;
+    const plugin = () => window.RevealChalkboard || Reveal.getPlugin('chalkboard');
+
+    const HIT = 12;           // pick radius, in slide units (1600-wide coordinates)
+    let active = false;       // tool switched on
+    let down = false;         // pointer is down (dragging)
+    let board = 0;            // chalkboard board index, tracked from the plugin's broadcasts
+    let pending = null;       // throttled replay timer
+    let work = null;          // parsed storage being edited during a drag
+    let duration = 0;         // recorded length of the slide being edited (keeps event times ordered)
+
+    const setActive = (on) => {
+      active = on;
+      btn.style.color = on ? 'rgba(220, 20, 60, 0.95)' : '';
+      document.body.classList.toggle('stroke-eraser-on', on);
+    };
+    btn.addEventListener('click', () => {
+      setActive(!active);
+      // make the plugin refresh its canvas scale/offsets (initially unset) so picking matches drawing
+      if (active) window.dispatchEvent(new Event('resize'));
+    });
+    // picking a pen or the sponge from the plugin's palette ends eraser mode
+    document.addEventListener('click', (e) => {
+      if (active && e.target.closest && e.target.closest('.palette')) setActive(false);
+    }, true);
+    document.addEventListener('broadcast', (e) => {
+      if (e.content && e.content.type === 'selectboard') board = e.content.board;
+    });
+    if (window.Reveal) Reveal.on('slidechanged', () => { board = 0; });
+
+    const distToSeg = (px, py, x1, y1, x2, y2) => {
+      const dx = x2 - x1, dy = y2 - y1, l2 = dx * dx + dy * dy;
+      let t = l2 ? ((px - x1) * dx + (py - y1) * dy) / l2 : 0;
+      t = Math.max(0, Math.min(1, t));
+      return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+    };
+
+    // Group the slide's 'draw' events into strokes (consecutive segments that
+    // share an end point and colour). A 'clear' or sponge 'erase' ends a run;
+    // everything before a 'clear' is gone and cannot be picked.
+    const strokesOf = (events, mode) => {
+      let list = [], cur = null;
+      for (const ev of events) {
+        if (mode === 1 && ev.board !== undefined && ev.board !== board) continue;
+        if (ev.type === 'draw') {
+          const last = cur && cur[cur.length - 1];
+          if (last && last.color === ev.color &&
+              Math.abs(last.x2 - ev.x1) < 1e-6 && Math.abs(last.y2 - ev.y1) < 1e-6) {
+            cur.push(ev);
+          } else {
+            cur = [ev];
+            list.push(cur);
+          }
+        } else if (ev.type === 'clear') {
+          list = []; cur = null;
+        } else if (ev.type === 'erase') {
+          cur = null;
+        }
+      }
+      return list;
+    };
+
+    const slideEntry = (data, id) => {
+      const idx = Reveal.getIndices();
+      return data[id].data.find(d => d.slide.h === idx.h && d.slide.v === idx.v && d.slide.f === idx.f);
+    };
+
+    const toBase = (data, id, pageX, pageY) => {
+      const W = data[id].width, H = data[id].height;
+      const s = Math.min(window.innerWidth / W, window.innerHeight / H);
+      return [(pageX - (window.innerWidth - W * s) / 2) / s,
+              (pageY - (window.innerHeight - H * s) / 2) / s];
+    };
+
+    // Delete the topmost stroke within HIT of the point. Returns true if one was removed.
+    const eraseAt = (id, pageX, pageY) => {
+      if (!work) work = JSON.parse(plugin().getData());
+      const entry = slideEntry(work, id);
+      if (!entry) return false;
+      duration = entry.duration || 0;
+      const [x, y] = toBase(work, id, pageX, pageY);
+      const strokes = strokesOf(entry.events, id);
+      for (let i = strokes.length - 1; i >= 0; i--) {
+        if (strokes[i].some(s => distToSeg(x, y, s.x1, s.y1, s.x2, s.y2) <= HIT)) {
+          const gone = new Set(strokes[i]);
+          entry.events = entry.events.filter(ev => !gone.has(ev));
+          return true;
+        }
+      }
+      return false;
+    };
+
+    // Push the edited storage back into the plugin and replay the slide.
+    const commit = (id) => {
+      if (!work) return;
+      const stored = (Reveal.getConfig().chalkboard || {}).transition;
+      plugin().configure({ transition: 1 });              // replay at once, not after the slide transition
+      const msg = new CustomEvent('received');
+      msg.content = { sender: 'chalkboard-plugin', type: 'init', storage: work,
+                      timestamp: duration, mode: id, board: board };
+      document.dispatchEvent(msg);
+      plugin().configure({ transition: stored || 800 });
+      work = null;
+      // the replay closes the chalkboard (as when returning to a slide); reopen it
+      if (id === 1) setTimeout(() => plugin().toggleChalkboard(), 40);
+    };
+    const schedule = (id) => {
+      if (pending) return;
+      pending = setTimeout(() => { pending = null; commit(id); }, 40);
+    };
+
+    const handle = (e, kind) => {
+      if (!active || !e.target || !e.target.getAttribute) return;
+      const attr = e.target.getAttribute('data-chalkboard');
+      if (attr === null) return;                         // not one of the plugin's canvases
+      const id = parseInt(attr);
+      e.stopPropagation(); e.preventDefault();           // keep the plugin from drawing
+      const pt = e.touches ? (e.touches[0] || e.changedTouches[0]) : e;
+      if (kind === 'down') down = true;
+      if (kind === 'up') { down = false; return; }
+      if (kind === 'move' && !down) return;
+      if (eraseAt(id, pt.pageX, pt.pageY)) schedule(id);
+    };
+    [['mousedown', 'down'], ['mousemove', 'move'], ['mouseup', 'up'],
+     ['touchstart', 'down'], ['touchmove', 'move'], ['touchend', 'up']]
+      .forEach(([t, k]) => document.addEventListener(t, (e) => handle(e, k), { capture: true, passive: false }));
   });
 </script>
