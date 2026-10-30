@@ -108,10 +108,13 @@
      (the same path used for remote synchronisation), which replays the slide. -->
 <script>
   window.addEventListener('load', () => {
-    const ICON = '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" ' +
-      'stroke-linecap="round" stroke-linejoin="round" style="margin-top:10px">' +
-      '<path d="M20 20H9l-5.3-5.3a1.5 1.5 0 0 1 0-2.1L13.4 2.9a1.5 1.5 0 0 1 2.1 0l5.6 5.6a1.5 1.5 0 0 1 0 2.1L12 19.7"/>' +
-      '<line x1="7.5" y1="9" x2="16" y2="17.5"/></svg>';
+    const svg = (inner) => '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" ' +
+      'fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-top:10px">' + inner + '</svg>';
+    // broom = stroke eraser; rubber = area ("pixel") eraser replacing the plugin's sponge picture
+    const BROOM = svg('<line x1="20" y1="4" x2="12" y2="12"/><path d="M9.5 9.5l5 5-3.5 3.5c-2 2-6 2.5-8 1.5 1-2 .5-6 2.5-8z"/>' +
+      '<line x1="8" y1="14" x2="10" y2="16"/><line x1="6" y1="16" x2="8" y2="18"/>');
+    const RUBBER = svg('<path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/>' +
+      '<path d="M22 21H7"/><path d="m5 11 9 9"/>');
     const btns = [];
     const plugin = () => window.RevealChalkboard || Reveal.getPlugin('chalkboard');
 
@@ -125,7 +128,7 @@
 
     const setActive = (on) => {
       active = on;
-      btns.forEach(b => { b.style.color = on ? 'rgba(220, 20, 60, 0.95)' : ''; });
+      btns.forEach(b => { b.style.color = on ? 'rgb(255, 90, 90)' : '#fff'; });
       document.body.classList.toggle('stroke-eraser-on', on);
     };
     // Add the tool to the end of each pen palette (notes canvas and chalkboard).
@@ -136,9 +139,10 @@
         if (ul.querySelector('[data-stroke-eraser]')) return;
         const li = document.createElement('li');
         li.setAttribute('data-stroke-eraser', 'true');
-        li.title = 'Stroke eraser: click or drag over a pen stroke to delete it';
+        li.title = 'Broom (stroke eraser): click or drag over a pen stroke to delete it';
         li.style.cursor = 'pointer';
-        li.innerHTML = ICON;
+        li.innerHTML = BROOM;
+        li.style.color = '#fff';
         const toggle = (e) => {
           e.preventDefault(); e.stopPropagation();
           setActive(!active);
@@ -149,6 +153,12 @@
         li.addEventListener('touchstart', toggle, { passive: false });
         ul.appendChild(li);
         btns.push(li);
+        const sponge = ul.querySelector('[data-eraser]');
+        if (sponge) {
+          sponge.title = 'Eraser (wipes an area)';
+          sponge.style.color = '#fff';
+          sponge.innerHTML = RUBBER;
+        }
       });
     };
     install();
