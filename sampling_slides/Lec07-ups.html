@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.9.37">
 
   <meta name="author" content="Longhai Li">
-  <meta name="dcterms.date" content="2026-10-30">
+  <meta name="dcterms.date" content="2026-11-17">
   <title>UPS-Slides</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -32,6 +32,72 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="Lec07-ups_files/libs/revealjs/dist/theme/quarto-2abc1c5b7b5c7eecd6137558e106e4c3.css">
   <link rel="stylesheet" href="_extensions/banner_slides/slides.css">
@@ -161,14 +227,14 @@ Longhai Li
 </div>
 </div>
 
-  <p class="date">2026-10-30</p>
+  <p class="date">2026-11-17</p>
 </section>
 <section>
-<section id="unequal-probability-sampling-with-replacement-upswr" class="title-slide slide level1 center" data-number="1">
-<h1><span class="header-section-number">1</span> Unequal Probability Sampling with Replacement (UPSWR)</h1>
+<section id="the-hansenhurwitz-estimator-upswr" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> The Hansen–Hurwitz Estimator (UPSWR)</h1>
 
 </section>
-<section id="how-to-do-unequal-probability-sampling" class="slide level2">
+<section id="how-to-do-unequal-probability-sampling" class="slide level2 smaller">
 <h2>How to Do Unequal Probability Sampling?</h2>
 <p>Suppose <span class="math inline">n&gt;1</span> and we sample <strong>with replacement</strong>: the selection probabilities do not change after the first draw. Let <span class="math display">
 \psi_i = P(\text{select unit } i \text{ on any given draw}),\qquad \sum_{i=1}^N\psi_i=1 .
@@ -242,8 +308,8 @@ S_{b^*}^2=V(b_j^*)=\sum_{i=1}^N\psi_i(b_i-B)^2 .
 <h2>HH Estimator of <span class="math inline">B</span>: Mean and Variance</h2>
 <p>The HH estimator is the mean of the <span class="math inline">n</span> IID observations <span class="math inline">b_j^*</span> (the <strong>mean of the ratios</strong>): <span class="math display">
 \boxed{\hat B_{\mathrm{HH}}=\bar b^*=\frac1n\sum_{j=1}^n b_j^*},\qquad E(\hat B_{\mathrm{HH}})=B,
-</span> and its variance is that of one draw divided by <span class="math inline">n</span>. With <span class="math inline">w^x_i=x_i/\bar x_U=N\psi_i</span> (relative size), <span class="math display">
-V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac1n\sum_{i=1}^N\psi_i(b_i-B)^2=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2 .
+</span> and its variance is that of one draw divided by <span class="math inline">n</span>: <span class="math display">
+V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac1n\sum_{i=1}^N\psi_i(b_i-B)^2 .
 </span> No finite population correction: the draws are independent.</p>
 </section>
 <section id="estimating-the-variance-mean-and-total" class="slide level2">
@@ -309,7 +375,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n(b_j^*-\bar b^*)^2 .
 <li>With PPS, <span class="math inline">w_i=t_x/(n\,x_i)</span>: large units get small weights.</li>
 </ul>
 </section>
-<section id="variance-of-the-hh-estimator-in-terms-of-psi_i" class="slide level2">
+<section id="variance-of-the-hh-estimator-in-terms-of-psi_i" class="slide level2 smaller">
 <h2>Variance of the HH Estimator in Terms of <span class="math inline">\psi_i</span></h2>
 <p><strong>From <span class="math inline">V(\hat B_{\mathrm{HH}})=S_{b^*}^2/n</span></strong>, using <span class="math inline">t_xb_i=y_i/\psi_i</span> and <span class="math inline">t_xB=t</span>, so that <span class="math inline">t_x(b_i-B)=y_i/\psi_i-t</span>: <span class="math display">
 \begin{aligned}
@@ -319,200 +385,24 @@ V(\hat t_{\mathrm{HH}})&amp;=t_x^2\,V(\hat B_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\
 </span> Likewise <span class="math inline">t_x(b_j^*-\bar b^*)=y_j^*/\psi_j^*-\hat t_{\mathrm{HH}}</span>, so the estimated variance <span class="math inline">t_x^2s_{b^*}^2/n</span> is <span class="math display">
 \hat V(\hat t_{\mathrm{HH}})=\boxed{\frac{1}{n(n-1)}\sum_{j=1}^n\Big(\frac{y_j^*}{\psi_j^*}-\hat t_{\mathrm{HH}}\Big)^2}
 </span> Both hold for <strong>any</strong> <span class="math inline">\psi_i</span>, with no finite population correction.</p>
-</section></section>
-<section>
-<section id="comparison-of-the-hh-ratio-and-average-estimators" class="title-slide slide level1 center" data-number="2">
-<h1><span class="header-section-number">2</span> Comparison of the HH, Ratio and Average Estimators</h1>
-
 </section>
-<section id="the-ratio-estimator-and-the-sample-average-in-terms-of-b_i" class="slide level2">
-<h2>The Ratio Estimator and the Sample Average in Terms of <span class="math inline">b_i</span></h2>
-<p>With an SRS <span class="math inline">\mathcal S</span> of <span class="math inline">n</span> units, write <span class="math inline">y_i=x_ib_i=\bar x_U\,w^x_ib_i</span>:</p>
-<ul>
-<li><p><strong>Ratio estimator</strong> (uses <span class="math inline">x_i</span> at the estimation stage): <span class="math display">
-\hat B_r=\frac{\sum_{i\in\mathcal S}y_i}{\sum_{i\in\mathcal S}x_i}=\frac{\sum_{i\in\mathcal S}x_i\,b_i}{\sum_{i\in\mathcal S}x_i}
-</span> the mean of the sampled <span class="math inline">b_i</span> with weights <span class="math inline">x_i</span> adding up to one.</p></li>
-<li><p><strong>Sample average</strong> (ignores <span class="math inline">x_i</span>): <span class="math inline">\bar y=\bar x_U\hat B_{\mathrm{avg}}</span> with <span class="math display">
-\hat B_{\mathrm{avg}}=\frac{\bar y}{\bar x_U}=\frac1n\sum_{i\in\mathcal S}w^x_i\,b_i
-</span> weights <span class="math inline">w^x_i</span> that do not add up to one.</p></li>
-</ul>
-</section>
-<section id="comparison-of-the-three-estimators-of-b" class="slide level2">
-<h2>Comparison of the Three Estimators of <span class="math inline">B</span></h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Estimator</th>
-<th style="text-align: center;">Estimator of <span class="math inline">B</span></th>
-<th style="text-align: left;"><span class="math inline">x_i</span> used at</th>
-<th style="text-align: left;">Unbiased?</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Sample average (SRS)</td>
-<td style="text-align: center;"><span class="math inline">\dfrac1n\sum\limits_{i\in\mathcal S}w^x_ib_i</span></td>
-<td style="text-align: left;">not used</td>
-<td style="text-align: left;">yes</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Ratio (SRS)</td>
-<td style="text-align: center;"><span class="math inline">\dfrac{\sum_{\mathcal S} x_ib_i}{\sum_{\mathcal S} x_i}</span></td>
-<td style="text-align: left;">estimation stage</td>
-<td style="text-align: left;">slightly biased</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">HH (UPSWR)</td>
-<td style="text-align: center;"><span class="math inline">\dfrac1n\sum\limits_{j=1}^n b_j^*</span></td>
-<td style="text-align: left;">design stage</td>
-<td style="text-align: left;">exactly unbiased</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="variances-of-the-three-estimators-of-b" class="slide level2">
-<h2>Variances of the Three Estimators of <span class="math inline">B</span></h2>
-<p>Variances (multiply by <span class="math inline">\bar x_U^2</span> for the mean, <span class="math inline">t_x^2</span> for the total): <span class="math display">
-\begin{aligned}
-V(\hat B_{\mathrm{avg}})&amp;=\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w^x_ib_i-B)^2\\
-V(\hat B_{r})&amp;\approx\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w^x_i)^2\,(b_i-B)^2\\
-V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2
-\end{aligned}
+<section id="equivalence-psi_i-as-a-normalized-size" class="slide level2">
+<h2>Equivalence: <span class="math inline">\psi_i</span> as a Normalized Size</h2>
+<p>Take the <strong>normalized size</strong> <span class="math inline">\tilde x_i=\psi_i</span>, so that <span class="math inline">t_{\tilde x}=\sum_i\tilde x_i=1</span> and <span class="math inline">\tilde x_i/t_{\tilde x}=\psi_i</span>. Its ratios and population ratio are <span class="math display">
+\tilde b_i=\frac{y_i}{\tilde x_i}=\frac{y_i}{\psi_i},\qquad \tilde B=\frac{t}{t_{\tilde x}}=t ,
+</span> so the HH estimator of <span class="math inline">\tilde B</span> is the HH estimator of the total: <span class="math display">
+\hat{\tilde B}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*}=\hat t_{\mathrm{HH}},\qquad
+\hat t_{\mathrm{HH}}=t_{\tilde x}\,\hat{\tilde B}_{\mathrm{HH}}=\hat{\tilde B}_{\mathrm{HH}} .
 </span></p>
-</section>
-<section id="per-unit-squared-terms" class="slide level2">
-<h2>Per-Unit Squared Terms</h2>
-<p>Each variance is <span class="math inline">\frac1n\times</span> the average over the units of one squared term:</p>
-<table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Estimator</th>
-<th style="text-align: center;">Squared term of unit <span class="math inline">i</span></th>
-<th style="text-align: left;">Spread of <span class="math inline">y</span> about</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Sample average</td>
-<td style="text-align: center;"><span class="math inline">(w^x_ib_i-B)^2</span></td>
-<td style="text-align: left;">the flat line <span class="math inline">\bar y_U</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Ratio</td>
-<td style="text-align: center;"><span class="math inline">(w^x_i)^2\,(b_i-B)^2</span></td>
-<td style="text-align: left;">the line <span class="math inline">y=Bx</span></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">HH</td>
-<td style="text-align: center;"><span class="math inline">w^x_i\,(b_i-B)^2</span></td>
-<td style="text-align: left;">the line <span class="math inline">y=Bx</span>, weight <span class="math inline">1/w^x_i</span> relative to ratio</td>
-</tr>
-</tbody>
-</table>
-<p>HH divides the ratio estimator’s term by <span class="math inline">w^x_i</span>: units larger than average (<span class="math inline">w^x_i&gt;1</span>) are <strong>downweighted</strong>, smaller ones are upweighted, because large units are already drawn more often. UPSWR wins when the large residuals <span class="math inline">y_i-Bx_i</span> belong to the large units.</p>
-</section>
-<section id="toy-example-four-supermarkets-one-draw-variances" class="slide level2 smaller">
-<h2>Toy Example: Four Supermarkets, One-Draw Variances</h2>
-<p><span class="math inline">t_x=1600</span>, <span class="math inline">\bar x_U=400</span>, <span class="math inline">B=300/1600=0.1875</span>. Sales nearly proportional to floor area:</p>
-<table class="caption-top">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 7%">
-<col style="width: 7%">
-<col style="width: 7%">
-<col style="width: 7%">
-<col style="width: 7%">
-<col style="width: 17%">
-<col style="width: 17%">
-<col style="width: 17%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Store</th>
-<th style="text-align: right;"><span class="math inline">x_i</span></th>
-<th style="text-align: right;"><span class="math inline">y_i</span></th>
-<th style="text-align: right;"><span class="math inline">w^x_i</span></th>
-<th style="text-align: right;"><span class="math inline">b_i</span></th>
-<th style="text-align: right;"><span class="math inline">b_i-B</span></th>
-<th style="text-align: right;"><span class="math inline">(w^x_ib_i-B)^2</span></th>
-<th style="text-align: right;"><span class="math inline">(w^x_i)^2(b_i-B)^2</span></th>
-<th style="text-align: right;"><span class="math inline">w^x_i(b_i-B)^2</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">A</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">0.25</td>
-<td style="text-align: right;">0.1100</td>
-<td style="text-align: right;"><span class="math inline">-0.0775</span></td>
-<td style="text-align: right;">0.025600</td>
-<td style="text-align: right;">0.000375</td>
-<td style="text-align: right;">0.001502</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">B</td>
-<td style="text-align: right;">200</td>
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">0.50</td>
-<td style="text-align: right;">0.1000</td>
-<td style="text-align: right;"><span class="math inline">-0.0875</span></td>
-<td style="text-align: right;">0.018906</td>
-<td style="text-align: right;">0.001914</td>
-<td style="text-align: right;">0.003828</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">C</td>
-<td style="text-align: right;">300</td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">0.75</td>
-<td style="text-align: right;">0.0800</td>
-<td style="text-align: right;"><span class="math inline">-0.1075</span></td>
-<td style="text-align: right;">0.016256</td>
-<td style="text-align: right;">0.006500</td>
-<td style="text-align: right;">0.008667</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">D</td>
-<td style="text-align: right;">1000</td>
-<td style="text-align: right;">245</td>
-<td style="text-align: right;">2.50</td>
-<td style="text-align: right;">0.2450</td>
-<td style="text-align: right;"><span class="math inline">0.0575</span></td>
-<td style="text-align: right;">0.180625</td>
-<td style="text-align: right;">0.020664</td>
-<td style="text-align: right;">0.008266</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><strong>Variance</strong> (Sum <span class="math inline">/N</span>)</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"><strong>0.0603</strong></td>
-<td style="text-align: right;"><strong>0.00736</strong></td>
-<td style="text-align: right;"><strong>0.00557</strong></td>
-</tr>
-</tbody>
-</table>
-<p>HH <span class="math inline">&lt;</span> ratio <span class="math inline">\ll</span> sample average. If the sales were unrelated to the floor area, the ordering reverses (average <span class="math inline">0.00078</span>, ratio <span class="math inline">0.0288</span>, HH <span class="math inline">0.0273</span>): <strong>the size variable must be tied to <span class="math inline">y</span></strong>.</p>
+<ul>
+<li>With a normalized size, the “ratio” <strong>is</strong> the total.</li>
+<li>Conversely, <span class="math inline">\psi_i=x_i/t_x</span> gives <span class="math inline">y_j^*/\psi_j^*=t_x\,b_j^*</span>, so <span class="math inline">\hat t_{\mathrm{HH}}=t_x\,\bar b^*</span>.</li>
+<li>Rescaling a size variable to total 1 does not change the estimator of the total.</li>
+</ul>
 </section></section>
 <section>
-<section id="example-revenue-from-ai-token-usage" class="title-slide slide level1 center" data-number="3">
-<h1><span class="header-section-number">3</span> Example: Revenue from AI Token Usage</h1>
+<section id="example-revenue-from-ai-token-usage" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Example: Revenue from AI Token Usage</h1>
 
 </section>
 <section id="setup-and-sample" class="slide level2">
@@ -601,7 +491,7 @@ V(\hat B_{\mathrm{HH}})&amp;=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2
 <h2>Estimates</h2>
 <p><span class="math display">
 \hat B_{\mathrm{HH}}=\bar b^*=\frac{24.4583}{5}=4.8917,\qquad
-s_{b^*}^2=\frac{0.220833}{4}=0.055208,\quad s_{b^*}=0.2350
+s_{b^*}^2=\frac{0.220833}{4}=0.0552,\quad s_{b^*}=0.235
 </span></p>
 <table class="caption-top">
 <colgroup>
@@ -634,11 +524,438 @@ s_{b^*}^2=\frac{0.220833}{4}=0.055208,\quad s_{b^*}=0.2350
 </tr>
 </tbody>
 </table>
-<p>In R: <code>upswr_est(ydata, xdata, xbar_pop, tx_pop, method = "ratio")</code> with <code>method</code> equal to <code>"ratio"</code>, <code>"mean"</code> or <code>"total"</code> returns the estimate, SE and CI.</p>
+<p>In R, with the sample as a data set <code>token</code> (one row per draw, columns <code>y</code> and <code>x</code>), <code>upswr_est</code> returns the estimate, SE and CI; <code>method</code> is <code>"ratio"</code>, <code>"mean"</code> or <code>"total"</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">upswr_est</span>(token<span class="sc">$</span>y, token<span class="sc">$</span>x, <span class="at">xbar_pop =</span> <span class="dv">100</span> <span class="sc">/</span> <span class="dv">6</span>, <span class="at">tx_pop =</span> <span class="dv">100</span>, <span class="at">method =</span> <span class="st">"total"</span>)</span>
+<span id="cb3-2"><a href=""></a><span class="fu">upswr_est</span>(token<span class="sc">$</span>y, token<span class="sc">$</span>x <span class="sc">/</span> <span class="dv">100</span>, <span class="at">xbar_pop =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="dv">6</span>, <span class="at">tx_pop =</span> <span class="dv">1</span>, <span class="at">method =</span> <span class="st">"total"</span>)  <span class="co"># x = psi</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Both give <span class="math inline">\hat t_{\mathrm{HH}}=489.2</span> (SE <span class="math inline">10.5</span>): the second uses the normalized size <span class="math inline">\tilde x_i=\psi_i</span>.</p>
 </section></section>
 <section>
-<section id="one-stage-cluster-sampling-with-pps" class="title-slide slide level1 center" data-number="4">
-<h1><span class="header-section-number">4</span> One-Stage Cluster Sampling with PPS</h1>
+<section id="example-physicians-in-u.s.-counties" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Example: Physicians in U.S. Counties</h1>
+
+</section>
+<section id="the-data-statepop.csv" class="slide level2">
+<h2>The Data (<code>statepop.csv</code>)</h2>
+<div class="columns">
+<div class="column" style="width:48%;">
+<ul>
+<li><span class="math inline">n=100</span> draws <strong>with replacement</strong> from the <span class="math inline">N=3141</span> U.S. counties, with <span class="math inline">\psi_i=x_i/t_x</span>: <span class="math inline">x_i</span> = county population, <span class="math inline">t_x=255{,}077{,}536</span>.</li>
+<li>Large counties (Los Angeles) appear several times.</li>
+<li>Goal: the total number of physicians <span class="math inline">t</span> (true value <span class="math inline">532{,}638</span>).</li>
+<li>The number of physicians is roughly proportional to the population: a good size variable.</li>
+</ul>
+</div><div class="column" style="width:52%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Lec07-ups_files/figure-revealjs/statepop-plot-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="physicians-hh-estimates-and-srs-comparison" class="slide level2 smaller">
+<h2>Physicians: HH Estimates and SRS Comparison</h2>
+<p>With the population in thousands, <span class="math inline">b_j^*</span> = physicians per 1,000 people of the county on draw <span class="math inline">j</span>:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Quantity</th>
+<th style="text-align: right;">HH estimate</th>
+<th style="text-align: right;">SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Physicians per 1,000 people, <span class="math inline">\hat B_{\mathrm{HH}}</span></td>
+<td style="text-align: right;">2.24</td>
+<td style="text-align: right;">0.16</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Physicians per county, <span class="math inline">\bar x_U\hat B_{\mathrm{HH}}</span></td>
+<td style="text-align: right;">181.6</td>
+<td style="text-align: right;">13.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total physicians, <span class="math inline">t_x\hat B_{\mathrm{HH}}</span></td>
+<td style="text-align: right;">570,304</td>
+<td style="text-align: right;">41,401</td>
+</tr>
+</tbody>
+</table>
+<p>Compared with estimates from a separate SRS of 100 counties (<code>counties.csv</code>):</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Method</th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">Estimate <span class="math inline">-</span> true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Sample total <span class="math inline">N\bar y</span> (SRS)</td>
+<td style="text-align: right;">933,411</td>
+<td style="text-align: right;">491,983</td>
+<td style="text-align: right;">400,773</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ratio estimator (SRS)</td>
+<td style="text-align: right;">639,506</td>
+<td style="text-align: right;">87,885</td>
+<td style="text-align: right;">106,868</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Regression estimator (SRS)</td>
+<td style="text-align: right;">585,871</td>
+<td style="text-align: right;">105,177</td>
+<td style="text-align: right;">53,233</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hansen–Hurwitz (UPSWR)</td>
+<td style="text-align: right;">570,304</td>
+<td style="text-align: right;">41,401</td>
+<td style="text-align: right;">37,666</td>
+</tr>
+</tbody>
+</table>
+<p>Using the size at the <strong>design</strong> stage (HH) gives the smallest SE here; the next section explains when.</p>
+</section></section>
+<section>
+<section id="comparison-of-the-hh-ratio-and-average-estimators-of-the-total" class="title-slide slide level1 center" data-number="4">
+<h1><span class="header-section-number">4</span> Comparison of the HH, Ratio and Average Estimators of the Total</h1>
+
+</section>
+<section id="three-estimators-of-the-total" class="slide level2 smaller">
+<h2>Three Estimators of the Total</h2>
+<p>Residuals about the line through the origin: <span class="math display">
+d_i=y_i-Bx_i,\qquad B=\frac{t}{t_x},\qquad \sum_{i=1}^N d_i=0 .
+</span></p>
+<ul>
+<li><strong>Sample average</strong> (SRS, ignores <span class="math inline">x_i</span>): <span class="math inline">\hat t_{\mathrm{avg}}=N\bar y</span>, <span class="math inline">\displaystyle V(\hat t_{\mathrm{avg}})=\Big(1-\frac nN\Big)\frac{N^2S_y^2}{n}</span>.</li>
+<li><strong>Ratio</strong> (SRS, <span class="math inline">x_i</span> at the estimation stage): <span class="math inline">\hat t_r=t_x\,\bar y/\bar x</span>; an SRS selects every unit with probability <span class="math inline">1/N</span>, so <span class="math display">
+V(\hat t_r)\approx\Big(1-\frac nN\Big)\frac{N^2S_d^2}{n}\approx\Big(1-\frac nN\Big)\frac1n\sum_{i=1}^N\frac{d_i^2}{1/N}.
+</span></li>
+<li><strong>HH</strong> (UPSWR, <span class="math inline">x_i</span> at the design stage, <span class="math inline">\psi_i=x_i/t_x</span>): each draw deviates by a scaled residual, <span class="math display">
+\frac{y_i}{\psi_i}-t=\frac{d_i}{\psi_i}
+\quad\Longrightarrow\quad
+V(\hat t_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\frac{d_i^2}{\psi_i}.
+</span></li>
+</ul>
+</section>
+<section id="comparison-of-the-three-estimators" class="slide level2">
+<h2>Comparison of the Three Estimators</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 13%">
+<col style="width: 40%">
+<col style="width: 15%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estimator</th>
+<th style="text-align: center;">Estimator of <span class="math inline">t</span></th>
+<th style="text-align: center;">Variance</th>
+<th style="text-align: left;"><span class="math inline">x_i</span> used at</th>
+<th style="text-align: left;">Unbiased?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Sample average (SRS)</td>
+<td style="text-align: center;"><span class="math inline">N\bar y</span></td>
+<td style="text-align: center;"><span class="math inline">\Big(1-\dfrac nN\Big)\dfrac{N^2S_y^2}{n}</span></td>
+<td style="text-align: left;">not used</td>
+<td style="text-align: left;">yes</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ratio (SRS)</td>
+<td style="text-align: center;"><span class="math inline">t_x\,\dfrac{\bar y}{\bar x}</span></td>
+<td style="text-align: center;"><span class="math inline">\approx\Big(1-\dfrac nN\Big)\dfrac1n\sum\limits_{i=1}^N\dfrac{d_i^2}{1/N}</span></td>
+<td style="text-align: left;">estimation stage</td>
+<td style="text-align: left;">slightly biased</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HH (UPSWR)</td>
+<td style="text-align: center;"><span class="math inline">\dfrac1n\sum\limits_{j=1}^n\dfrac{y_j^*}{\psi_j^*}</span></td>
+<td style="text-align: center;"><span class="math inline">\dfrac1n\sum\limits_{i=1}^N\dfrac{d_i^2}{\psi_i}</span></td>
+<td style="text-align: left;">design stage</td>
+<td style="text-align: left;">exactly unbiased</td>
+</tr>
+</tbody>
+</table>
+<p>For the mean, divide the estimators by <span class="math inline">N</span> and the variances by <span class="math inline">N^2</span>.</p>
+</section>
+<section id="on-a-common-scale" class="slide level2 smaller">
+<h2>On a Common Scale</h2>
+<p>Ignoring the fpc, each variance is <span class="math inline">\frac1n\sum_i</span> (squared deviation)/(selection probability of unit <span class="math inline">i</span>):</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estimator</th>
+<th style="text-align: center;">Term of unit <span class="math inline">i</span></th>
+<th style="text-align: left;">Spread of <span class="math inline">y</span> about</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Sample average</td>
+<td style="text-align: center;"><span class="math inline">\dfrac{(y_i-\bar y_U)^2}{1/N}</span></td>
+<td style="text-align: left;">the flat line <span class="math inline">\bar y_U</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ratio</td>
+<td style="text-align: center;"><span class="math inline">\dfrac{d_i^2}{1/N}</span></td>
+<td style="text-align: left;">the line <span class="math inline">y=Bx</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HH</td>
+<td style="text-align: center;"><span class="math inline">\dfrac{d_i^2}{\psi_i}</span></td>
+<td style="text-align: left;">the line <span class="math inline">y=Bx</span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Ratio vs average:</strong> <span class="math inline">y_i-\bar y_U=d_i+B(x_i-\bar x_U)</span>. If <span class="math inline">y\approx Bx</span>, the ratio estimator removes the spread due to <span class="math inline">x</span>; if <span class="math inline">y</span> is unrelated to <span class="math inline">x</span>, <span class="math inline">d_i</span> <em>adds</em> it and the average wins.</li>
+<li><strong>HH vs ratio:</strong> the same <span class="math inline">d_i^2</span>, divided by <span class="math inline">\psi_i</span> instead of <span class="math inline">1/N</span>. Units with <span class="math inline">\psi_i&gt;1/N</span> (larger than average) are <strong>downweighted</strong>, since they are already drawn more often.</li>
+</ul>
+</section>
+<section id="when-does-ups-beat-the-ratio-estimator" class="slide level2 smaller">
+<h2>When Does UPS Beat the Ratio Estimator?</h2>
+<p><span class="math display">
+V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1{\psi_i}\Big)
+=\frac Nn\sum_{i=1}^N d_i^2\Big(1-\frac{\bar x_U}{x_i}\Big),
+</span> so HH wins exactly when the units with large residuals are larger than average: <span class="math display">
+\boxed{H_d=\frac{\sum_{i=1}^N d_i^2}{\sum_{i=1}^N d_i^2/x_i}&gt;\bar x_U}
+</span> If <span class="math inline">d_i^2\approx\sigma^2x_i^{\gamma}</span>:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 60%">
+<col style="width: 10%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Spread of <span class="math inline">y</span> about the line <span class="math inline">y=Bx</span></th>
+<th style="text-align: center;"><span class="math inline">\gamma</span></th>
+<th style="text-align: left;">Better</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">constant</td>
+<td style="text-align: center;"><span class="math inline">0</span></td>
+<td style="text-align: left;">ratio (SRS)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\mathrm{SD}\propto\sqrt{x}</span>, i.e.&nbsp;<span class="math inline">V(y_i)\propto x_i</span></td>
+<td style="text-align: center;"><span class="math inline">1</span></td>
+<td style="text-align: left;">tie</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\mathrm{SD}\propto x</span>: constant coefficient of variation</td>
+<td style="text-align: center;"><span class="math inline">2</span></td>
+<td style="text-align: left;">HH (UPSWR)</td>
+</tr>
+</tbody>
+</table>
+<p>Revenues, acreages and counts often have a roughly constant CV (<span class="math inline">\gamma\approx2</span>): PPS works well for them.</p>
+</section>
+<section id="three-population-shapes" class="slide level2">
+<h2>Three Population Shapes</h2>
+
+<img data-src="Lec07-ups_files/figure-revealjs/ups-spread-plot-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p>Plot <span class="math inline">y</span> against <span class="math inline">x</span> (census or pilot): if the scatter <strong>fans out</strong> in proportion to <span class="math inline">x</span>, sample with PPS; if its width stays about the same, use an SRS with the ratio estimator.</p>
+</section>
+<section id="toy-example-four-supermarkets" class="slide level2 smaller">
+<h2>Toy Example: Four Supermarkets</h2>
+<p>Floor areas <span class="math inline">x_i</span>, <span class="math inline">t_x=1600</span>, <span class="math inline">\psi_i=x_i/t_x</span> against <span class="math inline">1/N=0.25</span> in an SRS; <span class="math inline">t=300</span>, <span class="math inline">B=0.1875</span>. One-draw variances (the sum of each column). <strong>Sales proportional to floor area:</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table class="caption-top">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 14%">
+<col style="width: 19%">
+<col style="width: 10%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Store</th>
+<th style="text-align: right;"><span class="math inline">x_i</span></th>
+<th style="text-align: right;"><span class="math inline">y_i</span></th>
+<th style="text-align: right;"><span class="math inline">\psi_i</span></th>
+<th style="text-align: right;"><span class="math inline">d_i=y_i-Bx_i</span></th>
+<th style="text-align: right;"><span class="math inline">N(y_i-\bar y_U)^2</span></th>
+<th style="text-align: right;"><span class="math inline">N\,d_i^2</span></th>
+<th style="text-align: right;"><span class="math inline">d_i^2/\psi_i</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.0625</td>
+<td style="text-align: right;">-7.75</td>
+<td style="text-align: right;">16,384</td>
+<td style="text-align: right;">240.2</td>
+<td style="text-align: right;">961</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.1250</td>
+<td style="text-align: right;">-17.50</td>
+<td style="text-align: right;">12,100</td>
+<td style="text-align: right;">1,225.0</td>
+<td style="text-align: right;">2,450</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">0.1875</td>
+<td style="text-align: right;">-32.25</td>
+<td style="text-align: right;">10,404</td>
+<td style="text-align: right;">4,160.2</td>
+<td style="text-align: right;">5,547</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">D</td>
+<td style="text-align: right;">1,000</td>
+<td style="text-align: right;">245</td>
+<td style="text-align: right;">0.6250</td>
+<td style="text-align: right;">57.50</td>
+<td style="text-align: right;">115,600</td>
+<td style="text-align: right;">13,225.0</td>
+<td style="text-align: right;">5,290</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Variance</strong> (Sum)</td>
+<td style="text-align: right;">1,600</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">1.0000</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">154,488</td>
+<td style="text-align: right;">18,850.5</td>
+<td style="text-align: right;">14,248</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Store D has the largest residual and <span class="math inline">\psi_D=0.625&gt;1/N</span>: HH divides <span class="math inline">d_D^2</span> by <span class="math inline">0.625</span> instead of <span class="math inline">0.25</span>. HH <span class="math inline">&lt;</span> ratio <span class="math inline">\ll</span> average; here <span class="math inline">H_d=529&gt;\bar x_U=400</span>.</p>
+</section>
+<section id="toy-example-sales-unrelated-to-floor-area" class="slide level2 smaller">
+<h2>Toy Example: Sales Unrelated to Floor Area</h2>
+<p>The same stores and the same total <span class="math inline">t=300</span>, but the sales hardly vary:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table class="caption-top">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 14%">
+<col style="width: 19%">
+<col style="width: 10%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Store</th>
+<th style="text-align: right;"><span class="math inline">x_i</span></th>
+<th style="text-align: right;"><span class="math inline">y_i</span></th>
+<th style="text-align: right;"><span class="math inline">\psi_i</span></th>
+<th style="text-align: right;"><span class="math inline">d_i=y_i-Bx_i</span></th>
+<th style="text-align: right;"><span class="math inline">N(y_i-\bar y_U)^2</span></th>
+<th style="text-align: right;"><span class="math inline">N\,d_i^2</span></th>
+<th style="text-align: right;"><span class="math inline">d_i^2/\psi_i</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">0.0625</td>
+<td style="text-align: right;">41.25</td>
+<td style="text-align: right;">900</td>
+<td style="text-align: right;">6,806.2</td>
+<td style="text-align: right;">27,225</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">0.1250</td>
+<td style="text-align: right;">42.50</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">7,225.0</td>
+<td style="text-align: right;">14,450</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">0.1875</td>
+<td style="text-align: right;">33.75</td>
+<td style="text-align: right;">900</td>
+<td style="text-align: right;">4,556.2</td>
+<td style="text-align: right;">6,075</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">D</td>
+<td style="text-align: right;">1,000</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">0.6250</td>
+<td style="text-align: right;">-117.50</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">55,225.0</td>
+<td style="text-align: right;">22,090</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Variance</strong> (Sum)</td>
+<td style="text-align: right;">1,600</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">1.0000</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">2,000</td>
+<td style="text-align: right;">73,812.5</td>
+<td style="text-align: right;">69,840</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The ordering reverses: the line <span class="math inline">y=Bx</span> fits badly, all the <span class="math inline">d_i</span> are large, and the ratio estimator and HH are more than 30 times worse than the sample average. <strong>The size variable must be tied to <span class="math inline">y</span>.</strong></p>
+</section>
+<section id="simulation-and-app" class="slide level2">
+<h2>Simulation and App</h2>
+<ul>
+<li><strong>Simulation</strong> (book, Section 7.3.3): 2000 samples of 300 counties from <code>agpop</code>, <span class="math inline">y</span> = acres in 1992, <span class="math inline">x</span> = acres in 1987. The naive SRS total has a huge variance; the SRS ratio and regression estimators and UPSWR remove most of it.</li>
+<li><strong>App:</strong> <a href="../shinylives_sampling/app-ups.html" target="_blank">SRS (average and ratio) with UPSWR and UPSWO</a> reports the simulated and theoretical variance reductions relative to the plain SRS average.</li>
+</ul>
+</section></section>
+<section>
+<section id="one-stage-cluster-sampling-with-pps" class="title-slide slide level1 center" data-number="5">
+<h1><span class="header-section-number">5</span> One-Stage Cluster Sampling with PPS</h1>
 
 </section>
 <section id="change-of-notation" class="slide level2">
@@ -796,8 +1113,8 @@ b_i=\frac{t_i}{M_i}=\bar y_i ,\qquad B=\frac{t}{M_0}=\bar y_U\ \ (\text{mean per
 </div></div>
 </section></section>
 <section>
-<section id="two-stage-cluster-sampling-with-replacement" class="title-slide slide level1 center" data-number="5">
-<h1><span class="header-section-number">5</span> Two-Stage Cluster Sampling with Replacement</h1>
+<section id="two-stage-cluster-sampling-with-replacement" class="title-slide slide level1 center" data-number="6">
+<h1><span class="header-section-number">6</span> Two-Stage Cluster Sampling with Replacement</h1>
 
 </section>
 <section id="setup-and-estimators" class="slide level2">
@@ -944,8 +1261,8 @@ s_{\bar y^*}^2=\frac{1}{n-1}\sum_{j=1}^n(\bar y_j^*-\bar y^*)^2 ,
 </div></div>
 </section></section>
 <section>
-<section id="unequal-probability-sampling-without-replacement-upswo" class="title-slide slide level1 center" data-number="6">
-<h1><span class="header-section-number">6</span> Unequal Probability Sampling Without Replacement (UPSWO)</h1>
+<section id="unequal-probability-sampling-without-replacement-upswo" class="title-slide slide level1 center" data-number="7">
+<h1><span class="header-section-number">7</span> Unequal Probability Sampling Without Replacement (UPSWO)</h1>
 
 </section>
 <section id="the-horvitz-thompson-estimator" class="slide level2">
@@ -975,7 +1292,7 @@ A=\frac{\sum_{\mathcal S}(1-\pi_i)u_i}{\sum_{\mathcal S}(1-\pi_i)}</span></li>
 </ul>
 <p>For the mean divide the SE by <span class="math inline">N</span>; for <span class="math inline">\hat B_{\mathrm{HT}}</span> divide by <span class="math inline">t_x</span>.</p>
 </section>
-<section id="example-ht-estimate-and-variances" class="slide level2">
+<section id="example-ht-estimate-and-variances" class="slide level2 smaller">
 <h2>Example: HT Estimate and Variances</h2>
 <p><span class="math inline">N=20</span> units, a sample of <span class="math inline">n=4</span> units with inclusion probabilities <span class="math inline">\pi_i</span>:</p>
 <table class="caption-top" style="width:100%;">
@@ -1056,13 +1373,13 @@ A=\frac{\sum_{\mathcal S}(1-\pi_i)u_i}{\sum_{\mathcal S}(1-\pi_i)}</span></li>
 </span> SE of the mean: <span class="math inline">31.7/20=1.58</span> (Hájek), <span class="math inline">36.2/20=1.81</span> (WR).</p>
 </section></section>
 <section>
-<section id="when-to-use-ups" class="title-slide slide level1 center" data-number="7">
-<h1><span class="header-section-number">7</span> When to Use UPS</h1>
+<section id="when-to-use-ups" class="title-slide slide level1 center" data-number="8">
+<h1><span class="header-section-number">8</span> When to Use UPS</h1>
 
 </section>
 <section id="ups-is-risky-unless-y-is-tied-to-the-size-variable" class="slide level2">
 <h2>UPS Is Risky Unless <span class="math inline">y</span> Is Tied to the Size Variable</h2>
-<p>The gain depends on the ratios <span class="math inline">b_i=y_i/x_i</span> being nearly constant, i.e.&nbsp;<span class="math inline">y_i</span> roughly proportional to <span class="math inline">x_i</span>. Otherwise,</p>
+<p>The gain depends on the residuals <span class="math inline">d_i=y_i-Bx_i</span> being small, i.e.&nbsp;<span class="math inline">y_i</span> roughly proportional to <span class="math inline">x_i</span>; UPS beats the SRS ratio estimator only when the spread about the line grows with the size (<span class="math inline">H_d&gt;\bar x_U</span>). Otherwise,</p>
 <ul>
 <li>the estimate can be <strong>much worse than a plain SRS average</strong>;</li>
 <li>a unit with small <span class="math inline">x_i</span> but large <span class="math inline">y_i</span> gets a huge weight <span class="math inline">1/\psi_i</span> (<span class="math inline">1/\pi_i</span>), so the estimates are unstable and the estimated SE tends to be too small (intervals under-cover).</li>

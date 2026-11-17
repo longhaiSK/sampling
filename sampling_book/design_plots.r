@@ -494,3 +494,39 @@ plot_france_toy <- function ()
     text(x + 0.15, (y + yhat) / 2, sprintf("e=%d", e), cex = 0.8, adj = 0)
     text(5.3, Bhat * 5.3, expression(y == hat(B) * x), col = "firebrick", adj = 0)
 }
+
+## UPS vs the ratio estimator: three populations whose spread about y = Bx grows
+## like x^(gamma/2), gamma = 0, 1, 2; each panel reports H_d against xbar_U
+plot_ups_spread <- function () with_seed (2027, {
+    N <- 200
+    x <- rlnorm(N, log(20), 0.7)            # skewed sizes
+    B <- 2
+    z <- rnorm(N)
+    gammas <- c(0, 1, 2)
+    winner <- c("ratio (SRS) better", "tie", "HH (UPSWR) better")
+    titles <- list(expression(gamma == 0 * ":  SD of y about the line constant"),
+                   expression(gamma == 1 * ":  SD" %prop% sqrt(x)),
+                   expression(gamma == 2 * ":  SD" %prop% x))
+    xg <- seq(0, max(x) * 1.02, length.out = 200)
+
+    par(mfrow = c(1, 3), mar = c(4, 4, 3.2, 0.5))
+    for (k in 1:3) {
+        g <- gammas[k]
+        s <- x^(g / 2)
+        s <- s / mean(s) * 0.25 * B * mean(x)   # same average spread in all panels
+        y <- B * x + s * z
+        d <- y - sum(y) / sum(x) * x
+        H_d <- sum(d^2) / sum(d^2 / x)
+        sg <- xg^(g / 2) / mean(x^(g / 2)) * 0.25 * B * mean(x)
+        plot(x, y, pch = 19, cex = 0.6, col = adjustcolor("grey30", 0.6),
+             xlab = "size x", ylab = "y", ylim = range(c(y, B * xg - 2 * sg, B * xg + 2 * sg)),
+             main = titles[[k]])
+        polygon(c(xg, rev(xg)), c(B * xg - 2 * sg, rev(B * xg + 2 * sg)),
+                col = adjustcolor("cyan", 0.15), border = NA)
+        lines(xg, B * xg - 2 * sg, lty = 2, col = "steelblue")
+        lines(xg, B * xg + 2 * sg, lty = 2, col = "steelblue")
+        abline(0, B, col = "firebrick", lwd = 2)
+        mtext(sprintf("%s:  H_d = %.1f,  mean x = %.1f", winner[k], H_d, mean(x)),
+              side = 3, line = 0.2, cex = 0.7)
+    }
+})

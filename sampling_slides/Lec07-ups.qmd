@@ -12,12 +12,14 @@ knitr::opts_chunk$set(
   echo = FALSE,
   fig.align = "center"
 )
+## the figures shared with the book chapter
+source("../sampling_book/design_plots.r")
 ```
 
-# Unequal Probability Sampling with Replacement (UPSWR)
+# The Hansen--Hurwitz Estimator (UPSWR)
 
 
-## How to Do Unequal Probability Sampling?
+## How to Do Unequal Probability Sampling? {.smaller}
 
 Suppose $n>1$ and we sample **with replacement**: the selection probabilities do not change after the first
 draw. Let
@@ -98,9 +100,9 @@ The HH estimator is the mean of the $n$ IID observations $b_j^*$ (the **mean of 
 $$
 \boxed{\hat B_{\mathrm{HH}}=\bar b^*=\frac1n\sum_{j=1}^n b_j^*},\qquad E(\hat B_{\mathrm{HH}})=B,
 $$
-and its variance is that of one draw divided by $n$. With $w^x_i=x_i/\bar x_U=N\psi_i$ (relative size),
+and its variance is that of one draw divided by $n$:
 $$
-V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac1n\sum_{i=1}^N\psi_i(b_i-B)^2=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2 .
+V(\hat B_{\mathrm{HH}})=\frac{S_{b^*}^2}{n}=\frac1n\sum_{i=1}^N\psi_i(b_i-B)^2 .
 $$
 No finite population correction: the draws are independent.
 
@@ -145,7 +147,7 @@ $$
 * Unit $i$ is expected to appear $n\psi_i$ times, so each draw of unit $i$ **represents** $1/(n\psi_i)$ units.
 * With PPS, $w_i=t_x/(n\,x_i)$: large units get small weights.
 
-## Variance of the HH Estimator in Terms of $\psi_i$ 
+## Variance of the HH Estimator in Terms of $\psi_i$ {.smaller}
 
 **From $V(\hat B_{\mathrm{HH}})=S_{b^*}^2/n$**, using $t_xb_i=y_i/\psi_i$ and $t_xB=t$, so that
 $t_x(b_i-B)=y_i/\psi_i-t$:
@@ -162,71 +164,23 @@ $$
 $$
 Both hold for **any** $\psi_i$, with no finite population correction.
 
-# Comparison of the HH, Ratio and Average Estimators
+## Equivalence: $\psi_i$ as a Normalized Size
 
-## The Ratio Estimator and the Sample Average in Terms of $b_i$
-
-With an SRS $\mathcal S$ of $n$ units, write $y_i=x_ib_i=\bar x_U\,w^x_ib_i$:
-
-* **Ratio estimator** (uses $x_i$ at the estimation stage):
+Take the **normalized size** $\tilde x_i=\psi_i$, so that $t_{\tilde x}=\sum_i\tilde x_i=1$ and
+$\tilde x_i/t_{\tilde x}=\psi_i$. Its ratios and population ratio are
 $$
-\hat B_r=\frac{\sum_{i\in\mathcal S}y_i}{\sum_{i\in\mathcal S}x_i}=\frac{\sum_{i\in\mathcal S}x_i\,b_i}{\sum_{i\in\mathcal S}x_i}
+\tilde b_i=\frac{y_i}{\tilde x_i}=\frac{y_i}{\psi_i},\qquad \tilde B=\frac{t}{t_{\tilde x}}=t ,
 $$
-the mean of the sampled $b_i$ with weights $x_i$ adding up to one.
-
-* **Sample average** (ignores $x_i$): $\bar y=\bar x_U\hat B_{\mathrm{avg}}$ with
+so the HH estimator of $\tilde B$ is the HH estimator of the total:
 $$
-\hat B_{\mathrm{avg}}=\frac{\bar y}{\bar x_U}=\frac1n\sum_{i\in\mathcal S}w^x_i\,b_i
-$$
-weights $w^x_i$ that do not add up to one.
-
-## Comparison of the Three Estimators of $B$ 
-
-| Estimator | Estimator of $B$ | $x_i$ used at | Unbiased? |
-|:---|:--:|:---|:---|
-| Sample average (SRS) | $\dfrac1n\sum\limits_{i\in\mathcal S}w^x_ib_i$ | not used | yes |
-| Ratio (SRS) | $\dfrac{\sum_{\mathcal S} x_ib_i}{\sum_{\mathcal S} x_i}$ | estimation stage | slightly biased |
-| HH (UPSWR) | $\dfrac1n\sum\limits_{j=1}^n b_j^*$ | design stage | exactly unbiased |
-
-## Variances of the Three Estimators of $B$ 
-
-Variances (multiply by $\bar x_U^2$ for the mean, $t_x^2$ for the total):
-$$
-\begin{aligned}
-V(\hat B_{\mathrm{avg}})&=\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w^x_ib_i-B)^2\\
-V(\hat B_{r})&\approx\frac{1-n/N}{n(N-1)}\sum_{i=1}^N (w^x_i)^2\,(b_i-B)^2\\
-V(\hat B_{\mathrm{HH}})&=\frac{1}{nN}\sum_{i=1}^N w^x_i\,(b_i-B)^2
-\end{aligned}
+\hat{\tilde B}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*}=\hat t_{\mathrm{HH}},\qquad
+\hat t_{\mathrm{HH}}=t_{\tilde x}\,\hat{\tilde B}_{\mathrm{HH}}=\hat{\tilde B}_{\mathrm{HH}} .
 $$
 
-## Per-Unit Squared Terms
+* With a normalized size, the "ratio" **is** the total.
+* Conversely, $\psi_i=x_i/t_x$ gives $y_j^*/\psi_j^*=t_x\,b_j^*$, so $\hat t_{\mathrm{HH}}=t_x\,\bar b^*$.
+* Rescaling a size variable to total 1 does not change the estimator of the total.
 
-Each variance is $\frac1n\times$ the average over the units of one squared term:
-
-| Estimator | Squared term of unit $i$ | Spread of $y$ about |
-|:---|:--:|:---|
-| Sample average | $(w^x_ib_i-B)^2$ | the flat line $\bar y_U$ |
-| Ratio | $(w^x_i)^2\,(b_i-B)^2$ | the line $y=Bx$ |
-| HH | $w^x_i\,(b_i-B)^2$ | the line $y=Bx$, weight $1/w^x_i$ relative to ratio |
-
-HH divides the ratio estimator's term by $w^x_i$: units larger than average ($w^x_i>1$) are **downweighted**,
-smaller ones are upweighted, because large units are already drawn more often. UPSWR wins when the large
-residuals $y_i-Bx_i$ belong to the large units.
-
-## Toy Example: Four Supermarkets, One-Draw Variances {.smaller}
-
-$t_x=1600$, $\bar x_U=400$, $B=300/1600=0.1875$. Sales nearly proportional to floor area:
-
-| Store | $x_i$ | $y_i$ | $w^x_i$ | $b_i$ | $b_i-B$ | $(w^x_ib_i-B)^2$ | $(w^x_i)^2(b_i-B)^2$ | $w^x_i(b_i-B)^2$ |
-|:--:|--:|--:|--:|--:|--:|------:|------:|------:|
-| A | 100 | 11 | 0.25 | 0.1100 | $-0.0775$ | 0.025600 | 0.000375 | 0.001502 |
-| B | 200 | 20 | 0.50 | 0.1000 | $-0.0875$ | 0.018906 | 0.001914 | 0.003828 |
-| C | 300 | 24 | 0.75 | 0.0800 | $-0.1075$ | 0.016256 | 0.006500 | 0.008667 |
-| D | 1000 | 245 | 2.50 | 0.2450 | $0.0575$ | 0.180625 | 0.020664 | 0.008266 |
-| **Variance** (Sum $/N$) | | | | | | **0.0603** | **0.00736** | **0.00557** |
-
-HH $<$ ratio $\ll$ sample average. If the sales were unrelated to the floor area, the ordering reverses
-(average $0.00078$, ratio $0.0288$, HH $0.0273$): **the size variable must be tied to $y$**.
 
 # Example: Revenue from AI Token Usage
 
@@ -249,7 +203,7 @@ $\psi_i=x_i/t_x$ ($t_x=100$, $\bar x_U=16.67$). The sample is $\mathcal R=\{F,E,
 
 $$
 \hat B_{\mathrm{HH}}=\bar b^*=\frac{24.4583}{5}=4.8917,\qquad
-s_{b^*}^2=\frac{0.220833}{4}=0.055208,\quad s_{b^*}=0.2350
+s_{b^*}^2=\frac{0.220833}{4}=0.0552,\quad s_{b^*}=0.235
 $$
 
 | Quantity | Estimate | Estimated SE |
@@ -258,8 +212,205 @@ $$
 | Mean revenue per customer | $16.67\times4.8917=81.53$ | $16.67\times0.1051=1.75$ |
 | Total revenue | $100\times4.8917=489.2$ | $100\times0.1051=10.5$ |
 
-In R: `upswr_est(ydata, xdata, xbar_pop, tx_pop, method = "ratio")` with `method` equal to
-`"ratio"`, `"mean"` or `"total"` returns the estimate, SE and CI.
+In R, with the sample as a data set `token` (one row per draw, columns `y` and `x`), `upswr_est` returns
+the estimate, SE and CI; `method` is `"ratio"`, `"mean"` or `"total"`:
+
+```r
+upswr_est(token$y, token$x, xbar_pop = 100 / 6, tx_pop = 100, method = "total")
+upswr_est(token$y, token$x / 100, xbar_pop = 1 / 6, tx_pop = 1, method = "total")  # x = psi
+```
+
+Both give $\hat t_{\mathrm{HH}}=489.2$ (SE $10.5$): the second uses the normalized size $\tilde x_i=\psi_i$.
+
+# Example: Physicians in U.S. Counties
+
+## The Data (`statepop.csv`)
+
+:::: {.columns}
+
+:::{.column style="width:48%;"}
+
+* $n=100$ draws **with replacement** from the $N=3141$ U.S. counties, with $\psi_i=x_i/t_x$:
+  $x_i$ = county population, $t_x=255{,}077{,}536$.
+* Large counties (Los Angeles) appear several times.
+* Goal: the total number of physicians $t$ (true value $532{,}638$).
+* The number of physicians is roughly proportional to the population: a good size variable.
+
+:::
+
+:::{.column style="width:52%;"}
+
+```{r}
+#| label: statepop-plot
+#| fig-width: 5
+#| fig-height: 4.2
+#| out-width: "100%"
+statepop <- read.csv("../sampling_book/data/statepop.csv")
+par(mar = c(4, 4, 1, 0.5))
+plot(statepop$popn, statepop$phys, log = "xy", pch = 19, col = adjustcolor("grey30", 0.6),
+     xlab = "County population", ylab = "Physicians")
+```
+
+:::
+
+::::
+
+## Physicians: HH Estimates and SRS Comparison {.smaller}
+
+With the population in thousands, $b_j^*$ = physicians per 1,000 people of the county on draw $j$:
+
+| Quantity | HH estimate | SE |
+|:---|--:|--:|
+| Physicians per 1,000 people, $\hat B_{\mathrm{HH}}$ | 2.24 | 0.16 |
+| Physicians per county, $\bar x_U\hat B_{\mathrm{HH}}$ | 181.6 | 13.2 |
+| Total physicians, $t_x\hat B_{\mathrm{HH}}$ | 570,304 | 41,401 |
+
+Compared with estimates from a separate SRS of 100 counties (`counties.csv`):
+
+| Method | Estimate | SE | Estimate $-$ true |
+|:---|--:|--:|--:|
+| Sample total $N\bar y$ (SRS) | 933,411 | 491,983 | 400,773 |
+| Ratio estimator (SRS) | 639,506 | 87,885 | 106,868 |
+| Regression estimator (SRS) | 585,871 | 105,177 | 53,233 |
+| Hansen--Hurwitz (UPSWR) | 570,304 | 41,401 | 37,666 |
+
+Using the size at the **design** stage (HH) gives the smallest SE here; the next section explains when.
+
+# Comparison of the HH, Ratio and Average Estimators of the Total
+
+## Three Estimators of the Total {.smaller}
+
+Residuals about the line through the origin:
+$$
+d_i=y_i-Bx_i,\qquad B=\frac{t}{t_x},\qquad \sum_{i=1}^N d_i=0 .
+$$
+
+* **Sample average** (SRS, ignores $x_i$): $\hat t_{\mathrm{avg}}=N\bar y$,
+  $\displaystyle V(\hat t_{\mathrm{avg}})=\Big(1-\frac nN\Big)\frac{N^2S_y^2}{n}$.
+* **Ratio** (SRS, $x_i$ at the estimation stage): $\hat t_r=t_x\,\bar y/\bar x$; an SRS selects every unit with
+  probability $1/N$, so
+  $$
+  V(\hat t_r)\approx\Big(1-\frac nN\Big)\frac{N^2S_d^2}{n}\approx\Big(1-\frac nN\Big)\frac1n\sum_{i=1}^N\frac{d_i^2}{1/N}.
+  $$
+* **HH** (UPSWR, $x_i$ at the design stage, $\psi_i=x_i/t_x$): each draw deviates by a scaled residual,
+  $$
+  \frac{y_i}{\psi_i}-t=\frac{d_i}{\psi_i}
+  \quad\Longrightarrow\quad
+  V(\hat t_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\frac{d_i^2}{\psi_i}.
+  $$
+
+## Comparison of the Three Estimators
+
+| Estimator | Estimator of $t$ | Variance | $x_i$ used at | Unbiased? |
+|:---|:--:|:--:|:---|:---|
+| Sample average (SRS) | $N\bar y$ | $\Big(1-\dfrac nN\Big)\dfrac{N^2S_y^2}{n}$ | not used | yes |
+| Ratio (SRS) | $t_x\,\dfrac{\bar y}{\bar x}$ | $\approx\Big(1-\dfrac nN\Big)\dfrac1n\sum\limits_{i=1}^N\dfrac{d_i^2}{1/N}$ | estimation stage | slightly biased |
+| HH (UPSWR) | $\dfrac1n\sum\limits_{j=1}^n\dfrac{y_j^*}{\psi_j^*}$ | $\dfrac1n\sum\limits_{i=1}^N\dfrac{d_i^2}{\psi_i}$ | design stage | exactly unbiased |
+
+: {tbl-colwidths="[17,13,40,15,15]"}
+
+For the mean, divide the estimators by $N$ and the variances by $N^2$.
+
+## On a Common Scale {.smaller}
+
+Ignoring the fpc, each variance is $\frac1n\sum_i$ (squared deviation)/(selection probability of unit $i$):
+
+| Estimator | Term of unit $i$ | Spread of $y$ about |
+|:---|:--:|:---|
+| Sample average | $\dfrac{(y_i-\bar y_U)^2}{1/N}$ | the flat line $\bar y_U$ |
+| Ratio | $\dfrac{d_i^2}{1/N}$ | the line $y=Bx$ |
+| HH | $\dfrac{d_i^2}{\psi_i}$ | the line $y=Bx$ |
+
+* **Ratio vs average:** $y_i-\bar y_U=d_i+B(x_i-\bar x_U)$. If $y\approx Bx$, the ratio estimator removes the spread
+  due to $x$; if $y$ is unrelated to $x$, $d_i$ *adds* it and the average wins.
+* **HH vs ratio:** the same $d_i^2$, divided by $\psi_i$ instead of $1/N$. Units with $\psi_i>1/N$ (larger than
+  average) are **downweighted**, since they are already drawn more often.
+
+## When Does UPS Beat the Ratio Estimator? {.smaller}
+
+$$
+V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1{\psi_i}\Big)
+=\frac Nn\sum_{i=1}^N d_i^2\Big(1-\frac{\bar x_U}{x_i}\Big),
+$$
+so HH wins exactly when the units with large residuals are larger than average:
+$$
+\boxed{H_d=\frac{\sum_{i=1}^N d_i^2}{\sum_{i=1}^N d_i^2/x_i}>\bar x_U}
+$$
+If $d_i^2\approx\sigma^2x_i^{\gamma}$:
+
+| Spread of $y$ about the line $y=Bx$ | $\gamma$ | Better |
+|:---|:--:|:---|
+| constant | $0$ | ratio (SRS) |
+| $\mathrm{SD}\propto\sqrt{x}$, i.e. $V(y_i)\propto x_i$ | $1$ | tie |
+| $\mathrm{SD}\propto x$: constant coefficient of variation | $2$ | HH (UPSWR) |
+
+: {tbl-colwidths="[60,10,30]"}
+
+Revenues, acreages and counts often have a roughly constant CV ($\gamma\approx2$): PPS works well for them.
+
+## Three Population Shapes
+
+```{r}
+#| label: ups-spread-plot
+#| fig-width: 11
+#| fig-height: 4.2
+#| out-width: "100%"
+plot_ups_spread()
+```
+
+Plot $y$ against $x$ (census or pilot): if the scatter **fans out** in proportion to $x$, sample with PPS; if its
+width stays about the same, use an SRS with the ratio estimator.
+
+```{r toy-functions}
+#| include: false
+# one-draw variances of the three estimators of t: N (y_i - ybar_U)^2, N d_i^2, d_i^2 / psi_i
+toy_table <- function(x, y) {
+  N <- length(x)
+  B <- sum(y) / sum(x)
+  psi <- x / sum(x)
+  d <- y - B * x
+  tab <- data.frame(Store = LETTERS[1:N], x = x, y = y, psi = psi, d = d,
+                    avg = N * (y - mean(y))^2, r = N * d^2, h = d^2 / psi)
+  rbind(tab, data.frame(Store = "**Variance** (Sum)", x = sum(x), y = sum(y), psi = sum(psi),
+                        d = sum(d), avg = sum(tab$avg), r = sum(tab$r), h = sum(tab$h)))
+}
+show_toy_table <- function(tab)
+  knitr::kable(tab, digits = c(0, 0, 0, 4, 2, 1, 1, 1), format.args = list(big.mark = ","),
+               col.names = c("Store", "$x_i$", "$y_i$", "$\\psi_i$", "$d_i=y_i-Bx_i$",
+                             "$N(y_i-\\bar y_U)^2$", "$N\\,d_i^2$", "$d_i^2/\\psi_i$"))
+x_toy <- c(100, 200, 300, 1000)
+```
+
+## Toy Example: Four Supermarkets {.smaller}
+
+Floor areas $x_i$, $t_x=1600$, $\psi_i=x_i/t_x$ against $1/N=0.25$ in an SRS; $t=300$, $B=0.1875$.
+One-draw variances (the sum of each column). **Sales proportional to floor area:**
+
+```{r toy-good}
+show_toy_table(toy_table(x_toy, c(11, 20, 24, 245)))
+```
+
+Store D has the largest residual and $\psi_D=0.625>1/N$: HH divides $d_D^2$ by $0.625$ instead of $0.25$.
+HH $<$ ratio $\ll$ average; here $H_d=529>\bar x_U=400$.
+
+## Toy Example: Sales Unrelated to Floor Area {.smaller}
+
+The same stores and the same total $t=300$, but the sales hardly vary:
+
+```{r toy-bad}
+show_toy_table(toy_table(x_toy, c(60, 80, 90, 70)))
+```
+
+The ordering reverses: the line $y=Bx$ fits badly, all the $d_i$ are large, and the ratio estimator and HH are
+more than 30 times worse than the sample average. **The size variable must be tied to $y$.**
+
+## Simulation and App
+
+* **Simulation** (book, Section 7.3.3): 2000 samples of 300 counties from `agpop`, $y$ = acres in 1992,
+  $x$ = acres in 1987. The naive SRS total has a huge variance; the SRS ratio and regression estimators and
+  UPSWR remove most of it.
+* **App:** [SRS (average and ratio) with UPSWR and UPSWO](../shinylives_sampling/app-ups.html){target="_blank"}
+  reports the simulated and theoretical variance reductions relative to the plain SRS average.
 
 # One-Stage Cluster Sampling with PPS
 
@@ -420,7 +571,7 @@ which ignores the factors $1-\pi_i$ and is a little too large.
 
 For the mean divide the SE by $N$; for $\hat B_{\mathrm{HT}}$ divide by $t_x$.
 
-## Example: HT Estimate and Variances 
+## Example: HT Estimate and Variances {.smaller}
 
 $N=20$ units, a sample of $n=4$ units with inclusion probabilities $\pi_i$:
 
@@ -446,7 +597,8 @@ SE of the mean: $31.7/20=1.58$ (Hájek), $36.2/20=1.81$ (WR).
 
 ## UPS Is Risky Unless $y$ Is Tied to the Size Variable
 
-The gain depends on the ratios $b_i=y_i/x_i$ being nearly constant, i.e. $y_i$ roughly proportional to $x_i$.
+The gain depends on the residuals $d_i=y_i-Bx_i$ being small, i.e. $y_i$ roughly proportional to $x_i$; UPS
+beats the SRS ratio estimator only when the spread about the line grows with the size ($H_d>\bar x_U$).
 Otherwise,
 
 * the estimate can be **much worse than a plain SRS average**;

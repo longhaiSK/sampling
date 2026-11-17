@@ -32,6 +32,7 @@ library(latex2exp)
 library(gt)
 source("samplingestimate.r")
 source("book_helpers.r")
+source("design_plots.r")
 ```
 
 The full source of `samplingestimate.r` is listed in @sec-estimating-functions.
@@ -468,10 +469,12 @@ $$
   S_y^2=\frac{1}{N-1}\sum_{i=1}^N\left(y_i-\bar{y}_U\right)^2 .
   $$
 * The **ratio estimator** (@sec-ratio-theory) is $\hat{t}_r=t_x\,\bar{y}/\bar{x}$, and its (large-$n$)
-  variance is the SRS variance of the residuals,
+  variance is the SRS variance of the residuals, $\left(1-\frac nN\right)N^2S_d^2/n$ with
+  $S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2$. Since an SRS gives every unit the same selection probability
+  $1/N$, it can be written in the same form as the HH variance below:
   $$
-  V(\hat{t}_r)\approx\left(1-\frac nN\right)\frac{N^2S_d^2}{n},\qquad
-  S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2 .
+  V(\hat{t}_r)\approx\left(1-\frac nN\right)\frac{N}{N-1}\cdot\frac1n\sum_{i=1}^N\frac{d_i^2}{1/N}
+  \approx\left(1-\frac nN\right)\frac1n\sum_{i=1}^N\frac{d_i^2}{1/N}.
   $$
 * The **HH estimator** is $\hat{t}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n y_j^*/\psi_j^*$ (@sec-ups-hh-psi), with
   variance $\frac1n\sum_{i=1}^N\psi_i\left(y_i/\psi_i-t\right)^2$. With $\psi_i=x_i/t_x$, each one-draw
@@ -485,7 +488,7 @@ $$
 | Estimator | Estimator of $t$ | Variance | $x_i$ is used at | Unbiased? |
 |:---|:--:|:--:|:---|:---|
 | Sample average (SRS) | $\hat{t}_{\mathrm{avg}}=N\bar{y}$ | $\left(1-\dfrac{n}{N}\right)\dfrac{N^2S_y^2}{n}$ | not used | yes |
-| Ratio (SRS) | $\hat{t}_r=t_x\,\dfrac{\bar{y}}{\bar{x}}$ | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{N^2S_d^2}{n}$ | the **estimation** stage | slightly biased |
+| Ratio (SRS) | $\hat{t}_r=t_x\,\dfrac{\bar{y}}{\bar{x}}$ | $\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n}\sum\limits_{i=1}^N \dfrac{d_i^2}{1/N}$ | the **estimation** stage | slightly biased |
 | HH (UPSWR) | $\hat{t}_{\mathrm{HH}}=\dfrac1n\sum\limits_{j=1}^n \dfrac{y_j^*}{\psi_j^*}$ | $\dfrac{1}{n}\sum\limits_{i=1}^N \dfrac{d_i^2}{\psi_i}$ | the **design** stage, $\psi_i=x_i/t_x$ | exactly unbiased |
 
 : Estimators of the total $t$ from SRS and UPSWR samples of $n$ units, with $d_i=y_i-Bx_i$. {#tbl-ups-compare}
@@ -493,13 +496,11 @@ $$
 For the mean, divide the estimators by $N$ and the variances by $N^2$; for $B=t/t_x$, divide by $t_x$ and
 $t_x^2$.
 
-**On a common scale.** Ignoring the finite population correction and the difference between $N-1$ and $N$,
-$$
-\frac{N^2S_y^2}{n}\approx\frac1n\sum_{i=1}^N\frac{(y_i-\bar{y}_U)^2}{1/N},\qquad
-\frac{N^2S_d^2}{n}\approx\frac1n\sum_{i=1}^N\frac{d_i^2}{1/N},
-$$
-so each variance is $\frac1n$ times a sum over the units of one term, a squared deviation divided by the
-unit's selection probability: $1/N$ for every unit in an SRS, $\psi_i$ under UPSWR.
+**On a common scale.** The ratio and HH variances differ only in the selection probability that divides
+$d_i^2$: $1/N$ for every unit in an SRS, $\psi_i$ under UPSWR. Writing the sample average the same way,
+$N^2S_y^2/n\approx\frac1n\sum_{i=1}^N(y_i-\bar{y}_U)^2/(1/N)$, and ignoring the finite population correction,
+each variance is $\frac1n$ times a sum over the units of one term, a squared deviation divided by the unit's
+selection probability:
 
 | Estimator | Term of unit $i$ | Spread of $y$ about |
 |:---|:---|:---|
@@ -523,29 +524,65 @@ acreages. When the spread of $y_i$ is the same for all $x_i$, the SRS ratio esti
 $y_i$ is not related to $x_i$ at all, all the $d_i$ are large and both can be worse than the plain sample
 average. The toy example in @sec-ups-toy illustrates these cases.
 
+**When does UPS beat the ratio estimator?** Ignoring the finite population correction, the difference of the
+two variances is a single sum,
+$$
+V(\hat{t}_r)-V(\hat{t}_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\left(N-\frac{1}{\psi_i}\right)
+=\frac Nn\sum_{i=1}^N d_i^2\left(1-\frac{\bar{x}_U}{x_i}\right),
+$$
+so HH has the smaller variance exactly when
+$$
+\boxed{H_d=\frac{\sum_{i=1}^N d_i^2}{\sum_{i=1}^N d_i^2/x_i}>\bar{x}_U},
+$$
+that is, when the harmonic mean of the sizes, weighted by the squared residuals, exceeds their ordinary mean:
+the units with large residuals are larger than average. In terms of the features of the population, suppose
+the spread of $y$ about the line $y=Bx$ grows like a power of the size, $d_i^2\approx\sigma^2x_i^{\gamma}$.
+Then the sum above is proportional to $\sum_i x_i^{\gamma-1}(x_i-\bar{x}_U)$, a multiple of the covariance
+of $x_i^{\gamma-1}$ with $x_i$, whose sign is that of $\gamma-1$:
+
+| Spread of $y$ about the line $y=Bx$ | $\gamma$ | Better estimator |
+|:---|:---:|:---|
+| Constant: $\mathrm{SD}(d_i)$ does not depend on $x_i$ | $0$ | ratio (SRS) |
+| $\mathrm{SD}(d_i)\propto\sqrt{x_i}$: $V(y_i)\propto x_i$, as for sums of $x_i$ independent pieces | $1$ | tie |
+| $\mathrm{SD}(d_i)\propto x_i$: a constant coefficient of variation, $\mathrm{SD}(y_i)\propto Bx_i$ | $2$ | HH (UPSWR) |
+
+: {tbl-colwidths="[62,8,30]"}
+
+@fig-ups-spread shows the three cases for one skewed population of sizes, with the same line $y=Bx$ and the
+same average spread about it; only the way the spread grows with $x$ differs.
+
+```{r fig-ups-spread}
+#| cache: false
+#| echo: false
+#| fig-cap: "Three populations with the same sizes $x_i$ and the same line $y=Bx$ (red), whose spread about the line (dashed band, $\\pm2$ SD) is constant ($\\gamma=0$), grows like $\\sqrt{x}$ ($\\gamma=1$), or grows like $x$ ($\\gamma=2$). The subtitle compares $H_d$ with the mean size $\\bar{x}_U$: HH beats the SRS ratio estimator only when $H_d>\\bar{x}_U$."
+#| fig-width: 11
+#| fig-height: 4
+#| out-width: "100%"
+plot_ups_spread()
+```
+
+Many skewed populations with a natural size, such as revenues by customer size, acreages by county area, or
+counts by population, have a roughly constant coefficient of variation ($\gamma\approx2$), which is why PPS
+works well for them. A plot of $y$ against $x$ from a census or a pilot sample shows which case applies: if the
+scatter about the line fans out in proportion to $x$, sample with PPS; if its width stays about the same,
+use an SRS with the ratio estimator. Three further points favour the SRS ratio estimator: its finite
+population correction $1-n/N$, which matters when the sampling fraction is large; the repeated units of
+sampling with replacement (a $\pi$ps design without replacement, @sec-ups-wo, removes this); and a line with
+an intercept, when $y$ is not proportional to $x$, where both rely on the wrong line and the regression
+estimator with an SRS is safer. In the toy example, $H_d$ is
+`r { .x <- c(100, 200, 300, 1000); .y <- c(11, 20, 24, 245); .d <- .y - sum(.y) / sum(.x) * .x; round(sum(.d^2) / sum(.d^2 / .x)) }`
+for the first population and
+`r { .x <- c(100, 200, 300, 1000); .y <- c(60, 80, 90, 70); .d <- .y - sum(.y) / sum(.x) * .x; round(sum(.d^2) / sum(.d^2 / .x)) }`
+for the second, both above $\bar{x}_U=400$, so HH beats the ratio estimator in both, as the working tables
+below confirm.
+
 ### Toy Example: Four Supermarkets {#sec-ups-toy}
 
 A town has four supermarkets, with floor areas $x_i$ from $100\,\text{m}^2$ to $1000\,\text{m}^2$, so
 $t_x=1600$, and the selection probabilities are $\psi_i=x_i/t_x=0.0625,\,0.125,\,0.1875,\,0.625$, against
 $1/N=0.25$ for each store in an SRS. We want to estimate the total
 monthly sales $t$ of the four stores; $B=t/t_x$ is the sales per square metre, and the line $y=Bx$ gives the
-residuals $d_i=y_i-Bx_i$. The data for the first population (the sales, in thousands of dollars per month,
-are nearly proportional to the floor areas) are:
-
-```{r toy-data}
-#| cache: false
-#| echo: false
-store <- c("A", "B", "C", "D")
-x <- c(100, 200, 300, 1000)
-y_good <- c(11, 20, 24, 245)
-B_true <- sum(y_good) / sum(x)
-dat <- data.frame(Store = c(store, "**Total**", "**True $B=\\sum y_i/\\sum x_i$**"),
-                  x = c(x, sum(x), NA), y = c(y_good, sum(y_good), NA),
-                  b = c(y_good / x, NA, B_true))
-options(knitr.kable.NA = "")
-knitr::kable(dat, digits = c(0, 0, 0, 4), format.args = list(big.mark = ","),
-             col.names = c("Store", "$x_i$ (floor area, m$^2$)", "$y_i$ (sales)", "$b_i=y_i/x_i$"))
-```
+residuals $d_i=y_i-Bx_i$.
 
 To compare the three estimators of $t$ in
 @sec-ups-compare, we work out their variances for a **single draw** ($n=1$); for $n$ draws, each is divided
@@ -588,25 +625,6 @@ show_toy_table <- function(tab) {
                              "$N(y_i-\\bar{y}_U)^2$", "$N\\,d_i^2$", "$d_i^2/\\psi_i$"))
 }
 
-# Unbiasedness of HH: the one-draw estimates b_i of B, weighted by psi_i
-unbiased_table <- function(store, x, y) {
-  psi <- x / sum(x)
-  b <- y / x
-  tab <- data.frame(Store = store, y = y, x = x, psi = psi, b = b, pb = psi * b,
-                    ybar = mean(x) * b, tot = sum(x) * b)
-  sums <- data.frame(Store = "**Sum**", y = sum(y), x = sum(x), psi = sum(psi), b = NA,
-                     pb = sum(tab$pb), ybar = sum(psi * tab$ybar), tot = sum(psi * tab$tot))
-  rbind(tab, sums)
-}
-
-show_unbiased_table <- function(tab) {
-  options(knitr.kable.NA = "")
-  knitr::kable(tab, digits = c(0, 0, 0, 4, 4, 5, 2, 1),
-               format.args = list(big.mark = ","),
-               col.names = c("Store", "$y_i$", "$x_i$", "$\\psi_i=x_i/t_x$", "$b_i$",
-                             "$\\psi_ib_i$", "$\\bar{x}_Ub_i$ (mean)", "$t_xb_i$ (total)"))
-}
-
 # The Variance row: sample average, ratio, HH
 toy_var <- function(tab) {
   v <- tab[nrow(tab), c("dy2", "r", "h")]
@@ -618,30 +636,7 @@ toy_var <- function(tab) {
 to the floor areas, as in the slides for this chapter. Here $t=300$, $\bar{y}_U=75$ and
 $B=300/1600=0.1875$.
 
-**HH is unbiased.** With one draw, the HH estimate of $B$ is $b_i$ when store $i$ is selected, which
-happens with probability $\psi_i$, so $E(\hat{B}_{\mathrm{HH}})=\sum_i\psi_ib_i$, the sum of the
-column $\psi_ib_i$. Multiplying the estimates by $\bar{x}_U$ or $t_x$ gives the estimates of the mean or the
-total, and the last row (the sum of $\psi_i$ times the column) is their expectation:
-
-```{r toy-unbiased}
-#| cache: false
-#| echo: false
-store <- c("A", "B", "C", "D")
-x <- c(100, 200, 300, 1000)
-y_good <- c(11, 20, 24, 245)
-tab_unb <- unbiased_table(store, x, y_good)
-show_unbiased_table(tab_unb)
-```
-
-The four possible estimates of $B$, `r paste(round(tab_unb$b[1:4], 4), collapse = ", ")`, are all different
-from $B=0.1875$, but weighted by their selection probabilities they average to
-$E(\hat{B}_{\mathrm{HH}})=`r round(tab_unb$pb[5], 4)`=B$, so $E(\hat{\bar{y}}_{\mathrm{HH}})=`r tab_unb$ybar[5]`=\bar{y}_U$ and
-$E(\hat{t}_{\mathrm{HH}})=`r tab_unb$tot[5]`=t$. In general,
-$\sum_i\psi_ib_i=\sum_i\frac{x_i}{t_x}\cdot\frac{y_i}{x_i}=\frac{t}{t_x}=B$. (The same four values are what the
-ratio estimator gives under an SRS of one store, but there each has probability $1/4$, so its expectation is
-`r round(mean(tab_unb$b[1:4]), 4)` for $B$, and it is biased.)
-
-**Variances.** The working table for the three one-draw variances:
+The working table for the three one-draw variances:
 
 ```{r toy-good}
 #| cache: false
