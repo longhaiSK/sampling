@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Longhai Li">
-<meta name="dcterms.date" content="2026-10-23">
+<meta name="dcterms.date" content="2026-11-16">
 
 <title>Appendix A — List of Important Formulas – Elements of Sampling Survey</title>
 <style>
@@ -264,7 +264,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 23, 2026</p>
+      <p class="date">November 16, 2026</p>
     </div>
   </div>
   
@@ -475,17 +475,22 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(b_j^*-\bar{b}^*\right)^2
 \hat{t}_{\mathrm{HH}}=t_x\,\bar{b}^*,\quad
 \widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=t_x\,\frac{s_{b^*}}{\sqrt{n}}}
 \]</span></p>
-<p><strong>One-stage cluster sampling with PPS</strong>: <span class="math inline">\(y_i \to t_i\)</span>, <span class="math inline">\(x_i \to M_i\)</span>, <span class="math inline">\(\psi_i = M_i/M_0\)</span>; the ratio of the cluster on draw <span class="math inline">\(j\)</span> is its mean per element <span class="math inline">\(\bar y_j^*\)</span> (<a href="ups.html#sec-ups-cluster-theory" class="quarto-xref"><span>Section 7.3.1</span></a>): <span class="math display">\[
+<p><strong>HH total for any selection probabilities</strong> <span class="math inline">\(\psi_i\)</span>; <span class="math inline">\(y_j^*\)</span> and <span class="math inline">\(\psi_j^*\)</span> belong to the unit selected on draw <span class="math inline">\(j\)</span> (<a href="ups.html#sec-ups-hh-psi" class="quarto-xref"><span>Section 7.2.2</span></a>): <span class="math display">\[
+\boxed{\hat{t}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt n},\qquad
+s_u^2=\frac{1}{n-1}\sum_{j=1}^n\left(\frac{y_j^*}{\psi_j^*}-\hat{t}_{\mathrm{HH}}\right)^2}
+\]</span></p>
+<p><strong>One-stage cluster sampling with PPS</strong>: <span class="math inline">\(y_i \to t_i\)</span>, <span class="math inline">\(x_i \to M_i\)</span>, <span class="math inline">\(\psi_i = M_i/M_0\)</span>; the ratio of the cluster on draw <span class="math inline">\(j\)</span> is its mean per element <span class="math inline">\(\bar y_j^*\)</span> (<a href="ups.html#sec-ups-cluster-theory" class="quarto-xref"><span>Section 7.4.1</span></a>): <span class="math display">\[
 \boxed{\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
 \widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}},\qquad
 s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{b}^*\right)^2
 \]</span></p>
-<p><strong>Two-stage cluster sampling with PPS</strong>: <span class="math inline">\(\bar y_j^*\)</span> is now the mean of the <span class="math inline">\(m_j\)</span> elements subsampled on draw <span class="math inline">\(j\)</span>; the mean per cluster and the total are <span class="math inline">\(\bar M_U\hat B_{\mathrm{HH}}\)</span> and <span class="math inline">\(M_0\hat B_{\mathrm{HH}}\)</span>, with SEs scaled the same way (<a href="ups.html#sec-ups-twostage-theory" class="quarto-xref"><span>Section 7.4.1</span></a>): <span class="math display">\[
+<p><strong>Two-stage cluster sampling with PPS</strong>: <span class="math inline">\(\bar y_j^*\)</span> is now the mean of the <span class="math inline">\(m_j\)</span> elements subsampled on draw <span class="math inline">\(j\)</span>; the mean per cluster and the total are <span class="math inline">\(\bar M_U\hat B_{\mathrm{HH}}\)</span> and <span class="math inline">\(M_0\hat B_{\mathrm{HH}}\)</span>, with SEs scaled the same way (<a href="ups.html#sec-ups-twostage-theory" class="quarto-xref"><span>Section 7.5.1</span></a>): <span class="math display">\[
 \boxed{\hat{B}_{\mathrm{HH}}=\bar{y}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
 \widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
 s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{y}^*\right)^2
 \]</span></p>
-<p><strong>Horvitz–Thompson (HT) estimator</strong>: without replacement, with inclusion probabilities <span class="math inline">\(\pi_i = P(i\in\mathcal S)\)</span>, for example <span class="math inline">\(\pi_i = n x_i/t_x\)</span> (<a href="ups.html#sec-ups-wo-theory" class="quarto-xref"><span>Section 7.5.1</span></a>): <span class="math display">\[
+<p><strong>Horvitz–Thompson (HT) estimator</strong>: without replacement, with inclusion probabilities <span class="math inline">\(\pi_i = P(i\in\mathcal S)\)</span>, for example <span class="math inline">\(\pi_i = n x_i/t_x\)</span> (<a href="ups.html#sec-ups-wo-theory" class="quarto-xref"><span>Section 7.6.1</span></a>): <span class="math display">\[
 \boxed{\hat{t}_{\mathrm{HT}}=\sum_{i\in\mathcal{S}}\frac{y_i}{\pi_i}}
 \]</span></p>
 
