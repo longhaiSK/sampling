@@ -9184,6 +9184,7 @@ replacement is briefly discussed at the end (Section~\ref{sec-ups-wo}).
 
 The estimating functions used throughout this book (in this chapter
 \texttt{upswr\_est} and \texttt{upswr\_total} for sampling with
+replacement, \texttt{cluster\_upswr} for clusters sampled with
 replacement, \texttt{upswo\_est} for sampling without replacement,
 \texttt{srs\_est}, \texttt{ratio\_est} and \texttt{reg\_est} for
 comparison, and the \texttt{format\_est\_gt} table-formatting helper)
@@ -10506,12 +10507,13 @@ b_i=\frac{t_i}{M_i}=\bar{y}_i ,
 \(B=t/M_0\) is the mean per element of the whole population, which we
 denote also by \(\bar{y}_U\). Let \(b_j^*=\bar{y}_j^*\) be the mean per
 element of the cluster selected on draw \(j\). Then everything in
-Section~\ref{sec-ups-hh-theory} applies:
+Section~\ref{sec-ups-hh-theory} applies, with \(\hat{B}_{\mathrm{HH}}\)
+written in the cluster notation as \(\hat{\bar{y}}_{\mathrm{HH}}\):
 
 \[
-\boxed{\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
-\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}},\qquad
-s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{b}^*\right)^2 .
+\boxed{\hat{\bar{y}}_{\mathrm{HH}}=\hat{B}_{\mathrm{HH}}=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
+s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\hat{\bar{y}}_{\mathrm{HH}}\right)^2 .
 \]
 
 That is, the estimate of the mean per element is the plain average of
@@ -10537,15 +10539,97 @@ Estimated SE
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Mean per element, \(\bar{y}_U=B=t/M_0\) & \(\hat{B}_{\mathrm{HH}}\) &
-\(s_{b^*}/\sqrt{n}\) \\
-Mean per cluster (psu-level mean), \(\bar{t}_U=t/N\) &
-\(\bar{M}_U\,\hat{B}_{\mathrm{HH}}\) &
-\(\bar{M}_U\,s_{b^*}/\sqrt{n}\) \\
-Total, \(t=\sum_{i=1}^N t_i\) & \(M_0\,\hat{B}_{\mathrm{HH}}\) &
-\(M_0\,s_{b^*}/\sqrt{n}\) \\
+Mean per element (ssu-level mean), \(\bar{y}_U=B=t/M_0\) &
+\(\hat{\bar{y}}_{\mathrm{HH}}\) & \(s_{\bar{y}^*}/\sqrt{n}\) \\
+Mean per cluster (psu-level mean of the totals), \(\bar{t}_U=t/N\) &
+\(\hat{\bar{t}}_{\mathrm{HH}}=\bar{M}_U\,\hat{\bar{y}}_{\mathrm{HH}}\) &
+\(\bar{M}_U\,s_{\bar{y}^*}/\sqrt{n}\) \\
+Total, \(t=\sum_{i=1}^N t_i\) &
+\(\hat{t}_{\mathrm{HH}}=M_0\,\hat{\bar{y}}_{\mathrm{HH}}\) &
+\(M_0\,s_{\bar{y}^*}/\sqrt{n}\) \\
 \end{longtable}
 }
+
+The function \texttt{cluster\_upswr(ti,\ Mi,\ N,\ M0,\ estimate)}
+computes these estimates. It simply calls \texttt{upswr\_est} with
+\(y=t\) (the cluster totals) and \(x=M\) (the cluster sizes),
+\(\bar{x}_U=\bar{M}_U\) and \(t_x=M_0\), and reports the working table
+and the results in the cluster notation; \texttt{estimate} is
+\texttt{"ybar"} (mean per element), \texttt{"tbar"} (mean per cluster)
+or \texttt{"total"}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cluster\_upswr }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{ (ti, Mi, N, M0, }\AttributeTok{estimate =} \FunctionTok{c}\NormalTok{ (}\StringTok{"ybar"}\NormalTok{, }\StringTok{"tbar"}\NormalTok{, }\StringTok{"total"}\NormalTok{),}
+                           \AttributeTok{show.details =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{cluster =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{t\_label =} \StringTok{"t\_j\^{}*"}\NormalTok{,}
+                           \AttributeTok{decimals =} \DecValTok{4}\NormalTok{)}
+\NormalTok{\{}
+\NormalTok{    estimate }\OtherTok{\textless{}{-}} \FunctionTok{match.arg}\NormalTok{ (estimate)}
+\NormalTok{    Mbar\_U }\OtherTok{\textless{}{-}}\NormalTok{ M0 }\SpecialCharTok{/}\NormalTok{ N}
+\NormalTok{    method }\OtherTok{\textless{}{-}} \ControlFlowTok{switch}\NormalTok{ (estimate, }\AttributeTok{ybar =} \StringTok{"ratio"}\NormalTok{, }\AttributeTok{tbar =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{total =} \StringTok{"total"}\NormalTok{)}
+\NormalTok{    res }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{ (ti, Mi, }\AttributeTok{xbar\_pop =}\NormalTok{ Mbar\_U, }\AttributeTok{tx\_pop =}\NormalTok{ M0, }\AttributeTok{method =}\NormalTok{ method,}
+                      \AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\NormalTok{show.details) }\FunctionTok{return}\NormalTok{ (res)}
+
+    \DocumentationTok{\#\# working table on the scale of the cluster means ybar\_j*}
+\NormalTok{    n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{ (ti)}
+\NormalTok{    ybar\_j }\OtherTok{\textless{}{-}}\NormalTok{ ti }\SpecialCharTok{/}\NormalTok{ Mi}
+\NormalTok{    ybar\_hh }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{ (ybar\_j)}
+\NormalTok{    dev }\OtherTok{\textless{}{-}}\NormalTok{ ybar\_j }\SpecialCharTok{{-}}\NormalTok{ ybar\_hh}
+\NormalTok{    s2 }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{ (dev}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{/}\NormalTok{ (n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{)}
+\NormalTok{    se\_ybar }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{ (s2 }\SpecialCharTok{/}\NormalTok{ n)}
+\NormalTok{    working }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{ (}
+        \AttributeTok{j    =} \FunctionTok{c}\NormalTok{ (}\FunctionTok{seq\_len}\NormalTok{ (n), }\StringTok{"Sum"}\NormalTok{),}
+        \AttributeTok{cl   =} \FunctionTok{c}\NormalTok{ (}\ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.null}\NormalTok{ (cluster)) }\FunctionTok{rep}\NormalTok{ (}\StringTok{""}\NormalTok{, n) }\ControlFlowTok{else} \FunctionTok{as.character}\NormalTok{ (cluster), }\StringTok{""}\NormalTok{),}
+        \AttributeTok{M    =} \FunctionTok{c}\NormalTok{ (Mi, }\ConstantTok{NA}\NormalTok{),}
+        \AttributeTok{t    =} \FunctionTok{c}\NormalTok{ (ti, }\ConstantTok{NA}\NormalTok{),}
+        \AttributeTok{ybar =} \FunctionTok{c}\NormalTok{ (ybar\_j, }\FunctionTok{sum}\NormalTok{ (ybar\_j)),}
+        \AttributeTok{dev  =} \FunctionTok{c}\NormalTok{ (dev, }\FunctionTok{sum}\NormalTok{ (dev)),}
+        \AttributeTok{dev2 =} \FunctionTok{c}\NormalTok{ (dev}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{, }\FunctionTok{sum}\NormalTok{ (dev}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\NormalTok{    )}
+\NormalTok{    working }\OtherTok{\textless{}{-}} \FunctionTok{truncate\_working}\NormalTok{ (working, }\AttributeTok{id\_col =} \StringTok{"j"}\NormalTok{, }\AttributeTok{head\_n =} \DecValTok{10}\NormalTok{)}
+
+\NormalTok{    yh }\OtherTok{\textless{}{-}} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}
+\NormalTok{    th }\OtherTok{\textless{}{-}} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar t\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}
+\NormalTok{    Th }\OtherTok{\textless{}{-}} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat t\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}
+\NormalTok{    fn }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{ (x, }\AttributeTok{d =}\NormalTok{ decimals) }\FunctionTok{fmt\_num}\NormalTok{ (x, }\AttributeTok{decimals =}\NormalTok{ d)}
+\NormalTok{    table }\OtherTok{\textless{}{-}} \FunctionTok{gt}\NormalTok{ (working) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_header}\NormalTok{ (}\AttributeTok{title =} \StringTok{"UPSWR Cluster Sampling (Hansen{-}Hurwitz): Working Table"}\NormalTok{,}
+                    \AttributeTok{subtitle =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$n = \%d$ draws, $N = \%s$, $M\_0 = \%s$, $}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar M\_U = M\_0/N = \%s$"}\NormalTok{,}
+\NormalTok{                                            n, }\FunctionTok{fn}\NormalTok{ (N, }\DecValTok{0}\NormalTok{), }\FunctionTok{fn}\NormalTok{ (M0, }\DecValTok{0}\NormalTok{), }\FunctionTok{fn}\NormalTok{ (Mbar\_U, }\DecValTok{2}\NormalTok{)))) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{cols\_label}\NormalTok{ (}
+            \AttributeTok{j    =} \FunctionTok{md}\NormalTok{ (}\StringTok{"$j$"}\NormalTok{),}
+            \AttributeTok{cl   =} \StringTok{"Cluster"}\NormalTok{,}
+            \AttributeTok{M    =} \FunctionTok{md}\NormalTok{ (}\StringTok{"$M\_j\^{}*$"}\NormalTok{),}
+            \AttributeTok{t    =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$\%s$"}\NormalTok{, t\_label)),}
+            \AttributeTok{ybar =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\_j\^{}* = \%s/M\_j\^{}*$"}\NormalTok{, t\_label)),}
+            \AttributeTok{dev  =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\_j\^{}* {-} \%s$"}\NormalTok{, yh)),}
+            \AttributeTok{dev2 =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\_j\^{}* {-} \%s)\^{}2$"}\NormalTok{, yh))}
+\NormalTok{        ) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{fmt\_number}\NormalTok{ (}\AttributeTok{columns =} \FunctionTok{c}\NormalTok{ (}\StringTok{"M"}\NormalTok{, }\StringTok{"t"}\NormalTok{), }\AttributeTok{decimals =} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{all}\NormalTok{ (ti }\SpecialCharTok{==} \FunctionTok{round}\NormalTok{ (ti))) }\DecValTok{0} \ControlFlowTok{else} \DecValTok{1}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{fmt\_auto}\NormalTok{ (}\AttributeTok{data =}\NormalTok{ working, }\AttributeTok{columns =} \FunctionTok{c}\NormalTok{ (}\StringTok{"ybar"}\NormalTok{, }\StringTok{"dev"}\NormalTok{, }\StringTok{"dev2"}\NormalTok{), }\AttributeTok{decimals =}\NormalTok{ decimals) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{sub\_missing}\NormalTok{ (}\AttributeTok{missing\_text =} \StringTok{""}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_style}\NormalTok{ (}\AttributeTok{style =} \FunctionTok{cell\_text}\NormalTok{ (}\AttributeTok{weight =} \StringTok{"bold"}\NormalTok{),}
+                   \AttributeTok{locations =} \FunctionTok{cells\_body}\NormalTok{ (}\AttributeTok{rows =}\NormalTok{ j }\SpecialCharTok{==} \StringTok{"Sum"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_footnote}\NormalTok{ (}
+            \AttributeTok{footnote =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$s\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\^{}*\}\^{}2 = }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sum\_j (}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\_j\^{}* {-} \%s)\^{}2/(n{-}1) = \%s$, $s\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\^{}*\} = \%s$."}\NormalTok{,}
+\NormalTok{                                    yh, }\FunctionTok{fn}\NormalTok{ (s2), }\FunctionTok{fn}\NormalTok{ (}\FunctionTok{sqrt}\NormalTok{ (s2)))),}
+            \AttributeTok{locations =} \FunctionTok{cells\_column\_labels}\NormalTok{ (}\AttributeTok{columns =}\NormalTok{ dev2)) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_source\_note}\NormalTok{ (}\FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}
+            \StringTok{"Mean per element: $\%s = }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{dfrac\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sum\_j }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\_j\^{}*\}\{n\} = }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{dfrac\{\%s\}\{\%d\} = \%s$, $}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(\%s) = }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{dfrac\{s\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\^{}*\}\}\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sqrt n\} = \%s$"}\NormalTok{,}
+\NormalTok{            yh, }\FunctionTok{fn}\NormalTok{ (}\FunctionTok{sum}\NormalTok{ (ybar\_j)), n, }\FunctionTok{fn}\NormalTok{ (ybar\_hh), yh, }\FunctionTok{fn}\NormalTok{ (se\_ybar)))) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_source\_note}\NormalTok{ (}\FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}
+            \StringTok{"Mean per cluster: $\%s = }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar M\_U}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{,\%s = \%s }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{times \%s = \%s$, $}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(\%s) = \%s$"}\NormalTok{,}
+\NormalTok{            th, yh, }\FunctionTok{fn}\NormalTok{ (Mbar\_U, }\DecValTok{2}\NormalTok{), }\FunctionTok{fn}\NormalTok{ (ybar\_hh), }\FunctionTok{fn}\NormalTok{ (Mbar\_U }\SpecialCharTok{*}\NormalTok{ ybar\_hh, }\DecValTok{2}\NormalTok{), th, }\FunctionTok{fn}\NormalTok{ (Mbar\_U }\SpecialCharTok{*}\NormalTok{ se\_ybar, }\DecValTok{2}\NormalTok{)))) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_source\_note}\NormalTok{ (}\FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}
+            \StringTok{"Total: $\%s = M\_0}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{,\%s = \%s }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{times \%s = \%s$, $}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(\%s) = \%s$"}\NormalTok{,}
+\NormalTok{            Th, yh, }\FunctionTok{fn}\NormalTok{ (M0, }\DecValTok{0}\NormalTok{), }\FunctionTok{fn}\NormalTok{ (ybar\_hh), }\FunctionTok{fn}\NormalTok{ (M0 }\SpecialCharTok{*}\NormalTok{ ybar\_hh, }\DecValTok{2}\NormalTok{), Th, }\FunctionTok{fn}\NormalTok{ (M0 }\SpecialCharTok{*}\NormalTok{ se\_ybar, }\DecValTok{2}\NormalTok{))))}
+    \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.null}\NormalTok{ (cluster)) table }\OtherTok{\textless{}{-}} \FunctionTok{cols\_hide}\NormalTok{ (table, }\StringTok{"cl"}\NormalTok{)}
+
+    \FunctionTok{list}\NormalTok{ (}\AttributeTok{estimate =}\NormalTok{ res}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{table =}\NormalTok{ table)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
 
 The estimator is most precise when the cluster means \(\bar{y}_i\) vary
 little, that is, when \(t_i\) is nearly proportional to \(M_i\). Note
@@ -10574,12 +10658,12 @@ its residents are reviewed, it has the same \(t_i\):
 {
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0804}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0446}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1786}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1875}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1429}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.3661}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0763}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0424}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1695}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1780}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1356}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.3983}}@{}}
 
 \caption{\label{tbl-falls-data}Falls in the sampled long-term care
 homes, \(n=8\) draws}
@@ -10598,7 +10682,7 @@ Home
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(t_j^*\) (falls)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(b_j^*=t_j^*/M_j^*\) (falls per resident)
+\(\bar{y}_j^*=t_j^*/M_j^*\) (falls per resident)
 \end{minipage} \\
 \midrule\noalign{}
 \endhead
@@ -10617,71 +10701,53 @@ Home
 
 }
 
-We estimate \(B\), the number of falls per resident, with
-\texttt{upswr\_est}, using the totals \(t_i\) of the sampled homes as
-\texttt{ydata} and their sizes \(M_i\) as \texttt{xdata}. The working
-table lists the cluster means \(b_j^*\), their deviations from
-\(\hat{B}_{\mathrm{HH}}\), and the squared deviations:
+We estimate \(\bar{y}_U\), the number of falls per resident, with
+\texttt{cluster\_upswr}, from the totals \(t_j^*\) and the sizes
+\(M_j^*\) of the sampled homes. The working table lists the cluster
+means \(\bar{y}_j^*=t_j^*/M_j^*\), their deviations from
+\(\hat{\bar{y}}_{\mathrm{HH}}\), and the squared deviations, and its
+notes give all three estimates:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{res\_falls\_B }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(ti, Mi, }\AttributeTok{xbar\_pop =}\NormalTok{ Mbar\_U, }\AttributeTok{tx\_pop =}\NormalTok{ M0, }\AttributeTok{method =} \StringTok{"ratio"}\NormalTok{, }\AttributeTok{decimals =} \DecValTok{4}\NormalTok{)}
+\NormalTok{res\_falls\_B }\OtherTok{\textless{}{-}} \FunctionTok{cluster\_upswr}\NormalTok{(ti, Mi, }\AttributeTok{N =}\NormalTok{ N, }\AttributeTok{M0 =}\NormalTok{ M0, }\AttributeTok{estimate =} \StringTok{"ybar"}\NormalTok{, }\AttributeTok{cluster =}\NormalTok{ home)}
 \NormalTok{res\_falls\_B}\SpecialCharTok{$}\NormalTok{table}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{table}[H]
 \caption*{
-{\large  UPSWR Hansen-Hurwitz Estimation: Working Table\normalsize } \\ 
-{\normalsize  \(n = 8\)\normalsize }
+{\large  UPSWR Cluster Sampling (Hansen-Hurwitz): Working Table\normalsize } \\ 
+{\normalsize  \(n = 8\) draws, \(N = 40\), \(M_0 = 3,000\), \(\bar M_U = M_0/N = 75.00\)\normalsize }
 } 
 \normalsize
-\begin{gtfit}{\linewidth}{>{\raggedright\arraybackslash}p{\dimexpr 30.00pt -2\tabcolsep-1.5\arrayrulewidth}>{\raggedleft\arraybackslash}p{\dimexpr 82.50pt -2\tabcolsep-1.5\arrayrulewidth}>{\raggedleft\arraybackslash}p{\dimexpr 82.50pt -2\tabcolsep-1.5\arrayrulewidth}>{\raggedleft\arraybackslash}p{\dimexpr 82.50pt -2\tabcolsep-1.5\arrayrulewidth}>{\raggedleft\arraybackslash}p{\dimexpr 82.50pt -2\tabcolsep-1.5\arrayrulewidth}}
+\begin{gtfit}{\linewidth}{llrrrrr}
 \toprule
-\(i\) & \(b_j^*\) & \(\hat B_{\mathrm{HH}}\) & \(b_j^*-\hat B_{\mathrm{HH}}\) & \((b_j^*-\hat B_{\mathrm{HH}})^2\)\textsuperscript{\textit{1}} \\ 
+\(j\) & Cluster & \(M_j^*\) & \(t_j^*\) & \(\bar y_j^* = t_j^*/M_j^*\) & \(\bar y_j^* - \hat{\bar y}_{\mathrm{HH}}\) & \((\bar y_j^* - \hat{\bar y}_{\mathrm{HH}})^2\)\textsuperscript{\textit{1}} \\ 
 \midrule\addlinespace[2.5pt]
-1 & 0.8889 & 0.8461 & 0.0428 & 0.0018 \\ 
-2 & 0.8167 & 0.8461 & -0.0294 & 0.0009 \\ 
-3 & 0.8542 & 0.8461 & 0.0081 & 0.0001 \\ 
-4 & 0.8889 & 0.8461 & 0.0428 & 0.0018 \\ 
-5 & 0.7368 & 0.8461 & -0.1093 & 0.0119 \\ 
-6 & 0.9833 & 0.8461 & 0.1372 & 0.0188 \\ 
-... & ... & ... & ... & ... \\ 
-{\bfseries Sum} & {\bfseries 6.7688} & {\bfseries 0.8461} & {\bfseries 0.0000} & {\bfseries 0.0752} \\ 
+1 & H12 & 180 & 160 & 0.8889 & 0.0428 & 0.0018 \\ 
+2 & H03 & 60 & 49 & 0.8167 & -0.0294 & 0.0009 \\ 
+3 & H27 & 240 & 205 & 0.8542 & 0.0081 & 0.0001 \\ 
+4 & H12 & 180 & 160 & 0.8889 & 0.0428 & 0.0018 \\ 
+5 & H31 & 95 & 70 & 0.7368 & -0.1093 & 0.0119 \\ 
+6 & H08 & 120 & 118 & 0.9833 & 0.1372 & 0.0188 \\ 
+7 & H19 & 45 & 30 & 0.6667 & -0.1794 & 0.0322 \\ 
+8 & H36 & 150 & 140 & 0.9333 & 0.0872 & 0.0076 \\ 
+{\bfseries Sum} & {\bfseries } & {\bfseries } & {\bfseries } & {\bfseries 6.7688} & {\bfseries 0.0000} & {\bfseries 0.0752} \\ 
 \bottomrule
 \end{gtfit}
 \begin{minipage}{\linewidth}
 \vspace{.05em}
-\textsuperscript{\textit{1}}\(s_{b^*}^2 = \sum_i (b_j^*-\hat B_{\mathrm{HH}})^2/(n-1) = 0.0107\).\\
-\(\hat B_{\mathrm{HH}} = \dfrac{\sum_i b_j^*}{n} = \dfrac{6.7688}{8} = 0.8461\)\\
-\(\mathrm{SE}(\hat B_{\mathrm{HH}}) = \dfrac{s_{b^*}}{\sqrt n} = \dfrac{0.1036}{\sqrt{8}} = 0.0366\)\\
+\textsuperscript{\textit{1}}\(s_{\bar y^*}^2 = \sum_j (\bar y_j^* - \hat{\bar y}_{\mathrm{HH}})^2/(n-1) = 0.0107\), \(s_{\bar y^*} = 0.1036\).\\
+Mean per element: \(\hat{\bar y}_{\mathrm{HH}} = \dfrac{\sum_j \bar y_j^*}{n} = \dfrac{6.7688}{8} = 0.8461\), \(\mathrm{SE}(\hat{\bar y}_{\mathrm{HH}}) = \dfrac{s_{\bar y^*}}{\sqrt n} = 0.0366\)\\
+Mean per cluster: \(\hat{\bar t}_{\mathrm{HH}} = \bar M_U\,\hat{\bar y}_{\mathrm{HH}} = 75.00 \times 0.8461 = 63.46\), \(\mathrm{SE}(\hat{\bar t}_{\mathrm{HH}}) = 2.75\)\\
+Total: \(\hat t_{\mathrm{HH}} = M_0\,\hat{\bar y}_{\mathrm{HH}} = 3,000 \times 0.8461 = 2,538.29\), \(\mathrm{SE}(\hat t_{\mathrm{HH}}) = 109.91\)\\
 \end{minipage}
 \end{table}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{res\_falls\_B}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_B"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{table}[H]
-\normalsize
-\begin{gtfit}{0.7\linewidth}{rrrr}
-\toprule
-\(\hat{B}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{B}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
-\midrule\addlinespace[2.5pt]
-0.85 & 0.04 & 0.76 & 0.93 \\ 
-\bottomrule
-\end{gtfit}
-\end{table}
-
-Then we multiply by \(\bar{M}_U=75\) for the number of falls per home,
-and by \(M_0=3{,}000\) for the total number of falls:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{res\_falls\_home }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(ti, Mi, }\AttributeTok{xbar\_pop =}\NormalTok{ Mbar\_U, }\AttributeTok{tx\_pop =}\NormalTok{ M0, }\AttributeTok{method =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
-\NormalTok{res\_falls\_home}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_ybar"}\NormalTok{)}
+\NormalTok{res\_falls\_B}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_ybar"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -10691,6 +10757,27 @@ and by \(M_0=3{,}000\) for the total number of falls:
 \toprule
 \(\hat{\bar{y}}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
 \midrule\addlinespace[2.5pt]
+0.85 & 0.04 & 0.76 & 0.93 \\ 
+\bottomrule
+\end{gtfit}
+\end{table}
+
+The number of falls per home is \(\bar{M}_U=75\) times as large, and the
+total number of falls is \(M_0=3{,}000\) times as large:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res\_falls\_home }\OtherTok{\textless{}{-}} \FunctionTok{cluster\_upswr}\NormalTok{(ti, Mi, }\AttributeTok{N =}\NormalTok{ N, }\AttributeTok{M0 =}\NormalTok{ M0, }\AttributeTok{estimate =} \StringTok{"tbar"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{res\_falls\_home}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_tbar"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\normalsize
+\begin{gtfit}{0.7\linewidth}{rrrr}
+\toprule
+\(\hat{\bar{t}}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{\bar{t}}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
+\midrule\addlinespace[2.5pt]
 63.46 & 2.75 & 56.96 & 69.95 \\ 
 \bottomrule
 \end{gtfit}
@@ -10698,7 +10785,7 @@ and by \(M_0=3{,}000\) for the total number of falls:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{res\_falls\_total }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(ti, Mi, }\AttributeTok{xbar\_pop =}\NormalTok{ Mbar\_U, }\AttributeTok{tx\_pop =}\NormalTok{ M0, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{res\_falls\_total }\OtherTok{\textless{}{-}} \FunctionTok{cluster\_upswr}\NormalTok{(ti, Mi, }\AttributeTok{N =}\NormalTok{ N, }\AttributeTok{M0 =}\NormalTok{ M0, }\AttributeTok{estimate =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
 \NormalTok{res\_falls\_total}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -10715,13 +10802,13 @@ and by \(M_0=3{,}000\) for the total number of falls:
 \end{table}
 
 \textbf{Output Note:} The estimated number of falls per resident is
-\(\hat{B}_{\mathrm{HH}}=0.846\) (SE 0.037), the plain average of the
-eight cluster means in the working table. A typical home has
-\(\bar{M}_U\hat{B}_{\mathrm{HH}}=63.5\) falls per year (SE 2.7), and the
-40 homes together have about \(M_0\hat{B}_{\mathrm{HH}}=2,538\) falls
-(SE 110, 95\% interval {[}2,278, 2,798{]}). The three statements carry
-the same information: the estimates and the standard errors are in the
-same proportion.
+\(\hat{\bar{y}}_{\mathrm{HH}}=0.846\) (SE 0.037), the plain average of
+the eight cluster means in the working table. A typical home has
+\(\hat{\bar{t}}_{\mathrm{HH}}=63.5\) falls per year (SE 2.7), and the 40
+homes together have about \(\hat{t}_{\mathrm{HH}}=2,538\) falls (SE 110,
+95\% interval {[}2,278, 2,798{]}). The three statements carry the same
+information: the estimates and the standard errors are in the same
+proportion.
 
 \section{Two-Stage Cluster Sampling with PPS}\label{sec-ups-twostage}
 
@@ -10738,13 +10825,14 @@ Section~\ref{sec-ups-cluster-theory}. We estimate it from the subsample,
 \] where \(\bar{y}_i\) is the mean of the \emph{subsample}. The
 one-stage formulas carry over with the subsample mean \(\bar{y}_j^*\) of
 draw \(j\) in place of the cluster mean \(b_j^*\): \[
-\boxed{\hat{B}_{\mathrm{HH}}=\bar{y}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
-\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
-s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{y}^*\right)^2 ,
+\boxed{\hat{\bar{y}}_{\mathrm{HH}}=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
+s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\hat{\bar{y}}_{\mathrm{HH}}\right)^2 ,
 \] and the estimates of the mean per element, the mean per cluster and
-the total are \(\hat{B}_{\mathrm{HH}}\),
-\(\bar{M}_U\hat{B}_{\mathrm{HH}}\) and \(M_0\hat{B}_{\mathrm{HH}}\),
-with their SEs multiplied by the same constants, as in the table of
+the total are \(\hat{\bar{y}}_{\mathrm{HH}}\),
+\(\hat{\bar{t}}_{\mathrm{HH}}=\bar{M}_U\hat{\bar{y}}_{\mathrm{HH}}\) and
+\(\hat{t}_{\mathrm{HH}}=M_0\hat{\bar{y}}_{\mathrm{HH}}\), with their SEs
+multiplied by the same constants, as in the table of
 Section~\ref{sec-ups-cluster-theory}. Equivalently, each draw estimates
 the total by \(\hat{t}_j^*/\psi_j^*=M_0\,\bar{y}_j^*\).
 
@@ -10762,6 +10850,51 @@ simplification compared with two-stage SRS of clusters, where the
 variance has a between-cluster and a within-cluster piece. Of course, a
 larger subsample \(m_i\) makes \(\bar{y}_i\) closer to \(t_i/M_i\) and
 reduces the variance, but it does so through \(s_{\bar{y}^*}^2\).
+
+\textbf{Why the within-cluster variation is absorbed into
+\(V(\bar{y}_j^*)\).} Write \(\bar{y}_{iU}=t_i/M_i\) for the true mean of
+cluster \(i\), \(S_i^2\) for the variance of its \(M_i\) elements, and
+\(V_{2i}=\left(1-\frac{m_i}{M_i}\right)\frac{S_i^2}{m_i}\) for the
+variance of the subsample mean \(\bar{y}_i\) of an SRS of \(m_i\)
+elements. The value \(\bar{y}_j^*\) of draw \(j\) has two sources of
+randomness: which cluster \(i\) is drawn (with probability \(\psi_i\)),
+and which \(m_i\) elements are subsampled from it. Conditioning on the
+cluster, \(E(\bar{y}_j^*\mid i)=\bar{y}_{iU}\) and
+\(V(\bar{y}_j^*\mid i)=V_{2i}\), so \[
+E(\bar{y}_j^*)=\sum_{i=1}^N\psi_i\,\bar{y}_{iU}=\sum_{i=1}^N\frac{M_i}{M_0}\frac{t_i}{M_i}=\bar{y}_U,
+\] and, by the law of total variance, \[
+V(\bar{y}_j^*)=\underbrace{V\big(E[\bar{y}_j^*\mid i]\big)}_{\text{which cluster}}
++\underbrace{E\big(V[\bar{y}_j^*\mid i]\big)}_{\text{which elements}}
+=\underbrace{\sum_{i=1}^N\psi_i\left(\bar{y}_{iU}-\bar{y}_U\right)^2}_{\text{between clusters}}
++\underbrace{\sum_{i=1}^N\psi_i\,V_{2i}}_{\text{within clusters}} .
+\] In one-stage sampling \(V_{2i}=0\) and only the between-cluster term
+remains. Because the \(n\) draws are independent and identically
+distributed, so are \(\bar{y}_1^*,\dots,\bar{y}_n^*\), and their sample
+variance is unbiased for the whole variance: \[
+E\left(s_{\bar{y}^*}^2\right)=V(\bar{y}_j^*)=\text{between}+\text{within},\qquad
+E\left[\widehat{V}(\hat{\bar{y}}_{\mathrm{HH}})\right]=E\left(\frac{s_{\bar{y}^*}^2}{n}\right)=\frac{V(\bar{y}_j^*)}{n}=V(\hat{\bar{y}}_{\mathrm{HH}}).
+\] The within-cluster variation is visible in the spread of the values
+\(\bar{y}_j^*\): two draws of clusters with the same true mean still
+give different \(\bar{y}_j^*\) because of the subsampling (home H12 in
+the example below gives \(0.95\) on one draw and \(0.80\) on the other).
+So no estimate of \(S_i^2\) is needed, and the method works even with
+\(m_i=1\). This relies on three conditions: the clusters are drawn
+\textbf{with replacement}, a cluster drawn twice is \textbf{subsampled
+again, independently}, on each draw (reusing one subsample would make
+those two draws dependent), and the subsample mean is \textbf{unbiased}
+for the cluster mean, for example with an SRS within the cluster.
+
+\emph{Compare with two-stage sampling of clusters without replacement.}
+There, the cluster-level values are not iid: the between-cluster formula
+applied to the estimated totals carries the finite population correction
+\((1-n/N)\), and captures only a fraction (about \(n/N\)) of the
+within-cluster variance, so the rest must be added back with an estimate
+of \(S_i^2\). With replacement there is no finite population correction,
+and nothing is lost. The price is that \(s_{\bar{y}^*}^2\) estimates
+only the \textbf{sum} of the two components: a single sample does not
+tell how much of the variance is due to the choice of the clusters and
+how much to the subsampling, which is what one would need to decide
+between more clusters and larger subsamples \(m_i\).
 
 \subsection{Example: Falls in Long-Term Care Homes, Two
 Stages}\label{sec-ups-twostage-example}
@@ -10829,50 +10962,53 @@ Falls in subsample
 
 }
 
-The data enter \texttt{upswr\_est} through the estimated totals
-\(\hat{t}_j^*\) (as \texttt{ydata}) and the sizes \(M_j^*\) (as
-\texttt{xdata}), whose ratios are the subsample means \(\bar{y}_j^*\).
-The working table lists them, their deviations from
-\(\hat{B}_{\mathrm{HH}}\) and the squared deviations:
+The data enter \texttt{cluster\_upswr} through the estimated totals
+\(\hat{t}_j^*\) and the sizes \(M_j^*\), whose ratios are the subsample
+means \(\bar{y}_j^*\) (\texttt{t\_label} names the totals column
+\(\hat{t}_j^*\)). The working table lists them, their deviations from
+\(\hat{\bar{y}}_{\mathrm{HH}}\) and the squared deviations:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{res\_falls2\_B }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(ti\_hat2, Mi2, }\AttributeTok{xbar\_pop =}\NormalTok{ Mbar\_U, }\AttributeTok{tx\_pop =}\NormalTok{ M0, }\AttributeTok{method =} \StringTok{"ratio"}\NormalTok{, }\AttributeTok{decimals =} \DecValTok{4}\NormalTok{)}
+\NormalTok{res\_falls2\_B }\OtherTok{\textless{}{-}} \FunctionTok{cluster\_upswr}\NormalTok{(ti\_hat2, Mi2, }\AttributeTok{N =}\NormalTok{ N, }\AttributeTok{M0 =}\NormalTok{ M0, }\AttributeTok{estimate =} \StringTok{"ybar"}\NormalTok{, }\AttributeTok{cluster =}\NormalTok{ home2,}
+                              \AttributeTok{t\_label =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat t\_j\^{}*"}\NormalTok{)}
 \NormalTok{res\_falls2\_B}\SpecialCharTok{$}\NormalTok{table}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{table}[H]
 \caption*{
-{\large  UPSWR Hansen-Hurwitz Estimation: Working Table\normalsize } \\ 
-{\normalsize  \(n = 8\)\normalsize }
+{\large  UPSWR Cluster Sampling (Hansen-Hurwitz): Working Table\normalsize } \\ 
+{\normalsize  \(n = 8\) draws, \(N = 40\), \(M_0 = 3,000\), \(\bar M_U = M_0/N = 75.00\)\normalsize }
 } 
 \normalsize
-\begin{gtfit}{\linewidth}{>{\raggedright\arraybackslash}p{\dimexpr 30.00pt -2\tabcolsep-1.5\arrayrulewidth}>{\raggedleft\arraybackslash}p{\dimexpr 82.50pt -2\tabcolsep-1.5\arrayrulewidth}>{\raggedleft\arraybackslash}p{\dimexpr 82.50pt -2\tabcolsep-1.5\arrayrulewidth}>{\raggedleft\arraybackslash}p{\dimexpr 82.50pt -2\tabcolsep-1.5\arrayrulewidth}>{\raggedleft\arraybackslash}p{\dimexpr 82.50pt -2\tabcolsep-1.5\arrayrulewidth}}
+\begin{gtfit}{\linewidth}{llrrrrr}
 \toprule
-\(i\) & \(b_j^*\) & \(\hat B_{\mathrm{HH}}\) & \(b_j^*-\hat B_{\mathrm{HH}}\) & \((b_j^*-\hat B_{\mathrm{HH}})^2\)\textsuperscript{\textit{1}} \\ 
+\(j\) & Cluster & \(M_j^*\) & \(\hat t_j^*\) & \(\bar y_j^* = \hat t_j^*/M_j^*\) & \(\bar y_j^* - \hat{\bar y}_{\mathrm{HH}}\) & \((\bar y_j^* - \hat{\bar y}_{\mathrm{HH}})^2\)\textsuperscript{\textit{1}} \\ 
 \midrule\addlinespace[2.5pt]
-1 & 0.9500 & 0.8458 & 0.1042 & 0.0109 \\ 
-2 & 0.7500 & 0.8458 & -0.0958 & 0.0092 \\ 
-3 & 0.8000 & 0.8458 & -0.0458 & 0.0021 \\ 
-4 & 0.8000 & 0.8458 & -0.0458 & 0.0021 \\ 
-5 & 0.9000 & 0.8458 & 0.0542 & 0.0029 \\ 
-6 & 1.0500 & 0.8458 & 0.2042 & 0.0417 \\ 
-... & ... & ... & ... & ... \\ 
-{\bfseries Sum} & {\bfseries 6.7667} & {\bfseries 0.8458} & {\bfseries 0.0000} & {\bfseries 0.1010} \\ 
+1 & H12 & 180.0 & 171.0 & 0.9500 & 0.1042 & 0.0109 \\ 
+2 & H03 & 60.0 & 45.0 & 0.7500 & -0.0958 & 0.0092 \\ 
+3 & H27 & 240.0 & 192.0 & 0.8000 & -0.0458 & 0.0021 \\ 
+4 & H12 & 180.0 & 144.0 & 0.8000 & -0.0458 & 0.0021 \\ 
+5 & H31 & 95.0 & 85.5 & 0.9000 & 0.0542 & 0.0029 \\ 
+6 & H08 & 120.0 & 126.0 & 1.0500 & 0.2042 & 0.0417 \\ 
+7 & H19 & 45.0 & 30.0 & 0.6667 & -0.1792 & 0.0321 \\ 
+8 & H36 & 150.0 & 127.5 & 0.8500 & 0.0042 & 0.0000 \\ 
+{\bfseries Sum} & {\bfseries } & {\bfseries } & {\bfseries } & {\bfseries 6.7667} & {\bfseries 0.0000} & {\bfseries 0.1010} \\ 
 \bottomrule
 \end{gtfit}
 \begin{minipage}{\linewidth}
 \vspace{.05em}
-\textsuperscript{\textit{1}}\(s_{b^*}^2 = \sum_i (b_j^*-\hat B_{\mathrm{HH}})^2/(n-1) = 0.0144\).\\
-\(\hat B_{\mathrm{HH}} = \dfrac{\sum_i b_j^*}{n} = \dfrac{6.7667}{8} = 0.8458\)\\
-\(\mathrm{SE}(\hat B_{\mathrm{HH}}) = \dfrac{s_{b^*}}{\sqrt n} = \dfrac{0.1201}{\sqrt{8}} = 0.0425\)\\
+\textsuperscript{\textit{1}}\(s_{\bar y^*}^2 = \sum_j (\bar y_j^* - \hat{\bar y}_{\mathrm{HH}})^2/(n-1) = 0.0144\), \(s_{\bar y^*} = 0.1201\).\\
+Mean per element: \(\hat{\bar y}_{\mathrm{HH}} = \dfrac{\sum_j \bar y_j^*}{n} = \dfrac{6.7667}{8} = 0.8458\), \(\mathrm{SE}(\hat{\bar y}_{\mathrm{HH}}) = \dfrac{s_{\bar y^*}}{\sqrt n} = 0.0425\)\\
+Mean per cluster: \(\hat{\bar t}_{\mathrm{HH}} = \bar M_U\,\hat{\bar y}_{\mathrm{HH}} = 75.00 \times 0.8458 = 63.44\), \(\mathrm{SE}(\hat{\bar t}_{\mathrm{HH}}) = 3.18\)\\
+Total: \(\hat t_{\mathrm{HH}} = M_0\,\hat{\bar y}_{\mathrm{HH}} = 3,000 \times 0.8458 = 2,537.50\), \(\mathrm{SE}(\hat t_{\mathrm{HH}}) = 127.39\)\\
 \end{minipage}
 \end{table}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{res\_falls2\_B}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_B"}\NormalTok{)}
+\NormalTok{res\_falls2\_B}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_ybar"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -10880,7 +11016,7 @@ The working table lists them, their deviations from
 \normalsize
 \begin{gtfit}{0.7\linewidth}{rrrr}
 \toprule
-\(\hat{B}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{B}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
+\(\hat{\bar{y}}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
 \midrule\addlinespace[2.5pt]
 0.85 & 0.04 & 0.75 & 0.95 \\ 
 \bottomrule
@@ -10891,8 +11027,8 @@ Multiplying by \(\bar{M}_U=75\) and \(M_0=3{,}000\):
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{res\_falls2\_home }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(ti\_hat2, Mi2, }\AttributeTok{xbar\_pop =}\NormalTok{ Mbar\_U, }\AttributeTok{tx\_pop =}\NormalTok{ M0, }\AttributeTok{method =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
-\NormalTok{res\_falls2\_home}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_ybar"}\NormalTok{)}
+\NormalTok{res\_falls2\_home }\OtherTok{\textless{}{-}} \FunctionTok{cluster\_upswr}\NormalTok{(ti\_hat2, Mi2, }\AttributeTok{N =}\NormalTok{ N, }\AttributeTok{M0 =}\NormalTok{ M0, }\AttributeTok{estimate =} \StringTok{"tbar"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{res\_falls2\_home}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_tbar"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -10900,7 +11036,7 @@ Multiplying by \(\bar{M}_U=75\) and \(M_0=3{,}000\):
 \normalsize
 \begin{gtfit}{0.7\linewidth}{rrrr}
 \toprule
-\(\hat{\bar{y}}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
+\(\hat{\bar{t}}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{\bar{t}}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
 \midrule\addlinespace[2.5pt]
 63.44 & 3.18 & 55.91 & 70.97 \\ 
 \bottomrule
@@ -10909,7 +11045,7 @@ Multiplying by \(\bar{M}_U=75\) and \(M_0=3{,}000\):
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{res\_falls2\_total }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(ti\_hat2, Mi2, }\AttributeTok{xbar\_pop =}\NormalTok{ Mbar\_U, }\AttributeTok{tx\_pop =}\NormalTok{ M0, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{res\_falls2\_total }\OtherTok{\textless{}{-}} \FunctionTok{cluster\_upswr}\NormalTok{(ti\_hat2, Mi2, }\AttributeTok{N =}\NormalTok{ N, }\AttributeTok{M0 =}\NormalTok{ M0, }\AttributeTok{estimate =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
 \NormalTok{res\_falls2\_total}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -10926,11 +11062,11 @@ Multiplying by \(\bar{M}_U=75\) and \(M_0=3{,}000\):
 \end{table}
 
 \textbf{Output Note:} The estimated number of falls per resident is
-\(\hat{B}_{\mathrm{HH}}=0.846\) (SE 0.042), the plain average of the
-eight subsample means. A typical home has 63.4 falls per year (SE 3.2),
-and the 40 homes together have about 2,538 falls (SE 127). The standard
-error is computed exactly as in the one-stage example, from the eight
-values \(\bar{y}_j^*\) alone. Here it is a little larger than the
+\(\hat{\bar{y}}_{\mathrm{HH}}=0.846\) (SE 0.042), the plain average of
+the eight subsample means. A typical home has 63.4 falls per year (SE
+3.2), and the 40 homes together have about 2,538 falls (SE 127). The
+standard error is computed exactly as in the one-stage example, from the
+eight values \(\bar{y}_j^*\) alone. Here it is a little larger than the
 one-stage SE of 0.037, as expected, since the subsample means carry the
 extra sampling noise of the second stage (for home H12, the two draws
 gave \(\bar{y}=0.95\) and \(0.80\)); in a single sample this is not
@@ -11491,24 +11627,53 @@ exactly when (Section~\ref{sec-ups-compare-theory}) \[
 \boxed{H_d=\frac{\sum_{i=1}^N d_i^2}{\sum_{i=1}^N d_i^2/x_i}>\bar{x}_U}
 \]
 
-\textbf{One-stage cluster sampling with PPS}: \(y_i \to t_i\),
-\(x_i \to M_i\), \(\psi_i = M_i/M_0\); the ratio of the cluster on draw
-\(j\) is its mean per element \(\bar y_j^*\)
-(Section~\ref{sec-ups-cluster-theory}): \[
-\boxed{\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
-\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}},\qquad
-s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{b}^*\right)^2
+\textbf{Cluster sampling with PPS, one or two stages}
+(Section~\ref{sec-ups-cluster-theory},
+Section~\ref{sec-ups-twostage-theory}): \(n\) clusters are drawn with
+replacement with \(\psi_i = M_i/M_0\); \(\bar M_U = M_0/N\). Here
+\(\bar y_j^*\) is the mean per element of the cluster on draw \(j\): its
+true mean \(t_j^*/M_j^*\) (one stage), or the mean of an SRS of
+\(m_j^*\) of its elements, \(\hat t_j^*/M_j^*\), taken afresh on every
+draw (two stages). The formulas are the same in both designs: \[
+\boxed{\hat{\bar{y}}_{\mathrm{HH}}=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*,\qquad
+\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
+s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\hat{\bar{y}}_{\mathrm{HH}}\right)^2}
 \]
 
-\textbf{Two-stage cluster sampling with PPS}: \(\bar y_j^*\) is now the
-mean of the \(m_j\) elements subsampled on draw \(j\); the mean per
-cluster and the total are \(\bar M_U\hat B_{\mathrm{HH}}\) and
-\(M_0\hat B_{\mathrm{HH}}\), with SEs scaled the same way
-(Section~\ref{sec-ups-twostage-theory}): \[
-\boxed{\hat{B}_{\mathrm{HH}}=\bar{y}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
-\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
-s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{y}^*\right)^2
-\]
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Quantity
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Estimated SE
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Mean per element (ssu-level mean), \(\bar y_U = t/M_0\) &
+\(\hat{\bar y}_{\mathrm{HH}}\) & \(s_{\bar y^*}/\sqrt n\) \\
+Mean per cluster (psu-level mean of the totals), \(\bar t_U = t/N\) &
+\(\hat{\bar t}_{\mathrm{HH}} = \bar M_U\,\hat{\bar y}_{\mathrm{HH}}\) &
+\(\bar M_U\,s_{\bar y^*}/\sqrt n\) \\
+Total, \(t\) &
+\(\hat t_{\mathrm{HH}} = M_0\,\hat{\bar y}_{\mathrm{HH}}\) &
+\(M_0\,s_{\bar y^*}/\sqrt n\) \\
+\end{longtable}
+}
+
+No second-stage variance term is needed: with \(\bar y_{iU} = t_i/M_i\)
+and \(V_{2i} = \left(1-\frac{m_i}{M_i}\right)\frac{S_i^2}{m_i}\)
+(\(V_{2i}=0\) in one stage), \[
+V(\bar y_j^*) = \underbrace{\sum_{i=1}^N\psi_i\left(\bar y_{iU}-\bar y_U\right)^2}_{\text{between clusters}} + \underbrace{\sum_{i=1}^N\psi_i V_{2i}}_{\text{within clusters}},
+\qquad E\left(s_{\bar y^*}^2\right) = V(\bar y_j^*),
+\] since the draws \(\bar y_1^*,\dots,\bar y_n^*\) are iid.
 
 \textbf{Horvitz--Thompson (HT) estimator}: without replacement, with
 inclusion probabilities \(\pi_i = P(i\in\mathcal S)\), for example
@@ -11901,7 +12066,7 @@ source is listed below for reference.
 
 \CommentTok{\# Helper function to format estimation outputs with appropriate mathematical headers}
 \NormalTok{format\_est\_gt }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(est\_data, }\AttributeTok{est\_type =} \FunctionTok{c}\NormalTok{(}\StringTok{"mean"}\NormalTok{, }\StringTok{"total"}\NormalTok{, }\StringTok{"ratio"}\NormalTok{, }\StringTok{"reg\_mean"}\NormalTok{, }\StringTok{"reg\_total"}\NormalTok{, }\StringTok{"ratio\_mean"}\NormalTok{, }\StringTok{"domain\_mean"}\NormalTok{,}
-                                                 \StringTok{"hh\_total"}\NormalTok{, }\StringTok{"hh\_B"}\NormalTok{, }\StringTok{"hh\_ybar"}\NormalTok{)) \{}
+                                                 \StringTok{"hh\_total"}\NormalTok{, }\StringTok{"hh\_B"}\NormalTok{, }\StringTok{"hh\_ybar"}\NormalTok{, }\StringTok{"hh\_tbar"}\NormalTok{)) \{}
 \NormalTok{  est\_type }\OtherTok{\textless{}{-}} \FunctionTok{match.arg}\NormalTok{(est\_type)}
 
 \NormalTok{  sym\_map }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
@@ -11919,7 +12084,10 @@ source is listed below for reference.
     \StringTok{"hh\_B"}          \OtherTok{=} \FunctionTok{c}\NormalTok{(}\AttributeTok{est =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{B\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}$"}\NormalTok{,}
                         \AttributeTok{se  =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{B\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\})$"}\NormalTok{),}
     \StringTok{"hh\_ybar"}       \OtherTok{=} \FunctionTok{c}\NormalTok{(}\AttributeTok{est =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{y\}\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}$"}\NormalTok{,}
-                        \AttributeTok{se  =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{y\}\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\})$"}\NormalTok{)}
+                        \AttributeTok{se  =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{y\}\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\})$"}\NormalTok{),}
+    \DocumentationTok{\#\# UPSWR of clusters (cluster\_upswr): mean of the cluster totals}
+    \StringTok{"hh\_tbar"}       \OtherTok{=} \FunctionTok{c}\NormalTok{(}\AttributeTok{est =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{t\}\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}$"}\NormalTok{,}
+                        \AttributeTok{se  =} \StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar\{t\}\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\})$"}\NormalTok{)}
 \NormalTok{  )}
 
 \NormalTok{  est\_sym }\OtherTok{\textless{}{-}}\NormalTok{ sym\_map[[est\_type]][}\StringTok{"est"}\NormalTok{]}
@@ -12720,6 +12888,92 @@ source is listed below for reference.
                   \AttributeTok{decimals =}\NormalTok{ decimals)}
 \NormalTok{  res}\SpecialCharTok{$}\NormalTok{estimate }\OtherTok{\textless{}{-}}\NormalTok{ scale }\SpecialCharTok{*}\NormalTok{ res}\SpecialCharTok{$}\NormalTok{estimate}
 \NormalTok{  res}
+\NormalTok{\}}
+
+\DocumentationTok{\#\# UPSWR (Hansen{-}Hurwitz) estimation for cluster sampling, with clusters}
+\DocumentationTok{\#\# drawn with replacement with probabilities psi\_i = M\_i / M0. It calls}
+\DocumentationTok{\#\# upswr\_est() with y = t (cluster totals) and x = M (cluster sizes), so the}
+\DocumentationTok{\#\# ratio b\_j* = t\_j*/M\_j* is the mean per element (ssu{-}level mean) ybar\_j* of}
+\DocumentationTok{\#\# the cluster of draw j, and reports the results in cluster notation:}
+\DocumentationTok{\#\#   ybar {-}{-}{-} mean per element, ybar\_U = t/M0, estimated by ybarhat\_HH = mean(ybar\_j*)}
+\DocumentationTok{\#\#   tbar {-}{-}{-} mean per cluster (psu{-}level mean of the totals), tbar\_U = t/N,}
+\DocumentationTok{\#\#            estimated by Mbar\_U * ybarhat\_HH}
+\DocumentationTok{\#\#   total {-}{-}{-} population total t, estimated by M0 * ybarhat\_HH}
+\DocumentationTok{\#\# ti {-}{-}{-} cluster totals of the n draws (repeats kept); in a two{-}stage design,}
+\DocumentationTok{\#\#        the estimated totals M\_i * ybar\_i from the subsamples}
+\DocumentationTok{\#\# Mi {-}{-}{-} cluster sizes of the n draws}
+\DocumentationTok{\#\# N, M0 {-}{-}{-} number of clusters and number of elements in the population}
+\DocumentationTok{\#\# estimate {-}{-}{-} which of the three quantities to return ("ybar" default)}
+\DocumentationTok{\#\# cluster {-}{-}{-} optional labels of the drawn clusters, shown in the working table}
+\DocumentationTok{\#\# t\_label {-}{-}{-} RAW latex for the totals column ("\textbackslash{}\textbackslash{}hat t\_j\^{}*" for two stages)}
+\DocumentationTok{\#\# returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)}
+\NormalTok{cluster\_upswr }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{ (ti, Mi, N, M0, }\AttributeTok{estimate =} \FunctionTok{c}\NormalTok{ (}\StringTok{"ybar"}\NormalTok{, }\StringTok{"tbar"}\NormalTok{, }\StringTok{"total"}\NormalTok{),}
+                           \AttributeTok{show.details =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{cluster =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{t\_label =} \StringTok{"t\_j\^{}*"}\NormalTok{,}
+                           \AttributeTok{decimals =} \DecValTok{4}\NormalTok{)}
+\NormalTok{\{}
+\NormalTok{    estimate }\OtherTok{\textless{}{-}} \FunctionTok{match.arg}\NormalTok{ (estimate)}
+\NormalTok{    Mbar\_U }\OtherTok{\textless{}{-}}\NormalTok{ M0 }\SpecialCharTok{/}\NormalTok{ N}
+\NormalTok{    method }\OtherTok{\textless{}{-}} \ControlFlowTok{switch}\NormalTok{ (estimate, }\AttributeTok{ybar =} \StringTok{"ratio"}\NormalTok{, }\AttributeTok{tbar =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{total =} \StringTok{"total"}\NormalTok{)}
+\NormalTok{    res }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{ (ti, Mi, }\AttributeTok{xbar\_pop =}\NormalTok{ Mbar\_U, }\AttributeTok{tx\_pop =}\NormalTok{ M0, }\AttributeTok{method =}\NormalTok{ method,}
+                      \AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\NormalTok{show.details) }\FunctionTok{return}\NormalTok{ (res)}
+
+    \DocumentationTok{\#\# working table on the scale of the cluster means ybar\_j*}
+\NormalTok{    n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{ (ti)}
+\NormalTok{    ybar\_j }\OtherTok{\textless{}{-}}\NormalTok{ ti }\SpecialCharTok{/}\NormalTok{ Mi}
+\NormalTok{    ybar\_hh }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{ (ybar\_j)}
+\NormalTok{    dev }\OtherTok{\textless{}{-}}\NormalTok{ ybar\_j }\SpecialCharTok{{-}}\NormalTok{ ybar\_hh}
+\NormalTok{    s2 }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{ (dev}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{/}\NormalTok{ (n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{)}
+\NormalTok{    se\_ybar }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{ (s2 }\SpecialCharTok{/}\NormalTok{ n)}
+\NormalTok{    working }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{ (}
+        \AttributeTok{j    =} \FunctionTok{c}\NormalTok{ (}\FunctionTok{seq\_len}\NormalTok{ (n), }\StringTok{"Sum"}\NormalTok{),}
+        \AttributeTok{cl   =} \FunctionTok{c}\NormalTok{ (}\ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.null}\NormalTok{ (cluster)) }\FunctionTok{rep}\NormalTok{ (}\StringTok{""}\NormalTok{, n) }\ControlFlowTok{else} \FunctionTok{as.character}\NormalTok{ (cluster), }\StringTok{""}\NormalTok{),}
+        \AttributeTok{M    =} \FunctionTok{c}\NormalTok{ (Mi, }\ConstantTok{NA}\NormalTok{),}
+        \AttributeTok{t    =} \FunctionTok{c}\NormalTok{ (ti, }\ConstantTok{NA}\NormalTok{),}
+        \AttributeTok{ybar =} \FunctionTok{c}\NormalTok{ (ybar\_j, }\FunctionTok{sum}\NormalTok{ (ybar\_j)),}
+        \AttributeTok{dev  =} \FunctionTok{c}\NormalTok{ (dev, }\FunctionTok{sum}\NormalTok{ (dev)),}
+        \AttributeTok{dev2 =} \FunctionTok{c}\NormalTok{ (dev}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{, }\FunctionTok{sum}\NormalTok{ (dev}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\NormalTok{    )}
+\NormalTok{    working }\OtherTok{\textless{}{-}} \FunctionTok{truncate\_working}\NormalTok{ (working, }\AttributeTok{id\_col =} \StringTok{"j"}\NormalTok{, }\AttributeTok{head\_n =} \DecValTok{10}\NormalTok{)}
+
+\NormalTok{    yh }\OtherTok{\textless{}{-}} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}
+\NormalTok{    th }\OtherTok{\textless{}{-}} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar t\}\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}
+\NormalTok{    Th }\OtherTok{\textless{}{-}} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat t\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}
+\NormalTok{    fn }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{ (x, }\AttributeTok{d =}\NormalTok{ decimals) }\FunctionTok{fmt\_num}\NormalTok{ (x, }\AttributeTok{decimals =}\NormalTok{ d)}
+\NormalTok{    table }\OtherTok{\textless{}{-}} \FunctionTok{gt}\NormalTok{ (working) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_header}\NormalTok{ (}\AttributeTok{title =} \StringTok{"UPSWR Cluster Sampling (Hansen{-}Hurwitz): Working Table"}\NormalTok{,}
+                    \AttributeTok{subtitle =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$n = \%d$ draws, $N = \%s$, $M\_0 = \%s$, $}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar M\_U = M\_0/N = \%s$"}\NormalTok{,}
+\NormalTok{                                            n, }\FunctionTok{fn}\NormalTok{ (N, }\DecValTok{0}\NormalTok{), }\FunctionTok{fn}\NormalTok{ (M0, }\DecValTok{0}\NormalTok{), }\FunctionTok{fn}\NormalTok{ (Mbar\_U, }\DecValTok{2}\NormalTok{)))) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{cols\_label}\NormalTok{ (}
+            \AttributeTok{j    =} \FunctionTok{md}\NormalTok{ (}\StringTok{"$j$"}\NormalTok{),}
+            \AttributeTok{cl   =} \StringTok{"Cluster"}\NormalTok{,}
+            \AttributeTok{M    =} \FunctionTok{md}\NormalTok{ (}\StringTok{"$M\_j\^{}*$"}\NormalTok{),}
+            \AttributeTok{t    =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$\%s$"}\NormalTok{, t\_label)),}
+            \AttributeTok{ybar =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\_j\^{}* = \%s/M\_j\^{}*$"}\NormalTok{, t\_label)),}
+            \AttributeTok{dev  =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\_j\^{}* {-} \%s$"}\NormalTok{, yh)),}
+            \AttributeTok{dev2 =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\_j\^{}* {-} \%s)\^{}2$"}\NormalTok{, yh))}
+\NormalTok{        ) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{fmt\_number}\NormalTok{ (}\AttributeTok{columns =} \FunctionTok{c}\NormalTok{ (}\StringTok{"M"}\NormalTok{, }\StringTok{"t"}\NormalTok{), }\AttributeTok{decimals =} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{all}\NormalTok{ (ti }\SpecialCharTok{==} \FunctionTok{round}\NormalTok{ (ti))) }\DecValTok{0} \ControlFlowTok{else} \DecValTok{1}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{fmt\_auto}\NormalTok{ (}\AttributeTok{data =}\NormalTok{ working, }\AttributeTok{columns =} \FunctionTok{c}\NormalTok{ (}\StringTok{"ybar"}\NormalTok{, }\StringTok{"dev"}\NormalTok{, }\StringTok{"dev2"}\NormalTok{), }\AttributeTok{decimals =}\NormalTok{ decimals) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{sub\_missing}\NormalTok{ (}\AttributeTok{missing\_text =} \StringTok{""}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_style}\NormalTok{ (}\AttributeTok{style =} \FunctionTok{cell\_text}\NormalTok{ (}\AttributeTok{weight =} \StringTok{"bold"}\NormalTok{),}
+                   \AttributeTok{locations =} \FunctionTok{cells\_body}\NormalTok{ (}\AttributeTok{rows =}\NormalTok{ j }\SpecialCharTok{==} \StringTok{"Sum"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_footnote}\NormalTok{ (}
+            \AttributeTok{footnote =} \FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}\StringTok{"$s\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\^{}*\}\^{}2 = }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sum\_j (}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\_j\^{}* {-} \%s)\^{}2/(n{-}1) = \%s$, $s\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\^{}*\} = \%s$."}\NormalTok{,}
+\NormalTok{                                    yh, }\FunctionTok{fn}\NormalTok{ (s2), }\FunctionTok{fn}\NormalTok{ (}\FunctionTok{sqrt}\NormalTok{ (s2)))),}
+            \AttributeTok{locations =} \FunctionTok{cells\_column\_labels}\NormalTok{ (}\AttributeTok{columns =}\NormalTok{ dev2)) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_source\_note}\NormalTok{ (}\FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}
+            \StringTok{"Mean per element: $\%s = }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{dfrac\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sum\_j }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\_j\^{}*\}\{n\} = }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{dfrac\{\%s\}\{\%d\} = \%s$, $}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(\%s) = }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{dfrac\{s\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar y\^{}*\}\}\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{sqrt n\} = \%s$"}\NormalTok{,}
+\NormalTok{            yh, }\FunctionTok{fn}\NormalTok{ (}\FunctionTok{sum}\NormalTok{ (ybar\_j)), n, }\FunctionTok{fn}\NormalTok{ (ybar\_hh), yh, }\FunctionTok{fn}\NormalTok{ (se\_ybar)))) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_source\_note}\NormalTok{ (}\FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}
+            \StringTok{"Mean per cluster: $\%s = }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bar M\_U}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{,\%s = \%s }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{times \%s = \%s$, $}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(\%s) = \%s$"}\NormalTok{,}
+\NormalTok{            th, yh, }\FunctionTok{fn}\NormalTok{ (Mbar\_U, }\DecValTok{2}\NormalTok{), }\FunctionTok{fn}\NormalTok{ (ybar\_hh), }\FunctionTok{fn}\NormalTok{ (Mbar\_U }\SpecialCharTok{*}\NormalTok{ ybar\_hh, }\DecValTok{2}\NormalTok{), th, }\FunctionTok{fn}\NormalTok{ (Mbar\_U }\SpecialCharTok{*}\NormalTok{ se\_ybar, }\DecValTok{2}\NormalTok{)))) }\SpecialCharTok{|\textgreater{}}
+        \FunctionTok{tab\_source\_note}\NormalTok{ (}\FunctionTok{md}\NormalTok{ (}\FunctionTok{sprintf}\NormalTok{ (}
+            \StringTok{"Total: $\%s = M\_0}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{,\%s = \%s }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{times \%s = \%s$, $}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{SE\}(\%s) = \%s$"}\NormalTok{,}
+\NormalTok{            Th, yh, }\FunctionTok{fn}\NormalTok{ (M0, }\DecValTok{0}\NormalTok{), }\FunctionTok{fn}\NormalTok{ (ybar\_hh), }\FunctionTok{fn}\NormalTok{ (M0 }\SpecialCharTok{*}\NormalTok{ ybar\_hh, }\DecValTok{2}\NormalTok{), Th, }\FunctionTok{fn}\NormalTok{ (M0 }\SpecialCharTok{*}\NormalTok{ se\_ybar, }\DecValTok{2}\NormalTok{))))}
+    \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.null}\NormalTok{ (cluster)) table }\OtherTok{\textless{}{-}} \FunctionTok{cols\_hide}\NormalTok{ (table, }\StringTok{"cl"}\NormalTok{)}
+
+    \FunctionTok{list}\NormalTok{ (}\AttributeTok{estimate =}\NormalTok{ res}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{table =}\NormalTok{ table)}
 \NormalTok{\}}
 
 \DocumentationTok{\#\# Variance estimate of the Horvitz{-}Thompson total sum(y/pik) for a fixed{-}size}
