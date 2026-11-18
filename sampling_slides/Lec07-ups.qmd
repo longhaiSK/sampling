@@ -14,6 +14,9 @@ knitr::opts_chunk$set(
 )
 ## the figures shared with the book chapter
 source("../sampling_book/design_plots.r")
+## the estimating functions shared with the book chapter (cluster_upswr, ...)
+library(gt)
+source("../sampling_book/samplingestimate.r")
 ```
 
 # The Hansen--Hurwitz Estimator (UPSWR)
@@ -427,14 +430,18 @@ $$
 
 ## Estimates for One-Stage Cluster Sampling
 
-Then $\hat B_{\mathrm{HH}}=\bar b^*=\dfrac1n\sum_{j=1}^n\bar y_j^*$: the **plain average of the sampled cluster
-means** (large clusters are already selected more often), with $\widehat{\mathrm{SE}}=s_{b^*}/\sqrt n$.
+Then $\hat{\bar y}_{\mathrm{HH}}=\hat B_{\mathrm{HH}}=\dfrac1n\sum_{j=1}^n\bar y_j^*$: the **plain average of the sampled cluster
+means** (large clusters are already selected more often), with $\widehat{\mathrm{SE}}=s_{\bar y^*}/\sqrt n$,
+$s_{\bar y^*}^2=\frac{1}{n-1}\sum_j(\bar y_j^*-\hat{\bar y}_{\mathrm{HH}})^2$.
 
 | Quantity | Estimate | Estimated SE |
 |:---|:---|:---|
-| Mean per element $\bar y_U=B$ | $\hat B_{\mathrm{HH}}$ | $s_{b^*}/\sqrt n$ |
-| Mean per cluster $t/N$ | $\bar M_U\,\hat B_{\mathrm{HH}}$ | $\bar M_U\,s_{b^*}/\sqrt n$ |
-| Total $t$ | $M_0\,\hat B_{\mathrm{HH}}$ | $M_0\,s_{b^*}/\sqrt n$ |
+| Mean per element $\bar y_U=t/M_0$ | $\hat{\bar y}_{\mathrm{HH}}$ | $s_{\bar y^*}/\sqrt n$ |
+| Mean per cluster $\bar t_U=t/N$ | $\hat{\bar t}_{\mathrm{HH}}=\bar M_U\,\hat{\bar y}_{\mathrm{HH}}$ | $\bar M_U\,s_{\bar y^*}/\sqrt n$ |
+| Total $t$ | $\hat t_{\mathrm{HH}}=M_0\,\hat{\bar y}_{\mathrm{HH}}$ | $M_0\,s_{\bar y^*}/\sqrt n$ |
+
+In R, `cluster_upswr(ti, Mi, N, M0, estimate)` calls `upswr_est` with $y=t$, $x=M$, and reports in this
+notation; `estimate` is `"ybar"`, `"tbar"` or `"total"`.
 
 ## Example: Falls in Long-Term Care Homes 
 
@@ -445,7 +452,7 @@ selected home is reviewed ($t_i$ = falls in the home). Home H12 is drawn twice (
 
 :::{.column style="width:58%;"}
 
-| $j$ | Home | $M_j^*$ | $t_j^*$ | $b_j^*=t_j^*/M_j^*$ |
+| $j$ | Home | $M_j^*$ | $t_j^*$ | $\bar y_j^*=t_j^*/M_j^*$ |
 |:--:|:--:|--:|--:|--:|
 | 1 | H12 | 180 | 160 | 0.8889 |
 | 2 | H03 | 60 | 49 | 0.8167 |
@@ -461,18 +468,30 @@ selected home is reviewed ($t_i$ = falls in the home). Home H12 is drawn twice (
 
 :::{.column style="width:42%;"}
 
-$\hat B_{\mathrm{HH}}=6.7688/8=0.8461$ falls per resident, $s_{b^*}=0.1036$,
+$\hat{\bar y}_{\mathrm{HH}}=6.7688/8=0.8461$ falls per resident, $s_{\bar y^*}=0.1036$,
 $\widehat{\mathrm{SE}}=0.1036/\sqrt8=0.0366$.
 
 | Quantity | Est. | SE |
 |:---|--:|--:|
-| per resident | 0.846 | 0.037 |
-| per home ($\times75$) | 63.5 | 2.7 |
-| total ($\times3000$) | 2538 | 110 |
+| per resident $\hat{\bar y}_{\mathrm{HH}}$ | 0.846 | 0.037 |
+| per home $\hat{\bar t}_{\mathrm{HH}}$ ($\times75$) | 63.5 | 2.7 |
+| total $\hat t_{\mathrm{HH}}$ ($\times3000$) | 2538 | 110 |
 
 :::
 
 ::::
+
+## Falls in Care Homes with `cluster_upswr` {.smaller .scrollable}
+
+```{r falls-cluster-upswr}
+#| echo: true
+home <- c("H12", "H03", "H27", "H12", "H31", "H08", "H19", "H36")
+Mi <- c(180, 60, 240, 180, 95, 120, 45, 150)
+ti <- c(160, 49, 205, 160, 70, 118, 30, 140)
+res <- cluster_upswr(ti, Mi, N = 40, M0 = 3000, estimate = "total", cluster = home)
+res$table
+res$estimate |> format_est_gt("hh_total")
+```
 
 # Two-Stage Cluster Sampling with Replacement
 
@@ -482,13 +501,13 @@ Select $n$ clusters with replacement, $\psi_i=M_i/M_0$, then take an SRS of $m_i
 **on every draw**: a cluster drawn twice gets two **independent** subsamples. The cluster mean $b_i=t_i/M_i$ is
 not observed, but estimated by the subsample mean $\bar y_i$, and $\hat t_i=M_i\bar y_i$.
 
-The one-stage formulas carry over with $\bar y_j^*$ (subsample mean of draw $j$) in place of $b_j^*$:
+The one-stage formulas carry over with $\bar y_j^*$ now the subsample mean of draw $j$:
 $$
-\hat B_{\mathrm{HH}}=\bar y^*=\frac1n\sum_{j=1}^n\bar y_j^*,\qquad
-\widehat{\mathrm{SE}}(\hat B_{\mathrm{HH}})=\frac{s_{\bar y^*}}{\sqrt n},\qquad
-s_{\bar y^*}^2=\frac{1}{n-1}\sum_{j=1}^n(\bar y_j^*-\bar y^*)^2 ,
+\hat{\bar y}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\bar y_j^*,\qquad
+\widehat{\mathrm{SE}}(\hat{\bar y}_{\mathrm{HH}})=\frac{s_{\bar y^*}}{\sqrt n},\qquad
+s_{\bar y^*}^2=\frac{1}{n-1}\sum_{j=1}^n(\bar y_j^*-\hat{\bar y}_{\mathrm{HH}})^2 ,
 $$
-mean per cluster $\bar M_U\hat B_{\mathrm{HH}}$ and total $M_0\hat B_{\mathrm{HH}}$ with SEs multiplied by the same constants
+mean per cluster $\hat{\bar t}_{\mathrm{HH}}=\bar M_U\hat{\bar y}_{\mathrm{HH}}$ and total $\hat t_{\mathrm{HH}}=M_0\hat{\bar y}_{\mathrm{HH}}$ with SEs multiplied by the same constants
 (each draw estimates the total by $\hat t_j^*/\psi_j^*=M_0\bar y_j^*$).
 
 ::: {.callout-note}
@@ -521,7 +540,7 @@ drawn twice, with different subsample means:
 
 :::{.column style="width:42%;"}
 
-$\hat B_{\mathrm{HH}}=6.767/8=0.846$, $s_{\bar y^*}=0.120$, $\widehat{\mathrm{SE}}=0.120/\sqrt8=0.0425$.
+$\hat{\bar y}_{\mathrm{HH}}=6.767/8=0.846$, $s_{\bar y^*}=0.120$, $\widehat{\mathrm{SE}}=0.120/\sqrt8=0.0425$.
 
 | Quantity | Est. | SE |
 |:---|--:|--:|

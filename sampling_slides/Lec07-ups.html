@@ -968,7 +968,7 @@ b_i=\frac{t_i}{M_i}=\bar y_i ,\qquad B=\frac{t}{M_0}=\bar y_U\ \ (\text{mean per
 </section>
 <section id="estimates-for-one-stage-cluster-sampling" class="slide level2">
 <h2>Estimates for One-Stage Cluster Sampling</h2>
-<p>Then <span class="math inline">\hat B_{\mathrm{HH}}=\bar b^*=\dfrac1n\sum_{j=1}^n\bar y_j^*</span>: the <strong>plain average of the sampled cluster means</strong> (large clusters are already selected more often), with <span class="math inline">\widehat{\mathrm{SE}}=s_{b^*}/\sqrt n</span>.</p>
+<p>Then <span class="math inline">\hat{\bar y}_{\mathrm{HH}}=\hat B_{\mathrm{HH}}=\dfrac1n\sum_{j=1}^n\bar y_j^*</span>: the <strong>plain average of the sampled cluster means</strong> (large clusters are already selected more often), with <span class="math inline">\widehat{\mathrm{SE}}=s_{\bar y^*}/\sqrt n</span>, <span class="math inline">s_{\bar y^*}^2=\frac{1}{n-1}\sum_j(\bar y_j^*-\hat{\bar y}_{\mathrm{HH}})^2</span>.</p>
 <table class="caption-top">
 <colgroup>
 <col style="width: 33%">
@@ -984,22 +984,23 @@ b_i=\frac{t_i}{M_i}=\bar y_i ,\qquad B=\frac{t}{M_0}=\bar y_U\ \ (\text{mean per
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Mean per element <span class="math inline">\bar y_U=B</span></td>
-<td style="text-align: left;"><span class="math inline">\hat B_{\mathrm{HH}}</span></td>
-<td style="text-align: left;"><span class="math inline">s_{b^*}/\sqrt n</span></td>
+<td style="text-align: left;">Mean per element <span class="math inline">\bar y_U=t/M_0</span></td>
+<td style="text-align: left;"><span class="math inline">\hat{\bar y}_{\mathrm{HH}}</span></td>
+<td style="text-align: left;"><span class="math inline">s_{\bar y^*}/\sqrt n</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Mean per cluster <span class="math inline">t/N</span></td>
-<td style="text-align: left;"><span class="math inline">\bar M_U\,\hat B_{\mathrm{HH}}</span></td>
-<td style="text-align: left;"><span class="math inline">\bar M_U\,s_{b^*}/\sqrt n</span></td>
+<td style="text-align: left;">Mean per cluster <span class="math inline">\bar t_U=t/N</span></td>
+<td style="text-align: left;"><span class="math inline">\hat{\bar t}_{\mathrm{HH}}=\bar M_U\,\hat{\bar y}_{\mathrm{HH}}</span></td>
+<td style="text-align: left;"><span class="math inline">\bar M_U\,s_{\bar y^*}/\sqrt n</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Total <span class="math inline">t</span></td>
-<td style="text-align: left;"><span class="math inline">M_0\,\hat B_{\mathrm{HH}}</span></td>
-<td style="text-align: left;"><span class="math inline">M_0\,s_{b^*}/\sqrt n</span></td>
+<td style="text-align: left;"><span class="math inline">\hat t_{\mathrm{HH}}=M_0\,\hat{\bar y}_{\mathrm{HH}}</span></td>
+<td style="text-align: left;"><span class="math inline">M_0\,s_{\bar y^*}/\sqrt n</span></td>
 </tr>
 </tbody>
 </table>
+<p>In R, <code>cluster_upswr(ti, Mi, N, M0, estimate)</code> calls <code>upswr_est</code> with <span class="math inline">y=t</span>, <span class="math inline">x=M</span>, and reports in this notation; <code>estimate</code> is <code>"ybar"</code>, <code>"tbar"</code> or <code>"total"</code>.</p>
 </section>
 <section id="example-falls-in-long-term-care-homes" class="slide level2">
 <h2>Example: Falls in Long-Term Care Homes</h2>
@@ -1013,7 +1014,7 @@ b_i=\frac{t_i}{M_i}=\bar y_i ,\qquad B=\frac{t}{M_0}=\bar y_U\ \ (\text{mean per
 <th style="text-align: center;">Home</th>
 <th style="text-align: right;"><span class="math inline">M_j^*</span></th>
 <th style="text-align: right;"><span class="math inline">t_j^*</span></th>
-<th style="text-align: right;"><span class="math inline">b_j^*=t_j^*/M_j^*</span></th>
+<th style="text-align: right;"><span class="math inline">\bar y_j^*=t_j^*/M_j^*</span></th>
 </tr>
 </thead>
 <tbody>
@@ -1083,7 +1084,7 @@ b_i=\frac{t_i}{M_i}=\bar y_i ,\qquad B=\frac{t}{M_0}=\bar y_U\ \ (\text{mean per
 </tbody>
 </table>
 </div><div class="column" style="width:42%;">
-<p><span class="math inline">\hat B_{\mathrm{HH}}=6.7688/8=0.8461</span> falls per resident, <span class="math inline">s_{b^*}=0.1036</span>, <span class="math inline">\widehat{\mathrm{SE}}=0.1036/\sqrt8=0.0366</span>.</p>
+<p><span class="math inline">\hat{\bar y}_{\mathrm{HH}}=6.7688/8=0.8461</span> falls per resident, <span class="math inline">s_{\bar y^*}=0.1036</span>, <span class="math inline">\widehat{\mathrm{SE}}=0.1036/\sqrt8=0.0366</span>.</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -1094,23 +1095,1087 @@ b_i=\frac{t_i}{M_i}=\bar y_i ,\qquad B=\frac{t}{M_0}=\bar y_U\ \ (\text{mean per
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">per resident</td>
+<td style="text-align: left;">per resident <span class="math inline">\hat{\bar y}_{\mathrm{HH}}</span></td>
 <td style="text-align: right;">0.846</td>
 <td style="text-align: right;">0.037</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">per home (<span class="math inline">\times75</span>)</td>
+<td style="text-align: left;">per home <span class="math inline">\hat{\bar t}_{\mathrm{HH}}</span> (<span class="math inline">\times75</span>)</td>
 <td style="text-align: right;">63.5</td>
 <td style="text-align: right;">2.7</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">total (<span class="math inline">\times3000</span>)</td>
+<td style="text-align: left;">total <span class="math inline">\hat t_{\mathrm{HH}}</span> (<span class="math inline">\times3000</span>)</td>
 <td style="text-align: right;">2538</td>
 <td style="text-align: right;">110</td>
 </tr>
 </tbody>
 </table>
 </div></div>
+</section>
+<section id="falls-in-care-homes-with-cluster_upswr" class="slide level2 smaller scrollable">
+<h2>Falls in Care Homes with <code>cluster_upswr</code></h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>home <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"H12"</span>, <span class="st">"H03"</span>, <span class="st">"H27"</span>, <span class="st">"H12"</span>, <span class="st">"H31"</span>, <span class="st">"H08"</span>, <span class="st">"H19"</span>, <span class="st">"H36"</span>)</span>
+<span id="cb4-2"><a href=""></a>Mi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">180</span>, <span class="dv">60</span>, <span class="dv">240</span>, <span class="dv">180</span>, <span class="dv">95</span>, <span class="dv">120</span>, <span class="dv">45</span>, <span class="dv">150</span>)</span>
+<span id="cb4-3"><a href=""></a>ti <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">160</span>, <span class="dv">49</span>, <span class="dv">205</span>, <span class="dv">160</span>, <span class="dv">70</span>, <span class="dv">118</span>, <span class="dv">30</span>, <span class="dv">140</span>)</span>
+<span id="cb4-4"><a href=""></a>res <span class="ot">&lt;-</span> <span class="fu">cluster_upswr</span>(ti, Mi, <span class="at">N =</span> <span class="dv">40</span>, <span class="at">M0 =</span> <span class="dv">3000</span>, <span class="at">estimate =</span> <span class="st">"total"</span>, <span class="at">cluster =</span> home)</span>
+<span id="cb4-5"><a href=""></a>res<span class="sc">$</span>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="ydgabwknrs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ydgabwknrs table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ydgabwknrs thead, #ydgabwknrs tbody, #ydgabwknrs tfoot, #ydgabwknrs tr, #ydgabwknrs td, #ydgabwknrs th {
+  border-style: none;
+}
+
+#ydgabwknrs p {
+  margin: 0;
+  padding: 0;
+}
+
+#ydgabwknrs .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ydgabwknrs .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ydgabwknrs .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ydgabwknrs .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ydgabwknrs .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ydgabwknrs .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ydgabwknrs .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ydgabwknrs .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ydgabwknrs .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ydgabwknrs .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ydgabwknrs .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ydgabwknrs .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ydgabwknrs .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ydgabwknrs .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ydgabwknrs .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ydgabwknrs .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ydgabwknrs .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ydgabwknrs .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ydgabwknrs .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ydgabwknrs .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ydgabwknrs .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ydgabwknrs .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ydgabwknrs .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ydgabwknrs .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ydgabwknrs .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ydgabwknrs .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ydgabwknrs .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ydgabwknrs .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ydgabwknrs .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ydgabwknrs .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ydgabwknrs .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ydgabwknrs .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ydgabwknrs .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ydgabwknrs .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ydgabwknrs .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ydgabwknrs .gt_left {
+  text-align: left;
+}
+
+#ydgabwknrs .gt_center {
+  text-align: center;
+}
+
+#ydgabwknrs .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ydgabwknrs .gt_font_normal {
+  font-weight: normal;
+}
+
+#ydgabwknrs .gt_font_bold {
+  font-weight: bold;
+}
+
+#ydgabwknrs .gt_font_italic {
+  font-style: italic;
+}
+
+#ydgabwknrs .gt_super {
+  font-size: 65%;
+}
+
+#ydgabwknrs .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ydgabwknrs .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ydgabwknrs .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ydgabwknrs .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ydgabwknrs .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ydgabwknrs .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ydgabwknrs .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ydgabwknrs .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ydgabwknrs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" style="width:100%;" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="gt_heading header">
+<td colspan="7" class="gt_heading gt_title gt_font_normal">UPSWR Cluster Sampling (Hansen-Hurwitz): Working Table</td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="7" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border"><span class="math inline">n = 8</span> draws, <span class="math inline">N = 40</span>, <span class="math inline">M_0 = 3,000</span>, <span class="math inline">\bar M_U = M_0/N = 75.00</span></td>
+</tr>
+<tr class="gt_col_headings header">
+<th id="j" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><span class="math inline">j</span></th>
+<th id="cl" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Cluster</th>
+<th id="M" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">M_j^*</span></th>
+<th id="t" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">t_j^*</span></th>
+<th id="ybar" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\bar y_j^* = t_j^*/M_j^*</span></th>
+<th id="dev" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\bar y_j^* - \hat{\bar y}_{\mathrm{HH}}</span></th>
+<th id="dev2" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">(\bar y_j^* - \hat{\bar y}_{\mathrm{HH}})^2</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="j">1</td>
+<td class="gt_row gt_left" headers="cl">H12</td>
+<td class="gt_row gt_right" headers="M">180</td>
+<td class="gt_row gt_right" headers="t">160</td>
+<td class="gt_row gt_right" headers="ybar">0.8889</td>
+<td class="gt_row gt_right" headers="dev">0.0428</td>
+<td class="gt_row gt_right" headers="dev2">0.0018</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="j">2</td>
+<td class="gt_row gt_left" headers="cl">H03</td>
+<td class="gt_row gt_right" headers="M">60</td>
+<td class="gt_row gt_right" headers="t">49</td>
+<td class="gt_row gt_right" headers="ybar">0.8167</td>
+<td class="gt_row gt_right" headers="dev">−0.0294</td>
+<td class="gt_row gt_right" headers="dev2">0.0009</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="j">3</td>
+<td class="gt_row gt_left" headers="cl">H27</td>
+<td class="gt_row gt_right" headers="M">240</td>
+<td class="gt_row gt_right" headers="t">205</td>
+<td class="gt_row gt_right" headers="ybar">0.8542</td>
+<td class="gt_row gt_right" headers="dev">0.0081</td>
+<td class="gt_row gt_right" headers="dev2">0.0001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="j">4</td>
+<td class="gt_row gt_left" headers="cl">H12</td>
+<td class="gt_row gt_right" headers="M">180</td>
+<td class="gt_row gt_right" headers="t">160</td>
+<td class="gt_row gt_right" headers="ybar">0.8889</td>
+<td class="gt_row gt_right" headers="dev">0.0428</td>
+<td class="gt_row gt_right" headers="dev2">0.0018</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="j">5</td>
+<td class="gt_row gt_left" headers="cl">H31</td>
+<td class="gt_row gt_right" headers="M">95</td>
+<td class="gt_row gt_right" headers="t">70</td>
+<td class="gt_row gt_right" headers="ybar">0.7368</td>
+<td class="gt_row gt_right" headers="dev">−0.1093</td>
+<td class="gt_row gt_right" headers="dev2">0.0119</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="j">6</td>
+<td class="gt_row gt_left" headers="cl">H08</td>
+<td class="gt_row gt_right" headers="M">120</td>
+<td class="gt_row gt_right" headers="t">118</td>
+<td class="gt_row gt_right" headers="ybar">0.9833</td>
+<td class="gt_row gt_right" headers="dev">0.1372</td>
+<td class="gt_row gt_right" headers="dev2">0.0188</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="j">7</td>
+<td class="gt_row gt_left" headers="cl">H19</td>
+<td class="gt_row gt_right" headers="M">45</td>
+<td class="gt_row gt_right" headers="t">30</td>
+<td class="gt_row gt_right" headers="ybar">0.6667</td>
+<td class="gt_row gt_right" headers="dev">−0.1794</td>
+<td class="gt_row gt_right" headers="dev2">0.0322</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="j">8</td>
+<td class="gt_row gt_left" headers="cl">H36</td>
+<td class="gt_row gt_right" headers="M">150</td>
+<td class="gt_row gt_right" headers="t">140</td>
+<td class="gt_row gt_right" headers="ybar">0.9333</td>
+<td class="gt_row gt_right" headers="dev">0.0872</td>
+<td class="gt_row gt_right" headers="dev2">0.0076</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="j" style="font-weight: bold">Sum</td>
+<td class="gt_row gt_left" headers="cl" style="font-weight: bold"></td>
+<td class="gt_row gt_right" headers="M" style="font-weight: bold"><br>
+</td>
+<td class="gt_row gt_right" headers="t" style="font-weight: bold"><br>
+</td>
+<td class="gt_row gt_right" headers="ybar" style="font-weight: bold">6.7688</td>
+<td class="gt_row gt_right" headers="dev" style="font-weight: bold">0.0000</td>
+<td class="gt_row gt_right" headers="dev2" style="font-weight: bold">0.0752</td>
+</tr>
+</tbody><tfoot>
+<tr class="gt_footnotes odd">
+<td colspan="7" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class="math inline">s_{\bar y^*}^2 = \sum_j (\bar y_j^* - \hat{\bar y}_{\mathrm{HH}})^2/(n-1) = 0.0107</span>, <span class="math inline">s_{\bar y^*} = 0.1036</span>.</td>
+</tr>
+<tr class="gt_sourcenotes even">
+<td colspan="7" class="gt_sourcenote">Mean per element: <span class="math inline">\hat{\bar y}_{\mathrm{HH}} = \dfrac{\sum_j \bar y_j^*}{n} = \dfrac{6.7688}{8} = 0.8461</span>, <span class="math inline">\mathrm{SE}(\hat{\bar y}_{\mathrm{HH}}) = \dfrac{s_{\bar y^*}}{\sqrt n} = 0.0366</span></td>
+</tr>
+<tr class="gt_sourcenotes odd">
+<td colspan="7" class="gt_sourcenote">Mean per cluster: <span class="math inline">\hat{\bar t}_{\mathrm{HH}} = \bar M_U\,\hat{\bar y}_{\mathrm{HH}} = 75.00 \times 0.8461 = 63.46</span>, <span class="math inline">\mathrm{SE}(\hat{\bar t}_{\mathrm{HH}}) = 2.75</span></td>
+</tr>
+<tr class="gt_sourcenotes even">
+<td colspan="7" class="gt_sourcenote">Total: <span class="math inline">\hat t_{\mathrm{HH}} = M_0\,\hat{\bar y}_{\mathrm{HH}} = 3,000 \times 0.8461 = 2,538.29</span>, <span class="math inline">\mathrm{SE}(\hat t_{\mathrm{HH}}) = 109.91</span></td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>res<span class="sc">$</span>estimate <span class="sc">|&gt;</span> <span class="fu">format_est_gt</span>(<span class="st">"hh_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="ftpobacxif" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ftpobacxif table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ftpobacxif thead, #ftpobacxif tbody, #ftpobacxif tfoot, #ftpobacxif tr, #ftpobacxif td, #ftpobacxif th {
+  border-style: none;
+}
+
+#ftpobacxif p {
+  margin: 0;
+  padding: 0;
+}
+
+#ftpobacxif .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 70%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ftpobacxif .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ftpobacxif .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ftpobacxif .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ftpobacxif .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ftpobacxif .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ftpobacxif .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ftpobacxif .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ftpobacxif .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ftpobacxif .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ftpobacxif .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ftpobacxif .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ftpobacxif .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ftpobacxif .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ftpobacxif .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ftpobacxif .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ftpobacxif .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ftpobacxif .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ftpobacxif .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ftpobacxif .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ftpobacxif .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ftpobacxif .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ftpobacxif .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ftpobacxif .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ftpobacxif .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ftpobacxif .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ftpobacxif .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ftpobacxif .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ftpobacxif .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ftpobacxif .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ftpobacxif .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ftpobacxif .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ftpobacxif .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ftpobacxif .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ftpobacxif .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ftpobacxif .gt_left {
+  text-align: left;
+}
+
+#ftpobacxif .gt_center {
+  text-align: center;
+}
+
+#ftpobacxif .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ftpobacxif .gt_font_normal {
+  font-weight: normal;
+}
+
+#ftpobacxif .gt_font_bold {
+  font-weight: bold;
+}
+
+#ftpobacxif .gt_font_italic {
+  font-style: italic;
+}
+
+#ftpobacxif .gt_super {
+  font-size: 65%;
+}
+
+#ftpobacxif .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ftpobacxif .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ftpobacxif .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ftpobacxif .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ftpobacxif .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ftpobacxif .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ftpobacxif .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ftpobacxif .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ftpobacxif div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="Est." class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\hat{t}_{\mathrm{HH}}</span></th>
+<th id="S.E." class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><span class="math inline">\mathrm{SE}(\hat{t}_{\mathrm{HH}})</span></th>
+<th id="ci.low" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">95% CI Lower</th>
+<th id="ci.upp" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">95% CI Upper</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="Est.">2,538.29</td>
+<td class="gt_row gt_right" headers="S.E.">109.91</td>
+<td class="gt_row gt_right" headers="ci.low">2,278.39</td>
+<td class="gt_row gt_right" headers="ci.upp">2,798.20</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
 </section></section>
 <section>
 <section id="two-stage-cluster-sampling-with-replacement" class="title-slide slide level1 center" data-number="6">
@@ -1120,11 +2185,11 @@ b_i=\frac{t_i}{M_i}=\bar y_i ,\qquad B=\frac{t}{M_0}=\bar y_U\ \ (\text{mean per
 <section id="setup-and-estimators" class="slide level2">
 <h2>Setup and Estimators</h2>
 <p>Select <span class="math inline">n</span> clusters with replacement, <span class="math inline">\psi_i=M_i/M_0</span>, then take an SRS of <span class="math inline">m_i</span> elements from the cluster <strong>on every draw</strong>: a cluster drawn twice gets two <strong>independent</strong> subsamples. The cluster mean <span class="math inline">b_i=t_i/M_i</span> is not observed, but estimated by the subsample mean <span class="math inline">\bar y_i</span>, and <span class="math inline">\hat t_i=M_i\bar y_i</span>.</p>
-<p>The one-stage formulas carry over with <span class="math inline">\bar y_j^*</span> (subsample mean of draw <span class="math inline">j</span>) in place of <span class="math inline">b_j^*</span>: <span class="math display">
-\hat B_{\mathrm{HH}}=\bar y^*=\frac1n\sum_{j=1}^n\bar y_j^*,\qquad
-\widehat{\mathrm{SE}}(\hat B_{\mathrm{HH}})=\frac{s_{\bar y^*}}{\sqrt n},\qquad
-s_{\bar y^*}^2=\frac{1}{n-1}\sum_{j=1}^n(\bar y_j^*-\bar y^*)^2 ,
-</span> mean per cluster <span class="math inline">\bar M_U\hat B_{\mathrm{HH}}</span> and total <span class="math inline">M_0\hat B_{\mathrm{HH}}</span> with SEs multiplied by the same constants (each draw estimates the total by <span class="math inline">\hat t_j^*/\psi_j^*=M_0\bar y_j^*</span>).</p>
+<p>The one-stage formulas carry over with <span class="math inline">\bar y_j^*</span> now the subsample mean of draw <span class="math inline">j</span>: <span class="math display">
+\hat{\bar y}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\bar y_j^*,\qquad
+\widehat{\mathrm{SE}}(\hat{\bar y}_{\mathrm{HH}})=\frac{s_{\bar y^*}}{\sqrt n},\qquad
+s_{\bar y^*}^2=\frac{1}{n-1}\sum_{j=1}^n(\bar y_j^*-\hat{\bar y}_{\mathrm{HH}})^2 ,
+</span> mean per cluster <span class="math inline">\hat{\bar t}_{\mathrm{HH}}=\bar M_U\hat{\bar y}_{\mathrm{HH}}</span> and total <span class="math inline">\hat t_{\mathrm{HH}}=M_0\hat{\bar y}_{\mathrm{HH}}</span> with SEs multiplied by the same constants (each draw estimates the total by <span class="math inline">\hat t_j^*/\psi_j^*=M_0\bar y_j^*</span>).</p>
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1231,7 +2296,7 @@ s_{\bar y^*}^2=\frac{1}{n-1}\sum_{j=1}^n(\bar y_j^*-\bar y^*)^2 ,
 </tbody>
 </table>
 </div><div class="column" style="width:42%;">
-<p><span class="math inline">\hat B_{\mathrm{HH}}=6.767/8=0.846</span>, <span class="math inline">s_{\bar y^*}=0.120</span>, <span class="math inline">\widehat{\mathrm{SE}}=0.120/\sqrt8=0.0425</span>.</p>
+<p><span class="math inline">\hat{\bar y}_{\mathrm{HH}}=6.767/8=0.846</span>, <span class="math inline">s_{\bar y^*}=0.120</span>, <span class="math inline">\widehat{\mathrm{SE}}=0.120/\sqrt8=0.0425</span>.</p>
 <table class="caption-top">
 <thead>
 <tr class="header">

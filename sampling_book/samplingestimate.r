@@ -87,7 +87,7 @@ truncate_working <- function (working, id_col, head_n = 6)
 
 # Helper function to format estimation outputs with appropriate mathematical headers
 format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_mean", "reg_total", "ratio_mean", "domain_mean",
-                                                 "hh_total", "hh_B", "hh_ybar")) {
+                                                 "hh_total", "hh_B", "hh_ybar", "hh_tbar")) {
   est_type <- match.arg(est_type)
 
   sym_map <- list(
@@ -105,7 +105,10 @@ format_est_gt <- function(est_data, est_type = c("mean", "total", "ratio", "reg_
     "hh_B"          = c(est = "$\\hat{B}_{\\mathrm{HH}}$",
                         se  = "$\\mathrm{SE}(\\hat{B}_{\\mathrm{HH}})$"),
     "hh_ybar"       = c(est = "$\\hat{\\bar{y}}_{\\mathrm{HH}}$",
-                        se  = "$\\mathrm{SE}(\\hat{\\bar{y}}_{\\mathrm{HH}})$")
+                        se  = "$\\mathrm{SE}(\\hat{\\bar{y}}_{\\mathrm{HH}})$"),
+    ## UPSWR of clusters (cluster_upswr): mean of the cluster totals
+    "hh_tbar"       = c(est = "$\\hat{\\bar{t}}_{\\mathrm{HH}}$",
+                        se  = "$\\mathrm{SE}(\\hat{\\bar{t}}_{\\mathrm{HH}})$")
   )
 
   est_sym <- sym_map[[est_type]]["est"]
@@ -906,6 +909,92 @@ upswr_est <- function (ydata, xdata, xbar_pop, tx_pop,
                   decimals = decimals)
   res$estimate <- scale * res$estimate
   res
+}
+
+## UPSWR (Hansen-Hurwitz) estimation for cluster sampling, with clusters
+## drawn with replacement with probabilities psi_i = M_i / M0. It calls
+## upswr_est() with y = t (cluster totals) and x = M (cluster sizes), so the
+## ratio b_j* = t_j*/M_j* is the mean per element (ssu-level mean) ybar_j* of
+## the cluster of draw j, and reports the results in cluster notation:
+##   ybar --- mean per element, ybar_U = t/M0, estimated by ybarhat_HH = mean(ybar_j*)
+##   tbar --- mean per cluster (psu-level mean of the totals), tbar_U = t/N,
+##            estimated by Mbar_U * ybarhat_HH
+##   total --- population total t, estimated by M0 * ybarhat_HH
+## ti --- cluster totals of the n draws (repeats kept); in a two-stage design,
+##        the estimated totals M_i * ybar_i from the subsamples
+## Mi --- cluster sizes of the n draws
+## N, M0 --- number of clusters and number of elements in the population
+## estimate --- which of the three quantities to return ("ybar" default)
+## cluster --- optional labels of the drawn clusters, shown in the working table
+## t_label --- RAW latex for the totals column ("\\hat t_j^*" for two stages)
+## returns list ($estimate = c(Est., S.E., ci.low, ci.upp), $table)
+cluster_upswr <- function (ti, Mi, N, M0, estimate = c ("ybar", "tbar", "total"),
+                           show.details = TRUE, cluster = NULL, t_label = "t_j^*",
+                           decimals = 4)
+{
+    estimate <- match.arg (estimate)
+    Mbar_U <- M0 / N
+    method <- switch (estimate, ybar = "ratio", tbar = "mean", total = "total")
+    res <- upswr_est (ti, Mi, xbar_pop = Mbar_U, tx_pop = M0, method = method,
+                      show.details = FALSE)
+    if (!show.details) return (res)
+
+    ## working table on the scale of the cluster means ybar_j*
+    n <- length (ti)
+    ybar_j <- ti / Mi
+    ybar_hh <- mean (ybar_j)
+    dev <- ybar_j - ybar_hh
+    s2 <- sum (dev^2) / (n - 1)
+    se_ybar <- sqrt (s2 / n)
+    working <- data.frame (
+        j    = c (seq_len (n), "Sum"),
+        cl   = c (if (is.null (cluster)) rep ("", n) else as.character (cluster), ""),
+        M    = c (Mi, NA),
+        t    = c (ti, NA),
+        ybar = c (ybar_j, sum (ybar_j)),
+        dev  = c (dev, sum (dev)),
+        dev2 = c (dev^2, sum (dev^2))
+    )
+    working <- truncate_working (working, id_col = "j", head_n = 10)
+
+    yh <- "\\hat{\\bar y}_{\\mathrm{HH}}"
+    th <- "\\hat{\\bar t}_{\\mathrm{HH}}"
+    Th <- "\\hat t_{\\mathrm{HH}}"
+    fn <- function (x, d = decimals) fmt_num (x, decimals = d)
+    table <- gt (working) |>
+        tab_header (title = "UPSWR Cluster Sampling (Hansen-Hurwitz): Working Table",
+                    subtitle = md (sprintf ("$n = %d$ draws, $N = %s$, $M_0 = %s$, $\\bar M_U = M_0/N = %s$",
+                                            n, fn (N, 0), fn (M0, 0), fn (Mbar_U, 2)))) |>
+        cols_label (
+            j    = md ("$j$"),
+            cl   = "Cluster",
+            M    = md ("$M_j^*$"),
+            t    = md (sprintf ("$%s$", t_label)),
+            ybar = md (sprintf ("$\\bar y_j^* = %s/M_j^*$", t_label)),
+            dev  = md (sprintf ("$\\bar y_j^* - %s$", yh)),
+            dev2 = md (sprintf ("$(\\bar y_j^* - %s)^2$", yh))
+        ) |>
+        fmt_number (columns = c ("M", "t"), decimals = if (all (ti == round (ti))) 0 else 1) |>
+        fmt_auto (data = working, columns = c ("ybar", "dev", "dev2"), decimals = decimals) |>
+        sub_missing (missing_text = "") |>
+        tab_style (style = cell_text (weight = "bold"),
+                   locations = cells_body (rows = j == "Sum")) |>
+        tab_footnote (
+            footnote = md (sprintf ("$s_{\\bar y^*}^2 = \\sum_j (\\bar y_j^* - %s)^2/(n-1) = %s$, $s_{\\bar y^*} = %s$.",
+                                    yh, fn (s2), fn (sqrt (s2)))),
+            locations = cells_column_labels (columns = dev2)) |>
+        tab_source_note (md (sprintf (
+            "Mean per element: $%s = \\dfrac{\\sum_j \\bar y_j^*}{n} = \\dfrac{%s}{%d} = %s$, $\\mathrm{SE}(%s) = \\dfrac{s_{\\bar y^*}}{\\sqrt n} = %s$",
+            yh, fn (sum (ybar_j)), n, fn (ybar_hh), yh, fn (se_ybar)))) |>
+        tab_source_note (md (sprintf (
+            "Mean per cluster: $%s = \\bar M_U\\,%s = %s \\times %s = %s$, $\\mathrm{SE}(%s) = %s$",
+            th, yh, fn (Mbar_U, 2), fn (ybar_hh), fn (Mbar_U * ybar_hh, 2), th, fn (Mbar_U * se_ybar, 2)))) |>
+        tab_source_note (md (sprintf (
+            "Total: $%s = M_0\\,%s = %s \\times %s = %s$, $\\mathrm{SE}(%s) = %s$",
+            Th, yh, fn (M0, 0), fn (ybar_hh), fn (M0 * ybar_hh, 2), Th, fn (M0 * se_ybar, 2))))
+    if (is.null (cluster)) table <- cols_hide (table, "cl")
+
+    list (estimate = res$estimate, table = table)
 }
 
 ## Variance estimate of the Horvitz-Thompson total sum(y/pik) for a fixed-size

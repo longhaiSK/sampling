@@ -444,7 +444,7 @@
 
 \title{Elements of Sampling Survey}
 \author{Longhai Li}
-\date{2026-10-23}
+\date{2026-11-17}
 \begin{document}
 \maketitle
 
@@ -9169,6 +9169,10 @@ a special case or an extension of the previous one:
   (Section~\ref{sec-ups-twostage}).
 \end{enumerate}
 
+Along the way, Section~\ref{sec-ups-compare} compares the HH estimator
+with the sample average and the ratio estimator computed from a simple
+random sample of the same size.
+
 Sampling \textbf{with replacement} (UPSWR) is used throughout, since it
 makes the variance easy to estimate: we make \(n\) independent draws,
 and on each draw unit \(i\) is selected with probability \(\psi_i\),
@@ -9302,13 +9306,8 @@ error all scale by the same constant: \[
 &\mathrm{SE}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{S_{b^*}}{\sqrt{n}},\qquad
 &\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})&=t_x\,\frac{s_{b^*}}{\sqrt{n}} .
 \end{aligned}\;}
-\] In the more general notation of unequal probability sampling,
-\(y_j^*/\psi_j^*=t_x\,b_j^*\) is the estimate of the total from draw
-\(j\), so \(\hat{t}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n y_j^*/\psi_j^*\).
-This form works for any \(\psi_i\), not only for \(\psi_i=x_i/t_x\), and
-is what the function \texttt{upswr\_total} computes; for
-\(\psi_i=x_i/t_x\), the function \texttt{upswr\_est} works directly with
-the ratios \(b_j^*\).
+\] Section~\ref{sec-ups-hh-psi} writes \(\hat{t}_{\mathrm{HH}}\)
+directly in terms of the selection probabilities \(\psi_i\).
 
 \textbf{Variance of the mean and total.} The variances of
 \(\hat{\bar{y}}_{\mathrm{HH}}\) and \(\hat{t}_{\mathrm{HH}}\) are
@@ -9316,411 +9315,50 @@ the ratios \(b_j^*\).
 variance is small when all the ratios \(b_i\) are close to \(B\), that
 is, when \(y_i\) is nearly proportional to \(x_i\).
 
-\subsection{\texorpdfstring{Comparison of the HH, Ratio, and Average
-Estimators of
-\(B\)}{Comparison of the HH, Ratio, and Average Estimators of B}}\label{sec-ups-compare}
+\subsection{\texorpdfstring{The HH Estimator of the Total in Terms of
+\(\psi_i\)}{The HH Estimator of the Total in Terms of \textbackslash psi\_i}}\label{sec-ups-hh-psi}
 
-The ratio estimator and the sample average are used with a simple random
-sample (SRS) \(\mathcal{S}\) of \(n\) units without replacement. Let
-\(w^x_i=x_i/\bar{x}_U\) be the size of unit \(i\) relative to the
-average, and \(d_i=y_i-Bx_i=x_i(b_i-B)\) the residuals about the line
-through the origin \(y=Bx\). Each estimator is also an estimator of
-\(B\), which is then multiplied by \(\bar{x}_U\) or \(t_x\).
+The selection probabilities need not come from a size variable: any
+\(\psi_i>0\) with \(\sum_{i=1}^N\psi_i=1\) define a UPSWR design. Let
+\(y_j^*\) and \(\psi_j^*\) be the study value and the selection
+probability of the unit selected on draw \(j\). Dividing \(y_j^*\) by
+its selection probability gives an estimate of the total from that draw
+alone, \[
+u_j=\frac{y_j^*}{\psi_j^*},\qquad
+E(u_j)=\sum_{i=1}^N\psi_i\,\frac{y_i}{\psi_i}=\sum_{i=1}^N y_i=t ,
+\] and the \(u_j\) are iid, since the draws are independent. The HH
+estimator of the total is their average: \[
+\boxed{\hat{t}_{\mathrm{HH}}=\bar u=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt n},\qquad
+s_u^2=\frac{1}{n-1}\sum_{j=1}^n\left(\frac{y_j^*}{\psi_j^*}-\hat{t}_{\mathrm{HH}}\right)^2},
+\] with variance \[
+V(\hat{t}_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\psi_i\left(\frac{y_i}{\psi_i}-t\right)^2 .
+\] The mean is estimated by \(\hat{t}_{\mathrm{HH}}/N\). A unit with a
+small \(\psi_i\) is rarely drawn, but when it is, its value is
+multiplied by the large factor \(1/\psi_i\); this is what makes \(u_j\)
+unbiased. This form is what the function \texttt{upswr\_total} computes.
 
-\begin{itemize}
-\item
-  The \textbf{ratio estimator} (Section~\ref{sec-ratio-theory})
-  estimates \(\bar{y}_U\) by \(\bar{x}_U\,\bar{y}/\bar{x}\). Since
-  \(y_i=x_ib_i\), \[
-  \hat{B}_r=\frac{\bar{y}}{\bar{x}}=\frac{\sum_{i\in\mathcal{S}}y_i}{\sum_{i\in\mathcal{S}}x_i}
-  =\frac{\sum_{i\in\mathcal{S}}x_i\,b_i}{\sum_{i\in\mathcal{S}}x_i},
-  \] the mean of the sampled \(b_i\) weighted by \(x_i\) (weights adding
-  up to one), and \(\hat{\bar{y}}_r=\bar{x}_U\hat{B}_r\),
-  \(\hat{t}_r=t_x\hat{B}_r\).
-\item
-  The \textbf{sample average} \(\bar{y}\) ignores \(x_i\). Since
-  \(y_i=x_ib_i=\bar{x}_U\,w^x_ib_i\), \[
-  \bar{y}=\bar{x}_U\cdot\frac{1}{n}\sum_{i\in\mathcal{S}}w^x_i\,b_i
-  \quad\Longrightarrow\quad
-  \hat{B}_{\mathrm{avg}}=\frac{\bar{y}}{\bar{x}_U}=\frac{1}{n}\sum_{i\in\mathcal{S}}w^x_i\,b_i ,
-  \] the mean of the sampled \(b_i\) with weights \(w^x_i\) that do not
-  add up to one, and
-  \(\hat{t}_{\mathrm{avg}}=t_x\hat{B}_{\mathrm{avg}}\).
-\end{itemize}
-
-Table~\ref{tbl-ups-compare} compares them with the HH estimator
-\(\hat{B}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n b_j^*\). Their variances
-follow from the variances of \(\bar{y}\) and \(\hat{\bar{y}}_r\) for SRS
-divided by \(\bar{x}_U^2\), using
-\(w^x_ib_i-B=(y_i-\bar{y}_U)/\bar{x}_U\) and
-\(w^x_i(b_i-B)=d_i/\bar{x}_U\) (the ratio estimator's variance is the
-large-\(n\) approximation), and from the HH variance of the theory
-section.
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}@{}}
-\caption{Estimators of \(B=t/t_x\) from SRS and UPSWR samples of \(n\)
-units.}\label{tbl-ups-compare}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Estimator
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Estimator of \(B\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Variance
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\(x_i\) is used at
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Unbiased?
-\end{minipage} \\
-\midrule\noalign{}
-\endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Estimator
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Estimator of \(B\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Variance
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\(x_i\) is used at
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Unbiased?
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Sample average (SRS) &
-\(\hat{B}_{\mathrm{avg}}=\dfrac1n\sum\limits_{i\in\mathcal{S}}w^x_ib_i\)
-&
-\(\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (w^x_ib_i-B)^2\)
-& not used & yes, for \(\bar{y}_U/\bar{x}_U\) \\
-Ratio (SRS) &
-\(\hat{B}_r=\dfrac{\sum_{i\in\mathcal{S}} x_ib_i}{\sum_{i\in\mathcal{S}} x_i}\)
-&
-\(\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n(N-1)}\sum\limits_{i=1}^N (w^x_i)^2\,(b_i-B)^2\)
-& the \textbf{estimation} stage & slightly biased \\
-HH (UPSWR, \(\psi_i=x_i/t_x\)) &
-\(\hat{B}_{\mathrm{HH}}=\dfrac1n\sum\limits_{j=1}^n b_j^*\) &
-\(\dfrac{1}{nN}\sum\limits_{i=1}^N w^x_i\,(b_i-B)^2\) & the
-\textbf{design} stage & exactly unbiased \\
-\end{longtable}
-
-\emph{Note:} for the sample average, \(w^x_i=x_i/\bar{x}_U\) and
-\(w^x_ib_i=y_i/\bar{x}_U\), so that
-\(\hat{B}_{\mathrm{avg}}=\bar{y}/\bar{x}_U\) and its variance is the SRS
-variance of \(y_i\) divided by \(\bar{x}_U^2\).
-
-For the mean and the total, multiply the estimators by \(\bar{x}_U\) and
-\(t_x\), and the variances by \(\bar{x}_U^2\) and \(t_x^2\).
-
-Ignoring the finite population correction and the difference between
-\(N-1\) and \(N\), each variance is \(\frac1n\) times an average over
-the units of one squared term:
-
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Estimator
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Squared term of unit \(i\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Spread of \(y\) about
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Sample average & \((w^x_ib_i-B)^2\) & the flat line \(\bar{y}_U\) \\
-Ratio & \((w^x_i)^2\,(b_i-B)^2\) & the line \(y=Bx\) \\
-HH & \(w^x_i\,(b_i-B)^2\) & the line \(y=Bx\), with weight \(1/w^x_i\)
-relative to the ratio estimator \\
-\end{longtable}
-}
-
-The ratio estimator and HH use the same ratios and the same centre
-\(B\), so their terms differ only in one factor: \((w^x_i)^2\) for the
-ratio estimator, \(w^x_i\) for HH. HH multiplies the term of the ratio
-estimator by \(1/w^x_i=\bar{x}_U/x_i\). A unit larger than average
-(\(w^x_i>1\)) is \textbf{downweighted} under HH, and a smaller one is
-upweighted. The reason is that HH gives equal weights to the draws
-because the large units are already drawn more often, whereas the ratio
-estimator must give the large units larger weights \(x_i\) to compensate
-for the equal chances. UPSWR therefore wins when the large residuals
-\(d_i\) belong to the large units, that is, when the spread of \(y_i\)
-about the line grows with \(x_i\), as it does for county acreages. When
-the spread of \(y_i\) is the same for all \(x_i\) (so that
-\(b_i-B\propto1/x_i\)), the SRS ratio estimator does better. When
-\(y_i\) is not related to \(x_i\) at all, all the \(b_i-B\) are large
-and both estimators can be worse than the plain sample average. The next
-section illustrates these cases.
-
-\subsection{Toy Example: Four Supermarkets}\label{sec-ups-toy}
-
-A town has four supermarkets, with floor areas \(x_i\) from
-\(100\,\text{m}^2\) to \(1000\,\text{m}^2\), so \(t_x=1600\),
-\(\bar{x}_U=400\) and \(w^x_i=x_i/\bar{x}_U=0.25,\,0.5,\,0.75,\,2.5\).
-We want to estimate the monthly sales per square metre
-\(B=\bar{y}_U/\bar{x}_U\), from the ratios \(b_i=y_i/x_i\) of the stores
-(the mean and the total of sales follow by multiplying by \(\bar{x}_U\)
-and \(t_x\)). The data for the first population (the sales, in thousands
-of dollars per month, are nearly proportional to the floor areas) are:
-
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3647}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3059}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1647}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1647}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Store
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(x_i\) (floor area, m\(^2\))
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(y_i\) (sales)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(b_i=y_i/x_i\)
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-A & 100 & 11 & 0.1100 \\
-B & 200 & 20 & 0.1000 \\
-C & 300 & 24 & 0.0800 \\
-D & 1,000 & 245 & 0.2450 \\
-\textbf{Total} & 1,600 & 300 & \\
-\textbf{True \(B=\sum y_i/\sum x_i\)} & & & 0.1875 \\
-\end{longtable}
-}
-
-To compare the three estimators of \(B\) in
-Section~\ref{sec-ups-compare}, we work out their variances for a
-\textbf{single draw} (\(n=1\)); for \(n\) draws, each is divided by
-\(n\). For the two SRS estimators we take \(N=\infty\), that is, we
-ignore the finite population correction, so a single draw has the
-variance of one value drawn with equal probabilities \(1/N\) (hence the
-divisor \(N\) rather than \(N-1\)). The one-draw variance of each
-estimator is \(\frac1N\) times the sum over the stores of its squared
-term:
-
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-Estimator & Design & Squared term of store \(i\) \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Sample average & SRS & \((w^x_ib_i-B)^2\) \\
-Ratio & SRS & \((w^x_i)^2\,(b_i-B)^2\) \\
-HH & PPS, \(\psi_i=x_i/t_x\) & \(w^x_i\,(b_i-B)^2\) \\
-\end{longtable}
-}
-
-For each population below, a single table works out the three variances
-side by side. The \textbf{Sum} row adds the squared terms, and the
-\textbf{Variance} row divides the sum by \(N\).
-
-\textbf{Sales proportional to floor area.} The monthly sales (thousands
-of dollars) are nearly proportional to the floor areas, as in the slides
-for this chapter. Here \(t=300\), \(\bar{y}_U=75\) and
-\(B=300/1600=0.1875\).
-
-\textbf{HH is unbiased.} With one draw, the HH estimate of \(B\) is
-\(b_i\) when store \(i\) is selected, which happens with probability
-\(\psi_i\), so \(E(\hat{B}_{\mathrm{HH}})=\sum_i\psi_ib_i\), the sum of
-the column \(\psi_ib_i\). Multiplying the estimates by \(\bar{x}_U\) or
-\(t_x\) gives the estimates of the mean or the total, and the last row
-(the sum of \(\psi_i\) times the column) is their expectation:
-
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0851}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0638}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0638}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1809}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0638}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1277}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.2340}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1809}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Store
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(y_i\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(x_i\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(\psi_i=x_i/t_x\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(b_i\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(\psi_ib_i\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(\bar{x}_Ub_i\) (mean)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(t_xb_i\) (total)
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-A & 11 & 100 & 0.0625 & 0.110 & 0.00688 & 44 & 176 \\
-B & 20 & 200 & 0.1250 & 0.100 & 0.01250 & 40 & 160 \\
-C & 24 & 300 & 0.1875 & 0.080 & 0.01500 & 32 & 128 \\
-D & 245 & 1,000 & 0.6250 & 0.245 & 0.15313 & 98 & 392 \\
-\textbf{Sum} & 300 & 1,600 & 1.0000 & & 0.18750 & 75 & 300 \\
-\end{longtable}
-}
-
-The four possible estimates of \(B\), 0.11, 0.1, 0.08, 0.245, are all
-different from \(B=0.1875\), but weighted by their selection
-probabilities they average to \(E(\hat{B}_{\mathrm{HH}})=0.1875=B\), so
-\(E(\hat{\bar{y}}_{\mathrm{HH}})=75=\bar{y}_U\) and
-\(E(\hat{t}_{\mathrm{HH}})=300=t\). In general,
-\(\sum_i\psi_ib_i=\sum_i\frac{x_i}{t_x}\cdot\frac{y_i}{x_i}=\frac{t}{t_x}=B\).
-(The same four values are what the ratio estimator gives under an SRS of
-one store, but there each has probability \(1/4\), so its expectation is
-0.1338 for \(B\), and it is biased.)
-
-\textbf{Variances.} The working table for the three one-draw variances:
-
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1838}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0441}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0441}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1618}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1029}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0588}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1250}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1544}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1250}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Store
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(x_i\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(y_i\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(w^x_i=x_i/\bar{x}_U\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(b_i=y_i/x_i\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(b_i-B\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\((w^x_ib_i-B)^2\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\((w^x_i)^2(b_i-B)^2\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(w^x_i(b_i-B)^2\)
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-A & 100 & 11 & 0.25 & 0.110 & -0.0775 & 0.025600 & 0.000375 &
-0.001502 \\
-B & 200 & 20 & 0.50 & 0.100 & -0.0875 & 0.018906 & 0.001914 &
-0.003828 \\
-C & 300 & 24 & 0.75 & 0.080 & -0.1075 & 0.016256 & 0.006500 &
-0.008667 \\
-D & 1,000 & 245 & 2.50 & 0.245 & 0.0575 & 0.180625 & 0.020664 &
-0.008266 \\
-\textbf{Sum} & 1,600 & 300 & 4.00 & & & 0.241388 & 0.029454 &
-0.022262 \\
-\textbf{Variance} (Sum / \(N\)) & & & & & & 0.060347 & 0.007363 &
-0.005566 \\
-\end{longtable}
-}
-
-The sample average ignores the floor areas, and its variance, 0.0603, is
-dominated by store D, whose sales are far from \(\bar{y}_U=75\). The
-ratio estimator measures each store against the line \(y=Bx\) instead,
-that is, it looks at \(b_i-B\), which cuts the variance to 0.00736. HH
-uses the same ratios, but the largest term of the ratio estimator, store
-D's 0.0207, belongs to the largest store, with \(w_D=2.5\): HH divides
-it by \(w_D\), giving 0.00827, and the HH variance drops to 0.00557,
-about 9\% of that of the sample average. (Multiplying by
-\(\bar{x}_U^2=160{,}000\) gives the variances of the estimates of the
-mean, 9,656, 1,178.2 and 890.5.)
-
-\textbf{Sales not related to floor area: a poor choice of \(\psi_i\).}
-Now suppose the sales are about the same in all four stores, for example
-because the large store D is a warehouse outlet with few customers,
-while the total is still \(t=300\), so \(B=0.1875\) again. The floor
-area is then a poor size variable, but we still draw with
-\(\psi_i=x_i/t_x\):
-
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1838}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0441}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0441}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1618}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1029}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0588}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1250}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1544}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1250}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Store
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(x_i\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(y_i\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(w^x_i=x_i/\bar{x}_U\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(b_i=y_i/x_i\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(b_i-B\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\((w^x_ib_i-B)^2\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\((w^x_i)^2(b_i-B)^2\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(w^x_i(b_i-B)^2\)
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-A & 100 & 60 & 0.25 & 0.60 & 0.4125 & 0.001406 & 0.010635 & 0.042539 \\
-B & 200 & 80 & 0.50 & 0.40 & 0.2125 & 0.000156 & 0.011289 & 0.022578 \\
-C & 300 & 90 & 0.75 & 0.30 & 0.1125 & 0.001406 & 0.007119 & 0.009492 \\
-D & 1,000 & 70 & 2.50 & 0.07 & -0.1175 & 0.000156 & 0.086289 &
-0.034516 \\
-\textbf{Sum} & 1,600 & 300 & 4.00 & & & 0.003125 & 0.115332 &
-0.109125 \\
-\textbf{Variance} (Sum / \(N\)) & & & & & & 0.000781 & 0.028833 &
-0.027281 \\
-\end{longtable}
-}
-
-The ordering is reversed. The sales hardly vary, so the sample average
-has a tiny variance, 0.000781. The line \(y=Bx\) fits the sales badly,
-so all the deviations \(b_i-B\) are large, and the ratio estimator and
-HH, with variances 0.0288 and 0.0273, are more than 34 times worse than
-the sample average. Dividing by \(w^x_i\) helps little: it downweights
-the large negative deviation of store D, but upweights the positive
-deviations of the small stores, by \(4\) for store A. Unequal
-probability sampling is only as good as the size variable used to
-construct \(\psi_i\): before using PPS, check that \(y_i\) is roughly
-proportional to \(x_i\).
+\textbf{Equivalence with \(\hat{B}_{\mathrm{HH}}\).} The formula is the
+estimator of Section~\ref{sec-ups-hh-theory} with the selection
+probabilities themselves as the size variable. Take the
+\textbf{normalized size} \[
+\tilde{x}_i=\psi_i,\qquad\text{so that}\qquad t_{\tilde{x}}=\sum_{i=1}^N\tilde{x}_i=1
+\quad\text{and}\quad \frac{\tilde{x}_i}{t_{\tilde{x}}}=\psi_i .
+\] The ratios and the population ratio for this size variable are \[
+\tilde{b}_i=\frac{y_i}{\tilde{x}_i}=\frac{y_i}{\psi_i},\qquad
+\tilde{B}=\frac{t}{t_{\tilde{x}}}=t ,
+\] so each observation \(\tilde{b}_j^*=y_j^*/\psi_j^*=u_j\), and \[
+\hat{\tilde{B}}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\tilde{b}_j^*=\hat{t}_{\mathrm{HH}},\qquad
+\hat{t}_{\mathrm{HH}}=t_{\tilde{x}}\,\hat{\tilde{B}}_{\mathrm{HH}}=\hat{\tilde{B}}_{\mathrm{HH}},\qquad
+s_{\tilde{b}^*}=s_u .
+\] With a normalized size, the ``ratio'' \(\tilde{B}\) \emph{is} the
+total, and the estimator, its SE and its variance are those of
+Section~\ref{sec-ups-hh-theory}. Conversely, when \(\psi_i=x_i/t_x\),
+every draw gives \(y_j^*/\psi_j^*=t_x\,y_j^*/x_j^*=t_x\,b_j^*\), so
+\(\hat{t}_{\mathrm{HH}}=t_x\,\bar{b}^*\) and \(s_u=t_x\,s_{b^*}\), the
+formulas for the total in Section~\ref{sec-ups-hh-theory}. Rescaling a
+size variable to total 1 therefore does not change the estimator of the
+total, since \(\psi_i\) depends on \(x_i\) only through \(x_i/t_x\).
 
 \subsection{Computation Example: Revenue from AI Token
 Usage}\label{sec-ups-toy-sample}
@@ -9847,13 +9485,33 @@ that is, \(\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})=1.67\). The estimate
 \(\bar{y}_U=81.83\).
 
 The same HH estimates from the shared function \texttt{upswr\_est}
-(Section~\ref{sec-ups-statepop} uses it for real data), which takes the
-\(y\) and \(x\) values of the draws and the population mean and total of
-\(x\):
+(Section~\ref{sec-ups-statepop} uses it for real data). The audited
+sample is stored as a data set \texttt{token}, with one row per draw
+(customer F appears twice) and columns \texttt{y} (revenue) and
+\texttt{x} (tokens). \texttt{upswr\_est} takes these two columns and the
+population mean and total of \(x\), passed as \texttt{xbar\_pop}
+\(=\bar{x}_U=t_x/N=100/6\) and \texttt{tx\_pop} \(=t_x=100\):
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{upswr\_est}\NormalTok{(y\_U[R], x\_U[R], xbar\_U, t\_x, }\AttributeTok{method =} \StringTok{"ratio"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
+\NormalTok{token }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{y =} \FunctionTok{c}\NormalTok{(}\DecValTok{190}\NormalTok{, }\DecValTok{155}\NormalTok{, }\DecValTok{190}\NormalTok{, }\DecValTok{70}\NormalTok{, }\DecValTok{41}\NormalTok{),   }\CommentTok{\# draws F, E, F, D, C}
+                    \AttributeTok{x =} \FunctionTok{c}\NormalTok{(}\DecValTok{40}\NormalTok{, }\DecValTok{30}\NormalTok{, }\DecValTok{40}\NormalTok{, }\DecValTok{15}\NormalTok{, }\DecValTok{8}\NormalTok{))}
+\NormalTok{token}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+    y  x
+1 190 40
+2 155 30
+3 190 40
+4  70 15
+5  41  8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{xbar\_pop =} \DecValTok{100} \SpecialCharTok{/} \DecValTok{6}\NormalTok{, }\AttributeTok{tx\_pop =} \DecValTok{100}\NormalTok{, }\AttributeTok{method =} \StringTok{"ratio"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_B"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -9871,7 +9529,7 @@ The same HH estimates from the shared function \texttt{upswr\_est}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{upswr\_est}\NormalTok{(y\_U[R], x\_U[R], xbar\_U, t\_x, }\AttributeTok{method =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
+\FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{xbar\_pop =} \DecValTok{100} \SpecialCharTok{/} \DecValTok{6}\NormalTok{, }\AttributeTok{tx\_pop =} \DecValTok{100}\NormalTok{, }\AttributeTok{method =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_ybar"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -9889,7 +9547,31 @@ The same HH estimates from the shared function \texttt{upswr\_est}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{upswr\_est}\NormalTok{(y\_U[R], x\_U[R], xbar\_U, t\_x, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
+\FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{xbar\_pop =} \DecValTok{100} \SpecialCharTok{/} \DecValTok{6}\NormalTok{, }\AttributeTok{tx\_pop =} \DecValTok{100}\NormalTok{, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\normalsize
+\begin{gtfit}{0.7\linewidth}{rrrr}
+\toprule
+\(\hat{t}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{t}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
+\midrule\addlinespace[2.5pt]
+489.17 & 10.51 & 459.99 & 518.34 \\ 
+\bottomrule
+\end{gtfit}
+\end{table}
+
+The same total with the normalized size \(\tilde{x}_i=\psi_i\) of
+Section~\ref{sec-ups-hh-psi}, whose total is \(t_{\tilde{x}}=1\) (so
+\(\bar{\tilde{x}}_U=1/N\)): the ratios are now \(y_j^*/\psi_j^*\), and
+their mean is \(\hat{t}_{\mathrm{HH}}\) itself.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{token}\SpecialCharTok{$}\NormalTok{psi }\OtherTok{\textless{}{-}}\NormalTok{ token}\SpecialCharTok{$}\NormalTok{x }\SpecialCharTok{/} \DecValTok{100}   \CommentTok{\# psi\_i = x\_i / t\_x}
+\FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{psi, }\AttributeTok{xbar\_pop =} \DecValTok{1} \SpecialCharTok{/} \DecValTok{6}\NormalTok{, }\AttributeTok{tx\_pop =} \DecValTok{1}\NormalTok{, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -9982,9 +9664,10 @@ whose sum gives \(s_{b^*}^2\):
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{N }\OtherTok{\textless{}{-}} \DecValTok{3141}   \CommentTok{\# counties in the US}
-\NormalTok{popn\_k }\OtherTok{\textless{}{-}}\NormalTok{ popn }\SpecialCharTok{/} \DecValTok{1000}   \CommentTok{\# population in thousands}
-\NormalTok{M\_k }\OtherTok{\textless{}{-}}\NormalTok{ M }\SpecialCharTok{/} \DecValTok{1000}
-\NormalTok{res\_phys\_ratio\_hh }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(phys, popn\_k, }\AttributeTok{xbar\_pop =}\NormalTok{ M\_k }\SpecialCharTok{/}\NormalTok{ N, }\AttributeTok{tx\_pop =}\NormalTok{ M\_k, }\AttributeTok{method =} \StringTok{"ratio"}\NormalTok{)}
+\NormalTok{popn\_in\_thousands }\OtherTok{\textless{}{-}}\NormalTok{ popn }\SpecialCharTok{/} \DecValTok{1000}   \CommentTok{\# county populations in thousands}
+\NormalTok{popn\_US\_in\_thousands }\OtherTok{\textless{}{-}}\NormalTok{ popn\_US }\SpecialCharTok{/} \DecValTok{1000}
+\NormalTok{res\_phys\_ratio\_hh }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(phys, popn\_in\_thousands, }\AttributeTok{xbar\_pop =}\NormalTok{ popn\_US\_in\_thousands }\SpecialCharTok{/}\NormalTok{ N,}
+                               \AttributeTok{tx\_pop =}\NormalTok{ popn\_US\_in\_thousands, }\AttributeTok{method =} \StringTok{"ratio"}\NormalTok{)}
 \NormalTok{res\_phys\_ratio\_hh}\SpecialCharTok{$}\NormalTok{table}
 \end{Highlighting}
 \end{Shaded}
@@ -10041,11 +9724,11 @@ interval of {[}1.914, 2.558{]}.
 
 \emph{Physicians per county,}
 \(\hat{\bar{y}}_{\mathrm{HH}}=\bar{x}_U\hat{B}_{\mathrm{HH}}\), with
-\(\bar{x}_U=M/N\) the average population of a county:
+\(\bar{x}_U=t_x/N\) the average population of a county:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{res\_phys\_county }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(phys, popn\_k, }\AttributeTok{xbar\_pop =}\NormalTok{ M\_k }\SpecialCharTok{/}\NormalTok{ N, }\AttributeTok{tx\_pop =}\NormalTok{ M\_k,}
+\NormalTok{res\_phys\_county }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(phys, popn\_in\_thousands, }\AttributeTok{xbar\_pop =}\NormalTok{ popn\_US\_in\_thousands }\SpecialCharTok{/}\NormalTok{ N, }\AttributeTok{tx\_pop =}\NormalTok{ popn\_US\_in\_thousands,}
                              \AttributeTok{method =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
 \NormalTok{res\_phys\_county}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_ybar"}\NormalTok{)}
 \end{Highlighting}
@@ -10069,14 +9752,36 @@ standard error is multiplied by the same factor. It averages over
 pull it down to about 182 physicians per county.
 
 \emph{Total physicians in the US,}
-\(\hat{t}_{\mathrm{HH}}=t_x\hat{B}_{\mathrm{HH}}\), with \(t_x=M\) the
-US population (in thousands):
+\(\hat{t}_{\mathrm{HH}}=t_x\hat{B}_{\mathrm{HH}}\), with \(t_x\) the US
+population (in thousands):
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{res\_phys\_total }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(phys, popn\_k, }\AttributeTok{xbar\_pop =}\NormalTok{ M\_k }\SpecialCharTok{/}\NormalTok{ N, }\AttributeTok{tx\_pop =}\NormalTok{ M\_k,}
+\NormalTok{res\_phys\_total }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(phys, popn\_in\_thousands, }\AttributeTok{xbar\_pop =}\NormalTok{ popn\_US\_in\_thousands }\SpecialCharTok{/}\NormalTok{ N, }\AttributeTok{tx\_pop =}\NormalTok{ popn\_US\_in\_thousands,}
                             \AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
 \NormalTok{res\_phys\_total}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\normalsize
+\begin{gtfit}{0.7\linewidth}{rrrr}
+\toprule
+\(\hat{t}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{t}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
+\midrule\addlinespace[2.5pt]
+570,304.30 & 41,401.23 & 488,155.27 & 652,453.32 \\ 
+\bottomrule
+\end{gtfit}
+\end{table}
+
+The same total with the normalized size \(\tilde{x}_i=\psi_i\)
+(Section~\ref{sec-ups-hh-psi}), with \(t_{\tilde{x}}=1\); the population
+need not be in thousands now, since \(\psi_i\) has no units:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{upswr\_est}\NormalTok{(phys, psi, }\AttributeTok{xbar\_pop =} \DecValTok{1} \SpecialCharTok{/}\NormalTok{ N, }\AttributeTok{tx\_pop =} \DecValTok{1}\NormalTok{, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -10296,7 +10001,405 @@ a huge SE. The ratio and regression estimators use the county
 populations at the estimation stage and have much smaller SEs, and HH,
 which uses them at the design stage, has the smallest SE and the
 smallest error here, even though its sample is of the same size, 100
-counties.
+counties. Section~\ref{sec-ups-compare} explains when using the size
+variable at the design stage pays off.
+
+\section{Comparison of the HH, Ratio, and Average Estimators of the
+Total}\label{sec-ups-compare}
+
+The HH estimator uses the size variable \(x_i\) at the \textbf{design}
+stage, through the selection probabilities \(\psi_i\). With a simple
+random sample, the same information can instead be used at the
+\textbf{estimation} stage, by the ratio estimator, or ignored, by the
+sample average. This section compares the three estimators of the total
+\(t\): their variances, a toy example in which each of them can win, a
+simulation with the \texttt{agpop} data, and an app.
+
+\subsection{Theory}\label{sec-ups-compare-theory}
+
+The sample average and the ratio estimator use a simple random sample
+(SRS) \(\mathcal{S}\) of \(n\) units drawn without replacement; HH uses
+\(n\) draws with replacement, with selection probabilities
+\(\psi_i=x_i/t_x\). The ratio estimator and HH are best compared through
+the \textbf{residuals about the line through the origin}, \[
+d_i=y_i-Bx_i,\qquad B=\frac{t}{t_x},\qquad \sum_{i=1}^N d_i=t-Bt_x=0 .
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  The \textbf{sample average} ignores \(x_i\):
+  \(\hat{t}_{\mathrm{avg}}=N\bar{y}\), with the SRS variance \[
+  V(\hat{t}_{\mathrm{avg}})=\left(1-\frac nN\right)\frac{N^2S_y^2}{n},\qquad
+  S_y^2=\frac{1}{N-1}\sum_{i=1}^N\left(y_i-\bar{y}_U\right)^2 .
+  \]
+\item
+  The \textbf{ratio estimator} (Section~\ref{sec-ratio-theory}) is
+  \(\hat{t}_r=t_x\,\bar{y}/\bar{x}\), and its (large-\(n\)) variance is
+  the SRS variance of the residuals,
+  \(\left(1-\frac nN\right)N^2S_d^2/n\) with
+  \(S_d^2=\frac{1}{N-1}\sum_{i=1}^N d_i^2\). Since an SRS gives every
+  unit the same selection probability \(1/N\), it can be written in the
+  same form as the HH variance below: \[
+  V(\hat{t}_r)\approx\left(1-\frac nN\right)\frac{N}{N-1}\cdot\frac1n\sum_{i=1}^N\frac{d_i^2}{1/N}
+  \approx\left(1-\frac nN\right)\frac1n\sum_{i=1}^N\frac{d_i^2}{1/N}.
+  \]
+\item
+  The \textbf{HH estimator} is
+  \(\hat{t}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n y_j^*/\psi_j^*\)
+  (Section~\ref{sec-ups-hh-psi}), with variance
+  \(\frac1n\sum_{i=1}^N\psi_i\left(y_i/\psi_i-t\right)^2\). With
+  \(\psi_i=x_i/t_x\), each one-draw deviation is a scaled residual, \[
+  \frac{y_i}{\psi_i}-t=\frac{t_x}{x_i}\left(y_i-\frac{t}{t_x}\,x_i\right)=\frac{d_i}{\psi_i},
+  \qquad\text{so}\qquad
+  V(\hat{t}_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\frac{d_i^2}{\psi_i}.
+  \]
+\end{itemize}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\caption{Estimators of the total \(t\) from SRS and UPSWR samples of
+\(n\) units, with
+\(d_i=y_i-Bx_i\).}\label{tbl-ups-compare}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Estimator
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Estimator of \(t\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Variance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(x_i\) is used at
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Unbiased?
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Estimator
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Estimator of \(t\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Variance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(x_i\) is used at
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Unbiased?
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Sample average (SRS) & \(\hat{t}_{\mathrm{avg}}=N\bar{y}\) &
+\(\left(1-\dfrac{n}{N}\right)\dfrac{N^2S_y^2}{n}\) & not used & yes \\
+Ratio (SRS) & \(\hat{t}_r=t_x\,\dfrac{\bar{y}}{\bar{x}}\) &
+\(\approx\left(1-\dfrac{n}{N}\right)\dfrac{1}{n}\sum\limits_{i=1}^N \dfrac{d_i^2}{1/N}\)
+& the \textbf{estimation} stage & slightly biased \\
+HH (UPSWR) &
+\(\hat{t}_{\mathrm{HH}}=\dfrac1n\sum\limits_{j=1}^n \dfrac{y_j^*}{\psi_j^*}\)
+& \(\dfrac{1}{n}\sum\limits_{i=1}^N \dfrac{d_i^2}{\psi_i}\) & the
+\textbf{design} stage, \(\psi_i=x_i/t_x\) & exactly unbiased \\
+\end{longtable}
+
+For the mean, divide the estimators by \(N\) and the variances by
+\(N^2\); for \(B=t/t_x\), divide by \(t_x\) and \(t_x^2\).
+
+\textbf{On a common scale.} The ratio and HH variances differ only in
+the selection probability that divides \(d_i^2\): \(1/N\) for every unit
+in an SRS, \(\psi_i\) under UPSWR. Writing the sample average the same
+way, \(N^2S_y^2/n\approx\frac1n\sum_{i=1}^N(y_i-\bar{y}_U)^2/(1/N)\),
+and ignoring the finite population correction, each variance is
+\(\frac1n\) times a sum over the units of one term, a squared deviation
+divided by the unit's selection probability:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Estimator
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Term of unit \(i\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Spread of \(y\) about
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Sample average & \(\dfrac{(y_i-\bar{y}_U)^2}{1/N}=N(y_i-\bar{y}_U)^2\) &
+the flat line \(\bar{y}_U\) \\
+Ratio & \(\dfrac{d_i^2}{1/N}=N\,d_i^2\) & the line \(y=Bx\) \\
+HH & \(\dfrac{d_i^2}{\psi_i}\) & the line \(y=Bx\) \\
+\end{longtable}
+}
+
+\textbf{Ratio versus average.} Since
+\(y_i-\bar{y}_U=d_i+B(x_i-\bar{x}_U)\), the two terms differ by
+\(B(x_i-\bar{x}_U)\). When \(y_i\) is roughly proportional to \(x_i\),
+the residuals \(d_i\) are small and the spread of \(y\) comes mostly
+from that of \(x\), which the ratio estimator removes. When \(y_i\) is
+not related to \(x_i\), the residual
+\(d_i=(y_i-\bar{y}_U)-B(x_i-\bar{x}_U)\) \emph{adds} the spread of \(x\)
+to that of \(y\), and the sample average does better.
+
+\textbf{HH versus ratio.} Both use the same squared residuals \(d_i^2\);
+they differ only in what they are divided by, the equal probability
+\(1/N\) for the ratio estimator and \(\psi_i\) for HH. A unit larger
+than average (\(\psi_i>1/N\)) has its residual \textbf{downweighted}
+under HH, and a smaller one upweighted. The reason is that HH gives
+equal weights to the draws because the large units are already drawn
+more often, whereas the SRS estimators give every unit the same chance.
+UPSWR therefore wins when the large residuals \(d_i\) belong to the
+large units, that is, when the spread of \(y_i\) about the line grows
+with \(x_i\), as it does for county acreages. When the spread of \(y_i\)
+is the same for all \(x_i\), the SRS ratio estimator does better, and
+when \(y_i\) is not related to \(x_i\) at all, all the \(d_i\) are large
+and both can be worse than the plain sample average. The toy example in
+Section~\ref{sec-ups-toy} illustrates these cases.
+
+\textbf{When does UPS beat the ratio estimator?} Ignoring the finite
+population correction, the difference of the two variances is a single
+sum, \[
+V(\hat{t}_r)-V(\hat{t}_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\left(N-\frac{1}{\psi_i}\right)
+=\frac Nn\sum_{i=1}^N d_i^2\left(1-\frac{\bar{x}_U}{x_i}\right),
+\] so HH has the smaller variance exactly when \[
+\boxed{H_d=\frac{\sum_{i=1}^N d_i^2}{\sum_{i=1}^N d_i^2/x_i}>\bar{x}_U},
+\] that is, when the harmonic mean of the sizes, weighted by the squared
+residuals, exceeds their ordinary mean: the units with large residuals
+are larger than average. In terms of the features of the population,
+suppose the spread of \(y\) about the line \(y=Bx\) grows like a power
+of the size, \(d_i^2\approx\sigma^2x_i^{\gamma}\). Then the sum above is
+proportional to \(\sum_i x_i^{\gamma-1}(x_i-\bar{x}_U)\), a multiple of
+the covariance of \(x_i^{\gamma-1}\) with \(x_i\), whose sign is that of
+\(\gamma-1\):
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.6200}}
+  >{\centering\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0800}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Spread of \(y\) about the line \(y=Bx\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\(\gamma\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Better estimator
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Constant: \(\mathrm{SD}(d_i)\) does not depend on \(x_i\) & \(0\) &
+ratio (SRS) \\
+\(\mathrm{SD}(d_i)\propto\sqrt{x_i}\): \(V(y_i)\propto x_i\), as for
+sums of \(x_i\) independent pieces & \(1\) & tie \\
+\(\mathrm{SD}(d_i)\propto x_i\): a constant coefficient of variation,
+\(\mathrm{SD}(y_i)\propto Bx_i\) & \(2\) & HH (UPSWR) \\
+\end{longtable}
+}
+
+Figure~\ref{fig-ups-spread} shows the three cases for one skewed
+population of sizes, with the same line \(y=Bx\) and the same average
+spread about it; only the way the spread grows with \(x\) differs.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{ups_files/figure-pdf/fig-ups-spread-1.pdf}
+
+}
+
+\caption{\label{fig-ups-spread}Three populations with the same sizes
+\(x_i\) and the same line \(y=Bx\) (red), whose spread about the line
+(dashed band, \(\pm2\) SD) is constant (\(\gamma=0\)), grows like
+\(\sqrt{x}\) (\(\gamma=1\)), or grows like \(x\) (\(\gamma=2\)). The
+subtitle compares \(H_d\) with the mean size \(\bar{x}_U\): HH beats the
+SRS ratio estimator only when \(H_d>\bar{x}_U\).}
+
+\end{figure}%
+
+Many skewed populations with a natural size, such as revenues by
+customer size, acreages by county area, or counts by population, have a
+roughly constant coefficient of variation (\(\gamma\approx2\)), which is
+why PPS works well for them. A plot of \(y\) against \(x\) from a census
+or a pilot sample shows which case applies: if the scatter about the
+line fans out in proportion to \(x\), sample with PPS; if its width
+stays about the same, use an SRS with the ratio estimator. Three further
+points favour the SRS ratio estimator: its finite population correction
+\(1-n/N\), which matters when the sampling fraction is large; the
+repeated units of sampling with replacement (a \(\pi\)ps design without
+replacement, Section~\ref{sec-ups-wo}, removes this); and a line with an
+intercept, when \(y\) is not proportional to \(x\), where both rely on
+the wrong line and the regression estimator with an SRS is safer. In the
+toy example, \(H_d\) is 529 for the first population and 423 for the
+second, both above \(\bar{x}_U=400\), so HH beats the ratio estimator in
+both, as the working tables below confirm.
+
+\subsection{Toy Example: Four Supermarkets}\label{sec-ups-toy}
+
+A town has four supermarkets, with floor areas \(x_i\) from
+\(100\,\text{m}^2\) to \(1000\,\text{m}^2\), so \(t_x=1600\), and the
+selection probabilities are
+\(\psi_i=x_i/t_x=0.0625,\,0.125,\,0.1875,\,0.625\), against \(1/N=0.25\)
+for each store in an SRS. We want to estimate the total monthly sales
+\(t\) of the four stores; \(B=t/t_x\) is the sales per square metre, and
+the line \(y=Bx\) gives the residuals \(d_i=y_i-Bx_i\).
+
+To compare the three estimators of \(t\) in
+Section~\ref{sec-ups-compare}, we work out their variances for a
+\textbf{single draw} (\(n=1\)); for \(n\) draws, each is divided by
+\(n\). For the two SRS estimators we ignore the finite population
+correction, so a single draw has the variance of one value drawn with
+equal probabilities \(1/N\) (hence the divisor \(N\) rather than
+\(N-1\)). The one-draw variance of each estimator is the sum over the
+stores of its term:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Estimator & Design & Term of store \(i\) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Sample average & SRS & \(N(y_i-\bar{y}_U)^2\) \\
+Ratio & SRS & \(N\,d_i^2\) \\
+HH & PPS, \(\psi_i=x_i/t_x\) & \(d_i^2/\psi_i\) \\
+\end{longtable}
+}
+
+For each population below, a single table works out the three variances
+side by side; the \textbf{Variance} row is the sum of each column.
+
+\textbf{Sales proportional to floor area.} The monthly sales (thousands
+of dollars) are nearly proportional to the floor areas, as in the slides
+for this chapter. Here \(t=300\), \(\bar{y}_U=75\) and
+\(B=300/1600=0.1875\).
+
+The working table for the three one-draw variances:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1727}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0545}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0545}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1545}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1364}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1909}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1000}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1364}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Store
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(x_i\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(y_i\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(\psi_i=x_i/t_x\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(d_i=y_i-Bx_i\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(N(y_i-\bar{y}_U)^2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(N\,d_i^2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(d_i^2/\psi_i\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+A & 100 & 11 & 0.0625 & -7.75 & 16,384 & 240.2 & 961 \\
+B & 200 & 20 & 0.1250 & -17.50 & 12,100 & 1,225.0 & 2,450 \\
+C & 300 & 24 & 0.1875 & -32.25 & 10,404 & 4,160.2 & 5,547 \\
+D & 1,000 & 245 & 0.6250 & 57.50 & 115,600 & 13,225.0 & 5,290 \\
+\textbf{Variance} (Sum) & 1,600 & 300 & 1.0000 & 0.00 & 154,488 &
+18,850.5 & 14,248 \\
+\end{longtable}
+}
+
+The sample average ignores the floor areas, and its variance, 154,000,
+is dominated by store D, whose sales are far from \(\bar{y}_U=75\). The
+ratio estimator measures each store against the line \(y=Bx\) instead,
+that is, it looks at the residuals \(d_i\), which cuts the variance to
+18,900. HH uses the same residuals, but the largest term of the ratio
+estimator, store D's 13,225, belongs to the largest store, with
+\(\psi_D=0.625\), much larger than \(1/N=0.25\): HH divides \(d_D^2\) by
+\(\psi_D\) instead of \(1/N\), giving 5,290. The small stores' terms
+grow, since their \(\psi_i\) are below \(1/N\), but they are small, and
+the HH variance drops to 14,200, about 9\% of that of the sample
+average. (Dividing by \(N^2=16\) gives the variances of the estimates of
+the mean sales per store, 9,656, 1,178.2 and 890.5.)
+
+\textbf{Sales not related to floor area: a poor choice of \(\psi_i\).}
+Now suppose the sales are about the same in all four stores, for example
+because the large store D is a warehouse outlet with few customers,
+while the total is still \(t=300\), so \(B=0.1875\) again. The floor
+area is then a poor size variable, but we still draw with
+\(\psi_i=x_i/t_x\):
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1727}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0545}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0545}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1545}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1364}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1909}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1000}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1364}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Store
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(x_i\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(y_i\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(\psi_i=x_i/t_x\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(d_i=y_i-Bx_i\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(N(y_i-\bar{y}_U)^2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(N\,d_i^2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(d_i^2/\psi_i\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+A & 100 & 60 & 0.0625 & 41.25 & 900 & 6,806.2 & 27,225 \\
+B & 200 & 80 & 0.1250 & 42.50 & 100 & 7,225.0 & 14,450 \\
+C & 300 & 90 & 0.1875 & 33.75 & 900 & 4,556.2 & 6,075 \\
+D & 1,000 & 70 & 0.6250 & -117.50 & 100 & 55,225.0 & 22,090 \\
+\textbf{Variance} (Sum) & 1,600 & 300 & 1.0000 & 0.00 & 2,000 & 73,812.5
+& 69,840 \\
+\end{longtable}
+}
+
+The ordering is reversed. The sales hardly vary, so the sample average
+has a tiny variance, 2,000. The line \(y=Bx\) fits the sales badly, so
+all the residuals \(d_i\) are large, and the ratio estimator and HH,
+with variances 73,800 and 69,800, are more than 34 times worse than the
+sample average. Dividing by \(\psi_i\) instead of \(1/N\) helps little:
+it downweights the large negative residual of store D, but upweights the
+positive residuals of the small stores, by \(0.25/0.0625=4\) for store
+A. Unequal probability sampling is only as good as the size variable
+used to construct \(\psi_i\): before using PPS, check that \(y_i\) is
+roughly proportional to \(x_i\).
 
 \subsection{\texorpdfstring{Simulation Study using \texttt{agpop}
 Data}{Simulation Study using agpop Data}}\label{sec-ups-sim}
@@ -11066,8 +11169,9 @@ Hájek).
 The gain from unequal probability sampling depends entirely on how close
 the ratios \(b_i=y_i/x_i\) are to a constant, that is, on \(y_i\) being
 roughly proportional to the size variable \(x_i\) used for \(\psi_i\) or
-\(\pi_i\). Then the variance in Table~\ref{tbl-ups-compare} is small, as
-for the county acreages. Otherwise,
+\(\pi_i\). Then the residuals \(d_i=y_i-Bx_i\) in
+Table~\ref{tbl-ups-compare} are small, and so is the variance, as for
+the county acreages. Otherwise,
 
 \begin{itemize}
 \tightlist
@@ -11372,6 +11476,21 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(b_j^*-\bar{b}^*\right)^2
 \widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=t_x\,\frac{s_{b^*}}{\sqrt{n}}}
 \]
 
+\textbf{HH total for any selection probabilities} \(\psi_i\); \(y_j^*\)
+and \(\psi_j^*\) belong to the unit selected on draw \(j\)
+(Section~\ref{sec-ups-hh-psi}): \[
+\boxed{\hat{t}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt n},\qquad
+s_u^2=\frac{1}{n-1}\sum_{j=1}^n\left(\frac{y_j^*}{\psi_j^*}-\hat{t}_{\mathrm{HH}}\right)^2}
+\]
+
+\textbf{UPS versus the ratio estimator}: with residuals
+\(d_i = y_i - Bx_i\), \(B = t/t_x\), HH (with \(\psi_i = x_i/t_x\)) has
+a smaller variance than the SRS ratio estimator, ignoring the fpc,
+exactly when (Section~\ref{sec-ups-compare-theory}) \[
+\boxed{H_d=\frac{\sum_{i=1}^N d_i^2}{\sum_{i=1}^N d_i^2/x_i}>\bar{x}_U}
+\]
+
 \textbf{One-stage cluster sampling with PPS}: \(y_i \to t_i\),
 \(x_i \to M_i\), \(\psi_i = M_i/M_0\); the ratio of the cluster on draw
 \(j\) is its mean per element \(\bar y_j^*\)
@@ -11590,6 +11709,9 @@ Survey}\label{introduction-to-sampling-survey-1}
 \item
   Figure~\ref{fig-statepop-phys-vs-popn} --- Physicians vs.~population
   (log-log scale), sample of U.S. counties
+\item
+  Figure~\ref{fig-ups-spread} --- Spread of y about the line y = Bx:
+  when UPS beats the ratio estimator
 \item
   Figure~\ref{fig-upswr-sim-comparison} --- Estimator distribution:
   naive SRS vs.~SRS ratio vs.~SRS regression vs.~UPSWR (2000

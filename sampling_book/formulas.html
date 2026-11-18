@@ -483,16 +483,46 @@ s_u^2=\frac{1}{n-1}\sum_{j=1}^n\left(\frac{y_j^*}{\psi_j^*}-\hat{t}_{\mathrm{HH}
 <p><strong>UPS versus the ratio estimator</strong>: with residuals <span class="math inline">\(d_i = y_i - Bx_i\)</span>, <span class="math inline">\(B = t/t_x\)</span>, HH (with <span class="math inline">\(\psi_i = x_i/t_x\)</span>) has a smaller variance than the SRS ratio estimator, ignoring the fpc, exactly when (<a href="ups.html#sec-ups-compare-theory" class="quarto-xref"><span>Section 7.3.1</span></a>) <span class="math display">\[
 \boxed{H_d=\frac{\sum_{i=1}^N d_i^2}{\sum_{i=1}^N d_i^2/x_i}&gt;\bar{x}_U}
 \]</span></p>
-<p><strong>One-stage cluster sampling with PPS</strong>: <span class="math inline">\(y_i \to t_i\)</span>, <span class="math inline">\(x_i \to M_i\)</span>, <span class="math inline">\(\psi_i = M_i/M_0\)</span>; the ratio of the cluster on draw <span class="math inline">\(j\)</span> is its mean per element <span class="math inline">\(\bar y_j^*\)</span> (<a href="ups.html#sec-ups-cluster-theory" class="quarto-xref"><span>Section 7.4.1</span></a>): <span class="math display">\[
-\boxed{\hat{B}_{\mathrm{HH}}=\bar{b}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
-\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{b^*}}{\sqrt{n}},\qquad
-s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{b}^*\right)^2
+<p><strong>Cluster sampling with PPS, one or two stages</strong> (<a href="ups.html#sec-ups-cluster-theory" class="quarto-xref"><span>Section 7.4.1</span></a>, <a href="ups.html#sec-ups-twostage-theory" class="quarto-xref"><span>Section 7.5.1</span></a>): <span class="math inline">\(n\)</span> clusters are drawn with replacement with <span class="math inline">\(\psi_i = M_i/M_0\)</span>; <span class="math inline">\(\bar M_U = M_0/N\)</span>. Here <span class="math inline">\(\bar y_j^*\)</span> is the mean per element of the cluster on draw <span class="math inline">\(j\)</span>: its true mean <span class="math inline">\(t_j^*/M_j^*\)</span> (one stage), or the mean of an SRS of <span class="math inline">\(m_j^*\)</span> of its elements, <span class="math inline">\(\hat t_j^*/M_j^*\)</span>, taken afresh on every draw (two stages). The formulas are the same in both designs: <span class="math display">\[
+\boxed{\hat{\bar{y}}_{\mathrm{HH}}=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*,\qquad
+\widehat{\mathrm{SE}}(\hat{\bar{y}}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
+s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\hat{\bar{y}}_{\mathrm{HH}}\right)^2}
 \]</span></p>
-<p><strong>Two-stage cluster sampling with PPS</strong>: <span class="math inline">\(\bar y_j^*\)</span> is now the mean of the <span class="math inline">\(m_j\)</span> elements subsampled on draw <span class="math inline">\(j\)</span>; the mean per cluster and the total are <span class="math inline">\(\bar M_U\hat B_{\mathrm{HH}}\)</span> and <span class="math inline">\(M_0\hat B_{\mathrm{HH}}\)</span>, with SEs scaled the same way (<a href="ups.html#sec-ups-twostage-theory" class="quarto-xref"><span>Section 7.5.1</span></a>): <span class="math display">\[
-\boxed{\hat{B}_{\mathrm{HH}}=\bar{y}^*=\frac{1}{n}\sum_{j=1}^n \bar{y}_j^*},\qquad
-\widehat{\mathrm{SE}}(\hat{B}_{\mathrm{HH}})=\frac{s_{\bar{y}^*}}{\sqrt{n}},\qquad
-s_{\bar{y}^*}^2=\frac{1}{n-1}\sum_{j=1}^n\left(\bar{y}_j^*-\bar{y}^*\right)^2
-\]</span></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Quantity</th>
+<th style="text-align: left;">Estimate</th>
+<th style="text-align: left;">Estimated SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Mean per element (ssu-level mean), <span class="math inline">\(\bar y_U = t/M_0\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\hat{\bar y}_{\mathrm{HH}}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(s_{\bar y^*}/\sqrt n\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mean per cluster (psu-level mean of the totals), <span class="math inline">\(\bar t_U = t/N\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\hat{\bar t}_{\mathrm{HH}} = \bar M_U\,\hat{\bar y}_{\mathrm{HH}}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\bar M_U\,s_{\bar y^*}/\sqrt n\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total, <span class="math inline">\(t\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\hat t_{\mathrm{HH}} = M_0\,\hat{\bar y}_{\mathrm{HH}}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(M_0\,s_{\bar y^*}/\sqrt n\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>No second-stage variance term is needed: with <span class="math inline">\(\bar y_{iU} = t_i/M_i\)</span> and <span class="math inline">\(V_{2i} = \left(1-\frac{m_i}{M_i}\right)\frac{S_i^2}{m_i}\)</span> (<span class="math inline">\(V_{2i}=0\)</span> in one stage), <span class="math display">\[
+V(\bar y_j^*) = \underbrace{\sum_{i=1}^N\psi_i\left(\bar y_{iU}-\bar y_U\right)^2}_{\text{between clusters}} + \underbrace{\sum_{i=1}^N\psi_i V_{2i}}_{\text{within clusters}},
+\qquad E\left(s_{\bar y^*}^2\right) = V(\bar y_j^*),
+\]</span> since the draws <span class="math inline">\(\bar y_1^*,\dots,\bar y_n^*\)</span> are iid.</p>
 <p><strong>Horvitz–Thompson (HT) estimator</strong>: without replacement, with inclusion probabilities <span class="math inline">\(\pi_i = P(i\in\mathcal S)\)</span>, for example <span class="math inline">\(\pi_i = n x_i/t_x\)</span> (<a href="ups.html#sec-ups-wo-theory" class="quarto-xref"><span>Section 7.6.1</span></a>): <span class="math display">\[
 \boxed{\hat{t}_{\mathrm{HT}}=\sum_{i\in\mathcal{S}}\frac{y_i}{\pi_i}}
 \]</span></p>
