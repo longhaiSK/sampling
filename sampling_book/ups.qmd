@@ -1100,13 +1100,174 @@ only $\pi_i$ are used:
 
 For the mean per unit, divide the estimate and the SE by $N$; for the ratio $\hat{B}_{\mathrm{HT}}$, divide by $t_x$.
 
+### Selecting a Sample with Given Inclusion Probabilities {#sec-ups-wo-select}
+
+The HT estimator needs only the inclusion probabilities $\pi_i$, but to use it we must be able to **draw** a sample
+without replacement whose inclusion probabilities are exactly the $\pi_i$ we chose. This is less obvious than it
+looks, because many different designs have the same $\pi_i$ (they differ in the joint probabilities $\pi_{ij}$),
+and the most natural procedure does not give them.
+
+**Step 1: compute the $\pi_i$.** For a size variable $x_i$ and a sample of size $n$, start with
+$\pi_i=n\,x_i/t_x$. A unit with $\pi_i\ge 1$ is taken with certainty, $\pi_i=1$; remove the certainty units, and
+recompute $\pi_i=n'x_i/t_x'$ for the others, with $n'$ the number of places left and $t_x'$ the total size of the
+remaining units; repeat until all $\pi_i\le1$. The function `inclusionprobabilities(x, n)` of the R package
+`sampling` does this. For example, with $N=6$ units of sizes $x=(40,25,15,10,6,4)$, $t_x=100$ and $n=3$, unit 1 has
+$3\times40/100=1.2>1$, so it is a certainty unit, and the other two places are shared by units 2--6 with
+$\pi_i=2x_i/60$:
+
+```{r wo-select-pik}
+library(sampling)
+x_toy <- c(40, 25, 15, 10, 6, 4)
+pik_toy <- inclusionprobabilities(x_toy, 3)
+round(pik_toy, 4)
+sum(pik_toy)
+```
+
+**The natural procedure does not work.** Drawing $n$ times with probabilities $\psi_i=x_i/t_x$, and redrawing
+whenever a unit already in the sample comes up (draw by draw, without replacement), does **not** give
+$\pi_i=n\psi_i$. For example, with $N=3$, $x=(2,1,1)$ and $n=2$, the target is $\pi=(1,0.5,0.5)$, but unit 1 is in
+the sample with probability $P(\text{1 on draw 1})+P(\text{1 on draw 2})=0.5+2\times0.25\times\frac{0.5}{0.75}=0.833$:
+when a small unit is drawn first, the large unit only has probability $2/3$ on the second draw.
+
+**Step 2: draw the sample.** There are many methods for drawing a fixed-size sample without replacement with any
+given $\pi_i$ (with $0<\pi_i\le1$ and $\sum_i\pi_i=n$ an integer); see Tillé, *Sampling Algorithms* (Springer, 2006), for a survey. Two of them are
+simple and general.
+
+* **Systematic $\pi$ps sampling** (Madow, 1949). Lay the units along a line in some order, unit $i$ occupying an
+  interval of length $\pi_i$, so that the line has length $\sum_i\pi_i=n$. Draw one random start
+  $u\sim\mathrm{Uniform}(0,1)$, and select the units whose intervals contain the $n$ points
+  $u,\,u+1,\,\dots,\,u+n-1$. Since the points are spaced 1 apart and an interval has length $\pi_i\le1$, it
+  contains at most one point, and it contains one with probability exactly $\pi_i$. This is the same line as for
+  UPSWR (@sec-ups-hh-theory), with $n$ equally spaced points instead of $n$ independent ones; see
+  @fig-sys-pps.
+
+* **The pivotal method** (Deville and Tillé, 1998). Process the probabilities two at a time. Take two units $i$
+  and $j$ whose current probabilities $a=\pi_i$ and $b=\pi_j$ are strictly between 0 and 1, and let them
+  "fight" for their combined probability $a+b$:
+    - if $a+b<1$: with probability $\frac{a}{a+b}$ set $(\pi_i,\pi_j)\leftarrow(a+b,0)$, otherwise $(0,a+b)$;
+    - if $a+b\ge1$: with probability $\frac{1-b}{2-a-b}$ set $(\pi_i,\pi_j)\leftarrow(1,a+b-1)$, otherwise $(a+b-1,1)$.
+
+  Each step decides at least one of the two units (its probability becomes 0 or 1), keeps the sum $n$, and keeps the
+  **expected** value of every probability. For example, if $a+b<1$, the new $\pi_i$ has expectation
+  $\frac{a}{a+b}(a+b)+\frac{b}{a+b}\cdot0=a$, and if $a+b\ge1$ it has expectation
+  $\frac{1-b}{2-a-b}\cdot1+\frac{1-a}{2-a-b}(a+b-1)=\frac{a(2-a-b)}{2-a-b}=a$. After at most $N-1$ steps every
+  probability is 0 or 1, the units with 1 form a sample of size $n$, and unit $i$ is in it with probability equal
+  to its original $\pi_i$.
+
+```{r fig-sys-pps}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 2.4
+#| out-width: "90%"
+#| fig-cap: "Systematic $\\pi$ps sampling of $n=3$ of the six toy units: unit $i$ occupies an interval of length $\\pi_i$ on $[0,3]$, and the units containing the points $u$, $u+1$, $u+2$ (red triangles, here $u=0.62$) are selected: units 1, 2 and 4."
+pik_fig <- c(1, 2 * c(25, 15, 10, 6, 4) / 60)
+cum <- c(0, cumsum(pik_fig))
+u <- 0.62
+pts <- u + 0:2
+sel <- findInterval(pts, cum, left.open = TRUE)
+par(mar = c(3, 0.5, 0.5, 0.5))
+plot(NA, xlim = c(0, 3), ylim = c(0, 1), xaxt = "n", yaxt = "n", xlab = "", ylab = "", bty = "n")
+cols <- ifelse(seq_along(pik_fig) %in% sel, "#f6d5c8", rep(c("#dbe9fb", "#c3dbf7"), length.out = 6))
+rect(cum[-7], 0.3, cum[-1], 0.7, col = cols, border = "black", lwd = 1.5)
+text((cum[-7] + cum[-1]) / 2, 0.5, 1:6, cex = 1.3)
+axis(1, at = cum, labels = sprintf("%.3g", cum), cex.axis = 0.85)
+abline(v = 1:2, lty = 3, col = "grey50")
+points(pts, rep(0.5, 3), pch = 17, col = "firebrick", cex = 1.8)
+text(pts, rep(0.85, 3), sprintf("%.2f", pts), col = "firebrick", cex = 0.9)
+```
+
+The pivotal method is an instance of a **general procedure**, the *splitting method* of Deville and Tillé (1998):
+at each step, write the current vector of probabilities as a random choice between two vectors,
+$\boldsymbol{\pi}=\lambda\,\boldsymbol{\pi}^{(1)}+(1-\lambda)\,\boldsymbol{\pi}^{(2)}$, each with sum $n$ and
+components in $[0,1]$, and move to $\boldsymbol{\pi}^{(1)}$ with probability $\lambda$, otherwise to
+$\boldsymbol{\pi}^{(2)}$. The expected value of every component is kept, and the procedure stops when all
+components are 0 or 1. Almost all fixed-size methods can be described in this way; they differ in how the vector is
+split, which determines the joint probabilities $\pi_{ij}$. The main methods, all in the R package `sampling`, are:
+
+| Method | R function | Remarks |
+|:---|:---|:---|
+| Systematic $\pi$ps | `UPsystematic(pik)` | simplest; many $\pi_{ij}=0$ |
+| Randomized systematic | `UPrandomsystematic(pik)` | random order of the units first, so fewer $\pi_{ij}=0$ |
+| Pivotal method | `UPpivotal(pik)` | sequential, two units at a time |
+| Brewer's method | `UPbrewer(pik)` | draw by draw with adjusted probabilities; $\pi_{ij}>0$ |
+| Sampford's method | `UPsampford(pik)` | rejective: redraw until $n$ distinct units; $\pi_{ij}$ computable |
+| Tillé's elimination | `UPtille(pik)` | eliminates units one at a time |
+| Maximum entropy (conditional Poisson) | `UPmaxentropy(pik)` | most "random" design with the $\pi_i$; used in @sec-ups-wo-example |
+| Poisson sampling | `UPpoisson(pik)` | each unit independently with probability $\pi_i$; random sample size |
+
+The choice matters for the variance estimation of @sec-ups-wo-theory: the SYG estimator needs $\pi_{ij}>0$ for every
+pair, which fails for systematic sampling, and the Hájek approximation is accurate for designs of high entropy, such
+as maximum entropy, Brewer, Sampford and Tillé sampling. Systematic sampling is often used in practice for its
+simplicity, with a with-replacement or Hájek variance estimate.
+
+**Implementing the two methods.** The following functions implement systematic $\pi$ps sampling and the pivotal
+method directly from their descriptions, and each returns the indices of the sampled units. We draw 20,000 samples
+with each method from the toy population and compare the proportion of samples that contain each unit with the
+target $\pi_i$:
+
+```{r wo-select-functions}
+## systematic pi-ps: points u, u+1, ..., u+n-1 on the cumulated pi_i
+sys_pps <- function(pik) {
+  n <- round(sum(pik))
+  cum <- c(0, cumsum(pik))
+  u <- runif(1)
+  findInterval(u + 0:(n - 1), cum, left.open = TRUE)
+}
+
+## pivotal method: two undecided units fight for their combined probability
+pivotal_pps <- function(pik, eps = 1e-9) {
+  repeat {
+    open <- which(pik > eps & pik < 1 - eps)   # undecided units
+    if (length(open) < 2) break
+    i <- open[1]; j <- open[2]
+    a <- pik[i]; b <- pik[j]
+    if (a + b < 1) {
+      if (runif(1) < a / (a + b)) { pik[i] <- a + b; pik[j] <- 0 }
+      else                        { pik[i] <- 0;     pik[j] <- a + b }
+    } else {
+      if (runif(1) < (1 - b) / (2 - a - b)) { pik[i] <- 1;         pik[j] <- a + b - 1 }
+      else                                  { pik[i] <- a + b - 1; pik[j] <- 1 }
+    }
+  }
+  which(pik > 1 - eps)
+}
+
+set.seed(348)
+sys_pps(pik_toy)
+pivotal_pps(pik_toy)
+```
+
+```{r wo-select-check}
+#| tbl-cap: "Target inclusion probabilities and the proportion of 20,000 samples containing each unit"
+R_sel <- 20000
+freq <- function(draw) tabulate(unlist(replicate(R_sel, draw(pik_toy), simplify = FALSE)), length(pik_toy)) / R_sel
+knitr::kable(rbind(`target pi_i` = pik_toy, systematic = freq(sys_pps), pivotal = freq(pivotal_pps),
+                   `UPbrewer` = freq(function(p) which(UPbrewer(p) == 1))),
+             digits = 3, col.names = paste("unit", 1:6))
+```
+
+All three methods reproduce the target $\pi_i$ up to simulation error. They are different designs, however, as the
+joint inclusion probabilities show. For systematic sampling (in this order of the units) they are, from
+`UPsystematicpi2`:
+
+```{r wo-select-pi2}
+#| tbl-cap: "Joint inclusion probabilities $\\pi_{ij}$ of systematic $\\pi$ps sampling for the toy population (diagonal: $\\pi_i$)"
+knitr::kable(UPsystematicpi2(pik_toy), digits = 3, col.names = paste("unit", 1:6))
+```
+
+Several pairs, such as units 3 and 4, are never selected together ($\pi_{ij}=0$): their intervals,
+$(1.833,2.333]$ and $(2.333,2.667]$, are adjacent with a total length $0.833<1$, so two points spaced 1 apart
+cannot fall in both. For these pairs the SYG
+variance estimator cannot be computed, which is why a with-replacement or Hájek approximation is used with
+systematic sampling, or the order of the units is randomized first.
+
 ### Example: Acres of Farmland in Counties (`agpop.csv`) {#sec-ups-wo-example}
 
 We draw a sample of $n=100$ of the counties of `agpop` without replacement, with inclusion probabilities
 $\pi_i=100\,x_i/t_x$ proportional to the acres in 1987 ($x_i$), and estimate the mean acres of farmland in 1992
 ($y_i$) per county. (The few counties with no farmland in 1987 cannot be selected and are left out.) The sample
 is drawn by maximum entropy sampling, a fixed-size design with these inclusion probabilities, from the R package
-`sampling`; a county with $100x_i/t_x>1$ would be included with certainty (none is here).
+`sampling` (@sec-ups-wo-select); a county with $100x_i/t_x>1$ would be included with certainty (none is here).
 
 ```{r wo-sample}
 library(sampling)
@@ -1222,7 +1383,22 @@ nominal 95% because its variance is too large. The ratio of the total acres in 1
 $\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/t_x=`r round(est_B_hajek["Est."], 3)`$
 (SE `r round(est_B_hajek["S.E."], 3)`, Hájek).
 
-## When to Use Unequal Probability Sampling {#sec-ups-when}
+## Summary and Discussion on UPS {#sec-ups-summary}
+
+### Summary of the Designs and Estimators {#sec-ups-summary-table}
+
+| Design | Selection | Estimator of the total | Estimated SE |
+|:---|:---|:---|:---|
+| UPSWR (@sec-ups-hh) | $n$ independent draws, unit $i$ with probability $\psi_i$ | $\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n y_j^*/\psi_j^*$ | $s_u/\sqrt n$, from the $n$ values $y_j^*/\psi_j^*$ |
+| One- and two-stage cluster UPSWR, $\psi_i=M_i/M_0$ (@sec-ups-cluster, @sec-ups-twostage) | clusters drawn with replacement; in two stages, a fresh SRS of elements on every draw | $\hat t_{\mathrm{HH}}=M_0\,\hat{\bar y}_{\mathrm{HH}}$, $\hat{\bar y}_{\mathrm{HH}}=\frac1n\sum_j\bar y_j^*$ | $M_0\,s_{\bar y^*}/\sqrt n$; no second-stage term |
+| UPSWO (@sec-ups-wo) | $n$ distinct units with inclusion probabilities $\pi_i$ | $\hat t_{\mathrm{HT}}=\sum_{i\in\mathcal S}y_i/\pi_i$ | SYG (needs $\pi_{ij}$), or the Hájek or with-replacement approximation |
+
+: {tbl-colwidths="[24,24,26,26]"}
+
+In all three, a unit's weight is the inverse of its selection probability, and the estimator is precise when
+$y_i$ is nearly proportional to the size $x_i$ that defines the probabilities.
+
+### When to Use Unequal Probability Sampling {#sec-ups-when}
 
 ::: {.callout-warning title="Remark: UPS is risky unless y is tied to the size variable"}
 The gain from unequal probability sampling depends entirely on how close the ratios $b_i=y_i/x_i$ are to a constant,
@@ -1241,3 +1417,42 @@ the items, or surveying establishments by their employment. When the size is onl
 $y_i$, use simple random or stratified sampling, with a ratio or regression estimator if $x_i$ is
 known, which is much safer than using $x_i$ at the design stage.
 :::
+
+### Practical Issues of Sampling Without Replacement {#sec-ups-wo-practice}
+
+Sampling without replacement avoids drawing a large unit twice, but it is harder than UPSWR, in the
+selection and above all in the analysis.
+
+**Selecting the sample** is no longer a real difficulty. Software draws a fixed-size sample with given
+$\pi_i$ in one line, for example `UPbrewer(pik)` or `UPmaxentropy(pik)` in the R package `sampling`, and
+systematic $\pi$ps sampling is easy to do by hand (@sec-ups-wo-select). The two points that need care are
+to make the units with $n\,x_i/t_x\ge1$ certainty units, and not to use the natural "draw with $\psi_i$
+and redraw on duplicates" procedure, which does not give the intended $\pi_i$.
+
+**Estimating the variance** is the real cost. The unbiased SYG estimator needs the joint inclusion
+probabilities $\pi_{ij}$, which are hard to compute for most designs, and for systematic sampling some
+$\pi_{ij}$ are $0$, so the estimator cannot be computed at all. In practice the $\pi_{ij}$ are avoided:
+
+* **Small sampling fraction: analyse as with replacement.** With and without replacement differ only through
+  factors of about $1-\pi_i$; when all $\pi_i$ are small, the with-replacement variance
+  $\hat V_{\mathrm{WR}}$ is only slightly conservative. This is the standard practice of large surveys and
+  survey software, which treat the first-stage units as drawn with replacement.
+* **Some large $\pi_i$: a high-entropy design with Hájek's approximation.** Maximum entropy (conditional
+  Poisson), Brewer, Sampford, Tillé and randomized systematic sampling have high entropy, and for them the
+  Hájek approximation $\hat V_{\mathrm{H}}$, which needs only the $\pi_i$, is accurate. This is the
+  combination used in @sec-ups-wo-example.
+* **Avoid plain systematic sampling of a fixed list** when a design-based variance estimate is needed;
+  randomize the order of the units first.
+
+**Simpler alternatives** give most of the benefit of $\pi$ps sampling with an easy analysis:
+
+* **UPSWR** itself: when $n/N$ is small, repeated draws are rare and the simple HH analysis of
+  @sec-ups-hh loses almost nothing.
+* **Stratification by size** with an SRS within each stratum (and a larger sampling fraction in the
+  strata of large units), analysed with the usual stratified formulas.
+* **Poisson sampling**: each unit is included independently with probability $\pi_i$, so
+  $\pi_{ij}=\pi_i\pi_j$ and $\hat V(\hat t_{\mathrm{HT}})=\sum_{i\in\mathcal S}(1-\pi_i)\,y_i^2/\pi_i^2$ is
+  simple, at the price of a random sample size.
+
+In short, sampling without replacement pays off mainly when the sampling fraction is large, so that UPSWR
+would waste a noticeable part of the sample on repeated draws of the large units.

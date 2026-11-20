@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Longhai Li">
-<meta name="dcterms.date" content="2026-11-17">
+<meta name="dcterms.date" content="2026-11-19">
 
 <title>7&nbsp; Unequal Probability Sampling – Elements of Sampling Survey</title>
 <style>
@@ -304,9 +304,15 @@ window.Quarto = {
   <li><a href="#sec-ups-wo" id="toc-sec-ups-wo" class="nav-link" data-scroll-target="#sec-ups-wo"><span class="header-section-number">7.6</span> UPS Without Replacement</a>
   <ul>
   <li><a href="#sec-ups-wo-theory" id="toc-sec-ups-wo-theory" class="nav-link" data-scroll-target="#sec-ups-wo-theory"><span class="header-section-number">7.6.1</span> Review of UPSWR and the Horvitz–Thompson Estimator</a></li>
-  <li><a href="#sec-ups-wo-example" id="toc-sec-ups-wo-example" class="nav-link" data-scroll-target="#sec-ups-wo-example"><span class="header-section-number">7.6.2</span> Example: Acres of Farmland in Counties (<code>agpop.csv</code>)</a></li>
+  <li><a href="#sec-ups-wo-select" id="toc-sec-ups-wo-select" class="nav-link" data-scroll-target="#sec-ups-wo-select"><span class="header-section-number">7.6.2</span> Selecting a Sample with Given Inclusion Probabilities</a></li>
+  <li><a href="#sec-ups-wo-example" id="toc-sec-ups-wo-example" class="nav-link" data-scroll-target="#sec-ups-wo-example"><span class="header-section-number">7.6.3</span> Example: Acres of Farmland in Counties (<code>agpop.csv</code>)</a></li>
   </ul></li>
-  <li><a href="#sec-ups-when" id="toc-sec-ups-when" class="nav-link" data-scroll-target="#sec-ups-when"><span class="header-section-number">7.7</span> When to Use Unequal Probability Sampling</a></li>
+  <li><a href="#sec-ups-summary" id="toc-sec-ups-summary" class="nav-link" data-scroll-target="#sec-ups-summary"><span class="header-section-number">7.7</span> Summary and Discussion on UPS</a>
+  <ul>
+  <li><a href="#sec-ups-summary-table" id="toc-sec-ups-summary-table" class="nav-link" data-scroll-target="#sec-ups-summary-table"><span class="header-section-number">7.7.1</span> Summary of the Designs and Estimators</a></li>
+  <li><a href="#sec-ups-when" id="toc-sec-ups-when" class="nav-link" data-scroll-target="#sec-ups-when"><span class="header-section-number">7.7.2</span> When to Use Unequal Probability Sampling</a></li>
+  <li><a href="#sec-ups-wo-practice" id="toc-sec-ups-wo-practice" class="nav-link" data-scroll-target="#sec-ups-wo-practice"><span class="header-section-number">7.7.3</span> Practical Issues of Sampling Without Replacement</a></li>
+  </ul></li>
   </ul>
 </nav>
 </nav>
@@ -336,7 +342,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 17, 2026</p>
+      <p class="date">November 19, 2026</p>
     </div>
   </div>
   
@@ -670,23 +676,23 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_est_gt</span>(<span class="st">"hh_B"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="bkjkmybjep" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#bkjkmybjep table {
+<div id="twtyaslymu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#twtyaslymu table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#bkjkmybjep thead, #bkjkmybjep tbody, #bkjkmybjep tfoot, #bkjkmybjep tr, #bkjkmybjep td, #bkjkmybjep th {
+#twtyaslymu thead, #twtyaslymu tbody, #twtyaslymu tfoot, #twtyaslymu tr, #twtyaslymu td, #twtyaslymu th {
   border-style: none;
 }
 
-#bkjkmybjep p {
+#twtyaslymu p {
   margin: 0;
   padding: 0;
 }
 
-#bkjkmybjep .gt_table {
+#twtyaslymu .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -712,12 +718,12 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-left-color: #D3D3D3;
 }
 
-#bkjkmybjep .gt_caption {
+#twtyaslymu .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#bkjkmybjep .gt_title {
+#twtyaslymu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -729,7 +735,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-width: 0;
 }
 
-#bkjkmybjep .gt_subtitle {
+#twtyaslymu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -741,7 +747,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-top-width: 0;
 }
 
-#bkjkmybjep .gt_heading {
+#twtyaslymu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -753,13 +759,13 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#bkjkmybjep .gt_bottom_border {
+#twtyaslymu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#bkjkmybjep .gt_col_headings {
+#twtyaslymu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -774,7 +780,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#bkjkmybjep .gt_col_heading {
+#twtyaslymu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -794,7 +800,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   overflow-x: hidden;
 }
 
-#bkjkmybjep .gt_column_spanner_outer {
+#twtyaslymu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -806,15 +812,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 4px;
 }
 
-#bkjkmybjep .gt_column_spanner_outer:first-child {
+#twtyaslymu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#bkjkmybjep .gt_column_spanner_outer:last-child {
+#twtyaslymu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#bkjkmybjep .gt_column_spanner {
+#twtyaslymu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -826,11 +832,11 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   width: 100%;
 }
 
-#bkjkmybjep .gt_spanner_row {
+#twtyaslymu .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#bkjkmybjep .gt_group_heading {
+#twtyaslymu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -856,7 +862,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   text-align: left;
 }
 
-#bkjkmybjep .gt_empty_group_heading {
+#twtyaslymu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -871,15 +877,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   vertical-align: middle;
 }
 
-#bkjkmybjep .gt_from_md > :first-child {
+#twtyaslymu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#bkjkmybjep .gt_from_md > :last-child {
+#twtyaslymu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#bkjkmybjep .gt_row {
+#twtyaslymu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -898,7 +904,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   overflow-x: hidden;
 }
 
-#bkjkmybjep .gt_stub {
+#twtyaslymu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -911,7 +917,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#bkjkmybjep .gt_stub_row_group {
+#twtyaslymu .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -925,15 +931,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   vertical-align: top;
 }
 
-#bkjkmybjep .gt_row_group_first td {
+#twtyaslymu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#bkjkmybjep .gt_row_group_first th {
+#twtyaslymu .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#bkjkmybjep .gt_summary_row {
+#twtyaslymu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -943,16 +949,16 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#bkjkmybjep .gt_first_summary_row {
+#twtyaslymu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#bkjkmybjep .gt_first_summary_row.thick {
+#twtyaslymu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#bkjkmybjep .gt_last_summary_row {
+#twtyaslymu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -962,7 +968,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#bkjkmybjep .gt_grand_summary_row {
+#twtyaslymu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -972,7 +978,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#bkjkmybjep .gt_first_grand_summary_row {
+#twtyaslymu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -982,7 +988,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-top-color: #D3D3D3;
 }
 
-#bkjkmybjep .gt_last_grand_summary_row_top {
+#twtyaslymu .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -992,11 +998,11 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#bkjkmybjep .gt_striped {
+#twtyaslymu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#bkjkmybjep .gt_table_body {
+#twtyaslymu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1005,7 +1011,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#bkjkmybjep .gt_footnotes {
+#twtyaslymu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1019,7 +1025,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#bkjkmybjep .gt_footnote {
+#twtyaslymu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1028,7 +1034,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#bkjkmybjep .gt_sourcenotes {
+#twtyaslymu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1042,7 +1048,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#bkjkmybjep .gt_sourcenote {
+#twtyaslymu .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1050,72 +1056,72 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#bkjkmybjep .gt_left {
+#twtyaslymu .gt_left {
   text-align: left;
 }
 
-#bkjkmybjep .gt_center {
+#twtyaslymu .gt_center {
   text-align: center;
 }
 
-#bkjkmybjep .gt_right {
+#twtyaslymu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bkjkmybjep .gt_font_normal {
+#twtyaslymu .gt_font_normal {
   font-weight: normal;
 }
 
-#bkjkmybjep .gt_font_bold {
+#twtyaslymu .gt_font_bold {
   font-weight: bold;
 }
 
-#bkjkmybjep .gt_font_italic {
+#twtyaslymu .gt_font_italic {
   font-style: italic;
 }
 
-#bkjkmybjep .gt_super {
+#twtyaslymu .gt_super {
   font-size: 65%;
 }
 
-#bkjkmybjep .gt_footnote_marks {
+#twtyaslymu .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#bkjkmybjep .gt_asterisk {
+#twtyaslymu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#bkjkmybjep .gt_indent_1 {
+#twtyaslymu .gt_indent_1 {
   text-indent: 5px;
 }
 
-#bkjkmybjep .gt_indent_2 {
+#twtyaslymu .gt_indent_2 {
   text-indent: 10px;
 }
 
-#bkjkmybjep .gt_indent_3 {
+#twtyaslymu .gt_indent_3 {
   text-indent: 15px;
 }
 
-#bkjkmybjep .gt_indent_4 {
+#twtyaslymu .gt_indent_4 {
   text-indent: 20px;
 }
 
-#bkjkmybjep .gt_indent_5 {
+#twtyaslymu .gt_indent_5 {
   text-indent: 25px;
 }
 
-#bkjkmybjep .katex-display {
+#twtyaslymu .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#bkjkmybjep div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#twtyaslymu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1147,23 +1153,23 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_est_gt</span>(<span class="st">"hh_ybar"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="rirknhhsew" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#rirknhhsew table {
+<div id="gcjayigbjk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gcjayigbjk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#rirknhhsew thead, #rirknhhsew tbody, #rirknhhsew tfoot, #rirknhhsew tr, #rirknhhsew td, #rirknhhsew th {
+#gcjayigbjk thead, #gcjayigbjk tbody, #gcjayigbjk tfoot, #gcjayigbjk tr, #gcjayigbjk td, #gcjayigbjk th {
   border-style: none;
 }
 
-#rirknhhsew p {
+#gcjayigbjk p {
   margin: 0;
   padding: 0;
 }
 
-#rirknhhsew .gt_table {
+#gcjayigbjk .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1189,12 +1195,12 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-left-color: #D3D3D3;
 }
 
-#rirknhhsew .gt_caption {
+#gcjayigbjk .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#rirknhhsew .gt_title {
+#gcjayigbjk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1206,7 +1212,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-width: 0;
 }
 
-#rirknhhsew .gt_subtitle {
+#gcjayigbjk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1218,7 +1224,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-top-width: 0;
 }
 
-#rirknhhsew .gt_heading {
+#gcjayigbjk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1230,13 +1236,13 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#rirknhhsew .gt_bottom_border {
+#gcjayigbjk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#rirknhhsew .gt_col_headings {
+#gcjayigbjk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1251,7 +1257,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#rirknhhsew .gt_col_heading {
+#gcjayigbjk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1271,7 +1277,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   overflow-x: hidden;
 }
 
-#rirknhhsew .gt_column_spanner_outer {
+#gcjayigbjk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1283,15 +1289,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 4px;
 }
 
-#rirknhhsew .gt_column_spanner_outer:first-child {
+#gcjayigbjk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#rirknhhsew .gt_column_spanner_outer:last-child {
+#gcjayigbjk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#rirknhhsew .gt_column_spanner {
+#gcjayigbjk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1303,11 +1309,11 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   width: 100%;
 }
 
-#rirknhhsew .gt_spanner_row {
+#gcjayigbjk .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#rirknhhsew .gt_group_heading {
+#gcjayigbjk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1333,7 +1339,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   text-align: left;
 }
 
-#rirknhhsew .gt_empty_group_heading {
+#gcjayigbjk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1348,15 +1354,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   vertical-align: middle;
 }
 
-#rirknhhsew .gt_from_md > :first-child {
+#gcjayigbjk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rirknhhsew .gt_from_md > :last-child {
+#gcjayigbjk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rirknhhsew .gt_row {
+#gcjayigbjk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1375,7 +1381,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   overflow-x: hidden;
 }
 
-#rirknhhsew .gt_stub {
+#gcjayigbjk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1388,7 +1394,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#rirknhhsew .gt_stub_row_group {
+#gcjayigbjk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1402,15 +1408,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   vertical-align: top;
 }
 
-#rirknhhsew .gt_row_group_first td {
+#gcjayigbjk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#rirknhhsew .gt_row_group_first th {
+#gcjayigbjk .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#rirknhhsew .gt_summary_row {
+#gcjayigbjk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1420,16 +1426,16 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#rirknhhsew .gt_first_summary_row {
+#gcjayigbjk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#rirknhhsew .gt_first_summary_row.thick {
+#gcjayigbjk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#rirknhhsew .gt_last_summary_row {
+#gcjayigbjk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1439,7 +1445,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#rirknhhsew .gt_grand_summary_row {
+#gcjayigbjk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1449,7 +1455,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#rirknhhsew .gt_first_grand_summary_row {
+#gcjayigbjk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1459,7 +1465,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-top-color: #D3D3D3;
 }
 
-#rirknhhsew .gt_last_grand_summary_row_top {
+#gcjayigbjk .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1469,11 +1475,11 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#rirknhhsew .gt_striped {
+#gcjayigbjk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#rirknhhsew .gt_table_body {
+#gcjayigbjk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1482,7 +1488,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#rirknhhsew .gt_footnotes {
+#gcjayigbjk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1496,7 +1502,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#rirknhhsew .gt_footnote {
+#gcjayigbjk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1505,7 +1511,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#rirknhhsew .gt_sourcenotes {
+#gcjayigbjk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1519,7 +1525,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#rirknhhsew .gt_sourcenote {
+#gcjayigbjk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1527,72 +1533,72 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#rirknhhsew .gt_left {
+#gcjayigbjk .gt_left {
   text-align: left;
 }
 
-#rirknhhsew .gt_center {
+#gcjayigbjk .gt_center {
   text-align: center;
 }
 
-#rirknhhsew .gt_right {
+#gcjayigbjk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rirknhhsew .gt_font_normal {
+#gcjayigbjk .gt_font_normal {
   font-weight: normal;
 }
 
-#rirknhhsew .gt_font_bold {
+#gcjayigbjk .gt_font_bold {
   font-weight: bold;
 }
 
-#rirknhhsew .gt_font_italic {
+#gcjayigbjk .gt_font_italic {
   font-style: italic;
 }
 
-#rirknhhsew .gt_super {
+#gcjayigbjk .gt_super {
   font-size: 65%;
 }
 
-#rirknhhsew .gt_footnote_marks {
+#gcjayigbjk .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#rirknhhsew .gt_asterisk {
+#gcjayigbjk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#rirknhhsew .gt_indent_1 {
+#gcjayigbjk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#rirknhhsew .gt_indent_2 {
+#gcjayigbjk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#rirknhhsew .gt_indent_3 {
+#gcjayigbjk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#rirknhhsew .gt_indent_4 {
+#gcjayigbjk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#rirknhhsew .gt_indent_5 {
+#gcjayigbjk .gt_indent_5 {
   text-indent: 25px;
 }
 
-#rirknhhsew .katex-display {
+#gcjayigbjk .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#rirknhhsew div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#gcjayigbjk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1624,23 +1630,23 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_est_gt</span>(<span class="st">"hh_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="osymtlpeon" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#osymtlpeon table {
+<div id="kyqfbhmrvb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kyqfbhmrvb table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#osymtlpeon thead, #osymtlpeon tbody, #osymtlpeon tfoot, #osymtlpeon tr, #osymtlpeon td, #osymtlpeon th {
+#kyqfbhmrvb thead, #kyqfbhmrvb tbody, #kyqfbhmrvb tfoot, #kyqfbhmrvb tr, #kyqfbhmrvb td, #kyqfbhmrvb th {
   border-style: none;
 }
 
-#osymtlpeon p {
+#kyqfbhmrvb p {
   margin: 0;
   padding: 0;
 }
 
-#osymtlpeon .gt_table {
+#kyqfbhmrvb .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1666,12 +1672,12 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-left-color: #D3D3D3;
 }
 
-#osymtlpeon .gt_caption {
+#kyqfbhmrvb .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#osymtlpeon .gt_title {
+#kyqfbhmrvb .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1683,7 +1689,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-width: 0;
 }
 
-#osymtlpeon .gt_subtitle {
+#kyqfbhmrvb .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1695,7 +1701,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-top-width: 0;
 }
 
-#osymtlpeon .gt_heading {
+#kyqfbhmrvb .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1707,13 +1713,13 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#osymtlpeon .gt_bottom_border {
+#kyqfbhmrvb .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#osymtlpeon .gt_col_headings {
+#kyqfbhmrvb .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1728,7 +1734,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#osymtlpeon .gt_col_heading {
+#kyqfbhmrvb .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1748,7 +1754,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   overflow-x: hidden;
 }
 
-#osymtlpeon .gt_column_spanner_outer {
+#kyqfbhmrvb .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1760,15 +1766,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 4px;
 }
 
-#osymtlpeon .gt_column_spanner_outer:first-child {
+#kyqfbhmrvb .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#osymtlpeon .gt_column_spanner_outer:last-child {
+#kyqfbhmrvb .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#osymtlpeon .gt_column_spanner {
+#kyqfbhmrvb .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1780,11 +1786,11 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   width: 100%;
 }
 
-#osymtlpeon .gt_spanner_row {
+#kyqfbhmrvb .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#osymtlpeon .gt_group_heading {
+#kyqfbhmrvb .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1810,7 +1816,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   text-align: left;
 }
 
-#osymtlpeon .gt_empty_group_heading {
+#kyqfbhmrvb .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1825,15 +1831,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   vertical-align: middle;
 }
 
-#osymtlpeon .gt_from_md > :first-child {
+#kyqfbhmrvb .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#osymtlpeon .gt_from_md > :last-child {
+#kyqfbhmrvb .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#osymtlpeon .gt_row {
+#kyqfbhmrvb .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1852,7 +1858,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   overflow-x: hidden;
 }
 
-#osymtlpeon .gt_stub {
+#kyqfbhmrvb .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1865,7 +1871,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#osymtlpeon .gt_stub_row_group {
+#kyqfbhmrvb .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1879,15 +1885,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   vertical-align: top;
 }
 
-#osymtlpeon .gt_row_group_first td {
+#kyqfbhmrvb .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#osymtlpeon .gt_row_group_first th {
+#kyqfbhmrvb .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#osymtlpeon .gt_summary_row {
+#kyqfbhmrvb .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1897,16 +1903,16 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#osymtlpeon .gt_first_summary_row {
+#kyqfbhmrvb .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#osymtlpeon .gt_first_summary_row.thick {
+#kyqfbhmrvb .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#osymtlpeon .gt_last_summary_row {
+#kyqfbhmrvb .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1916,7 +1922,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#osymtlpeon .gt_grand_summary_row {
+#kyqfbhmrvb .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1926,7 +1932,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#osymtlpeon .gt_first_grand_summary_row {
+#kyqfbhmrvb .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1936,7 +1942,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-top-color: #D3D3D3;
 }
 
-#osymtlpeon .gt_last_grand_summary_row_top {
+#kyqfbhmrvb .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1946,11 +1952,11 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#osymtlpeon .gt_striped {
+#kyqfbhmrvb .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#osymtlpeon .gt_table_body {
+#kyqfbhmrvb .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1959,7 +1965,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#osymtlpeon .gt_footnotes {
+#kyqfbhmrvb .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1973,7 +1979,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#osymtlpeon .gt_footnote {
+#kyqfbhmrvb .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1982,7 +1988,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#osymtlpeon .gt_sourcenotes {
+#kyqfbhmrvb .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1996,7 +2002,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#osymtlpeon .gt_sourcenote {
+#kyqfbhmrvb .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2004,72 +2010,72 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#osymtlpeon .gt_left {
+#kyqfbhmrvb .gt_left {
   text-align: left;
 }
 
-#osymtlpeon .gt_center {
+#kyqfbhmrvb .gt_center {
   text-align: center;
 }
 
-#osymtlpeon .gt_right {
+#kyqfbhmrvb .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#osymtlpeon .gt_font_normal {
+#kyqfbhmrvb .gt_font_normal {
   font-weight: normal;
 }
 
-#osymtlpeon .gt_font_bold {
+#kyqfbhmrvb .gt_font_bold {
   font-weight: bold;
 }
 
-#osymtlpeon .gt_font_italic {
+#kyqfbhmrvb .gt_font_italic {
   font-style: italic;
 }
 
-#osymtlpeon .gt_super {
+#kyqfbhmrvb .gt_super {
   font-size: 65%;
 }
 
-#osymtlpeon .gt_footnote_marks {
+#kyqfbhmrvb .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#osymtlpeon .gt_asterisk {
+#kyqfbhmrvb .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#osymtlpeon .gt_indent_1 {
+#kyqfbhmrvb .gt_indent_1 {
   text-indent: 5px;
 }
 
-#osymtlpeon .gt_indent_2 {
+#kyqfbhmrvb .gt_indent_2 {
   text-indent: 10px;
 }
 
-#osymtlpeon .gt_indent_3 {
+#kyqfbhmrvb .gt_indent_3 {
   text-indent: 15px;
 }
 
-#osymtlpeon .gt_indent_4 {
+#kyqfbhmrvb .gt_indent_4 {
   text-indent: 20px;
 }
 
-#osymtlpeon .gt_indent_5 {
+#kyqfbhmrvb .gt_indent_5 {
   text-indent: 25px;
 }
 
-#osymtlpeon .katex-display {
+#kyqfbhmrvb .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#osymtlpeon div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#kyqfbhmrvb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2105,23 +2111,23 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format_est_gt</span>(<span class="st">"hh_total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="pmppedaopl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#pmppedaopl table {
+<div id="srebwthmki" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#srebwthmki table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#pmppedaopl thead, #pmppedaopl tbody, #pmppedaopl tfoot, #pmppedaopl tr, #pmppedaopl td, #pmppedaopl th {
+#srebwthmki thead, #srebwthmki tbody, #srebwthmki tfoot, #srebwthmki tr, #srebwthmki td, #srebwthmki th {
   border-style: none;
 }
 
-#pmppedaopl p {
+#srebwthmki p {
   margin: 0;
   padding: 0;
 }
 
-#pmppedaopl .gt_table {
+#srebwthmki .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2147,12 +2153,12 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-left-color: #D3D3D3;
 }
 
-#pmppedaopl .gt_caption {
+#srebwthmki .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#pmppedaopl .gt_title {
+#srebwthmki .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2164,7 +2170,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-width: 0;
 }
 
-#pmppedaopl .gt_subtitle {
+#srebwthmki .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2176,7 +2182,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-top-width: 0;
 }
 
-#pmppedaopl .gt_heading {
+#srebwthmki .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2188,13 +2194,13 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#pmppedaopl .gt_bottom_border {
+#srebwthmki .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pmppedaopl .gt_col_headings {
+#srebwthmki .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2209,7 +2215,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#pmppedaopl .gt_col_heading {
+#srebwthmki .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2229,7 +2235,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   overflow-x: hidden;
 }
 
-#pmppedaopl .gt_column_spanner_outer {
+#srebwthmki .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2241,15 +2247,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 4px;
 }
 
-#pmppedaopl .gt_column_spanner_outer:first-child {
+#srebwthmki .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pmppedaopl .gt_column_spanner_outer:last-child {
+#srebwthmki .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pmppedaopl .gt_column_spanner {
+#srebwthmki .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2261,11 +2267,11 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   width: 100%;
 }
 
-#pmppedaopl .gt_spanner_row {
+#srebwthmki .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#pmppedaopl .gt_group_heading {
+#srebwthmki .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2291,7 +2297,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   text-align: left;
 }
 
-#pmppedaopl .gt_empty_group_heading {
+#srebwthmki .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2306,15 +2312,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   vertical-align: middle;
 }
 
-#pmppedaopl .gt_from_md > :first-child {
+#srebwthmki .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pmppedaopl .gt_from_md > :last-child {
+#srebwthmki .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pmppedaopl .gt_row {
+#srebwthmki .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2333,7 +2339,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   overflow-x: hidden;
 }
 
-#pmppedaopl .gt_stub {
+#srebwthmki .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2346,7 +2352,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#pmppedaopl .gt_stub_row_group {
+#srebwthmki .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2360,15 +2366,15 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   vertical-align: top;
 }
 
-#pmppedaopl .gt_row_group_first td {
+#srebwthmki .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pmppedaopl .gt_row_group_first th {
+#srebwthmki .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#pmppedaopl .gt_summary_row {
+#srebwthmki .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2378,16 +2384,16 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#pmppedaopl .gt_first_summary_row {
+#srebwthmki .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pmppedaopl .gt_first_summary_row.thick {
+#srebwthmki .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pmppedaopl .gt_last_summary_row {
+#srebwthmki .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2397,7 +2403,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#pmppedaopl .gt_grand_summary_row {
+#srebwthmki .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2407,7 +2413,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#pmppedaopl .gt_first_grand_summary_row {
+#srebwthmki .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2417,7 +2423,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-top-color: #D3D3D3;
 }
 
-#pmppedaopl .gt_last_grand_summary_row_top {
+#srebwthmki .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2427,11 +2433,11 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#pmppedaopl .gt_striped {
+#srebwthmki .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#pmppedaopl .gt_table_body {
+#srebwthmki .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2440,7 +2446,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-bottom-color: #D3D3D3;
 }
 
-#pmppedaopl .gt_footnotes {
+#srebwthmki .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2454,7 +2460,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#pmppedaopl .gt_footnote {
+#srebwthmki .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2463,7 +2469,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#pmppedaopl .gt_sourcenotes {
+#srebwthmki .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2477,7 +2483,7 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   border-right-color: #D3D3D3;
 }
 
-#pmppedaopl .gt_sourcenote {
+#srebwthmki .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2485,72 +2491,72 @@ s_{b^*}^2=\frac{1}{n-1}\sum_{j=1}^5\left(b_j^*-\bar{b}^*\right)^2=\frac{0.220833
   padding-right: 5px;
 }
 
-#pmppedaopl .gt_left {
+#srebwthmki .gt_left {
   text-align: left;
 }
 
-#pmppedaopl .gt_center {
+#srebwthmki .gt_center {
   text-align: center;
 }
 
-#pmppedaopl .gt_right {
+#srebwthmki .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pmppedaopl .gt_font_normal {
+#srebwthmki .gt_font_normal {
   font-weight: normal;
 }
 
-#pmppedaopl .gt_font_bold {
+#srebwthmki .gt_font_bold {
   font-weight: bold;
 }
 
-#pmppedaopl .gt_font_italic {
+#srebwthmki .gt_font_italic {
   font-style: italic;
 }
 
-#pmppedaopl .gt_super {
+#srebwthmki .gt_super {
   font-size: 65%;
 }
 
-#pmppedaopl .gt_footnote_marks {
+#srebwthmki .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#pmppedaopl .gt_asterisk {
+#srebwthmki .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pmppedaopl .gt_indent_1 {
+#srebwthmki .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pmppedaopl .gt_indent_2 {
+#srebwthmki .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pmppedaopl .gt_indent_3 {
+#srebwthmki .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pmppedaopl .gt_indent_4 {
+#srebwthmki .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pmppedaopl .gt_indent_5 {
+#srebwthmki .gt_indent_5 {
   text-indent: 25px;
 }
 
-#pmppedaopl .katex-display {
+#srebwthmki .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#pmppedaopl div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#srebwthmki div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -13039,51 +13045,342 @@ A=\frac{\sum_{i\in\mathcal{S}}(1-\pi_i)\,y_i/\pi_i}{\sum_{i\in\mathcal{S}}(1-\pi
 </ul>
 <p>For the mean per unit, divide the estimate and the SE by <span class="math inline">\(N\)</span>; for the ratio <span class="math inline">\(\hat{B}_{\mathrm{HT}}\)</span>, divide by <span class="math inline">\(t_x\)</span>.</p>
 </section>
-<section id="sec-ups-wo-example" class="level3" data-number="7.6.2">
-<h3 data-number="7.6.2" class="anchored" data-anchor-id="sec-ups-wo-example"><span class="header-section-number">7.6.2</span> Example: Acres of Farmland in Counties (<code>agpop.csv</code>)</h3>
-<p>We draw a sample of <span class="math inline">\(n=100\)</span> of the counties of <code>agpop</code> without replacement, with inclusion probabilities <span class="math inline">\(\pi_i=100\,x_i/t_x\)</span> proportional to the acres in 1987 (<span class="math inline">\(x_i\)</span>), and estimate the mean acres of farmland in 1992 (<span class="math inline">\(y_i\)</span>) per county. (The few counties with no farmland in 1987 cannot be selected and are left out.) The sample is drawn by maximum entropy sampling, a fixed-size design with these inclusion probabilities, from the R package <code>sampling</code>; a county with <span class="math inline">\(100x_i/t_x&gt;1\)</span> would be included with certainty (none is here).</p>
+<section id="sec-ups-wo-select" class="level3" data-number="7.6.2">
+<h3 data-number="7.6.2" class="anchored" data-anchor-id="sec-ups-wo-select"><span class="header-section-number">7.6.2</span> Selecting a Sample with Given Inclusion Probabilities</h3>
+<p>The HT estimator needs only the inclusion probabilities <span class="math inline">\(\pi_i\)</span>, but to use it we must be able to <strong>draw</strong> a sample without replacement whose inclusion probabilities are exactly the <span class="math inline">\(\pi_i\)</span> we chose. This is less obvious than it looks, because many different designs have the same <span class="math inline">\(\pi_i\)</span> (they differ in the joint probabilities <span class="math inline">\(\pi_{ij}\)</span>), and the most natural procedure does not give them.</p>
+<p><strong>Step 1: compute the <span class="math inline">\(\pi_i\)</span>.</strong> For a size variable <span class="math inline">\(x_i\)</span> and a sample of size <span class="math inline">\(n\)</span>, start with <span class="math inline">\(\pi_i=n\,x_i/t_x\)</span>. A unit with <span class="math inline">\(\pi_i\ge 1\)</span> is taken with certainty, <span class="math inline">\(\pi_i=1\)</span>; remove the certainty units, and recompute <span class="math inline">\(\pi_i=n'x_i/t_x'\)</span> for the others, with <span class="math inline">\(n'\)</span> the number of places left and <span class="math inline">\(t_x'\)</span> the total size of the remaining units; repeat until all <span class="math inline">\(\pi_i\le1\)</span>. The function <code>inclusionprobabilities(x, n)</code> of the R package <code>sampling</code> does this. For example, with <span class="math inline">\(N=6\)</span> units of sizes <span class="math inline">\(x=(40,25,15,10,6,4)\)</span>, <span class="math inline">\(t_x=100\)</span> and <span class="math inline">\(n=3\)</span>, unit 1 has <span class="math inline">\(3\times40/100=1.2&gt;1\)</span>, so it is a certainty unit, and the other two places are shared by units 2–6 with <span class="math inline">\(\pi_i=2x_i/60\)</span>:</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sampling)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">acres_in_thousands</span>(<span class="fu">read.csv</span>(<span class="st">"data/agpop.csv"</span>, <span class="at">na.strings =</span> <span class="st">"-99"</span>))</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(acres92), <span class="sc">!</span><span class="fu">is.na</span>(acres87), acres87 <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span>(agpop)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>tx <span class="ot">&lt;-</span> <span class="fu">sum</span>(agpop<span class="sc">$</span>acres87)</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>pik <span class="ot">&lt;-</span> <span class="fu">inclusionprobabilities</span>(agpop<span class="sc">$</span>acres87, n)    <span class="co"># pi_i = n x_i / t_x</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">348</span>)</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>q_me <span class="ot">&lt;-</span> <span class="fu">UPMEqfromw</span>(<span class="fu">UPMEpiktildefrompik</span>(pik), n)    <span class="co"># set-up of the sampling design</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">UPMEsfromq</span>(q_me) <span class="sc">==</span> <span class="dv">1</span>)                  <span class="co"># indices of the n sampled counties</span></span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres92[s]; x <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres87[s]; p <span class="ot">&lt;-</span> pik[s]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>x_toy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">25</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">6</span>, <span class="dv">4</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>pik_toy <span class="ot">&lt;-</span> <span class="fu">inclusionprobabilities</span>(x_toy, <span class="dv">3</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(pik_toy, <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.0000 0.8333 0.5000 0.3333 0.2000 0.1333</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pik_toy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+</div>
+<p><strong>The natural procedure does not work.</strong> Drawing <span class="math inline">\(n\)</span> times with probabilities <span class="math inline">\(\psi_i=x_i/t_x\)</span>, and redrawing whenever a unit already in the sample comes up (draw by draw, without replacement), does <strong>not</strong> give <span class="math inline">\(\pi_i=n\psi_i\)</span>. For example, with <span class="math inline">\(N=3\)</span>, <span class="math inline">\(x=(2,1,1)\)</span> and <span class="math inline">\(n=2\)</span>, the target is <span class="math inline">\(\pi=(1,0.5,0.5)\)</span>, but unit 1 is in the sample with probability <span class="math inline">\(P(\text{1 on draw 1})+P(\text{1 on draw 2})=0.5+2\times0.25\times\frac{0.5}{0.75}=0.833\)</span>: when a small unit is drawn first, the large unit only has probability <span class="math inline">\(2/3\)</span> on the second draw.</p>
+<p><strong>Step 2: draw the sample.</strong> There are many methods for drawing a fixed-size sample without replacement with any given <span class="math inline">\(\pi_i\)</span> (with <span class="math inline">\(0&lt;\pi_i\le1\)</span> and <span class="math inline">\(\sum_i\pi_i=n\)</span> an integer); see Tillé, <em>Sampling Algorithms</em> (Springer, 2006), for a survey. Two of them are simple and general.</p>
+<ul>
+<li><strong>Systematic <span class="math inline">\(\pi\)</span>ps sampling</strong> (Madow, 1949). Lay the units along a line in some order, unit <span class="math inline">\(i\)</span> occupying an interval of length <span class="math inline">\(\pi_i\)</span>, so that the line has length <span class="math inline">\(\sum_i\pi_i=n\)</span>. Draw one random start <span class="math inline">\(u\sim\mathrm{Uniform}(0,1)\)</span>, and select the units whose intervals contain the <span class="math inline">\(n\)</span> points <span class="math inline">\(u,\,u+1,\,\dots,\,u+n-1\)</span>. Since the points are spaced 1 apart and an interval has length <span class="math inline">\(\pi_i\le1\)</span>, it contains at most one point, and it contains one with probability exactly <span class="math inline">\(\pi_i\)</span>. This is the same line as for UPSWR (<a href="#sec-ups-hh-theory" class="quarto-xref"><span>Section 7.2.1</span></a>), with <span class="math inline">\(n\)</span> equally spaced points instead of <span class="math inline">\(n\)</span> independent ones; see
+<ol class="example" type="1">
+<li></li>
+</ol></li>
+<li><strong>The pivotal method</strong> (Deville and Tillé, 1998). Process the probabilities two at a time. Take two units <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> whose current probabilities <span class="math inline">\(a=\pi_i\)</span> and <span class="math inline">\(b=\pi_j\)</span> are strictly between 0 and 1, and let them “fight” for their combined probability <span class="math inline">\(a+b\)</span>:
+<ul>
+<li>if <span class="math inline">\(a+b&lt;1\)</span>: with probability <span class="math inline">\(\frac{a}{a+b}\)</span> set <span class="math inline">\((\pi_i,\pi_j)\leftarrow(a+b,0)\)</span>, otherwise <span class="math inline">\((0,a+b)\)</span>;</li>
+<li>if <span class="math inline">\(a+b\ge1\)</span>: with probability <span class="math inline">\(\frac{1-b}{2-a-b}\)</span> set <span class="math inline">\((\pi_i,\pi_j)\leftarrow(1,a+b-1)\)</span>, otherwise <span class="math inline">\((a+b-1,1)\)</span>.</li>
+</ul>
+Each step decides at least one of the two units (its probability becomes 0 or 1), keeps the sum <span class="math inline">\(n\)</span>, and keeps the <strong>expected</strong> value of every probability. For example, if <span class="math inline">\(a+b&lt;1\)</span>, the new <span class="math inline">\(\pi_i\)</span> has expectation <span class="math inline">\(\frac{a}{a+b}(a+b)+\frac{b}{a+b}\cdot0=a\)</span>, and if <span class="math inline">\(a+b\ge1\)</span> it has expectation <span class="math inline">\(\frac{1-b}{2-a-b}\cdot1+\frac{1-a}{2-a-b}(a+b-1)=\frac{a(2-a-b)}{2-a-b}=a\)</span>. After at most <span class="math inline">\(N-1\)</span> steps every probability is 0 or 1, the units with 1 form a sample of size <span class="math inline">\(n\)</span>, and unit <span class="math inline">\(i\)</span> is in it with probability equal to its original <span class="math inline">\(\pi_i\)</span>.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-sys-pps" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sys-pps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ups_files/figure-html/fig-sys-pps-1.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sys-pps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.4: Systematic <span class="math inline">\(\pi\)</span>ps sampling of <span class="math inline">\(n=3\)</span> of the six toy units: unit <span class="math inline">\(i\)</span> occupies an interval of length <span class="math inline">\(\pi_i\)</span> on <span class="math inline">\([0,3]\)</span>, and the units containing the points <span class="math inline">\(u\)</span>, <span class="math inline">\(u+1\)</span>, <span class="math inline">\(u+2\)</span> (red triangles, here <span class="math inline">\(u=0.62\)</span>) are selected: units 1, 2 and 4.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The pivotal method is an instance of a <strong>general procedure</strong>, the <em>splitting method</em> of Deville and Tillé (1998): at each step, write the current vector of probabilities as a random choice between two vectors, <span class="math inline">\(\boldsymbol{\pi}=\lambda\,\boldsymbol{\pi}^{(1)}+(1-\lambda)\,\boldsymbol{\pi}^{(2)}\)</span>, each with sum <span class="math inline">\(n\)</span> and components in <span class="math inline">\([0,1]\)</span>, and move to <span class="math inline">\(\boldsymbol{\pi}^{(1)}\)</span> with probability <span class="math inline">\(\lambda\)</span>, otherwise to <span class="math inline">\(\boldsymbol{\pi}^{(2)}\)</span>. The expected value of every component is kept, and the procedure stops when all components are 0 or 1. Almost all fixed-size methods can be described in this way; they differ in how the vector is split, which determines the joint probabilities <span class="math inline">\(\pi_{ij}\)</span>. The main methods, all in the R package <code>sampling</code>, are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Method</th>
+<th style="text-align: left;">R function</th>
+<th style="text-align: left;">Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Systematic <span class="math inline">\(\pi\)</span>ps</td>
+<td style="text-align: left;"><code>UPsystematic(pik)</code></td>
+<td style="text-align: left;">simplest; many <span class="math inline">\(\pi_{ij}=0\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Randomized systematic</td>
+<td style="text-align: left;"><code>UPrandomsystematic(pik)</code></td>
+<td style="text-align: left;">random order of the units first, so fewer <span class="math inline">\(\pi_{ij}=0\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Pivotal method</td>
+<td style="text-align: left;"><code>UPpivotal(pik)</code></td>
+<td style="text-align: left;">sequential, two units at a time</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Brewer’s method</td>
+<td style="text-align: left;"><code>UPbrewer(pik)</code></td>
+<td style="text-align: left;">draw by draw with adjusted probabilities; <span class="math inline">\(\pi_{ij}&gt;0\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sampford’s method</td>
+<td style="text-align: left;"><code>UPsampford(pik)</code></td>
+<td style="text-align: left;">rejective: redraw until <span class="math inline">\(n\)</span> distinct units; <span class="math inline">\(\pi_{ij}\)</span> computable</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tillé’s elimination</td>
+<td style="text-align: left;"><code>UPtille(pik)</code></td>
+<td style="text-align: left;">eliminates units one at a time</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Maximum entropy (conditional Poisson)</td>
+<td style="text-align: left;"><code>UPmaxentropy(pik)</code></td>
+<td style="text-align: left;">most “random” design with the <span class="math inline">\(\pi_i\)</span>; used in <a href="#sec-ups-wo-example" class="quarto-xref"><span>Section 7.6.3</span></a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Poisson sampling</td>
+<td style="text-align: left;"><code>UPpoisson(pik)</code></td>
+<td style="text-align: left;">each unit independently with probability <span class="math inline">\(\pi_i\)</span>; random sample size</td>
+</tr>
+</tbody>
+</table>
+<p>The choice matters for the variance estimation of <a href="#sec-ups-wo-theory" class="quarto-xref"><span>Section 7.6.1</span></a>: the SYG estimator needs <span class="math inline">\(\pi_{ij}&gt;0\)</span> for every pair, which fails for systematic sampling, and the Hájek approximation is accurate for designs of high entropy, such as maximum entropy, Brewer, Sampford and Tillé sampling. Systematic sampling is often used in practice for its simplicity, with a with-replacement or Hájek variance estimate.</p>
+<p><strong>Implementing the two methods.</strong> The following functions implement systematic <span class="math inline">\(\pi\)</span>ps sampling and the pivotal method directly from their descriptions, and each returns the indices of the sampled units. We draw 20,000 samples with each method from the toy population and compare the proportion of samples that contain each unit with the target <span class="math inline">\(\pi_i\)</span>:</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="do">## systematic pi-ps: points u, u+1, ..., u+n-1 on the cumulated pi_i</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>sys_pps <span class="ot">&lt;-</span> <span class="cf">function</span>(pik) {</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">sum</span>(pik))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  cum <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">cumsum</span>(pik))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">findInterval</span>(u <span class="sc">+</span> <span class="dv">0</span><span class="sc">:</span>(n <span class="sc">-</span> <span class="dv">1</span>), cum, <span class="at">left.open =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="do">## pivotal method: two undecided units fight for their combined probability</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>pivotal_pps <span class="ot">&lt;-</span> <span class="cf">function</span>(pik, <span class="at">eps =</span> <span class="fl">1e-9</span>) {</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span> {</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    open <span class="ot">&lt;-</span> <span class="fu">which</span>(pik <span class="sc">&gt;</span> eps <span class="sc">&amp;</span> pik <span class="sc">&lt;</span> <span class="dv">1</span> <span class="sc">-</span> eps)   <span class="co"># undecided units</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(open) <span class="sc">&lt;</span> <span class="dv">2</span>) <span class="cf">break</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> open[<span class="dv">1</span>]; j <span class="ot">&lt;-</span> open[<span class="dv">2</span>]</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>    a <span class="ot">&lt;-</span> pik[i]; b <span class="ot">&lt;-</span> pik[j]</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (a <span class="sc">+</span> b <span class="sc">&lt;</span> <span class="dv">1</span>) {</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> a <span class="sc">/</span> (a <span class="sc">+</span> b)) { pik[i] <span class="ot">&lt;-</span> a <span class="sc">+</span> b; pik[j] <span class="ot">&lt;-</span> <span class="dv">0</span> }</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>      <span class="cf">else</span>                        { pik[i] <span class="ot">&lt;-</span> <span class="dv">0</span>;     pik[j] <span class="ot">&lt;-</span> a <span class="sc">+</span> b }</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> (<span class="dv">1</span> <span class="sc">-</span> b) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">-</span> a <span class="sc">-</span> b)) { pik[i] <span class="ot">&lt;-</span> <span class="dv">1</span>;         pik[j] <span class="ot">&lt;-</span> a <span class="sc">+</span> b <span class="sc">-</span> <span class="dv">1</span> }</span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>      <span class="cf">else</span>                                  { pik[i] <span class="ot">&lt;-</span> a <span class="sc">+</span> b <span class="sc">-</span> <span class="dv">1</span>; pik[j] <span class="ot">&lt;-</span> <span class="dv">1</span> }</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">which</span>(pik <span class="sc">&gt;</span> <span class="dv">1</span> <span class="sc">-</span> eps)</span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">348</span>)</span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a><span class="fu">sys_pps</span>(pik_toy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 4</code></pre>
+</div>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pivotal_pps</span>(pik_toy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 3 4</code></pre>
+</div>
+</div>
+<div class="cell" data-tbl-cap="Target inclusion probabilities and the proportion of 20,000 samples containing each unit">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>R_sel <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>freq <span class="ot">&lt;-</span> <span class="cf">function</span>(draw) <span class="fu">tabulate</span>(<span class="fu">unlist</span>(<span class="fu">replicate</span>(R_sel, <span class="fu">draw</span>(pik_toy), <span class="at">simplify =</span> <span class="cn">FALSE</span>)), <span class="fu">length</span>(pik_toy)) <span class="sc">/</span> R_sel</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">rbind</span>(<span class="st">`</span><span class="at">target pi_i</span><span class="st">`</span> <span class="ot">=</span> pik_toy, <span class="at">systematic =</span> <span class="fu">freq</span>(sys_pps), <span class="at">pivotal =</span> <span class="fu">freq</span>(pivotal_pps),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                   <span class="st">`</span><span class="at">UPbrewer</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">freq</span>(<span class="cf">function</span>(p) <span class="fu">which</span>(<span class="fu">UPbrewer</span>(p) <span class="sc">==</span> <span class="dv">1</span>))),</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">col.names =</span> <span class="fu">paste</span>(<span class="st">"unit"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Target inclusion probabilities and the proportion of 20,000 samples containing each unit</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">unit 1</th>
+<th style="text-align: right;">unit 2</th>
+<th style="text-align: right;">unit 3</th>
+<th style="text-align: right;">unit 4</th>
+<th style="text-align: right;">unit 5</th>
+<th style="text-align: right;">unit 6</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">target pi_i</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.833</td>
+<td style="text-align: right;">0.500</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0.200</td>
+<td style="text-align: right;">0.133</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">systematic</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">0.502</td>
+<td style="text-align: right;">0.332</td>
+<td style="text-align: right;">0.198</td>
+<td style="text-align: right;">0.132</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pivotal</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">0.497</td>
+<td style="text-align: right;">0.336</td>
+<td style="text-align: right;">0.200</td>
+<td style="text-align: right;">0.131</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UPbrewer</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.838</td>
+<td style="text-align: right;">0.498</td>
+<td style="text-align: right;">0.331</td>
+<td style="text-align: right;">0.200</td>
+<td style="text-align: right;">0.133</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>All three methods reproduce the target <span class="math inline">\(\pi_i\)</span> up to simulation error. They are different designs, however, as the joint inclusion probabilities show. For systematic sampling (in this order of the units) they are, from <code>UPsystematicpi2</code>:</p>
+<div class="cell" data-tbl-cap="Joint inclusion probabilities $\pi_{ij}$ of systematic $\pi$ps sampling for the toy population (diagonal: $\pi_i$)">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">UPsystematicpi2</span>(pik_toy), <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">col.names =</span> <span class="fu">paste</span>(<span class="st">"unit"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Joint inclusion probabilities <span class="math inline">\(\pi_{ij}\)</span> of systematic <span class="math inline">\(\pi\)</span>ps sampling for the toy population (diagonal: <span class="math inline">\(\pi_i\)</span>)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">unit 1</th>
+<th style="text-align: right;">unit 2</th>
+<th style="text-align: right;">unit 3</th>
+<th style="text-align: right;">unit 4</th>
+<th style="text-align: right;">unit 5</th>
+<th style="text-align: right;">unit 6</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1.000</td>
+<td style="text-align: right;">0.833</td>
+<td style="text-align: right;">0.500</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0.200</td>
+<td style="text-align: right;">0.133</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.833</td>
+<td style="text-align: right;">0.833</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0.167</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.500</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0.500</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.033</td>
+<td style="text-align: right;">0.133</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.200</td>
+<td style="text-align: right;">0.167</td>
+<td style="text-align: right;">0.033</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.200</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.133</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.133</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.133</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Several pairs, such as units 3 and 4, are never selected together (<span class="math inline">\(\pi_{ij}=0\)</span>): their intervals, <span class="math inline">\((1.833,2.333]\)</span> and <span class="math inline">\((2.333,2.667]\)</span>, are adjacent with a total length <span class="math inline">\(0.833&lt;1\)</span>, so two points spaced 1 apart cannot fall in both. For these pairs the SYG variance estimator cannot be computed, which is why a with-replacement or Hájek approximation is used with systematic sampling, or the order of the units is randomized first.</p>
+</section>
+<section id="sec-ups-wo-example" class="level3" data-number="7.6.3">
+<h3 data-number="7.6.3" class="anchored" data-anchor-id="sec-ups-wo-example"><span class="header-section-number">7.6.3</span> Example: Acres of Farmland in Counties (<code>agpop.csv</code>)</h3>
+<p>We draw a sample of <span class="math inline">\(n=100\)</span> of the counties of <code>agpop</code> without replacement, with inclusion probabilities <span class="math inline">\(\pi_i=100\,x_i/t_x\)</span> proportional to the acres in 1987 (<span class="math inline">\(x_i\)</span>), and estimate the mean acres of farmland in 1992 (<span class="math inline">\(y_i\)</span>) per county. (The few counties with no farmland in 1987 cannot be selected and are left out.) The sample is drawn by maximum entropy sampling, a fixed-size design with these inclusion probabilities, from the R package <code>sampling</code> (<a href="#sec-ups-wo-select" class="quarto-xref"><span>Section 7.6.2</span></a>); a county with <span class="math inline">\(100x_i/t_x&gt;1\)</span> would be included with certainty (none is here).</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sampling)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> <span class="fu">acres_in_thousands</span>(<span class="fu">read.csv</span>(<span class="st">"data/agpop.csv"</span>, <span class="at">na.strings =</span> <span class="st">"-99"</span>))</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>agpop <span class="ot">&lt;-</span> agpop <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(acres92), <span class="sc">!</span><span class="fu">is.na</span>(acres87), acres87 <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span>(agpop)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>tx <span class="ot">&lt;-</span> <span class="fu">sum</span>(agpop<span class="sc">$</span>acres87)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>pik <span class="ot">&lt;-</span> <span class="fu">inclusionprobabilities</span>(agpop<span class="sc">$</span>acres87, n)    <span class="co"># pi_i = n x_i / t_x</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">348</span>)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>q_me <span class="ot">&lt;-</span> <span class="fu">UPMEqfromw</span>(<span class="fu">UPMEpiktildefrompik</span>(pik), n)    <span class="co"># set-up of the sampling design</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">UPMEsfromq</span>(q_me) <span class="sc">==</span> <span class="dv">1</span>)                  <span class="co"># indices of the n sampled counties</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres92[s]; x <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres87[s]; p <span class="ot">&lt;-</span> pik[s]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>The mean per county, estimated by HT with the two variance estimators (the plain sample mean ignores the inclusion probabilities and is shown for contrast), and the ratio <span class="math inline">\(\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/t_x\)</span>, the acres in 1992 per acre in 1987:</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>est_ht_hajek <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(y, p, N, <span class="at">method =</span> <span class="st">"mean"</span>, <span class="at">variance =</span> <span class="st">"hajek"</span>)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>est_ht_wr    <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(y, p, N, <span class="at">method =</span> <span class="st">"mean"</span>, <span class="at">variance =</span> <span class="st">"wr"</span>)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>est_B_hajek <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(y, p, N, tx, <span class="at">method =</span> <span class="st">"ratio"</span>, <span class="at">variance =</span> <span class="st">"hajek"</span>)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>est_B_wr    <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(y, p, N, tx, <span class="at">method =</span> <span class="st">"ratio"</span>, <span class="at">variance =</span> <span class="st">"wr"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>est_ht_hajek <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(y, p, N, <span class="at">method =</span> <span class="st">"mean"</span>, <span class="at">variance =</span> <span class="st">"hajek"</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>est_ht_wr    <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(y, p, N, <span class="at">method =</span> <span class="st">"mean"</span>, <span class="at">variance =</span> <span class="st">"wr"</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>est_B_hajek <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(y, p, N, tx, <span class="at">method =</span> <span class="st">"ratio"</span>, <span class="at">variance =</span> <span class="st">"hajek"</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>est_B_wr    <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(y, p, N, tx, <span class="at">method =</span> <span class="st">"ratio"</span>, <span class="at">variance =</span> <span class="st">"wr"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>To judge the variance estimators, we repeat the sampling 2000 times, and compute the standard deviation of the 2000 HT estimates, which is the true standard error of the design, and the average of the estimated standard errors:</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, R, <span class="dv">5</span>, <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"est"</span>, <span class="st">"se_hajek"</span>, <span class="st">"se_wr"</span>, <span class="st">"cover_hajek"</span>, <span class="st">"cover_wr"</span>)))</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>R) {</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  si <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">UPMEsfromq</span>(q_me) <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  yi <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres92[si]</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  eh <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(yi, pik[si], N, <span class="at">method =</span> <span class="st">"mean"</span>, <span class="at">variance =</span> <span class="st">"hajek"</span>)</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  ew <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(yi, pik[si], N, <span class="at">method =</span> <span class="st">"mean"</span>, <span class="at">variance =</span> <span class="st">"wr"</span>)</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  sim[i, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(eh[<span class="st">"Est."</span>], eh[<span class="st">"S.E."</span>], ew[<span class="st">"S.E."</span>],</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>                eh[<span class="st">"ci.low"</span>] <span class="sc">&lt;=</span> <span class="fu">mean</span>(agpop<span class="sc">$</span>acres92) <span class="sc">&amp;</span> <span class="fu">mean</span>(agpop<span class="sc">$</span>acres92) <span class="sc">&lt;=</span> eh[<span class="st">"ci.upp"</span>],</span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>                ew[<span class="st">"ci.low"</span>] <span class="sc">&lt;=</span> <span class="fu">mean</span>(agpop<span class="sc">$</span>acres92) <span class="sc">&amp;</span> <span class="fu">mean</span>(agpop<span class="sc">$</span>acres92) <span class="sc">&lt;=</span> ew[<span class="st">"ci.upp"</span>])</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, R, <span class="dv">5</span>, <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"est"</span>, <span class="st">"se_hajek"</span>, <span class="st">"se_wr"</span>, <span class="st">"cover_hajek"</span>, <span class="st">"cover_wr"</span>)))</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>R) {</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  si <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">UPMEsfromq</span>(q_me) <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  yi <span class="ot">&lt;-</span> agpop<span class="sc">$</span>acres92[si]</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  eh <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(yi, pik[si], N, <span class="at">method =</span> <span class="st">"mean"</span>, <span class="at">variance =</span> <span class="st">"hajek"</span>)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  ew <span class="ot">&lt;-</span> <span class="fu">upswo_est</span>(yi, pik[si], N, <span class="at">method =</span> <span class="st">"mean"</span>, <span class="at">variance =</span> <span class="st">"wr"</span>)</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  sim[i, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(eh[<span class="st">"Est."</span>], eh[<span class="st">"S.E."</span>], ew[<span class="st">"S.E."</span>],</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>                eh[<span class="st">"ci.low"</span>] <span class="sc">&lt;=</span> <span class="fu">mean</span>(agpop<span class="sc">$</span>acres92) <span class="sc">&amp;</span> <span class="fu">mean</span>(agpop<span class="sc">$</span>acres92) <span class="sc">&lt;=</span> eh[<span class="st">"ci.upp"</span>],</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>                ew[<span class="st">"ci.low"</span>] <span class="sc">&lt;=</span> <span class="fu">mean</span>(agpop<span class="sc">$</span>acres92) <span class="sc">&amp;</span> <span class="fu">mean</span>(agpop<span class="sc">$</span>acres92) <span class="sc">&lt;=</span> ew[<span class="st">"ci.upp"</span>])</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
@@ -13094,7 +13391,7 @@ A=\frac{\sum_{i\in\mathcal{S}}(1-\pi_i)\,y_i/\pi_i}{\sum_{i\in\mathcal{S}}(1-\pi
 <img src="ups_files/figure-html/fig-wo-variances-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wo-variances-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.4: Estimated variances of the HT mean in 2000 repeated samples: Hájek and with-replacement approximations. The red line is the Monte Carlo estimate of the true variance, the variance of the 2000 HT estimates.
+Figure&nbsp;7.5: Estimated variances of the HT mean in 2000 repeated samples: Hájek and with-replacement approximations. The red line is the Monte Carlo estimate of the true variance, the variance of the 2000 HT estimates.
 </figcaption>
 </figure>
 </div>
@@ -13108,7 +13405,7 @@ Figure&nbsp;7.4: Estimated variances of the HT mean in 2000 repeated samples: H�
 <img src="ups_files/figure-html/fig-wo-mean-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wo-mean-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.5: HT estimates of the mean acres per county in 2000 repeated samples. The red line is the true mean; the coverage rates of the 95% confidence intervals with the Hájek and the with-replacement variance estimates are given in the subtitle.
+Figure&nbsp;7.6: HT estimates of the mean acres per county in 2000 repeated samples. The red line is the true mean; the coverage rates of the 95% confidence intervals with the Hájek and the with-replacement variance estimates are given in the subtitle.
 </figcaption>
 </figure>
 </div>
@@ -13156,8 +13453,50 @@ Table&nbsp;7.6: Estimates of the mean acres of farmland in 1992 per county from 
 <p><strong>Output Note:</strong> The true mean is 310.1 thousand acres per county. The plain sample mean, 834.3, is far off because it gives every sampled county the same weight, although the large counties had a larger chance of being selected; the HT estimate 315.8 corrects for that. The Hájek and with-replacement SEs are 1.98 and 2.06. Over the 2000 repeated samples the true standard error of the HT mean is 2.37, and the average estimated SEs are 2.33 for the Hájek approximation and 2.43 for the with-replacement approximation, which is a little too large, as expected. The violin plots show the whole distribution of the two estimated variances, with the true variance (the variance of the 2000 HT estimates) as a red line: both are centred close to it, the with-replacement one slightly above. The HT estimates of the mean are centred at the true mean, as unbiasedness implies. The 95% confidence intervals, estimate <span class="math inline">\(\pm\)</span> <span class="math inline">\(t_{n-1}\)</span> SE, cover the true mean in 94.7% of the samples with the Hájek variance and in 95.5% with the with-replacement variance; the latter is a little above the nominal 95% because its variance is too large. The ratio of the total acres in 1992 to that in 1987 is <span class="math inline">\(\hat{B}_{\mathrm{HT}}=\hat{t}_{\mathrm{HT}}/t_x=0.998\)</span> (SE 0.006, Hájek).</p>
 </section>
 </section>
-<section id="sec-ups-when" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="sec-ups-when"><span class="header-section-number">7.7</span> When to Use Unequal Probability Sampling</h2>
+<section id="sec-ups-summary" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="sec-ups-summary"><span class="header-section-number">7.7</span> Summary and Discussion on UPS</h2>
+<section id="sec-ups-summary-table" class="level3" data-number="7.7.1">
+<h3 data-number="7.7.1" class="anchored" data-anchor-id="sec-ups-summary-table"><span class="header-section-number">7.7.1</span> Summary of the Designs and Estimators</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 26%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Design</th>
+<th style="text-align: left;">Selection</th>
+<th style="text-align: left;">Estimator of the total</th>
+<th style="text-align: left;">Estimated SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">UPSWR (<a href="#sec-ups-hh" class="quarto-xref"><span>Section 7.2</span></a>)</td>
+<td style="text-align: left;"><span class="math inline">\(n\)</span> independent draws, unit <span class="math inline">\(i\)</span> with probability <span class="math inline">\(\psi_i\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\hat t_{\mathrm{HH}}=\frac1n\sum_{j=1}^n y_j^*/\psi_j^*\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(s_u/\sqrt n\)</span>, from the <span class="math inline">\(n\)</span> values <span class="math inline">\(y_j^*/\psi_j^*\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">One- and two-stage cluster UPSWR, <span class="math inline">\(\psi_i=M_i/M_0\)</span> (<a href="#sec-ups-cluster" class="quarto-xref"><span>Section 7.4</span></a>, <a href="#sec-ups-twostage" class="quarto-xref"><span>Section 7.5</span></a>)</td>
+<td style="text-align: left;">clusters drawn with replacement; in two stages, a fresh SRS of elements on every draw</td>
+<td style="text-align: left;"><span class="math inline">\(\hat t_{\mathrm{HH}}=M_0\,\hat{\bar y}_{\mathrm{HH}}\)</span>, <span class="math inline">\(\hat{\bar y}_{\mathrm{HH}}=\frac1n\sum_j\bar y_j^*\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(M_0\,s_{\bar y^*}/\sqrt n\)</span>; no second-stage term</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UPSWO (<a href="#sec-ups-wo" class="quarto-xref"><span>Section 7.6</span></a>)</td>
+<td style="text-align: left;"><span class="math inline">\(n\)</span> distinct units with inclusion probabilities <span class="math inline">\(\pi_i\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\hat t_{\mathrm{HT}}=\sum_{i\in\mathcal S}y_i/\pi_i\)</span></td>
+<td style="text-align: left;">SYG (needs <span class="math inline">\(\pi_{ij}\)</span>), or the Hájek or with-replacement approximation</td>
+</tr>
+</tbody>
+</table>
+<p>In all three, a unit’s weight is the inverse of its selection probability, and the estimator is precise when <span class="math inline">\(y_i\)</span> is nearly proportional to the size <span class="math inline">\(x_i\)</span> that defines the probabilities.</p>
+</section>
+<section id="sec-ups-when" class="level3" data-number="7.7.2">
+<h3 data-number="7.7.2" class="anchored" data-anchor-id="sec-ups-when"><span class="header-section-number">7.7.2</span> When to Use Unequal Probability Sampling</h3>
 <div class="callout callout-style-default callout-warning callout-titled" title="Remark: UPS is risky unless y is tied to the size variable">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -13176,8 +13515,27 @@ Table&nbsp;7.6: Estimates of the mean acres of farmland in 1992 per county from 
 <p>UPS is therefore used mostly when the size is a good proxy of what is measured: selecting the clusters of a multi-stage survey with probabilities proportional to their number of households or students, auditing by the monetary value of the items, or surveying establishments by their employment. When the size is only loosely related to <span class="math inline">\(y_i\)</span>, use simple random or stratified sampling, with a ratio or regression estimator if <span class="math inline">\(x_i\)</span> is known, which is much safer than using <span class="math inline">\(x_i\)</span> at the design stage.</p>
 </div>
 </div>
+</section>
+<section id="sec-ups-wo-practice" class="level3" data-number="7.7.3">
+<h3 data-number="7.7.3" class="anchored" data-anchor-id="sec-ups-wo-practice"><span class="header-section-number">7.7.3</span> Practical Issues of Sampling Without Replacement</h3>
+<p>Sampling without replacement avoids drawing a large unit twice, but it is harder than UPSWR, in the selection and above all in the analysis.</p>
+<p><strong>Selecting the sample</strong> is no longer a real difficulty. Software draws a fixed-size sample with given <span class="math inline">\(\pi_i\)</span> in one line, for example <code>UPbrewer(pik)</code> or <code>UPmaxentropy(pik)</code> in the R package <code>sampling</code>, and systematic <span class="math inline">\(\pi\)</span>ps sampling is easy to do by hand (<a href="#sec-ups-wo-select" class="quarto-xref"><span>Section 7.6.2</span></a>). The two points that need care are to make the units with <span class="math inline">\(n\,x_i/t_x\ge1\)</span> certainty units, and not to use the natural “draw with <span class="math inline">\(\psi_i\)</span> and redraw on duplicates” procedure, which does not give the intended <span class="math inline">\(\pi_i\)</span>.</p>
+<p><strong>Estimating the variance</strong> is the real cost. The unbiased SYG estimator needs the joint inclusion probabilities <span class="math inline">\(\pi_{ij}\)</span>, which are hard to compute for most designs, and for systematic sampling some <span class="math inline">\(\pi_{ij}\)</span> are <span class="math inline">\(0\)</span>, so the estimator cannot be computed at all. In practice the <span class="math inline">\(\pi_{ij}\)</span> are avoided:</p>
+<ul>
+<li><strong>Small sampling fraction: analyse as with replacement.</strong> With and without replacement differ only through factors of about <span class="math inline">\(1-\pi_i\)</span>; when all <span class="math inline">\(\pi_i\)</span> are small, the with-replacement variance <span class="math inline">\(\hat V_{\mathrm{WR}}\)</span> is only slightly conservative. This is the standard practice of large surveys and survey software, which treat the first-stage units as drawn with replacement.</li>
+<li><strong>Some large <span class="math inline">\(\pi_i\)</span>: a high-entropy design with Hájek’s approximation.</strong> Maximum entropy (conditional Poisson), Brewer, Sampford, Tillé and randomized systematic sampling have high entropy, and for them the Hájek approximation <span class="math inline">\(\hat V_{\mathrm{H}}\)</span>, which needs only the <span class="math inline">\(\pi_i\)</span>, is accurate. This is the combination used in <a href="#sec-ups-wo-example" class="quarto-xref"><span>Section 7.6.3</span></a>.</li>
+<li><strong>Avoid plain systematic sampling of a fixed list</strong> when a design-based variance estimate is needed; randomize the order of the units first.</li>
+</ul>
+<p><strong>Simpler alternatives</strong> give most of the benefit of <span class="math inline">\(\pi\)</span>ps sampling with an easy analysis:</p>
+<ul>
+<li><strong>UPSWR</strong> itself: when <span class="math inline">\(n/N\)</span> is small, repeated draws are rare and the simple HH analysis of <a href="#sec-ups-hh" class="quarto-xref"><span>Section 7.2</span></a> loses almost nothing.</li>
+<li><strong>Stratification by size</strong> with an SRS within each stratum (and a larger sampling fraction in the strata of large units), analysed with the usual stratified formulas.</li>
+<li><strong>Poisson sampling</strong>: each unit is included independently with probability <span class="math inline">\(\pi_i\)</span>, so <span class="math inline">\(\pi_{ij}=\pi_i\pi_j\)</span> and <span class="math inline">\(\hat V(\hat t_{\mathrm{HT}})=\sum_{i\in\mathcal S}(1-\pi_i)\,y_i^2/\pi_i^2\)</span> is simple, at the price of a random sample size.</li>
+</ul>
+<p>In short, sampling without replacement pays off mainly when the sampling fraction is large, so that UPSWR would waste a noticeable part of the sample on repeated draws of the large units.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
