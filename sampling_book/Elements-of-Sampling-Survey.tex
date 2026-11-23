@@ -10277,16 +10277,26 @@ equal probabilities \(1/N\) (hence the divisor \(N\) rather than
 stores of its term:
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
 \toprule\noalign{}
-Estimator & Design & Term of store \(i\) \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Estimator
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Design
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Term of store \(i\)
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
 Sample average & SRS & \(N(y_i-\bar{y}_U)^2\) \\
 Ratio & SRS & \(N\,d_i^2\) \\
-HH & PPS, \(\psi_i=x_i/t_x\) & \(d_i^2/\psi_i\) \\
+HH & PPS, \(\psi_i=x_i/t_x\) & \(d_i^2/\psi_i=N\,d_i^2/w^x_i\), with
+\(w^x_i=x_i/\bar{x}_U\) \\
 \end{longtable}
 }
 
@@ -10302,14 +10312,15 @@ The working table for the three one-draw variances:
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1727}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0545}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0545}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1545}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1364}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1909}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1000}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1364}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1159}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0366}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0366}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1037}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1341}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0915}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1280}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0671}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.2866}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Store
@@ -10320,23 +10331,25 @@ Store
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(\psi_i=x_i/t_x\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(w^x_i=x_i/\bar{x}_U\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(d_i=y_i-Bx_i\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(N(y_i-\bar{y}_U)^2\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(N\,d_i^2\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(d_i^2/\psi_i\)
+\(\dfrac{d_i^2}{\psi_i}=\dfrac{N d_i^2}{w^x_i}\)
 \end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-A & 100 & 11 & 0.0625 & -7.75 & 16,384 & 240.2 & 961 \\
-B & 200 & 20 & 0.1250 & -17.50 & 12,100 & 1,225.0 & 2,450 \\
-C & 300 & 24 & 0.1875 & -32.25 & 10,404 & 4,160.2 & 5,547 \\
-D & 1,000 & 245 & 0.6250 & 57.50 & 115,600 & 13,225.0 & 5,290 \\
-\textbf{Variance} (Sum) & 1,600 & 300 & 1.0000 & 0.00 & 154,488 &
+A & 100 & 11 & 0.0625 & 0.25 & -7.75 & 16,384 & 240.2 & 961 \\
+B & 200 & 20 & 0.1250 & 0.50 & -17.50 & 12,100 & 1,225.0 & 2,450 \\
+C & 300 & 24 & 0.1875 & 0.75 & -32.25 & 10,404 & 4,160.2 & 5,547 \\
+D & 1,000 & 245 & 0.6250 & 2.50 & 57.50 & 115,600 & 13,225.0 & 5,290 \\
+\textbf{Variance} (Sum) & 1,600 & 300 & 1.0000 & 4.00 & 0.00 & 154,488 &
 18,850.5 & 14,248 \\
 \end{longtable}
 }
@@ -10363,14 +10376,15 @@ area is then a poor size variable, but we still draw with
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1727}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0545}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0545}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1545}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1364}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1909}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1000}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1364}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1159}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0366}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0366}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1037}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1341}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0915}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1280}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0671}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.2866}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Store
@@ -10381,24 +10395,26 @@ Store
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(\psi_i=x_i/t_x\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(w^x_i=x_i/\bar{x}_U\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(d_i=y_i-Bx_i\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(N(y_i-\bar{y}_U)^2\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(N\,d_i^2\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-\(d_i^2/\psi_i\)
+\(\dfrac{d_i^2}{\psi_i}=\dfrac{N d_i^2}{w^x_i}\)
 \end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-A & 100 & 60 & 0.0625 & 41.25 & 900 & 6,806.2 & 27,225 \\
-B & 200 & 80 & 0.1250 & 42.50 & 100 & 7,225.0 & 14,450 \\
-C & 300 & 90 & 0.1875 & 33.75 & 900 & 4,556.2 & 6,075 \\
-D & 1,000 & 70 & 0.6250 & -117.50 & 100 & 55,225.0 & 22,090 \\
-\textbf{Variance} (Sum) & 1,600 & 300 & 1.0000 & 0.00 & 2,000 & 73,812.5
-& 69,840 \\
+A & 100 & 60 & 0.0625 & 0.25 & 41.25 & 900 & 6,806.2 & 27,225 \\
+B & 200 & 80 & 0.1250 & 0.50 & 42.50 & 100 & 7,225.0 & 14,450 \\
+C & 300 & 90 & 0.1875 & 0.75 & 33.75 & 900 & 4,556.2 & 6,075 \\
+D & 1,000 & 70 & 0.6250 & 2.50 & -117.50 & 100 & 55,225.0 & 22,090 \\
+\textbf{Variance} (Sum) & 1,600 & 300 & 1.0000 & 4.00 & 0.00 & 2,000 &
+73,812.5 & 69,840 \\
 \end{longtable}
 }
 

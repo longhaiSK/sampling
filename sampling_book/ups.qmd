@@ -598,7 +598,7 @@ one-draw variance of each estimator is the sum over the stores of its term:
 |:---|:---|:---|
 | Sample average | SRS | $N(y_i-\bar{y}_U)^2$ |
 | Ratio | SRS | $N\,d_i^2$ |
-| HH | PPS, $\psi_i=x_i/t_x$ | $d_i^2/\psi_i$ |
+| HH | PPS, $\psi_i=x_i/t_x$ | $d_i^2/\psi_i=N\,d_i^2/w^x_i$, with $w^x_i=x_i/\bar{x}_U$ |
 
 For each population below, a single table works out the three variances side by side; the **Variance** row
 is the sum of each column.
@@ -612,21 +612,22 @@ toy_table <- function(store, x, y) {
   B <- sum(y) / sum(x)
   psi <- x / sum(x)
   d <- y - B * x
-  tab <- data.frame(Store = store, x = x, y = y, psi = psi, d = d,
+  tab <- data.frame(Store = store, x = x, y = y, psi = psi, w = x / mean(x), d = d,
                     dy2 = N * (y - mean(y))^2,
                     r = N * d^2,
                     h = d^2 / psi)
-  vr <- data.frame(Store = "**Variance** (Sum)", x = sum(x), y = sum(y), psi = sum(psi), d = sum(d),
+  vr <- data.frame(Store = "**Variance** (Sum)", x = sum(x), y = sum(y), psi = sum(psi), w = sum(tab$w), d = sum(d),
                    dy2 = sum(tab$dy2), r = sum(tab$r), h = sum(tab$h))
   rbind(tab, vr)
 }
 
 show_toy_table <- function(tab) {
   options(knitr.kable.NA = "")
-  knitr::kable(tab, digits = c(0, 0, 0, 4, 2, 1, 1, 1),
+  knitr::kable(tab, digits = c(0, 0, 0, 4, 2, 2, 1, 1, 1),
                format.args = list(big.mark = ","),
-               col.names = c("Store", "$x_i$", "$y_i$", "$\\psi_i=x_i/t_x$", "$d_i=y_i-Bx_i$",
-                             "$N(y_i-\\bar{y}_U)^2$", "$N\\,d_i^2$", "$d_i^2/\\psi_i$"))
+               col.names = c("Store", "$x_i$", "$y_i$", "$\\psi_i=x_i/t_x$", "$w^x_i=x_i/\\bar{x}_U$",
+                             "$d_i=y_i-Bx_i$", "$N(y_i-\\bar{y}_U)^2$", "$N\\,d_i^2$",
+                             "$\\dfrac{d_i^2}{\\psi_i}=\\dfrac{N d_i^2}{w^x_i}$"))
 }
 
 # The Variance row: sample average, ratio, HH

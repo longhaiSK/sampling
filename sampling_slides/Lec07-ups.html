@@ -784,19 +784,20 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 </section>
 <section id="toy-example-four-supermarkets" class="slide level2 smaller">
 <h2>Toy Example: Four Supermarkets</h2>
-<p>Floor areas <span class="math inline">x_i</span>, <span class="math inline">t_x=1600</span>, <span class="math inline">\psi_i=x_i/t_x</span> against <span class="math inline">1/N=0.25</span> in an SRS; <span class="math inline">t=300</span>, <span class="math inline">B=0.1875</span>. One-draw variances (the sum of each column). <strong>Sales proportional to floor area:</strong></p>
+<p>Floor areas <span class="math inline">x_i</span>, <span class="math inline">t_x=1600</span>, <span class="math inline">\psi_i=x_i/t_x</span> against <span class="math inline">1/N=0.25</span> in an SRS, <span class="math inline">w^x_i=x_i/\bar x_U=N\psi_i</span>; <span class="math inline">t=300</span>, <span class="math inline">B=0.1875</span>, <span class="math inline">d_i=y_i-Bx_i</span>. One-draw variances (the sum of each column). <strong>Sales proportional to floor area:</strong></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<table class="caption-top">
+<table class="caption-top" style="width:100%;">
 <colgroup>
-<col style="width: 18%">
+<col style="width: 14%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 6%">
+<col style="width: 6%">
 <col style="width: 5%">
-<col style="width: 5%">
+<col style="width: 15%">
 <col style="width: 8%">
-<col style="width: 14%">
-<col style="width: 19%">
-<col style="width: 10%">
-<col style="width: 14%">
+<col style="width: 35%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -804,10 +805,11 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <th style="text-align: right;"><span class="math inline">x_i</span></th>
 <th style="text-align: right;"><span class="math inline">y_i</span></th>
 <th style="text-align: right;"><span class="math inline">\psi_i</span></th>
-<th style="text-align: right;"><span class="math inline">d_i=y_i-Bx_i</span></th>
+<th style="text-align: right;"><span class="math inline">w^x_i</span></th>
+<th style="text-align: right;"><span class="math inline">d_i</span></th>
 <th style="text-align: right;"><span class="math inline">N(y_i-\bar y_U)^2</span></th>
 <th style="text-align: right;"><span class="math inline">N\,d_i^2</span></th>
-<th style="text-align: right;"><span class="math inline">d_i^2/\psi_i</span></th>
+<th style="text-align: right;"><span class="math inline">\dfrac{d_i^2}{\psi_i}=\dfrac{N d_i^2}{w^x_i}</span></th>
 </tr>
 </thead>
 <tbody>
@@ -816,6 +818,7 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <td style="text-align: right;">100</td>
 <td style="text-align: right;">11</td>
 <td style="text-align: right;">0.0625</td>
+<td style="text-align: right;">0.25</td>
 <td style="text-align: right;">-7.75</td>
 <td style="text-align: right;">16,384</td>
 <td style="text-align: right;">240.2</td>
@@ -826,6 +829,7 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <td style="text-align: right;">200</td>
 <td style="text-align: right;">20</td>
 <td style="text-align: right;">0.1250</td>
+<td style="text-align: right;">0.50</td>
 <td style="text-align: right;">-17.50</td>
 <td style="text-align: right;">12,100</td>
 <td style="text-align: right;">1,225.0</td>
@@ -836,6 +840,7 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <td style="text-align: right;">300</td>
 <td style="text-align: right;">24</td>
 <td style="text-align: right;">0.1875</td>
+<td style="text-align: right;">0.75</td>
 <td style="text-align: right;">-32.25</td>
 <td style="text-align: right;">10,404</td>
 <td style="text-align: right;">4,160.2</td>
@@ -846,6 +851,7 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <td style="text-align: right;">1,000</td>
 <td style="text-align: right;">245</td>
 <td style="text-align: right;">0.6250</td>
+<td style="text-align: right;">2.50</td>
 <td style="text-align: right;">57.50</td>
 <td style="text-align: right;">115,600</td>
 <td style="text-align: right;">13,225.0</td>
@@ -856,6 +862,7 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <td style="text-align: right;">1,600</td>
 <td style="text-align: right;">300</td>
 <td style="text-align: right;">1.0000</td>
+<td style="text-align: right;">4.00</td>
 <td style="text-align: right;">0.00</td>
 <td style="text-align: right;">154,488</td>
 <td style="text-align: right;">18,850.5</td>
@@ -865,7 +872,7 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 </table>
 </div>
 </div>
-<p>Store D has the largest residual and <span class="math inline">\psi_D=0.625&gt;1/N</span>: HH divides <span class="math inline">d_D^2</span> by <span class="math inline">0.625</span> instead of <span class="math inline">0.25</span>. HH <span class="math inline">&lt;</span> ratio <span class="math inline">\ll</span> average; here <span class="math inline">H_d=529&gt;\bar x_U=400</span>.</p>
+<p>Store D has the largest residual and <span class="math inline">\psi_D=0.625&gt;1/N</span>: HH divides <span class="math inline">d_D^2</span> by <span class="math inline">0.625</span> instead of <span class="math inline">0.25</span>, i.e.&nbsp;<span class="math inline">Nd_D^2</span> by <span class="math inline">w^x_D=2.5</span> instead of <span class="math inline">1</span>. HH <span class="math inline">&lt;</span> ratio <span class="math inline">\ll</span> average; here <span class="math inline">H_d=529&gt;\bar x_U=400</span>.</p>
 </section>
 <section id="toy-example-sales-unrelated-to-floor-area" class="slide level2 smaller">
 <h2>Toy Example: Sales Unrelated to Floor Area</h2>
@@ -874,14 +881,15 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <div class="cell-output-display">
 <table class="caption-top">
 <colgroup>
-<col style="width: 18%">
+<col style="width: 14%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 6%">
 <col style="width: 5%">
 <col style="width: 5%">
+<col style="width: 14%">
 <col style="width: 8%">
-<col style="width: 14%">
-<col style="width: 19%">
-<col style="width: 10%">
-<col style="width: 14%">
+<col style="width: 35%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -889,10 +897,11 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <th style="text-align: right;"><span class="math inline">x_i</span></th>
 <th style="text-align: right;"><span class="math inline">y_i</span></th>
 <th style="text-align: right;"><span class="math inline">\psi_i</span></th>
-<th style="text-align: right;"><span class="math inline">d_i=y_i-Bx_i</span></th>
+<th style="text-align: right;"><span class="math inline">w^x_i</span></th>
+<th style="text-align: right;"><span class="math inline">d_i</span></th>
 <th style="text-align: right;"><span class="math inline">N(y_i-\bar y_U)^2</span></th>
 <th style="text-align: right;"><span class="math inline">N\,d_i^2</span></th>
-<th style="text-align: right;"><span class="math inline">d_i^2/\psi_i</span></th>
+<th style="text-align: right;"><span class="math inline">\dfrac{d_i^2}{\psi_i}=\dfrac{N d_i^2}{w^x_i}</span></th>
 </tr>
 </thead>
 <tbody>
@@ -901,6 +910,7 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <td style="text-align: right;">100</td>
 <td style="text-align: right;">60</td>
 <td style="text-align: right;">0.0625</td>
+<td style="text-align: right;">0.25</td>
 <td style="text-align: right;">41.25</td>
 <td style="text-align: right;">900</td>
 <td style="text-align: right;">6,806.2</td>
@@ -911,6 +921,7 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <td style="text-align: right;">200</td>
 <td style="text-align: right;">80</td>
 <td style="text-align: right;">0.1250</td>
+<td style="text-align: right;">0.50</td>
 <td style="text-align: right;">42.50</td>
 <td style="text-align: right;">100</td>
 <td style="text-align: right;">7,225.0</td>
@@ -921,6 +932,7 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <td style="text-align: right;">300</td>
 <td style="text-align: right;">90</td>
 <td style="text-align: right;">0.1875</td>
+<td style="text-align: right;">0.75</td>
 <td style="text-align: right;">33.75</td>
 <td style="text-align: right;">900</td>
 <td style="text-align: right;">4,556.2</td>
@@ -931,6 +943,7 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <td style="text-align: right;">1,000</td>
 <td style="text-align: right;">70</td>
 <td style="text-align: right;">0.6250</td>
+<td style="text-align: right;">2.50</td>
 <td style="text-align: right;">-117.50</td>
 <td style="text-align: right;">100</td>
 <td style="text-align: right;">55,225.0</td>
@@ -941,6 +954,7 @@ V(\hat t_r)-V(\hat t_{\mathrm{HH}})\approx\frac1n\sum_{i=1}^N d_i^2\Big(N-\frac1
 <td style="text-align: right;">1,600</td>
 <td style="text-align: right;">300</td>
 <td style="text-align: right;">1.0000</td>
+<td style="text-align: right;">4.00</td>
 <td style="text-align: right;">0.00</td>
 <td style="text-align: right;">2,000</td>
 <td style="text-align: right;">73,812.5</td>

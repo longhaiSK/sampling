@@ -374,28 +374,28 @@ toy_table <- function(x, y) {
   B <- sum(y) / sum(x)
   psi <- x / sum(x)
   d <- y - B * x
-  tab <- data.frame(Store = LETTERS[1:N], x = x, y = y, psi = psi, d = d,
+  tab <- data.frame(Store = LETTERS[1:N], x = x, y = y, psi = psi, w = x / mean(x), d = d,
                     avg = N * (y - mean(y))^2, r = N * d^2, h = d^2 / psi)
   rbind(tab, data.frame(Store = "**Variance** (Sum)", x = sum(x), y = sum(y), psi = sum(psi),
-                        d = sum(d), avg = sum(tab$avg), r = sum(tab$r), h = sum(tab$h)))
+                        w = sum(tab$w), d = sum(d), avg = sum(tab$avg), r = sum(tab$r), h = sum(tab$h)))
 }
 show_toy_table <- function(tab)
-  knitr::kable(tab, digits = c(0, 0, 0, 4, 2, 1, 1, 1), format.args = list(big.mark = ","),
-               col.names = c("Store", "$x_i$", "$y_i$", "$\\psi_i$", "$d_i=y_i-Bx_i$",
-                             "$N(y_i-\\bar y_U)^2$", "$N\\,d_i^2$", "$d_i^2/\\psi_i$"))
+  knitr::kable(tab, digits = c(0, 0, 0, 4, 2, 2, 1, 1, 1), format.args = list(big.mark = ","),
+               col.names = c("Store", "$x_i$", "$y_i$", "$\\psi_i$", "$w^x_i$", "$d_i$",
+                             "$N(y_i-\\bar y_U)^2$", "$N\\,d_i^2$", "$\\dfrac{d_i^2}{\\psi_i}=\\dfrac{N d_i^2}{w^x_i}$"))
 x_toy <- c(100, 200, 300, 1000)
 ```
 
 ## Toy Example: Four Supermarkets {.smaller}
 
-Floor areas $x_i$, $t_x=1600$, $\psi_i=x_i/t_x$ against $1/N=0.25$ in an SRS; $t=300$, $B=0.1875$.
+Floor areas $x_i$, $t_x=1600$, $\psi_i=x_i/t_x$ against $1/N=0.25$ in an SRS, $w^x_i=x_i/\bar x_U=N\psi_i$; $t=300$, $B=0.1875$, $d_i=y_i-Bx_i$.
 One-draw variances (the sum of each column). **Sales proportional to floor area:**
 
 ```{r toy-good}
 show_toy_table(toy_table(x_toy, c(11, 20, 24, 245)))
 ```
 
-Store D has the largest residual and $\psi_D=0.625>1/N$: HH divides $d_D^2$ by $0.625$ instead of $0.25$.
+Store D has the largest residual and $\psi_D=0.625>1/N$: HH divides $d_D^2$ by $0.625$ instead of $0.25$, i.e. $Nd_D^2$ by $w^x_D=2.5$ instead of $1$.
 HH $<$ ratio $\ll$ average; here $H_d=529>\bar x_U=400$.
 
 ## Toy Example: Sales Unrelated to Floor Area {.smaller}
