@@ -318,11 +318,13 @@ For the mean, divide the estimators by $N$ and the variances by $N^2$.
 
 Ignoring the fpc, each variance is $\frac1n\sum_i$ (squared deviation)/(selection probability of unit $i$):
 
-| Estimator | Term of unit $i$ | Spread of $y$ about |
-|:---|:--:|:---|
-| Sample average | $\dfrac{(y_i-\bar y_U)^2}{1/N}$ | the flat line $\bar y_U$ |
-| Ratio | $\dfrac{d_i^2}{1/N}$ | the line $y=Bx$ |
-| HH | $\dfrac{d_i^2}{\psi_i}$ | the line $y=Bx$ |
+| Estimator | Term of unit $i$ | Same, as $N\times$ (squared deviation) / (relative size) | Spread of $y$ about |
+|:---|:--:|:--:|:---|
+| Sample average | $\dfrac{(y_i-\bar y_U)^2}{1/N}$ | $\dfrac{N(y_i-\bar y_U)^2}{1}$ | the flat line $\bar y_U$ |
+| Ratio | $\dfrac{d_i^2}{1/N}$ | $\dfrac{N\,d_i^2}{1}$ | the line $y=Bx$ |
+| HH | $\dfrac{d_i^2}{\psi_i}$ | $\dfrac{N\,d_i^2}{x_i/\bar x_U}=\dfrac{N\,d_i^2}{w^x_i}$ | the line $y=Bx$ |
+
+Since $\psi_i=x_i/t_x=\dfrac{1}{N}\dfrac{x_i}{\bar x_U}$: the three terms differ only in the divisor, $1$ for SRS, $w^x_i=x_i/\bar x_U$ for HH.
 
 * **Ratio vs average:** $y_i-\bar y_U=d_i+B(x_i-\bar x_U)$. If $y\approx Bx$, the ratio estimator removes the spread
   due to $x$; if $y$ is unrelated to $x$, $d_i$ *adds* it and the average wins.

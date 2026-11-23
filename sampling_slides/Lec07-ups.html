@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.9.37">
 
   <meta name="author" content="Longhai Li">
-  <meta name="dcterms.date" content="2026-11-17">
+  <meta name="dcterms.date" content="2026-11-23">
   <title>UPS-Slides</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -227,7 +227,7 @@ Longhai Li
 </div>
 </div>
 
-  <p class="date">2026-11-17</p>
+  <p class="date">2026-11-23</p>
 </section>
 <section>
 <section id="the-hansenhurwitz-estimator-upswr" class="title-slide slide level1 center" data-number="1">
@@ -696,14 +696,16 @@ V(\hat t_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\frac{d_i^2}{\psi_i}.
 <p>Ignoring the fpc, each variance is <span class="math inline">\frac1n\sum_i</span> (squared deviation)/(selection probability of unit <span class="math inline">i</span>):</p>
 <table class="caption-top">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Estimator</th>
 <th style="text-align: center;">Term of unit <span class="math inline">i</span></th>
+<th style="text-align: center;">Same, as <span class="math inline">N\times</span> (squared deviation) / (relative size)</th>
 <th style="text-align: left;">Spread of <span class="math inline">y</span> about</th>
 </tr>
 </thead>
@@ -711,20 +713,24 @@ V(\hat t_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\frac{d_i^2}{\psi_i}.
 <tr class="odd">
 <td style="text-align: left;">Sample average</td>
 <td style="text-align: center;"><span class="math inline">\dfrac{(y_i-\bar y_U)^2}{1/N}</span></td>
+<td style="text-align: center;"><span class="math inline">\dfrac{N(y_i-\bar y_U)^2}{1}</span></td>
 <td style="text-align: left;">the flat line <span class="math inline">\bar y_U</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Ratio</td>
 <td style="text-align: center;"><span class="math inline">\dfrac{d_i^2}{1/N}</span></td>
+<td style="text-align: center;"><span class="math inline">\dfrac{N\,d_i^2}{1}</span></td>
 <td style="text-align: left;">the line <span class="math inline">y=Bx</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HH</td>
 <td style="text-align: center;"><span class="math inline">\dfrac{d_i^2}{\psi_i}</span></td>
+<td style="text-align: center;"><span class="math inline">\dfrac{N\,d_i^2}{x_i/\bar x_U}=\dfrac{N\,d_i^2}{w^x_i}</span></td>
 <td style="text-align: left;">the line <span class="math inline">y=Bx</span></td>
 </tr>
 </tbody>
 </table>
+<p>Since <span class="math inline">\psi_i=x_i/t_x=\dfrac{1}{N}\dfrac{x_i}{\bar x_U}</span>: the three terms differ only in the divisor, <span class="math inline">1</span> for SRS, <span class="math inline">w^x_i=x_i/\bar x_U</span> for HH.</p>
 <ul>
 <li><strong>Ratio vs average:</strong> <span class="math inline">y_i-\bar y_U=d_i+B(x_i-\bar x_U)</span>. If <span class="math inline">y\approx Bx</span>, the ratio estimator removes the spread due to <span class="math inline">x</span>; if <span class="math inline">y</span> is unrelated to <span class="math inline">x</span>, <span class="math inline">d_i</span> <em>adds</em> it and the average wins.</li>
 <li><strong>HH vs ratio:</strong> the same <span class="math inline">d_i^2</span>, divided by <span class="math inline">\psi_i</span> instead of <span class="math inline">1/N</span>. Units with <span class="math inline">\psi_i&gt;1/N</span> (larger than average) are <strong>downweighted</strong>, since they are already drawn more often.</li>

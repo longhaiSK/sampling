@@ -502,11 +502,15 @@ $N^2S_y^2/n\approx\frac1n\sum_{i=1}^N(y_i-\bar{y}_U)^2/(1/N)$, and ignoring the 
 each variance is $\frac1n$ times a sum over the units of one term, a squared deviation divided by the unit's
 selection probability:
 
-| Estimator | Term of unit $i$ | Spread of $y$ about |
-|:---|:---|:---|
-| Sample average | $\dfrac{(y_i-\bar{y}_U)^2}{1/N}=N(y_i-\bar{y}_U)^2$ | the flat line $\bar{y}_U$ |
-| Ratio | $\dfrac{d_i^2}{1/N}=N\,d_i^2$ | the line $y=Bx$ |
-| HH | $\dfrac{d_i^2}{\psi_i}$ | the line $y=Bx$ |
+| Estimator | Term of unit $i$ | Same, as $N\times$ (squared deviation) / (relative size) | Spread of $y$ about |
+|:---|:---|:---|:---|
+| Sample average | $\dfrac{(y_i-\bar{y}_U)^2}{1/N}$ | $\dfrac{N(y_i-\bar{y}_U)^2}{1}$ | the flat line $\bar{y}_U$ |
+| Ratio | $\dfrac{d_i^2}{1/N}$ | $\dfrac{N\,d_i^2}{1}$ | the line $y=Bx$ |
+| HH | $\dfrac{d_i^2}{\psi_i}$ | $\dfrac{N\,d_i^2}{x_i/\bar{x}_U}=\dfrac{N\,d_i^2}{w^x_i}$ | the line $y=Bx$ |
+
+Because $\psi_i=x_i/t_x=\frac1N\,x_i/\bar{x}_U$, the last column shows the contrast most directly: the three terms
+share the factor $N$ and differ only in what divides the squared deviation, namely $1$ for the two SRS
+estimators and the relative size $w^x_i=x_i/\bar{x}_U$ for HH.
 
 **Ratio versus average.** Since $y_i-\bar{y}_U=d_i+B(x_i-\bar{x}_U)$, the two terms differ by
 $B(x_i-\bar{x}_U)$. When $y_i$ is roughly proportional to $x_i$, the residuals $d_i$ are small and the spread
