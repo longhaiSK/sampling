@@ -890,16 +890,20 @@ upswr_total <- function (total, psi, N = Inf, estimate = c ("total", "mean"), sh
 ## ratios b_j* = y_j*/x_j* of the n draws (repeats kept): Bhat = mean(b_j*)
 ## estimates B = t/t_x with SE s_b*/sqrt(n) (no fpc, draws are independent).
 ## ydata, xdata --- y and x of the n draws
-## xbar_pop, tx_pop --- population mean and total of x
+## xbar_pop, tx_pop --- population mean and total of x; may be left NULL (the
+##            default) to estimate B itself. In particular, with x = psi_i
+##            (total 1), B = t, so upswr_est(y, psi) estimates the total
 ## method --- "ratio" (default): Bhat, i.e. the total of y per unit of x
-##            "mean": the population mean of y, xbar_pop * Bhat
-##            "total": the population total of y, tx_pop * Bhat
+##            "mean": the population mean of y, xbar_pop * Bhat (needs xbar_pop)
+##            "total": the population total of y, tx_pop * Bhat (needs tx_pop)
 ## decimals --- decimals shown in the working table
 ## (the working table, if shown, is on the scale of the ratio b_j*)
-upswr_est <- function (ydata, xdata, xbar_pop, tx_pop,
+upswr_est <- function (ydata, xdata, xbar_pop = NULL, tx_pop = NULL,
                        method = c ("ratio", "mean", "total"), show.details = TRUE, decimals = 2)
 {
   method <- match.arg (method)
+  if (method == "mean" && is.null (xbar_pop)) stop ("xbar_pop is needed for method = \"mean\"")
+  if (method == "total" && is.null (tx_pop)) stop ("tx_pop is needed for method = \"total\"")
   scale <- switch (method, ratio = 1, mean = xbar_pop, total = tx_pop)
   res <- srs_est (ydata/xdata, N = Inf, estimate = "mean", show.details = show.details,
                   col_labels = list (y = "b_j^*", yhat = "\\hat B_{\\mathrm{HH}}",

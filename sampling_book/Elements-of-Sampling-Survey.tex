@@ -9712,7 +9712,7 @@ need not be in thousands now, since \(\psi_i\) has no units:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{upswr\_est}\NormalTok{(phys, psi, }\AttributeTok{xbar\_pop =} \DecValTok{1} \SpecialCharTok{/}\NormalTok{ N, }\AttributeTok{tx\_pop =} \DecValTok{1}\NormalTok{, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
+\FunctionTok{upswr\_est}\NormalTok{(phys, psi, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -10045,16 +10045,20 @@ s_u^2=\frac{1}{n-1}\sum_{j=1}^5\left(u_j-\hat{t}_{\mathrm{HH}}\right)^2=\frac{22
 \(\hat{\bar{y}}_{\mathrm{HH}}=\hat{t}_{\mathrm{HH}}/N=81.53\) and
 \(\hat{B}_{\mathrm{HH}}=\hat{t}_{\mathrm{HH}}/t_x=4.8917\).
 
-The same total from \texttt{upswr\_est}, with the normalized size
+The same estimates from \texttt{upswr\_est}, with the normalized size
 \(\tilde{x}_i=\psi_i\) of Section~\ref{sec-ups-hh-psi}, whose total is
-\(t_{\tilde{x}}=1\) (so \(\bar{\tilde{x}}_U=1/N\)): the ratios are the
-\(u_j\) and their mean is \(\hat{t}_{\mathrm{HH}}\) itself.
+\(t_{\tilde{x}}=1\): the ratios are the \(u_j\), and their mean
+\(\hat{\tilde{B}}_{\mathrm{HH}}\) is \(\hat{t}_{\mathrm{HH}}\) itself.
+So \texttt{xbar\_pop} and \texttt{tx\_pop} are left out, and the call
+returns the estimate of the total; the estimates of \(\bar{y}_U\) and
+\(B\) follow by dividing the estimate and its SE by \(N=6\) and by
+\(t_x=100\):
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{token}\SpecialCharTok{$}\NormalTok{psi }\OtherTok{\textless{}{-}}\NormalTok{ token}\SpecialCharTok{$}\NormalTok{x }\SpecialCharTok{/} \DecValTok{100}   \CommentTok{\# psi\_i = x\_i / t\_x}
-\FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{psi, }\AttributeTok{xbar\_pop =} \DecValTok{1} \SpecialCharTok{/} \DecValTok{6}\NormalTok{, }\AttributeTok{tx\_pop =} \DecValTok{1}\NormalTok{, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
+\NormalTok{t\_hat }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{psi, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate   }\CommentTok{\# estimate of t}
+\NormalTok{t\_hat }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -10065,6 +10069,40 @@ The same total from \texttt{upswr\_est}, with the normalized size
 \(\hat{t}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{t}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
 \midrule\addlinespace[2.5pt]
 489.17 & 10.51 & 459.99 & 518.34 \\ 
+\bottomrule
+\end{gtfit}
+\end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{(t\_hat }\SpecialCharTok{/} \DecValTok{6}\NormalTok{) }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_ybar"}\NormalTok{)       }\CommentTok{\# mean y: divide by N}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\normalsize
+\begin{gtfit}{0.7\linewidth}{rrrr}
+\toprule
+\(\hat{\bar{y}}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{\bar{y}}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
+\midrule\addlinespace[2.5pt]
+81.53 & 1.75 & 76.67 & 86.39 \\ 
+\bottomrule
+\end{gtfit}
+\end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{(t\_hat }\SpecialCharTok{/} \DecValTok{100}\NormalTok{) }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_B"}\NormalTok{)        }\CommentTok{\# B: divide by t\_x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\normalsize
+\begin{gtfit}{0.7\linewidth}{rrrr}
+\toprule
+\(\hat{B}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{B}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
+\midrule\addlinespace[2.5pt]
+4.89 & 0.11 & 4.60 & 5.18 \\ 
 \bottomrule
 \end{gtfit}
 \end{table}

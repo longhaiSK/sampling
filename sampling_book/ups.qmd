@@ -330,7 +330,7 @@ The same total with the normalized size $\tilde{x}_i=\psi_i$ (@sec-ups-hh-psi), 
 population need not be in thousands now, since $\psi_i$ has no units:
 
 ```{r statepop-upswr-total-psi}
-upswr_est(phys, psi, xbar_pop = 1 / N, tx_pop = 1, method = "total", show.details = FALSE)$estimate |>
+upswr_est(phys, psi, show.details = FALSE)$estimate |>
   format_est_gt("hh_total")
 ```
 **Output Note:** This is the estimate per 1,000 people times the US population in thousands, so it estimates the national total
@@ -483,15 +483,19 @@ again equal to $t_x\,s_{b^*}/\sqrt{n}=`r round(t_x * sd(y_U[R] / x_U[R]) / sqrt(
 $\hat{\bar{y}}_{\mathrm{HH}}=\hat{t}_{\mathrm{HH}}/N=`r round(t_HH2 / N_c, 2)`$ and
 $\hat{B}_{\mathrm{HH}}=\hat{t}_{\mathrm{HH}}/t_x=`r round(t_HH2 / t_x, 4)`$.
 
-The same total from `upswr_est`, with the normalized size $\tilde{x}_i=\psi_i$ of @sec-ups-hh-psi, whose
-total is $t_{\tilde{x}}=1$ (so $\bar{\tilde{x}}_U=1/N$): the ratios are the $u_j$ and their mean is
-$\hat{t}_{\mathrm{HH}}$ itself.
+The same estimates from `upswr_est`, with the normalized size $\tilde{x}_i=\psi_i$ of @sec-ups-hh-psi, whose
+total is $t_{\tilde{x}}=1$: the ratios are the $u_j$, and their mean $\hat{\tilde{B}}_{\mathrm{HH}}$ is
+$\hat{t}_{\mathrm{HH}}$ itself. So `xbar_pop` and `tx_pop` are left out, and the call returns the estimate of the
+total; the estimates of $\bar{y}_U$ and $B$ follow by dividing the estimate and its SE by $N=6$ and by
+$t_x=100$:
 
 ```{r toy-sample-psi}
 #| cache: false
 token$psi <- token$x / 100   # psi_i = x_i / t_x
-upswr_est(token$y, token$psi, xbar_pop = 1 / 6, tx_pop = 1, method = "total", show.details = FALSE)$estimate |>
-  format_est_gt("hh_total")
+t_hat <- upswr_est(token$y, token$psi, show.details = FALSE)$estimate   # estimate of t
+t_hat |> format_est_gt("hh_total")
+(t_hat / 6) |> format_est_gt("hh_ybar")       # mean y: divide by N
+(t_hat / 100) |> format_est_gt("hh_B")        # B: divide by t_x
 ```
 
 ## Comparison of the HH, Ratio, and Average Estimators of the Total {#sec-ups-compare}
