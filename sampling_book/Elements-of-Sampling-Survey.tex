@@ -13413,30 +13413,24 @@ source is listed below for reference.
 \NormalTok{  res}
 \NormalTok{\}}
 
-\DocumentationTok{\#\# UPSWR Hansen{-}Hurwitz estimation when the drawing probabilities are}
-\DocumentationTok{\#\# psi\_i = x\_i / tx\_pop, built from the auxiliary variable x. Works with the}
+\DocumentationTok{\#\# UPSWR Hansen{-}Hurwitz estimation of B = t/t\_x when the drawing probabilities}
+\DocumentationTok{\#\# are psi\_i = x\_i / t\_x, built from the auxiliary variable x. Works with the}
 \DocumentationTok{\#\# ratios b\_j* = y\_j*/x\_j* of the n draws (repeats kept): Bhat = mean(b\_j*)}
-\DocumentationTok{\#\# estimates B = t/t\_x with SE s\_b*/sqrt(n) (no fpc, draws are independent).}
+\DocumentationTok{\#\# estimates B with SE s\_b*/sqrt(n) (no fpc, draws are independent).}
 \DocumentationTok{\#\# ydata, xdata {-}{-}{-} y and x of the n draws}
-\DocumentationTok{\#\# xbar\_pop, tx\_pop {-}{-}{-} population mean and total of x}
-\DocumentationTok{\#\# method {-}{-}{-} "ratio" (default): Bhat, i.e. the total of y per unit of x}
-\DocumentationTok{\#\#            "mean": the population mean of y, xbar\_pop * Bhat}
-\DocumentationTok{\#\#            "total": the population total of y, tx\_pop * Bhat}
 \DocumentationTok{\#\# decimals {-}{-}{-} decimals shown in the working table}
-\DocumentationTok{\#\# (the working table, if shown, is on the scale of the ratio b\_j*)}
-\NormalTok{upswr\_est }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{ (ydata, xdata, xbar\_pop, tx\_pop,}
-                       \AttributeTok{method =} \FunctionTok{c}\NormalTok{ (}\StringTok{"ratio"}\NormalTok{, }\StringTok{"mean"}\NormalTok{, }\StringTok{"total"}\NormalTok{), }\AttributeTok{show.details =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{decimals =} \DecValTok{2}\NormalTok{)}
+\DocumentationTok{\#\# returns list($estimate = c(Est., S.E., ci.low, ci.upp) of B, $table)}
+\DocumentationTok{\#\# To estimate the mean or the total of y, multiply $estimate by the known mean}
+\DocumentationTok{\#\# xbar\_U or total t\_x of x. With x = psi\_i (total 1), B = t, so the estimate is}
+\DocumentationTok{\#\# already the total.}
+\NormalTok{upswr\_est }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{ (ydata, xdata, }\AttributeTok{show.details =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{decimals =} \DecValTok{2}\NormalTok{)}
 \NormalTok{\{}
-\NormalTok{  method }\OtherTok{\textless{}{-}} \FunctionTok{match.arg}\NormalTok{ (method)}
-\NormalTok{  scale }\OtherTok{\textless{}{-}} \ControlFlowTok{switch}\NormalTok{ (method, }\AttributeTok{ratio =} \DecValTok{1}\NormalTok{, }\AttributeTok{mean =}\NormalTok{ xbar\_pop, }\AttributeTok{total =}\NormalTok{ tx\_pop)}
-\NormalTok{  res }\OtherTok{\textless{}{-}} \FunctionTok{srs\_est}\NormalTok{ (ydata}\SpecialCharTok{/}\NormalTok{xdata, }\AttributeTok{N =} \ConstantTok{Inf}\NormalTok{, }\AttributeTok{estimate =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{show.details =}\NormalTok{ show.details,}
-                  \AttributeTok{col\_labels =} \FunctionTok{list}\NormalTok{ (}\AttributeTok{y =} \StringTok{"b\_j\^{}*"}\NormalTok{, }\AttributeTok{yhat =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat B\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}\NormalTok{,}
-                                     \AttributeTok{dev =} \StringTok{"b\_j\^{}*{-}}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat B\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}\NormalTok{,}
-                                     \AttributeTok{ybar =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat B\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}\NormalTok{, }\AttributeTok{s =} \StringTok{"s\_\{b\^{}*\}"}\NormalTok{),}
-                  \AttributeTok{title =} \StringTok{"UPSWR Hansen{-}Hurwitz Estimation: Working Table"}\NormalTok{,}
-                  \AttributeTok{decimals =}\NormalTok{ decimals)}
-\NormalTok{  res}\SpecialCharTok{$}\NormalTok{estimate }\OtherTok{\textless{}{-}}\NormalTok{ scale }\SpecialCharTok{*}\NormalTok{ res}\SpecialCharTok{$}\NormalTok{estimate}
-\NormalTok{  res}
+  \FunctionTok{srs\_est}\NormalTok{ (ydata}\SpecialCharTok{/}\NormalTok{xdata, }\AttributeTok{N =} \ConstantTok{Inf}\NormalTok{, }\AttributeTok{estimate =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{show.details =}\NormalTok{ show.details,}
+           \AttributeTok{col\_labels =} \FunctionTok{list}\NormalTok{ (}\AttributeTok{y =} \StringTok{"b\_j\^{}*"}\NormalTok{, }\AttributeTok{yhat =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat B\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}\NormalTok{,}
+                              \AttributeTok{dev =} \StringTok{"b\_j\^{}*{-}}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat B\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}\NormalTok{,}
+                              \AttributeTok{ybar =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{hat B\_\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{mathrm\{HH\}\}"}\NormalTok{, }\AttributeTok{s =} \StringTok{"s\_\{b\^{}*\}"}\NormalTok{),}
+           \AttributeTok{title =} \StringTok{"UPSWR Hansen{-}Hurwitz Estimation: Working Table"}\NormalTok{,}
+           \AttributeTok{decimals =}\NormalTok{ decimals)}
 \NormalTok{\}}
 
 \DocumentationTok{\#\# UPSWR (Hansen{-}Hurwitz) estimation for cluster sampling, with clusters}
@@ -13462,9 +13456,8 @@ source is listed below for reference.
 \NormalTok{\{}
 \NormalTok{    estimate }\OtherTok{\textless{}{-}} \FunctionTok{match.arg}\NormalTok{ (estimate)}
 \NormalTok{    Mbar\_U }\OtherTok{\textless{}{-}}\NormalTok{ M0 }\SpecialCharTok{/}\NormalTok{ N}
-\NormalTok{    method }\OtherTok{\textless{}{-}} \ControlFlowTok{switch}\NormalTok{ (estimate, }\AttributeTok{ybar =} \StringTok{"ratio"}\NormalTok{, }\AttributeTok{tbar =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{total =} \StringTok{"total"}\NormalTok{)}
-\NormalTok{    res }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{ (ti, Mi, }\AttributeTok{xbar\_pop =}\NormalTok{ Mbar\_U, }\AttributeTok{tx\_pop =}\NormalTok{ M0, }\AttributeTok{method =}\NormalTok{ method,}
-                      \AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{    res }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{ (ti, Mi, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)      }\CommentTok{\# estimates ybar\_U}
+\NormalTok{    res}\SpecialCharTok{$}\NormalTok{estimate }\OtherTok{\textless{}{-}}\NormalTok{ res}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{*} \ControlFlowTok{switch}\NormalTok{ (estimate, }\AttributeTok{ybar =} \DecValTok{1}\NormalTok{, }\AttributeTok{tbar =}\NormalTok{ Mbar\_U, }\AttributeTok{total =}\NormalTok{ M0)}
     \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\NormalTok{show.details) }\FunctionTok{return}\NormalTok{ (res)}
 
     \DocumentationTok{\#\# working table on the scale of the cluster means ybar\_j*}
