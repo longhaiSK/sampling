@@ -524,10 +524,12 @@ s_{b^*}^2=\frac{0.220833}{4}=0.0552,\quad s_{b^*}=0.235
 </tr>
 </tbody>
 </table>
-<p>In R, with the sample as a data set <code>token</code> (one row per draw, columns <code>y</code> and <code>x</code>), <code>upswr_est</code> returns the estimate, SE and CI; <code>method</code> is <code>"ratio"</code>, <code>"mean"</code> or <code>"total"</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">upswr_est</span>(token<span class="sc">$</span>y, token<span class="sc">$</span>x, <span class="at">xbar_pop =</span> <span class="dv">100</span> <span class="sc">/</span> <span class="dv">6</span>, <span class="at">tx_pop =</span> <span class="dv">100</span>, <span class="at">method =</span> <span class="st">"total"</span>)</span>
-<span id="cb3-2"><a href=""></a><span class="fu">upswr_est</span>(token<span class="sc">$</span>y, token<span class="sc">$</span>x <span class="sc">/</span> <span class="dv">100</span>)  <span class="co"># x = psi, total 1: B-hat is the total</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Both give <span class="math inline">\hat t_{\mathrm{HH}}=489.2</span> (SE <span class="math inline">10.5</span>): the second uses the normalized size <span class="math inline">\tilde x_i=\psi_i</span>.</p>
+<p>In R, with the sample as a data set <code>token</code> (one row per draw, columns <code>y</code> and <code>x</code>), <code>upswr_est</code> returns the estimate, SE and CI of <span class="math inline">B</span>; multiply by <span class="math inline">\bar x_U</span> or <span class="math inline">t_x</span> for the mean or the total:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>B_hat <span class="ot">&lt;-</span> <span class="fu">upswr_est</span>(token<span class="sc">$</span>y, token<span class="sc">$</span>x)<span class="sc">$</span>estimate</span>
+<span id="cb3-2"><a href=""></a>B_hat <span class="sc">*</span> <span class="dv">100</span> <span class="sc">/</span> <span class="dv">6</span>     <span class="co"># mean:  xbar_U = t_x / N</span></span>
+<span id="cb3-3"><a href=""></a>B_hat <span class="sc">*</span> <span class="dv">100</span>         <span class="co"># total: t_x</span></span>
+<span id="cb3-4"><a href=""></a><span class="fu">upswr_est</span>(token<span class="sc">$</span>y, token<span class="sc">$</span>x <span class="sc">/</span> <span class="dv">100</span>)<span class="sc">$</span>estimate   <span class="co"># x = psi (total 1): B-hat is the total</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The total line and the last line both give <span class="math inline">\hat t_{\mathrm{HH}}=489.2</span> (SE <span class="math inline">10.5</span>); the last uses the normalized size <span class="math inline">\tilde x_i=\psi_i</span>.</p>
 </section></section>
 <section>
 <section id="example-physicians-in-u.s.-counties" class="title-slide slide level1 center" data-number="3">

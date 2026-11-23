@@ -216,14 +216,16 @@ $$
 | Total revenue | $100\times4.8917=489.2$ | $100\times0.1051=10.5$ |
 
 In R, with the sample as a data set `token` (one row per draw, columns `y` and `x`), `upswr_est` returns
-the estimate, SE and CI; `method` is `"ratio"`, `"mean"` or `"total"`:
+the estimate, SE and CI of $B$; multiply by $\bar x_U$ or $t_x$ for the mean or the total:
 
 ```r
-upswr_est(token$y, token$x, xbar_pop = 100 / 6, tx_pop = 100, method = "total")
-upswr_est(token$y, token$x / 100)  # x = psi, total 1: B-hat is the total
+B_hat <- upswr_est(token$y, token$x)$estimate
+B_hat * 100 / 6     # mean:  xbar_U = t_x / N
+B_hat * 100         # total: t_x
+upswr_est(token$y, token$x / 100)$estimate   # x = psi (total 1): B-hat is the total
 ```
 
-Both give $\hat t_{\mathrm{HH}}=489.2$ (SE $10.5$): the second uses the normalized size $\tilde x_i=\psi_i$.
+The total line and the last line both give $\hat t_{\mathrm{HH}}=489.2$ (SE $10.5$); the last uses the normalized size $\tilde x_i=\psi_i$.
 
 # Example: Physicians in U.S. Counties
 

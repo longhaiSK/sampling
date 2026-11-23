@@ -232,20 +232,18 @@ $`r round(ybar_HH, 2)`$ is $`r round(abs(mean(y_U) - ybar_HH) / se_ybar, 2)`$ es
 
 The same HH estimates from the shared function `upswr_est` (@sec-ups-statepop uses it for real data).
 The audited sample is stored as a data set `token`, with one row per draw (customer F appears twice) and
-columns `y` (revenue) and `x` (tokens). `upswr_est` takes these two columns and the population mean and total
-of $x$, passed as `xbar_pop` $=\bar{x}_U=t_x/N=100/6$ and `tx_pop` $=t_x=100$:
+columns `y` (revenue) and `x` (tokens). `upswr_est` takes these two columns and returns the estimate of $B$, with its SE and
+confidence interval; the mean and the total are $\bar{x}_U=t_x/N=100/6$ and $t_x=100$ times the estimate:
 
 ```{r toy-sample-fn}
 #| cache: false
 token <- data.frame(y = c(190, 155, 190, 70, 41),   # draws F, E, F, D, C
                     x = c(40, 30, 40, 15, 8))
 token
-upswr_est(token$y, token$x, xbar_pop = 100 / 6, tx_pop = 100, method = "ratio", show.details = FALSE)$estimate |>
-  format_est_gt("hh_B")
-upswr_est(token$y, token$x, xbar_pop = 100 / 6, tx_pop = 100, method = "mean", show.details = FALSE)$estimate |>
-  format_est_gt("hh_ybar")
-upswr_est(token$y, token$x, xbar_pop = 100 / 6, tx_pop = 100, method = "total", show.details = FALSE)$estimate |>
-  format_est_gt("hh_total")
+B_hat <- upswr_est(token$y, token$x, show.details = FALSE)$estimate   # estimate of B
+B_hat |> format_est_gt("hh_B")
+(B_hat * 100 / 6) |> format_est_gt("hh_ybar")   # mean of y: times xbar_U = t_x / N
+(B_hat * 100) |> format_est_gt("hh_total")      # total of y: times t_x
 ```
 
 ### Example: Physicians in U.S. Counties (`statepop.csv`) {#sec-ups-statepop}
@@ -284,8 +282,8 @@ plot(popn, phys, log = "xy",
 All three estimates come from the same quantity, the ratio $b_j^*=\mathrm{phys}_j^*/\mathrm{popn}_j^*$ of
 physicians per person of the county selected on draw $j$. To avoid tiny numbers we measure the population in
 thousands of people, so that $b_j^*$ is the number of physicians per 1,000 people. The function `upswr_est`
-takes the physicians and populations of the 100 draws, the population mean and total of $x$ (the number of
-counties is $N=3141$, so $\bar{x}_U=t_x/N$), and the `method`.
+takes the physicians and populations of the 100 draws and estimates $B$; the mean and the total follow
+by multiplying by $\bar{x}_U=t_x/N$ and $t_x$ (the number of counties is $N=3141$).
 
 *Physicians per 1,000 people,* $\hat{B}_{\mathrm{HH}}=\bar{b}^*$. The working table lists the ratios $b_j^*$ of
 the first draws, their deviations from $\hat{B}_{\mathrm{HH}}$, and the squared deviations, whose sum gives
@@ -295,8 +293,7 @@ $s_{b^*}^2$:
 N <- 3141   # counties in the US
 popn_in_thousands <- popn / 1000   # county populations in thousands
 popn_US_in_thousands <- popn_US / 1000
-res_phys_ratio_hh <- upswr_est(phys, popn_in_thousands, xbar_pop = popn_US_in_thousands / N,
-                               tx_pop = popn_US_in_thousands, method = "ratio")
+res_phys_ratio_hh <- upswr_est(phys, popn_in_thousands)
 res_phys_ratio_hh$table
 res_phys_ratio_hh$estimate |> format_est_gt("hh_B")
 ```
@@ -309,21 +306,19 @@ per 1,000 people, with a 95% interval of [`r round(res_phys_ratio_hh$estimate["c
 $\bar{x}_U=t_x/N$ the average population of a county:
 
 ```{r statepop-upswr-per-county}
-res_phys_county <- upswr_est(phys, popn_in_thousands, xbar_pop = popn_US_in_thousands / N, tx_pop = popn_US_in_thousands,
-                             method = "mean", show.details = FALSE)
-res_phys_county$estimate |> format_est_gt("hh_ybar")
+res_phys_county <- res_phys_ratio_hh$estimate * popn_US_in_thousands / N   # xbar_U times B
+res_phys_county |> format_est_gt("hh_ybar")
 ```
 **Output Note:** This is the estimate per 1,000 people times the average county population in thousands,
 $\bar{x}_U=`r round(popn_US_in_thousands / N, 1)`$, and its standard error is multiplied by the same
 factor. It averages over *counties*, each weighted equally, so the many small rural counties pull it down to
-about `r round(res_phys_county$estimate["Est."])` physicians per county.
+about `r round(res_phys_county["Est."])` physicians per county.
 
 *Total physicians in the US,* $\hat{t}_{\mathrm{HH}}=t_x\hat{B}_{\mathrm{HH}}$, with $t_x$ the US population (in thousands):
 
 ```{r statepop-upswr-total}
-res_phys_total <- upswr_est(phys, popn_in_thousands, xbar_pop = popn_US_in_thousands / N, tx_pop = popn_US_in_thousands,
-                            method = "total", show.details = FALSE)
-res_phys_total$estimate |> format_est_gt("hh_total")
+res_phys_total <- res_phys_ratio_hh$estimate * popn_US_in_thousands   # t_x times B
+res_phys_total |> format_est_gt("hh_total")
 ```
 
 The same total with the normalized size $\tilde{x}_i=\psi_i$ (@sec-ups-hh-psi), with $t_{\tilde{x}}=1$; the
@@ -335,9 +330,9 @@ upswr_est(phys, psi, show.details = FALSE)$estimate |>
 ```
 **Output Note:** This is the estimate per 1,000 people times the US population in thousands, so it estimates the national total
 number of physicians: about
-`r format(round(res_phys_total$estimate["Est."]), big.mark = ",")` physicians in the US,
-with a 95% interval of [`r format(round(res_phys_total$estimate["ci.low"]), big.mark = ",")`,
-`r format(round(res_phys_total$estimate["ci.upp"]), big.mark = ",")`]. The three estimates carry the same
+`r format(round(res_phys_total["Est."]), big.mark = ",")` physicians in the US,
+with a 95% interval of [`r format(round(res_phys_total["ci.low"]), big.mark = ",")`,
+`r format(round(res_phys_total["ci.upp"]), big.mark = ",")`]. The three estimates carry the same
 information: the standard errors are in the same proportion as the estimates.
 
 #### Comparison with estimates based on an SRS sample {-}
@@ -375,7 +370,7 @@ summ <- rbind(
   "Sample total, $N\\bar{y}$ (SRS)"      = res_counties_srs$estimate,
   "Ratio estimator (SRS)"                 = res_counties_ratio$estimate,
   "Regression estimator (SRS)"            = res_counties_reg$estimate,
-  "Hansen--Hurwitz, $t_x\\hat{B}_{\\mathrm{HH}}$ (UPSWR)" = res_phys_total$estimate)
+  "Hansen--Hurwitz, $t_x\\hat{B}_{\\mathrm{HH}}$ (UPSWR)" = res_phys_total)
 summ <- data.frame(Method = rownames(summ), unname(summ), check.names = FALSE,
                    Error = unname(summ[, 1]) - 532638)
 knitr::kable(summ, row.names = FALSE, digits = 0, format.args = list(big.mark = ","),

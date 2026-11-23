@@ -9444,9 +9444,10 @@ The same HH estimates from the shared function \texttt{upswr\_est}
 (Section~\ref{sec-ups-statepop} uses it for real data). The audited
 sample is stored as a data set \texttt{token}, with one row per draw
 (customer F appears twice) and columns \texttt{y} (revenue) and
-\texttt{x} (tokens). \texttt{upswr\_est} takes these two columns and the
-population mean and total of \(x\), passed as \texttt{xbar\_pop}
-\(=\bar{x}_U=t_x/N=100/6\) and \texttt{tx\_pop} \(=t_x=100\):
+\texttt{x} (tokens). \texttt{upswr\_est} takes these two columns and
+returns the estimate of \(B\), with its SE and confidence interval; the
+mean and the total are \(\bar{x}_U=t_x/N=100/6\) and \(t_x=100\) times
+the estimate:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9467,8 +9468,8 @@ population mean and total of \(x\), passed as \texttt{xbar\_pop}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{xbar\_pop =} \DecValTok{100} \SpecialCharTok{/} \DecValTok{6}\NormalTok{, }\AttributeTok{tx\_pop =} \DecValTok{100}\NormalTok{, }\AttributeTok{method =} \StringTok{"ratio"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_B"}\NormalTok{)}
+\NormalTok{B\_hat }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate   }\CommentTok{\# estimate of B}
+\NormalTok{B\_hat }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_B"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -9485,8 +9486,7 @@ population mean and total of \(x\), passed as \texttt{xbar\_pop}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{xbar\_pop =} \DecValTok{100} \SpecialCharTok{/} \DecValTok{6}\NormalTok{, }\AttributeTok{tx\_pop =} \DecValTok{100}\NormalTok{, }\AttributeTok{method =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_ybar"}\NormalTok{)}
+\NormalTok{(B\_hat }\SpecialCharTok{*} \DecValTok{100} \SpecialCharTok{/} \DecValTok{6}\NormalTok{) }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_ybar"}\NormalTok{)   }\CommentTok{\# mean of y: times xbar\_U = t\_x / N}
 \end{Highlighting}
 \end{Shaded}
 
@@ -9503,8 +9503,7 @@ population mean and total of \(x\), passed as \texttt{xbar\_pop}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{xbar\_pop =} \DecValTok{100} \SpecialCharTok{/} \DecValTok{6}\NormalTok{, }\AttributeTok{tx\_pop =} \DecValTok{100}\NormalTok{, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
+\NormalTok{(B\_hat }\SpecialCharTok{*} \DecValTok{100}\NormalTok{) }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)      }\CommentTok{\# total of y: times t\_x}
 \end{Highlighting}
 \end{Shaded}
 
@@ -9584,9 +9583,9 @@ All three estimates come from the same quantity, the ratio
 of the county selected on draw \(j\). To avoid tiny numbers we measure
 the population in thousands of people, so that \(b_j^*\) is the number
 of physicians per 1,000 people. The function \texttt{upswr\_est} takes
-the physicians and populations of the 100 draws, the population mean and
-total of \(x\) (the number of counties is \(N=3141\), so
-\(\bar{x}_U=t_x/N\)), and the \texttt{method}.
+the physicians and populations of the 100 draws and estimates \(B\); the
+mean and the total follow by multiplying by \(\bar{x}_U=t_x/N\) and
+\(t_x\) (the number of counties is \(N=3141\)).
 
 \emph{Physicians per 1,000 people,} \(\hat{B}_{\mathrm{HH}}=\bar{b}^*\).
 The working table lists the ratios \(b_j^*\) of the first draws, their
@@ -9598,8 +9597,7 @@ whose sum gives \(s_{b^*}^2\):
 \NormalTok{N }\OtherTok{\textless{}{-}} \DecValTok{3141}   \CommentTok{\# counties in the US}
 \NormalTok{popn\_in\_thousands }\OtherTok{\textless{}{-}}\NormalTok{ popn }\SpecialCharTok{/} \DecValTok{1000}   \CommentTok{\# county populations in thousands}
 \NormalTok{popn\_US\_in\_thousands }\OtherTok{\textless{}{-}}\NormalTok{ popn\_US }\SpecialCharTok{/} \DecValTok{1000}
-\NormalTok{res\_phys\_ratio\_hh }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(phys, popn\_in\_thousands, }\AttributeTok{xbar\_pop =}\NormalTok{ popn\_US\_in\_thousands }\SpecialCharTok{/}\NormalTok{ N,}
-                               \AttributeTok{tx\_pop =}\NormalTok{ popn\_US\_in\_thousands, }\AttributeTok{method =} \StringTok{"ratio"}\NormalTok{)}
+\NormalTok{res\_phys\_ratio\_hh }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(phys, popn\_in\_thousands)}
 \NormalTok{res\_phys\_ratio\_hh}\SpecialCharTok{$}\NormalTok{table}
 \end{Highlighting}
 \end{Shaded}
@@ -9660,9 +9658,8 @@ interval of {[}1.914, 2.558{]}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{res\_phys\_county }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(phys, popn\_in\_thousands, }\AttributeTok{xbar\_pop =}\NormalTok{ popn\_US\_in\_thousands }\SpecialCharTok{/}\NormalTok{ N, }\AttributeTok{tx\_pop =}\NormalTok{ popn\_US\_in\_thousands,}
-                             \AttributeTok{method =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
-\NormalTok{res\_phys\_county}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_ybar"}\NormalTok{)}
+\NormalTok{res\_phys\_county }\OtherTok{\textless{}{-}}\NormalTok{ res\_phys\_ratio\_hh}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{*}\NormalTok{ popn\_US\_in\_thousands }\SpecialCharTok{/}\NormalTok{ N   }\CommentTok{\# xbar\_U times B}
+\NormalTok{res\_phys\_county }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_ybar"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -9689,9 +9686,8 @@ population (in thousands):
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{res\_phys\_total }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{(phys, popn\_in\_thousands, }\AttributeTok{xbar\_pop =}\NormalTok{ popn\_US\_in\_thousands }\SpecialCharTok{/}\NormalTok{ N, }\AttributeTok{tx\_pop =}\NormalTok{ popn\_US\_in\_thousands,}
-                            \AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
-\NormalTok{res\_phys\_total}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
+\NormalTok{res\_phys\_total }\OtherTok{\textless{}{-}}\NormalTok{ res\_phys\_ratio\_hh}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{*}\NormalTok{ popn\_US\_in\_thousands   }\CommentTok{\# t\_x times B}
+\NormalTok{res\_phys\_total }\SpecialCharTok{|\textgreater{}} \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -10695,9 +10691,8 @@ or \texttt{"total"}:
 \NormalTok{\{}
 \NormalTok{    estimate }\OtherTok{\textless{}{-}} \FunctionTok{match.arg}\NormalTok{ (estimate)}
 \NormalTok{    Mbar\_U }\OtherTok{\textless{}{-}}\NormalTok{ M0 }\SpecialCharTok{/}\NormalTok{ N}
-\NormalTok{    method }\OtherTok{\textless{}{-}} \ControlFlowTok{switch}\NormalTok{ (estimate, }\AttributeTok{ybar =} \StringTok{"ratio"}\NormalTok{, }\AttributeTok{tbar =} \StringTok{"mean"}\NormalTok{, }\AttributeTok{total =} \StringTok{"total"}\NormalTok{)}
-\NormalTok{    res }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{ (ti, Mi, }\AttributeTok{xbar\_pop =}\NormalTok{ Mbar\_U, }\AttributeTok{tx\_pop =}\NormalTok{ M0, }\AttributeTok{method =}\NormalTok{ method,}
-                      \AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{    res }\OtherTok{\textless{}{-}} \FunctionTok{upswr\_est}\NormalTok{ (ti, Mi, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)      }\CommentTok{\# estimates ybar\_U}
+\NormalTok{    res}\SpecialCharTok{$}\NormalTok{estimate }\OtherTok{\textless{}{-}}\NormalTok{ res}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{*} \ControlFlowTok{switch}\NormalTok{ (estimate, }\AttributeTok{ybar =} \DecValTok{1}\NormalTok{, }\AttributeTok{tbar =}\NormalTok{ Mbar\_U, }\AttributeTok{total =}\NormalTok{ M0)}
     \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\NormalTok{show.details) }\FunctionTok{return}\NormalTok{ (res)}
 
     \DocumentationTok{\#\# working table on the scale of the cluster means ybar\_j*}
