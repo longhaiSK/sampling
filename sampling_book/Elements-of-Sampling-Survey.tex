@@ -9316,51 +9316,6 @@ directly in terms of the selection probabilities \(\psi_i\).
 variance is small when all the ratios \(b_i\) are close to \(B\), that
 is, when \(y_i\) is nearly proportional to \(x_i\).
 
-\subsection{\texorpdfstring{The HH Estimator of the Total in Terms of
-\(\psi_i\)}{The HH Estimator of the Total in Terms of \textbackslash psi\_i}}\label{sec-ups-hh-psi}
-
-The selection probabilities need not come from a size variable: any
-\(\psi_i>0\) with \(\sum_{i=1}^N\psi_i=1\) define a UPSWR design. Let
-\(y_j^*\) and \(\psi_j^*\) be the study value and the selection
-probability of the unit selected on draw \(j\). Dividing \(y_j^*\) by
-its selection probability gives an estimate of the total from that draw
-alone, \[
-u_j=\frac{y_j^*}{\psi_j^*},\qquad
-E(u_j)=\sum_{i=1}^N\psi_i\,\frac{y_i}{\psi_i}=\sum_{i=1}^N y_i=t ,
-\] and the \(u_j\) are iid, since the draws are independent. The HH
-estimator of the total is their average: \[
-\boxed{\hat{t}_{\mathrm{HH}}=\bar u=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
-\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt n},\qquad
-s_u^2=\frac{1}{n-1}\sum_{j=1}^n\left(\frac{y_j^*}{\psi_j^*}-\hat{t}_{\mathrm{HH}}\right)^2},
-\] with variance \[
-V(\hat{t}_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\psi_i\left(\frac{y_i}{\psi_i}-t\right)^2 .
-\] The mean is estimated by \(\hat{t}_{\mathrm{HH}}/N\). A unit with a
-small \(\psi_i\) is rarely drawn, but when it is, its value is
-multiplied by the large factor \(1/\psi_i\); this is what makes \(u_j\)
-unbiased. This form is what the function \texttt{upswr\_total} computes.
-
-\textbf{Equivalence with \(\hat{B}_{\mathrm{HH}}\).} The formula is the
-estimator of Section~\ref{sec-ups-hh-theory} with the selection
-probabilities themselves as the size variable. Take the
-\textbf{normalized size} \[
-\tilde{x}_i=\psi_i,\qquad\text{so that}\qquad t_{\tilde{x}}=\sum_{i=1}^N\tilde{x}_i=1
-\quad\text{and}\quad \frac{\tilde{x}_i}{t_{\tilde{x}}}=\psi_i .
-\] The ratios and the population ratio for this size variable are \[
-\tilde{b}_i=\frac{y_i}{\tilde{x}_i}=\frac{y_i}{\psi_i},\qquad
-\tilde{B}=\frac{t}{t_{\tilde{x}}}=t ,
-\] so each observation \(\tilde{b}_j^*=y_j^*/\psi_j^*=u_j\), and \[
-\hat{\tilde{B}}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\tilde{b}_j^*=\hat{t}_{\mathrm{HH}},\qquad
-\hat{t}_{\mathrm{HH}}=t_{\tilde{x}}\,\hat{\tilde{B}}_{\mathrm{HH}}=\hat{\tilde{B}}_{\mathrm{HH}},\qquad
-s_{\tilde{b}^*}=s_u .
-\] With a normalized size, the ``ratio'' \(\tilde{B}\) \emph{is} the
-total, and the estimator, its SE and its variance are those of
-Section~\ref{sec-ups-hh-theory}. Conversely, when \(\psi_i=x_i/t_x\),
-every draw gives \(y_j^*/\psi_j^*=t_x\,y_j^*/x_j^*=t_x\,b_j^*\), so
-\(\hat{t}_{\mathrm{HH}}=t_x\,\bar{b}^*\) and \(s_u=t_x\,s_{b^*}\), the
-formulas for the total in Section~\ref{sec-ups-hh-theory}. Rescaling a
-size variable to total 1 therefore does not change the estimator of the
-total, since \(\psi_i\) depends on \(x_i\) only through \(x_i/t_x\).
-
 \subsection{Computation Example: Revenue from AI Token
 Usage}\label{sec-ups-toy-sample}
 
@@ -9549,30 +9504,6 @@ population mean and total of \(x\), passed as \texttt{xbar\_pop}
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{xbar\_pop =} \DecValTok{100} \SpecialCharTok{/} \DecValTok{6}\NormalTok{, }\AttributeTok{tx\_pop =} \DecValTok{100}\NormalTok{, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{table}[H]
-\normalsize
-\begin{gtfit}{0.7\linewidth}{rrrr}
-\toprule
-\(\hat{t}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{t}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
-\midrule\addlinespace[2.5pt]
-489.17 & 10.51 & 459.99 & 518.34 \\ 
-\bottomrule
-\end{gtfit}
-\end{table}
-
-The same total with the normalized size \(\tilde{x}_i=\psi_i\) of
-Section~\ref{sec-ups-hh-psi}, whose total is \(t_{\tilde{x}}=1\) (so
-\(\bar{\tilde{x}}_U=1/N\)): the ratios are now \(y_j^*/\psi_j^*\), and
-their mean is \(\hat{t}_{\mathrm{HH}}\) itself.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{token}\SpecialCharTok{$}\NormalTok{psi }\OtherTok{\textless{}{-}}\NormalTok{ token}\SpecialCharTok{$}\NormalTok{x }\SpecialCharTok{/} \DecValTok{100}   \CommentTok{\# psi\_i = x\_i / t\_x}
-\FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{psi, }\AttributeTok{xbar\_pop =} \DecValTok{1} \SpecialCharTok{/} \DecValTok{6}\NormalTok{, }\AttributeTok{tx\_pop =} \DecValTok{1}\NormalTok{, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -10004,6 +9935,139 @@ which uses them at the design stage, has the smallest SE and the
 smallest error here, even though its sample is of the same size, 100
 counties. Section~\ref{sec-ups-compare} explains when using the size
 variable at the design stage pays off.
+
+\subsection{\texorpdfstring{The HH Estimator of the Total in Terms of
+\(\psi_i\)}{The HH Estimator of the Total in Terms of \textbackslash psi\_i}}\label{sec-ups-hh-psi}
+
+The selection probabilities need not come from a size variable: any
+\(\psi_i>0\) with \(\sum_{i=1}^N\psi_i=1\) define a UPSWR design. Let
+\(y_j^*\) and \(\psi_j^*\) be the study value and the selection
+probability of the unit selected on draw \(j\). Dividing \(y_j^*\) by
+its selection probability gives an estimate of the total from that draw
+alone, \[
+u_j=\frac{y_j^*}{\psi_j^*},\qquad
+E(u_j)=\sum_{i=1}^N\psi_i\,\frac{y_i}{\psi_i}=\sum_{i=1}^N y_i=t ,
+\] and the \(u_j\) are iid, since the draws are independent. The HH
+estimator of the total is their average: \[
+\boxed{\hat{t}_{\mathrm{HH}}=\bar u=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt n},\qquad
+s_u^2=\frac{1}{n-1}\sum_{j=1}^n\left(\frac{y_j^*}{\psi_j^*}-\hat{t}_{\mathrm{HH}}\right)^2},
+\] with variance \[
+V(\hat{t}_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\psi_i\left(\frac{y_i}{\psi_i}-t\right)^2 .
+\] The mean is estimated by \(\hat{t}_{\mathrm{HH}}/N\). A unit with a
+small \(\psi_i\) is rarely drawn, but when it is, its value is
+multiplied by the large factor \(1/\psi_i\); this is what makes \(u_j\)
+unbiased. This form is what the function \texttt{upswr\_total} computes.
+
+\textbf{Equivalence with \(\hat{B}_{\mathrm{HH}}\).} The formula is the
+estimator of Section~\ref{sec-ups-hh-theory} with the selection
+probabilities themselves as the size variable. Take the
+\textbf{normalized size} \[
+\tilde{x}_i=\psi_i,\qquad\text{so that}\qquad t_{\tilde{x}}=\sum_{i=1}^N\tilde{x}_i=1
+\quad\text{and}\quad \frac{\tilde{x}_i}{t_{\tilde{x}}}=\psi_i .
+\] The ratios and the population ratio for this size variable are \[
+\tilde{b}_i=\frac{y_i}{\tilde{x}_i}=\frac{y_i}{\psi_i},\qquad
+\tilde{B}=\frac{t}{t_{\tilde{x}}}=t ,
+\] so each observation \(\tilde{b}_j^*=y_j^*/\psi_j^*=u_j\), and \[
+\hat{\tilde{B}}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\tilde{b}_j^*=\hat{t}_{\mathrm{HH}},\qquad
+\hat{t}_{\mathrm{HH}}=t_{\tilde{x}}\,\hat{\tilde{B}}_{\mathrm{HH}}=\hat{\tilde{B}}_{\mathrm{HH}},\qquad
+s_{\tilde{b}^*}=s_u .
+\] With a normalized size, the ``ratio'' \(\tilde{B}\) \emph{is} the
+total, and the estimator, its SE and its variance are those of
+Section~\ref{sec-ups-hh-theory}. Conversely, when \(\psi_i=x_i/t_x\),
+every draw gives \(y_j^*/\psi_j^*=t_x\,y_j^*/x_j^*=t_x\,b_j^*\), so
+\(\hat{t}_{\mathrm{HH}}=t_x\,\bar{b}^*\) and \(s_u=t_x\,s_{b^*}\), the
+formulas for the total in Section~\ref{sec-ups-hh-theory}. Rescaling a
+size variable to total 1 therefore does not change the estimator of the
+total, since \(\psi_i\) depends on \(x_i\) only through \(x_i/t_x\).
+
+\subsubsection{\texorpdfstring{Example: Revenue from AI Token Usage,
+Using
+\(\psi_i\)}{Example: Revenue from AI Token Usage, Using \textbackslash psi\_i}}\label{sec-ups-hh-psi-example}
+
+We repeat the AI token example of Section~\ref{sec-ups-toy-sample} with
+the formula in terms of \(\psi_i\). The same sample
+\(\mathcal{R}=\{F,E,F,D,C\}\) is used, but each draw now gives an
+estimate \(u_j=y_j^*/\psi_j^*\) of the \textbf{total} revenue, and the
+HH estimate is their average.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0763}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0763}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0678}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0932}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1780}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.2373}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.2712}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedleft
+Draw \(j\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Customer
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(y_j^*\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(\psi_j^*\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(u_j=y_j^*/\psi_j^*\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\(u_j-\hat{t}_{\mathrm{HH}}\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+\((u_j-\hat{t}_{\mathrm{HH}})^2\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & F & 190 & 0.40 & 475.0 & -14.2 & 200.7 \\
+2 & E & 155 & 0.30 & 516.7 & 27.5 & 756.3 \\
+3 & F & 190 & 0.40 & 475.0 & -14.2 & 200.7 \\
+4 & D & 70 & 0.15 & 466.7 & -22.5 & 506.2 \\
+5 & C & 41 & 0.08 & 512.5 & 23.3 & 544.4 \\
+& \textbf{Sum} & & & 2,445.8 & 0.0 & 2,208.3 \\
+\end{longtable}
+}
+
+\textbf{Step 1: HH estimate of the total.} \[
+\hat{t}_{\mathrm{HH}}=\bar{u}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*}=\frac{2445.8}{5}=489.2,
+\] the same as \(t_x\hat{B}_{\mathrm{HH}}=489.2\) in
+Section~\ref{sec-ups-toy-sample}.
+
+\textbf{Step 2: its standard error.} From the last column, \[
+s_u^2=\frac{1}{n-1}\sum_{j=1}^5\left(u_j-\hat{t}_{\mathrm{HH}}\right)^2=\frac{2208.3}{4}
+=552.1,\qquad
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt{n}}=10.5,
+\] again equal to \(t_x\,s_{b^*}/\sqrt{n}=10.5\) (here
+\(u_j=t_x\,b_j^*\)).
+
+\textbf{Step 3: the mean and \(B\).} Divide by \(N\) and by \(t_x\):
+\(\hat{\bar{y}}_{\mathrm{HH}}=\hat{t}_{\mathrm{HH}}/N=81.53\) and
+\(\hat{B}_{\mathrm{HH}}=\hat{t}_{\mathrm{HH}}/t_x=4.8917\).
+
+The same total from \texttt{upswr\_est}, with the normalized size
+\(\tilde{x}_i=\psi_i\) of Section~\ref{sec-ups-hh-psi}, whose total is
+\(t_{\tilde{x}}=1\) (so \(\bar{\tilde{x}}_U=1/N\)): the ratios are the
+\(u_j\) and their mean is \(\hat{t}_{\mathrm{HH}}\) itself.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{token}\SpecialCharTok{$}\NormalTok{psi }\OtherTok{\textless{}{-}}\NormalTok{ token}\SpecialCharTok{$}\NormalTok{x }\SpecialCharTok{/} \DecValTok{100}   \CommentTok{\# psi\_i = x\_i / t\_x}
+\FunctionTok{upswr\_est}\NormalTok{(token}\SpecialCharTok{$}\NormalTok{y, token}\SpecialCharTok{$}\NormalTok{psi, }\AttributeTok{xbar\_pop =} \DecValTok{1} \SpecialCharTok{/} \DecValTok{6}\NormalTok{, }\AttributeTok{tx\_pop =} \DecValTok{1}\NormalTok{, }\AttributeTok{method =} \StringTok{"total"}\NormalTok{, }\AttributeTok{show.details =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{estimate }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{format\_est\_gt}\NormalTok{(}\StringTok{"hh\_total"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\normalsize
+\begin{gtfit}{0.7\linewidth}{rrrr}
+\toprule
+\(\hat{t}_{\mathrm{HH}}\) & \(\mathrm{SE}(\hat{t}_{\mathrm{HH}})\) & 95\% CI Lower & 95\% CI Upper \\ 
+\midrule\addlinespace[2.5pt]
+489.17 & 10.51 & 459.99 & 518.34 \\ 
+\bottomrule
+\end{gtfit}
+\end{table}
 
 \section{Comparison of the HH, Ratio, and Average Estimators of the
 Total}\label{sec-ups-compare}

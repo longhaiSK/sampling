@@ -131,54 +131,6 @@ $$
 $\hat{t}_{\mathrm{HH}}$ are $\bar{x}_U^2$ and $t_x^2$ times $V(\hat{B}_{\mathrm{HH}})$. The variance is small when all the ratios $b_i$
 are close to $B$, that is, when $y_i$ is nearly proportional to $x_i$.
 
-### The HH Estimator of the Total in Terms of $\psi_i$ {#sec-ups-hh-psi}
-
-The selection probabilities need not come from a size variable: any $\psi_i>0$ with
-$\sum_{i=1}^N\psi_i=1$ define a UPSWR design. Let $y_j^*$ and $\psi_j^*$ be the study value and the
-selection probability of the unit selected on draw $j$. Dividing $y_j^*$ by its selection probability gives
-an estimate of the total from that draw alone,
-$$
-u_j=\frac{y_j^*}{\psi_j^*},\qquad
-E(u_j)=\sum_{i=1}^N\psi_i\,\frac{y_i}{\psi_i}=\sum_{i=1}^N y_i=t ,
-$$
-and the $u_j$ are iid, since the draws are independent. The HH estimator of the total is their average:
-$$
-\boxed{\hat{t}_{\mathrm{HH}}=\bar u=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
-\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt n},\qquad
-s_u^2=\frac{1}{n-1}\sum_{j=1}^n\left(\frac{y_j^*}{\psi_j^*}-\hat{t}_{\mathrm{HH}}\right)^2},
-$$
-with variance
-$$
-V(\hat{t}_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\psi_i\left(\frac{y_i}{\psi_i}-t\right)^2 .
-$$
-The mean is estimated by $\hat{t}_{\mathrm{HH}}/N$. A unit with a small $\psi_i$ is rarely drawn, but when it is, its value
-is multiplied by the large factor $1/\psi_i$; this is what makes $u_j$ unbiased. This form is what the
-function `upswr_total` computes.
-
-**Equivalence with $\hat{B}_{\mathrm{HH}}$.** The formula is the estimator of @sec-ups-hh-theory with the
-selection probabilities themselves as the size variable. Take the **normalized size**
-$$
-\tilde{x}_i=\psi_i,\qquad\text{so that}\qquad t_{\tilde{x}}=\sum_{i=1}^N\tilde{x}_i=1
-\quad\text{and}\quad \frac{\tilde{x}_i}{t_{\tilde{x}}}=\psi_i .
-$$
-The ratios and the population ratio for this size variable are
-$$
-\tilde{b}_i=\frac{y_i}{\tilde{x}_i}=\frac{y_i}{\psi_i},\qquad
-\tilde{B}=\frac{t}{t_{\tilde{x}}}=t ,
-$$
-so each observation $\tilde{b}_j^*=y_j^*/\psi_j^*=u_j$, and
-$$
-\hat{\tilde{B}}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\tilde{b}_j^*=\hat{t}_{\mathrm{HH}},\qquad
-\hat{t}_{\mathrm{HH}}=t_{\tilde{x}}\,\hat{\tilde{B}}_{\mathrm{HH}}=\hat{\tilde{B}}_{\mathrm{HH}},\qquad
-s_{\tilde{b}^*}=s_u .
-$$
-With a normalized size, the "ratio" $\tilde{B}$ *is* the total, and the estimator, its SE and its variance are
-those of @sec-ups-hh-theory. Conversely, when $\psi_i=x_i/t_x$, every draw gives
-$y_j^*/\psi_j^*=t_x\,y_j^*/x_j^*=t_x\,b_j^*$, so $\hat{t}_{\mathrm{HH}}=t_x\,\bar{b}^*$ and
-$s_u=t_x\,s_{b^*}$, the formulas for the total in @sec-ups-hh-theory. Rescaling a size variable to
-total 1 therefore does not change the estimator of the total, since $\psi_i$ depends on $x_i$ only through
-$x_i/t_x$.
-
 ### Computation Example: Revenue from AI Token Usage {#sec-ups-toy-sample}
 
 An AI company has $N=6$ enterprise customers. From its usage logs it knows, for every customer, the number
@@ -293,16 +245,6 @@ upswr_est(token$y, token$x, xbar_pop = 100 / 6, tx_pop = 100, method = "ratio", 
 upswr_est(token$y, token$x, xbar_pop = 100 / 6, tx_pop = 100, method = "mean", show.details = FALSE)$estimate |>
   format_est_gt("hh_ybar")
 upswr_est(token$y, token$x, xbar_pop = 100 / 6, tx_pop = 100, method = "total", show.details = FALSE)$estimate |>
-  format_est_gt("hh_total")
-```
-
-The same total with the normalized size $\tilde{x}_i=\psi_i$ of @sec-ups-hh-psi, whose total is $t_{\tilde{x}}=1$
-(so $\bar{\tilde{x}}_U=1/N$): the ratios are now $y_j^*/\psi_j^*$, and their mean is $\hat{t}_{\mathrm{HH}}$ itself.
-
-```{r toy-sample-psi}
-#| cache: false
-token$psi <- token$x / 100   # psi_i = x_i / t_x
-upswr_est(token$y, token$psi, xbar_pop = 1 / 6, tx_pop = 1, method = "total", show.details = FALSE)$estimate |>
   format_est_gt("hh_total")
 ```
 
@@ -445,6 +387,112 @@ The naive SRS total ignores the county sizes: it is far too large, with a huge S
 estimators use the county populations at the estimation stage and have much smaller SEs, and HH, which uses
 them at the design stage, has the smallest SE and the smallest error here, even though its sample is of the same
 size, 100 counties. @sec-ups-compare explains when using the size variable at the design stage pays off.
+
+### The HH Estimator of the Total in Terms of $\psi_i$ {#sec-ups-hh-psi}
+
+The selection probabilities need not come from a size variable: any $\psi_i>0$ with
+$\sum_{i=1}^N\psi_i=1$ define a UPSWR design. Let $y_j^*$ and $\psi_j^*$ be the study value and the
+selection probability of the unit selected on draw $j$. Dividing $y_j^*$ by its selection probability gives
+an estimate of the total from that draw alone,
+$$
+u_j=\frac{y_j^*}{\psi_j^*},\qquad
+E(u_j)=\sum_{i=1}^N\psi_i\,\frac{y_i}{\psi_i}=\sum_{i=1}^N y_i=t ,
+$$
+and the $u_j$ are iid, since the draws are independent. The HH estimator of the total is their average:
+$$
+\boxed{\hat{t}_{\mathrm{HH}}=\bar u=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*},\qquad
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt n},\qquad
+s_u^2=\frac{1}{n-1}\sum_{j=1}^n\left(\frac{y_j^*}{\psi_j^*}-\hat{t}_{\mathrm{HH}}\right)^2},
+$$
+with variance
+$$
+V(\hat{t}_{\mathrm{HH}})=\frac1n\sum_{i=1}^N\psi_i\left(\frac{y_i}{\psi_i}-t\right)^2 .
+$$
+The mean is estimated by $\hat{t}_{\mathrm{HH}}/N$. A unit with a small $\psi_i$ is rarely drawn, but when it is, its value
+is multiplied by the large factor $1/\psi_i$; this is what makes $u_j$ unbiased. This form is what the
+function `upswr_total` computes.
+
+**Equivalence with $\hat{B}_{\mathrm{HH}}$.** The formula is the estimator of @sec-ups-hh-theory with the
+selection probabilities themselves as the size variable. Take the **normalized size**
+$$
+\tilde{x}_i=\psi_i,\qquad\text{so that}\qquad t_{\tilde{x}}=\sum_{i=1}^N\tilde{x}_i=1
+\quad\text{and}\quad \frac{\tilde{x}_i}{t_{\tilde{x}}}=\psi_i .
+$$
+The ratios and the population ratio for this size variable are
+$$
+\tilde{b}_i=\frac{y_i}{\tilde{x}_i}=\frac{y_i}{\psi_i},\qquad
+\tilde{B}=\frac{t}{t_{\tilde{x}}}=t ,
+$$
+so each observation $\tilde{b}_j^*=y_j^*/\psi_j^*=u_j$, and
+$$
+\hat{\tilde{B}}_{\mathrm{HH}}=\frac1n\sum_{j=1}^n\tilde{b}_j^*=\hat{t}_{\mathrm{HH}},\qquad
+\hat{t}_{\mathrm{HH}}=t_{\tilde{x}}\,\hat{\tilde{B}}_{\mathrm{HH}}=\hat{\tilde{B}}_{\mathrm{HH}},\qquad
+s_{\tilde{b}^*}=s_u .
+$$
+With a normalized size, the "ratio" $\tilde{B}$ *is* the total, and the estimator, its SE and its variance are
+those of @sec-ups-hh-theory. Conversely, when $\psi_i=x_i/t_x$, every draw gives
+$y_j^*/\psi_j^*=t_x\,y_j^*/x_j^*=t_x\,b_j^*$, so $\hat{t}_{\mathrm{HH}}=t_x\,\bar{b}^*$ and
+$s_u=t_x\,s_{b^*}$, the formulas for the total in @sec-ups-hh-theory. Rescaling a size variable to
+total 1 therefore does not change the estimator of the total, since $\psi_i$ depends on $x_i$ only through
+$x_i/t_x$.
+
+#### Example: Revenue from AI Token Usage, Using $\psi_i$ {#sec-ups-hh-psi-example}
+
+We repeat the AI token example of @sec-ups-toy-sample with the formula in terms of $\psi_i$. The same sample
+$\mathcal{R}=\{F,E,F,D,C\}$ is used, but each draw now gives an estimate $u_j=y_j^*/\psi_j^*$ of the **total**
+revenue, and the HH estimate is their average.
+
+```{r toy-sample-psi-table}
+#| cache: false
+#| echo: false
+N_c <- length(x_U)                         # N was redefined for the counties above
+R <- c("F", "E", "F", "D", "C")            # the same draws as before
+n <- length(R)
+psi_U <- x_U / t_x
+psi_star <- psi_U[R]
+u <- y_U[R] / psi_star
+t_HH2 <- mean(u)
+s2_u <- var(u)
+se_t2 <- sqrt(s2_u / n)
+samp2 <- data.frame(j = seq_len(n), Customer = R, y = y_U[R], psi = psi_star, u = u,
+                    dev = u - t_HH2, dev2 = (u - t_HH2)^2)
+sums2 <- data.frame(j = NA, Customer = "**Sum**", y = NA, psi = NA, u = sum(u),
+                    dev = sum(samp2$dev), dev2 = sum(samp2$dev2))
+options(knitr.kable.NA = "")
+knitr::kable(rbind(samp2, sums2), digits = c(0, 0, 0, 2, 1, 1, 1), row.names = FALSE,
+             format.args = list(big.mark = ","),
+             col.names = c("Draw $j$", "Customer", "$y_j^*$", "$\\psi_j^*$", "$u_j=y_j^*/\\psi_j^*$",
+                           "$u_j-\\hat{t}_{\\mathrm{HH}}$", "$(u_j-\\hat{t}_{\\mathrm{HH}})^2$"))
+```
+
+**Step 1: HH estimate of the total.**
+$$
+\hat{t}_{\mathrm{HH}}=\bar{u}=\frac1n\sum_{j=1}^n\frac{y_j^*}{\psi_j^*}=\frac{`r round(sum(u), 1)`}{5}=`r round(t_HH2, 1)`,
+$$
+the same as $t_x\hat{B}_{\mathrm{HH}}=`r round(t_x * mean(y_U[R] / x_U[R]), 1)`$ in @sec-ups-toy-sample.
+
+**Step 2: its standard error.** From the last column,
+$$
+s_u^2=\frac{1}{n-1}\sum_{j=1}^5\left(u_j-\hat{t}_{\mathrm{HH}}\right)^2=\frac{`r round(sum(samp2$dev2), 1)`}{4}
+=`r round(s2_u, 1)`,\qquad
+\widehat{\mathrm{SE}}(\hat{t}_{\mathrm{HH}})=\frac{s_u}{\sqrt{n}}=`r round(se_t2, 1)`,
+$$
+again equal to $t_x\,s_{b^*}/\sqrt{n}=`r round(t_x * sd(y_U[R] / x_U[R]) / sqrt(n), 1)`$ (here $u_j=t_x\,b_j^*$).
+
+**Step 3: the mean and $B$.** Divide by $N$ and by $t_x$:
+$\hat{\bar{y}}_{\mathrm{HH}}=\hat{t}_{\mathrm{HH}}/N=`r round(t_HH2 / N_c, 2)`$ and
+$\hat{B}_{\mathrm{HH}}=\hat{t}_{\mathrm{HH}}/t_x=`r round(t_HH2 / t_x, 4)`$.
+
+The same total from `upswr_est`, with the normalized size $\tilde{x}_i=\psi_i$ of @sec-ups-hh-psi, whose
+total is $t_{\tilde{x}}=1$ (so $\bar{\tilde{x}}_U=1/N$): the ratios are the $u_j$ and their mean is
+$\hat{t}_{\mathrm{HH}}$ itself.
+
+```{r toy-sample-psi}
+#| cache: false
+token$psi <- token$x / 100   # psi_i = x_i / t_x
+upswr_est(token$y, token$psi, xbar_pop = 1 / 6, tx_pop = 1, method = "total", show.details = FALSE)$estimate |>
+  format_est_gt("hh_total")
+```
 
 ## Comparison of the HH, Ratio, and Average Estimators of the Total {#sec-ups-compare}
 
