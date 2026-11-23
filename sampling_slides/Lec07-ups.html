@@ -530,6 +530,103 @@ s_{b^*}^2=\frac{0.220833}{4}=0.0552,\quad s_{b^*}=0.235
 <span id="cb3-3"><a href=""></a>B_hat <span class="sc">*</span> <span class="dv">100</span>         <span class="co"># total: t_x</span></span>
 <span id="cb3-4"><a href=""></a><span class="fu">upswr_est</span>(token<span class="sc">$</span>y, token<span class="sc">$</span>x <span class="sc">/</span> <span class="dv">100</span>)<span class="sc">$</span>estimate   <span class="co"># x = psi (total 1): B-hat is the total</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The total line and the last line both give <span class="math inline">\hat t_{\mathrm{HH}}=489.2</span> (SE <span class="math inline">10.5</span>); the last uses the normalized size <span class="math inline">\tilde x_i=\psi_i</span>.</p>
+</section>
+<section id="same-example-using-psi_i-the-total" class="slide level2 smaller">
+<h2>Same Example Using <span class="math inline">\psi_i</span>: the Total</h2>
+<p>Each draw estimates the total, <span class="math inline">u_j=y_j^*/\psi_j^*</span>, with <span class="math inline">\psi_i=x_i/100</span>:</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Draw <span class="math inline">j</span></th>
+<th style="text-align: center;">Customer</th>
+<th style="text-align: right;"><span class="math inline">y_j^*</span></th>
+<th style="text-align: right;"><span class="math inline">\psi_j^*</span></th>
+<th style="text-align: right;"><span class="math inline">u_j=y_j^*/\psi_j^*</span></th>
+<th style="text-align: right;"><span class="math inline">u_j-\hat t_{\mathrm{HH}}</span></th>
+<th style="text-align: right;"><span class="math inline">(u_j-\hat t_{\mathrm{HH}})^2</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">F</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">475.0</td>
+<td style="text-align: right;"><span class="math inline">-14.2</span></td>
+<td style="text-align: right;">200.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">E</td>
+<td style="text-align: right;">155</td>
+<td style="text-align: right;">0.30</td>
+<td style="text-align: right;">516.7</td>
+<td style="text-align: right;">27.5</td>
+<td style="text-align: right;">756.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">F</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">475.0</td>
+<td style="text-align: right;"><span class="math inline">-14.2</span></td>
+<td style="text-align: right;">200.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">0.15</td>
+<td style="text-align: right;">466.7</td>
+<td style="text-align: right;"><span class="math inline">-22.5</span></td>
+<td style="text-align: right;">506.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">C</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">512.5</td>
+<td style="text-align: right;">23.3</td>
+<td style="text-align: right;">544.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>Sum</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>2445.8</strong></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;"><strong>2208.3</strong></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">
+\hat t_{\mathrm{HH}}=\bar u=\frac{2445.8}{5}=489.2,\qquad
+s_u^2=\frac{2208.3}{4}=552.1,\qquad
+\widehat{\mathrm{SE}}(\hat t_{\mathrm{HH}})=\frac{s_u}{\sqrt5}=\frac{23.50}{\sqrt5}=10.5 .
+</span></p>
+</section>
+<section id="same-example-using-psi_i-the-means" class="slide level2">
+<h2>Same Example Using <span class="math inline">\psi_i</span>: the Means</h2>
+<p>Divide the total and its SE by <span class="math inline">N=6</span>: <span class="math display">
+\hat{\bar t}_{\mathrm{HH}}=\frac{\hat t_{\mathrm{HH}}}{N}=\frac{489.2}{6}=81.53,\qquad
+\widehat{\mathrm{SE}}(\hat{\bar t}_{\mathrm{HH}})=\frac{10.5}{6}=1.75 .
+</span> Here <span class="math inline">y_i</span> is the revenue of customer <span class="math inline">i</span>, so the mean total per unit is the mean revenue per customer: <span class="math display">
+\hat{\bar y}_{\mathrm{HH}}=\hat{\bar t}_{\mathrm{HH}}=81.53,\qquad
+\widehat{\mathrm{SE}}(\hat{\bar y}_{\mathrm{HH}})=1.75 ,
+</span> the same as <span class="math inline">\bar x_U\hat B_{\mathrm{HH}}=16.67\times4.8917</span> from the ratios <span class="math inline">b_j^*</span>.</p>
 </section></section>
 <section>
 <section id="example-physicians-in-u.s.-counties" class="title-slide slide level1 center" data-number="3">

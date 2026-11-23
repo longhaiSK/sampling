@@ -227,6 +227,39 @@ upswr_est(token$y, token$x / 100)$estimate   # x = psi (total 1): B-hat is the t
 
 The total line and the last line both give $\hat t_{\mathrm{HH}}=489.2$ (SE $10.5$); the last uses the normalized size $\tilde x_i=\psi_i$.
 
+## Same Example Using $\psi_i$: the Total {.smaller}
+
+Each draw estimates the total, $u_j=y_j^*/\psi_j^*$, with $\psi_i=x_i/100$:
+
+| Draw $j$ | Customer | $y_j^*$ | $\psi_j^*$ | $u_j=y_j^*/\psi_j^*$ | $u_j-\hat t_{\mathrm{HH}}$ | $(u_j-\hat t_{\mathrm{HH}})^2$ |
+|:--:|:--:|--:|--:|------:|------:|-------:|
+| 1 | F | 190 | 0.40 | 475.0 | $-14.2$ | 200.7 |
+| 2 | E | 155 | 0.30 | 516.7 | 27.5 | 756.3 |
+| 3 | F | 190 | 0.40 | 475.0 | $-14.2$ | 200.7 |
+| 4 | D | 70 | 0.15 | 466.7 | $-22.5$ | 506.2 |
+| 5 | C | 41 | 0.08 | 512.5 | 23.3 | 544.4 |
+| **Sum** | | | | **2445.8** | 0 | **2208.3** |
+
+$$
+\hat t_{\mathrm{HH}}=\bar u=\frac{2445.8}{5}=489.2,\qquad
+s_u^2=\frac{2208.3}{4}=552.1,\qquad
+\widehat{\mathrm{SE}}(\hat t_{\mathrm{HH}})=\frac{s_u}{\sqrt5}=\frac{23.50}{\sqrt5}=10.5 .
+$$
+
+## Same Example Using $\psi_i$: the Means
+
+Divide the total and its SE by $N=6$:
+$$
+\hat{\bar t}_{\mathrm{HH}}=\frac{\hat t_{\mathrm{HH}}}{N}=\frac{489.2}{6}=81.53,\qquad
+\widehat{\mathrm{SE}}(\hat{\bar t}_{\mathrm{HH}})=\frac{10.5}{6}=1.75 .
+$$
+Here $y_i$ is the revenue of customer $i$, so the mean total per unit is the mean revenue per customer:
+$$
+\hat{\bar y}_{\mathrm{HH}}=\hat{\bar t}_{\mathrm{HH}}=81.53,\qquad
+\widehat{\mathrm{SE}}(\hat{\bar y}_{\mathrm{HH}})=1.75 ,
+$$
+the same as $\bar x_U\hat B_{\mathrm{HH}}=16.67\times4.8917$ from the ratios $b_j^*$.
+
 # Example: Physicians in U.S. Counties
 
 ## The Data (`statepop.csv`)
